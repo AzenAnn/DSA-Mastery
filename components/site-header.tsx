@@ -10,11 +10,11 @@ export function SiteHeader({ searchItems }: { searchItems: SearchItem[] }) {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link aria-label="DSA Lab 首页" className="brand" href="/">
+        <Link aria-label="DSA Mastery 首页" className="brand" href="/">
           <span className="brand-mark" aria-hidden="true">D</span>
           <span>
-            <strong>DSA Lab</strong>
-            <small>主动输出式教程</small>
+            <strong>DSA Mastery</strong>
+            <small>理论与实验教程</small>
           </span>
         </Link>
 

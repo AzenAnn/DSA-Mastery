@@ -5,7 +5,7 @@ import { getChapterGroups, getLabs } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "动手实验",
-  description: "把数据结构与算法知识转化为可运行、可测试、可评审的作品。",
+  description: "用动手实现、边界测试和对比实验验证数据结构与算法理论。",
 };
 
 export default function LabsIndexPage() {
@@ -14,9 +14,9 @@ export default function LabsIndexPage() {
   return (
     <div className="labs-index">
       <header className="labs-hero">
-        <div className="eyebrow"><FlaskConical aria-hidden="true" size={15} />DSA Labs</div>
+        <div className="eyebrow"><FlaskConical aria-hidden="true" size={15} />DSA Mastery Labs</div>
         <h1>用实验把理解落到代码上</h1>
-        <p>每个 Lab 都给出目标、任务与验收标准。当前只保留小而完整的练习，用来验证团队的内容生产流程。</p>
+        <p>每个 Lab 都与理论章节相互对应，通过实现、测试、观察和复盘，把抽象定义与复杂度分析转化为可以独立验证的能力。</p>
       </header>
 
       {groups.map((group) => (

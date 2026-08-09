@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { getChapterGroups, getLabs, getLessons } from "@/lib/content";
 
-const learningLoop = ["学习", "理解", "解释", "实现", "测试", "讲授", "评审", "改进"];
+const learningLoop = ["理解", "推导", "实现", "测试", "练习", "讲解", "复盘", "迁移"];
 
 export default function Home() {
   const lessons = getLessons();
@@ -23,10 +23,10 @@ export default function Home() {
       <section className="hero-section">
         <div className="hero-grid">
           <div className="hero-copy">
-            <div className="eyebrow"><Sparkles aria-hidden="true" size={15} />一个会随学习一起生长的开源教程</div>
-            <h1>把“我好像懂了”<br />变成<span>可以被检验的作品</span></h1>
+            <div className="eyebrow"><Sparkles aria-hidden="true" size={15} />面向课程高水平掌握的理论与实验教程</div>
+            <h1>把数据结构与算法<br /><span>学透、做实、用活</span></h1>
             <p>
-              DSA Lab 是两名学生共同维护的数据结构与算法学习工程。每个知识点都要经历解释、实现、测试与同伴 Review，网站只是这条学习链路的公开出口。
+              DSA Mastery 面向课程学习者，把定义、推导、实现、测试与典型问题训练连成一条完整路径，帮助读者建立能够应对课堂、考试、实验和综合应用的扎实能力。项目由两名学生共同维护，并通过交叉 Review 持续校正内容。
             </p>
             <div className="hero-actions">
               <Link className="button button-primary" href={lessons[0]?.url || "/labs"}>
@@ -37,13 +37,13 @@ export default function Home() {
               </Link>
             </div>
             <div className="hero-proof">
-              <span><CheckCircle2 aria-hidden="true" size={16} />Markdown 单一内容源</span>
-              <span><CheckCircle2 aria-hidden="true" size={16} />自动目录与全文搜索</span>
-              <span><CheckCircle2 aria-hidden="true" size={16} />人工最终审核</span>
+              <span><CheckCircle2 aria-hidden="true" size={16} />核心理论与复杂度推导</span>
+              <span><CheckCircle2 aria-hidden="true" size={16} />动手 Lab 与边界测试任务</span>
+              <span><CheckCircle2 aria-hidden="true" size={16} />同伴复核与来源核验</span>
             </div>
           </div>
 
-          <div className="hero-visual" aria-label="项目学习闭环示意">
+          <div className="hero-visual" aria-label="课程能力形成路径示意">
             <div className="code-window">
               <div className="window-bar"><i /><i /><i /><span>chapter-01-linear-list.md</span></div>
               <div className="code-lines">
@@ -57,23 +57,23 @@ export default function Home() {
                 <p>- 比较顺序表与链表</p>
               </div>
             </div>
-            <div className="flow-card flow-card-top"><RefreshCw aria-hidden="true" size={19} /><span>保存 MD</span><strong>自动更新导航</strong></div>
-            <div className="flow-card flow-card-bottom"><Braces aria-hidden="true" size={19} /><span>构建网站</span><strong>渲染公式与代码</strong></div>
+            <div className="flow-card flow-card-top"><RefreshCw aria-hidden="true" size={19} /><span>理解理论</span><strong>推导性质与复杂度</strong></div>
+            <div className="flow-card flow-card-bottom"><Braces aria-hidden="true" size={19} /><span>完成实验</span><strong>实现并检查边界</strong></div>
           </div>
         </div>
         <div className="hero-stats">
           <div><strong>{chapters.length}</strong><span>个起步章节</span></div>
           <div><strong>{lessons.length}</strong><span>篇教程页面</span></div>
           <div><strong>{labs.length}</strong><span>个动手实验</span></div>
-          <div><strong>1</strong><span>份内容，多端生长</span></div>
+          <div><strong>1</strong><span>条理论到实践的路径</span></div>
         </div>
       </section>
 
       <section className="section learning-loop-section">
         <div className="section-heading centered">
-          <div className="eyebrow">主动输出，不做笔记仓库</div>
-          <h2>每一章都走完完整学习闭环</h2>
-          <p>写作与工程实践都服务于理解；如果不能解释、实现和测试，就还没有真正掌握。</p>
+          <div className="eyebrow">理论 × 实验 × 综合训练</div>
+          <h2>从理解概念，到独立解决问题</h2>
+          <p>每章同时训练定义与推导、算法实现、边界验证和问题迁移；能讲清、能写出、能验证，才算真正掌握。</p>
         </div>
         <ol className="learning-loop">
           {learningLoop.map((step, index) => (
@@ -88,7 +88,7 @@ export default function Home() {
             <div className="eyebrow">当前内容</div>
             <h2>从共同语言，到第一种结构</h2>
           </div>
-          <p>当前只建设第 0 章与第 1 章，用真实的小闭环验证协作方式。通过后再扩展后续章节。</p>
+          <p>当前以第 0 章和第 1 章展示教程的起步结构；后续将沿课程主线补齐理论、实验、练习与综合应用。</p>
         </div>
         <div className="chapter-card-grid">
           {chapters.map((chapter) => (
@@ -136,15 +136,15 @@ export default function Home() {
           <ol className="update-steps">
             <li><span>01</span><div><strong>创建 Markdown</strong><p>复制相邻页面，填写标题、章节号、顺序与更新时间。</p></div></li>
             <li><span>02</span><div><strong>本地检查</strong><p>保存后检查导航、公式、代码和相对链接是否正确。</p></div></li>
-            <li><span>03</span><div><strong>Review 后合并</strong><p>另一名成员验证内容与 Lab，合并后即可自动发布。</p></div></li>
+            <li><span>03</span><div><strong>Review 后合并</strong><p>另一名成员验证内容与 Lab，合并后由同一内容源统一构建网站。</p></div></li>
           </ol>
         </div>
       </section>
 
       <section className="section manifesto-section">
         <GitPullRequest aria-hidden="true" size={30} />
-        <h2>正确性 &gt; 更新速度，学习价值 &gt; GitHub Star</h2>
-        <p>这个 demo 是一次团队讨论的起点，不是过度承诺的最终产品。</p>
+        <h2>用扎实理论与过硬实验，走向课程高水平</h2>
+        <p>项目不提供押题捷径或分数保证；我们用严谨理论、可复现实验和综合训练，帮助读者把能力练到可以独立验证和迁移。</p>
       </section>
     </main>
   );

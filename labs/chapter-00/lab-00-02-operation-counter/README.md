@@ -5,7 +5,7 @@ order: 2
 chapter: 0
 chapterTitle: "绪论"
 updated: "2026-08-09"
-contributors: ["DSA Lab Team"]
+contributors: ["DSA Mastery Team"]
 status: "draft"
 lab: true
 difficulty: "入门"

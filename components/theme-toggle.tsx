@@ -7,7 +7,7 @@ export function ThemeToggle() {
     const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
     const nextTheme = currentTheme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = nextTheme;
-    localStorage.setItem("dsa-lab-theme", nextTheme);
+    localStorage.setItem("dsa-mastery-theme", nextTheme);
   }
 
   return (

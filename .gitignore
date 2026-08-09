@@ -38,4 +38,5 @@ yarn-error.log*
 /.wrangler/
 /outputs/
 /work/
+/graphify-out/
 *.tsbuildinfo

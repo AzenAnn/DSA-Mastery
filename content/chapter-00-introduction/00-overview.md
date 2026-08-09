@@ -1,11 +1,11 @@
 ---
 title: "第 0 章 绪论"
-description: "认识数据结构、算法与主动输出式学习，建立整门课程的地图。"
+description: "认识数据结构、算法及理论—实验学习路径，建立整门课程的能力地图。"
 order: 0
 chapter: 0
 chapterTitle: "绪论"
 updated: "2026-08-09"
-contributors: ["DSA Lab Team"]
+contributors: ["DSA Mastery Team"]
 status: "draft"
 ---
 
@@ -20,7 +20,7 @@ status: "draft"
 - 区分数据、数据元素、数据结构和抽象数据类型；
 - 从输入、输出、正确性和资源消耗四个角度描述算法；
 - 使用数量级初步比较两个算法；
-- 说清楚本项目的主动输出学习闭环。
+- 说清楚本项目如何用理论、实验与主动输出共同训练课程能力。
 
 ## 核心概念
 

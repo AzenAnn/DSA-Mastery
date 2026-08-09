@@ -35,7 +35,7 @@ order: 1
 chapter: 1
 chapterTitle: "线性表"
 updated: "2026-08-09"
-contributors: ["DSA Lab Team"]
+contributors: ["DSA Mastery Team"]
 status: "draft"
 ---
 ```

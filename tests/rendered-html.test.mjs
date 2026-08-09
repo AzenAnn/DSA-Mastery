@@ -13,12 +13,12 @@ async function render(pathname) {
   );
 }
 
-test("renders the DSA Lab home instead of the starter", async () => {
+test("renders the DSA Mastery home instead of the starter", async () => {
   const response = await render("/");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /DSA Lab/);
-  assert.match(html, /可以被检验的作品/);
+  assert.match(html, /DSA Mastery/);
+  assert.match(html, /学透、做实、用活/);
   assert.match(html, /Markdown/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
