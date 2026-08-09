@@ -1,9 +1,9 @@
 "use client";
 
 import { BookOpen, FlaskConical, Search, X } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { SearchItem } from "@/lib/content";
+import { SiteLink as Link } from "./site-link";
 
 interface SearchPaletteProps {
   items: SearchItem[];

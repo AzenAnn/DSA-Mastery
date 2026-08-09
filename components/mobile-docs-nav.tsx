@@ -1,6 +1,6 @@
 import { Menu } from "lucide-react";
-import Link from "next/link";
 import type { ChapterGroup } from "@/lib/content";
+import { SiteLink as Link } from "./site-link";
 
 export function MobileDocsNav({
   lessonGroups,

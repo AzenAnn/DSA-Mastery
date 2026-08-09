@@ -1,5 +1,5 @@
 import { BookOpen, Code2, FlaskConical } from "lucide-react";
-import Link from "next/link";
+import { SiteLink as Link } from "@/components/site-link";
 import type { SearchItem } from "@/lib/content";
 import { SearchPalette } from "./search-palette";
 import { ThemeToggle } from "./theme-toggle";

@@ -8,7 +8,7 @@ import {
   RefreshCw,
   Sparkles,
 } from "lucide-react";
-import Link from "next/link";
+import { SiteLink as Link } from "@/components/site-link";
 import { getChapterGroups, getLabs, getLessons } from "@/lib/content";
 
 const learningLoop = ["理解", "推导", "实现", "测试", "练习", "讲解", "复盘", "迁移"];

@@ -1,9 +1,9 @@
 "use client";
 
 import { BookOpen, ChevronDown, FlaskConical } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ChapterGroup } from "@/lib/content";
+import { SiteLink as Link } from "./site-link";
 
 interface DocsSidebarProps {
   lessonGroups: ChapterGroup[];
