@@ -1,6 +1,9 @@
 name: Deploy course site to GitHub Pages
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -12,7 +15,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -49,6 +52,8 @@ jobs:
         env:
           GITHUB_PAGES: "true"
           GITHUB_PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_DEPLOY_TARGET: github-pages
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}/
         run: npm run build
 
@@ -57,12 +62,21 @@ jobs:
           GITHUB_PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
         run: node scripts/prepare-pages-artifact.mjs
 
+      - name: Install Chromium for navigation smoke test
+        run: npx playwright install --with-deps chromium
+
+      - name: Click through lesson and Lab routes
+        env:
+          GITHUB_PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: npm run test:pages
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist/pages
 
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

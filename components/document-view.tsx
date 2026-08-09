@@ -8,9 +8,9 @@ import {
   PencilLine,
   Users,
 } from "lucide-react";
-import Link from "next/link";
 import type { TutorialDocument } from "@/lib/content";
 import { MarkdownRenderer } from "./markdown-renderer";
+import { SiteLink as Link } from "./site-link";
 
 interface DocumentViewProps {
   document: TutorialDocument;

@@ -1,6 +1,6 @@
 import { ArrowRight, Clock3, FlaskConical, Target } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SiteLink as Link } from "@/components/site-link";
 import { getChapterGroups, getLabs } from "@/lib/content";
 
 export const metadata: Metadata = {

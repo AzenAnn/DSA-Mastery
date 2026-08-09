@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { SiteLink as Link } from "@/components/site-link";
 
 export default function NotFound() {
   return (

@@ -1,4 +1,4 @@
-import { access, cp, mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import { access, cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -59,4 +59,54 @@ for (const relativePath of requiredPaths) {
   await access(path.join(resolvedPagesRoot, relativePath));
 }
 
-console.log(`GitHub Pages artifact ready at ${path.relative(projectRoot, resolvedPagesRoot)}.`);
+async function collectHtmlFiles(directory) {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const absolutePath = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await collectHtmlFiles(absolutePath));
+    else if (entry.name.endsWith(".html")) files.push(absolutePath);
+  }
+  return files;
+}
+
+function artifactTargetForHref(href) {
+  if (!href.startsWith("/") || href.startsWith("//")) return null;
+  const url = new URL(href, "https://pages.example");
+  const expectedPrefix = basePath ? `${basePath}/` : "/";
+  if (!url.pathname.startsWith(expectedPrefix)) {
+    throw new Error(`Document navigation escaped the Pages base path: ${href}`);
+  }
+
+  const routePath = basePath ? url.pathname.slice(basePath.length) : url.pathname;
+  const relativePath = routePath.replace(/^\/+/, "");
+  if (!relativePath) return path.join(resolvedPagesRoot, "index.html");
+  if (!routePath.endsWith("/")) {
+    if (path.extname(routePath)) return path.join(resolvedPagesRoot, relativePath);
+    throw new Error(`Document route is missing its trailing slash: ${href}`);
+  }
+  return path.join(resolvedPagesRoot, relativePath, "index.html");
+}
+
+let documentNavigationLinks = 0;
+const checkedTargets = new Set();
+for (const htmlPath of await collectHtmlFiles(resolvedPagesRoot)) {
+  const html = await readFile(htmlPath, "utf8");
+  for (const [tag] of html.matchAll(/<a\b[^>]*>/g)) {
+    if (!/\bdata-navigation-mode="document"/.test(tag)) continue;
+    documentNavigationLinks += 1;
+    const href = /\bhref="([^"]+)"/.exec(tag)?.[1];
+    if (!href) throw new Error(`Document navigation link has no href in ${htmlPath}`);
+    const target = artifactTargetForHref(href);
+    if (target) checkedTargets.add(target);
+  }
+}
+
+if (documentNavigationLinks === 0) {
+  throw new Error("Pages artifact contains no document-navigation links.");
+}
+for (const target of checkedTargets) await access(target);
+
+console.log(
+  `GitHub Pages artifact ready at ${path.relative(projectRoot, resolvedPagesRoot)} `
+  + `(${documentNavigationLinks} document links, ${checkedTargets.size} static targets verified).`,
+);

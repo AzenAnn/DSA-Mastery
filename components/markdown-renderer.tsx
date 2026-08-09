@@ -5,13 +5,13 @@ import javascript from "highlight.js/lib/languages/javascript";
 import plaintext from "highlight.js/lib/languages/plaintext";
 import python from "highlight.js/lib/languages/python";
 import typescript from "highlight.js/lib/languages/typescript";
-import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import { CopyButton } from "./copy-button";
+import { SiteLink as Link } from "./site-link";
 
 hljs.registerLanguage("bash", bash);
 hljs.registerLanguage("cpp", cpp);
