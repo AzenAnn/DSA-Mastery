@@ -1,47 +1,40 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import "katex/dist/katex.min.css";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { getSearchItems } from "@/lib/content";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host")
-    ?? requestHeaders.get("host")
-    ?? "localhost:3000";
-  const protocol = requestHeaders.get("x-forwarded-proto")
-    ?? (/^(localhost|127\.)/.test(host) ? "http" : "https");
-  const origin = `${protocol}://${host}`;
-  const description = "从概念、ADT 与复杂度推导，到动手实现、边界测试与典型问题训练，帮助课程学习者扎实掌握数据结构与算法。";
-  const imageUrl = new URL("/og.png", origin).toString();
+const siteUrlValue = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000/";
+const siteUrl = new URL(siteUrlValue.endsWith("/") ? siteUrlValue : `${siteUrlValue}/`);
+const description = "从概念、ADT 与复杂度推导，到动手实现、边界测试与典型问题训练，帮助课程学习者扎实掌握数据结构与算法。";
+const imageUrl = new URL("og.png", siteUrl).toString();
+const faviconUrl = new URL("favicon.svg", siteUrl).toString();
 
-  return {
-    metadataBase: new URL(origin),
-    title: {
-      default: "DSA Mastery · 数据结构与算法理论与实验教程",
-      template: "%s · DSA Mastery",
-    },
+export const metadata: Metadata = {
+  metadataBase: siteUrl,
+  title: {
+    default: "DSA Mastery · 数据结构与算法理论与实验教程",
+    template: "%s · DSA Mastery",
+  },
+  description,
+  icons: {
+    icon: faviconUrl,
+    shortcut: faviconUrl,
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    title: "DSA Mastery · 数据结构与算法理论与实验教程",
     description,
-    icons: {
-      icon: "/favicon.svg",
-      shortcut: "/favicon.svg",
-    },
-    openGraph: {
-      type: "website",
-      url: origin,
-      title: "DSA Mastery · 数据结构与算法理论与实验教程",
-      description,
-      images: [{ url: imageUrl, width: 1672, height: 941, alt: "DSA Mastery 项目分享封面" }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: "DSA Mastery · 数据结构与算法理论与实验教程",
-      description,
-      images: [imageUrl],
-    },
-  };
-}
+    images: [{ url: imageUrl, width: 1672, height: 941, alt: "DSA Mastery 项目分享封面" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DSA Mastery · 数据结构与算法理论与实验教程",
+    description,
+    images: [imageUrl],
+  },
+};
 
 const themeScript = `
   try {

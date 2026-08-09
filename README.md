@@ -8,6 +8,8 @@ DSA Mastery 是两名学生共同维护、面向课程学习者的数据结构�
 
 当前是用于团队讨论的 **Demo / MVP**，重点是用第 0、1 章验证这套教程结构是否清楚、实验是否可复现、网站是否适合持续阅读，而不是一次性做完一本教材。
 
+在线课程网站：[https://azenann.github.io/DSA-Mastery/](https://azenann.github.io/DSA-Mastery/)
+
 ## 希望读者最终做到
 
 - 准确说明核心概念、ADT、表示方法与关键不变量，而不是只背结论。
@@ -74,6 +76,8 @@ duration: "45～60 分钟"
 
 保存文件后，开发模式会更新页面；正式合并前运行构建和测试即可验证站点。完整步骤、命名规则与检查清单见 [更新工作流](docs/UPDATE_WORKFLOW.md)。
 
+通过 Review 的改动合并到 `main` 后，GitHub Actions 会自动完成内容检查、网站测试、静态构建与 GitHub Pages 发布。维护者无需提交 `dist/` 等生成目录；发布状态可在仓库的 **Actions** 页面查看。
+
 ## 仓库导览
 
 ```text
@@ -92,12 +96,12 @@ dsa-mastery/
 ├─ docs/
 │  ├─ PROJECT_BLUEPRINT.md      # 项目定位、架构、路线图与风险
 │  └─ UPDATE_WORKFLOW.md        # 日常新增章节、Lab 与 Review 流程
-└─ .github/                     # Issue 与 Pull Request 模板
+└─ .github/                     # 协作模板与 GitHub Pages 自动发布
 ```
 
 建议从以下入口开始：
 
-- 想读教材：进入 `content/`，或运行网站后在线阅读。
+- 想读教材：访问[在线课程网站](https://azenann.github.io/DSA-Mastery/)，或进入 `content/` 阅读 Markdown。
 - 想做实验：进入 `labs/`，按 Lab 的目标、步骤和验收清单完成。
 - 想参与更新：先读 [CONTRIBUTING.md](CONTRIBUTING.md) 和 [更新工作流](docs/UPDATE_WORKFLOW.md)。
 - 想理解长期规划：阅读 [项目蓝图](docs/PROJECT_BLUEPRINT.md)。
@@ -141,11 +145,11 @@ fix/linear-list-complexity
 
 **MVP 现在做：** 两章 Markdown、基础网站、少量 Lab、稳定的新增内容规则、轻量 Review。
 
-**验证后再做：** 按课程主线补齐章节、综合练习与可运行 Lab，再逐步加入交互可视化、多语言实现、Benchmark、LaTeX/PDF、版本发布与更完整的 CI/CD。先证明内容能够形成真实的读者能力，再增加基础设施。
+**验证后再做：** 按课程主线补齐章节、综合练习与可运行 Lab，再逐步加入交互可视化、多语言实现、Benchmark、LaTeX/PDF、版本发布与更完整的质量门禁和预览流程。先证明内容能够形成真实的读者能力，再增加基础设施。
 
 ## 贡献与许可
 
-欢迎通过 Issue 提出勘误、实验建议和章节改进。提交内容前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。项目正式公开前，维护者仍需共同确定内容与代码 License；在 License 明确之前，不应假设仓库内容可以被任意复制或再分发。
+欢迎通过 Issue 提出勘误、实验建议和章节改进。提交内容前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。仓库目前公开可见，但尚未添加明确的内容与代码 License；公开可见不等于获得复制、修改或再分发授权。维护者应尽快共同确定许可方案，在此之前请先取得作者明确许可。
 
 引用教材、论文、网页、图片或开源代码时必须标明来源和许可，尽量用自己的结构与语言讲解，不复制受版权保护的正文或图表。详见 [更新工作流中的版权规则](docs/UPDATE_WORKFLOW.md#8-版权引用与-ai-复核)。
 
