@@ -113,7 +113,7 @@ Reviewer 从“零上下文读者”的角度检查：
 
 ### Step 7：Human Final Review & Merge
 
-Reviewer 对照 DoD，确认自动检查通过、阻塞评论解决后批准并使用 squash merge。默认由 Reviewer 合并，确保作者不会绕过同伴审核。合并后删除分支，关闭 Issue，并检查 `main` 的网站构建。
+Reviewer 对照 DoD，确认自动检查通过、阻塞评论解决后批准并使用 squash merge。默认由 Reviewer 合并，确保作者不会绕过同伴审核。合并后删除分支，关闭 Issue，并检查 `main` 上的 **Deploy course site to GitHub Pages** 工作流；发布成功后抽查[在线课程网站](https://azenann.github.io/DSA-Mastery/)中的新页面。
 
 ### Step 8：Retrospective
 
@@ -166,6 +166,14 @@ PR 描述需要回答：
 - 关联哪个 Issue。
 
 不要在同一 PR 顺便重构无关网站代码。纯排版批量修改与知识内容修改尽量拆开，方便 Review 差异。
+
+### 网站发布与回滚
+
+- `main` 是公开课程网站的唯一正式发布源；分支和 PR 不直接覆盖线上内容。
+- 合并到 `main` 后，GitHub Actions 自动执行内容检查、普通网站测试、Pages 静态构建和发布，不提交 `dist/`、`.next/` 等生成目录。
+- 发布完成后，在 Actions 中确认工作流为绿色，再抽查首页、新页面、前后页链接、搜索和至少一个 Lab。
+- 发布失败时，在短分支中修复并重新走 PR；不要通过跳过检查或手工上传构建产物绕过流水线。
+- 已上线内容需要紧急撤回时，优先创建一个回退 PR 或使用 GitHub 的 Revert 生成新提交，不强推或改写 `main` 历史。
 
 ### Tag 与 Release
 

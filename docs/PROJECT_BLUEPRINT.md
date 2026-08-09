@@ -173,7 +173,7 @@ Issue/目标
 - 公式与代码：由网站渲染层统一处理，正文保留标准 Markdown/数学标记。
 - Lab：每个 Lab 一个独立目录，从 `README.md` 开始，按需要增加代码与测试。
 - 验证：`npm run validate:content`、`npm run build`、`npm test`，必要时运行 `npm run lint`。
-- 托管：在内容结构稳定后再确定持续部署方案。
+- 托管：公开仓库通过 GitHub Actions 自动构建并发布到 [GitHub Pages](https://azenann.github.io/DSA-Mastery/)；生成目录不进入 Git。
 
 ### 为什么暂不以 LaTeX 为主源码
 
@@ -219,7 +219,7 @@ Pull Request
   └─ install → metadata/link check → lint → test → website build
 
 main
-  └─ 同一组质量检查 → 部署网站
+  └─ 同一组质量检查 → GitHub Pages 公开课程网站
                          └─ 未来再追加 PDF/Release artifact
 ```
 
@@ -294,9 +294,9 @@ main
 - 从一个高价值交互（如排序单步执行）开始。
 - 每个交互都要有确定状态模型、重置能力和测试。
 
-### Phase 6：开源完善
+### Phase 6：公开协作完善
 
-- 明确 License、治理、版本节奏和外部贡献机制。
+- 仓库已经公开；下一步明确 License、治理、版本节奏和外部贡献机制。
 - 只有贡献规模需要时再引入更复杂的 Project Board 与自动发布。
 
 ## 13. 第一个月行动计划
