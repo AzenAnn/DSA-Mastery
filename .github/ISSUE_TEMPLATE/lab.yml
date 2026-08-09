@@ -1,0 +1,45 @@
+name: Lab 提案
+description: 设计一个可复现的章节实验
+title: "[Lab] "
+labels: ["lab"]
+body:
+  - type: input
+    id: outcome
+    attributes:
+      label: 学习目标
+      description: 完成实验后，学习者具体掌握什么？
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: 实验任务
+      description: 简述输入、操作、预期输出与建议时长。
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收方式
+      description: 如何客观判断完成？包含哪些边界或测试？
+    validations:
+      required: true
+  - type: input
+    id: chapter
+    attributes:
+      label: 所属章节
+      placeholder: 例如：第 2 章 栈与队列
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Owner / Reviewer
+      placeholder: "A 负责，B Review"
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 环境与依赖
+      description: 列出语言、工具和可能影响复现的外部依赖；没有可写“无”。

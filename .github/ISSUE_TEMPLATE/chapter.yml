@@ -1,0 +1,61 @@
+name: 章节更新
+description: 规划一个章节或可独立审阅的小节
+title: "[Chapter] "
+labels: ["chapter"]
+body:
+  - type: markdown
+    attributes:
+      value: 请先阅读 `docs/UPDATE_WORKFLOW.md`，并尽量把范围切到一次 PR 可以验证。
+  - type: input
+    id: outcome
+    attributes:
+      label: 学习结果
+      description: 读者完成后应该能够做什么？
+      placeholder: 能够……
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: 本次范围
+      description: 列出要覆盖的小节、示例和 Lab。
+    validations:
+      required: true
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: 本次不做
+      description: 明确暂缓内容，防止范围膨胀。
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: 关键验证点
+      description: 哪些定义、复杂度、边界、实验或引用需要重点核验？
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Chapter Owner
+      placeholder: "@用户名或姓名"
+    validations:
+      required: true
+  - type: input
+    id: reviewer
+    attributes:
+      label: Review Owner
+      placeholder: "@用户名或姓名"
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: 目标日期
+      placeholder: YYYY-MM-DD
+  - type: textarea
+    id: sources
+    attributes:
+      label: 参考资料候选
+      description: 优先列原始或权威来源；AI 回答不能作为唯一来源。
