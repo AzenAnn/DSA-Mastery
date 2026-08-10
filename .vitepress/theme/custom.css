@@ -104,6 +104,27 @@ input:focus-visible {
   background: color-mix(in srgb, var(--course-accent) 25%, transparent);
 }
 
+.course-skip-link {
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  z-index: 1000;
+  padding: 10px 14px;
+  border: 1px solid var(--course-accent);
+  border-radius: var(--course-radius-sm);
+  background: var(--course-paper-strong);
+  color: var(--course-ink);
+  font-size: 13px;
+  font-weight: 750;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform var(--course-motion-fast);
+}
+
+.course-skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 /* Native VitePress shell, restyled rather than replaced. */
 .VPNavBar,
 .VPNavBar:not(.home.top),
