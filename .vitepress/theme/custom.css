@@ -1055,7 +1055,7 @@ input:focus-visible {
 /* 样例输入/输出是纯文本，覆盖 log 语法对数字的蓝色高亮，统一为亮白 */
 .course-document-layout .vp-doc div[class*="language-input"] pre span,
 .course-document-layout .vp-doc div[class*="language-output"] pre span {
-  color: var(--course-code-text);
+  color: var(--course-code-text) !important;
 }
 
 .course-document-layout .vp-doc [class*="language-"] pre,
