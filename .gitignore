@@ -30,6 +30,7 @@ yarn-error.log*
 
 /dist/
 /.vitepress/cache/
+/.vitepress/.temp/
 /outputs/
 /work/
 /graphify-out/

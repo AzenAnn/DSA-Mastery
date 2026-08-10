@@ -190,14 +190,186 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${baseUrl}/learn/chapter-01-linear-list/00-overview/`);
   await expect(page.locator(".VPLocalNav .menu")).toBeVisible();
+
+  const closedSidebar = await page.locator(".VPSidebar").evaluate((sidebar) => {
+    const firstLink = sidebar.querySelector("a");
+    firstLink?.focus();
+    const style = globalThis.getComputedStyle(sidebar);
+    return {
+      activeInsideSidebar: globalThis.document.activeElement?.closest(".VPSidebar") === sidebar,
+      pointerEvents: style.pointerEvents,
+      visibility: style.visibility,
+    };
+  });
+  expect(closedSidebar.activeInsideSidebar, "closed mobile sidebar should not accept focus").toBe(false);
+  expect(closedSidebar.pointerEvents, "closed mobile sidebar should not accept pointer input").toBe("none");
+  expect(closedSidebar.visibility, "closed mobile sidebar should be hidden").toBe("hidden");
+
   await page.locator(".VPLocalNav .menu").click();
   await expect(page.locator(".VPSidebar.open")).toBeVisible();
   await expect(page.locator(".VPSidebar.open")).toContainText("1.2 顺序表");
   await page.keyboard.press("Escape");
+  await expect(page.locator(".VPSidebar")).toBeHidden();
 
   await page.locator(".VPNavBarHamburger").click();
   await expect(page.locator(".VPNavScreen")).toBeVisible();
   await expect(page.locator(".VPNavScreen")).toContainText("Labs");
+  expect(failures).toEqual([]);
+});
+
+test("home and lesson navbar share the same horizontal rail", async ({ page }) => {
+  const failures = monitorPage(page);
+  const widths = [1024, 1440, 2048];
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-complexity-basics/`;
+
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: 700 });
+    await page.goto(`${baseUrl}/`);
+    const homeRail = await page.evaluate(() => {
+      const container = globalThis.document.querySelector(".VPNavBar .wrapper > .container");
+      const brand = globalThis.document.querySelector(".course-brand-mark");
+      const containerRect = container?.getBoundingClientRect();
+      const brandRect = brand?.getBoundingClientRect();
+      return {
+        brandLeft: brandRect?.left ?? Number.NaN,
+        containerLeft: containerRect?.left ?? Number.NaN,
+        containerRight: containerRect?.right ?? Number.NaN,
+      };
+    });
+
+    await page.goto(route);
+    const lessonRail = await page.evaluate(() => {
+      const brand = globalThis.document.querySelector(".course-brand-mark");
+      const contentBody = globalThis.document.querySelector(".VPNavBar .content-body");
+      const brandRect = brand?.getBoundingClientRect();
+      const contentRect = contentBody?.getBoundingClientRect();
+      return {
+        brandLeft: brandRect?.left ?? Number.NaN,
+        contentRight: contentRect?.right ?? Number.NaN,
+      };
+    });
+
+    expect(lessonRail.brandLeft, `lesson brand rail at ${width}px`).toBeCloseTo(homeRail.brandLeft, 1);
+    expect(lessonRail.contentRight, `lesson content rail at ${width}px`).toBeCloseTo(homeRail.containerRight, 1);
+  }
+
+  expect(failures).toEqual([]);
+});
+
+test("navbar brand subtitle stays contained and appearance icon stays centered", async ({ page }) => {
+  const failures = monitorPage(page);
+
+  for (const width of [1440, 1024]) {
+    await page.setViewportSize({ width, height: 700 });
+    await page.goto(`${baseUrl}/`);
+    if (width === 1024) {
+      await page.locator(".VPNavBarExtra .button").first().click();
+      await expect(page.locator(".VPNavBarExtra .VPSwitchAppearance")).toBeVisible();
+    } else {
+      await expect(page.locator(".VPNavBarAppearance .VPSwitchAppearance")).toBeVisible();
+    }
+
+    const metrics = await page.evaluate(() => {
+      const doc = globalThis.document;
+      const title = doc.querySelector(".VPNavBarTitle .title");
+      const brandMark = doc.querySelector(".course-brand-mark");
+      const subtitle = doc.querySelector(".course-brand-subtitle");
+      const appearance = [...doc.querySelectorAll(".VPSwitchAppearance")].find(
+        (element) => element.getBoundingClientRect().width > 0,
+      );
+      const icon = appearance?.querySelector(".icon");
+      const titleRect = title?.getBoundingClientRect();
+      const brandMarkRect = brandMark?.getBoundingClientRect();
+      const subtitleRect = subtitle?.getBoundingClientRect();
+      const appearanceRect = appearance?.getBoundingClientRect();
+      const iconRect = icon?.getBoundingClientRect();
+
+      return {
+        subtitleContained:
+          Boolean(titleRect && subtitleRect) &&
+          subtitleRect.left >= titleRect.left &&
+          subtitleRect.right <= titleRect.right + 0.5 &&
+          subtitleRect.top >= titleRect.top &&
+          subtitleRect.bottom <= titleRect.bottom + 0.5 &&
+          subtitle.scrollWidth === subtitle.clientWidth,
+        brandMarkCentered:
+          Boolean(titleRect && brandMarkRect) &&
+          Math.abs(brandMarkRect.top + brandMarkRect.height / 2 - (titleRect.top + titleRect.height / 2)) <= 1,
+        iconCentered:
+          Boolean(appearanceRect && iconRect) &&
+          Math.abs(iconRect.left + iconRect.width / 2 - (appearanceRect.left + appearanceRect.width / 2)) <= 1 &&
+          Math.abs(iconRect.top + iconRect.height / 2 - (appearanceRect.top + appearanceRect.height / 2)) <= 1,
+        rootOverflow: doc.documentElement.scrollWidth - globalThis.window.innerWidth,
+      };
+    });
+
+    expect(metrics.subtitleContained, `brand subtitle containment at ${width}px`).toBe(true);
+    expect(metrics.brandMarkCentered, `brand mark centering at ${width}px`).toBe(true);
+    expect(metrics.iconCentered, `appearance icon centering at ${width}px`).toBe(true);
+    expect(metrics.rootOverflow, `root overflow at ${width}px`).toBeLessThanOrEqual(0);
+  }
+
+  await page.setViewportSize({ width: 980, height: 700 });
+  await page.goto(`${baseUrl}/`);
+  await expect(page.locator(".course-brand-subtitle")).toBeHidden();
+  expect(failures).toEqual([]);
+});
+
+test("lesson navigation keeps the pre-migration hierarchy at responsive widths", async ({ page }) => {
+  const failures = monitorPage(page);
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-complexity-basics/`;
+
+  for (const width of [1440, 1024, 980, 768, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(route);
+
+    const metrics = await page.evaluate(() => {
+      const doc = globalThis.document;
+      const win = globalThis.window;
+      const getStyle = globalThis.getComputedStyle;
+      const root = doc.documentElement;
+      const sidebarText = doc.querySelector(".VPSidebarItem .text");
+      const outlineLink = doc.querySelector(".VPDocAsideOutline .outline-link");
+      const nestedItems = [...doc.querySelectorAll(".VPSidebarItem .items")].find(
+        (element) => getStyle(element).borderLeftStyle !== "none",
+      );
+      const visibleIndicators = [...doc.querySelectorAll(".VPSidebarItem .indicator")].filter(
+        (element) => getStyle(element).backgroundColor !== "rgba(0, 0, 0, 0)",
+      );
+      const readPixels = (element) => {
+        if (!element) return null;
+        const style = getStyle(element);
+        return { fontSize: Number.parseFloat(style.fontSize), lineHeight: Number.parseFloat(style.lineHeight) };
+      };
+
+      return {
+        rootOverflow: root.scrollWidth - win.innerWidth,
+        sidebarText: readPixels(sidebarText),
+        outlineLink: readPixels(outlineLink),
+        nestedBorder: nestedItems
+          ? { style: getStyle(nestedItems).borderLeftStyle, width: getStyle(nestedItems).borderLeftWidth }
+          : null,
+        visibleIndicators: visibleIndicators.length,
+      };
+    });
+
+    expect(metrics.rootOverflow, `root overflow at ${width}px`).toBeLessThanOrEqual(0);
+    expect(metrics.visibleIndicators, `colored sidebar indicators at ${width}px`).toBe(0);
+    expect(metrics.sidebarText?.fontSize, `sidebar font size at ${width}px`).toBeGreaterThanOrEqual(12);
+    expect(metrics.sidebarText?.lineHeight, `sidebar line height at ${width}px`).toBeGreaterThanOrEqual(20);
+
+    if (width >= 981) {
+      await expect(page.locator(".VPDocAsideOutline")).toBeVisible();
+      expect(metrics.outlineLink?.fontSize, `outline font size at ${width}px`).toBeGreaterThanOrEqual(12);
+      expect(metrics.outlineLink?.lineHeight, `outline line height at ${width}px`).toBeGreaterThanOrEqual(20);
+      expect(metrics.nestedBorder?.style, `sidebar hierarchy border at ${width}px`).toBe("solid");
+      expect(metrics.nestedBorder?.width, `sidebar hierarchy border width at ${width}px`).toBe("1px");
+    } else {
+      await expect(page.locator(".VPDocAsideOutline")).toBeHidden();
+      await expect(page.locator(".VPLocalNav .menu")).toBeVisible();
+    }
+  }
+
   expect(failures).toEqual([]);
 });
 
