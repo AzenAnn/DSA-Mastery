@@ -23,6 +23,7 @@ Each route was rendered at `1440`, `1024`, `768`, and `375` CSS pixels in both l
 | Mobile reading layout | Pass at `768px` and `375px`: outline is hidden, local course-directory control is visible, content stays within the viewport | `.VPLocalNav .menu` visibility and root overflow measurement |
 | Navbar brand lockup | Pass: subtitle remains inside the title box with no clipped scroll width | `.VPNavBarTitle .title` and `.course-brand-subtitle` bounding-box measurement |
 | Appearance control | Pass: native switch remains keyboard/ARIA-compatible and icon center delta is `0px` in navbar and extra menu | `.VPSwitchAppearance` geometry at `1440px` and `1024px` |
+| Keyboard focus | Pass: search, appearance, mobile directory, document links, and code-copy controls receive visible `3px` focus outlines | Direct focus checks on homepage, lesson, and linked-list document |
 | Sidebar/outline hierarchy | Pass: indicators are transparent; nested groups use a single neutral border; outline links are `12px` with `21.6px` line height | Responsive Playwright regression in `tests/pages-navigation.spec.mjs` |
 | Reduced motion | Pass: `prefers-reduced-motion: reduce` changes scroll behavior to `auto` and transition duration to the minimal value | Browser emulation check |
 
