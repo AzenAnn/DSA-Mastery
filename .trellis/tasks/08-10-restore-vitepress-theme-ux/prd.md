@@ -54,14 +54,14 @@ The reader should again encounter a deliberate academic-editorial interface: a p
 
 ## Acceptance Criteria
 
-- [ ] The homepage, lesson page, Labs index, and Lab page exhibit the required academic-editorial identity in both light and dark mode, with no unintentional stock VitePress styling in their primary surfaces.
-- [ ] The homepage contains every experience listed in R3 and its cards/statistics still derive from the course index.
-- [ ] A lesson or Lab page presents branded metadata and a readable three-column desktop reading experience; at mobile widths, the VitePress course drawer is reachable and content remains unobscured.
-- [ ] At 375px, 768px, 1024px, and 1440px, no root-level horizontal scroll, clipped text, overlapping controls, or hidden primary action is present.
-- [ ] Keyboard users can visibly focus navigation, search, theme switch, mobile directory, document links, and code-copy controls. Reduced-motion mode suppresses nonessential animation.
-- [ ] Existing Pages-base navigation, Chinese search, theme persistence, code copy, Markdown tables/task lists, Labs navigation, and branded 404 Playwright coverage remain green.
-- [ ] `npm run validate`, `npm run build`, `npm run check:site`, and `npm run test:pages` pass; the implementation records before/after screenshot evidence at the defined viewports and classifies intentional differences.
+- [x] The homepage, lesson page, Labs index, and Lab page exhibit the required academic-editorial identity in both light and dark mode, with no unintentional stock VitePress styling in their primary surfaces.
+- [x] The homepage contains every experience listed in R3 and its cards/statistics still derive from the course index.
+- [x] A lesson or Lab page presents branded metadata and a readable three-column desktop reading experience; at mobile widths, the VitePress course drawer is reachable and content remains unobscured.
+- [x] At 375px, 768px, 1024px, and 1440px, no root-level horizontal scroll, clipped text, overlapping controls, or hidden primary action is present.
+- [x] Keyboard users can visibly focus navigation, search, theme switch, mobile directory, document links, and code-copy controls. Reduced-motion mode suppresses nonessential animation.
+- [x] Existing Pages-base navigation, Chinese search, theme persistence, code copy, Markdown tables/task lists, Labs navigation, and branded 404 Playwright coverage remain green.
+- [x] `npm run validate`, `npm run build`, `npm run check:site`, and `npm run test:pages` pass; the implementation records before/after screenshot evidence at the defined viewports and classifies intentional differences.
 
 ## Execution Status
 
-Planning was approved and implementation is now in progress. The task must remain active until the code, visual checks, and quality gates are complete; it must not be archived as part of this work.
+Planning was approved and implementation, visual review, and quality gates are complete for this session. The task remains active for the owner's review and must not be archived as part of this work.
