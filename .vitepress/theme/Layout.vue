@@ -6,6 +6,7 @@ import { findCourseDocument } from "./course";
 import BrandMark from "./components/BrandMark.vue";
 import DocumentFooterNote from "./components/DocumentFooterNote.vue";
 import DocumentHeader from "./components/DocumentHeader.vue";
+import QuizNavigator from "./components/QuizNavigator.vue";
 
 const DefaultLayout = DefaultTheme.Layout;
 const route = useRoute();
@@ -25,6 +26,9 @@ const currentDocument = computed(() => findCourseDocument(route.path));
     </template>
     <template #doc-footer-before>
       <DocumentFooterNote />
+    </template>
+    <template #aside-outline-after>
+      <QuizNavigator />
     </template>
   </DefaultLayout>
 </template>

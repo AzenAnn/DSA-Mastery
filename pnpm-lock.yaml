@@ -41,6 +41,9 @@ importers:
       markdown-it-mathjax3:
         specifier: 4.3.2
         version: 4.3.2
+      shiki:
+        specifier: 2.5.0
+        version: 2.5.0
       typescript:
         specifier: 5.9.3
         version: 5.9.3

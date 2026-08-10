@@ -951,19 +951,111 @@ input:focus-visible {
 }
 
 .course-document-layout .vp-doc div[class*="language-"] {
+  position: relative;
   margin: 27px 0;
+  overflow: hidden;
   border: 1px solid var(--course-code-border);
   border-radius: var(--course-radius-sm);
   background: var(--course-code-bg);
   box-shadow: none;
 }
 
+/* 顶部工具栏：语言标签在左，复制按钮在右（CSDN 风格） */
 .course-document-layout .vp-doc div[class*="language-"] > span.lang {
-  color: var(--course-code-muted);
+  position: absolute;
+  z-index: 2; /* pre 自带 z-index: 1，工具栏元素必须更高 */
+  top: 0;
+  left: 0;
+  right: auto; /* 覆盖原生 right: 8px，避免左右定位把标签拉伸铺满 */
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 14px;
+  border-right: 1px solid rgb(255 255 255 / 9%);
+  background: var(--course-code-surface);
+  color: var(--course-code-text);
   font-family: var(--course-font-mono);
-  font-size: 9px;
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.course-document-layout .vp-doc div[class*="language-"] > button.copy {
+  position: absolute;
+  z-index: 2; /* pre 自带 z-index: 1，工具栏元素必须更高 */
+  top: 5px;
+  right: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; /* 固定宽度：复制/已复制两种状态同宽，点击后不位移 */
+  height: 22px;
+  padding: 0 6px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 5px;
+  background: rgb(255 255 255 / 7%);
+  background-image: none !important;
+  color: var(--course-code-text);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  opacity: 1;
+  transition: border-color var(--course-motion-fast), background-color var(--course-motion-fast), color var(--course-motion-fast);
+}
+
+.course-document-layout .vp-doc div[class*="language-"] > button.copy svg {
+  display: none;
+}
+
+.course-document-layout .vp-doc div[class*="language-"] > button.copy::before {
+  content: "复制";
+}
+
+.course-document-layout .vp-doc div[class*="language-"] > button.copy:hover {
+  border-color: rgb(255 255 255 / 26%);
+  background: rgb(255 255 255 / 14%);
+  color: #fff;
+}
+
+.course-document-layout .vp-doc div[class*="language-"] > button.copy.copied {
+  border-color: color-mix(in srgb, #5bcf7c 45%, transparent);
+  border-radius: 5px; /* 覆盖原生 copied 的直角圆角，保持形状不变 */
+  background: rgb(255 255 255 / 7%);
+  color: #5bcf7c;
+}
+
+.course-document-layout .vp-doc div[class*="language-"] > button.copy.copied::before,
+.course-document-layout .vp-doc div[class*="language-"] > button.copy:hover.copied::before {
+  /* 覆盖原生 copied 的左侧弹出提示框，改为按钮内的“已复制”文字 */
+  content: "已复制";
+  position: static;
+  top: auto;
+  transform: none;
+  display: inline;
+  justify-content: normal;
+  align-items: normal;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+  background: none;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+/* 代码区域为工具栏留出高度，文字统一提亮保证对比度 */
+.course-document-layout .vp-doc [class*="language-"] pre {
+  padding-top: 46px;
+}
+
+/* 样例输入/输出是纯文本，覆盖 log 语法对数字的蓝色高亮，统一为亮白 */
+.course-document-layout .vp-doc div[class*="language-input"] pre span,
+.course-document-layout .vp-doc div[class*="language-output"] pre span {
+  color: var(--course-code-text) !important;
 }
 
 .course-document-layout .vp-doc [class*="language-"] pre,
@@ -1233,4 +1325,422 @@ input:focus-visible {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+/* Interactive complexity quiz mounted from Lab READMEs. */
+.course-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+  white-space: nowrap;
+}
+
+.course-quiz {
+  display: grid;
+  gap: 24px;
+  margin: 30px 0 34px;
+}
+
+/* 题目卡 */
+.course-quiz-question {
+  scroll-margin-top: calc(var(--vp-nav-height) + 26px);
+  padding: 26px 28px;
+  border: 1px solid var(--course-line);
+  border-radius: var(--course-radius-sm);
+  background: var(--course-paper-strong);
+  box-shadow: var(--course-shadow-sm);
+  transition: border-color var(--course-motion-fast), box-shadow var(--course-motion-fast);
+}
+
+.course-quiz-question:hover {
+  border-color: var(--course-line-strong);
+  box-shadow: 0 2px 6px rgb(24 27 35 / 4%), 0 14px 34px rgb(24 27 35 / 7%);
+}
+
+.course-quiz-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.course-quiz-number {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--course-accent-soft);
+  color: var(--course-accent);
+  font-family: var(--course-font-mono);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+}
+
+.course-quiz-stem {
+  margin: 3px 0 0;
+  color: var(--course-ink);
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.7;
+}
+
+/* 代码窗口(统一深色,与教材代码块一致) */
+.course-quiz-code {
+  margin: 18px 0 0;
+  overflow: hidden;
+  border: 1px solid var(--course-code-border);
+  border-radius: var(--course-radius-sm);
+  background: var(--course-code-bg);
+  box-shadow: var(--course-shadow-sm);
+}
+
+.course-quiz-code-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgb(255 255 255 / 8%);
+  background: var(--course-code-surface);
+}
+
+.course-quiz-code-bar i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.course-quiz-code-bar i:nth-child(1) { background: #ff6b65; }
+.course-quiz-code-bar i:nth-child(2) { background: #f2c357; }
+.course-quiz-code-bar i:nth-child(3) { background: #5bcf7c; }
+
+.course-quiz-code-bar span {
+  margin-left: 8px;
+  color: var(--course-code-text);
+  font-family: var(--course-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.course-quiz-code-body {
+  padding: 15px 18px;
+  overflow-x: auto;
+}
+
+.course-quiz-code-body pre.shiki {
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+  font-family: var(--course-font-mono);
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+.course-quiz-code-body pre.shiki code {
+  font-family: inherit;
+}
+
+/* 选项 */
+.course-quiz-options {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.course-quiz-options label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 15px;
+  border: 1px solid var(--course-line);
+  border-radius: var(--course-radius-sm);
+  background: var(--course-paper);
+  cursor: pointer;
+  transition: border-color var(--course-motion-fast), background-color var(--course-motion-fast);
+}
+
+.course-quiz-options label:hover {
+  border-color: var(--course-line-strong);
+  background: var(--course-paper-strong);
+}
+
+.course-quiz-options label:has(input:checked) {
+  border-color: var(--course-accent);
+  background: var(--course-accent-soft);
+}
+
+.course-quiz-options label:has(input:focus-visible) {
+  outline: 3px solid var(--course-accent);
+  outline-offset: 2px;
+}
+
+.course-quiz-options input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+  white-space: nowrap;
+}
+
+.course-quiz-option-mark {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--course-line-strong);
+  border-radius: 50%;
+  background: var(--course-paper-strong);
+  color: var(--course-ink-soft);
+  font-family: var(--course-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  transition: border-color var(--course-motion-fast), background-color var(--course-motion-fast), color var(--course-motion-fast);
+}
+
+.course-quiz-options label:has(input:checked) .course-quiz-option-mark {
+  border-color: var(--course-accent);
+  background: var(--course-accent);
+  color: var(--course-paper);
+}
+
+.course-quiz-option-text {
+  color: var(--course-ink-soft);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.course-quiz-options label:has(input:checked) .course-quiz-option-text {
+  color: var(--course-ink);
+  font-weight: 650;
+}
+
+/* 提交后的选项状态 */
+.course-quiz-options.is-submitted label {
+  cursor: default;
+}
+
+.course-quiz-options.is-submitted label:hover {
+  border-color: var(--course-line);
+  background: var(--course-paper);
+}
+
+.course-quiz-options.is-submitted label.is-answer {
+  border-color: color-mix(in srgb, var(--course-success) 50%, var(--course-line));
+  background: var(--course-success-soft);
+}
+
+.course-quiz-options.is-submitted label.is-answer .course-quiz-option-mark {
+  border-color: var(--course-success);
+  background: var(--course-success);
+  color: var(--course-paper);
+}
+
+.course-quiz-options.is-submitted label.is-answer .course-quiz-option-text {
+  color: var(--course-success);
+  font-weight: 750;
+}
+
+.course-quiz-options.is-submitted label.is-answer::after {
+  position: absolute;
+  right: 15px;
+  color: var(--course-success);
+  font-size: 15px;
+  font-weight: 800;
+  content: "✓";
+}
+
+.course-quiz-options.is-submitted label.is-wrong-pick {
+  border-color: color-mix(in srgb, var(--course-signal) 50%, var(--course-line));
+  background: var(--course-signal-soft);
+}
+
+.course-quiz-options.is-submitted label.is-wrong-pick .course-quiz-option-mark {
+  border-color: var(--course-signal);
+  background: var(--course-signal);
+  color: var(--course-paper);
+}
+
+.course-quiz-options.is-submitted label.is-wrong-pick .course-quiz-option-text {
+  color: var(--course-signal);
+  font-weight: 750;
+}
+
+.course-quiz-options.is-submitted label.is-wrong-pick::after {
+  position: absolute;
+  right: 15px;
+  color: var(--course-signal);
+  font-size: 15px;
+  font-weight: 800;
+  content: "✕";
+}
+
+/* 操作与反馈 */
+.course-quiz-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.course-quiz-submit {
+  min-height: 42px;
+  padding: 10px 18px;
+}
+
+.course-quiz-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
+.course-quiz-feedback {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 17px 20px;
+  border: 1px solid var(--course-line);
+  border-radius: var(--course-radius-sm);
+}
+
+.course-quiz-feedback.is-correct {
+  border-color: color-mix(in srgb, var(--course-success) 45%, var(--course-line));
+  background: linear-gradient(180deg, var(--course-success-soft), color-mix(in srgb, var(--course-success-soft) 60%, var(--course-paper-strong)));
+}
+
+.course-quiz-feedback.is-wrong {
+  border-color: color-mix(in srgb, var(--course-signal) 45%, var(--course-line));
+  background: linear-gradient(180deg, var(--course-signal-soft), color-mix(in srgb, var(--course-signal-soft) 60%, var(--course-paper-strong)));
+}
+
+.course-quiz-feedback-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--course-ink);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.course-quiz-feedback.is-correct .course-quiz-feedback-heading svg { color: var(--course-success); }
+.course-quiz-feedback.is-wrong .course-quiz-feedback-heading svg { color: var(--course-signal); }
+
+.course-quiz-answer {
+  margin: 0;
+  color: var(--course-ink-soft);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.course-quiz-answer strong {
+  color: var(--course-ink);
+}
+
+.course-quiz-explanation {
+  display: grid;
+  gap: 7px;
+  padding: 13px 15px;
+  border: 1px dashed color-mix(in srgb, var(--course-line-strong) 60%, transparent);
+  border-radius: var(--course-radius-sm);
+  background: color-mix(in srgb, var(--course-paper-strong) 75%, transparent);
+}
+
+.course-quiz-explanation-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--course-accent);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.course-quiz-explanation-title svg { color: var(--course-accent); }
+
+.course-quiz-explanation p {
+  margin: 0;
+  color: var(--course-ink-soft);
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+
+.course-quiz-empty {
+  margin: 30px 0;
+  color: var(--course-ink-faint);
+  font-size: 13px;
+}
+
+/* 右侧栏答题进度导航（挂在 outline 之后） */
+.course-quiz-nav {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--course-line);
+}
+
+.course-quiz-nav-title {
+  margin: 0 0 11px;
+  color: var(--course-ink);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.course-quiz-nav-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course-quiz-nav-list button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid var(--course-line);
+  border-radius: 50%;
+  background: var(--course-paper-strong);
+  color: var(--course-ink-soft);
+  font-family: var(--course-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color var(--course-motion-fast), background-color var(--course-motion-fast), color var(--course-motion-fast);
+}
+
+.course-quiz-nav-list button:hover {
+  border-color: var(--course-accent);
+  color: var(--course-accent);
+}
+
+.course-quiz-nav-list li.is-correct button {
+  border-color: color-mix(in srgb, var(--course-success) 55%, var(--course-line));
+  background: var(--course-success-soft);
+  color: var(--course-success);
+}
+
+.course-quiz-nav-list li.is-wrong button {
+  border-color: color-mix(in srgb, var(--course-signal) 55%, var(--course-line));
+  background: var(--course-signal-soft);
+  color: var(--course-signal);
 }

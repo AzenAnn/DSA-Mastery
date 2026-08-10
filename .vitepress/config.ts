@@ -56,6 +56,8 @@ export default defineConfig({
     "README.md",
     "CONTRIBUTING.md",
     "AGENTS.md",
+    "CLAUDE.md",
+    "CLAUDE.local.md",
     "content/README.md",
     "docs/**",
     ".github/**",
@@ -106,6 +108,8 @@ export default defineConfig({
     // Use one high-contrast dark Shiki palette so light-mode tokens never become
     // dark text on the dark code surface.
     theme: "github-dark-high-contrast",
+    // 样例输入/输出用 log 语法:shiki 内置,对纯文本不产生高亮 token
+    languageAlias: { input: "log", output: "log" },
     config(md) {
       // VitePress exposes its own MarkdownIt structural type, while the stable
       // plugin publishes the equivalent @types/markdown-it signature.
