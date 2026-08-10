@@ -15,13 +15,13 @@
   "branch": "feat/trellis-vitepress-migration",
   "base_branch": "main",
   "worktree_path": null,
-  "commit": "9a22da9",
+  "commit": "d7daac0",
   "pr_url": "https://github.com/AzenAnn/DSA-Mastery/pull/4",
   "subtasks": [],
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "Local acceptance gates passed; Draft PR #4 is awaiting GitHub Actions and human review. Keep unarchived until the reviewed PR is merged or closed.",
+  "notes": "Local acceptance gates and Draft PR #4 GitHub Actions passed. The task is awaiting human review; keep it unarchived until the reviewed PR is merged or closed.",
   "meta": {
     "local_verification": "npm ci; npm test; Pages-base check; Playwright 5/5",
     "migration_doc": "docs/VITEPRESS_MIGRATION.md"
