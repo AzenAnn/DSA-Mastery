@@ -3,6 +3,7 @@ import DefaultTheme from "vitepress/theme-without-fonts";
 import Layout from "./Layout.vue";
 import HomePage from "./components/HomePage.vue";
 import LabsIndex from "./components/LabsIndex.vue";
+import QuizSet from "./components/QuizSet.vue";
 import "./custom.css";
 
 export default {
@@ -11,5 +12,6 @@ export default {
   enhanceApp({ app }) {
     app.component("HomePage", HomePage);
     app.component("LabsIndex", LabsIndex);
+    app.component("QuizSet", QuizSet);
   },
 } satisfies Theme;

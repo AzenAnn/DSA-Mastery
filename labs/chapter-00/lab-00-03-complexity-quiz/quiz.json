@@ -1,0 +1,65 @@
+[
+  {
+    "id": "q1",
+    "stem": "以下代码片段的时间复杂度是？",
+    "code": "int value = array[n - 1];",
+    "options": ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+    "answer": 0,
+    "explanation": "该语句只执行一次数组下标访问，执行次数不随 n 增长，故为 O(1)。数组按下标读取是 O(1) 的典型形态。"
+  },
+  {
+    "id": "q2",
+    "stem": "以下代码片段的时间复杂度是？",
+    "code": "long long sum = 0;\nfor (int i = 0; i < n; i++) {\n  sum += array[i];\n}\nprintf(\"%lld\", sum);",
+    "options": ["O(1)", "O(n)", "O(n²)", "O(n log n)"],
+    "answer": 1,
+    "explanation": "循环体执行 n 次，每次做一次加法，基本操作总次数约为 n，故为 O(n)。单层循环扫描全部元素是 O(n) 的典型形态。"
+  },
+  {
+    "id": "q3",
+    "stem": "以下代码片段的时间复杂度是？",
+    "code": "for (int i = 0; i < n; i++) {\n  for (int j = 0; j < n; j++) {\n    compare(i, j);\n  }\n}",
+    "options": ["O(n)", "O(n log n)", "O(n²)", "O(2ⁿ)"],
+    "answer": 2,
+    "explanation": "外层循环 n 次，内层循环 n 次，compare 共被调用 n × n = n² 次，主导项为 n²，故为 O(n²)。两层都与 n 相关的遍历是 O(n²) 的典型形态。"
+  },
+  {
+    "id": "q4",
+    "stem": "以下代码片段的时间复杂度是？(提示：内层循环次数与 n 无关)",
+    "code": "for (int i = 0; i < n; i++) {\n  for (int j = 0; j < 100; j++) {\n    work();\n  }\n}",
+    "options": ["O(1)", "O(n)", "O(n²)", "O(100n)"],
+    "answer": 1,
+    "explanation": "内层循环固定执行 100 次，与 n 无关。外层循环 n 次，总执行次数为 100n，保留主导项并省略常数后为 O(n)。看到两层循环就直接断定为 O(n²) 是常见误判——必须看内层循环次数是否随 n 增长。"
+  },
+  {
+    "id": "q5",
+    "stem": "以下代码片段的时间复杂度是？",
+    "code": "int count = 0;\nwhile (n > 1) {\n  n = n / 2;\n  count++;\n}\nprintf(\"%d\", count);",
+    "options": ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+    "answer": 1,
+    "explanation": "每次循环 n 减半：第 k 次循环后 n = n₀ / 2ᵏ。当 n₀ / 2ᵏ < 1 时循环停止，即 k ≈ log₂ n₀，故为 O(log n)。每步将规模缩小固定比例是 O(log n) 的典型形态。"
+  },
+  {
+    "id": "q6",
+    "stem": "以下代码片段的时间复杂度是？",
+    "code": "for (int i = n; i > 1; i = i / 2) {\n  for (int j = 0; j < n; j++) {\n    sum += a[j];\n  }\n}",
+    "options": ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+    "answer": 1,
+    "explanation": "外层循环执行约 log₂ n 次（每次减半），内层循环每次执行 n 次，总执行次数约为 n · log₂ n，故为 O(n log n)。分层处理且每层总工作量为 n 是 O(n log n) 的典型形态。"
+  },
+  {
+    "id": "q7",
+    "stem": "以下函数在统计额外空间（不含输入数组本身）时，空间复杂度是？",
+    "code": "int max(int a[], int n) {\n  int m = a[0];\n  for (int i = 1; i < n; i++) {\n    if (a[i] > m) m = a[i];\n  }\n  return m;\n}",
+    "options": ["O(1)", "O(n)", "O(log n)", "无法确定"],
+    "answer": 0,
+    "explanation": "函数只使用固定个数的普通变量（m、i），所需额外空间不随 n 增长，故额外空间为 O(1)。输入数组本身占用的空间不统计在内——写结论时应先说明统计口径。"
+  },
+  {
+    "id": "q8",
+    "stem": "对长度为 n 的有序数组进行二分查找，最坏情况下需要多少次比较？",
+    "options": ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+    "answer": 1,
+    "explanation": "每次比较把查找区间缩小一半：第 k 次比较后区间长度为 n / 2ᵏ，区间缩小到空时停止，比较次数约为 log₂ n + 1，故最坏情况为 O(log n)。注意这是文字描述而非代码——先定义规模 n，再数基本操作（比较）。"
+  }
+]
