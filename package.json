@@ -2,22 +2,23 @@
   "name": "dsa-mastery",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.1.1",
   "engines": {
     "node": ">=22.13.0"
   },
   "scripts": {
     "dev": "vitepress dev . --host 127.0.0.1",
-    "dev:vitepress": "npm run dev",
+    "dev:vitepress": "pnpm run dev",
     "build": "vitepress build .",
-    "build:vitepress": "npm run build",
+    "build:vitepress": "pnpm run build",
     "preview": "vitepress preview . --host 127.0.0.1",
-    "preview:vitepress": "npm run preview",
-    "validate": "npm run validate:content && npm run typecheck && npm run lint",
+    "preview:vitepress": "pnpm run preview",
+    "validate": "pnpm run validate:content && pnpm run typecheck && pnpm run lint",
     "validate:content": "node scripts/validate-content.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "check:site": "node scripts/check-built-site.mjs",
     "test:discovery": "node scripts/test-content-discovery.mjs",
-    "test": "npm run validate && npm run test:discovery && npm run build && npm run check:site",
+    "test": "pnpm run validate && pnpm run test:discovery && pnpm run build && pnpm run check:site",
     "test:pages": "playwright test",
     "lint": "eslint \".vitepress/**/*.{ts,vue}\" scripts/validate-content.mjs scripts/check-built-site.mjs scripts/test-content-discovery.mjs tests/pages-navigation.spec.mjs playwright.config.mjs eslint.config.mjs"
   },
