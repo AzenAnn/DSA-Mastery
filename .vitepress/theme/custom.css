@@ -140,6 +140,12 @@ input:focus-visible {
   display: none;
 }
 
+.VPNavBarTitle .title > .course-brand-mark {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
 .course-brand-mark {
   display: inline-flex;
   flex: 0 0 auto;

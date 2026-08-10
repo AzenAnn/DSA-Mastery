@@ -217,12 +217,14 @@ test("navbar brand subtitle stays contained and appearance icon stays centered",
     const metrics = await page.evaluate(() => {
       const doc = globalThis.document;
       const title = doc.querySelector(".VPNavBarTitle .title");
+      const brandMark = doc.querySelector(".course-brand-mark");
       const subtitle = doc.querySelector(".course-brand-subtitle");
       const appearance = [...doc.querySelectorAll(".VPSwitchAppearance")].find(
         (element) => element.getBoundingClientRect().width > 0,
       );
       const icon = appearance?.querySelector(".icon");
       const titleRect = title?.getBoundingClientRect();
+      const brandMarkRect = brandMark?.getBoundingClientRect();
       const subtitleRect = subtitle?.getBoundingClientRect();
       const appearanceRect = appearance?.getBoundingClientRect();
       const iconRect = icon?.getBoundingClientRect();
@@ -235,6 +237,9 @@ test("navbar brand subtitle stays contained and appearance icon stays centered",
           subtitleRect.top >= titleRect.top &&
           subtitleRect.bottom <= titleRect.bottom + 0.5 &&
           subtitle.scrollWidth === subtitle.clientWidth,
+        brandMarkCentered:
+          Boolean(titleRect && brandMarkRect) &&
+          Math.abs(brandMarkRect.top + brandMarkRect.height / 2 - (titleRect.top + titleRect.height / 2)) <= 1,
         iconCentered:
           Boolean(appearanceRect && iconRect) &&
           Math.abs(iconRect.left + iconRect.width / 2 - (appearanceRect.left + appearanceRect.width / 2)) <= 1 &&
@@ -244,6 +249,7 @@ test("navbar brand subtitle stays contained and appearance icon stays centered",
     });
 
     expect(metrics.subtitleContained, `brand subtitle containment at ${width}px`).toBe(true);
+    expect(metrics.brandMarkCentered, `brand mark centering at ${width}px`).toBe(true);
     expect(metrics.iconCentered, `appearance icon centering at ${width}px`).toBe(true);
     expect(metrics.rootOverflow, `root overflow at ${width}px`).toBeLessThanOrEqual(0);
   }
