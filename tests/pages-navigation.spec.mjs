@@ -110,7 +110,7 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await expect(page).toHaveTitle(/数据结构与算法理论与实验教程 · DSA Mastery/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("学透、做实、用活");
   await expect(page.locator(".course-hero-stats")).toContainText("7");
-  await expect(page.locator(".course-hero-stats")).toContainText("4");
+  await expect(page.locator(".course-hero-stats")).toContainText("6");
 
   await page.getByRole("link", { name: /从第 0 章开始/ }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/00-overview/`);
@@ -378,4 +378,79 @@ test("unknown course routes render the branded 404", async ({ page }) => {
   expect(response?.status()).toBe(404);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("PAGE NOT FOUND");
   await expect(page.getByRole("link", { name: /go to home|返回首页/ })).toBeVisible();
+});
+
+test("complexity quiz submits answers with immediate feedback", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/chapter-00/lab-00-03-complexity-quiz/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 00-03：复杂度计算自测");
+  const questions = page.locator(".course-quiz-question");
+  await expect(questions).toHaveCount(8);
+
+  // 右侧答题进度导航：8 个圈，初始全部未作答
+  const navigator = page.locator(".course-quiz-nav");
+  await expect(navigator).toBeVisible();
+  await expect(navigator.locator("li")).toHaveCount(8);
+  await expect(navigator.locator("li.is-pending")).toHaveCount(8);
+
+  // 第 1 题故意选错：立即出现错误反馈、正确答案与题解，导航第 1 圈变红
+  const first = questions.first();
+  await first.locator(".course-quiz-option").nth(1).click();
+  await expect(first.getByRole("radio").nth(1)).toBeChecked();
+  await first.getByRole("button", { name: "提交答案" }).click();
+  await expect(first.locator(".course-quiz-feedback")).toContainText("回答错误");
+  await expect(first.locator(".course-quiz-feedback")).toContainText("正确答案：A. O(1)");
+  await expect(first.locator(".course-quiz-explanation")).toContainText("执行次数不随 n 增长");
+  await expect(first.locator(".course-quiz-options")).toHaveClass(/is-submitted/);
+  await expect(first.getByRole("radio").first()).toBeDisabled();
+  await expect(navigator.locator("li").first()).toHaveClass(/is-wrong/);
+
+  // 第 2 题选对：正确反馈，导航第 2 圈变绿；重新作答后回到未作答状态
+  const second = questions.nth(1);
+  await second.locator(".course-quiz-option").nth(1).click();
+  await second.getByRole("button", { name: "提交答案" }).click();
+  await expect(second.locator(".course-quiz-feedback")).toContainText("回答正确");
+  await expect(navigator.locator("li").nth(1)).toHaveClass(/is-correct/);
+  await second.getByRole("button", { name: "重新作答" }).click();
+  await expect(second.locator(".course-quiz-feedback")).toHaveCount(0);
+  await expect(second.getByRole("radio").nth(1)).toBeEnabled();
+  await expect(navigator.locator("li").nth(1)).toHaveClass(/is-pending/);
+
+  // 点击导航第 3 个圈应跳转到第 3 题卡片
+  await navigator.locator("li").nth(2).getByRole("button").click();
+  await expect(questions.nth(2)).toBeInViewport();
+
+  expect(failures).toEqual([]);
+});
+
+test("programming problem template renders the standard problem sections", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-03-problem-template/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 01-03：编程题页面样板");
+
+  // 题面 7 要素全部渲染
+  for (const heading of ["题目", "输入格式", "输出格式", "数据范围与限制", "样例", "如何验证"]) {
+    await expect(page.locator(".vp-doc h2").filter({ hasText: heading })).toHaveCount(1);
+  }
+  // 「任务要求」属于「题目」小节下的 h3
+  await expect(page.locator(".vp-doc h3").filter({ hasText: "任务要求" })).toHaveCount(1);
+
+  // 样例输入与输出代码块
+  const sampleInput = page.locator(".vp-doc pre").filter({ hasText: "1 3 5 7" });
+  await expect(sampleInput).toBeVisible();
+  await expect(page.locator(".vp-doc pre").filter({ hasText: "1 2 3 4 5 6 7" })).toBeVisible();
+
+  // 数据范围表格与样例解释表格
+  await expect(page.locator(".vp-doc table")).toHaveCount(2);
+
+  // 验证清单的 checkbox 渲染
+  await expect(page.locator('.vp-doc input[type="checkbox"]')).toHaveCount(3);
+
+  // 页内链接到该 Lab 的入口在 Labs 索引中存在
+  await page.goto(`${baseUrl}/labs/`);
+  await expect(
+    page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-03：编程题页面样板" }),
+  ).toBeVisible();
+
+  expect(failures).toEqual([]);
 });
