@@ -59,6 +59,8 @@ Not adopted: teal/amber palette, playful children's typography, generic FAQ/supp
 
 `custom.css` restyles the default navbar, local search, sidebar, outline, code-copy controls, and footer through the public VitePress class surface. `Layout.vue` continues to provide slots only; it must not reimplement navigation or search. Interactive elements retain visible `:focus-visible` treatment, readable active states, and their native accessible names.
 
+The pre-migration `.brand` rendered the mark and name as a two-row lockup, while `.icon-button` used an inline flex center for the theme icon. The VitePress equivalent keeps the native title and appearance controls, but maps the title slot to a two-row grid so the subtitle remains inside the title box instead of relying on a negative margin. The native appearance switch keeps its `role="switch"` and keyboard behavior; its `.check` thumb is centered within the 44px touch target in both the navbar and the collapsed extra menu.
+
 ### Homepage
 
 `HomePage.vue` retains its data-derived sections in this order: learning promise and two entry actions; proof points; index statistics; learning loop; chapters; Labs; the Markdown update panel; closing statement. The code window is the hero's primary visual, has an accessible text alternative, and uses stable dimensions across breakpoints so badges cannot collide with text.

@@ -126,7 +126,14 @@ input:focus-visible {
 }
 
 .VPNavBarTitle .title {
+  display: grid;
+  grid-template-columns: 36px max-content;
+  grid-template-rows: 24px 14px;
+  align-content: center;
+  align-items: center;
   gap: 10px;
+  height: var(--vp-nav-height);
+  overflow: visible;
 }
 
 .VPNavBarTitle .logo {
@@ -151,19 +158,26 @@ input:focus-visible {
 }
 
 .course-brand-mark + span {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
   font-size: 15px;
   font-weight: 800;
   letter-spacing: 0.01em;
+  line-height: 1.05;
+  white-space: nowrap;
 }
 
 .course-brand-subtitle {
-  align-self: flex-end;
-  margin: 0 0 8px -86px;
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
+  margin: 0;
   color: var(--course-ink-faint);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 500;
-  line-height: 1;
-  transform: translateY(7px);
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .VPNavBar .content-body {
@@ -211,11 +225,27 @@ input:focus-visible {
 }
 
 .VPNavBarAppearance .VPSwitchAppearance,
-.VPNavBarExtra .button {
+.VPNavBarExtra .button,
+.VPNavBarExtra .VPSwitchAppearance {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
   min-width: 44px;
   min-height: 44px;
+  padding: 0;
   border: 1px solid var(--course-line);
   border-radius: 9px;
+}
+
+.VPNavBarAppearance .VPSwitchAppearance .check,
+.VPNavBarExtra .VPSwitchAppearance .check {
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%) !important;
 }
 
 .VPSidebar {
