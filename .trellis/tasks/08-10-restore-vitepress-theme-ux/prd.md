@@ -34,12 +34,14 @@ The reader should again encounter a deliberate academic-editorial interface: a p
 - The default VitePress top navigation, local search, appearance switch, desktop sidebar, mobile drawer, outline, document footer, code-copy controls, and 404 page remain available and visibly integrated with the brand.
 - The desktop course sidebar must follow the pre-migration hierarchy: one neutral divider for nested item groups, a quiet chapter heading, and a single active-item surface; it must not render a colored indicator on every item.
 - The right-side outline must use a readable 12px class, approximately 1.8 line-height, visible section spacing, and a stable sticky column so headings are scannable rather than compressed into a dense list.
+- The homepage and lesson top bars must share the same horizontal content rail; the two-row brand subtitle stays contained and the appearance icon remains centered in its touch target.
 
 ### R4. Responsive, accessible interaction
 
 - Verify the established 1180px, 980px, and 720px layout transitions, plus 375px, 768px, 1024px, and 1440px review widths. The root page must not horizontally overflow.
 - Light and dark modes must keep normal-size text and interactive controls legible, preserve visible keyboard focus, and not convey status through color alone.
 - Hover and focus states must be evident; motion is limited to short, functional opacity/transform transitions and is disabled by `prefers-reduced-motion`.
+- A closed mobile course drawer must not expose its links to pointer or keyboard focus, while the native open and Escape-close behavior remains intact.
 
 ### R5. Preserve migration behavior
 

@@ -61,6 +61,8 @@ Not adopted: teal/amber palette, playful children's typography, generic FAQ/supp
 
 The pre-migration `.brand` rendered the mark and name as a two-row lockup, while `.icon-button` used an inline flex center for the theme icon. The VitePress equivalent keeps the native title and appearance controls, but maps the title slot to a two-row grid so the subtitle remains inside the title box instead of relying on a negative margin. The native appearance switch keeps its `role="switch"` and keyboard behavior; its `.check` thumb is centered within the 44px touch target in both the navbar and the collapsed extra menu.
 
+The homepage and lesson navbar share one horizontal content rail. The home container uses `calc(var(--vp-layout-max-width) - 64px)` and the lesson shell derives its title and content edges from the same `--course-nav-gutter`; only the sidebar's reserved left area remains route-specific. The outer sidebar title selector is deliberately scoped to the direct container child so the inner brand grid keeps its own padding.
+
 ### Homepage
 
 `HomePage.vue` retains its data-derived sections in this order: learning promise and two entry actions; proof points; index statistics; learning loop; chapters; Labs; the Markdown update panel; closing statement. The code window is the hero's primary visual, has an accessible text alternative, and uses stable dimensions across breakpoints so badges cannot collide with text.
@@ -79,6 +81,8 @@ The old React implementation is the reference for hierarchy, not a DOM to restor
 - Style `.VPDocAsideOutline .content` as the old table-of-contents column: a neutral left border, 12px links, 1.8 line-height, 6-8px vertical rhythm, and wrapped long headings. The outline title is 12px/800 and is separated from links by at least 14px.
 
 These rules preserve VitePress's active-anchor behavior while recovering the pre-migration information hierarchy.
+
+At mobile widths, the closed native sidebar is visually and interactively absent (`visibility: hidden`, `pointer-events: none`) until VitePress adds `.open`. This prevents an opacity-only drawer from exposing hidden links to keyboard users while preserving native open, Escape, and focus behavior.
 
 ## Responsive Behavior
 

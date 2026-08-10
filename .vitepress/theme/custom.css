@@ -56,6 +56,7 @@
   --vp-nav-height: 68px;
   --vp-sidebar-width: 278px;
   --vp-layout-max-width: 1500px;
+  --course-nav-gutter: max(28px, calc((100vw - var(--vp-layout-max-width)) / 2 + 32px));
 }
 
 .dark {
@@ -122,7 +123,15 @@ input:focus-visible {
 }
 
 .VPNavBar .container {
-  max-width: 1480px;
+  max-width: calc(var(--vp-layout-max-width) - 64px);
+}
+
+.VPNavBar.has-sidebar > .wrapper > .container > .title {
+  padding-left: var(--course-nav-gutter);
+}
+
+.VPNavBar.has-sidebar .content {
+  padding-right: var(--course-nav-gutter) !important;
 }
 
 .VPNavBarTitle .title {
@@ -1095,7 +1104,7 @@ input:focus-visible {
 }
 
 @media (max-width: 1180px) {
-  .VPNavBar .wrapper { padding-inline: 18px; }
+  .VPNavBar .wrapper { padding-inline: var(--course-nav-gutter); }
   .VPNavBar .search { max-width: 360px; margin-right: 8px; }
   .course-hero-grid { grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr); gap: 40px; }
   .course-hero-copy h1 { font-size: 58px; }
@@ -1125,12 +1134,16 @@ input:focus-visible {
     max-width: 320px !important;
     padding-top: var(--vp-nav-height) !important;
     opacity: 0 !important;
+    pointer-events: none !important;
     transform: translateX(-100%) !important;
+    visibility: hidden !important;
   }
 
   .VPSidebar.open {
     opacity: 1 !important;
+    pointer-events: auto !important;
     transform: translateX(0) !important;
+    visibility: visible !important;
   }
 
   .VPLocalNav.has-sidebar { padding-left: 0 !important; }

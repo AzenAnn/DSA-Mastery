@@ -190,14 +190,69 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${baseUrl}/learn/chapter-01-linear-list/00-overview/`);
   await expect(page.locator(".VPLocalNav .menu")).toBeVisible();
+
+  const closedSidebar = await page.locator(".VPSidebar").evaluate((sidebar) => {
+    const firstLink = sidebar.querySelector("a");
+    firstLink?.focus();
+    const style = globalThis.getComputedStyle(sidebar);
+    return {
+      activeInsideSidebar: globalThis.document.activeElement?.closest(".VPSidebar") === sidebar,
+      pointerEvents: style.pointerEvents,
+      visibility: style.visibility,
+    };
+  });
+  expect(closedSidebar.activeInsideSidebar, "closed mobile sidebar should not accept focus").toBe(false);
+  expect(closedSidebar.pointerEvents, "closed mobile sidebar should not accept pointer input").toBe("none");
+  expect(closedSidebar.visibility, "closed mobile sidebar should be hidden").toBe("hidden");
+
   await page.locator(".VPLocalNav .menu").click();
   await expect(page.locator(".VPSidebar.open")).toBeVisible();
   await expect(page.locator(".VPSidebar.open")).toContainText("1.2 顺序表");
   await page.keyboard.press("Escape");
+  await expect(page.locator(".VPSidebar")).toBeHidden();
 
   await page.locator(".VPNavBarHamburger").click();
   await expect(page.locator(".VPNavScreen")).toBeVisible();
   await expect(page.locator(".VPNavScreen")).toContainText("Labs");
+  expect(failures).toEqual([]);
+});
+
+test("home and lesson navbar share the same horizontal rail", async ({ page }) => {
+  const failures = monitorPage(page);
+  const widths = [1024, 1440, 2048];
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-complexity-basics/`;
+
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: 700 });
+    await page.goto(`${baseUrl}/`);
+    const homeRail = await page.evaluate(() => {
+      const container = globalThis.document.querySelector(".VPNavBar .wrapper > .container");
+      const brand = globalThis.document.querySelector(".course-brand-mark");
+      const containerRect = container?.getBoundingClientRect();
+      const brandRect = brand?.getBoundingClientRect();
+      return {
+        brandLeft: brandRect?.left ?? Number.NaN,
+        containerLeft: containerRect?.left ?? Number.NaN,
+        containerRight: containerRect?.right ?? Number.NaN,
+      };
+    });
+
+    await page.goto(route);
+    const lessonRail = await page.evaluate(() => {
+      const brand = globalThis.document.querySelector(".course-brand-mark");
+      const contentBody = globalThis.document.querySelector(".VPNavBar .content-body");
+      const brandRect = brand?.getBoundingClientRect();
+      const contentRect = contentBody?.getBoundingClientRect();
+      return {
+        brandLeft: brandRect?.left ?? Number.NaN,
+        contentRight: contentRect?.right ?? Number.NaN,
+      };
+    });
+
+    expect(lessonRail.brandLeft, `lesson brand rail at ${width}px`).toBeCloseTo(homeRail.brandLeft, 1);
+    expect(lessonRail.contentRight, `lesson content rail at ${width}px`).toBeCloseTo(homeRail.containerRight, 1);
+  }
+
   expect(failures).toEqual([]);
 });
 

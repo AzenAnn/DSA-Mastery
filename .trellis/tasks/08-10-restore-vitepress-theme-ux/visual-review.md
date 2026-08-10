@@ -22,8 +22,10 @@ Each route was rendered at `1440`, `1024`, `768`, and `375` CSS pixels in both l
 | Desktop reading layout | Pass at `1440px` and `1024px`: sidebar, document content, and outline remain readable | `DocumentHeader.vue`, native VitePress sidebar/outline, lesson/Lab screenshots |
 | Mobile reading layout | Pass at `768px` and `375px`: outline is hidden, local course-directory control is visible, content stays within the viewport | `.VPLocalNav .menu` visibility and root overflow measurement |
 | Navbar brand lockup | Pass: mark is vertically centered and subtitle remains inside the title box with no clipped scroll width | `.VPNavBarTitle .title`, `.course-brand-mark`, and `.course-brand-subtitle` bounding-box measurements |
+| Navbar horizontal rail | Pass: homepage container left/brand and lesson brand/content right edges match at `1024`, `1440`, and `2048px` | `home and lesson navbar share the same horizontal rail` Playwright regression |
 | Appearance control | Pass: native switch remains keyboard/ARIA-compatible and icon center delta is `0px` in navbar and extra menu | `.VPSwitchAppearance` geometry at `1440px` and `1024px` |
 | Keyboard focus | Pass: search, appearance, mobile directory, document links, and code-copy controls receive visible `3px` focus outlines | Direct focus checks on homepage, lesson, and linked-list document |
+| Closed mobile drawer | Pass: closed sidebar is `visibility: hidden`/`pointer-events: none`, cannot accept programmatic focus, and becomes hidden again after Escape | `mobile navigation exposes the course sidebar and top-level links` Playwright regression |
 | Sidebar/outline hierarchy | Pass: indicators are transparent; nested groups use a single neutral border; outline links are `12px` with `21.6px` line height | Responsive Playwright regression in `tests/pages-navigation.spec.mjs` |
 | Reduced motion | Pass: `prefers-reduced-motion: reduce` changes scroll behavior to `auto` and transition duration to the minimal value | Browser emulation check |
 

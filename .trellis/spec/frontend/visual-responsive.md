@@ -20,6 +20,7 @@
 - 文档页保留桌面左侧课程目录、中央正文、右侧 outline；有面包屑、状态、更新时间、贡献者、来源/编辑入口和前后页。
 - Markdown 保留标题分隔、引用、可横滚表格、行内代码、代码语言/复制反馈、MathJax 和任务列表。
 - 顶栏品牌沿用旧 `.brand` 的两行锁定结构：副标题必须在品牌标题盒内完整显示，不能用负 margin 让文字溢出；VitePress 外观切换保留原生 switch 语义，并将图标居中于至少 44px 的触控目标。
+- 首页和正文页顶栏必须共用同一条水平内容轨道：使用 `--vp-layout-max-width` 推导动态外边距，正文页不能沿用 VitePress 默认的 2px 右侧内边距，也不能让侧栏标题选择器误伤品牌内层网格。
 
 视觉基准位于 `docs/assets/migration-baseline/`；比较相同 viewport、主题和页面，不用截图差异代替人工判断。
 
@@ -53,6 +54,7 @@
 - 浅/暗色下正文、靛蓝、橙色、状态徽章、代码块和焦点环均保持清楚对比。
 - 搜索使用 VitePress 原生本地搜索与键盘交互；不重复注册 `Ctrl/Cmd+K`、`/` 或 `Esc` 监听器。
 - 键盘用户能到达导航、搜索、主题、目录、代码复制和前后页；`:focus-visible` 不得被去除。
+- 移动课程抽屉关闭时必须同时 `visibility: hidden` 且 `pointer-events: none`，避免透明/移出视口的侧栏链接进入焦点或交互树；打开和 Escape 关闭仍由 VitePress 原生状态控制。
 - `prefers-reduced-motion: reduce` 时关闭非必要动画和顺滑滚动。
 - 横向内容只能让代码、公式或表格自身滚动，页面不能产生整体横向溢出。
 - 所有点击、悬停和 active 状态有清晰的非布局位移反馈；普通 UI 过渡只使用 `opacity`、`color`、`box-shadow` 或 `transform`，时长 150-300ms。不能只依赖 hover 传达导航或状态。
