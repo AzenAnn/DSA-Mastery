@@ -9,6 +9,7 @@
 | 调整项目范围或新增能力 | [project/](project/index.md) |
 | 新增或修改教材页面 | [content/frontmatter-and-routing.md](content/frontmatter-and-routing.md) |
 | 新增或修改 Lab | [content/labs.md](content/labs.md) |
+| 开始任何 VitePress 开发 | [frontend/vitepress-development.md](frontend/vitepress-development.md) |
 | 修改 VitePress 配置、路由、数据加载 | [frontend/vitepress-architecture.md](frontend/vitepress-architecture.md) |
 | 修改首页、导航或课程组件 | [frontend/components-and-data.md](frontend/components-and-data.md) |
 | 修改样式、暗色或响应式布局 | [frontend/visual-responsive.md](frontend/visual-responsive.md) |

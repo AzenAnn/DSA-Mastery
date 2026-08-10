@@ -85,7 +85,9 @@ Owner 创建分支并编写正文和 Lab。正文解释关键逻辑，完整可�
 本地阅读使用：
 
 ```bash
-npm run dev
+corepack enable
+pnpm install --frozen-lockfile
+pnpm run dev
 ```
 
 开发服务只监听 `127.0.0.1`。公式使用 `$...$` 或 `$$...$$`，由 VitePress `markdown.math` 的 MathJax 管线渲染。
@@ -95,17 +97,17 @@ npm run dev
 提交 PR 前，Owner 完成：
 
 ```bash
-npm test
+pnpm test
 ```
 
-`npm test` 已包含内容校验、`vue-tsc`、lint、临时教材/Lab 自动发现、生产构建和 `dist/pages` 产物检查。涉及导航、Pages base、主题、Markdown 渲染或发布工作流时，再在 Windows PowerShell 中运行：
+`pnpm test` 已包含内容校验、`vue-tsc`、lint、临时教材/Lab 自动发现、生产构建和 `dist/pages` 产物检查。涉及导航、Pages base、主题、Markdown 渲染或发布工作流时，再在 Windows PowerShell 中运行：
 
 ```powershell
 $env:GITHUB_PAGES_BASE_PATH = "/DSA-Mastery"
 $env:SITE_URL = "https://azenann.github.io/DSA-Mastery/"
-npm run build
-npm run check:site
-npm run test:pages
+pnpm run build
+pnpm run check:site
+pnpm run test:pages
 Remove-Item Env:GITHUB_PAGES_BASE_PATH
 Remove-Item Env:SITE_URL
 ```
@@ -274,7 +276,7 @@ PR 中保留以下检查表；不适用项必须解释，不能静默删除。
 - [ ] 正文、Lab、代码与测试使用一致的术语和行为约定。
 - [ ] 引用可追溯；第三方文字、图片和代码的许可允许当前用法。
 - [ ] 页面顺序、标题、链接和网站显示经过手工检查。
-- [ ] `npm test` 通过；涉及导航、主题、Markdown 渲染、base 或发布时，Pages 子路径 `npm run check:site` 与 `npm run test:pages` 也通过。
+- [ ] `pnpm test` 通过；涉及导航、主题、Markdown 渲染、base 或发布时，Pages 子路径 `pnpm run check:site` 与 `pnpm run test:pages` 也通过。
 - [ ] AI 参与范围已说明，事实、代码、引用和测试结果均由人工复核。
 - [ ] Review 的 blocking 评论已解决，Review Owner 已批准。
 

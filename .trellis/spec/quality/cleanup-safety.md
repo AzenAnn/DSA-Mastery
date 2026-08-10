@@ -47,14 +47,14 @@
 
 ## 5. Good / Base / Bad Cases
 
-- Good：报告证明某个新候选已有替代、无有效引用，并在单独 commit 删除后重跑 `npm test`。
+- Good：报告证明某个新候选已有替代、无有效引用，并在单独 commit 删除后重跑 `pnpm test`。
 - Base：用途不明的文件先保留并在报告中记录不确定性。
 - Bad：对仓库根执行递归清理，或用 `Remove-Item $variable -Recurse` 而未打印并验证解析路径。
 
 ## 6. Tests Required
 
 - 删除前后各保存 `rg` 引用结果和 `git status --short`。
-- 重新执行 `npm ci`，确认 lockfile 与安装树不再含已删技术栈。
+- 重新执行 `pnpm install --frozen-lockfile`，确认 lockfile 与安装树不再含已删技术栈。
 - 重跑内容、type/lint、build、link、单测和 Pages Playwright。
 - 核对七篇教材、四个 Lab、首页、Labs 索引、404 和截图。
 - Review staged deletion diff，确认没有课程内容、素材或 Trellis 文件。

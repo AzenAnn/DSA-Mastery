@@ -10,8 +10,8 @@
 
 <!-- 写实际执行的命令、Lab/示例结果，以及手工检查的页面。 -->
 
-- [ ] `npm test`
-- [ ] 涉及导航、主题、Markdown 渲染、base 或发布时：Pages 子路径 `npm run check:site` 与 `npm run test:pages`
+- [ ] `pnpm test`
+- [ ] 涉及导航、主题、Markdown 渲染、base 或发布时：Pages 子路径 `pnpm run check:site` 与 `pnpm run test:pages`
 - [ ] 新页面的导航、相对 `.md` 链接、公式、代码块和前后页跳转已检查
 - [ ] 实际命令、结果与未执行项原因已写在本节
 
