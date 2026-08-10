@@ -116,12 +116,12 @@ Remove-Item Env:SITE_URL
 `.github/workflows/pages.yml` 在 PR、`main` push 和手动触发时共用同一个 build job：
 
 1. `npm ci`；
-2. `actions/configure-pages@v5` 提供 `base_path` 与 `base_url`；
+2. `actions/configure-pages@v6` 提供 `base_path` 与 `base_url`；
 3. validate、discovery、最终 build、artifact check；
 4. Chromium Playwright；
-5. `actions/upload-pages-artifact@v4` 上传 `dist/pages`。
+5. `actions/upload-pages-artifact@v5` 上传 `dist/pages`。
 
-`actions/deploy-pages@v4` 只在非 PR 事件执行。PR 会完整构建与测试，但不会覆盖正式网站。
+`actions/deploy-pages@v5` 只在非 PR 事件执行。PR 会完整构建与测试，但不会覆盖正式网站。这三个 Pages action 均使用当前 Node 24 major，避免 GitHub Runner 的 Node 20 弃用告警。
 
 ## 5. 清理结果与依赖风险
 

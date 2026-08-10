@@ -69,7 +69,7 @@ actions/configure-pages base_path
 
 ```yaml
 - run: npm run build
-- uses: actions/deploy-pages@v4
+- uses: actions/deploy-pages@v5
 ```
 
 PR 也执行 deploy，且没有最终产物的点击测试。
