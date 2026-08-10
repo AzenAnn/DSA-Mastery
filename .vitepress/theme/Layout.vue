@@ -14,9 +14,6 @@ const currentDocument = computed(() => findCourseDocument(route.path));
 
 <template>
   <DefaultLayout :class="{ 'course-document-layout': Boolean(currentDocument) }">
-    <template #layout-top>
-      <a class="course-skip-link" href="#VPContent">跳转到正文</a>
-    </template>
     <template #nav-bar-title-before>
       <BrandMark />
     </template>

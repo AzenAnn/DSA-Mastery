@@ -104,27 +104,6 @@ input:focus-visible {
   background: color-mix(in srgb, var(--course-accent) 25%, transparent);
 }
 
-.course-skip-link {
-  position: fixed;
-  top: 12px;
-  left: 16px;
-  z-index: 1000;
-  padding: 10px 14px;
-  border: 1px solid var(--course-accent);
-  border-radius: var(--course-radius-sm);
-  background: var(--course-paper-strong);
-  color: var(--course-ink);
-  font-size: 13px;
-  font-weight: 750;
-  text-decoration: none;
-  transform: translateY(-160%);
-  transition: transform var(--course-motion-fast);
-}
-
-.course-skip-link:focus-visible {
-  transform: translateY(0);
-}
-
 /* Native VitePress shell, restyled rather than replaced. */
 .VPNavBar,
 .VPNavBar:not(.home.top),
@@ -247,13 +226,34 @@ input:focus-visible {
 .VPSidebarItem .text {
   color: var(--course-ink-soft);
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 24px;
+  padding-block: 5px;
 }
 
 .VPSidebarItem.level-0 > .item > .text {
   color: var(--course-ink);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 750;
+}
+
+.VPSidebarItem.level-1 .items,
+.VPSidebarItem.level-2 .items,
+.VPSidebarItem.level-3 .items,
+.VPSidebarItem.level-4 .items,
+.VPSidebarItem.level-5 .items {
+  border-left-color: var(--course-line);
+  padding-left: 14px;
+}
+
+.VPSidebarItem.level-1.is-active > .item > .link,
+.VPSidebarItem.level-2.is-active > .item > .link,
+.VPSidebarItem.level-3.is-active > .item > .link,
+.VPSidebarItem.level-4.is-active > .item > .link,
+.VPSidebarItem.level-5.is-active > .item > .link {
+  margin-inline: -10px;
+  padding-inline: 10px;
+  border-radius: var(--course-radius-sm);
+  background: var(--course-accent-soft);
 }
 
 .VPSidebarItem.is-active > .item .link > .text {
@@ -262,7 +262,12 @@ input:focus-visible {
 }
 
 .VPSidebarItem .indicator {
-  background-color: var(--course-accent);
+  background-color: transparent;
+}
+
+.VPSidebarItem .caret {
+  width: 44px;
+  height: 44px;
 }
 
 .VPLocalNav {
@@ -803,16 +808,26 @@ input:focus-visible {
 
 .course-document-layout .VPDocAsideOutline .outline-title {
   color: var(--course-ink);
-  font-size: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
+.course-document-layout .VPDocAsideOutline .content {
+  border-left-color: var(--course-line);
+  padding-left: 18px;
+  font-size: 12px;
+}
+
 .course-document-layout .VPDocAsideOutline .outline-link {
-  color: var(--course-ink-faint);
-  font-size: 10px;
-  line-height: 1.45;
+  color: var(--course-ink-soft);
+  font-size: 12px;
+  line-height: 1.8;
+  padding-block: 3px;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .course-document-layout .VPDocAsideOutline .outline-link:hover,

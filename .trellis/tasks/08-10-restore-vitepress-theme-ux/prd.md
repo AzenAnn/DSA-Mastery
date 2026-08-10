@@ -32,6 +32,8 @@ The reader should again encounter a deliberate academic-editorial interface: a p
 - The homepage must retain a clear learning promise, two discernible entry actions, proof points, course statistics, learning loop, chapter cards, Lab preview, update panel, and closing statement.
 - Lesson and Lab pages must make current location, title, summary, status, metadata, readable body text, code, tables, math, and next actions easy to scan.
 - The default VitePress top navigation, local search, appearance switch, desktop sidebar, mobile drawer, outline, document footer, code-copy controls, and 404 page remain available and visibly integrated with the brand.
+- The desktop course sidebar must follow the pre-migration hierarchy: one neutral divider for nested item groups, a quiet chapter heading, and a single active-item surface; it must not render a colored indicator on every item.
+- The right-side outline must use a readable 12px class, approximately 1.8 line-height, visible section spacing, and a stable sticky column so headings are scannable rather than compressed into a dense list.
 
 ### R4. Responsive, accessible interaction
 

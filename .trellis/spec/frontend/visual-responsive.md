@@ -57,6 +57,13 @@
 - 所有点击、悬停和 active 状态有清晰的非布局位移反馈；普通 UI 过渡只使用 `opacity`、`color`、`box-shadow` 或 `transform`，时长 150-300ms。不能只依赖 hover 传达导航或状态。
 - 正文与背景的对比度至少满足 WCAG AA；状态同时有文字或图标，不能只用靛蓝、橙色、绿色区分。图标按钮保留 VitePress 的可访问名称或提供等价 `aria-label`。
 
+### 侧栏与本页目录
+
+- 左侧 VitePress 课程目录遵循旧 `.docs-sidebar` 的层级视觉：嵌套 `.items` 使用一条 `--course-line` 竖线，`.VPSidebarItem .indicator` 默认透明；当前项使用 `--course-accent-soft` 背景与 `--course-accent` 文字，不得给每个条目染一条紫色线。
+- 章节标题保持 13px 左右的重量层级，页面条目使用至少 12px、约 24px 行高；可折叠 caret 的实际点击区域至少 44px。
+- `.VPDocAsideOutline .content` 使用独立的 `--course-line` 左边界和 18px 左内边距；标题至少 12px/800，链接至少 12px、1.8 行高、6px 以上纵向间距。长标题可换行，不使用过窄的省略号堆叠。
+- 这套规则来源于 `5c9e03b` 的 `.chapter-links` 与 `.table-of-contents` 视觉契约，复用 VitePress DOM，不恢复旧 React 组件。
+
 ## 验收
 
 - 桌面和移动、浅色和暗色均截图：至少首页、教材页、Labs 索引、Lab 页。

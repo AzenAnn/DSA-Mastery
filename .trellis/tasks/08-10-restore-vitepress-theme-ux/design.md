@@ -67,6 +67,17 @@ Not adopted: teal/amber palette, playful children's typography, generic FAQ/supp
 
 `DocumentHeader.vue` provides the heading sequence, breadcrumbs, text-labelled status, duration/date/contributors, and Lab difficulty. `custom.css` gives documents an editorial reading measure, logical rhythm, clear Markdown tables/code/math, and a desktop three-column layout made from VitePress sidebar, content, and outline. `LabsIndex.vue` uses the same card and metadata grammar as the homepage and preserves `target="_self"` for the known VitePress outline compatibility issue.
 
+### Sidebar and Outline Recovery
+
+The old React implementation is the reference for hierarchy, not a DOM to restore. Its `.chapter-links` used one neutral `border-left` for the nested group and its active link used `accent-soft` plus accent text. The equivalent VitePress rules are:
+
+- Reset the broad `.VPSidebarItem .indicator` color override. Keep indicators transparent except for an active nested item if VitePress needs one for anchor context; do not color every `.item`.
+- Retain a single neutral divider on `.VPSidebarItem.level-1 .items` and deeper nested `.items`, with 12px readable item text, 24px line-height, and a padded active link surface.
+- Give collapsible carets a 44px target while keeping chapter headings visually quiet. Active state uses text plus a background surface, never color alone.
+- Style `.VPDocAsideOutline .content` as the old table-of-contents column: a neutral left border, 12px links, 1.8 line-height, 6-8px vertical rhythm, and wrapped long headings. The outline title is 12px/800 and is separated from links by at least 14px.
+
+These rules preserve VitePress's active-anchor behavior while recovering the pre-migration information hierarchy.
+
 ## Responsive Behavior
 
 | Width | Layout behavior |
