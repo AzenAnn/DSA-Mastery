@@ -31,17 +31,18 @@ DSA Mastery 是两名学生共同维护、面向课程学习者的数据结构�
 需要 Node.js `>= 22.13.0`。
 
 ```bash
-npm ci
-npm run dev
+corepack enable
+pnpm install --frozen-lockfile
+pnpm run dev
 ```
 
-仓库已有 `package-lock.json`，日常检出后优先用 `npm ci` 获得一致依赖；只有主动新增或更新依赖并需要改锁文件时才用 `npm install`。开发服务只监听 `127.0.0.1`；启动后打开终端显示的本地地址。提交改动前运行：
+仓库使用 Corepack 固定的 pnpm `11.1.1`。日常检出后使用 `pnpm install --frozen-lockfile` 获得一致依赖；只有主动新增或更新依赖时才用 `pnpm install`，并提交更新后的 `pnpm-lock.yaml`。开发服务只监听 `127.0.0.1`；启动后打开终端显示的本地地址。提交改动前运行：
 
 ```bash
-npm test
+pnpm test
 ```
 
-`npm test` 会串行执行内容校验、Vue/TypeScript 检查、ESLint、临时内容自动发现、VitePress 生产构建和最终产物审计。`validate:content` 会检查必填字段、章节顺序和 Markdown 相对 `.md` 链接。涉及 Pages base、导航或主题时，还需按 [迁移与回滚说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)运行 `npm run test:pages`。
+`pnpm test` 会串行执行内容校验、Vue/TypeScript 检查、ESLint、临时内容自动发现、VitePress 生产构建和最终产物审计。`validate:content` 会检查必填字段、章节顺序和 Markdown 相对 `.md` 链接。涉及 Pages base、导航或主题时，还需按 [迁移与回滚说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)运行 `pnpm run test:pages`。
 
 ## 内容如何自动更新
 

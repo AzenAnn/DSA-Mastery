@@ -53,7 +53,7 @@ GitHub Pages 的 base 只从 `actions/configure-pages` 输出写入 `GITHUB_PAGE
 [对应 Lab](../../labs/chapter-01/lab-01-02-linked-list/README.md)
 ```
 
-`npm run validate:content` 先检查目标源文件存在；VitePress 构建时再把可识别的相对 `.md` 链接改写为无扩展名课程路由，并由统一 base 处理部署前缀。不要把 `/DSA-Mastery/` 写进正文。
+`pnpm run validate:content` 先检查目标源文件存在；VitePress 构建时再把可识别的相对 `.md` 链接改写为无扩展名课程路由，并由统一 base 处理部署前缀。不要把 `/DSA-Mastery/` 写进正文。
 
 ### 原生能力与自定义范围
 
@@ -80,19 +80,19 @@ VitePress `1.6.4` 在部分 Lab 跨页面客户端导航中会保留上一页 ou
 
 | 命令 | 作用 |
 | --- | --- |
-| `npm run dev` | 在 `127.0.0.1` 启动 VitePress 开发服务 |
-| `npm run preview` | 在 `127.0.0.1` 预览生产产物 |
-| `npm run validate` | 内容校验 + `vue-tsc` + ESLint |
-| `npm run test:discovery` | 临时内容自动发现、渲染与清理 |
-| `npm run build` | 构建 `dist/pages` |
-| `npm run check:site` | 检查页面清单、内部链接、base、H1 与搜索内容 |
-| `npm test` | 依次执行 validate、discovery、最终 build 与 artifact check |
-| `npm run test:pages` | 对最终 Pages 子路径产物运行 Playwright |
+| `pnpm run dev` | 在 `127.0.0.1` 启动 VitePress 开发服务 |
+| `pnpm run preview` | 在 `127.0.0.1` 预览生产产物 |
+| `pnpm run validate` | 内容校验 + `vue-tsc` + ESLint |
+| `pnpm run test:discovery` | 临时内容自动发现、渲染与清理 |
+| `pnpm run build` | 构建 `dist/pages` |
+| `pnpm run check:site` | 检查页面清单、内部链接、base、H1 与搜索内容 |
+| `pnpm test` | 依次执行 validate、discovery、最终 build 与 artifact check |
+| `pnpm run test:pages` | 对最终 Pages 子路径产物运行 Playwright |
 
 迁移收口时的实际结果：
 
-- `npm ci` 成功；
-- `npm test` 成功，产物包含首页、Labs 索引、404、7 篇教材与 4 个 Lab；
+- `pnpm install --frozen-lockfile` 成功；
+- `pnpm test` 成功，产物包含首页、Labs 索引、404、7 篇教材与 4 个 Lab；
 - `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 下 artifact check 成功；
 - Playwright `5/5` 通过：学习路径、中文搜索、主题/复制/表格/元数据、移动导航、404；
 - 浏览器监控未发现非预期同源 4xx/5xx、request failure、`pageerror` 或 `console.error`。
@@ -102,20 +102,20 @@ VitePress `1.6.4` 在部分 Lab 跨页面客户端导航中会保留上一页 ou
 ```powershell
 $env:GITHUB_PAGES_BASE_PATH = "/DSA-Mastery"
 $env:SITE_URL = "https://azenann.github.io/DSA-Mastery/"
-npm run build
-npm run check:site
-npm run test:pages
+pnpm run build
+pnpm run check:site
+pnpm run test:pages
 Remove-Item Env:GITHUB_PAGES_BASE_PATH
 Remove-Item Env:SITE_URL
 ```
 
-普通提交至少运行 `npm test`；涉及导航、base、主题、Markdown 渲染或 Pages workflow 时，再执行上面的子路径验收。
+普通提交至少运行 `pnpm test`；涉及导航、base、主题、Markdown 渲染或 Pages workflow 时，再执行上面的子路径验收。
 
 ## 4. GitHub Pages
 
 `.github/workflows/pages.yml` 在 PR、`main` push 和手动触发时共用同一个 build job：
 
-1. `npm ci`；
+1. `pnpm install --frozen-lockfile`；
 2. `actions/configure-pages@v6` 提供 `base_path` 与 `base_url`；
 3. validate、discovery、最终 build、artifact check；
 4. Chromium Playwright；
@@ -127,7 +127,7 @@ Remove-Item Env:SITE_URL
 
 清理报告审计的 30 个旧 vinext、React、RSC、Cloudflare Workers 与 OpenAI Sites 跟踪文件已全部删除；旧直接依赖和补丁脚本也已从 package/lockfile 与 workflow 移除。Markdown、Labs、`public`、文档、Trellis、内容校验、Playwright、VitePress 和 Pages workflow 均保留。
 
-`npm audit` 仍报告 3 个传递依赖问题（2 moderate、1 high）：
+`pnpm audit` 仍报告 3 个传递依赖问题（2 moderate、1 high）：
 
 ```text
 vitepress 1.6.4
@@ -135,11 +135,11 @@ vitepress 1.6.4
    └─ esbuild 0.21.5
 ```
 
-在固定 VitePress `1.6.4` 的兼容范围内没有可用修复。`npm audit fix --force` 会强制越过当前版本合同，可能破坏 VitePress 构建，禁止作为自动处置。当前缓解措施：
+在固定 VitePress `1.6.4` 的兼容范围内没有可用修复。`pnpm audit --fix` 或强制升级会越过当前版本合同，可能破坏 VitePress 构建，禁止作为自动处置。当前缓解措施：
 
 - `dev` 与 `preview` 强制绑定 `127.0.0.1`，不向局域网暴露开发服务器；
 - 正式环境只发布预构建的静态 `dist/pages`，不运行 Vite/esbuild 开发服务；
-- 升级需单独 Issue/PR，重新跑 `npm test`、Pages 子路径 Playwright 与视觉检查。
+- 升级需单独 Issue/PR，重新跑 `pnpm test`、Pages 子路径 Playwright 与视觉检查。
 
 ## 6. 回滚
 
@@ -151,7 +151,7 @@ vitepress 1.6.4
 
 1. 从当前 `main` 建立回滚分支；
 2. 通过新的 Review PR 逆序 revert 迁移提交组，不强推或改写 `main`；
-3. 从 lockfile 执行 `npm ci` 和恢复后对应的完整检查；
+3. 从 lockfile 执行 `pnpm install --frozen-lockfile` 和恢复后对应的完整检查；
 4. 重新发布最后一个绿色 Pages artifact；
 5. 核对 `/DSA-Mastery/` 首页、首篇教材、Labs 索引与至少一个 Lab。
 
@@ -165,9 +165,9 @@ vitepress 1.6.4
 
 | 现象 | 先检查 |
 | --- | --- |
-| 相对 `.md` 链接 404 | 源文件是否存在、是否位于两类内容扫描路径、`npm run validate:content` 输出 |
+| 相对 `.md` 链接 404 | 源文件是否存在、是否位于两类内容扫描路径、`pnpm run validate:content` 输出 |
 | URL 出现双 `/DSA-Mastery/` | 源码是否硬编码 base；`GITHUB_PAGES_BASE_PATH` 是否只注入一次 |
-| 新页面没有进入导航/搜索 | frontmatter、目录命名、`npm run test:discovery` |
+| 新页面没有进入导航/搜索 | frontmatter、目录命名、`pnpm run test:discovery` |
 | Lab 跳转后 outline 错乱 | `target="_self"` 是否仍在顶栏 Labs/目录卡片上 |
 | 公式未渲染 | `markdown.math` 是否仍为 `true`，正文分隔符是否完整 |
 | 本地正常、Pages 失败 | 使用本节 PowerShell 命令在最终 `dist/pages` 上复现 |

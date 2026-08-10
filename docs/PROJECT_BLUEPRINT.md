@@ -180,7 +180,7 @@ Issue/目标
 - 主题：保留默认 VitePress 顶栏、搜索、appearance、侧栏、outline、prev/next、代码复制和 404；只自定义 `BrandMark`、`Home`、`Labs`、`DocumentHeader`/`Footer` 与品牌 CSS。
 - 公式与代码：`markdown.math: true` 使用 MathJax；代码高亮与复制由 VitePress 处理。
 - Lab：每个 Lab 一个独立目录，从 `README.md` 开始，按需要增加代码与测试。
-- 验证：`npm test` 统一覆盖内容、类型、lint、自动发现、build 与产物审计；Pages 子路径由 Playwright 真实点击验证。
+- 验证：`pnpm test` 统一覆盖内容、类型、lint、自动发现、build 与产物审计；Pages 子路径由 Playwright 真实点击验证。
 - 托管：公开仓库通过 GitHub Actions 自动构建并发布到 [GitHub Pages](https://azenann.github.io/DSA-Mastery/)；生成目录不进入 Git。
 
 迁移实现、传递依赖风险和回滚见 [VITEPRESS_MIGRATION.md](VITEPRESS_MIGRATION.md)。
@@ -230,7 +230,7 @@ Lab 额外需要 `lab: true`、`difficulty` 和 `duration`。目录与文件使�
 
 ```text
 Pull Request
-  └─ npm ci → validate → discovery → build → artifact check → Playwright → upload artifact
+  └─ pnpm install --frozen-lockfile → validate → discovery → build → artifact check → Playwright → upload artifact
 
 main
   └─ 同一 build job → deploy-pages → GitHub Pages 公开课程网站

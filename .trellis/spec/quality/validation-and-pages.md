@@ -6,14 +6,17 @@
 
 ## 2. Signatures
 
+项目通过 `package.json#packageManager` 固定 pnpm 版本；使用 Corepack 启用该版本。`pnpm-lock.yaml` 是唯一依赖锁文件，禁止重新生成或提交 `package-lock.json`。
+
 标准门禁由 `package.json` 暴露稳定脚本：
 
 ```powershell
-npm ci
-npm test
+corepack enable
+pnpm install --frozen-lockfile
+pnpm test
 ```
 
-`npm test` 当前依次执行 `validate`（内容 + `vue-tsc` + lint）、`test:discovery`、最终 `build` 与 `check:site`。涉及 Pages 时，在设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 与 `SITE_URL` 后重新 build/check，再运行 `npm run test:pages`。
+`pnpm test` 当前依次执行 `validate`（内容 + `vue-tsc` + lint）、`test:discovery`、最终 `build` 与 `check:site`。涉及 Pages 时，在设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 与 `SITE_URL` 后重新 build/check，再运行 `pnpm run test:pages`。
 
 Pages 构建输入/输出：
 
@@ -27,7 +30,7 @@ actions/configure-pages base_path
 
 ## 3. Contracts
 
-- Node 版本与 `package.json#engines` 一致，干净环境使用 `npm ci`。
+- Node 版本与 `package.json#engines` 一致，Corepack 使用 `package.json#packageManager` 固定 pnpm 版本，干净环境使用 `pnpm install --frozen-lockfile`。
 - 内容校验与 VitePress 收集器是独立防线，但共享同一字段/路径契约；禁止一个接受、另一个拒绝。
 - workflow 使用 Node 24、全局 `pages` concurrency group；PR 执行全部 build/test 但不 deploy，只有 `main` push 和 `workflow_dispatch` 可部署。
 - `actions/configure-pages` 是部署 base 的来源；旧 `NEXT_PUBLIC_*`、RSC patch 和 artifact 修补已删除，不得重新引入。
@@ -68,7 +71,7 @@ actions/configure-pages base_path
 ### Wrong
 
 ```yaml
-- run: npm run build
+- run: pnpm run build
 - uses: actions/deploy-pages@v5
 ```
 

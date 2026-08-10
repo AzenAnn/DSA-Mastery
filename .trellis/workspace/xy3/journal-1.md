@@ -52,3 +52,26 @@
 ### Next Steps
 
 - 等待维护者审阅未提交的临时 PR Markdown 后决定是否创建正式 PR。
+
+
+## Session 2: Standardize pnpm and VitePress guidance
+
+**Date**: 2026-08-10
+**Task**: Standardize pnpm and VitePress guidance
+**Branch**: `dev/docs-update`
+
+### Summary
+
+Created and completed the pnpm-vitepress-guidance task. Pinned pnpm 11.1.1, removed package-lock.json, migrated package scripts and GitHub Pages CI, updated current contributor documentation and active specs, and added an Agent-oriented VitePress development contract. Verified pnpm frozen install, pnpm test, Pages-base artifact checks, and Playwright 8/8; archived the task.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `bd121ad` | (see git log) |
+| `662de93` | (see git log) |
+| `d51f940` | (see git log) |
+
+### Status
+
+[OK] **Completed**

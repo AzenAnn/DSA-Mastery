@@ -15,19 +15,20 @@
 需要 Node.js `>= 22.13.0`：
 
 ```bash
-npm ci
-npm run dev
+corepack enable
+pnpm install --frozen-lockfile
+pnpm run dev
 ```
 
-日常检出使用 `npm ci`；只有新增或更新依赖并需要同步 `package-lock.json` 时使用 `npm install`。
+日常检出使用 `pnpm install --frozen-lockfile`；只有新增或更新依赖并需要同步 `pnpm-lock.yaml` 时使用 `pnpm install`。
 
 提交前运行：
 
 ```bash
-npm test
+pnpm test
 ```
 
-`npm test` 已包含内容、类型、lint、自动发现、VitePress build 和静态产物检查。涉及导航、Pages base、主题或 Markdown 渲染时，再按 [VitePress 迁移说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)构建 Pages 子路径并运行 `npm run test:pages`。Lab 如果有独立命令，请按其 README 从头执行并在 PR 中记录结果。
+`pnpm test` 已包含内容、类型、lint、自动发现、VitePress build 和静态产物检查。涉及导航、Pages base、主题或 Markdown 渲染时，再按 [VitePress 迁移说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)构建 Pages 子路径并运行 `pnpm run test:pages`。Lab 如果有独立命令，请按其 README 从头执行并在 PR 中记录结果。
 
 ## 提交原则
 

@@ -61,10 +61,10 @@ outDir                         -> dist/pages
 
 ## 6. Tests Required
 
-- `npm run validate` 覆盖内容、类型与 lint。
-- `npm run test:discovery` 用临时教材/Lab 验证相对链接改写、MathJax、代码、表格、任务列表、导航、搜索和安全清理。
-- `npm run build && npm run check:site` 核对七篇教材、四个 Lab、首页、Labs 索引、404、链接与恰好一个 base。
-- 在 `/DSA-Mastery/` 下运行 `npm run test:pages`，真实点击五组场景并监控网络/控制台错误。
+- `pnpm run validate` 覆盖内容、类型与 lint。
+- `pnpm run test:discovery` 用临时教材/Lab 验证相对链接改写、MathJax、代码、表格、任务列表、导航、搜索和安全清理。
+- `pnpm run build && pnpm run check:site` 核对七篇教材、四个 Lab、首页、Labs 索引、404、链接与恰好一个 base。
+- 在 `/DSA-Mastery/` 下运行 `pnpm run test:pages`，真实点击五组场景并监控网络/控制台错误。
 
 ## 7. Wrong vs Correct
 

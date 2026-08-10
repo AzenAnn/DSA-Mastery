@@ -78,7 +78,7 @@ content/:chapter/:page.md -> learn/:chapter/:page/index.md
 
 ## 6. Tests Required
 
-- `npm run validate:content`：字段、路径、排序和相对 `.md` 目标。
+- `pnpm run validate:content`：字段、路径、排序和相对 `.md` 目标。
 - 内容发现 fixture：在 `try/finally` 中创建一篇合规临时教材，确认校验、侧栏、数据加载、搜索和 build 都发现它，最后删除。
 - 静态产物审计：期望 URL 存在，链接只含一次 base。
 - Playwright：从首页实际点击进入教材页，并检查同源请求、控制台和页面错误。
