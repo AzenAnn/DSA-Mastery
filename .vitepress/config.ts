@@ -104,7 +104,10 @@ export default defineConfig({
     math: true,
     lineNumbers: false,
     image: { lazyLoading: true },
-    theme: { light: "github-light", dark: "github-dark" },
+    // Course code blocks intentionally keep a dark surface in both site themes.
+    // Use one high-contrast dark Shiki palette so light-mode tokens never become
+    // dark text on the dark code surface.
+    theme: "github-dark-high-contrast",
     // 样例输入/输出用 log 语法:shiki 内置,对纯文本不产生高亮 token
     languageAlias: { input: "log", output: "log" },
     config(md) {
