@@ -201,6 +201,64 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
   expect(failures).toEqual([]);
 });
 
+test("lesson navigation keeps the pre-migration hierarchy at responsive widths", async ({ page }) => {
+  const failures = monitorPage(page);
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-complexity-basics/`;
+
+  for (const width of [1440, 1024, 980, 768, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(route);
+
+    const metrics = await page.evaluate(() => {
+      const doc = globalThis.document;
+      const win = globalThis.window;
+      const getStyle = globalThis.getComputedStyle;
+      const root = doc.documentElement;
+      const sidebarText = doc.querySelector(".VPSidebarItem .text");
+      const outlineLink = doc.querySelector(".VPDocAsideOutline .outline-link");
+      const nestedItems = [...doc.querySelectorAll(".VPSidebarItem .items")].find(
+        (element) => getStyle(element).borderLeftStyle !== "none",
+      );
+      const visibleIndicators = [...doc.querySelectorAll(".VPSidebarItem .indicator")].filter(
+        (element) => getStyle(element).backgroundColor !== "rgba(0, 0, 0, 0)",
+      );
+      const readPixels = (element) => {
+        if (!element) return null;
+        const style = getStyle(element);
+        return { fontSize: Number.parseFloat(style.fontSize), lineHeight: Number.parseFloat(style.lineHeight) };
+      };
+
+      return {
+        rootOverflow: root.scrollWidth - win.innerWidth,
+        sidebarText: readPixels(sidebarText),
+        outlineLink: readPixels(outlineLink),
+        nestedBorder: nestedItems
+          ? { style: getStyle(nestedItems).borderLeftStyle, width: getStyle(nestedItems).borderLeftWidth }
+          : null,
+        visibleIndicators: visibleIndicators.length,
+      };
+    });
+
+    expect(metrics.rootOverflow, `root overflow at ${width}px`).toBeLessThanOrEqual(0);
+    expect(metrics.visibleIndicators, `colored sidebar indicators at ${width}px`).toBe(0);
+    expect(metrics.sidebarText?.fontSize, `sidebar font size at ${width}px`).toBeGreaterThanOrEqual(12);
+    expect(metrics.sidebarText?.lineHeight, `sidebar line height at ${width}px`).toBeGreaterThanOrEqual(20);
+
+    if (width >= 981) {
+      await expect(page.locator(".VPDocAsideOutline")).toBeVisible();
+      expect(metrics.outlineLink?.fontSize, `outline font size at ${width}px`).toBeGreaterThanOrEqual(12);
+      expect(metrics.outlineLink?.lineHeight, `outline line height at ${width}px`).toBeGreaterThanOrEqual(20);
+      expect(metrics.nestedBorder?.style, `sidebar hierarchy border at ${width}px`).toBe("solid");
+      expect(metrics.nestedBorder?.width, `sidebar hierarchy border width at ${width}px`).toBe("1px");
+    } else {
+      await expect(page.locator(".VPDocAsideOutline")).toBeHidden();
+      await expect(page.locator(".VPLocalNav .menu")).toBeVisible();
+    }
+  }
+
+  expect(failures).toEqual([]);
+});
+
 test("unknown course routes render the branded 404", async ({ page }) => {
   const response = await page.goto(`${baseUrl}/learn/chapter-99-missing/00-overview/`);
   expect(response?.status()).toBe(404);
