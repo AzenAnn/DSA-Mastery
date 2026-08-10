@@ -201,6 +201,59 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
   expect(failures).toEqual([]);
 });
 
+test("navbar brand subtitle stays contained and appearance icon stays centered", async ({ page }) => {
+  const failures = monitorPage(page);
+
+  for (const width of [1440, 1024]) {
+    await page.setViewportSize({ width, height: 700 });
+    await page.goto(`${baseUrl}/`);
+    if (width === 1024) {
+      await page.locator(".VPNavBarExtra .button").first().click();
+      await expect(page.locator(".VPNavBarExtra .VPSwitchAppearance")).toBeVisible();
+    } else {
+      await expect(page.locator(".VPNavBarAppearance .VPSwitchAppearance")).toBeVisible();
+    }
+
+    const metrics = await page.evaluate(() => {
+      const doc = globalThis.document;
+      const title = doc.querySelector(".VPNavBarTitle .title");
+      const subtitle = doc.querySelector(".course-brand-subtitle");
+      const appearance = [...doc.querySelectorAll(".VPSwitchAppearance")].find(
+        (element) => element.getBoundingClientRect().width > 0,
+      );
+      const icon = appearance?.querySelector(".icon");
+      const titleRect = title?.getBoundingClientRect();
+      const subtitleRect = subtitle?.getBoundingClientRect();
+      const appearanceRect = appearance?.getBoundingClientRect();
+      const iconRect = icon?.getBoundingClientRect();
+
+      return {
+        subtitleContained:
+          Boolean(titleRect && subtitleRect) &&
+          subtitleRect.left >= titleRect.left &&
+          subtitleRect.right <= titleRect.right + 0.5 &&
+          subtitleRect.top >= titleRect.top &&
+          subtitleRect.bottom <= titleRect.bottom + 0.5 &&
+          subtitle.scrollWidth === subtitle.clientWidth,
+        iconCentered:
+          Boolean(appearanceRect && iconRect) &&
+          Math.abs(iconRect.left + iconRect.width / 2 - (appearanceRect.left + appearanceRect.width / 2)) <= 1 &&
+          Math.abs(iconRect.top + iconRect.height / 2 - (appearanceRect.top + appearanceRect.height / 2)) <= 1,
+        rootOverflow: doc.documentElement.scrollWidth - globalThis.window.innerWidth,
+      };
+    });
+
+    expect(metrics.subtitleContained, `brand subtitle containment at ${width}px`).toBe(true);
+    expect(metrics.iconCentered, `appearance icon centering at ${width}px`).toBe(true);
+    expect(metrics.rootOverflow, `root overflow at ${width}px`).toBeLessThanOrEqual(0);
+  }
+
+  await page.setViewportSize({ width: 980, height: 700 });
+  await page.goto(`${baseUrl}/`);
+  await expect(page.locator(".course-brand-subtitle")).toBeHidden();
+  expect(failures).toEqual([]);
+});
+
 test("lesson navigation keeps the pre-migration hierarchy at responsive widths", async ({ page }) => {
   const failures = monitorPage(page);
   const route = `${baseUrl}/learn/chapter-00-introduction/02-complexity-basics/`;
