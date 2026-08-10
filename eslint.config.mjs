@@ -1,40 +1,46 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import eslint from "@eslint/js";
-import next from "@next/eslint-plugin-next";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
+import vue from "eslint-plugin-vue";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
 const eslintConfig = defineConfig([
   globalIgnores([
-    ".next/**",
+    ".vitepress/cache/**",
+    ".vitepress/dist/**",
     "dist/**",
-    "out/**",
-    "build/**",
     "graphify-out/**",
-    "next-env.d.ts",
+    "node_modules/**",
+    "playwright-report/**",
+    "test-results/**",
   ]),
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
-  react.configs.flat.recommended,
-  react.configs.flat["jsx-runtime"],
-  reactHooks.configs.flat["recommended-latest"],
-  jsxA11y.flatConfigs.recommended,
-  next.configs["core-web-vitals"],
+  ...vue.configs["flat/essential"],
   {
+    files: [".vitepress/**/*.{ts,vue}"],
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.serviceworker,
       },
     },
-    settings: {
-      react: {
-        version: "detect",
+  },
+  {
+    files: ["**/*.vue"],
+    languageOptions: {
+      parserOptions: {
+        parser: tseslint.parser,
       },
+    },
+    rules: {
+      "vue/multi-word-component-names": "off",
+    },
+  },
+  {
+    files: ["scripts/**/*.mjs", "tests/**/*.mjs", "*.config.mjs"],
+    languageOptions: {
+      globals: globals.node,
     },
   },
 ]);
