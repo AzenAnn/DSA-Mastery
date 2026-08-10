@@ -56,6 +56,8 @@ export default defineConfig({
     "README.md",
     "CONTRIBUTING.md",
     "AGENTS.md",
+    "CLAUDE.md",
+    "CLAUDE.local.md",
     "content/README.md",
     "docs/**",
     ".github/**",
@@ -103,6 +105,8 @@ export default defineConfig({
     lineNumbers: false,
     image: { lazyLoading: true },
     theme: { light: "github-light", dark: "github-dark" },
+    // 样例输入/输出用 log 语法:shiki 内置,对纯文本不产生高亮 token
+    languageAlias: { input: "log", output: "log" },
     config(md) {
       // VitePress exposes its own MarkdownIt structural type, while the stable
       // plugin publishes the equivalent @types/markdown-it signature.
