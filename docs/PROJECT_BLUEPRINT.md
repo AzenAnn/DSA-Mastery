@@ -1,6 +1,6 @@
 # DSA Mastery 项目蓝图
 
-> 状态：Demo / MVP 讨论稿  
+> 状态：Demo / MVP；VitePress 站点基线已落地
 > 适用对象：两名核心维护者及后续贡献者  
 > 核心判断：先验证教材与 Lab 能否让读者形成可检查的课程能力，再扩展出版与交互能力。
 
@@ -70,21 +70,27 @@ Input → Understand → Explain → Implement → Test → Teach → Review →
 dsa-mastery/
 ├─ README.md                    # 新成员入口
 ├─ CONTRIBUTING.md             # 贡献入口与最短流程
-├─ app/                         # 教程网站：路由、页面与样式
-├─ components/                  # 导航、搜索与 Markdown 阅读组件
-├─ lib/                         # Markdown 扫描、解析、排序与索引
+├─ .vitepress/
+│  ├─ config.ts                # VitePress、rewrites、Markdown、Pages base
+│  ├─ content-index.ts         # 构建期内容索引
+│  ├─ content.data.ts          # Vue 内容数据加载
+│  └─ theme/                   # 默认主题扩展、品牌组件与样式
+├─ index.md                     # 品牌首页入口
 ├─ content/                     # 教材 Markdown，内容单一事实来源
 │  ├─ README.md                # frontmatter 与目录约定
 │  ├─ chapter-00-introduction/
 │  └─ chapter-01-linear-list/
 ├─ labs/                        # 章节实验与后续实现/测试
+│  ├─ index.md                 # Labs 目录入口
 │  ├─ chapter-00/
 │  └─ chapter-01/
 ├─ public/                      # 图片等 Web 静态资源
-├─ tests/                       # 网站/内容集成测试
+├─ scripts/                     # 内容、自动发现与产物审计
+├─ tests/                       # Pages 最终产物 Playwright
 ├─ docs/
 │  ├─ PROJECT_BLUEPRINT.md      # 本文档
-│  └─ UPDATE_WORKFLOW.md        # 日常生产与发布规范
+│  ├─ UPDATE_WORKFLOW.md        # 日常生产与发布规范
+│  └─ VITEPRESS_MIGRATION.md    # 架构、风险与回滚
 └─ .github/                     # PR 和 Issue 模板
 ```
 
@@ -92,9 +98,10 @@ dsa-mastery/
 
 - `content/` 只放教材正文及其写作规则。完整程序不塞进正文。
 - `labs/` 放实验说明；未来同一 Lab 可增加 `src/`、`tests/`、样例输入输出。
-- `app/` 不复制教材内容，只负责解析和呈现。
+- `.vitepress/content-index.ts` 只在构建期发现并派生课程数据；Vue 组件不读取文件或复制正文。
+- `.vitepress/theme/` 扩展默认 VitePress 外壳，只自定义品牌首页、Labs 目录和课程元信息。
 - `public/` 中的图片需记录作者、来源和许可；可在后续增加资源清单。
-- 构建产物是可再生文件，不作为人工编辑入口。
+- `dist/pages`、Playwright 输出和缓存都是可再生文件，不作为人工编辑入口。
 
 ## 4. 推荐章节结构
 
@@ -166,14 +173,17 @@ Issue/目标
 
 ## 7. 技术路线与 Single Source of Truth
 
-### Demo 推荐
+### 当前实现
 
 - 写作：Markdown + YAML frontmatter，便于 Git diff、Review 和 AI 辅助。
-- 网站：当前 React/vinext 应用读取仓库 Markdown，自动生成页面与导航。
-- 公式与代码：由网站渲染层统一处理，正文保留标准 Markdown/数学标记。
+- 网站：VitePress `1.6.4` 以仓库根目录为 source root，自动生成页面、侧栏、搜索和课程索引。
+- 主题：保留默认 VitePress 顶栏、搜索、appearance、侧栏、outline、prev/next、代码复制和 404；只自定义 `BrandMark`、`Home`、`Labs`、`DocumentHeader`/`Footer` 与品牌 CSS。
+- 公式与代码：`markdown.math: true` 使用 MathJax；代码高亮与复制由 VitePress 处理。
 - Lab：每个 Lab 一个独立目录，从 `README.md` 开始，按需要增加代码与测试。
-- 验证：`npm run validate:content`、`npm run build`、`npm test`，必要时运行 `npm run lint`。
+- 验证：`npm test` 统一覆盖内容、类型、lint、自动发现、build 与产物审计；Pages 子路径由 Playwright 真实点击验证。
 - 托管：公开仓库通过 GitHub Actions 自动构建并发布到 [GitHub Pages](https://azenann.github.io/DSA-Mastery/)；生成目录不进入 Git。
+
+迁移实现、传递依赖风险和回滚见 [VITEPRESS_MIGRATION.md](VITEPRESS_MIGRATION.md)。
 
 ### 为什么暂不以 LaTeX 为主源码
 
@@ -183,15 +193,17 @@ LaTeX 适合出版级 PDF，但 Web 组件、交互 Demo、GitHub diff 和学生
 
 ```text
 人工维护
-  ├─ content/chapter-*/*.md ──► 内容解析/校验 ──► 网站页面与导航
-  ├─ labs/**/README.md ───────► Lab 解析/校验 ──► 网站 Lab 页面
+  ├─ content/chapter-*/*.md ─┐
+  ├─ labs/**/README.md ──────┴─► validator + content-index
+  │                                  ├─► 页面 / 侧栏 / 搜索 / 首页统计
+  │                                  └─► VitePress build ─► dist/pages ─► Pages
   └─ labs/**/src + tests（未来）──► 编译/测试 ───► 可复现实验结果
 
 未来自动生成
   content + 引用 + 资源 ───────► Pandoc/Quarto ──► 分章 PDF / 全书 PDF
 ```
 
-手工编辑区是 Markdown、Lab 源码和网站代码。`.next/`、`.vinext/`、构建目录、生成的 HTML/PDF 都不应手工修改；如果输出不正确，应修复源文件或构建器。
+手工编辑区是 Markdown、Lab 源码和 `.vitepress/`。`dist/pages`、`test-results`、`playwright-report`、缓存和生成的 HTML/PDF 都不应手工修改；如果输出不正确，应修复源文件、主题或构建器。
 
 ## 8. 网站内容契约
 
@@ -208,24 +220,27 @@ contributors: ["成员 A"]
 status: "draft"
 ```
 
-Lab 额外需要 `lab: true`、`difficulty` 和 `duration`。目录与文件使用两位数字前缀保证仓库中也能自然排序；同一章 `order` 不得重复。网站从路径推导 URL，并根据 `chapter + order` 建立导航，因此新增 Markdown 不应要求改 `app/`。
+Lab 额外需要 `lab: true`、`difficulty` 和 `duration`。目录与文件使用两位数字前缀保证仓库中也能自然排序；同一类内容、同一章的 `order` 不得重复。网站从路径推导 URL，并根据 `chapter + order` 建立导航，因此新增 Markdown 不应要求修改配置或组件。
+
+正文可保留 `./page.md` 或跨目录相对 `.md` 链接。内容校验检查源目标存在，VitePress 构建再将其改写成课程路由并应用 Pages base；正文不得硬编码 `/DSA-Mastery/`。
 
 ## 9. 自动化边界
 
-Demo 首先保证本地 `build` 和 `test` 可重复。接入 GitHub Actions 后，推荐保持两条简单流水线：
+当前 GitHub Actions 让 PR 与 `main` 复用同一个 build job：
 
 ```text
 Pull Request
-  └─ install → metadata/link check → lint → test → website build
+  └─ npm ci → validate → discovery → build → artifact check → Playwright → upload artifact
 
 main
-  └─ 同一组质量检查 → GitHub Pages 公开课程网站
-                         └─ 未来再追加 PDF/Release artifact
+  └─ 同一 build job → deploy-pages → GitHub Pages 公开课程网站
+                          └─ 未来再追加 PDF/Release artifact
 ```
 
-- PR 只验证和生成预览，不发布正式内容。
+- PR 构建并上传测试 artifact，但 deploy job 显式跳过，不发布正式内容。
 - `main` 必须复用 PR 的检查，避免“Review 通过但发布失败”。
-- 内容字段、排序重复和内部链接检查应先做成一个本地命令，再接入 CI；不要写一份只在云端能运行的逻辑。
+- CI 使用 Node 24；本地最低版本仍由 `package.json#engines` 规定为 `>=22.13.0`。
+- Pages base 来自 `actions/configure-pages`，只注入一次；本地可按迁移文档复现同一子路径。
 - PDF、Benchmark 和多语言矩阵等耗时任务等对应成果进入近期范围后再增加。
 - 自动检查失败必须修复或明确调整规则，不能用 AI Review 或口头确认替代。
 
