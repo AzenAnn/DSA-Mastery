@@ -23,7 +23,7 @@ DSA Mastery 是两名学生共同维护、面向课程学习者的数据结构�
 - 第 0 章“绪论”：课程地图、主动输出方法和复杂度入门。
 - 第 1 章“线性表”：ADT、顺序表与链表的基础内容。
 - 每章两个轻量 Lab，用于把理论结论转化为可运行、可测试的实验能力。
-- Markdown 自动渲染的教程网站：章节导航、目录、全文搜索、深色模式、公式、代码复制与前后页跳转等。
+- VitePress 自动渲染的教程网站：章节导航、中文搜索、深色模式、MathJax 公式、代码复制与前后页跳转等。
 - 项目蓝图、两人轮换协作、章节完成标准和更新方法。
 
 ## 快速开始
@@ -35,15 +35,13 @@ npm ci
 npm run dev
 ```
 
-仓库已有 `package-lock.json`，日常检出后优先用 `npm ci` 获得一致依赖；只有主动新增或更新依赖并需要改锁文件时才用 `npm install`。开发服务启动后，打开终端中显示的本地地址。提交改动前请至少运行：
+仓库已有 `package-lock.json`，日常检出后优先用 `npm ci` 获得一致依赖；只有主动新增或更新依赖并需要改锁文件时才用 `npm install`。开发服务只监听 `127.0.0.1`；启动后打开终端显示的本地地址。提交改动前运行：
 
 ```bash
-npm run validate:content
-npm run build
 npm test
 ```
 
-`validate:content` 会检查必填字段、章节顺序和 Markdown 相对链接；如需检查代码风格，可运行 `npm run lint`。Windows PowerShell 或终端中直接使用以上 `npm` 命令即可。
+`npm test` 会串行执行内容校验、Vue/TypeScript 检查、ESLint、临时内容自动发现、VitePress 生产构建和最终产物审计。`validate:content` 会检查必填字段、章节顺序和 Markdown 相对 `.md` 链接。涉及 Pages base、导航或主题时，还需按 [迁移与回滚说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)运行 `npm run test:pages`。
 
 ## 内容如何自动更新
 
@@ -74,7 +72,9 @@ difficulty: "入门"
 duration: "45～60 分钟"
 ```
 
-保存文件后，开发模式会更新页面；正式合并前运行构建和测试即可验证站点。完整步骤、命名规则与检查清单见 [更新工作流](docs/UPDATE_WORKFLOW.md)。
+正文之间可以直接使用 `./01-page.md` 或跨目录相对 `.md` 链接：内容校验先检查源文件存在，VitePress 构建再改写为 Pages-aware 课程 URL。不要在正文中硬编码 `/DSA-Mastery/`。
+
+保存文件后，开发模式会更新页面；正式合并前运行测试即可验证站点。完整步骤、命名规则与检查清单见 [更新工作流](docs/UPDATE_WORKFLOW.md)。
 
 通过 Review 的改动合并到 `main` 后，GitHub Actions 会自动完成内容检查、网站测试、静态构建与 GitHub Pages 发布。维护者无需提交 `dist/` 等生成目录；发布状态可在仓库的 **Actions** 页面查看。
 
@@ -82,20 +82,30 @@ duration: "45～60 分钟"
 
 ```text
 dsa-mastery/
-├─ app/                         # 教程网站路由、页面与样式
-├─ components/                  # 搜索、导航、Markdown 阅读器等界面组件
-├─ lib/                         # Markdown 扫描、解析、排序与索引
+├─ .vitepress/                  # VitePress 配置、内容索引与 Vue 主题
+│  ├─ config.ts                # 路由、Markdown、搜索、Pages base
+│  ├─ content-index.ts         # 构建期课程索引
+│  ├─ content.data.ts          # Vue 数据加载器
+│  └─ theme/                   # 默认主题扩展与品牌组件
+├─ index.md                     # 品牌首页入口
 ├─ content/                     # 教材 Markdown（内容单一事实来源）
 │  ├─ chapter-00-introduction/
 │  └─ chapter-01-linear-list/
 ├─ labs/                        # 分章节实验说明与后续可运行材料
+│  ├─ index.md                 # Lab 目录入口
 │  ├─ chapter-00/
 │  └─ chapter-01/
 ├─ public/                      # 网站静态资源
-├─ tests/                       # 网站与内容集成测试
+├─ scripts/                     # 内容、自动发现与静态产物检查
+├─ tests/                       # Pages 最终产物浏览器测试
+├─ .trellis/                    # 团队任务、规范与协作工作流
+├─ .agents/、.codex/            # Trellis 提供的 Agent/Codex 集成
 ├─ docs/
 │  ├─ PROJECT_BLUEPRINT.md      # 项目定位、架构、路线图与风险
-│  └─ UPDATE_WORKFLOW.md        # 日常新增章节、Lab 与 Review 流程
+│  ├─ UPDATE_WORKFLOW.md        # 日常新增章节、Lab 与 Review 流程
+│  ├─ TRELLIS_ONBOARDING.md     # 团队任务与规范入门
+│  ├─ VITEPRESS_MIGRATION.md    # 迁移结果、已知风险与回滚
+│  └─ CLEANUP_REPORT.md         # 旧栈删除证据与恢复边界
 └─ .github/                     # 协作模板与 GitHub Pages 自动发布
 ```
 
@@ -103,13 +113,14 @@ dsa-mastery/
 
 - 想读教材：访问[在线课程网站](https://azenann.github.io/DSA-Mastery/)，或进入 `content/` 阅读 Markdown。
 - 想做实验：进入 `labs/`，按 Lab 的目标、步骤和验收清单完成。
-- 想参与更新：先读 [CONTRIBUTING.md](CONTRIBUTING.md) 和 [更新工作流](docs/UPDATE_WORKFLOW.md)。
+- 想参与更新：先读 [CONTRIBUTING.md](CONTRIBUTING.md)、[更新工作流](docs/UPDATE_WORKFLOW.md) 和 [Trellis 协作入门](docs/TRELLIS_ONBOARDING.md)。
 - 想理解长期规划：阅读 [项目蓝图](docs/PROJECT_BLUEPRINT.md)。
+- 想了解站点架构、Pages 验证或回滚：阅读 [VitePress 迁移说明](docs/VITEPRESS_MIGRATION.md)。
 
 ## Single Source of Truth
 
 ```text
-content/*.md ───────────────► 教程网站
+content/chapter-*/*.md ─────► 教程网站
      │                            │
      ├─ 当前：人工校对 + 自动构建 ┤
      └─ 未来：统一导出流程 ──────► PDF / 全书归档

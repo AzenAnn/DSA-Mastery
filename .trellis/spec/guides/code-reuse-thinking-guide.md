@@ -15,4 +15,3 @@
 - [内容契约](../content/frontmatter-and-routing.md)
 - [组件与数据](../frontend/components-and-data.md)
 - [VitePress 架构](../frontend/vitepress-architecture.md)
-

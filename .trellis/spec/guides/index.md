@@ -6,4 +6,3 @@
 - [cross-layer-thinking-guide.md](cross-layer-thinking-guide.md)：追踪 Markdown 从源文件到 Pages 点击的完整链路。
 
 具体实现规则从 [项目规范总索引](../index.md) 进入。
-

@@ -1,0 +1,29 @@
+{
+  "id": "vitepress-architecture-migration",
+  "name": "vitepress-architecture-migration",
+  "title": "VitePress 架构迁移",
+  "description": "Initialize the Trellis team workflow, migrate the branded DSA Mastery course site from vinext/React to VitePress 1.6.4, preserve content contracts and URLs, prove GitHub Pages behavior, then remove the superseded stack.",
+  "status": "in_progress",
+  "dev_type": "migration",
+  "scope": "fullstack",
+  "package": null,
+  "priority": "P1",
+  "creator": "AzenAnn",
+  "assignee": "AzenAnn",
+  "createdAt": "2026-08-10",
+  "completedAt": null,
+  "branch": "feat/trellis-vitepress-migration",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "Implementation, cleanup, documentation, npm test, Pages-base artifact checks, and Playwright 5/5 are complete. Human commit/push/Draft PR delivery remains.",
+  "meta": {
+    "local_verification": "npm ci; npm test; Pages-base check; Playwright 5/5",
+    "migration_doc": "docs/VITEPRESS_MIGRATION.md"
+  }
+}

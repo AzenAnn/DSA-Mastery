@@ -57,4 +57,3 @@ Review 评论用 `blocking`、`suggestion`、`question` 区分。Owner 回复应
 - 自动检查绿色、blocking 解决、Review Owner 批准后才合并。
 - PR 构建但不部署；`main` push 或手动工作流才部署 Pages。
 - 发布失败在短分支修复或用 GitHub Revert 创建回退 PR；不跳检查、不手传 `dist`、不改写 `main` 历史。
-

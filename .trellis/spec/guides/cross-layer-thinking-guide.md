@@ -27,4 +27,3 @@
 - [教材 Frontmatter 与路由](../content/frontmatter-and-routing.md)
 - [Lab 合同](../content/labs.md)
 - [验证与 Pages](../quality/validation-and-pages.md)
-

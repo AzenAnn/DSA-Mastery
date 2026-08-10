@@ -5,7 +5,7 @@
 ## 1. 三条默认规则
 
 1. `main` 始终保持可阅读、可构建；所有非微小改动走短生命周期分支和 Pull Request。
-2. Markdown 是教材的单一事实来源。不要直接修改 `.next/`、`.vinext/`、`build/` 等生成内容。
+2. Markdown 是教材的单一事实来源。不要直接修改 `dist/pages`、`test-results`、`playwright-report` 或其他生成内容。
 3. 作者不能独自宣布自己的章节完成；另一名成员必须独立 Review 并批准。
 
 ## 2. 两人角色与轮换
@@ -80,23 +80,37 @@ Owner 创建分支并编写正文和 Lab。正文解释关键逻辑，完整可�
 
 每个关键算法至少记录：输入、输出、前置条件、边界行为、复杂度及其分析前提。还没有实现或测试的内容不能写成“已验证”。
 
+正文与 Lab 之间优先使用相对 `.md` 链接，例如 `./01-stack.md` 或 `../../labs/chapter-02/lab-02-01-stack/README.md`。`validate:content` 会检查源目标存在，VitePress 构建会把链接改写为课程路由；不要手写 `/DSA-Mastery/`。
+
+本地阅读使用：
+
+```bash
+npm run dev
+```
+
+开发服务只监听 `127.0.0.1`。公式使用 `$...$` 或 `$$...$$`，由 VitePress `markdown.math` 的 MathJax 管线渲染。
+
 ### Step 5：Author Check
 
 提交 PR 前，Owner 完成：
 
 ```bash
-npm run validate:content
-npm run build
 npm test
 ```
 
-涉及网站代码时再运行：
+`npm test` 已包含内容校验、`vue-tsc`、lint、临时教材/Lab 自动发现、生产构建和 `dist/pages` 产物检查。涉及导航、Pages base、主题、Markdown 渲染或发布工作流时，再在 Windows PowerShell 中运行：
 
-```bash
-npm run lint
+```powershell
+$env:GITHUB_PAGES_BASE_PATH = "/DSA-Mastery"
+$env:SITE_URL = "https://azenann.github.io/DSA-Mastery/"
+npm run build
+npm run check:site
+npm run test:pages
+Remove-Item Env:GITHUB_PAGES_BASE_PATH
+Remove-Item Env:SITE_URL
 ```
 
-还应在网站中手工检查新页面的导航位置、标题、代码块、链接和前后页跳转。Lab 如包含独立运行命令，也在其 README 中记录并实际执行。
+还应在网站中手工检查新页面的导航位置、标题、公式、代码块、相对链接和前后页跳转。Lab 如包含独立运行命令，也在其 README 中记录并实际执行。站点命令、已知风险和排查见 [VITEPRESS_MIGRATION.md](VITEPRESS_MIGRATION.md)。
 
 ### Step 6：Peer Review
 
@@ -170,7 +184,8 @@ PR 描述需要回答：
 ### 网站发布与回滚
 
 - `main` 是公开课程网站的唯一正式发布源；分支和 PR 不直接覆盖线上内容。
-- 合并到 `main` 后，GitHub Actions 自动执行内容检查、普通网站测试、Pages 静态构建和发布，不提交 `dist/`、`.next/` 等生成目录。
+- PR 与 `main` 共用内容、类型、lint、自动发现、VitePress build、产物审计和 Pages 子路径 Playwright；PR 不 deploy，`main` push 或手动触发才发布。
+- workflow 使用 Node 24，`actions/configure-pages` 提供唯一 Pages base，并上传 `dist/pages`；仓库不提交构建产物。
 - 发布完成后，在 Actions 中确认工作流为绿色，再抽查首页、新页面、前后页链接、搜索和至少一个 Lab。
 - 发布失败时，在短分支中修复并重新走 PR；不要通过跳过检查或手工上传构建产物绕过流水线。
 - 已上线内容需要紧急撤回时，优先创建一个回退 PR 或使用 GitHub 的 Revert 生成新提交，不强推或改写 `main` 历史。
@@ -259,7 +274,7 @@ PR 中保留以下检查表；不适用项必须解释，不能静默删除。
 - [ ] 正文、Lab、代码与测试使用一致的术语和行为约定。
 - [ ] 引用可追溯；第三方文字、图片和代码的许可允许当前用法。
 - [ ] 页面顺序、标题、链接和网站显示经过手工检查。
-- [ ] `npm run validate:content`、`npm run build` 与 `npm test` 通过；涉及网站代码时 `npm run lint` 通过。
+- [ ] `npm test` 通过；涉及导航、主题、Markdown 渲染、base 或发布时，Pages 子路径 `npm run check:site` 与 `npm run test:pages` 也通过。
 - [ ] AI 参与范围已说明，事实、代码、引用和测试结果均由人工复核。
 - [ ] Review 的 blocking 评论已解决，Review Owner 已批准。
 

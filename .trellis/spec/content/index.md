@@ -10,4 +10,3 @@
 - 教材：`content/chapter-*/*.md`，明确排除 `content/README.md`。
 - Lab：`labs/chapter-*/lab-*/README.md`。
 - 完整程序和测试放在对应 Lab 目录；正文只保留解释所需的关键片段。
-
