@@ -58,7 +58,7 @@ Replace the vinext/React/RSC course-site runtime with a stable VitePress static 
 - [x] A temporary compliant lesson and Lab are automatically discovered and safely removed.
 - [x] `docs/CLEANUP_REPORT.md` records and authorizes the completed tracked removals.
 - [x] No deleted vinext/React/Cloudflare/Sites direct dependency or active command remains after clean verification.
-- [ ] The branch is split into intentional commits, pushed, and represented by an unmerged detailed Draft PR.
+- [x] The branch is split into intentional commits, pushed, and represented by unmerged Draft PR #4.
 
 ## Release and rollback gates
 

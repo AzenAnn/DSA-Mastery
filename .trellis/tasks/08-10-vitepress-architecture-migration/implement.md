@@ -42,4 +42,4 @@
 - [x] Local implementation criteria have direct evidence in tests, screenshots, and `docs/CLEANUP_REPORT.md`.
 - [x] Temporary discovery fixtures and generated test artifacts are safely cleaned.
 - [x] Documentation and Trellis specs describe the final VitePress implementation.
-- [ ] Human delivery remains: review/stage commits, push, attach the final branch/PR URL, and keep the Draft PR unmerged.
+- [x] The reviewed commit groups were pushed and attached to Draft PR #4; the PR remains unmerged for human review.
