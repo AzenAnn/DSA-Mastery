@@ -8,8 +8,8 @@
 content/
 ├── chapter-00-introduction/
 │   ├── 00-overview.md
-│   ├── 01-active-output.md
-│   └── 02-complexity-basics.md
+│   ├── 01-data-structure-basics.md
+│   └── 02-algorithm-complexity-analysis.md
 └── chapter-01-linear-list/
     ├── 00-overview.md
     ├── 01-abstract-data-type.md
@@ -55,6 +55,6 @@ status: "draft"
 
 ## 正文最低结构
 
-章首页至少包含：学习目标、核心概念、复杂度概览、章节小结与练习。小节可按主题调整，但应尽量包含示例、易错点和自检问题。
+章首页至少包含章节定位、学习目标、页面与 Lab 导览以及学习建议。主题页可按内容调整，但应尽量包含直觉引入、准确概念、例题、易错点和自检问题。
 
 新增内容时：复制同章相邻页面，修改文件名与全部 frontmatter，编写正文，检查本地预览，然后提交 Pull Request。不要编辑网站构建生成的页面，也不要把 PDF 或 LaTeX 当作本目录的第二份内容源。

@@ -102,7 +102,10 @@ export default defineConfig({
     math: true,
     lineNumbers: false,
     image: { lazyLoading: true },
-    theme: { light: "github-light", dark: "github-dark" },
+    // Course code blocks intentionally keep a dark surface in both site themes.
+    // Use one high-contrast dark Shiki palette so light-mode tokens never become
+    // dark text on the dark code surface.
+    theme: "github-dark-high-contrast",
     config(md) {
       // VitePress exposes its own MarkdownIt structural type, while the stable
       // plugin publishes the equivalent @types/markdown-it signature.

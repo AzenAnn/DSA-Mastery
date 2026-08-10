@@ -49,7 +49,7 @@ GitHub Pages 的 base 只从 `actions/configure-pages` 输出写入 `GITHUB_PAGE
 教材可以继续使用便于仓库阅读和 Review 的相对 `.md` 链接，例如：
 
 ```md
-[主动输出式学习](./01-active-output.md)
+[数据结构基础概念](./01-data-structure-basics.md)
 [对应 Lab](../../labs/chapter-01/lab-01-02-linked-list/README.md)
 ```
 
