@@ -36,6 +36,23 @@
 
 恢复前后至少人工检查：首页、教材页、Labs 索引和 Lab 页，分别在浅/暗色及相同 viewport 下对照。每处差异必须归类为“恢复”“有意的 VitePress/无障碍改进”或“回归”；最后一种不得合并。
 
+### 代码块配色契约
+
+课程正文代码块在浅色和暗色站点主题下都固定使用 `--course-code-bg` 深色表面，因此 Markdown 的 Shiki 主题也必须统一使用深色高对比度方案。不得把 `github-light` 一类浅色 token 配色放在该深色表面上；否则未着色的标点、变量或行号会接近背景色。
+
+```ts
+// 错误：浅色 token 会与固定深色代码背景冲突
+markdown: { theme: { light: "github-light", dark: "github-dark" } }
+
+// 正确：两种站点主题共用高对比度深色 token
+markdown: { theme: "github-dark-high-contrast" }
+```
+
+- 普通代码文字映射到 `--course-code-text`，行号映射到 `--course-code-muted`，不得依赖正文的 `--vp-c-text-*` 颜色。
+- 正文代码字号不得小于 13px；纵向溢出隐藏，长行只允许代码块自身横向滚动。
+- Pages 回归测试必须在浅/暗色下分别断言代表性 token 与行号对代码背景的对比度至少为 4.5:1，并断言 `overflow-x: auto`、`overflow-y: hidden`。
+- 人工检查至少覆盖带行号/高亮行、普通代码块、注释、标点、复制按钮和移动端长行。
+
 ## 响应式合同
 
 | 断点 | 必须发生 |
@@ -77,6 +94,7 @@
 ## 常见错误
 
 - 直接套默认 VitePress 首页或蓝白默认变量。
+- 固定深色代码背景，却继续按站点浅/暗主题切换浅色和深色 Shiki token。
 - 用大量绝对定位复刻截图，导致中文换行或移动端溢出。
 - 只测浅色桌面，忽略暗色、键盘和 320px～720px 宽度。
 - 为视觉一致性重写 VitePress 已可靠提供的搜索、outline 或移动抽屉。

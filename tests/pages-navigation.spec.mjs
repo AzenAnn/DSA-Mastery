@@ -122,9 +122,9 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await expect(page.locator(".course-document-header h1")).toHaveCount(1);
   expect(failures, "home → lesson navigation").toEqual([]);
 
-  await page.locator(".vp-doc").getByRole("link", { name: "主动输出式学习" }).click();
-  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/01-active-output/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.1 主动输出式学习");
+  await page.locator(".vp-doc table").getByRole("link", { name: "0.1 数据结构基础概念" }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/01-data-structure-basics/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.1 数据结构基础概念");
   expect(failures, "lesson → lesson navigation").toEqual([]);
 
   await page.locator(".VPNavBarMenu").getByRole("link", { name: "Labs" }).click();
@@ -150,6 +150,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   const results = page.getByRole("listbox");
   await input.fill("存储模型");
   await expect(results.locator('a[href*="/learn/chapter-01-linear-list/03-linked-list/"]')).toBeVisible();
+  await input.fill("算法复杂度与算法分析");
+  await expect(
+    results.locator('a[href*="/learn/chapter-00-introduction/02-algorithm-complexity-analysis/"]').first(),
+  ).toBeVisible();
   await input.fill("实现并验证单链表");
   const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-linked-list/"]').first();
   await expect(labResult).toBeVisible();
@@ -160,14 +164,79 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   expect(failures).toEqual([]);
 });
 
-test("appearance, code copy, tables, and metadata remain functional", async ({ page }) => {
+test("chapter 0 code contrast, callouts, math, copy, details, tables, and metadata remain functional", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/learn/chapter-01-linear-list/03-linked-list/`);
+  await page.goto(`${baseUrl}/learn/chapter-00-introduction/02-algorithm-complexity-analysis/`);
+  const codeContrast = async () =>
+    page.locator('.vp-doc div[class*="language-"].line-numbers-mode').first().evaluate((block) => {
+      const parseColor = (value) => {
+        const channels = value.match(/[\d.]+/g)?.map(Number) ?? [];
+        return {
+          red: channels[0] ?? 0,
+          green: channels[1] ?? 0,
+          blue: channels[2] ?? 0,
+          alpha: channels[3] ?? 1,
+        };
+      };
+      const composite = (foreground, background) => ({
+        red: foreground.red * foreground.alpha + background.red * (1 - foreground.alpha),
+        green: foreground.green * foreground.alpha + background.green * (1 - foreground.alpha),
+        blue: foreground.blue * foreground.alpha + background.blue * (1 - foreground.alpha),
+        alpha: 1,
+      });
+      const luminance = (color) => {
+        const linear = [color.red, color.green, color.blue].map((channel) => {
+          const normalized = channel / 255;
+          return normalized <= 0.04045
+            ? normalized / 12.92
+            : ((normalized + 0.055) / 1.055) ** 2.4;
+        });
+        return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+      };
+      const contrast = (foreground, background) => {
+        const brighter = Math.max(luminance(foreground), luminance(background));
+        const darker = Math.min(luminance(foreground), luminance(background));
+        return (brighter + 0.05) / (darker + 0.05);
+      };
+
+      const blockBackground = parseColor(globalThis.getComputedStyle(block).backgroundColor);
+      const tokenContrasts = [...block.querySelectorAll("code span[style]")]
+        .filter((token) => token.textContent?.trim())
+        .map((token) => {
+          const foreground = parseColor(globalThis.getComputedStyle(token).color);
+          const lineBackground = parseColor(
+            globalThis.getComputedStyle(token.closest(".highlighted") ?? block).backgroundColor,
+          );
+          return contrast(foreground, composite(lineBackground, blockBackground));
+        });
+      const lineNumber = block.querySelector(".line-numbers-wrapper span");
+      const pre = block.querySelector("pre");
+
+      return {
+        minimumTokenContrast: Math.min(...tokenContrasts),
+        lineNumberContrast: lineNumber
+          ? contrast(parseColor(globalThis.getComputedStyle(lineNumber).color), blockBackground)
+          : 0,
+        codeFontSize: Number.parseFloat(globalThis.getComputedStyle(block.querySelector("code")).fontSize),
+        overflowX: globalThis.getComputedStyle(pre).overflowX,
+        overflowY: globalThis.getComputedStyle(pre).overflowY,
+      };
+    });
+
+  const lightCodeContrast = await codeContrast();
+  expect(lightCodeContrast.minimumTokenContrast).toBeGreaterThanOrEqual(4.5);
+  expect(lightCodeContrast.lineNumberContrast).toBeGreaterThanOrEqual(4.5);
+  expect(lightCodeContrast.codeFontSize).toBeGreaterThanOrEqual(13);
+  expect(lightCodeContrast.overflowX).toBe("auto");
+  expect(lightCodeContrast.overflowY).toBe("hidden");
   const appearance = page.locator(".VPNavBarAppearance .VPSwitchAppearance");
   await appearance.click();
   await expect(page.locator("html")).toHaveClass(/dark/);
   await page.reload();
   await expect(page.locator("html")).toHaveClass(/dark/);
+  const darkCodeContrast = await codeContrast();
+  expect(darkCodeContrast.minimumTokenContrast).toBeGreaterThanOrEqual(4.5);
+  expect(darkCodeContrast.lineNumberContrast).toBeGreaterThanOrEqual(4.5);
 
   const codeBlock = page.locator('.vp-doc div[class*="language-"]').first();
   await expect(codeBlock).toBeVisible();
@@ -176,8 +245,15 @@ test("appearance, code copy, tables, and metadata remain functional", async ({ p
   await expect(copyButton).toHaveClass(/copied/);
   await expect(page.getByRole("link", { name: "在 GitHub 上编辑此页" })).toHaveAttribute(
     "href",
-    /content\/chapter-01-linear-list\/03-linked-list\.md$/,
+    /content\/chapter-00-introduction\/02-algorithm-complexity-analysis\.md$/,
   );
+  await expect(page.locator(".vp-doc .custom-block.info").first()).toBeVisible();
+  await expect(page.locator(".vp-doc .custom-block.warning").first()).toBeVisible();
+  await expect(page.locator(".vp-doc mjx-container").first()).toBeVisible();
+  const details = page.locator(".vp-doc details").first();
+  await expect(details).not.toHaveAttribute("open", "");
+  await details.locator("summary").click();
+  await expect(details).toHaveAttribute("open", "");
 
   await page.goto(`${baseUrl}/learn/chapter-00-introduction/00-overview/`);
   await expect(page.locator(".vp-doc table")).toBeVisible();
@@ -220,7 +296,7 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
 test("home and lesson navbar share the same horizontal rail", async ({ page }) => {
   const failures = monitorPage(page);
   const widths = [1024, 1440, 2048];
-  const route = `${baseUrl}/learn/chapter-00-introduction/02-complexity-basics/`;
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-algorithm-complexity-analysis/`;
 
   for (const width of widths) {
     await page.setViewportSize({ width, height: 700 });
@@ -317,7 +393,7 @@ test("navbar brand subtitle stays contained and appearance icon stays centered",
 
 test("lesson navigation keeps the pre-migration hierarchy at responsive widths", async ({ page }) => {
   const failures = monitorPage(page);
-  const route = `${baseUrl}/learn/chapter-00-introduction/02-complexity-basics/`;
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-algorithm-complexity-analysis/`;
 
   for (const width of [1440, 1024, 980, 768, 375]) {
     await page.setViewportSize({ width, height: 900 });

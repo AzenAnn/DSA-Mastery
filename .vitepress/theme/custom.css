@@ -48,6 +48,8 @@
   --vp-sidebar-bg-color: var(--course-paper);
   --vp-local-nav-bg-color: color-mix(in srgb, var(--course-paper) 94%, transparent);
   --vp-code-block-bg: var(--course-code-bg);
+  --vp-code-block-color: var(--course-code-text);
+  --vp-code-line-number-color: var(--course-code-muted);
   --vp-code-line-highlight-color: rgb(130 144 255 / 12%);
   --vp-code-copy-code-bg: var(--course-code-surface);
   --vp-code-copy-code-hover-bg: #2c313d;
@@ -966,8 +968,13 @@ input:focus-visible {
 
 .course-document-layout .vp-doc [class*="language-"] pre,
 .course-document-layout .vp-doc [class*="language-"] code {
-  font-size: 12px;
+  color: var(--course-code-text);
+  font-size: 13px;
   line-height: 1.7;
+}
+
+.course-document-layout .vp-doc [class*="language-"] pre {
+  overflow-y: hidden;
 }
 
 .course-document-layout .vp-doc .katex-display,
