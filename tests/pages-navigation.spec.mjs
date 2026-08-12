@@ -493,13 +493,13 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   await page.goto(`${baseUrl}/labs/chapter-00/lab-00-03-complexity-quiz/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 00-03：复杂度计算自测");
   const questions = page.locator(".course-quiz-question");
-  await expect(questions).toHaveCount(8);
+  await expect(questions).toHaveCount(19);
 
-  // 右侧答题进度导航：8 个圈，初始全部未作答
+  // 右侧答题进度导航：19 个圈，初始全部未作答
   const navigator = page.locator(".course-quiz-nav");
   await expect(navigator).toBeVisible();
-  await expect(navigator.locator("li")).toHaveCount(8);
-  await expect(navigator.locator("li.is-pending")).toHaveCount(8);
+  await expect(navigator.locator("li")).toHaveCount(19);
+  await expect(navigator.locator("li.is-pending")).toHaveCount(19);
 
   // 第 1 题故意选错：立即出现错误反馈、正确答案与题解，导航第 1 圈变红
   const first = questions.first();
@@ -507,8 +507,8 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   await expect(first.getByRole("radio").nth(1)).toBeChecked();
   await first.getByRole("button", { name: "提交答案" }).click();
   await expect(first.locator(".course-quiz-feedback")).toContainText("回答错误");
-  await expect(first.locator(".course-quiz-feedback")).toContainText("正确答案：A. O(1)");
-  await expect(first.locator(".course-quiz-explanation")).toContainText("执行次数不随 n 增长");
+  await expect(first.locator(".course-quiz-feedback")).toContainText("正确答案：A. O(log n)");
+  await expect(first.locator(".course-quiz-explanation")).toContainText("翻倍");
   await expect(first.locator(".course-quiz-options")).toHaveClass(/is-submitted/);
   await expect(first.getByRole("radio").first()).toBeDisabled();
   await expect(navigator.locator("li").first()).toHaveClass(/is-wrong/);
