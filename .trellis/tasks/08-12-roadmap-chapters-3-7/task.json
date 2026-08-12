@@ -1,0 +1,32 @@
+{
+  "id": "roadmap-chapters-3-7",
+  "name": "roadmap-chapters-3-7",
+  "title": "第 3~7 章课程路线图",
+  "description": "后续章节总规划：字符串与数组、树与二叉树、图、查找、排序五章，含内容分工、Lab 与依赖关系，子任务按章拆分",
+  "status": "planning",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-08-12",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "08-12-chapter-03-string-and-array",
+    "08-12-chapter-04-tree",
+    "08-12-chapter-05-graph",
+    "08-12-chapter-06-search",
+    "08-12-chapter-07-sort"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}
