@@ -4,7 +4,7 @@ description: "先定义行为契约，再讨论顺序表或链表的具体实现
 order: 1
 chapter: 1
 chapterTitle: "线性表"
-updated: "2026-08-09"
+updated: "2026-08-12"
 contributors: ["DSA Mastery Team"]
 status: "draft"
 ---
@@ -19,7 +19,7 @@ status: "draft"
 
 ## 数据对象
 
-设线性表为 `L = (a₀, a₁, …, aₙ₋₁)`，其中元素类型相同，`n` 为当前长度。这里采用从 `0` 开始的下标，并规定合法访问位置满足 `0 ≤ i < n`。
+设线性表为 $L = (a_0, a_1, \ldots, a_{n-1})$，其中元素类型相同，`n` 为当前长度。这里采用从 `0` 开始的下标，并规定合法访问位置满足 $0 \le i < n$。
 
 ## 最小操作集合
 
