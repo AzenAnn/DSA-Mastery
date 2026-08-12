@@ -12,9 +12,12 @@ content/
 │   └── 02-algorithm-complexity-analysis.md
 └── chapter-01-linear-list/
     ├── 00-overview.md
-    ├── 01-abstract-data-type.md
+    ├── 01-definition-and-adt.md
     ├── 02-sequential-list.md
-    └── 03-linked-list.md
+    ├── 03-singly-linked-list.md
+    ├── 04-doubly-circular-static-list.md
+    ├── 05-comparison-and-selection.md
+    └── 06-applications-and-exercises.md
 ```
 
 - 章节目录使用 `chapter-NN-kebab-case`，其中 `NN` 为两位章节号。
