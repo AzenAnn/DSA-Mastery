@@ -1,12 +1,13 @@
 import { expect, test } from "@playwright/test";
-import { readFile, stat } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const artifactRoot = path.join(projectRoot, "dist", "pages");
-const cleanedBase = (process.env.GITHUB_PAGES_BASE_PATH || "/DSA-Mastery")
+// 与 .vitepress/config.ts 的 normalizePagesBase 保持一致：默认根路径，仅 CI 显式设置前缀
+const cleanedBase = (process.env.GITHUB_PAGES_BASE_PATH ?? "")
   .trim()
   .replace(/^\/+|\/+$/g, "");
 const pagesBasePath = cleanedBase ? `/${cleanedBase}` : "";
@@ -24,11 +25,40 @@ const mimeTypes = new Map([
 
 let server;
 let baseUrl;
+let expectedStats;
 
 test.use({
   viewport: { width: 1280, height: 800 },
   permissions: ["clipboard-read", "clipboard-write"],
 });
+
+// 与 .vitepress/content-index.ts 的扫描规则保持一致，从仓库内容推导首页统计数字
+const chapterDirectoryPattern = /^chapter-\d{2}-[a-z0-9-]+$/;
+const labDirectoryPattern = /^lab-\d{2}-\d{2}-[a-z0-9-]+$/;
+
+async function computeCourseStats() {
+  const contentRoot = path.join(projectRoot, "content");
+  const labsRoot = path.join(projectRoot, "labs");
+  const chapterEntries = (await readdir(contentRoot, { withFileTypes: true })).filter(
+    (entry) => entry.isDirectory() && chapterDirectoryPattern.test(entry.name),
+  );
+  let lessons = 0;
+  let labs = 0;
+  for (const chapter of chapterEntries) {
+    const files = await readdir(path.join(contentRoot, chapter.name), { withFileTypes: true });
+    lessons += files.filter(
+      (file) => file.isFile() && file.name.endsWith(".md") && file.name.toLowerCase() !== "readme.md",
+    ).length;
+  }
+  const chapterLabEntries = (await readdir(labsRoot, { withFileTypes: true })).filter(
+    (entry) => entry.isDirectory() && /^chapter-\d{2}$/.test(entry.name),
+  );
+  for (const chapter of chapterLabEntries) {
+    const labEntries = await readdir(path.join(labsRoot, chapter.name), { withFileTypes: true });
+    labs += labEntries.filter((entry) => entry.isDirectory() && labDirectoryPattern.test(entry.name)).length;
+  }
+  return { chapters: chapterEntries.length, lessons, labs };
+}
 
 function resolveArtifactPath(relativePath) {
   const resolvedPath = path.resolve(artifactRoot, relativePath);
@@ -98,6 +128,7 @@ test.beforeAll(async () => {
   const address = server.address();
   if (!address || typeof address === "string") throw new Error("Could not start Pages test server.");
   baseUrl = `http://127.0.0.1:${address.port}${pagesBasePath}`;
+  expectedStats = await computeCourseStats();
 });
 
 test.afterAll(async () => {
@@ -109,8 +140,9 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await page.goto(`${baseUrl}/`);
   await expect(page).toHaveTitle(/数据结构与算法理论与实验教程 · DSA Mastery/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("学透、做实、用活");
-  await expect(page.locator(".course-hero-stats")).toContainText("7");
-  await expect(page.locator(".course-hero-stats")).toContainText("6");
+  await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.chapters));
+  await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.lessons));
+  await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.labs));
 
   await page.getByRole("link", { name: /从第 0 章开始/ }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/00-overview/`);
