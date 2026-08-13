@@ -7,6 +7,7 @@ export const courseIndex: CourseIndex = {
   lessons: loadedIndex.lessons ?? [],
   labs: loadedIndex.labs ?? [],
   chapters: loadedIndex.chapters ?? [],
+  curriculum: loadedIndex.curriculum ?? { url: "/learn/", foundations: [], parts: [] },
 };
 
 export function normalizeCourseUrl(value: string): string {

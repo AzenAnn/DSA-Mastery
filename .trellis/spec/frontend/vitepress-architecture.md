@@ -15,6 +15,8 @@
   -> 扫描与验证 Markdown，产生统一 ContentIndex
 .vitepress/content.data.ts
   -> defineLoader 监听同一内容契约，向 Vue 暴露序列化数据
+curriculum/**
+  -> 课程总目录、Part 入口与章节概览框架（不复制正文）
 .vitepress/theme/index.ts
   -> extends DefaultTheme，注册项目组件和样式
 index.md / labs/index.md
@@ -34,10 +36,12 @@ outDir                         -> dist/pages
 - 仓库根目录同时是 VitePress source root；不移动 `content/**` 和 `labs/**`。
 - `srcExclude` 必须排除仓库维护文档和代理数据：根 `README.md`、`CONTRIBUTING.md`、`content/README.md`、`docs/**`、`.github/**`、`.trellis/**`、`.agents/**`、`.codex/**`、`graphify-out/**`。
 - `.vitepress/content-index.ts` 是结构化课程元数据、侧栏、首页统计、Labs 目录和文档头部的唯一索引；VitePress 原生搜索索引生成页，原生 prev/next 读取同一侧栏顺序，组件不得另建手写清单。
+- 当课程编排编号与既有文章 `chapter` 元数据不同时，`curriculum/**` 只提供入口和框架，`.vitepress/content-index.ts` 按 `sourcePath` 把唯一的已有 `CourseDocument` 映射进目标 Part/章节。不得移动、改写或复制 `content/**` 正文来适配新编排。
 - Node `fs`、`path`、frontmatter 解析和文件遍历只在 config/data loader 构建期执行，不能进入浏览器 bundle。
 - `base` 从 `GITHUB_PAGES_BASE_PATH` 规范化：空值为 `/`；非空值首尾各一个斜杠。
 - 源码 URL 不含 base；Vue 链接使用 `withBase`。相对 `.md` 内容链接先由 validator 检查，再由 config 的 Markdown transform 按 `sourceUrlMap` 改写成 route。
 - 首页 `index.md`、Labs `labs/index.md` 和 404 是站点页面；课程页仍由 rewrites 生成。
+- 课程总目录使用 `/learn/`，Part 与章节框架使用 `/learn/parts/:part/`、`/learn/outline/:chapter/`；旧 `/learn/chapter-*/.../` 和 `/labs/chapter-*/.../` URL 必须继续可访问。
 - 静态产物只写 `dist/pages`，不提交 Git。
 - 顶栏 Labs 与 Labs 目录卡片保留 `target="_self"`，规避 VitePress 1.6.4 跨 Lab 客户端导航沿用旧 outline 的兼容问题。
 
@@ -51,6 +55,7 @@ outDir                         -> dist/pages
 | rewrite 后旧课程 URL 不存在 | 兼容性测试失败 |
 | repository-only Markdown 被构建 | 路由清单测试失败 |
 | 相对 `.md` 没有改写到课程 route | discovery/artifact check 失败 |
+| Part/章节只在组件中手写，或框架页复制已有正文 | 架构检查失败；改为 ContentIndex 编排映射 |
 | Labs `_self` 兼容入口被移除 | Pages Playwright 或人工 outline 检查失败 |
 
 ## 5. Good / Base / Bad Cases
@@ -65,6 +70,7 @@ outDir                         -> dist/pages
 - `pnpm run test:discovery` 用临时教材/Lab 验证相对链接改写、MathJax、代码、表格、任务列表、导航、搜索和安全清理。
 - `pnpm run build && pnpm run check:site` 核对七篇教材、四个 Lab、首页、Labs 索引、404、链接与恰好一个 base。
 - 在 `/DSA-Mastery/` 下运行 `pnpm run test:pages`，真实点击五组场景并监控网络/控制台错误。
+- 编排变更必须断言每个 Part 的子章节、框架页面、至少一个映射后的旧文章 URL 和旧 Lab URL；同时用 `git diff -- content labs` 证明受保护内容未改动。
 
 ## 7. Wrong vs Correct
 

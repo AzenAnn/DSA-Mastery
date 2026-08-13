@@ -27,6 +27,11 @@ function routeForSource(relativePath: string): string | undefined {
   const normalized = relativePath.replaceAll("\\", "/");
   if (normalized === "index.md") return "/";
   if (normalized === "labs/index.md") return "/labs/";
+  if (normalized === "curriculum/index.md") return "/learn/";
+  const partMatch = normalized.match(/^curriculum\/parts\/([a-z0-9-]+)\.md$/);
+  if (partMatch) return `/learn/parts/${partMatch[1]}/`;
+  const outlineMatch = normalized.match(/^curriculum\/outline\/([a-z0-9-]+)\.md$/);
+  if (outlineMatch) return `/learn/outline/${outlineMatch[1]}/`;
   return sourceRoutes.get(virtualSources.get(normalized) ?? normalized);
 }
 
@@ -51,6 +56,9 @@ export default defineConfig({
   rewrites: {
     "content/:chapter/:page.md": "learn/:chapter/:page/index.md",
     "labs/:chapter/:lab/README.md": "labs/:chapter/:lab/index.md",
+    "curriculum/index.md": "learn/index.md",
+    "curriculum/parts/:part.md": "learn/parts/:part/index.md",
+    "curriculum/outline/:chapter.md": "learn/outline/:chapter/index.md",
   },
   srcExclude: [
     "README.md",
@@ -156,7 +164,7 @@ export default defineConfig({
   themeConfig: {
     siteTitle: "DSA Mastery",
     nav: [
-      { text: "教材", link: course.lessons[0]?.url ?? "/" },
+      { text: "教材", link: course.curriculum.url },
       { text: "Labs", link: "/labs/", target: "_self" },
     ],
     socialLinks: [

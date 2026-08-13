@@ -10,12 +10,14 @@ import {
   Sparkles,
 } from "@lucide/vue";
 import { withBase } from "vitepress";
-import { computed } from "vue";
-import { courseIndex, getCourseChapters } from "../course";
+import { courseIndex } from "../course";
 
 const learningLoop = ["理解", "推导", "实现", "测试", "练习", "讲解", "复盘", "迁移"];
-const chapters = computed(() => getCourseChapters());
-const firstLessonUrl = computed(() => courseIndex.lessons[0]?.url ?? "/labs/");
+const curriculumGroups = [
+  { id: "foundations", label: "基础部分", chapters: courseIndex.curriculum.foundations },
+  ...courseIndex.curriculum.parts.map((part) => ({ id: part.id, label: `Part ${part.numeral} · ${part.title}`, chapters: part.chapters })),
+];
+const firstLessonUrl = courseIndex.curriculum.url;
 
 function courseHref(path: string): string {
   return withBase(path);
@@ -76,7 +78,7 @@ function courseHref(path: string): string {
       </div>
 
       <div class="course-hero-stats">
-        <div><strong>{{ chapters.length }}</strong><span>个起步章节</span></div>
+        <div><strong>17</strong><span>个章节入口</span></div>
         <div><strong>{{ courseIndex.lessons.length }}</strong><span>篇教程页面</span></div>
         <div><strong>{{ courseIndex.labs.length }}</strong><span>个动手实验</span></div>
         <div><strong>1</strong><span>条理论到实践的路径</span></div>
@@ -101,25 +103,32 @@ function courseHref(path: string): string {
     <section class="course-section course-chapters-section">
       <div class="course-section-heading is-split">
         <div>
-          <div class="course-eyebrow">当前内容</div>
-          <h2>从共同语言，到第一种结构</h2>
+          <div class="course-eyebrow">课程结构</div>
+          <h2>从内存基础，到算法思想</h2>
         </div>
-        <p>当前以第 0 章和第 1 章展示教程的起步结构；后续将沿课程主线补齐理论、实验、练习与综合应用。</p>
+        <p>基础部分建立共同语言，六个 Part 依次组织线性结构、树、图、查找、排序与算法思想。</p>
       </div>
-      <div class="course-chapter-grid">
-        <article v-for="chapter in chapters" :key="chapter.chapter" class="course-chapter-card">
-          <div class="course-chapter-number">CHAPTER {{ String(chapter.chapter).padStart(2, "0") }}</div>
-          <BookOpen aria-hidden="true" class="course-chapter-icon" :size="25" />
-          <h3>{{ chapter.title }}</h3>
-          <p>{{ chapter.lessons[0]?.description || chapter.labs[0]?.description }}</p>
-          <ul>
-            <li v-for="lesson in chapter.lessons.slice(0, 4)" :key="lesson.url">{{ lesson.title }}</li>
-          </ul>
-          <a :href="courseHref(chapter.lessons[0]?.url || chapter.labs[0]?.url || '/')">
-            进入本章 <ArrowRight aria-hidden="true" :size="16" />
-          </a>
-        </article>
+      <div v-for="group in curriculumGroups" :key="group.id" class="course-curriculum-group">
+        <h3>{{ group.label }}</h3>
+        <div class="course-chapter-grid">
+          <article v-for="chapter in group.chapters" :key="chapter.id" class="course-chapter-card">
+            <div class="course-chapter-number">CH.{{ chapter.number }}</div>
+            <BookOpen aria-hidden="true" class="course-chapter-icon" :size="25" />
+            <h3>{{ chapter.title }}</h3>
+            <p>{{ chapter.description }}</p>
+            <ul>
+              <li v-for="lesson in chapter.lessons.slice(0, 3)" :key="lesson.url">{{ lesson.title }}</li>
+              <li v-if="!chapter.lessons.length">内容待完善</li>
+            </ul>
+            <a :href="courseHref(chapter.url)">
+              进入本章 <ArrowRight aria-hidden="true" :size="16" />
+            </a>
+          </article>
+        </div>
       </div>
+      <a class="course-button course-button-secondary course-curriculum-link" :href="courseHref(courseIndex.curriculum.url)">
+        查看课程总目录 <ArrowRight aria-hidden="true" :size="16" />
+      </a>
     </section>
 
     <section class="course-section course-labs-preview">

@@ -309,7 +309,7 @@ input:focus-visible {
 }
 
 .VPSidebarItem .indicator {
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
 .VPSidebarItem .caret {
@@ -664,6 +664,16 @@ input:focus-visible {
 
 .course-chapters-section { padding-top: 60px; }
 
+.course-curriculum-group { margin-top: 48px; }
+.course-curriculum-group > h3 {
+  margin: 0 0 18px;
+  color: var(--course-ink-soft);
+  font-family: var(--course-font-mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+.course-curriculum-link { margin-top: 32px; }
+
 .course-chapter-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -695,6 +705,37 @@ input:focus-visible {
 .course-chapter-card ul { display: grid; gap: 7px; margin: 24px 0 32px; padding: 0; color: var(--course-ink-soft); font-size: 12px; list-style: none; }
 .course-chapter-card li::before { margin-right: 8px; color: var(--course-accent); content: "—"; }
 .course-chapter-card > a { display: inline-flex; align-items: center; gap: 7px; color: var(--course-accent); font-size: 12px; font-weight: 750; text-decoration: none; }
+
+.dsa-curriculum-index .VPDoc { padding-top: 0; }
+.dsa-curriculum-index .VPDoc .container,
+.dsa-curriculum-index .VPDoc .content,
+.dsa-curriculum-index .VPDoc .content-container { max-width: none; }
+.dsa-curriculum-index .vp-doc > h1 { display: none; }
+.course-curriculum-index { max-width: 1040px; margin: 0 auto; padding: 54px 28px 100px; }
+.course-curriculum-hero { max-width: 760px; padding-bottom: 42px; border-bottom: 1px solid var(--course-line); }
+.course-curriculum-hero h1 { margin: 12px 0 14px; font-family: var(--course-font-serif); font-size: 48px; line-height: 1.12; }
+.course-curriculum-hero > p { color: var(--course-ink-soft); font-size: 15px; line-height: 1.8; }
+.course-curriculum-kicker { margin: 20px 0 0 !important; color: var(--course-accent) !important; font-family: var(--course-font-mono); font-size: 12px !important; }
+.course-curriculum-part { margin-top: 54px; }
+.course-curriculum-part > header a { display: inline-flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; }
+.course-curriculum-part h2 { margin: 0; font-family: var(--course-font-serif); font-size: 30px; }
+.course-curriculum-chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+.course-curriculum-chapters > a { display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; min-width: 0; padding: 20px; border: 1px solid var(--course-line); border-radius: var(--course-radius-sm); color: inherit; text-decoration: none; }
+.course-curriculum-chapters > a:hover { border-color: var(--course-line-strong); }
+.course-curriculum-chapters span { grid-row: 1 / 3; color: var(--course-accent); font-family: var(--course-font-mono); font-size: 11px; }
+.course-curriculum-chapters strong { font-size: 15px; }
+.course-curriculum-chapters small { min-width: 0; color: var(--course-ink-soft); font-size: 12px; line-height: 1.6; }
+.course-curriculum-detail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; padding: 44px 0; }
+.course-curriculum-detail h2,
+.course-curriculum-resources h2 { margin: 0 0 16px; font-family: var(--course-font-serif); font-size: 26px; }
+.course-curriculum-detail ul { margin: 0; padding-left: 20px; color: var(--course-ink-soft); font-size: 14px; line-height: 1.9; }
+.course-curriculum-resources { padding-top: 36px; border-top: 1px solid var(--course-line); }
+.course-curriculum-resource-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.course-curriculum-resource-list > a { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 16px; border: 1px solid var(--course-line); border-radius: var(--course-radius-sm); color: inherit; text-decoration: none; }
+.course-curriculum-resource-list span { display: grid; min-width: 0; }
+.course-curriculum-resource-list strong { overflow-wrap: anywhere; font-size: 13px; }
+.course-curriculum-resource-list small { color: var(--course-ink-faint); font-size: 11px; }
+.course-curriculum-empty { color: var(--course-ink-soft); font-size: 14px; }
 
 .course-lab-grid {
   display: grid;
@@ -1296,6 +1337,11 @@ input:focus-visible {
   .course-lab-grid { grid-template-columns: 1fr; }
   .course-chapter-card { min-height: auto; padding: 28px; }
   .course-chapter-card > p { max-width: 100%; }
+  .course-curriculum-index { padding: 35px 18px 80px; }
+  .course-curriculum-hero h1 { font-size: 38px; }
+  .course-curriculum-chapters,
+  .course-curriculum-detail,
+  .course-curriculum-resource-list { grid-template-columns: 1fr; }
   .course-update-panel { grid-template-columns: 1fr; padding: 35px 26px; }
   .course-update-panel h2 { font-size: 34px; }
   .course-manifesto { padding-bottom: 90px; }

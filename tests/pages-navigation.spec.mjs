@@ -140,13 +140,27 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await page.goto(`${baseUrl}/`);
   await expect(page).toHaveTitle(/数据结构与算法理论与实验教程 · DSA Mastery/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("学透、做实、用活");
-  await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.chapters));
+  await expect(page.locator(".course-hero-stats")).toContainText("17");
   await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.lessons));
   await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.labs));
 
   await page.getByRole("link", { name: /从第 0 章开始/ }).click();
-  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/00-overview/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("第 0 章 绪论");
+  await expect(page).toHaveURL(`${baseUrl}/learn/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("课程总目录");
+  await page.locator(".course-curriculum-chapters").getByRole("link", { name: /Ch\.0 内存基础/ }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-00-memory-foundations/`);
+  await page.locator(".course-curriculum-resource-list").getByRole("link", { name: /0\.1 数据结构基础概念/ }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/01-data-structure-basics/`);
+  await page.locator(".VPNavBarMenu").getByRole("link", { name: "教材" }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/`);
+  await page.locator(".VPSidebar").getByRole("link", { name: /Ch\.0\+ 算法思维体验/ }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-00-plus-algorithm-thinking/`);
+  await expect(page.locator(".course-curriculum-detail")).toContainText("Peak Finding");
+  await expect(page.locator(".course-curriculum-detail")).toContainText("Union-Find");
+  await expect(page.locator(".course-curriculum-detail")).toContainText("数据结构的选择如何影响算法效率");
+  await page.locator(".course-curriculum-resource-list").getByRole("link", { name: /算法复杂度与算法分析/ }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/02-algorithm-complexity-analysis/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.2 算法复杂度与算法分析");
   await expect(page.locator(".course-document-meta")).toContainText("draft");
   await expect(page.locator(".VPSidebar")).toBeVisible();
   await expect(page.locator(".VPDocAsideOutline")).toBeVisible();
@@ -154,6 +168,8 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await expect(page.locator(".course-document-header h1")).toHaveCount(1);
   expect(failures, "home → lesson navigation").toEqual([]);
 
+  await page.locator(".course-breadcrumbs").getByRole("link", { name: "第 0 章" }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/00-overview/`);
   await page.locator(".vp-doc table").getByRole("link", { name: "0.1 数据结构基础概念" }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/01-data-structure-basics/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.1 数据结构基础概念");
@@ -193,6 +209,50 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(page).toHaveURL(
     (url) => url.pathname === `${pagesBasePath}/labs/chapter-01/lab-01-02-linked-list/`,
   );
+  expect(failures).toEqual([]);
+});
+
+test("curriculum exposes every Part and the required search, sorting, and algorithm chapters", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/learn/`);
+
+  for (const part of [
+    "Part I · 线性结构",
+    "Part II · 树形结构",
+    "Part III · 图结构",
+    "Part IV · 查找与索引",
+    "Part V · 排序",
+    "Part VI · 算法思想",
+  ]) {
+    await expect(page.locator("#VPContent").getByRole("heading", { level: 2, name: part })).toBeVisible();
+  }
+
+  for (const chapter of [
+    "Ch.8 基础查找与树形查找",
+    "Ch.9 散列与索引结构",
+    "Ch.10 基础排序算法",
+    "Ch.11 高效排序与外部排序",
+    "Ch.12 分治与递归",
+    "Ch.13 贪心算法",
+    "Ch.14 动态规划",
+    "Ch.15 回溯与搜索",
+  ]) {
+    await expect(page.getByRole("link", { name: new RegExp(chapter.replace(".", "\\.")) }).first()).toBeVisible();
+  }
+
+  await page.getByRole("link", { name: /Ch\.8 基础查找与树形查找/ }).first().click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-08-basic-tree-search/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("基础查找与树形查找");
+  await expect(page.locator(".course-curriculum-resource-list")).toContainText("6.1 二叉排序树");
+
+  await page.goto(`${baseUrl}/learn/outline/chapter-12-divide-conquer-recursion/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("分治与递归");
+  await expect(page.locator(".course-curriculum-empty")).toContainText("后续迭代中完善");
+
+  await page.goto(`${baseUrl}/learn/chapter-06-search/01-binary-search-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.1 二叉排序树");
+  await page.goto(`${baseUrl}/labs/chapter-06/lab-06-02-hash-table/`);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("散列表");
   expect(failures).toEqual([]);
 });
 
