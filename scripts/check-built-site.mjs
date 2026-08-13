@@ -49,7 +49,15 @@ async function expectedCoursePages() {
       labPages.push(path.join("labs", chapter.name, lab.name, "index.html"));
     }
   }
-  return { lessonPages, labPages };
+  const curriculumPages = [path.join("learn", "index.html")];
+  const curriculumRoot = path.join(projectRoot, "curriculum");
+  for (const section of ["parts", "outline"]) {
+    for (const file of await readdir(path.join(curriculumRoot, section), { withFileTypes: true })) {
+      if (!file.isFile() || !file.name.endsWith(".md")) continue;
+      curriculumPages.push(path.join("learn", section, file.name.replace(/\.md$/, ""), "index.html"));
+    }
+  }
+  return { lessonPages, labPages, curriculumPages };
 }
 
 function artifactTarget(urlPath) {
@@ -67,8 +75,8 @@ function artifactTarget(urlPath) {
   return path.join(artifactRoot, pathname);
 }
 
-const { lessonPages, labPages } = await expectedCoursePages();
-const expectedPages = ["index.html", "labs/index.html", "404.html", ...lessonPages, ...labPages];
+const { lessonPages, labPages, curriculumPages } = await expectedCoursePages();
+const expectedPages = ["index.html", "labs/index.html", "404.html", ...curriculumPages, ...lessonPages, ...labPages];
 const missingPages = [];
 for (const relativePath of expectedPages) {
   if (!(await exists(path.join(artifactRoot, relativePath)))) missingPages.push(relativePath.replaceAll("\\", "/"));
@@ -111,6 +119,31 @@ for (const relativePath of [...lessonPages, ...labPages]) {
   if (h1Count !== 1) throw new Error(`${relativePath.replaceAll("\\", "/")}: expected one H1, found ${h1Count}`);
 }
 
+const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
+for (const requiredLabel of [
+  "Part IV · 查找与索引",
+  "Ch.8",
+  "基础查找与树形查找",
+  "Ch.9",
+  "散列与索引结构",
+  "Part V · 排序",
+  "Ch.10",
+  "基础排序算法",
+  "Ch.11",
+  "高效排序与外部排序",
+  "Part VI · 算法思想",
+  "Ch.12",
+  "分治与递归",
+  "Ch.13",
+  "贪心算法",
+  "Ch.14",
+  "动态规划",
+  "Ch.15",
+  "回溯与搜索",
+]) {
+  if (!curriculumHtml.includes(requiredLabel)) throw new Error(`Curriculum index is missing: ${requiredLabel}`);
+}
+
 if (base !== "/") {
   const duplicate = `${base}${base.replace(/^\//, "")}`;
   for (const file of allFiles.filter((entry) => /\.(?:html|js|css|xml)$/.test(entry))) {
@@ -128,5 +161,5 @@ for (const searchTitle of ["第 0 章 绪论", "Lab 01-02：实现并验证单�
 }
 
 console.log(
-  `站点产物检查通过：${lessonPages.length} 篇教材、${labPages.length} 个 Lab、${htmlFiles.length} 个 HTML，base=${base}`,
+  `站点产物检查通过：${lessonPages.length} 篇教材、${labPages.length} 个 Lab、${curriculumPages.length} 个课程框架页、${htmlFiles.length} 个 HTML，base=${base}`,
 );
