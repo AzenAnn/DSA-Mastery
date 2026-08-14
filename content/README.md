@@ -14,7 +14,8 @@ content/
     ├── 00-overview.md
     ├── 01-abstract-data-type.md
     ├── 02-sequential-list.md
-    └── 03-linked-list.md
+    ├── 03-linked-list.md
+    └── 04-comparison-and-selection.md
 ```
 
 - 章节目录使用 `chapter-NN-kebab-case`，其中 `NN` 为两位章节号。

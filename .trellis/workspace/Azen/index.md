@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 1
-- **Last Active**: 2026-08-10
+- **Total Sessions**: 2
+- **Last Active**: 2026-08-14
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~28 | Active |
+| `journal-1.md` | ~49 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 2 | 2026-08-14 | 完成线性表第 3、4 篇文章 | `d1e630d` | `codex/linear-list-articles-3-4` |
 | 1 | 2026-08-10 | 重写第 0 章并修复代码块渲染 | `d5e77cf` | `feat/trellis-vitepress-migration` |
 <!-- @@@/auto:session-history -->
 

@@ -196,8 +196,14 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   const input = page.getByRole("searchbox");
   await expect(input).toBeVisible();
   const results = page.getByRole("listbox");
-  await input.fill("存储模型");
-  await expect(results.locator('a[href*="/learn/chapter-01-linear-list/03-linked-list/"]')).toBeVisible();
+  await input.fill("哨兵节点");
+  await expect(
+    results.locator('a[href*="/learn/chapter-01-linear-list/03-linked-list/"]').first(),
+  ).toBeVisible();
+  await input.fill("比较与权衡");
+  await expect(
+    results.locator('a[href*="/learn/chapter-01-linear-list/04-comparison-and-selection/"]').first(),
+  ).toBeVisible();
   await input.fill("算法复杂度与算法分析");
   await expect(
     results.locator('a[href*="/learn/chapter-00-introduction/02-algorithm-complexity-analysis/"]').first(),
@@ -376,8 +382,20 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
   await page.locator(".VPLocalNav .menu").click();
   await expect(page.locator(".VPSidebar.open")).toBeVisible();
   await expect(page.locator(".VPSidebar.open")).toContainText("1.2 顺序表");
+  await expect(page.locator(".VPSidebar.open")).toContainText("1.3 第二种实现——链表与演进设计");
+  await expect(page.locator(".VPSidebar.open")).toContainText("1.4 比较与权衡");
   await page.keyboard.press("Escape");
   await expect(page.locator(".VPSidebar")).toBeHidden();
+
+  await page.goto(`${baseUrl}/learn/chapter-01-linear-list/03-linked-list/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("1.3 第二种实现——链表与演进设计");
+  await expect(page.locator('.VPDocFooter a.pager-link.next')).toContainText("1.4 比较与权衡");
+
+  await page.goto(`${baseUrl}/learn/chapter-01-linear-list/04-comparison-and-selection/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("1.4 比较与权衡");
+  await expect(page.locator(".vp-doc table").first()).toBeVisible();
+  await expect(page.locator('.vp-doc div[class*="language-"]').first()).toBeVisible();
+  await expect(page.locator(".vp-doc details").first()).toBeVisible();
 
   await page.locator(".VPNavBarHamburger").click();
   await expect(page.locator(".VPNavScreen")).toBeVisible();
