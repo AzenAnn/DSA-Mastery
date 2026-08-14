@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>操作复杂度 ≠ 时间复杂度 · 内存视角下的数据结构与算法</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --card2: #1c2129;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --blue: #58a6ff;
+    --gold: #d29922;
+    --green: #3fb950;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --mono: "SF Mono", "Consolas", "Menlo", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.7; padding-bottom: 80px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  header { padding: 56px 0 28px; border-bottom: 1px solid var(--border); }
+  header h1 {
+    font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
+    background: linear-gradient(90deg, var(--blue), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  header .sub { color: var(--muted); margin-top: 10px; font-size: 16px; max-width: 720px; }
+  .global-controls { margin-top: 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .global-controls label { font-size: 13px; color: var(--muted); }
+
+  section { margin: 40px 0; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 26px;
+  }
+  .card h2 { font-size: 20px; font-weight: 650; }
+  .card h2 .idx { color: var(--muted); font-weight: 400; margin-right: 8px; font-size: 15px; }
+  .card .sub { color: var(--muted); font-size: 14px; margin: 6px 0 20px; }
+
+  .pyramid { display: flex; flex-direction: column; gap: 6px; }
+  .tier {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; border-radius: 8px; color: #fff; cursor: pointer;
+    transition: transform .15s, filter .15s;
+  }
+  .tier:hover { filter: brightness(1.12); transform: translateX(4px); }
+  .tier .name { font-weight: 600; font-size: 14px; }
+  .tier .meta { font-size: 12px; opacity: .9; text-align: right; }
+  .tier-detail {
+    margin-top: 14px; padding: 14px 16px; border-radius: 8px; background: var(--card2);
+    font-size: 14px; min-height: 52px; border: 1px solid var(--border);
+  }
+  .tier-detail b { color: var(--gold); }
+
+  .formula {
+    background: var(--card2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px; text-align: center; font-size: 22px; font-family: var(--mono);
+  }
+  .formula .big { color: var(--blue); font-weight: 700; }
+  .formula .miss { color: var(--gold); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  .formula .op { color: var(--muted); margin: 0 8px; }
+  .formula .note { font-size: 13px; color: var(--muted); margin-top: 14px; font-family: inherit; line-height: 1.7; }
+
+  .controls { display: flex; gap: 12px; margin: 16px 0; align-items: center; flex-wrap: wrap; }
+  .controls label { font-size: 13px; color: var(--muted); }
+  select, button {
+    background: var(--card2); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px; font-size: 14px; cursor: pointer;
+    font-family: inherit;
+  }
+  select:hover { border-color: var(--blue); }
+  button.run { background: var(--blue); border-color: var(--blue); color: #0d1117; font-weight: 600; }
+  button.run:hover { filter: brightness(1.1); }
+  button.run:disabled { opacity: .5; cursor: not-allowed; }
+  button.viz { background: transparent; border-color: var(--purple); color: var(--purple); }
+  button.viz:hover { background: #1c1830; }
+  .warn { font-size: 13px; color: var(--gold); }
+
+  .result { margin-top: 16px; }
+  .lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .lanes { grid-template-columns: 1fr; } }
+  .lane { border: 1px solid var(--border); border-radius: 10px; padding: 16px; background: var(--card2); }
+  .lane h3 { font-size: 15px; font-weight: 650; margin-bottom: 2px; }
+  .lane .cap { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .lane .time { font-size: 26px; font-weight: 700; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .bar-wrap { height: 10px; border-radius: 5px; background: #0d1117; overflow: hidden; margin: 10px 0 4px; }
+  .bar { height: 100%; border-radius: 5px; transition: width .3s; }
+  .rate-lbl { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; }
+  .conclusion {
+    margin-top: 16px; padding: 14px 16px; border-radius: 8px;
+    background: #1a2332; border-left: 3px solid var(--blue); font-size: 14px;
+  }
+  .conclusion b { color: var(--blue); }
+  .conclusion.warn { border-left-color: var(--gold); }
+  .conclusion.warn b { color: var(--gold); }
+  .model-note {
+    margin-top: 20px; padding: 10px 14px; border-radius: 8px;
+    background: #171d1a; border: 1px dashed var(--border); font-size: 12px; color: var(--muted);
+  }
+
+  /* ===== 可视化 ===== */
+  .viz-box {
+    margin-top: 20px; padding-top: 18px; border-top: 1px dashed var(--border);
+  }
+  .viz-box .viz-title { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .viz-ctl { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .viz-ctl button { font-size: 13px; padding: 6px 12px; }
+  .viz-step-ind { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+  .viz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .viz-grid { grid-template-columns: 1fr; } }
+  .viz-col { text-align: center; }
+  .viz-col h4 { font-size: 13px; font-weight: 650; margin-bottom: 4px; }
+  .viz-col .cap { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+
+  .cells { display: flex; gap: 3px; justify-content: center; flex-wrap: wrap; }
+  .cell {
+    width: 28px; height: 28px; border-radius: 4px; font-size: 10px;
+    display: flex; align-items: center; justify-content: center;
+    background: #21262d; color: var(--muted); transition: all .08s;
+  }
+  .cell.cur { background: var(--gold); color: #0d1117; font-weight: 700; transform: scale(1.1); }
+  .cell.hit { background: var(--green); color: #0d1117; }
+  .cell.miss { background: var(--red); color: #fff; }
+  .cell.pivot { background: var(--purple); color: #fff; }
+
+  .bars { display: flex; align-items: flex-end; gap: 2px; height: 110px; justify-content: center; }
+  .bar { width: 14px; background: #58a6ff; border-radius: 2px 2px 0 0; transition: all .08s; }
+  .bar.pivot { background: var(--purple); }
+  .bar.cur { background: var(--gold); }
+  .bar.done { background: var(--green); }
+  .bar.moving { background: var(--red); }
+
+  .matrix { display: flex; flex-direction: column; gap: 3px; }
+  .cacheline-row {
+    display: flex; gap: 2px; padding: 3px; border-radius: 4px;
+    border: 1px dashed #30363d; transition: all .1s;
+  }
+  .cacheline-row.loaded { border: 1px solid var(--blue); background: #0d1a2e; }
+  .mcell {
+    width: 26px; height: 26px; border-radius: 3px; background: #21262d;
+    display: flex; align-items: center; justify-content: center; font-size: 8px; color: var(--muted);
+    transition: all .05s;
+  }
+  .mcell.cur { background: var(--gold); color: #0d1117; }
+  .mcell.hit { background: #143d2a; color: var(--green); }
+  .mcell.miss { background: #3a1d1d; color: var(--red); }
+
+  .viz-legend { font-size: 11px; color: var(--muted); margin-top: 10px; text-align: center; }
+
+  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 56px; line-height: 1.8; }
+  .footnote { max-width: 760px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>操作复杂度 ≠ 时间复杂度</h1>
+    <div class="sub">数据结构是对内存的布局，算法是对数据的操作。大 O 记的其实是「操作次数」，我们却叫它「时间复杂度」——中间被忽略的那一环，是每一次操作的代价。</div>
+    <div class="global-controls">
+      <label>动画速度</label>
+      <select id="vizSpeed">
+        <option value="320">慢</option>
+        <option value="180" selected>中</option>
+        <option value="70">快</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- 01 存储金字塔 -->
+  <section>
+    <div class="card">
+      <h2><span class="idx">01</span>存储器是分层的</h2>
+      <div class="sub">越往里越快、越小、越贵。把鼠标移到每一层，看延迟差了几个数量级。</div>
+      <div class="pyramid">
+        <div class="tier" style="background:#1f6feb; width:100%;" data-detail="<b>寄存器</b>：就在 CPU 核心里，1 个周期内访问。程序基本操作几乎都发生在这里。">
+          <span class="name">寄存器</span><span class="meta">~1 周期</span>
+        </div>
+        <div class="tier" style="background:#388bfd; width:92%;" data-detail="<b>L1 缓存</b>：约 0.5 ns / 4 个周期。几十 KB，是离运算最近的一块。">
+          <span class="name">L1 缓存</span><span class="meta">0.5 ns · ~64 KB</span>
+        </div>
+        <div class="tier" style="background:#58a6ff; width:84%;" data-detail="<b>L2 缓存</b>：约 7 ns / 14 个周期。几百 KB。">
+          <span class="name">L2 缓存</span><span class="meta">7 ns · ~512 KB</span>
+        </div>
+        <div class="tier" style="background:#d29922; width:76%;" data-detail="<b>L3 缓存</b>：约 12 ns / 40 个周期。几 MB，多个核共享。">
+          <span class="name">L3 缓存</span><span class="meta">12 ns · 4–32 MB</span>
+        </div>
+        <div class="tier" style="background:#db6d28; width:68%;" data-detail="<b>主存（RAM）</b>：约 100 ns / 200+ 周期。出了芯片，这就是你平时说的「内存」。">
+          <span class="name">主存（RAM）</span><span class="meta">100 ns · 8–64 GB</span>
+        </div>
+        <div class="tier" style="background:#f85149; width:60%;" data-detail="<b>硬盘（SSD / HDD）</b>：SSD 约 150 μs，机械硬盘寻道约 10 ms。比主存慢一千到十万倍。">
+          <span class="name">硬盘（SSD / HDD）</span><span class="meta">150 μs ~ 10 ms</span>
+        </div>
+      </div>
+      <div class="tier-detail" id="tierDetail">把鼠标移到任意一层，看它的细节。</div>
+      <div class="model-note">关键不是数字本身，而是：<b>访问 L1 只要约 4 个周期，缓存未命中则要停滞几百个周期</b>。同一个「O(1) 访问」，命中与未命中差了几百倍——这就是下面要说的「单次操作代价」。</div>
+    </div>
+  </section>
+
+  <!-- 02 核心公式 -->
+  <section>
+    <div class="card">
+      <h2><span class="idx">02</span>把 O(n) 拆开</h2>
+      <div class="sub">大 O 记的是基本操作的执行次数。但它被叫成「时间复杂度」，漏掉了最关键的一项。</div>
+      <div class="formula">
+        真实耗时 <span class="op">≈</span> <span class="big">操作次数（大 O）</span> <span class="op">×</span> <span class="miss">单次操作代价</span>
+        <div class="note">
+          O(n)、O(log n) 数的是「操作多少次」——这一项大 O 管住了。<br>
+          但每次操作到底要几个周期、会命中缓存还是未命中——这一项大 O 看不见，却被「时间复杂度」这个名字糊弄过去了。<br>
+          数组遍历里的 O(1) 访问，和链表遍历里的 O(1) 访问，代价能差几百倍。这就是下面四个实验要展示的。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 数组 vs 链表 -->
+  <section>
+    <div class="card">
+      <h2><span class="idx">03</span>实验一：数组遍历 vs 链表遍历</h2>
+      <div class="sub">两者都是 O(n)，访问了同样多的元素。但数组连续、链表跳跃，缓存命中率天差地别。</div>
+      <div class="controls">
+        <label>数据规模</label>
+        <select id="alSize">
+          <option value="1000000">100 万</option>
+          <option value="5000000" selected>500 万</option>
+          <option value="20000000">2000 万</option>
+        </select>
+        <label>访问模式</label>
+        <select id="alMode">
+          <option value="seq" selected>顺序（空间局部性最好）</option>
+          <option value="rand">随机下标（模拟最坏访问）</option>
+        </select>
+        <button class="run" id="btnAl">跑计时</button>
+      </div>
+      <div class="result" id="alResult"></div>
+      <div class="viz-box">
+        <div class="viz-title">小样本看过程（16 个元素，一个缓存行）</div>
+        <div class="viz-ctl">
+          <button class="run viz" id="btnAlAuto">▶ 自动播放</button>
+          <button class="run viz" id="btnAlStep">单步 ▸</button>
+          <button class="run viz" id="btnAlReset">重置</button>
+          <span class="viz-step-ind" id="alStepInd">步 0 / 0</span>
+        </div>
+        <div class="viz-grid">
+          <div class="viz-col">
+            <h4 style="color:var(--green)">数组（顺序访问）</h4>
+            <div class="cap">16 个 int 挤在一个缓存行里，一次搬运全带进来</div>
+            <div class="cells" id="alVizArr"></div>
+          </div>
+          <div class="viz-col">
+            <h4 style="color:var(--red)">链表（跳跃访问）</h4>
+            <div class="cap">节点散落各处，下一个地址藏在 next 指针里</div>
+            <div class="cells" id="alVizList"></div>
+          </div>
+        </div>
+        <div class="viz-legend">绿 = 缓存命中，红 = 未命中，黄 = 正在访问</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 快排 vs 归并 -->
+  <section>
+    <div class="card">
+      <h2><span class="idx">04</span>实验二：快速排序 vs 归并排序</h2>
+      <div class="sub">同为 O(n log n)，但快排顺序访问 + 原地交换，归并两个子数组交替访问还要再复制一遍。不同数据分布下，差距还会变。</div>
+      <div class="controls">
+        <label>数据规模</label>
+        <select id="sortSize">
+          <option value="10000">1 万</option>
+          <option value="100000" selected>10 万</option>
+          <option value="500000">50 万</option>
+        </select>
+        <label>数据分布</label>
+        <select id="sortDist">
+          <option value="random" selected>随机（平均情况）</option>
+          <option value="sorted">有序</option>
+          <option value="reverse">逆序</option>
+          <option value="dups">大量重复元素</option>
+        </select>
+        <button class="run" id="btnSort">跑计时</button>
+      </div>
+      <div class="warn" id="sortWarn"></div>
+      <div class="result" id="sortResult"></div>
+      <div class="viz-box">
+        <div class="viz-title">小样本看过程（20 个元素）</div>
+        <div class="viz-ctl">
+          <button class="run viz" id="btnSortAuto">▶ 自动播放</button>
+          <button class="run viz" id="btnSortStep">单步 ▸</button>
+          <button class="run viz" id="btnSortReset">重置</button>
+          <span class="viz-step-ind" id="sortStepInd">步 0 / 0</span>
+        </div>
+        <div class="viz-grid">
+          <div class="viz-col">
+            <h4 style="color:var(--green)">快速排序（partition）</h4>
+            <div class="cap">两个指针从两端向中间扫，原地交换</div>
+            <div class="bars" id="sortVizQuick"></div>
+          </div>
+          <div class="viz-col">
+            <h4 style="color:var(--red)">归并排序（自底向上）</h4>
+            <div class="cap">小块并成大块，还要复制到辅助数组</div>
+            <div class="bars" id="sortVizMerge"></div>
+          </div>
+        </div>
+        <div class="viz-legend">紫 = pivot，黄 = 正在操作，红 = 交换/复制，绿 = 已排好</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 矩阵遍历 -->
+  <section>
+    <div class="card">
+      <h2><span class="idx">05</span>实验三：矩阵遍历 行优先 vs 列优先</h2>
+      <div class="sub">都是 O(n²)，但行优先顺着内存走，列优先每一跳都跨过一整行。空间局部性最干净的演示。</div>
+      <div class="controls">
+        <label>矩阵边长</label>
+        <select id="matSize">
+          <option value="512">512 × 512</option>
+          <option value="1024" selected>1024 × 1024</option>
+          <option value="2048">2048 × 2048</option>
+        </select>
+        <button class="run" id="btnMat">跑计时</button>
+      </div>
+      <div class="result" id="matResult"></div>
+      <div class="viz-box">
+        <div class="viz-title">小样本看过程（8×8，每行 8 个 double = 64 字节 = 一个缓存行）</div>
+        <div class="viz-ctl">
+          <button class="run viz" id="btnMatAuto">▶ 自动播放</button>
+          <button class="run viz" id="btnMatStep">单步 ▸</button>
+          <button class="run viz" id="btnMatReset">重置</button>
+          <span class="viz-step-ind" id="matStepInd">步 0 / 0</span>
+        </div>
+        <div class="viz-grid">
+          <div class="viz-col">
+            <h4 style="color:var(--green)">行优先</h4>
+            <div class="cap">一次搬一整行，同行后续都命中</div>
+            <div class="matrix" id="matVizRow"></div>
+          </div>
+          <div class="viz-col">
+            <h4 style="color:var(--red)">列优先</h4>
+            <div class="cap">每次跳一行，几乎每次都未命中</div>
+            <div class="matrix" id="matVizCol"></div>
+          </div>
+        </div>
+        <div class="viz-legend">黄 = 正在访问，绿 = 命中，红 = 未命中，蓝框 = 缓存行已加载</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 二分 vs 线性 -->
+  <section>
+    <div class="card">
+      <h2><span class="idx">06</span>实验四：二分查找 vs 线性查找</h2>
+      <div class="sub">二分 O(log n) 次数少，但访问跳跃、易未命中；线性 O(n) 次数多，但顺序访问命中率高。小规模下，线性甚至可能反超。</div>
+      <div class="controls">
+        <label>数据规模</label>
+        <select id="findSize">
+          <option value="100000">10 万</option>
+          <option value="1000000" selected>100 万</option>
+          <option value="10000000">1000 万</option>
+        </select>
+        <label>查找目标</label>
+        <select id="findTarget">
+          <option value="middle" selected>命中中间（平均）</option>
+          <option value="end">命中末尾（最坏）</option>
+          <option value="absent">不存在（最坏）</option>
+        </select>
+        <button class="run" id="btnFind">跑计时</button>
+      </div>
+      <div class="result" id="findResult"></div>
+      <div class="viz-box">
+        <div class="viz-title">小样本看过程（16 个元素）</div>
+        <div class="viz-ctl">
+          <button class="run viz" id="btnFindAuto">▶ 自动播放</button>
+          <button class="run viz" id="btnFindStep">单步 ▸</button>
+          <button class="run viz" id="btnFindReset">重置</button>
+          <span class="viz-step-ind" id="findStepInd">步 0 / 0</span>
+        </div>
+        <div class="viz-grid">
+          <div class="viz-col">
+            <h4 style="color:var(--blue)">线性查找</h4>
+            <div class="cap">顺序访问，命中率高</div>
+            <div class="cells" id="findVizLin"></div>
+          </div>
+          <div class="viz-col">
+            <h4 style="color:var(--purple)">二分查找</h4>
+            <div class="cap">跳跃访问，频繁换缓存行</div>
+            <div class="cells" id="findVizBin"></div>
+          </div>
+        </div>
+        <div class="viz-legend">黄 = 正在访问，绿 = 已访问（命中），紫 = 命中目标</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footnote">
+      所有计时均为浏览器内真实运行，采用「预热 1 次 + 计时 3 次取最小值」降低噪声；累加结果强制输出以防死代码被优化。<br>
+      快排与归并均使用迭代实现（显式栈 / 自底向上），既避免递归栈溢出，也呼应「递归 vs 迭代」这一内存话题。<br>
+      命中率为基于「64 字节缓存行」的访问模型估计（数组 16 个 int / 一行，矩阵 8 个 double / 一行），用于说明原理，非硬件性能计数器实测。<br>
+      延迟数据来源：Jeff Dean《Latency Numbers Every Programmer Should Know》· Ulrich Drepper《What Every Programmer Should Know About Memory》
+    </div>
+  </footer>
+</div>
+
+<script>
+// ===== 通用工具 =====
+const ns = () => performance.now();
+function bench(fn, warmup = 1, runs = 3) {
+  for (let i = 0; i < warmup; i++) fn();
+  let best = Infinity;
+  for (let i = 0; i < runs; i++) {
+    const t0 = ns(); fn(); const dt = ns() - t0;
+    if (dt < best) best = dt;
+  }
+  return best;
+}
+function fmt(ms) {
+  if (ms < 1) return ms.toFixed(3) + ' ms';
+  if (ms < 10) return ms.toFixed(2) + ' ms';
+  if (ms < 1000) return ms.toFixed(1) + ' ms';
+  return (ms / 1000).toFixed(2) + ' s';
+}
+function cacheRate(seq, lineElems) {
+  const lines = new Set(); let hits = 0;
+  const n = Math.min(seq.length, 200000);
+  for (let k = 0; k < n; k++) {
+    const line = Math.floor(seq[k] / lineElems);
+    if (lines.has(line)) hits++; else lines.add(line);
+  }
+  return hits / n;
+}
+function seqRate(lineElems) { return 1 - 1 / lineElems; }
+function renderCompare(el, a, b, conclusion, conclusionWarn = false) {
+  const maxT = Math.max(a.time, b.time, 0.0001);
+  el.innerHTML = `
+    <div class="lanes">
+      <div class="lane">
+        <h3>${a.name}</h3><div class="cap">${a.cap}</div>
+        <div class="time" style="color:${a.color}">${fmt(a.time)}</div>
+        <div class="bar-wrap"><div class="bar" style="width:${(a.time/maxT*100).toFixed(1)}%; background:${a.color}"></div></div>
+        <div class="rate-lbl"><span>命中率（模型估计）</span><span>${(a.rate*100).toFixed(1)}%</span></div>
+      </div>
+      <div class="lane">
+        <h3>${b.name}</h3><div class="cap">${b.cap}</div>
+        <div class="time" style="color:${b.color}">${fmt(b.time)}</div>
+        <div class="bar-wrap"><div class="bar" style="width:${(b.time/maxT*100).toFixed(1)}%; background:${b.color}"></div></div>
+        <div class="rate-lbl"><span>命中率（模型估计）</span><span>${(b.rate*100).toFixed(1)}%</span></div>
+      </div>
+    </div>
+    <div class="conclusion ${conclusionWarn ? 'warn' : ''}">${conclusion}</div>`;
+}
+function swap(arr, i, j) { const t = arr[i]; arr[i] = arr[j]; arr[j] = t; }
+
+// ===== 动画引擎（统一帧驱动，自动 + 单步） =====
+let vizTimer = null;
+let vizSpeed = 180; // 默认毫秒/帧
+const $ = (id) => document.getElementById(id);
+
+document.getElementById('vizSpeed').addEventListener('change', (e) => {
+  vizSpeed = parseInt(e.target.value);
+});
+
+// 创建一个可视化播放器：render(step) 是纯函数，给定步数渲染完整状态
+function makeViz(render, total, stepIndId) {
+  const v = { step: 0, total, render };
+  const ind = $(stepIndId);
+  function updateInd() { ind.textContent = `步 ${v.step} / ${v.total}`; }
+  v.reset = () => {
+    stopVizTimer();
+    v.step = 0; v.render(0); updateInd();
+  };
+  v.forward = () => {
+    if (v.step < v.total) { v.step++; v.render(v.step); updateInd(); }
+    return v.step >= v.total;
+  };
+  v.play = () => {
+    stopVizTimer();
+    vizTimer = setInterval(() => { if (v.forward()) stopVizTimer(); }, vizSpeed);
+  };
+  v.reset();
+  return v;
+}
+function stopVizTimer() { if (vizTimer) { clearInterval(vizTimer); vizTimer = null; } }
+
+// ===== 01 金字塔 =====
+document.querySelectorAll('.tier').forEach(t => {
+  t.addEventListener('mouseenter', () => $('tierDetail').innerHTML = t.dataset.detail);
+});
+
+// ===== 03 数组 vs 链表：计时 =====
+$('btnAl').addEventListener('click', () => {
+  const btn = $('btnAl');
+  const n = parseInt($('alSize').value);
+  const mode = $('alMode').value;
+  btn.disabled = true; btn.textContent = '运行中…';
+  setTimeout(() => {
+    try {
+      const values = new Float64Array(n);
+      for (let i = 0; i < n; i++) values[i] = i * 0.5;
+      const order = new Int32Array(n);
+      for (let i = 0; i < n; i++) order[i] = i;
+      for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); swap(order, i, j); }
+
+      let s1 = 0;
+      const tArr = bench(() => { s1 = 0; for (let i = 0; i < n; i++) s1 += values[i]; });
+      globalThis.__sink = s1;
+
+      let s2 = 0;
+      const tList = bench(() => { s2 = 0; let idx = order[0]; for (let i = 0; i < n; i++) { s2 += values[idx]; idx = order[idx]; } });
+      globalThis.__sink += s2;
+
+      const rateList = cacheRate(order, 16);
+      const rateArr = (mode === 'seq') ? seqRate(16) : cacheRate(order, 16);
+
+      renderCompare($('alResult'),
+        { name: '数组', cap: '元素连续，一次搬一行 16 个', time: tArr, rate: rateArr, color: 'var(--green)' },
+        { name: '链表', cap: '节点散落，下一个地址藏在 next 里', time: tList, rate: rateList, color: 'var(--red)' },
+        mode === 'seq'
+          ? `两者都访问了 ${n.toLocaleString()} 个元素、都是 <b>O(n)</b>。数组命中率约 ${(seqRate(16)*100).toFixed(1)}%，链表约 ${(rateList*100).toFixed(1)}%——<b>单次访问的代价不同</b>，真实耗时差约 <b>${(tList/Math.max(tArr,0.01)).toFixed(1)} 倍</b>。`
+          : `随机访问模式下数组的连续优势也消失（命中率约 ${(rateArr*100).toFixed(1)}%），因为跳着访问和链表一样频繁未命中——<b>决定快慢的不是「数组还是链表」，是访问模式本身</b>。`);
+    } catch (e) {
+      $('alResult').innerHTML = '<div class="warn">运行出错：' + e.message + '</div>';
+    }
+    btn.disabled = false; btn.textContent = '跑计时';
+  }, 30);
+});
+
+// ===== 03 数组 vs 链表：可视化 =====
+function buildCells(el, n) {
+  el.innerHTML = '';
+  const arr = [];
+  for (let i = 0; i < n; i++) {
+    const c = document.createElement('div');
+    c.className = 'cell'; c.textContent = i;
+    el.appendChild(c); arr.push(c);
+  }
+  return arr;
+}
+(function setupAlViz() {
+  const N = 16;
+  const arrCells = buildCells($('alVizArr'), N);
+  const listCells = buildCells($('alVizList'), N);
+  // 链表的随机访问顺序
+  const order = Array.from({length: N}, (_, i) => i);
+  for (let i = N - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); swap(order, i, j); }
+
+  const viz = makeViz((step) => {
+    // 数组：顺序访问，step 之前已访问（第一个 miss，其余 hit）
+    arrCells.forEach((c, i) => {
+      c.className = 'cell';
+      if (i < step) c.classList.add(i === 0 ? 'miss' : 'hit');
+      else if (i === step && step < N) c.classList.add('cur');
+    });
+    // 链表：跳跃访问，step 之前按 order 已访问（几乎全 miss）
+    const visited = order.slice(0, step);
+    listCells.forEach(c => { c.className = 'cell'; });
+    visited.forEach((phys, k) => listCells[phys].classList.add(k === 0 ? 'miss' : 'miss'));
+    if (step < N) listCells[order[step]].classList.add('cur');
+  }, N, 'alStepInd');
+
+  $('btnAlAuto').addEventListener('click', () => { viz.reset(); viz.play(); });
+  $('btnAlStep').addEventListener('click', () => viz.forward());
+  $('btnAlReset').addEventListener('click', () => viz.reset());
+})();
+
+// ===== 04 快排 vs 归并：计时 =====
+function quickSortIter(arr, lo, hi) {
+  const stack = [lo, hi];
+  while (stack.length) {
+    const h = stack.pop(), l = stack.pop();
+    if (l >= h) continue;
+    // 三数取中选 pivot，避免有序/逆序下退化
+    const mid = (l + h) >> 1;
+    if (arr[l] > arr[mid]) swap(arr, l, mid);
+    if (arr[l] > arr[h]) swap(arr, l, h);
+    if (arr[mid] > arr[h]) swap(arr, mid, h);
+    const pivot = arr[mid];
+    swap(arr, mid, h);
+    let i = l;
+    for (let j = l; j < h; j++) { if (arr[j] < pivot) { swap(arr, i, j); i++; } }
+    swap(arr, i, h);
+    stack.push(l, i - 1);
+    stack.push(i + 1, h);
+  }
+}
+function mergeSortIter(arr) {
+  const n = arr.length;
+  const aux = new Int32Array(n);
+  for (let width = 1; width < n; width *= 2) {
+    for (let lo = 0; lo < n; lo += 2 * width) {
+      const mid = Math.min(lo + width, n);
+      const hi = Math.min(lo + 2 * width, n);
+      if (mid >= hi) continue;
+      for (let k = lo; k < hi; k++) aux[k] = arr[k];
+      let i = lo, j = mid, k = lo;
+      while (i < mid && j < hi) { if (aux[i] <= aux[j]) arr[k++] = aux[i++]; else arr[k++] = aux[j++]; }
+      while (i < mid) arr[k++] = aux[i++];
+      while (j < hi) arr[k++] = aux[j++];
+    }
+  }
+}
+$('btnSort').addEventListener('click', () => {
+  const btn = $('btnSort');
+  const warn = $('sortWarn');
+  const n = parseInt($('sortSize').value);
+  const dist = $('sortDist').value;
+  warn.innerHTML = '';
+  btn.disabled = true; btn.textContent = '运行中…';
+  setTimeout(() => {
+    try {
+      const base = new Int32Array(n);
+      if (dist === 'random') for (let i = 0; i < n; i++) base[i] = (Math.random() * 0x7fffffff) | 0;
+      else if (dist === 'sorted') for (let i = 0; i < n; i++) base[i] = i;
+      else if (dist === 'reverse') for (let i = 0; i < n; i++) base[i] = n - i;
+      else for (let i = 0; i < n; i++) base[i] = (Math.random() * 100) | 0;
+
+      const a1 = new Int32Array(base);
+      let tQuick = bench(() => quickSortIter(a1, 0, n - 1));
+      globalThis.__sink = a1[0];
+
+      const a2 = new Int32Array(base);
+      let tMerge = bench(() => mergeSortIter(a2));
+      globalThis.__sink += a2[0];
+
+      const ratio = (tMerge / Math.max(tQuick, 0.01)).toFixed(2);
+      renderCompare($('sortResult'),
+        { name: '快速排序', cap: '原地 + 顺序扫描', time: tQuick, rate: 0.85, color: 'var(--green)' },
+        { name: '归并排序', cap: '辅助数组 + 两流交替', time: tMerge, rate: 0.5, color: 'var(--red)' },
+        `两者都是 <b>O(n log n)</b>、操作次数同量级，但快排顺序访问 + 原地交换（cache 友好），归并两流交替 + 复制。所以快排通常更快：本次归并耗时约快排的 <b>${ratio} 倍</b>。`);
+    } catch (e) {
+      $('sortResult').innerHTML = '<div class="warn">运行出错：' + e.message + '</div>';
+    }
+    btn.disabled = false; btn.textContent = '跑计时';
+  }, 30);
+});
+
+// ===== 04 快排 vs 归并：可视化 =====
+function buildBars(el, arr) {
+  el.innerHTML = '';
+  const bars = [];
+  arr.forEach(v => {
+    const b = document.createElement('div');
+    b.className = 'bar'; b.style.height = (8 + v * 4) + 'px';
+    el.appendChild(b); bars.push(b);
+  });
+  return bars;
+}
+// 记录完整快排步骤（迭代 Lomuto，末尾元素为 pivot）。
+// 只记录有实际效果的操作：交换 + pivot 归位，跳过纯比较和自交换，避免步数虚高。
+function recordQuickSort(arr) {
+  const steps = [];
+  const work = arr.slice();
+  const stack = [[0, work.length - 1]];
+  while (stack.length) {
+    const [lo, hi] = stack.pop();
+    if (lo >= hi) continue;
+    const pivot = work[hi];
+    let i = lo;
+    for (let j = lo; j < hi; j++) {
+      if (work[j] < pivot) {
+        if (i !== j) {
+          steps.push({ type: 'swap', a: i, b: j, hi });
+          [work[i], work[j]] = [work[j], work[i]];
+        }
+        i++;
+      }
+    }
+    if (i !== hi) {
+      steps.push({ type: 'swap', a: i, b: hi, hi }); // pivot 归位
+      [work[i], work[hi]] = [work[hi], work[i]];
+    }
+    steps.push({ type: 'pivot', p: i });
+    stack.push([lo, i - 1]);
+    stack.push([i + 1, hi]);
+  }
+  return { steps, sorted: work };
+}
+// 记录完整归并步骤（自底向上）
+function recordMergeSort(arr) {
+  const steps = [];
+  const work = arr.slice();
+  const aux = arr.slice();
+  const n = work.length;
+  for (let width = 1; width < n; width *= 2) {
+    for (let lo = 0; lo < n; lo += 2 * width) {
+      const mid = Math.min(lo + width, n);
+      const hi = Math.min(lo + 2 * width, n);
+      if (mid >= hi) continue;
+      steps.push({ type: 'copy', lo, hi });
+      for (let k = lo; k < hi; k++) aux[k] = work[k];
+      let i = lo, j = mid, k = lo;
+      while (i < mid && j < hi) { work[k++] = (aux[i] <= aux[j]) ? aux[i++] : aux[j++]; }
+      while (i < mid) work[k++] = aux[i++];
+      while (j < hi) work[k++] = aux[j++];
+      steps.push({ type: 'merge', lo, hi, seg: work.slice(lo, hi) });
+    }
+  }
+  return { steps, sorted: work };
+}
+(function setupSortViz() {
+  const N = 20;
+  const base = Array.from({length: N}, (_, i) => i + 1);
+  for (let i = N - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); swap(base, i, j); }
+  const qBars = buildBars($('sortVizQuick'), base);
+  const mBars = buildBars($('sortVizMerge'), base);
+
+  const quickRec = recordQuickSort(base);
+  const quickSteps = quickRec.steps;
+  const mergeRec = recordMergeSort(base);
+  const mergeSteps = mergeRec.steps;
+  const total = Math.max(quickSteps.length, mergeSteps.length);
+
+  const viz = makeViz((step) => {
+    // —— 快排：重放前 step 步，得到当前数组状态 ——
+    const qArr = base.slice();
+    const qStep = Math.min(step, quickSteps.length);
+    for (let k = 0; k < qStep; k++) {
+      const s = quickSteps[k];
+      if (s.type === 'swap') swap(qArr, s.a, s.b);
+    }
+    qBars.forEach((b, i) => { b.style.height = (8 + qArr[i] * 4) + 'px'; b.className = 'bar'; });
+    // 标记当前步的操作
+    const cur = quickSteps[Math.min(step, quickSteps.length - 1)];
+    if (cur && step < quickSteps.length) {
+      if (cur.type === 'swap') { qBars[cur.a].classList.add('moving'); qBars[cur.b].classList.add('moving'); qBars[cur.hi].classList.add('pivot'); }
+      else if (cur.type === 'pivot') { qBars[cur.p].classList.add('pivot'); }
+    } else if (step >= quickSteps.length) {
+      // 快排已完成：整体绿色
+      qBars.forEach(b => b.classList.add('done'));
+    }
+
+    // —— 归并：重放前 step 步 ——
+    const mArr = base.slice();
+    const mStep = Math.min(step, mergeSteps.length);
+    for (let k = 0; k < mStep; k++) {
+      const s = mergeSteps[k];
+      if (s.type === 'merge') {
+        for (let t = 0; t < s.seg.length; t++) mArr[s.lo + t] = s.seg[t];
+      }
+    }
+    mBars.forEach((b, i) => { b.style.height = (8 + mArr[i] * 4) + 'px'; b.className = 'bar'; });
+    // 标记当前步的操作区间
+    const curM = mergeSteps[Math.min(step, mergeSteps.length - 1)];
+    if (curM && step < mergeSteps.length) {
+      for (let i = curM.lo; i < curM.hi; i++) {
+        mBars[i].classList.add(curM.type === 'copy' ? 'moving' : 'cur');
+      }
+    } else if (step >= mergeSteps.length) {
+      mBars.forEach(b => b.classList.add('done'));
+    }
+  }, total, 'sortStepInd');
+
+  $('btnSortAuto').addEventListener('click', () => { viz.reset(); viz.play(); });
+  $('btnSortStep').addEventListener('click', () => viz.forward());
+  $('btnSortReset').addEventListener('click', () => viz.reset());
+})();
+
+// ===== 05 矩阵遍历：计时 =====
+$('btnMat').addEventListener('click', () => {
+  const btn = $('btnMat');
+  const W = parseInt($('matSize').value);
+  const H = W;
+  btn.disabled = true; btn.textContent = '运行中…';
+  setTimeout(() => {
+    try {
+      const m = new Float64Array(W * H);
+      for (let i = 0; i < W * H; i++) m[i] = i * 0.25;
+      let s1 = 0;
+      const tRow = bench(() => { s1 = 0; for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) s1 += m[r * W + c]; });
+      globalThis.__sink = s1;
+      let s2 = 0;
+      const tCol = bench(() => { s2 = 0; for (let c = 0; c < W; c++) for (let r = 0; r < H; r++) s2 += m[r * W + c]; });
+      globalThis.__sink += s2;
+      const rateRow = seqRate(8);
+      const rateCol = (W > 8) ? 0.02 : seqRate(8);
+      renderCompare($('matResult'),
+        { name: '行优先（row-major）', cap: '顺着内存地址连续读', time: tRow, rate: rateRow, color: 'var(--green)' },
+        { name: '列优先（col-major）', cap: '每次跳一整行，跨行访问', time: tCol, rate: rateCol, color: 'var(--red)' },
+        `都是 <b>O(n²)</b>，访问了 ${(W*H).toLocaleString()} 个元素。行优先命中率约 ${(rateRow*100).toFixed(1)}%，列优先约 ${(rateCol*100).toFixed(1)}%——同样的操作次数，列优先每次访问跨一个缓存行，真实耗时差约 <b>${(tCol/Math.max(tRow,0.01)).toFixed(1)} 倍</b>。`);
+    } catch (e) {
+      $('matResult').innerHTML = '<div class="warn">运行出错：' + e.message + '</div>';
+    }
+    btn.disabled = false; btn.textContent = '跑计时';
+  }, 30);
+});
+
+// ===== 05 矩阵：可视化 =====
+// 每行 8 个 double = 64 字节 = 一个缓存行。行优先整行一起加载，列优先每次跨行跳跃。
+function buildMatrix(el, n) {
+  el.innerHTML = '';
+  const rows = []; // rows[r] = { el: 缓存行容器, cells: [] }
+  for (let r = 0; r < n; r++) {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'cacheline-row';
+    const cells = [];
+    for (let c = 0; c < n; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'mcell';
+      rowDiv.appendChild(cell);
+      cells.push(cell);
+    }
+    el.appendChild(rowDiv);
+    rows.push({ el: rowDiv, cells });
+  }
+  return rows;
+}
+(function setupMatViz() {
+  const N = 8;
+  const rowMat = buildMatrix($('matVizRow'), N);   // 行优先矩阵
+  const colMat = buildMatrix($('matVizCol'), N);   // 列优先矩阵
+  const total = N * N;
+  const viz = makeViz((step) => {
+    // —— 行优先：访问顺序 (r,c) = (floor(step/N), step%N) ——
+    rowMat.forEach((row, r) => {
+      row.el.classList.remove('loaded');
+      row.cells.forEach(c => { c.className = 'mcell'; });
+    });
+    for (let s = 0; s < step; s++) {
+      const r = Math.floor(s / N), c = s % N;
+      // 行内第一个元素（c==0）触发缓存行加载（未命中），其余命中
+      rowMat[r].cells[c].classList.add(c === 0 ? 'miss' : 'hit');
+      rowMat[r].el.classList.add('loaded'); // 该行缓存行已加载
+    }
+    if (step < total) {
+      const r = Math.floor(step / N), c = step % N;
+      rowMat[r].cells[c].classList.add('cur');
+      rowMat[r].el.classList.add('loaded');
+    }
+
+    // —— 列优先：访问顺序 (r,c) = (step%N, floor(step/N)) ——
+    colMat.forEach((row, r) => {
+      row.el.classList.remove('loaded');
+      row.cells.forEach(c => { c.className = 'mcell'; });
+    });
+    for (let s = 0; s < step; s++) {
+      const r = s % N, c = Math.floor(s / N);
+      // 列优先每次访问不同的行（不同的缓存行），几乎都未命中
+      colMat[r].cells[c].classList.add('miss');
+    }
+    if (step < total) {
+      const r = step % N, c = Math.floor(step / N);
+      colMat[r].cells[c].classList.add('cur');
+    }
+  }, total, 'matStepInd');
+  $('btnMatAuto').addEventListener('click', () => { viz.reset(); viz.play(); });
+  $('btnMatStep').addEventListener('click', () => viz.forward());
+  $('btnMatReset').addEventListener('click', () => viz.reset());
+})();
+
+// ===== 06 二分 vs 线性：计时 =====
+$('btnFind').addEventListener('click', () => {
+  const btn = $('btnFind');
+  const n = parseInt($('findSize').value);
+  const targetMode = $('findTarget').value;
+  btn.disabled = true; btn.textContent = '运行中…';
+  setTimeout(() => {
+    try {
+      const arr = new Int32Array(n);
+      for (let i = 0; i < n; i++) arr[i] = i * 2;
+      let target;
+      if (targetMode === 'middle') target = arr[n >> 1];
+      else if (targetMode === 'end') target = arr[n - 1];
+      else target = -1;
+
+      let r1 = -1;
+      const tLin = bench(() => { r1 = -1; for (let i = 0; i < n; i++) if (arr[i] === target) { r1 = i; break; } });
+      globalThis.__sink = r1;
+
+      let r2 = -1;
+      const tBin = bench(() => { r2 = -1; let lo = 0, hi = n - 1; while (lo <= hi) { const mid = (lo + hi) >> 1; if (arr[mid] === target) { r2 = mid; break; } else if (arr[mid] < target) lo = mid + 1; else hi = mid - 1; } });
+      globalThis.__sink += r2;
+
+      const binSeq = [];
+      let lo = 0, hi = n - 1;
+      while (lo <= hi) { const mid = (lo + hi) >> 1; binSeq.push(mid); if (arr[mid] === target) break; else if (arr[mid] < target) lo = mid + 1; else hi = mid - 1; }
+      const rateLin = seqRate(16);
+      const rateBin = cacheRate(binSeq, 16);
+
+      renderCompare($('findResult'),
+        { name: '线性查找', cap: 'O(n) 次，但顺序访问', time: tLin, rate: rateLin, color: 'var(--blue)' },
+        { name: '二分查找', cap: 'O(log n) 次，但跳跃访问', time: tBin, rate: rateBin, color: 'var(--purple)' },
+        `二分只有 <b>${binSeq.length} 次</b>访问，线性要 <b>${n.toLocaleString()} 次</b>——操作次数差了几万倍。但二分每次跳区间中点（命中率约 ${(rateBin*100).toFixed(1)}%），线性顺序访问（命中率约 ${(rateLin*100).toFixed(1)}%）。` +
+        (tLin < tBin
+          ? `本次 <b>线性反而更快</b>——操作次数少的二分，每次都做昂贵的未命中，代价压过了次数优势。说明「操作次数少」不等于「更快」。`
+          : `本次二分更快（${(tLin/Math.max(tBin,0.01)).toFixed(1)} 倍）——次数优势压过了单次代价差距。两个维度缺一不可。`));
+    } catch (e) {
+      $('findResult').innerHTML = '<div class="warn">运行出错：' + e.message + '</div>';
+    }
+    btn.disabled = false; btn.textContent = '跑计时';
+  }, 30);
+});
+
+// ===== 06 二分 vs 线性：可视化 =====
+(function setupFindViz() {
+  const N = 16;
+  const linCells = buildCells($('findVizLin'), N);
+  const binCells = buildCells($('findVizBin'), N);
+  // 二分查末尾（最坏）：访问中点序列
+  const binSeq = [];
+  let lo = 0, hi = N - 1;
+  while (lo <= hi) { const mid = (lo + hi) >> 1; binSeq.push(mid); if (mid === N - 1) break; else lo = mid + 1; }
+  const total = Math.max(N, binSeq.length);
+  const viz = makeViz((step) => {
+    // 线性：顺序扫
+    linCells.forEach((c, i) => {
+      c.className = 'cell';
+      if (i < step) c.classList.add('hit');
+      else if (i === step && step < N) c.classList.add('cur');
+    });
+    // 二分：按 binSeq 跳，最后一个是命中目标
+    binCells.forEach(c => { c.className = 'cell'; });
+    const s = Math.min(step, binSeq.length);
+    binSeq.slice(0, s).forEach((k, idx) => {
+      const isLast = (k === binSeq[binSeq.length - 1]);
+      binCells[k].classList.add(isLast && idx === s - 1 && s >= binSeq.length ? 'pivot' : 'miss');
+    });
+    if (step < binSeq.length) {
+      binCells[binSeq[step]].classList.add('cur');
+    }
+  }, total, 'findStepInd');
+  $('btnFindAuto').addEventListener('click', () => { viz.reset(); viz.play(); });
+  $('btnFindStep').addEventListener('click', () => viz.forward());
+  $('btnFindReset').addEventListener('click', () => viz.reset());
+})();
+</script>
+</body>
+</html>
