@@ -4,8 +4,8 @@ description: "从抽象操作到顺序与链式存储，理解线性表的设计
 order: 0
 chapter: 1
 chapterTitle: "线性表"
-updated: "2026-08-09"
-contributors: ["DSA Mastery Team"]
+updated: "2026-08-13"
+contributors: ["DSA Mastery Team", "Azen"]
 status: "draft"
 ---
 
@@ -48,7 +48,10 @@ status: "draft"
 
 1. [线性表的抽象数据类型](./01-abstract-data-type.md)
 2. [顺序表](./02-sequential-list.md)
-3. [链表](./03-linked-list.md)
+3. [第二种实现——链表与演进设计](./03-linked-list.md)
+4. [比较与权衡](./04-comparison-and-selection.md)
+
+建议先用前两篇冻结操作契约并理解连续存储，再沿第 3 篇观察链表从裸节点到双向循环哨兵的演进，最后用第 4 篇的决策表完成选型。
 
 配套实践位于 `labs/chapter-01/`。
 

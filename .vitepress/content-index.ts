@@ -104,10 +104,8 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-01-linear-list/00-overview.md",
       "content/chapter-01-linear-list/01-abstract-data-type.md",
       "content/chapter-01-linear-list/02-sequential-list.md",
-      "content/chapter-01-linear-list/03-singly-linked-list.md",
-      "content/chapter-01-linear-list/04-doubly-circular-static-list.md",
-      "content/chapter-01-linear-list/05-comparison-and-selection.md",
-      "content/chapter-01-linear-list/06-applications-and-exercises.md",
+      "content/chapter-01-linear-list/03-linked-list.md",
+      "content/chapter-01-linear-list/04-comparison-and-selection.md",
     ],
     labSources: [
       "labs/chapter-01/lab-01-01-sequence-list/README.md",
