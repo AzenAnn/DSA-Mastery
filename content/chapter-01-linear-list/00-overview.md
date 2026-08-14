@@ -5,11 +5,7 @@ order: 0
 chapter: 1
 chapterTitle: "线性表"
 updated: "2026-08-13"
-<<<<<<< HEAD
-contributors: ["Wanderer0"]
-=======
-contributors: ["DSA Mastery Team", "Azen"]
->>>>>>> origin/main
+contributors: ["DSA Mastery Team", "Wanderer0"]
 status: "draft"
 ---
 
