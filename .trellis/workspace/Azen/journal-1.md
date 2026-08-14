@@ -26,3 +26,24 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 2: 完成线性表第 3、4 篇文章
+
+**Date**: 2026-08-14
+**Task**: 完成线性表第 3、4 篇文章
+**Branch**: `codex/linear-list-articles-3-4`
+
+### Summary
+
+补全链表演进设计与顺序表/链表比较选型文章，接入课程导航和搜索，验证 C++17 示例、完整构建、Pages 子路径及桌面/移动预览。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `d1e630d` | (see git log) |
+
+### Status
+
+[OK] **Completed**

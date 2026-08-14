@@ -1,0 +1,35 @@
+{
+  "id": "linear-list-articles-3-4",
+  "name": "linear-list-articles-3-4",
+  "title": "补全线性表第3与第4篇文章",
+  "description": "按照参考大纲补全线性表第 3 篇链表演进设计与第 4 篇比较选型，提供丰富例题、C++ 代码讲解和本地预览。",
+  "status": "completed",
+  "dev_type": "docs",
+  "scope": "content-and-navigation",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-08-13",
+  "completedAt": "2026-08-14",
+  "branch": "codex/linear-list-articles-3-4",
+  "base_branch": "codex/complete-course-outline",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "content/chapter-01-linear-list/00-overview.md",
+    "content/chapter-01-linear-list/03-linked-list.md",
+    "content/chapter-01-linear-list/04-comparison-and-selection.md",
+    ".vitepress/content-index.ts",
+    "tests/pages-navigation.spec.mjs"
+  ],
+  "notes": "文章、导航、自动化门禁和本地预览已完成；任务保持 in_progress，等待用户人工预览反馈后再决定提交与归档。",
+  "meta": {
+    "verification": "C++17 examples passed; pnpm test passed; Pages-base Playwright 11/11 passed",
+    "preview_url": "http://127.0.0.1:4174/DSA-Mastery/"
+  }
+}
