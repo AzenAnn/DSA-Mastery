@@ -11,6 +11,7 @@
 3. 明确改动从 Markdown/配置到最终 Pages 浏览器的完整链路、失败表现和最小验证集合。
 4. 不把 `dist/pages`、缓存、截图或临时 fixture 当作源码修改；生成物只用于检查。
 5. Node 版本遵循 `package.json#engines`，包管理器遵循 `package.json#packageManager`，安装使用 `pnpm install --frozen-lockfile`。
+6. `.vitepress/`、脚本或测试直接导入的包必须在 `package.json` 中直接声明；JavaScript 包没有内置 TypeScript 声明时，同时直接声明对应的 `@types/*`，不得依赖传递依赖或本机残留链接提供类型。
 
 ## 3. Ownership and Data Flow
 
@@ -71,7 +72,7 @@ VitePress `1.6.4` 的 Labs 跨页面 outline 兼容例外必须保留：顶栏 L
 | ContentIndex、loader、rewrite 或 config | `pnpm run validate`、`pnpm run build` | `pnpm run check:site`、Pages-base Playwright |
 | Vue 组件、导航或默认主题扩展 | `pnpm run validate`、`pnpm run build` | 代表性桌面/移动页面真实点击、搜索、键盘和控制台检查 |
 | 样式、暗色或响应式 | `pnpm run build`、`pnpm run check:site` | 浅/暗色和桌面/移动截图、焦点、无横向溢出、reduced motion |
-| 包、脚本或 Pages workflow | `pnpm install --frozen-lockfile`、`pnpm test` | workflow 静态审查；涉及发布时运行 Pages-base Playwright |
+| 包、脚本或 Pages workflow | 检查直接导入与直接依赖/类型声明一致；`pnpm install --frozen-lockfile`、`pnpm test` | workflow 静态审查；涉及发布时运行 Pages-base Playwright |
 
 常规合并前至少运行 `pnpm test`。涉及导航、主题、Markdown 渲染、base 或发布时，再设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 与 `SITE_URL`，在最终 `dist/pages` 上运行 `pnpm run build`、`pnpm run check:site` 和 `pnpm run test:pages`。
 

@@ -74,3 +74,10 @@
 - [x] 更新 Pages 浏览器测试，覆盖五个侧栏入口和选择、提交、反馈、重试。
 - [x] 将交互 Quiz 与章节 Lab 完整性约束写入 Trellis 内容、前端和质量规范。
 - [x] 重新执行完整质量门禁、Pages-base 构建与浏览器检查，并刷新本地预览。
+
+## 10. PR CI 修复
+
+- [x] 检查 PR #18 的 GitHub Actions 日志，定位 Linux 干净环境下 `markdown-it` 缺少直接类型声明导致的 `TS7016`。
+- [x] 将 `@types/markdown-it` 添加为直接开发依赖并更新 `pnpm-lock.yaml`，不依赖传递依赖或本机残留链接。
+- [x] 把直接导入、直接依赖与 TypeScript 类型包的约束补入 VitePress 和 Pages Trellis 规范。
+- [x] 使用冻结锁文件重新安装，执行完整门禁与 Pages-base 12 个浏览器测试；修复提交将在本轮推送到 PR #18。

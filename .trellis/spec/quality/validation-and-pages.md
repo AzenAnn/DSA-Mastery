@@ -31,6 +31,7 @@ actions/configure-pages base_path
 ## 3. Contracts
 
 - Node 版本与 `package.json#engines` 一致，Corepack 使用 `package.json#packageManager` 固定 pnpm 版本，干净环境使用 `pnpm install --frozen-lockfile`。
+- 源码直接导入的运行时包必须是 `package.json` 的直接依赖；无内置 TypeScript 声明的包还必须直接声明对应 `@types/*`。锁文件中存在传递依赖不代表当前包可以直接使用，且不得以本机 `node_modules` 中的残留链接作为通过依据。
 - 内容校验与 VitePress 收集器是独立防线，但共享同一字段/路径契约；禁止一个接受、另一个拒绝。
 - workflow 使用 Node 24、全局 `pages` concurrency group；PR 执行全部 build/test 但不 deploy，只有 `main` push 和 `workflow_dispatch` 可部署。
 - `actions/configure-pages` 是部署 base 的来源；旧 `NEXT_PUBLIC_*`、RSC patch 和 artifact 修补已删除，不得重新引入。
@@ -45,6 +46,7 @@ actions/configure-pages base_path
 | --- | --- |
 | frontmatter、路径、order、链接错误 | 所有内容 PR |
 | type/lint/build 失败 | 所有站点或依赖 PR |
+| 直接导入依赖或类型包仅由传递依赖提供 | 干净安装与 CI 阻塞 |
 | 期望 route/asset 缺失或双 base | 发布阻塞 |
 | 搜索找不到教材或 Lab | 发布阻塞 |
 | math、code、table/task-list 代表页回归 | 发布阻塞 |
@@ -63,6 +65,7 @@ actions/configure-pages base_path
 ## 6. Tests Required
 
 - 内容：字段、类型、路径、章一致性、排序、相对文件与站内路由。
+- 依赖：直接导入与 `package.json` 的直接依赖一致；无内置声明的 JavaScript 包具有直接 `@types/*` 依赖，并在冻结锁文件安装后通过 `typecheck`。
 - 自动发现：临时教材和 Lab 在 `try/finally` 内创建，贯穿验证、导航、搜索和 build；另在自动收录章节创建临时 Lab 并证明进入“相关 Labs”。
 - 产物：期望 HTML、favicon/OG、内部链接、asset、404、恰好一个 base。
 - 浏览器：三段真实点击、搜索教材/Lab、主题持久化、移动目录、代表性公式/代码/表格/任务列表、edit link。

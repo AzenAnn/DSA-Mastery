@@ -29,14 +29,15 @@
     "tests/pages-navigation.spec.mjs",
     ".trellis/spec/content/labs.md"
   ],
-  "notes": "已从用户本地 CodeBrick Obsidian 导出目录只读导入 36 道选择题，生成 5 个复用 QuizSet 的交互 Lab；移除个人原始页、交互可视化与答案来源说明。线性表侧栏改为自动收录同章 Lab，内容校验、自动发现 fixture、Pages 浏览器回归与 Trellis 规范均已覆盖。完整门禁和 Pages-base 12 个浏览器测试通过，用户已要求提交 PR。",
+  "notes": "已从用户本地 CodeBrick Obsidian 导出目录只读导入 36 道选择题，生成 5 个复用 QuizSet 的交互 Lab；移除个人原始页、交互可视化与答案来源说明。线性表侧栏改为自动收录同章 Lab，内容校验、自动发现 fixture、Pages 浏览器回归与 Trellis 规范均已覆盖。PR #18 首次 CI 暴露 markdown-it 类型包只由传递依赖提供，现已改为直接开发依赖，并补充依赖合同规范。",
   "meta": {
     "source_counts": "12/16/17/2/4",
     "selected_counts": "10/10/10/2/4",
-    "verification": "pnpm test; Pages build/check:site/test:pages (12 passed); in-app interaction and no-overflow audit",
+    "verification": "pnpm install --frozen-lockfile; pnpm test; Pages build/check:site/test:pages (12 passed); in-app interaction and no-overflow audit",
     "preview_url": "http://127.0.0.1:4175/DSA-Mastery/labs/",
     "personal_import_cleanup": "removed original-page links, personal visualizer resources, and answer-generation provenance; encoded in .trellis/spec/content/labs.md",
     "interactive_quiz": "five quiz.json files, 36 questions, existing QuizSet reused with rich Markdown rendering",
-    "sidebar_detection": "chapter 1 uses autoLabChapter; discovery fixture proves new Labs enter related Labs automatically"
+    "sidebar_detection": "chapter 1 uses autoLabChapter; discovery fixture proves new Labs enter related Labs automatically",
+    "ci_fix": "PR #18 TS7016: declare @types/markdown-it directly; verify frozen-lockfile install, full gates, and Pages-base tests"
   }
 }

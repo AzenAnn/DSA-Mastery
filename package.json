@@ -27,6 +27,7 @@
     "@lucide/vue": "1.31.0",
     "@mdit/plugin-tasklist": "1.0.2",
     "@playwright/test": "^1.62.1",
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "22.19.19",
     "eslint": "9.39.4",
     "eslint-plugin-vue": "10.10.0",
