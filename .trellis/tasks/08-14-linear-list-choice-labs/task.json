@@ -1,0 +1,42 @@
+{
+  "id": "linear-list-choice-labs",
+  "name": "linear-list-choice-labs",
+  "title": "线性表五类选择题 Lab",
+  "description": "把五篇线性表 Obsidian 题库各取前 10 道选择题（不足则全部保留），转换为五个复用 QuizSet、可交互作答的 VitePress Lab，并自动收录到线性表侧栏。",
+  "status": "in_progress",
+  "dev_type": "docs",
+  "scope": "labs-navigation-tests-and-content-spec",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-08-14",
+  "completedAt": null,
+  "branch": "codex/linear-list-choice-labs",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "labs/chapter-01/lab-01-04-sequential-list-quiz/README.md",
+    "labs/chapter-01/lab-01-05-singly-linked-list-quiz/README.md",
+    "labs/chapter-01/lab-01-06-doubly-linked-list-quiz/README.md",
+    "labs/chapter-01/lab-01-07-circular-linked-list-quiz/README.md",
+    "labs/chapter-01/lab-01-08-static-linked-list-quiz/README.md",
+    "tests/pages-navigation.spec.mjs",
+    ".trellis/spec/content/labs.md"
+  ],
+  "notes": "已从用户本地 CodeBrick Obsidian 导出目录只读导入 36 道选择题，生成 5 个复用 QuizSet 的交互 Lab；移除个人原始页、交互可视化与答案来源说明。线性表侧栏改为自动收录同章 Lab，内容校验、自动发现 fixture、Pages 浏览器回归与 Trellis 规范均已覆盖。完整门禁和 Pages-base 12 个浏览器测试通过，用户已要求提交 PR。",
+  "meta": {
+    "source_counts": "12/16/17/2/4",
+    "selected_counts": "10/10/10/2/4",
+    "verification": "pnpm test; Pages build/check:site/test:pages (12 passed); in-app interaction and no-overflow audit",
+    "preview_url": "http://127.0.0.1:4175/DSA-Mastery/labs/",
+    "personal_import_cleanup": "removed original-page links, personal visualizer resources, and answer-generation provenance; encoded in .trellis/spec/content/labs.md",
+    "interactive_quiz": "five quiz.json files, 36 questions, existing QuizSet reused with rich Markdown rendering",
+    "sidebar_detection": "chapter 1 uses autoLabChapter; discovery fixture proves new Labs enter related Labs automatically"
+  }
+}

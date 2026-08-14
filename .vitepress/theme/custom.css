@@ -1373,7 +1373,7 @@ input:focus-visible {
   }
 }
 
-/* Interactive complexity quiz mounted from Lab READMEs. */
+/* Interactive quiz mounted from Lab READMEs. */
 .course-sr-only {
   position: absolute;
   width: 1px;
@@ -1413,6 +1413,11 @@ input:focus-visible {
   gap: 12px;
 }
 
+.course-quiz-heading-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .course-quiz-number {
   display: inline-flex;
   flex: 0 0 auto;
@@ -1436,6 +1441,119 @@ input:focus-visible {
   font-size: 15px;
   font-weight: 750;
   line-height: 1.7;
+}
+
+.course-quiz-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 14px;
+  margin: 1px 0 10px;
+  color: var(--course-ink-faint);
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+
+.course-quiz-meta span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.course-quiz-meta strong {
+  color: var(--course-ink-soft);
+  font-weight: 750;
+}
+
+.course-quiz-meta code {
+  padding: 1px 5px;
+  border: 1px solid var(--course-line);
+  border-radius: 5px;
+  background: var(--course-paper);
+  color: var(--course-accent);
+  font-size: 10.5px;
+}
+
+.course-quiz-rich {
+  min-width: 0;
+}
+
+.course-quiz-rich > :first-child { margin-top: 0; }
+.course-quiz-rich > :last-child { margin-bottom: 0; }
+
+.course-quiz-rich p,
+.course-quiz-rich ul,
+.course-quiz-rich ol,
+.course-quiz-rich blockquote,
+.course-quiz-rich pre,
+.course-quiz-rich table {
+  margin: 10px 0;
+}
+
+.course-quiz-rich ul,
+.course-quiz-rich ol {
+  padding-left: 21px;
+}
+
+.course-quiz-rich li + li {
+  margin-top: 5px;
+}
+
+.course-quiz-rich blockquote {
+  padding: 9px 12px;
+  border-left: 3px solid var(--course-accent);
+  background: var(--course-accent-soft);
+  color: var(--course-ink-soft);
+}
+
+.course-quiz-rich pre {
+  max-width: 100%;
+  padding: 13px 15px;
+  overflow-x: auto;
+  border: 1px solid var(--course-code-border);
+  border-radius: var(--course-radius-sm);
+  background: var(--course-code-bg);
+  color: var(--course-code-text);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.course-quiz-rich pre code {
+  color: inherit;
+  font-family: var(--course-font-mono);
+}
+
+.course-quiz-rich table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.course-quiz-rich th,
+.course-quiz-rich td {
+  min-width: 76px;
+  padding: 7px 10px;
+  border: 1px solid var(--course-line);
+  text-align: left;
+}
+
+.course-quiz-rich th {
+  background: var(--course-paper);
+  color: var(--course-ink);
+}
+
+.course-quiz-rich h4 {
+  margin: 17px 0 8px;
+  color: var(--course-ink);
+  font-size: 13px;
+}
+
+.course-quiz-rich mjx-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* 代码窗口(统一深色,与教材代码块一致) */
@@ -1506,7 +1624,7 @@ input:focus-visible {
 .course-quiz-options label {
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 13px;
   padding: 12px 15px;
   border: 1px solid var(--course-line);
@@ -1566,6 +1684,8 @@ input:focus-visible {
 }
 
 .course-quiz-option-text {
+  min-width: 0;
+  padding-top: 3px;
   color: var(--course-ink-soft);
   font-size: 13px;
   line-height: 1.55;
@@ -1697,6 +1817,10 @@ input:focus-visible {
   color: var(--course-ink);
 }
 
+.course-quiz-answer strong .course-quiz-rich {
+  display: inline;
+}
+
 .course-quiz-explanation {
   display: grid;
   gap: 7px;
@@ -1718,11 +1842,14 @@ input:focus-visible {
 
 .course-quiz-explanation-title svg { color: var(--course-accent); }
 
-.course-quiz-explanation p {
-  margin: 0;
+.course-quiz-explanation .course-quiz-rich {
   color: var(--course-ink-soft);
   font-size: 12.5px;
   line-height: 1.8;
+}
+
+.course-quiz-explanation .course-quiz-rich p {
+  margin: 0 0 10px;
 }
 
 .course-quiz-empty {
@@ -1789,4 +1916,37 @@ input:focus-visible {
   border-color: color-mix(in srgb, var(--course-signal) 55%, var(--course-line));
   background: var(--course-signal-soft);
   color: var(--course-signal);
+}
+
+@media (max-width: 640px) {
+  .course-quiz {
+    gap: 18px;
+    margin: 22px 0 28px;
+  }
+
+  .course-quiz-question {
+    padding: 19px 16px;
+  }
+
+  .course-quiz-heading {
+    display: grid;
+    gap: 9px;
+  }
+
+  .course-quiz-meta {
+    gap: 5px 10px;
+  }
+
+  .course-quiz-options label {
+    gap: 10px;
+    padding: 11px 12px;
+  }
+
+  .course-quiz-options.is-submitted label {
+    padding-right: 38px;
+  }
+
+  .course-quiz-feedback {
+    padding: 15px 14px;
+  }
 }

@@ -204,6 +204,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-01-linear-list/04-comparison-and-selection/"]').first(),
   ).toBeVisible();
+  await input.fill("静态链表选择题精练");
+  await expect(
+    results.locator('a[href*="/labs/chapter-01/lab-01-08-static-linked-list-quiz/"]').first(),
+  ).toBeVisible();
   await input.fill("算法复杂度与算法分析");
   await expect(
     results.locator('a[href*="/learn/chapter-00-introduction/02-algorithm-complexity-analysis/"]').first(),
@@ -637,6 +641,91 @@ test("programming problem template renders the standard problem sections", async
   await expect(
     page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-03：编程题页面样板" }),
   ).toBeVisible();
+
+  expect(failures).toEqual([]);
+});
+
+test("linear-list quiz Labs are interactive and complete in the chapter sidebar", async ({ page }) => {
+  const failures = monitorPage(page);
+  const quizLabs = [
+    {
+      slug: "lab-01-04-sequential-list-quiz",
+      title: "Lab 01-04：顺序表选择题精练",
+      questions: 10,
+    },
+    {
+      slug: "lab-01-05-singly-linked-list-quiz",
+      title: "Lab 01-05：单链表选择题精练",
+      questions: 10,
+    },
+    {
+      slug: "lab-01-06-doubly-linked-list-quiz",
+      title: "Lab 01-06：双链表选择题精练",
+      questions: 10,
+    },
+    {
+      slug: "lab-01-07-circular-linked-list-quiz",
+      title: "Lab 01-07：循环链表选择题精练",
+      questions: 2,
+    },
+    {
+      slug: "lab-01-08-static-linked-list-quiz",
+      title: "Lab 01-08：静态链表选择题精练",
+      questions: 4,
+    },
+  ];
+
+  await page.goto(`${baseUrl}/labs/`);
+  for (const quiz of quizLabs) {
+    await expect(page.locator("a.course-labs-list-card").filter({ hasText: quiz.title })).toBeVisible();
+  }
+
+  for (const quiz of quizLabs) {
+    await page.goto(`${baseUrl}/labs/chapter-01/${quiz.slug}/`);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(quiz.title);
+    const questions = page.locator(".course-quiz-question");
+    await expect(questions).toHaveCount(quiz.questions);
+    await expect(page.locator(".course-quiz-nav li")).toHaveCount(quiz.questions);
+    await expect(page.locator(".course-quiz-option")).toHaveCount(quiz.questions * 4);
+    await expect(page.getByRole("button", { name: "提交答案" })).toHaveCount(quiz.questions);
+    await expect(page.locator(".course-quiz-meta")).toHaveCount(quiz.questions);
+    await expect(page.locator(".vp-doc")).not.toContainText(
+      /查看原始页面|看交互可视化|答案来源说明|答案来源：Codex/,
+    );
+
+    await expect(
+      page.locator(".vp-doc details > summary").filter({ hasText: "查看答案与解析" }),
+    ).toHaveCount(0);
+    await expect(
+      page.locator(".vp-doc details > summary").filter({ hasText: "展开答案表" }),
+    ).toHaveCount(1);
+
+    const firstQuestion = questions.first();
+    await expect(firstQuestion.locator(".course-quiz-feedback")).toHaveCount(0);
+    await firstQuestion.locator(".course-quiz-option").first().click();
+    await firstQuestion.getByRole("button", { name: "提交答案" }).click();
+    await expect(firstQuestion.locator(".course-quiz-feedback")).toBeVisible();
+    await expect(firstQuestion.locator(".course-quiz-feedback")).toContainText("正确答案");
+    await expect(firstQuestion.getByRole("button", { name: "重新作答" })).toBeVisible();
+
+    const layout = await page.evaluate(() => ({
+      clientWidth: globalThis.document.documentElement.clientWidth,
+      scrollWidth: globalThis.document.documentElement.scrollWidth,
+    }));
+    expect(layout.scrollWidth, `${quiz.slug} should not overflow horizontally`).toBeLessThanOrEqual(
+      layout.clientWidth,
+    );
+  }
+
+  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-04-sequential-list-quiz/`);
+  const chapterSidebar = page.locator(".VPSidebar");
+  for (const quiz of quizLabs) {
+    await expect(chapterSidebar.getByRole("link", { name: quiz.title, exact: true })).toHaveCount(1);
+  }
+  await expect(page.locator(".course-quiz-stem mjx-container").first()).toBeVisible();
+
+  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-05-singly-linked-list-quiz/`);
+  await expect(page.locator(".course-quiz-question").nth(1).locator("table")).toBeVisible();
 
   expect(failures).toEqual([]);
 });

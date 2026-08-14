@@ -1,0 +1,45 @@
+[
+  {
+    "id": "ds-2016-02",
+    "title": "2016 年真题第 2 题",
+    "source": "2016 年真题第 2 题",
+    "difficulty": "★★",
+    "topics": [
+      "循环链表",
+      "双向循环链表",
+      "删除操作",
+      "指针操作"
+    ],
+    "targetId": "ds-2016-02",
+    "stem": "已知一个带有表头结点的双向循环链表 L，结点结构为 prev|data|next，prev 和 next 分别是指向其直接前驱和直接后继结点的指针。现要删除指针 p 所指的结点，正确的语句序列是( )。",
+    "options": [
+      "`p->next->prev = p->prev; p->prev->next = p->prev; free(p);`",
+      "`p->next->prev = p->next; p->prev->next = p->next; free(p);`",
+      "`p->next->prev = p->next; p->prev->next = p->prev; free(p);`",
+      "`p->next->prev = p->prev; p->prev->next = p->next; free(p);`"
+    ],
+    "answer": 3,
+    "explanation": "**答案详解**\n\n删除双向循环链表中的p，必须让p的后继结点的prev越过p指向p的前驱，同时让p的前驱结点的next越过p指向p的后继，完成两个方向的摘链后才能释放p。只有D同时满足这两个条件。\n\n**选项辨析**\n\n- **A：错误。** 第二句令前驱的next错误指向前驱自身。\n- **B：错误。** 第一句令后继的prev错误指向后继自身。\n- **C：错误。** 两侧分别形成错误自环，前驱后继没有互接。\n- **D：正确。** 前驱与后继双向互连后再释放p，操作正确。"
+  },
+  {
+    "id": "ds-2021-01",
+    "title": "2021 年真题第 1 题",
+    "source": "2021 年真题第 1 题",
+    "difficulty": "★★★",
+    "topics": [
+      "循环链表",
+      "链表删除",
+      "尾指针"
+    ],
+    "targetId": "ds-2021-01",
+    "stem": "已知头指针 h 指向一个带头结点的非空单循环链表，结点结构为\n\n```\n------------\n|data |next|\n------------\n```\n\n其中 `next` 是指向直接后继结点的指针，`p` 是尾指针，`q` 是临时指针。现要删除该链表的第一个元素，正确的语句序列是（ ）。",
+    "options": [
+      "`h->next = h->next->next; q = h->next; free(q);`",
+      "`q = h->next; h->next = h->next->next; free(q);`",
+      "`q = h->next; h->next = q->next; if (p != q) p = h; free(q);`",
+      "`q = h->next; h->next = q->next; if (p == q) p = h; free(q);`"
+    ],
+    "answer": 3,
+    "explanation": "**答案详解**\n\n应先用q保存首元结点，再令h->next跳过q。若原表只有一个数据结点，则q同时等于尾指针p，删除后尾指针必须改为头结点h；若原表有多个结点，p保持不变。因此边界判断必须是p==q。\n\n**选项辨析**\n\n- **A：错误。** 先改头链再给q赋值，会释放新的首元结点。\n- **B：错误。** 遗漏单元素表删除后尾指针必须回到h的边界。\n- **C：错误。** 条件写反，多元素表会错误地修改尾指针。\n- **D：正确。** 既正确保存待删结点，也正确处理单元素边界。"
+  }
+]

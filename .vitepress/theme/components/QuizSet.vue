@@ -55,7 +55,7 @@ function retry(questionId: string) {
 </script>
 
 <template>
-  <section v-if="questions.length" class="course-quiz" aria-label="复杂度自测题">
+  <section v-if="questions.length" class="course-quiz" aria-label="选择题自测">
     <article
       v-for="(question, index) in questions"
       :id="`quiz-q${index + 1}`"
@@ -64,7 +64,19 @@ function retry(questionId: string) {
     >
       <header class="course-quiz-heading">
         <span class="course-quiz-number">第 {{ index + 1 }} 题</span>
-        <p class="course-quiz-stem">{{ question.stem }}</p>
+        <div class="course-quiz-heading-content">
+          <div
+            v-if="question.source || question.difficulty || question.topics?.length || question.targetId"
+            class="course-quiz-meta"
+            aria-label="题目信息"
+          >
+            <span v-if="question.source"><strong>来源</strong>{{ question.source }}</span>
+            <span v-if="question.difficulty"><strong>难度</strong>{{ question.difficulty }}</span>
+            <span v-if="question.topics?.length"><strong>考点</strong>{{ question.topics.join("、") }}</span>
+            <span v-if="question.targetId"><strong>标识</strong><code>{{ question.targetId }}</code></span>
+          </div>
+          <div class="course-quiz-stem course-quiz-rich" v-html="question.stemHtml" />
+        </div>
       </header>
 
       <div v-if="question.codeHtml" class="course-quiz-code">
@@ -96,7 +108,7 @@ function retry(questionId: string) {
             :value="optionIndex"
           />
           <span class="course-quiz-option-mark" aria-hidden="true">{{ optionLabel(optionIndex) }}</span>
-          <span class="course-quiz-option-text">{{ option }}</span>
+          <span class="course-quiz-option-text course-quiz-rich" v-html="question.optionHtml[optionIndex]" />
         </label>
       </fieldset>
 
@@ -127,11 +139,14 @@ function retry(questionId: string) {
           {{ isSelected(question, question.answer) ? "回答正确" : "回答错误" }}
         </p>
         <p class="course-quiz-answer">
-          正确答案：<strong>{{ optionLabel(question.answer) }}. {{ question.options[question.answer] }}</strong>
+          正确答案：<strong>
+            {{ optionLabel(question.answer) }}.
+            <span class="course-quiz-rich" v-html="question.optionHtml[question.answer]" />
+          </strong>
         </p>
         <div class="course-quiz-explanation">
           <strong class="course-quiz-explanation-title"><Info aria-hidden="true" :size="14" />题解</strong>
-          <p>{{ question.explanation }}</p>
+          <div class="course-quiz-rich" v-html="question.explanationHtml" />
         </div>
       </div>
     </article>
