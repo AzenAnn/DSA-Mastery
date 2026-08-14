@@ -102,8 +102,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-01-linear-list/",
     lessonSources: [
       "content/chapter-01-linear-list/00-overview.md",
-      "content/chapter-01-linear-list/01-list-adt.md",
-      "content/chapter-01-linear-list/02-dynamic-array.md",
+      "content/chapter-01-linear-list/01-abstract-data-type.md",
+      "content/chapter-01-linear-list/02-sequential-list.md",
+      "content/chapter-01-linear-list/03-linked-list.md",
+      "content/chapter-01-linear-list/04-comparison-and-selection.md",
     ],
     labSources: [
       "labs/chapter-01/lab-01-01-sequence-list/README.md",
