@@ -196,8 +196,8 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   const input = page.getByRole("searchbox");
   await expect(input).toBeVisible();
   const results = page.getByRole("listbox");
-  await input.fill("存储模型");
-  await expect(results.locator('a[href*="/learn/chapter-01-linear-list/03-linked-list/"]')).toBeVisible();
+  await input.fill("前驱后继");
+  await expect(results.locator('a[href*="/learn/chapter-01-linear-list/01-list-adt/"]')).toBeVisible();
   await input.fill("算法复杂度与算法分析");
   await expect(
     results.locator('a[href*="/learn/chapter-00-introduction/02-algorithm-complexity-analysis/"]').first(),

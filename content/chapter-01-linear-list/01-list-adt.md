@@ -1,15 +1,15 @@
 ---
-title: "第 1 节 问题驱动与 List ADT"
+title: "1.1 问题驱动与 List ADT"
 description: "从现实生活数据组织切入，确立面向接口编程思想，定义规范的 List ADT 接口契约。"
 order: 1
 chapter: 1
 chapterTitle: "线性表"
-updated: "2026-08-13"
+updated: "2026-08-14"
 contributors: ["Wanderer0"]
 status: "draft"
 ---
 
-# 1. 问题驱动与 List ADT (抽象接口定义)
+# 1.1 问题驱动与 List ADT (抽象接口定义)
 
 > **本节概述**：本篇为《数据结构与算法》开源项目 Chapter 01 的第 1 篇核心讲义。
 > 本篇从现实世界的一维序列数据组织切入，确立软件工程中“接口与实现分离”的面向接口编程思想，并给出规范的 **List ADT (Abstract Data Type)** 接口契约与语义定义。

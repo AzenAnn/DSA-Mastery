@@ -1,15 +1,15 @@
 ---
-title: "第 2 节 动态顺序表"
+title: "1.2 顺序表"
 description: "深入物理内存连续性、CPU Cache 局部性以及乘法 2 倍扩容的摊还分析数学推导。"
 order: 2
 chapter: 1
 chapterTitle: "线性表"
-updated: "2026-08-13"
+updated: "2026-08-14"
 contributors: ["Wanderer0"]
 status: "draft"
 ---
 
-# 2. 第一种实现——动态顺序表 (Dynamic Array / Vector)
+# 1.2 顺序表 (动态数组)
 
 > **本节概述**：本篇为《数据结构与算法》开源项目 Chapter 01 的第 2 篇核心讲义。
 > 本篇深入讲解线性表的第一种底层物理实现——**动态顺序表 (Dynamic Array / Vector)**。剖析其物理内存映射公式、硬件级别的 **CPU Cache 局部性**，并运用**聚合分析法**严密推导乘法扩容的 **$O(1)$ 摊还时间复杂度 (Amortized Analysis)**。
