@@ -31,11 +31,12 @@ actions/configure-pages base_path
 ## 3. Contracts
 
 - Node 版本与 `package.json#engines` 一致，Corepack 使用 `package.json#packageManager` 固定 pnpm 版本，干净环境使用 `pnpm install --frozen-lockfile`。
+- 源码直接导入的运行时包必须是 `package.json` 的直接依赖；无内置 TypeScript 声明的包还必须直接声明对应 `@types/*`。锁文件中存在传递依赖不代表当前包可以直接使用，且不得以本机 `node_modules` 中的残留链接作为通过依据。
 - 内容校验与 VitePress 收集器是独立防线，但共享同一字段/路径契约；禁止一个接受、另一个拒绝。
 - workflow 使用 Node 24、全局 `pages` concurrency group；PR 执行全部 build/test 但不 deploy，只有 `main` push 和 `workflow_dispatch` 可部署。
 - `actions/configure-pages` 是部署 base 的来源；旧 `NEXT_PUBLIC_*`、RSC patch 和 artifact 修补已删除，不得重新引入。
 - 上传目录固定为 `dist/pages`；生成目录不进 Git。
-- Playwright 必须服务最终静态产物，并挂载在 `/DSA-Mastery/`，不能只测开发服务器；当前必须保持 5 个用例全绿。
+- Playwright 必须服务最终静态产物，并挂载在 `/DSA-Mastery/`，不能只测开发服务器；仓库配置的全部用例必须全绿。
 - 真实点击覆盖：首页 CTA → 教材、顶栏 Labs → Labs 索引、Labs 索引 → Lab。
 - 浏览器收集 `pageerror`、`console.error`、request failure 和同源 4xx/5xx；任何非明确允许项都失败。
 
@@ -45,12 +46,15 @@ actions/configure-pages base_path
 | --- | --- |
 | frontmatter、路径、order、链接错误 | 所有内容 PR |
 | type/lint/build 失败 | 所有站点或依赖 PR |
+| 直接导入依赖或类型包仅由传递依赖提供 | 干净安装与 CI 阻塞 |
 | 期望 route/asset 缺失或双 base | 发布阻塞 |
 | 搜索找不到教材或 Lab | 发布阻塞 |
 | math、code、table/task-list 代表页回归 | 发布阻塞 |
 | 移动导航、暗色或关键点击失败 | 发布阻塞 |
 | PR workflow 触发 deploy | workflow 设计失败 |
 | fixture 未清理，工作树变脏 | 测试失败 |
+| 交互题库 JSON 损坏却被 loader 静默跳过 | 发布阻塞；validator 与构建都必须报错 |
+| 章节实际 Lab 集合与“相关 Labs”侧栏不完整 | discovery/Pages 发布阻塞 |
 
 ## 5. Good / Base / Bad Cases
 
@@ -61,9 +65,11 @@ actions/configure-pages base_path
 ## 6. Tests Required
 
 - 内容：字段、类型、路径、章一致性、排序、相对文件与站内路由。
-- 自动发现：临时教材和 Lab 在 `try/finally` 内创建，贯穿验证、导航、搜索和 build。
+- 依赖：直接导入与 `package.json` 的直接依赖一致；无内置声明的 JavaScript 包具有直接 `@types/*` 依赖，并在冻结锁文件安装后通过 `typecheck`。
+- 自动发现：临时教材和 Lab 在 `try/finally` 内创建，贯穿验证、导航、搜索和 build；另在自动收录章节创建临时 Lab 并证明进入“相关 Labs”。
 - 产物：期望 HTML、favicon/OG、内部链接、asset、404、恰好一个 base。
 - 浏览器：三段真实点击、搜索教材/Lab、主题持久化、移动目录、代表性公式/代码/表格/任务列表、edit link。
+- 交互题库：内容 validator 检查 schema、唯一挂载点与无静态重复；Pages 浏览器真实选择并提交，检查反馈、题解、重试、题量和每题四个选项。
 - 视觉：对照 `docs/assets/migration-baseline/` 的桌面/移动、浅/暗证据。
 
 ## 7. Wrong vs Correct

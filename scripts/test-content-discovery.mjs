@@ -6,6 +6,12 @@ import { fileURLToPath } from "node:url";
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const lessonDirectory = path.join(projectRoot, "content", "chapter-99-discovery-fixture");
 const labDirectory = path.join(projectRoot, "labs", "chapter-99", "lab-99-01-discovery-fixture");
+const sidebarLabDirectory = path.join(
+  projectRoot,
+  "labs",
+  "chapter-01",
+  "lab-01-99-sidebar-discovery-fixture",
+);
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const pagesEnvironment = {
   ...process.env,
@@ -64,6 +70,27 @@ duration: "1 分钟"
 - [ ] 页面、导航和搜索均包含本 Lab。
 `;
 
+const sidebarLab = `---
+title: "Lab 01-99：章节侧栏自动收录验证"
+description: "验证新增线性表 Lab 会自动进入本章相关 Labs。"
+order: 99
+chapter: 1
+chapterTitle: "线性表"
+updated: "2026-08-14"
+contributors: ["Discovery Test"]
+status: "draft"
+lab: true
+difficulty: "测试"
+duration: "1 分钟"
+---
+
+# Lab 01-99：章节侧栏自动收录验证
+
+## 验收标准
+
+- [ ] 本 Lab 自动出现在 Ch.1 线性表的相关 Labs 中。
+`;
+
 function runNpm(args) {
   const command = process.platform === "win32" ? (process.env.ComSpec ?? "cmd.exe") : npmCommand;
   const commandArgs = process.platform === "win32"
@@ -96,8 +123,10 @@ let primaryError;
 try {
   await mkdir(lessonDirectory, { recursive: true });
   await mkdir(labDirectory, { recursive: true });
+  await mkdir(sidebarLabDirectory, { recursive: true });
   await writeFile(path.join(lessonDirectory, "00-autodiscovery.md"), lesson, "utf8");
   await writeFile(path.join(labDirectory, "README.md"), lab, "utf8");
+  await writeFile(path.join(sidebarLabDirectory, "README.md"), sidebarLab, "utf8");
 
   runNpm(["run", "validate:content"]);
   runNpm(["run", "build:vitepress"]);
@@ -111,6 +140,18 @@ try {
     path.join(projectRoot, "dist", "pages", "labs", "chapter-99", "lab-99-01-discovery-fixture", "index.html"),
     "utf8",
   );
+  const sidebarLabHtml = await readFile(
+    path.join(
+      projectRoot,
+      "dist",
+      "pages",
+      "labs",
+      "chapter-01",
+      "lab-01-99-sidebar-discovery-fixture",
+      "index.html",
+    ),
+    "utf8",
+  );
   for (const required of ["第 99 章 自动发现验证", "mjx-container", "language-js", "<table", 'type="checkbox"']) {
     if (!lessonHtml.includes(required)) throw new Error(`Temporary lesson did not render expected feature: ${required}`);
   }
@@ -118,13 +159,32 @@ try {
     throw new Error("Relative Markdown link was not rewritten to the Pages-aware Lab route");
   }
   if (!labHtml.includes("Lab 99-01：自动发现验证")) throw new Error("Temporary Lab page was not generated");
+  const sidebarStart = sidebarLabHtml.indexOf('<aside class="VPSidebar"');
+  const sidebarEnd = sidebarLabHtml.indexOf("</aside>", sidebarStart);
+  const sidebarHtml = sidebarLabHtml.slice(sidebarStart, sidebarEnd);
+  if (
+    sidebarStart < 0 ||
+    sidebarEnd < 0 ||
+    !sidebarHtml.includes("Lab 01-99：章节侧栏自动收录验证") ||
+    !sidebarHtml.includes(
+      'href="/DSA-Mastery/labs/chapter-01/lab-01-99-sidebar-discovery-fixture/"',
+    )
+  ) {
+    throw new Error("Temporary chapter-01 Lab did not enter Ch.1 related Labs sidebar automatically");
+  }
 } catch (error) {
   primaryError = error;
 } finally {
   assertFixtureTarget(lessonDirectory, path.join(projectRoot, "content"), "chapter-99-discovery-fixture");
   assertFixtureTarget(labDirectory, path.join(projectRoot, "labs", "chapter-99"), "lab-99-01-discovery-fixture");
+  assertFixtureTarget(
+    sidebarLabDirectory,
+    path.join(projectRoot, "labs", "chapter-01"),
+    "lab-01-99-sidebar-discovery-fixture",
+  );
   await rm(lessonDirectory, { recursive: true, force: true });
   await rm(labDirectory, { recursive: true, force: true });
+  await rm(sidebarLabDirectory, { recursive: true, force: true });
   await rmdir(path.join(projectRoot, "labs", "chapter-99")).catch(() => {});
   try {
     runNpm(["run", "build:vitepress"]);
@@ -134,4 +194,4 @@ try {
 }
 
 if (primaryError) throw primaryError;
-console.log("自动发现检查通过：临时教材与 Lab 已进入构建、导航、搜索并被安全清理。");
+console.log("自动发现检查通过：临时教材与 Lab 已进入构建、导航、搜索及章节相关 Labs，并被安全清理。");

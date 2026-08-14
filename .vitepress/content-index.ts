@@ -70,6 +70,8 @@ const labDirectoryPattern = /^lab-\d{2}-\d{2}-[a-z0-9-]+$/;
 type CurriculumChapterDefinition = Omit<CurriculumChapter, "lessons" | "labs"> & {
   lessonSources?: string[];
   labSources?: string[];
+  /** 未拆分章节使用：自动收录该物理 chapter 下的全部 Lab。 */
+  autoLabChapter?: number;
 };
 
 const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
@@ -107,11 +109,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-01-linear-list/03-linked-list.md",
       "content/chapter-01-linear-list/04-comparison-and-selection.md",
     ],
-    labSources: [
-      "labs/chapter-01/lab-01-01-sequence-list/README.md",
-      "labs/chapter-01/lab-01-02-linked-list/README.md",
-      "labs/chapter-01/lab-01-03-problem-template/README.md",
-    ],
+    autoLabChapter: 1,
   },
   {
     id: "chapter-02-stack-queue",
@@ -402,11 +400,19 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
   });
 
   const documentsBySource = new Map([...lessons, ...labs].map((document) => [document.sourcePath, document]));
-  const outlineChapters = curriculumChapterDefinitions.map(({ lessonSources = [], labSources = [], ...chapter }) => ({
-    ...chapter,
-    lessons: lessonSources.map((source) => documentsBySource.get(source)).filter((item): item is CourseDocument => Boolean(item)),
-    labs: labSources.map((source) => documentsBySource.get(source)).filter((item): item is CourseDocument => Boolean(item)),
-  }));
+  const outlineChapters = curriculumChapterDefinitions.map(
+    ({ lessonSources = [], labSources = [], autoLabChapter, ...chapter }) => ({
+      ...chapter,
+      lessons: lessonSources
+        .map((source) => documentsBySource.get(source))
+        .filter((item): item is CourseDocument => Boolean(item)),
+      labs: autoLabChapter === undefined
+        ? labSources
+            .map((source) => documentsBySource.get(source))
+            .filter((item): item is CourseDocument => Boolean(item))
+        : labs.filter((lab) => lab.chapter === autoLabChapter),
+    }),
+  );
   const outlineByNumber = new Map(outlineChapters.map((chapter) => [chapter.number, chapter]));
   const parts = curriculumPartDefinitions.map((part) => ({
     id: part.id,

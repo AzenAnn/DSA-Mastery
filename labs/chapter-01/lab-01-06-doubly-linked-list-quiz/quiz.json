@@ -1,0 +1,224 @@
+[
+  {
+    "id": "ds-2023-02",
+    "title": "2023 年真题第 2 题",
+    "source": "2023 年真题第 2 题",
+    "difficulty": "★★★★",
+    "topics": [
+      "双链表",
+      "双向链表",
+      "插入操作",
+      "指针赋值",
+      "顺序敏感"
+    ],
+    "targetId": "ds-2023-02",
+    "stem": "现有非空双向链表 L，其结点结构为：\n\n```\nprev | data | next\n```\n\n`prev` 是指向直接前驱结点的指针，`next` 是指向直接后继结点的指针。若要在 L 中指针 `p` 所指向的结点（非尾结点）之后插入指针 `s` 指向的新结点，则在执行了语句序列 `s->next = p->next; p->next = s;` 后，还要执行（ ）。",
+    "options": [
+      "`s->next->prev = p; s->prev = p;`",
+      "`p->next->prev = s; s->prev = p;`",
+      "`s->prev = s->next->prev; s->next->prev = s;`",
+      "`p->next->prev = s->prev; s->next->prev = p;`"
+    ],
+    "answer": 2,
+    "explanation": "**答案详解**\n\n给定两句执行后，s->next保存原后继，p->next已经变为s。还需令s的prev指向p，并让原后继的prev指向s。原后继当前的prev仍是p，所以先令s->prev=s->next->prev，再令s->next->prev=s，恰好完成两条链接。\n\n**选项辨析**\n\n- **A：错误。** 只设置s前驱为p，没有让原后继回指s。\n- **B：错误。** p->next已是s，首句会把s->prev设成s自身。\n- **C：正确。** 先取得旧前驱p，再让原后继回指s，操作完整。\n- **D：错误。** 使用未初始化的s->prev，且把原后继错误指回p。"
+  },
+  {
+    "id": "ds-2026-02",
+    "title": "2026 年真题第 2 题",
+    "source": "2026 年真题第 2 题",
+    "difficulty": "★★★★",
+    "topics": [
+      "双链表",
+      "双向链表",
+      "指针操作",
+      "边界处理"
+    ],
+    "targetId": "ds-2026-02",
+    "stem": "设有一个双向链表 L，结构为 [p2, p1]，头结点为 head。初始时 head = cu。现要将每个结点的 p2 指向 p1 指向结点的直接后继，应该进行的操作是（）。",
+    "options": [
+      "`while(cu!=NULL) {cu->p2=cu->p1->p1; cu=cu->p1;}`",
+      "`while(cu!=NULL && cu->p2!=NULL) {cu->p2 = cu->p1->p1; cu = cu->p1;}`",
+      "`while(cu!=NULL) {if(cu->p1!=NULL) {cu->p2=cu->p1->p1; cu=cu->p1;}}`",
+      "`while(cu!=NULL) {if(cu->p1!=NULL) {cu->p2=cu->p1->p1;} else {cu->p2=NULL;} cu=cu->p1;}`"
+    ],
+    "answer": 3,
+    "explanation": "**答案详解**\n\n对每个结点，若p1非NULL，则p2应指向p1所指结点的直接后继，即p1->p1；若p1为NULL，不能继续解引用且p2应置NULL。无论分支如何，cu都必须在循环末尾沿p1推进。只有D同时保证访问安全、尾结点处理和循环终止。\n\n**选项辨析**\n\n- **A：错误。** 到尾结点时会对NULL继续取p1，发生非法解引用。\n- **B：错误。** 检查的是旧p2，可能提前停且仍未保护p1。\n- **C：错误。** 到尾结点后cu不再推进，会陷入无限循环。\n- **D：正确。** 分别处理有无后继并始终推进cu，覆盖全部结点。"
+  },
+  {
+    "id": "ds-drill-doubly-linked-list-001",
+    "title": "巩固题",
+    "source": "巩固题",
+    "difficulty": "★★",
+    "topics": [
+      "双链表",
+      "存储开销",
+      "结点结构"
+    ],
+    "targetId": "ds-drill-doubly-linked-list-001",
+    "stem": "下列关于**双链表**（doubly linked list）与**单链表**（singly linked list）存储开销的说法中，**正确**的是( )。",
+    "options": [
+      "双链表每个结点比单链表多一个 `prior` 指针字段，每结点空间开销多一个指针字宽",
+      "双链表与单链表的存储开销完全相同",
+      "双链表每个结点除多 `prior` 字段外，还需要一个 `prev_flag` 标志位区别正向反向",
+      "由于双链表能反向遍历，总存储反而比单链表少"
+    ],
+    "answer": 0,
+    "explanation": "**答案详解**\n\n单链表结点通常含数据域与一个next指针，双链表为了支持反向访问，还需增加一个prior指针。在数据域和对齐方式相同的前提下，双链表每个结点固定多占一个指针字宽，不需要额外的方向标志位。\n\n**选项辨析**\n\n- **A：正确。** 双链表确实比单链表多一个前驱指针字段。\n- **B：错误。** 增加prior字段后，两者每结点开销不可能相同。\n- **C：错误。** prior和next已经区分方向，不需要prev_flag。\n- **D：错误。** 反向遍历来自额外指针，存储空间不会因此减少。"
+  },
+  {
+    "id": "ds-drill-doubly-linked-list-002",
+    "title": "巩固题",
+    "source": "巩固题",
+    "difficulty": "★★★",
+    "topics": [
+      "双链表",
+      "插入操作",
+      "指针顺序",
+      "4步操作"
+    ],
+    "targetId": "ds-drill-doubly-linked-list-002",
+    "stem": "在带头结点的双链表中，已知指针 $p$ 指向某**非尾结点**。要在 $p$ 之后插入指针 $s$ 所指的新结点，下列**语句序列**中**正确**的是( )。",
+    "options": [
+      "`s->prior = p; s->next = p->next; p->next = s; p->next->prior = s;`",
+      "`s->prior = p; s->next = p->next; p->next->prior = s; p->next = s;`",
+      "`p->next = s; s->next = p->next; s->prior = p; p->next->prior = s;`",
+      "`s->prior = p->prior; s->next = p->next; p->next = s; s->next->prior = s;`"
+    ],
+    "answer": 1,
+    "explanation": "**答案详解**\n\n在p后插入s，应先令s->prior=p并保存s->next=p->next，再把原后继的prior改为s，最后令p->next=s。必须在覆盖p->next之前访问原后继。B的语句顺序能安全建立p、s、原后继之间的四条双向链接。\n\n**选项辨析**\n\n- **A：错误。** 先改p->next后，末句实际把s->prior设为s自身。\n- **B：正确。** 先连接s与原后继，再修改p->next，四条链接正确。\n- **C：错误。** 先覆盖p->next使s->next随后指向s，形成自环。\n- **D：错误。** s的prior应为p而非p的前驱，前向关系错误。"
+  },
+  {
+    "id": "ds-drill-doubly-linked-list-003",
+    "title": "巩固题",
+    "source": "巩固题",
+    "difficulty": "★★★",
+    "topics": [
+      "双链表",
+      "删除操作",
+      "指针操作"
+    ],
+    "targetId": "ds-drill-doubly-linked-list-003",
+    "stem": "在带头结点的双链表中，已知指针 $p$ 指向某**中间结点**（既非首元也非尾结点，前驱、后继都存在）。要删除 $p$ 所指结点并释放内存，下列语句序列中**正确**的是( )。",
+    "options": [
+      "`p->prior->next = p->next;` `p->next->prior = p->prior;` `free(p);`",
+      "`p->prior->next = p->next;` `free(p);` `p->next->prior = p->prior;`",
+      "`free(p);` `p->prior->next = p->next;` `p->next->prior = p->prior;`",
+      "`p->next = p->prior;` `p->prior = p->next;` `free(p);`"
+    ],
+    "answer": 0,
+    "explanation": "**答案详解**\n\n删除中间结点p时，先让前驱的next指向p的后继，再让后继的prior指向p的前驱，使两个邻结点越过p直接相连；所有需要读取p字段的链接修改完成后，才能安全释放p。A严格遵循这一顺序。\n\n**选项辨析**\n\n- **A：正确。** 两侧邻结点重连后再释放p，操作安全且完整。\n- **B：错误。** 释放p后仍访问p的next和prior，属于释放后使用。\n- **C：错误。** 一开始就释放p，后续读取p字段全部非法。\n- **D：错误。** 只修改p自身指针，前后邻结点没有越过p重连。"
+  },
+  {
+    "id": "ds-drill-doubly-linked-list-004",
+    "title": "巩固题",
+    "source": "巩固题",
+    "difficulty": "★★★★",
+    "topics": [
+      "双链表",
+      "循环双链表",
+      "空表判定",
+      "边界判断"
+    ],
+    "targetId": "ds-drill-doubly-linked-list-004",
+    "stem": "设 $L$ 是一个**带头结点的循环双链表**的头指针，其结构特点是：尾结点的 `next` 指向头结点（形成正向闭环），头结点的 `prior` 指向尾结点（形成反向闭环）。下列关于\"判断该循环双链表是否为空表\"的**正确**条件是( )。",
+    "options": [
+      "$L\\text{->next} == \\text{NULL}$",
+      "$L\\text{->next} == L$ 且 $L\\text{->prior} == L$",
+      "$L == \\text{NULL}$",
+      "$L\\text{->prior->next} == \\text{NULL}$"
+    ],
+    "answer": 1,
+    "explanation": "**答案详解**\n\n带头结点的循环双链表为空时，表中只剩头结点L。正向闭环要求L->next回到L，反向闭环要求L->prior也回到L；循环结构中的指针不会以NULL表示表尾。因此两个自指条件同时成立才是完整的空表判据。\n\n**选项辨析**\n\n- **A：错误。** 循环链表空表时next仍回到头结点，不为NULL。\n- **B：正确。** 头结点前驱和后继都指向自身，准确表示空表。\n- **C：错误。** L始终指向头结点，表空不等于L为NULL。\n- **D：错误。** 尾结点next回到头结点，不会出现NULL。"
+  },
+  {
+    "id": "ds-drill-doubly-linked-list-005",
+    "title": "巩固题",
+    "source": "巩固题",
+    "difficulty": "★★★★",
+    "topics": [
+      "双链表",
+      "反向遍历",
+      "单链表对比",
+      "复杂度"
+    ],
+    "targetId": "ds-drill-doubly-linked-list-005",
+    "stem": "设链表长度为 $n$，指针 $p$ 指向其中某个**中间结点**（既非首结点、也非尾结点）。从 $p$ 开始向**前驱方向**走 $k$ 步访问 $k$ 个结点，在单链表和双链表上的时间复杂度分别为( )。",
+    "options": [
+      "双链表：$O(k)$；单链表：$O(kn)$（每步都要从头找前驱）",
+      "双链表：$O(k)$；单链表：$O(k)$（两者相同）",
+      "双链表：$O(k^2)$；单链表：$O(kn)$",
+      "双链表与单链表都无法支持前驱方向遍历"
+    ],
+    "answer": 0,
+    "explanation": "**答案详解**\n\n双链表可沿prior直接访问前驱，每走一步为O(1)，走k步总计O(k)。单链表没有前驱链接，若每一步都从表头重新寻找当前结点的前驱，单步最坏O(n)，累计k步为O(kn)。\n\n**选项辨析**\n\n- **A：正确。** 分别反映沿prior与反复从头查前驱的实际代价。\n- **B：错误。** 单链表不能直接向前驱移动，无法同样做到O(k)。\n- **C：错误。** 双链表每步是常数时间，不会累计为O(k²)。\n- **D：错误。** 双链表明确支持前驱遍历，并非两者都不支持。"
+  },
+  {
+    "id": "ds-drill-doubly-linked-list-006",
+    "title": "巩固题",
+    "source": "巩固题",
+    "difficulty": "★★★★★",
+    "topics": [
+      "双链表",
+      "循环双链表",
+      "操作序列",
+      "综合操作"
+    ],
+    "targetId": "ds-drill-doubly-linked-list-006",
+    "stem": "设有一个带头结点 $H$ 的**循环双链表**，初始状态为：\n\n$$H \\leftrightarrow a \\leftrightarrow p \\leftrightarrow q \\leftrightarrow b \\leftrightarrow H \\quad (\\text{循环})$$\n\n依次执行下列两个操作：\n\n1. 在指针 $p$ **之前**插入新结点 $s$\n2. 删除新插入结点 $s$ **之后的下一个**结点\n\n操作完成后，循环双链表的状态是( )。",
+    "options": [
+      "$H \\leftrightarrow a \\leftrightarrow s \\leftrightarrow q \\leftrightarrow b \\leftrightarrow H$",
+      "$H \\leftrightarrow a \\leftrightarrow s \\leftrightarrow p \\leftrightarrow b \\leftrightarrow H$",
+      "$H \\leftrightarrow a \\leftrightarrow p \\leftrightarrow s \\leftrightarrow b \\leftrightarrow H$",
+      "$H \\leftrightarrow a \\leftrightarrow s \\leftrightarrow q \\leftrightarrow p \\leftrightarrow b \\leftrightarrow H$"
+    ],
+    "answer": 0,
+    "explanation": "**答案详解**\n\n初始顺序为H、a、p、q、b。先在p之前插入s，得到H、a、s、p、q、b；再删除新插入结点s之后的下一个结点，即删除紧随s的p，最后剩下H、a、s、q、b并维持循环双向链接。\n\n**选项辨析**\n\n- **A：正确。** 插入s后删除其后继p，剩余顺序正是该项。\n- **B：错误。** 该项删除了q而保留p，与第二步不符。\n- **C：错误。** 把s放在p之后，违背第一步的前插要求。\n- **D：错误。** 保留了应删除的p，还错误调整了p与q次序。"
+  },
+  {
+    "id": "ds-drill-doubly-linked-list-007",
+    "title": "巩固题",
+    "source": "巩固题",
+    "difficulty": "★★★★★",
+    "topics": [
+      "双链表",
+      "循环双链表",
+      "代码追踪",
+      "指针序列",
+      "结点交换",
+      "语句顺序"
+    ],
+    "targetId": "ds-drill-doubly-linked-list-007",
+    "stem": "已知带头结点的非空循环双链表，指针 $p$ 指向链表中非首且非尾的任意一个结点。则执行下列语句序列实现的功能是（ ）。\n\n```c\np->pre->pre->next = p;\np->next->pre = p->pre;\np->pre->next = p->next;\np->next = p->pre;\np->pre = p->pre->pre;\np->next->pre = p;\n```",
+    "options": [
+      "删除 $p$ 指向的结点",
+      "将 $p$ 指向的结点之前的结点插入 $p$ 结点之后",
+      "将 $p$ 指向的结点与其后继结点互换",
+      "将 $p$ 指向的结点的后继与 $p$ 指向的结点的前驱互换"
+    ],
+    "answer": 1,
+    "explanation": "**答案详解**\n\n设p的前驱为x、x的前驱为w、p的后继为y。六句执行后，正向关系变为w→p→x→y，反向关系也相应成为p.pre=w、x.pre=p、y.pre=x。因此原来位于p之前的x被摘下并插到了p之后。\n\n**选项辨析**\n\n- **A：错误。** p仍保留在链中且链接完整，并没有被删除。\n- **B：正确。** 原前驱x最终位于p和原后继y之间，描述正确。\n- **C：错误。** 交换的是p与其前驱，不是p与后继。\n- **D：错误。** 原后继y没有和前驱x互换，只是改为回指x。"
+  },
+  {
+    "id": "ds-drill-doubly-linked-list-102",
+    "title": "巩固题",
+    "source": "巩固题",
+    "difficulty": "★★★",
+    "topics": [
+      "双链表",
+      "前插操作",
+      "指针赋值次序",
+      "断链",
+      "自指"
+    ],
+    "targetId": "ds-drill-doubly-linked-list-102",
+    "stem": "在双链表中，向 $p$ 所指的结点**之前**插入一个结点 $q$ 的操作为（　）。",
+    "options": [
+      "`p->prior->next=q; q->next=p; q->prior=p->prior; p->prior=q;`",
+      "`p->prior=q; q->next=p; p->prior->next=q; q->prior=p->prior;`",
+      "`q->prior=p->prior; p->prior->next=q; q->next=p; p->prior=q->next;`",
+      "`q->next=p; p->next=q; q->prior->next=q; q->next=p;`"
+    ],
+    "answer": 0,
+    "explanation": "**答案详解**\n\n在p前插入q需要建立原前驱→q、q→p、q→原前驱、p→q四条关系。A在覆盖p->prior之前仍能取得原前驱，并依次补齐四条双向链接；其余序列或形成自环，或把p的prior设为p自身。\n\n**选项辨析**\n\n- **A：正确。** 四条前后向链接均指向正确结点，且顺序安全。\n- **B：错误。** 先令p->prior=q后，后续把q误当原前驱形成自环。\n- **C：错误。** 末句把p->prior设成q->next即p自身，链接错误。\n- **D：错误。** 误改p->next且语句重复，无法完成p之前插入。"
+  }
+]

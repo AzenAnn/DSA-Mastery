@@ -78,6 +78,87 @@ async function validateLinks(file, source) {
   }
 }
 
+function isRecord(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function assertOptionalString(value, field, label) {
+  if (value !== undefined && (typeof value !== "string" || !value.trim())) {
+    throw new Error(`${label}: ${field} 必须是非空字符串`);
+  }
+}
+
+async function validateQuizLab(file, readme) {
+  const relativeReadme = path.relative(projectRoot, file).replaceAll("\\", "/");
+  const quizPath = path.join(path.dirname(file), "quiz.json");
+  let quizSource;
+  try {
+    quizSource = await readFile(quizPath, "utf8");
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+  }
+
+  const mountCount = [...readme.matchAll(/<QuizSet\s*\/>/g)].length;
+  if (quizSource === undefined) {
+    if (mountCount) throw new Error(`${relativeReadme}: 使用了 QuizSet 但缺少同目录 quiz.json`);
+    return 0;
+  }
+  const relativeQuiz = path.relative(projectRoot, quizPath).replaceAll("\\", "/");
+  if (mountCount !== 1) {
+    throw new Error(`${relativeReadme}: 交互题库 README 必须且只能挂载一次 <QuizSet />`);
+  }
+  if (/^### 题 \d+/m.test(readme) || /^::: details 查看答案与解析/m.test(readme)) {
+    throw new Error(`${relativeReadme}: 交互题库不得重复维护静态题目或折叠答案`);
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(quizSource);
+  } catch (error) {
+    throw new Error(`${relativeQuiz}: JSON 解析失败：${error instanceof Error ? error.message : String(error)}`);
+  }
+  if (!Array.isArray(parsed) || parsed.length === 0) {
+    throw new Error(`${relativeQuiz}: 顶层必须是非空题目数组`);
+  }
+
+  const ids = new Set();
+  parsed.forEach((question, index) => {
+    const label = `${relativeQuiz}: 第 ${index + 1} 题`;
+    if (!isRecord(question)) throw new Error(`${label} 必须是对象`);
+    for (const field of ["id", "stem", "explanation"]) {
+      if (typeof question[field] !== "string" || !question[field].trim()) {
+        throw new Error(`${label}: ${field} 必须是非空字符串`);
+      }
+    }
+    if (ids.has(question.id)) throw new Error(`${label}: id ${question.id} 重复`);
+    ids.add(question.id);
+    if (!Array.isArray(question.options) || question.options.length !== 4) {
+      throw new Error(`${label}: options 必须恰好包含 4 项`);
+    }
+    if (question.options.some((option) => typeof option !== "string" || !option.trim())) {
+      throw new Error(`${label}: 每个选项都必须是非空字符串`);
+    }
+    if (!Number.isInteger(question.answer) || question.answer < 0 || question.answer > 3) {
+      throw new Error(`${label}: answer 必须是 0～3 的整数`);
+    }
+    for (const field of ["title", "source", "difficulty", "targetId", "code"]) {
+      assertOptionalString(question[field], field, label);
+    }
+    if (
+      question.topics !== undefined &&
+      (!Array.isArray(question.topics) ||
+        question.topics.some((topic) => typeof topic !== "string" || !topic.trim()))
+    ) {
+      throw new Error(`${label}: topics 必须是非空字符串数组`);
+    }
+  });
+
+  for (const forbidden of ["查看原始页面", "看交互可视化", "答案来源说明", "Codex 基于题面独立推理补全"]) {
+    if (quizSource.includes(forbidden)) throw new Error(`${relativeQuiz}: 含课程站点禁用的个人导出内容“${forbidden}”`);
+  }
+  return parsed.length;
+}
+
 const lessonRoot = path.join(projectRoot, "content");
 const labRoot = path.join(projectRoot, "labs");
 const lessonFiles = (await findFiles(lessonRoot, (file) => file.endsWith(".md")))
@@ -85,14 +166,18 @@ const lessonFiles = (await findFiles(lessonRoot, (file) => file.endsWith(".md"))
 const labFiles = await findFiles(labRoot, (file) => path.basename(file).toLowerCase() === "readme.md");
 
 const seenOrder = new Set();
+let interactiveQuizCount = 0;
 for (const [kind, files] of [["lesson", lessonFiles], ["lab", labFiles]]) {
   for (const file of files) {
     const source = await readFile(file, "utf8");
     const parsed = parseFrontmatter(source, path.relative(projectRoot, file));
     assertFileContract(file, kind, parsed, seenOrder);
     await validateLinks(file, source);
+    if (kind === "lab") interactiveQuizCount += await validateQuizLab(file, source);
   }
 }
 
 if (!lessonFiles.length) throw new Error("content/ 中没有可渲染的教材页面");
-console.log(`内容检查通过：${lessonFiles.length} 篇教材页面，${labFiles.length} 个 Lab。`);
+console.log(
+  `内容检查通过：${lessonFiles.length} 篇教材页面，${labFiles.length} 个 Lab，${interactiveQuizCount} 道交互选择题。`,
+);

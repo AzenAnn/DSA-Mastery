@@ -38,6 +38,7 @@ type ContentEntry = {
 - `HomePage.vue` 与 `LabsIndex.vue` 渲染两个自定义入口页；
 - `DocumentHeader.vue` 与 `DocumentFooterNote.vue` 补充课程元信息和人工复核提示；
 - `course.ts` 只消费 data loader 的可序列化索引。
+- `quiz.data.ts` 在构建期校验并渲染所有 Lab 的 `quiz.json`；`QuizSet.vue` 是唯一选择题交互组件，兼容纯文本与 Markdown 富文本题面、选项和解析。
 
 复用优先：
 
@@ -57,12 +58,16 @@ type ContentEntry = {
 | SSR 期间访问浏览器对象 | build 失败 |
 | 无 label 的图标按钮或键盘不可达 | 无障碍/Review blocking |
 | 自定义实现替换了等价原生能力但无需求 | 要求简化或说明理由 |
+| 新 Lab 复制/分叉 QuizSet 或在组件内硬编码题目 | Review blocking；复用 `quiz.json` loader |
+| 富文本通过未经约束的运行时 HTML 注入 | 安全/架构检查失败；改为构建期、`html: false` 渲染 |
 
 ## 5. Good / Base / Bad Cases
 
 - Good：`ChapterGrid` 接收按章分组的数据，只负责渲染卡片。
 - Base：没有 Lab 时显示明确空状态，不伪造统计。
 - Bad：`Home.vue` 内维护 `const chapters = [...]`，搜索组件另维护 `const items = [...]`。
+- Good：新选择题 Lab 只新增 README 挂载点和 `quiz.json`，既有 QuizSet 自动加载。
+- Bad：为“线性表选择题”复制一个 `LinearListQuiz.vue`，形成第二套提交和反馈逻辑。
 
 ## 6. Tests Required
 
@@ -70,6 +75,7 @@ type ContentEntry = {
 - 最终产物 Playwright 覆盖 draft 徽章、中文搜索、教材/Lab 跳转、默认 prev/next 与移动侧栏。
 - 键盘覆盖搜索打开/关闭、焦点、主题切换、移动目录和可见焦点。
 - 生产构建验证 SSR，无 hydration 或控制台错误。
+- Quiz 回归覆盖四选一、禁用未选择提交、正确/错误状态、题解、重试、进度导航和富文本无溢出；原 Lab 00-03 继续通过，证明通用增强向后兼容。
 
 ## 7. Wrong vs Correct
 
