@@ -9,7 +9,8 @@ content/
 ├── chapter-00-introduction/
 │   ├── 00-overview.md
 │   ├── 01-data-structure-basics.md
-│   └── 02-algorithm-complexity-analysis.md
+│   ├── 02-memory-perspective.md
+│   └── 03-algorithm-complexity-analysis.md
 └── chapter-01-linear-list/
     ├── 00-overview.md
     ├── 01-abstract-data-type.md

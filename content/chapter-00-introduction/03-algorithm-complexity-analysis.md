@@ -1,7 +1,7 @@
 ---
-title: "0.2 算法复杂度与算法分析"
+title: "0.3 算法复杂度与算法分析"
 description: "从输入规模和基本操作出发，推导常见算法的时间与辅助空间复杂度。"
-order: 2
+order: 3
 chapter: 0
 chapterTitle: "绪论"
 updated: "2026-08-12"
@@ -9,7 +9,7 @@ contributors: ["Azen"]
 status: "draft"
 ---
 
-# 0.2 算法复杂度与算法分析
+# 0.3 算法复杂度与算法分析
 
 ## 学习目标
 
