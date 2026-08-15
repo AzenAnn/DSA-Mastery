@@ -81,7 +81,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-00-memory-foundations/",
     lessonSources: [
       "content/chapter-00-introduction/01-data-structure-basics.md",
-      "content/chapter-00-introduction/03-memory-perspective.md",
+      "content/chapter-00-introduction/02-memory-perspective.md",
     ],
     labSources: ["labs/chapter-00/lab-00-02-operation-counter/README.md"],
   },
@@ -91,7 +91,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "算法思维体验",
     description: "通过 Peak Finding 与 Union-Find 体验数据结构选择如何改变算法效率。",
     url: "/learn/outline/chapter-00-plus-algorithm-thinking/",
-    lessonSources: ["content/chapter-00-introduction/02-algorithm-complexity-analysis.md"],
+    lessonSources: ["content/chapter-00-introduction/03-algorithm-complexity-analysis.md"],
     labSources: [
       "labs/chapter-00/lab-00-01-learning-map/README.md",
       "labs/chapter-00/lab-00-03-complexity-quiz/README.md",

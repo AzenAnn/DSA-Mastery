@@ -159,8 +159,8 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await expect(page.locator(".course-curriculum-detail")).toContainText("Union-Find");
   await expect(page.locator(".course-curriculum-detail")).toContainText("数据结构的选择如何影响算法效率");
   await page.locator(".course-curriculum-resource-list").getByRole("link", { name: /算法复杂度与算法分析/ }).click();
-  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/02-algorithm-complexity-analysis/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.2 算法复杂度与算法分析");
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.3 算法复杂度与算法分析");
   await expect(page.locator(".course-document-meta")).toContainText("draft");
   await expect(page.locator(".VPSidebar")).toBeVisible();
   await expect(page.locator(".VPDocAsideOutline")).toBeVisible();
@@ -206,7 +206,7 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   ).toBeVisible();
   await input.fill("算法复杂度与算法分析");
   await expect(
-    results.locator('a[href*="/learn/chapter-00-introduction/02-algorithm-complexity-analysis/"]').first(),
+    results.locator('a[href*="/learn/chapter-00-introduction/03-algorithm-complexity-analysis/"]').first(),
   ).toBeVisible();
   await input.fill("实现并验证单链表");
   const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-linked-list/"]').first();
@@ -264,7 +264,7 @@ test("curriculum exposes every Part and the required search, sorting, and algori
 
 test("chapter 0 code contrast, callouts, math, copy, details, tables, and metadata remain functional", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/learn/chapter-00-introduction/02-algorithm-complexity-analysis/`);
+  await page.goto(`${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`);
   const codeContrast = async () =>
     page.locator('.vp-doc div[class*="language-"].line-numbers-mode').first().evaluate((block) => {
       const parseColor = (value) => {
@@ -343,7 +343,7 @@ test("chapter 0 code contrast, callouts, math, copy, details, tables, and metada
   await expect(copyButton).toHaveClass(/copied/);
   await expect(page.getByRole("link", { name: "在 GitHub 上编辑此页" })).toHaveAttribute(
     "href",
-    /content\/chapter-00-introduction\/02-algorithm-complexity-analysis\.md$/,
+    /content\/chapter-00-introduction\/03-algorithm-complexity-analysis\.md$/,
   );
   await expect(page.locator(".vp-doc .custom-block.info").first()).toBeVisible();
   await expect(page.locator(".vp-doc .custom-block.warning").first()).toBeVisible();
@@ -406,7 +406,7 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
 test("home and lesson navbar share the same horizontal rail", async ({ page }) => {
   const failures = monitorPage(page);
   const widths = [1024, 1440, 2048];
-  const route = `${baseUrl}/learn/chapter-00-introduction/02-algorithm-complexity-analysis/`;
+  const route = `${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`;
 
   for (const width of widths) {
     await page.setViewportSize({ width, height: 700 });
@@ -503,7 +503,7 @@ test("navbar brand subtitle stays contained and appearance icon stays centered",
 
 test("lesson navigation keeps the pre-migration hierarchy at responsive widths", async ({ page }) => {
   const failures = monitorPage(page);
-  const route = `${baseUrl}/learn/chapter-00-introduction/02-algorithm-complexity-analysis/`;
+  const route = `${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`;
 
   for (const width of [1440, 1024, 980, 768, 375]) {
     await page.setViewportSize({ width, height: 900 });
