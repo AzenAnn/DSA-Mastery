@@ -36,7 +36,7 @@
 - [x] Update the relevant `.trellis/spec/frontend` and content/quality contracts with exact syntax, output and tests.
 - [x] Run `trellis-check`, fix all violations and repeat the full completion audit against AC1–AC8.
 - [x] Confirm generated fixture/cache/test artifacts are clean and diff contains only task-owned files.
-- [ ] Commit implementation in coherent Conventional Commit batches, archive the task and record the Azen session journal.
+- [x] Commit implementation in coherent Conventional Commit batches, archive the task and record the Azen session journal.
 
 ## Validation Commands
 
