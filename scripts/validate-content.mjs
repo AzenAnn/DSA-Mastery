@@ -13,6 +13,7 @@ const requiredFields = [
   "status",
 ];
 const validStatuses = new Set(["draft", "review", "published"]);
+const prefaceLessonPath = "content/chapter-preface/00-theory-environments.md";
 
 async function findFiles(root, predicate) {
   const results = [];
@@ -49,11 +50,23 @@ function assertFileContract(file, kind, parsed, seenOrder) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(parsed.data.updated)) {
     throw new Error(`${relativePath}: updated 必须使用 YYYY-MM-DD`);
   }
-  if (!/^\d+$/.test(parsed.data.chapter) || !/^\d+$/.test(parsed.data.order)) {
-    throw new Error(`${relativePath}: chapter 与 order 必须是非负整数`);
+  if (!/^\d+$/.test(parsed.data.order)) {
+    throw new Error(`${relativePath}: order 必须是非负整数`);
   }
-  if (kind === "lesson" && !/^content\/chapter-\d{2}-[a-z0-9-]+\/\d{2}-[a-z0-9-]+\.md$/.test(relativePath)) {
-    throw new Error(`${relativePath}: 教材路径不符合 chapter-NN/NN-slug.md 约定`);
+  const isPrefaceLesson = kind === "lesson" && relativePath === prefaceLessonPath;
+  if (parsed.data.chapter === "preface") {
+    if (!isPrefaceLesson || parsed.data.order !== "0" || parsed.data.chapterTitle !== "理论环境展示") {
+      throw new Error(`${relativePath}: preface 仅允许用于唯一的前言理论环境展示页`);
+    }
+  } else if (!/^\d+$/.test(parsed.data.chapter)) {
+    throw new Error(`${relativePath}: chapter 必须是非负整数或受支持的 preface`);
+  }
+  if (
+    kind === "lesson" &&
+    !isPrefaceLesson &&
+    !/^content\/chapter-\d{2}-[a-z0-9-]+\/\d{2}-[a-z0-9-]+\.md$/.test(relativePath)
+  ) {
+    throw new Error(`${relativePath}: 教材路径不符合 chapter-NN/NN-slug.md 或 chapter-preface 特例约定`);
   }
   if (kind === "lab") {
     for (const field of ["lab", "difficulty", "duration"]) {
@@ -66,7 +79,9 @@ function assertFileContract(file, kind, parsed, seenOrder) {
 }
 
 async function validateLinks(file, source) {
-  const relativeLinks = [...source.matchAll(/\]\(([^)]+\.md(?:#[^)]*)?)\)/g)].map((match) => match[1]);
+  const relativeLinks = [...source.matchAll(/\]\(([^)]+\.md(?:#[^)]*)?)\)/g)]
+    .map((match) => match[1])
+    .filter((href) => !/^[a-z][a-z\d+.-]*:/i.test(href) && !href.startsWith("/"));
   for (const href of relativeLinks) {
     const filePart = decodeURIComponent(href.split("#", 1)[0]);
     const target = path.resolve(path.dirname(file), filePart);
