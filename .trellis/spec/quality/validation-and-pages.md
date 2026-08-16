@@ -39,6 +39,7 @@ actions/configure-pages base_path
 - Playwright 必须服务最终静态产物，并挂载在 `/DSA-Mastery/`，不能只测开发服务器；仓库配置的全部用例必须全绿。
 - 真实点击覆盖：首页 CTA → 教材、顶栏 Labs → Labs 索引、Labs 索引 → Lab。
 - 浏览器收集 `pageerror`、`console.error`、request failure 和同源 4xx/5xx；任何非明确允许项都失败。
+- 理论 Markdown、行内高亮或 fence renderer 改动必须同时经过 discovery 解析、静态产物和 Pages 浏览器三层验证；不能只凭组件截图通过。
 
 ## 4. Validation & Error Matrix
 
@@ -55,6 +56,8 @@ actions/configure-pages base_path
 | fixture 未清理，工作树变脏 | 测试失败 |
 | 交互题库 JSON 损坏却被 loader 静默跳过 | 发布阻塞；validator 与构建都必须报错 |
 | 章节实际 Lab 集合与“相关 Labs”侧栏不完整 | discovery/Pages 发布阻塞 |
+| 理论标题未转义、`:::` 泄漏、搜索丢失正文或代码组文件名重复 | 发布阻塞 |
+| `==` 误解析行内代码、fenced code 或 MathJax | 发布阻塞 |
 
 ## 5. Good / Base / Bad Cases
 
@@ -69,6 +72,8 @@ actions/configure-pages base_path
 - 自动发现：临时教材和 Lab 在 `try/finally` 内创建，贯穿验证、导航、搜索和 build；另在自动收录章节创建临时 Lab 并证明进入“相关 Labs”。
 - 产物：期望 HTML、favicon/OG、内部链接、asset、404、恰好一个 base。
 - 浏览器：三段真实点击、搜索教材/Lab、主题持久化、移动目录、代表性公式/代码/表格/任务列表、edit link。
+- 理论文档：11 种容器、默认/自定义/恶意标题、嵌套 Markdown、搜索内容、mark 边界、独立文件名、代码组去重与 Shiki highlight/focus/diff/warning/error。
+- 理论视觉：浅暗主题正文至少 4.5:1、语义边栏/键盘焦点至少 3:1，390/1440px 根页面无横向溢出；复制与 code-group tabs 必须以键盘和点击保持可用。
 - 交互题库：内容 validator 检查 schema、唯一挂载点与无静态重复；Pages 浏览器真实选择并提交，检查反馈、题解、重试、题量和每题四个选项。
 - 视觉：对照 `docs/assets/migration-baseline/` 的桌面/移动、浅/暗证据。
 

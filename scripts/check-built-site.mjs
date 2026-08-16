@@ -31,7 +31,10 @@ async function expectedCoursePages() {
   const lessonPages = [];
   const contentRoot = path.join(projectRoot, "content");
   for (const chapter of await readdir(contentRoot, { withFileTypes: true })) {
-    if (!chapter.isDirectory() || !/^chapter-\d{2}-[a-z0-9-]+$/.test(chapter.name)) continue;
+    if (
+      !chapter.isDirectory() ||
+      !/^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/.test(chapter.name)
+    ) continue;
     const chapterRoot = path.join(contentRoot, chapter.name);
     for (const file of await readdir(chapterRoot, { withFileTypes: true })) {
       if (!file.isFile() || !file.name.endsWith(".md") || file.name.toLowerCase() === "readme.md") continue;
@@ -119,6 +122,85 @@ for (const relativePath of [...lessonPages, ...labPages]) {
   if (h1Count !== 1) throw new Error(`${relativePath.replaceAll("\\", "/")}: expected one H1, found ${h1Count}`);
 }
 
+const dataStructureBasicsHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-00-introduction", "01-data-structure-basics", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "dsa-theory-block--definition",
+  "dsa-theory-block--intuition",
+  "<mark>一个逻辑结构可以有多种存储实现</mark>",
+  "<dfn>抽象数据类型</dfn>",
+  "dsa-code-block--titled",
+  "student-list-interface.cpp",
+  "vp-code-group",
+]) {
+  if (!dataStructureBasicsHtml.includes(required)) {
+    throw new Error(`Data-structure basics page is missing theory style artifact: ${required}`);
+  }
+}
+
+const complexityHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-00-introduction", "03-algorithm-complexity-analysis", "index.html"),
+  "utf8",
+);
+for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
+  if (!complexityHtml.includes(`dsa-theory-block--${kind}`)) {
+    throw new Error(`Complexity page is missing theory container: ${kind}`);
+  }
+}
+if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.includes("::: definition")) {
+  throw new Error("Unparsed theory container markers leaked into Chapter 0 artifacts");
+}
+
+const prefacePages = lessonPages.filter((relativePath) =>
+  relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
+);
+if (prefacePages.length !== 1) {
+  throw new Error(`Preface must contain exactly one lesson page, found ${prefacePages.length}`);
+}
+const prefaceHtml = await readFile(path.join(artifactRoot, prefacePages[0]), "utf8");
+for (const kind of [
+  "definition",
+  "theorem",
+  "lemma",
+  "corollary",
+  "property",
+  "proof",
+  "intuition",
+  "example",
+  "counterexample",
+  "complexity",
+  "pitfall",
+]) {
+  if (!prefaceHtml.includes(`dsa-theory-block--${kind}`)) {
+    throw new Error(`Preface showcase is missing theory container: ${kind}`);
+  }
+}
+for (const required of [
+  "前言 · 理论环境展示",
+  "docs/THEORY_DOC_STYLE_GUIDE.md",
+  "https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/THEORY_DOC_STYLE_GUIDE.md",
+  "dsa-code-block--titled",
+  "theory-environment-demo.cpp",
+  "has-focused-lines",
+  "diff add",
+  "diff remove",
+  "highlighted warning",
+  "highlighted error",
+  "vp-code-group",
+  "<mark>",
+  "<dfn>",
+  "<kbd>",
+]) {
+  if (!prefaceHtml.includes(required)) {
+    throw new Error(`Preface showcase is missing rendered feature: ${required}`);
+  }
+}
+if (prefaceHtml.includes("第 preface 章") || prefaceHtml.includes("::: definition")) {
+  throw new Error("Preface leaked an internal chapter id or unparsed theory marker");
+}
+
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
 for (const requiredLabel of [
   "Part IV · 查找与索引",
@@ -143,6 +225,11 @@ for (const requiredLabel of [
 ]) {
   if (!curriculumHtml.includes(requiredLabel)) throw new Error(`Curriculum index is missing: ${requiredLabel}`);
 }
+const prefacePosition = curriculumHtml.indexOf(">前言<");
+const chapterZeroPosition = curriculumHtml.indexOf(">Ch.0<");
+if (prefacePosition < 0 || chapterZeroPosition < 0 || prefacePosition >= chapterZeroPosition) {
+  throw new Error("Preface chapter is missing or does not appear before Ch.0 in the curriculum");
+}
 
 if (base !== "/") {
   const duplicate = `${base}${base.replace(/^\//, "")}`;
@@ -156,7 +243,7 @@ if (base !== "/") {
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["第 0 章 绪论", "Lab 01-02：实现并验证单链表"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "第 0 章 绪论", "Lab 01-02：实现并验证单链表"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

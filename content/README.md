@@ -6,6 +6,8 @@
 
 ```text
 content/
+├── chapter-preface/
+│   └── 00-theory-environments.md
 ├── chapter-00-introduction/
 │   ├── 00-overview.md
 │   ├── 01-data-structure-basics.md
@@ -20,6 +22,7 @@ content/
 ```
 
 - 章节目录使用 `chapter-NN-kebab-case`，其中 `NN` 为两位章节号。
+- 唯一例外是独立前言：固定使用 `chapter-preface/00-theory-environments.md`，不得在该目录增加第二篇页面。
 - 页面文件使用 `NN-kebab-case.md`；`00-overview.md` 是章首页，其余文件按阅读顺序编号。
 - 文件名和目录名只用小写英文字母、数字与连字符，避免空格和中文路径。
 - 新增页面后无需手写导航；构建程序应递归读取 `content/chapter-*/*.md`，再按 `chapter` 与 `order` 排序。
@@ -54,6 +57,8 @@ status: "draft"
 | `updated` | 最后一次实质性修改日期，格式为 `YYYY-MM-DD` |
 | `contributors` | 实际参与本页编写或审阅的成员列表 |
 | `status` | `draft`、`review` 或 `published` |
+
+前言展示页固定使用 `chapter: "preface"`、`order: 0`、`chapterTitle: "理论环境展示"`；这是作者展示用途的特殊标识，不是普通章节号，也不能复制到其他页面。
 
 ## 正文最低结构
 

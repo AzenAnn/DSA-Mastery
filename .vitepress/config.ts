@@ -1,5 +1,6 @@
 import path from "node:path";
 import { tasklist } from "@mdit/plugin-tasklist";
+import type MarkdownIt from "markdown-it";
 import { defineConfig } from "vitepress";
 import {
   collectCourseIndex,
@@ -7,6 +8,7 @@ import {
   normalizePagesBase,
   sourceUrlMap,
 } from "./content-index";
+import { installTheoryMarkdown } from "./markdown/theory";
 
 const course = collectCourseIndex();
 const sidebar = createCourseSidebar(course);
@@ -122,6 +124,7 @@ export default defineConfig({
       // VitePress exposes its own MarkdownIt structural type, while the stable
       // plugin publishes the equivalent @types/markdown-it signature.
       tasklist(md as unknown as Parameters<typeof tasklist>[0]);
+      installTheoryMarkdown(md as unknown as MarkdownIt);
       md.core.ruler.after("block", "dsa-course-source-transform", (state) => {
         const renderedPath =
           typeof state.env?.relativePath === "string"

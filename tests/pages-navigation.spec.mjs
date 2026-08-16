@@ -33,7 +33,7 @@ test.use({
 });
 
 // 与 .vitepress/content-index.ts 的扫描规则保持一致，从仓库内容推导首页统计数字
-const chapterDirectoryPattern = /^chapter-\d{2}-[a-z0-9-]+$/;
+const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
 const labDirectoryPattern = /^lab-\d{2}-\d{2}-[a-z0-9-]+$/;
 
 async function computeCourseStats() {
@@ -140,7 +140,7 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await page.goto(`${baseUrl}/`);
   await expect(page).toHaveTitle(/数据结构与算法理论与实验教程 · DSA Mastery/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("学透、做实、用活");
-  await expect(page.locator(".course-hero-stats")).toContainText("17");
+  await expect(page.locator(".course-hero-stats")).toContainText("18");
   await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.lessons));
   await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.labs));
 
@@ -212,6 +212,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-00-introduction/03-algorithm-complexity-analysis/"]').first(),
   ).toBeVisible();
+  await input.fill("理论环境展示");
+  await expect(
+    results.locator('a[href*="/learn/chapter-preface/00-theory-environments/"]').first(),
+  ).toBeVisible();
   await input.fill("实现并验证单链表");
   const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-linked-list/"]').first();
   await expect(labResult).toBeVisible();
@@ -266,7 +270,77 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   expect(failures).toEqual([]);
 });
 
-test("chapter 0 code contrast, callouts, math, copy, details, tables, and metadata remain functional", async ({ page }) => {
+test("preface is the first independent chapter and showcases every theory environment", async ({ page }) => {
+  const failures = monitorPage(page);
+  const route = `${baseUrl}/learn/chapter-preface/00-theory-environments/`;
+
+  await page.goto(`${baseUrl}/learn/`);
+  const foundationChapters = page.locator(".course-curriculum-chapters > a");
+  await expect(foundationChapters.first()).toContainText("前言");
+  await expect(foundationChapters.first()).toContainText("理论环境展示");
+  await expect(foundationChapters.nth(1)).toContainText("Ch.0");
+  await foundationChapters.first().click();
+
+  await expect(page).toHaveURL(route);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("前言 · 理论环境展示");
+  await expect(page.locator(".course-breadcrumbs").getByRole("link", { name: "前言" })).toBeVisible();
+  await expect(page.locator(".course-eyebrow")).toHaveText("前言 · 理论环境展示");
+  await expect(page.locator("body")).not.toContainText("第 preface 章");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "前言", exact: true })).toBeVisible();
+
+  for (const kind of [
+    "definition",
+    "theorem",
+    "lemma",
+    "corollary",
+    "property",
+    "proof",
+    "intuition",
+    "example",
+    "counterexample",
+    "complexity",
+    "pitfall",
+  ]) {
+    await expect(page.locator(`.vp-doc .dsa-theory-block--${kind}`)).toHaveCount(1);
+  }
+
+  const authorGuide = page.getByRole("link", { name: "docs/THEORY_DOC_STYLE_GUIDE.md" }).first();
+  await expect(authorGuide).toBeVisible();
+  await expect(authorGuide).toHaveAttribute(
+    "href",
+    "https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/THEORY_DOC_STYLE_GUIDE.md",
+  );
+  await expect(page.locator(".vp-doc mark").first()).toContainText("逻辑结构不等于存储结构");
+  await expect(page.locator(".vp-doc dfn")).toHaveText("抽象数据类型");
+  await expect(page.locator(".vp-doc kbd")).toHaveCount(2);
+  await expect(page.locator(".vp-doc .dsa-code-title").first()).toContainText("theory-environment-demo.cpp");
+  await expect(page.locator(".vp-doc .has-focused-lines")).toHaveCount(1);
+  await expect(page.locator(".vp-doc code .diff.add")).toHaveCount(1);
+  await expect(page.locator(".vp-doc code .diff.remove")).toHaveCount(1);
+  await expect(page.locator(".vp-doc code .highlighted.warning")).toHaveCount(1);
+  await expect(page.locator(".vp-doc code .highlighted.error")).toHaveCount(1);
+
+  const copyButton = page.locator(".dsa-code-block--titled > button.copy").first();
+  await copyButton.click();
+  await expect(copyButton).toHaveClass(/copied/);
+  const codeGroup = page.locator(".vp-code-group");
+  await expect(codeGroup).toBeVisible();
+  await expect(codeGroup.locator(".tabs label")).toHaveCount(2);
+  await codeGroup.locator(".tabs label").nth(1).click();
+  await expect(codeGroup.locator("input").nth(1)).toBeChecked();
+
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(route);
+    const overflow = await page.evaluate(() =>
+      globalThis.document.documentElement.scrollWidth - globalThis.window.innerWidth,
+    );
+    expect(overflow, `preface root overflow at ${width}px`).toBeLessThanOrEqual(0);
+  }
+  expect(failures).toEqual([]);
+});
+
+test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tables, and metadata remain functional", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`);
   const codeContrast = async () =>
@@ -349,8 +423,14 @@ test("chapter 0 code contrast, callouts, math, copy, details, tables, and metada
     "href",
     /content\/chapter-00-introduction\/03-algorithm-complexity-analysis\.md$/,
   );
-  await expect(page.locator(".vp-doc .custom-block.info").first()).toBeVisible();
+  await expect(page.locator(".vp-doc .custom-block.tip").first()).toBeVisible();
   await expect(page.locator(".vp-doc .custom-block.warning").first()).toBeVisible();
+  for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
+    await expect(page.locator(`.vp-doc .dsa-theory-block--${kind}`).first()).toBeVisible();
+  }
+  await expect(page.locator(".vp-doc mark").filter({ hasText: "大 O 本身表示上界" })).toBeVisible();
+  await expect(page.locator(".vp-doc .dsa-code-title").first()).toContainText("first-score.cpp");
+  await expect(page.locator(".vp-doc code .highlighted").first()).toBeVisible();
   await expect(page.locator(".vp-doc mjx-container").first()).toBeVisible();
   const details = page.locator(".vp-doc details").first();
   await expect(details).not.toHaveAttribute("open", "");
@@ -360,6 +440,89 @@ test("chapter 0 code contrast, callouts, math, copy, details, tables, and metada
   await page.goto(`${baseUrl}/learn/chapter-00-introduction/00-overview/`);
   await expect(page.locator(".vp-doc table")).toBeVisible();
   await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", `${pagesBasePath}/favicon.svg`);
+  expect(failures).toEqual([]);
+});
+
+test("theory syntax and code workbench stay accessible at desktop and mobile widths", async ({ page }) => {
+  const failures = monitorPage(page);
+  const route = `${baseUrl}/learn/chapter-00-introduction/01-data-structure-basics/`;
+
+  const readContrast = (selector) => page.locator(selector).first().evaluate((element) => {
+    const parseColor = (value) => {
+      const channels = value.match(/[\d.]+/g)?.map(Number) ?? [];
+      const scale = value.startsWith("color(srgb") ? 255 : 1;
+      return {
+        red: (channels[0] ?? 0) * scale,
+        green: (channels[1] ?? 0) * scale,
+        blue: (channels[2] ?? 0) * scale,
+      };
+    };
+    const luminance = (color) => {
+      const linear = [color.red, color.green, color.blue].map((channel) => {
+        const normalized = channel / 255;
+        return normalized <= 0.04045
+          ? normalized / 12.92
+          : ((normalized + 0.055) / 1.055) ** 2.4;
+      });
+      return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+    };
+    const ratio = (first, second) => {
+      const brighter = Math.max(luminance(first), luminance(second));
+      const darker = Math.min(luminance(first), luminance(second));
+      return (brighter + 0.05) / (darker + 0.05);
+    };
+    const style = globalThis.getComputedStyle(element);
+    const foreground = parseColor(style.color);
+    const background = parseColor(style.backgroundColor);
+    const rail = parseColor(style.borderLeftColor);
+    return {
+      text: ratio(foreground, background),
+      rail: ratio(rail, background),
+    };
+  });
+
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(route);
+    await expect(page.locator(".dsa-theory-block--definition")).toHaveCount(2);
+    await expect(page.locator(".dsa-theory-block--intuition")).toHaveCount(1);
+    await expect(page.locator(".vp-doc mark").first()).toBeVisible();
+    await expect(page.locator(".vp-doc dfn").first()).toHaveText("抽象数据类型");
+    await expect(page.locator(".vp-doc .dsa-code-title")).toContainText("student-list-interface.cpp");
+    await expect(page.locator(".vp-doc .vp-code-group")).toBeVisible();
+    const overflow = await page.evaluate(() =>
+      globalThis.document.documentElement.scrollWidth - globalThis.window.innerWidth,
+    );
+    expect(overflow, `theory page root overflow at ${width}px`).toBeLessThanOrEqual(0);
+  }
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(route);
+  const lightContrast = await readContrast(".dsa-theory-block--definition");
+  expect(lightContrast.text).toBeGreaterThanOrEqual(4.5);
+  expect(lightContrast.rail).toBeGreaterThanOrEqual(3);
+
+  const copyButton = page.locator(".dsa-code-block--titled > button.copy").first();
+  await copyButton.focus();
+  await expect(copyButton).toBeFocused();
+  expect(await copyButton.evaluate((button) => globalThis.getComputedStyle(button).outlineStyle)).toBe("solid");
+
+  const firstCodeGroupInput = page.locator(".vp-code-group input").first();
+  await firstCodeGroupInput.focus();
+  const focusedTabOutline = await firstCodeGroupInput.evaluate((input) =>
+    globalThis.getComputedStyle(input.nextElementSibling).outlineStyle,
+  );
+  expect(focusedTabOutline).toBe("solid");
+  const secondCodeGroupTab = page.locator(".vp-code-group .tabs label").nth(1);
+  await secondCodeGroupTab.hover();
+  await secondCodeGroupTab.click();
+  await expect(page.locator(".vp-code-group input").nth(1)).toBeChecked();
+
+  await page.locator(".VPNavBarAppearance .VPSwitchAppearance").click();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  const darkContrast = await readContrast(".dsa-theory-block--definition");
+  expect(darkContrast.text).toBeGreaterThanOrEqual(4.5);
+  expect(darkContrast.rail).toBeGreaterThanOrEqual(3);
   expect(failures).toEqual([]);
 });
 

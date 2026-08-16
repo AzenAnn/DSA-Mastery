@@ -22,7 +22,7 @@ const duration = computed(() => {
       <a :href="withBase('/')">首页</a>
       <span aria-hidden="true">/</span>
       <a :href="withBase(getChapterLanding(document))">
-        {{ document.kind === "lab" ? "Labs" : `第 ${document.chapter} 章` }}
+        {{ document.kind === "lab" ? "Labs" : document.chapterLabel }}
       </a>
       <span aria-hidden="true">/</span>
       <span aria-current="page">{{ document.title }}</span>
@@ -31,7 +31,7 @@ const duration = computed(() => {
     <div class="course-eyebrow">
       <FlaskConical v-if="document.kind === 'lab'" aria-hidden="true" :size="15" />
       <FileText v-else aria-hidden="true" :size="15" />
-      {{ document.kind === "lab" ? "动手实验" : `第 ${document.chapter} 章 · ${document.chapterTitle}` }}
+      {{ document.kind === "lab" ? "动手实验" : `${document.chapterLabel} · ${document.chapterTitle}` }}
     </div>
     <h1>{{ document.title }}</h1>
     <p>{{ document.description }}</p>

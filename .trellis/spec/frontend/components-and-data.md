@@ -9,11 +9,14 @@
 统一条目至少包含：
 
 ```ts
+type ChapterId = number | 'preface'
+
 type ContentEntry = {
   kind: 'lesson' | 'lab'
   title: string
   description: string
-  chapter: number
+  chapter: ChapterId
+  chapterLabel: string
   chapterTitle: string
   order: number
   updated: string
@@ -45,6 +48,7 @@ type ContentEntry = {
 - 保留 VitePress 默认主题的顶栏、路由、local search、appearance、sidebar/mobile drawer、outline、prev/next、edit link、代码复制、语法高亮和 404，并用 `custom.css` 统一改色。
 - 只有课程元信息、教材/Lab 混合目录、品牌首页或默认主题无法表达的交互才写自定义组件。
 - 所有章节卡、Lab 卡、统计、sidebar、搜索和 prev/next 都从 ContentIndex 派生；不得在组件中手写七篇教材或四个 Lab。
+- `chapter` 是排序与映射用的内部标识；所有用户可见章节名称读取 `chapterLabel` 或 curriculum `label`。特殊 `preface` 的标签必须是“前言”，数字章标签保持“第 N 章”或 curriculum 的 `Ch.N`。
 - 浏览器 API 只在挂载后访问；SSR 阶段不能直接读取 `window`、`document`、`localStorage`。
 - 普通内部导航使用 `withBase` 或 VitePress 生成链接。VitePress 1.6.4 的 Lab 跨页面 outline 兼容路径是例外：顶栏 Labs 与 Labs 目录卡片使用 `target="_self"` 触发同标签整页导航。
 - 图标纯装饰时 `aria-hidden="true"`；导航、搜索、对话框、目录和按钮有中文可访问名称。
@@ -55,6 +59,7 @@ type ContentEntry = {
 | --- | --- |
 | 组件重复扫描 Markdown 或硬编码内容清单 | Review blocking |
 | 同一条目在首页、搜索、侧栏 URL 不同 | 数据一致性测试失败 |
+| 组件用 `chapter` 拼接可见标签并渲染“第 preface 章” | 数据契约/Playwright 失败；改用 `chapterLabel` |
 | SSR 期间访问浏览器对象 | build 失败 |
 | 无 label 的图标按钮或键盘不可达 | 无障碍/Review blocking |
 | 自定义实现替换了等价原生能力但无需求 | 要求简化或说明理由 |
@@ -64,6 +69,7 @@ type ContentEntry = {
 ## 5. Good / Base / Bad Cases
 
 - Good：`ChapterGrid` 接收按章分组的数据，只负责渲染卡片。
+- Good：`DocumentHeader` 使用 `document.chapterLabel`，前言面包屑显示“前言”。
 - Base：没有 Lab 时显示明确空状态，不伪造统计。
 - Bad：`Home.vue` 内维护 `const chapters = [...]`，搜索组件另维护 `const items = [...]`。
 - Good：新选择题 Lab 只新增 README 挂载点和 `quiz.json`，既有 QuizSet 自动加载。
@@ -72,6 +78,7 @@ type ContentEntry = {
 ## 6. Tests Required
 
 - 数据层测试断言所有消费者使用相同 URL、标题、kind 和顺序。
+- 前言回归断言总目录、侧栏、面包屑和 eyebrow 均使用显式标签，且排序早于 Ch.0。
 - 最终产物 Playwright 覆盖 draft 徽章、中文搜索、教材/Lab 跳转、默认 prev/next 与移动侧栏。
 - 键盘覆盖搜索打开/关闭、焦点、主题切换、移动目录和可见焦点。
 - 生产构建验证 SSR，无 hydration 或控制台错误。
@@ -94,4 +101,14 @@ const labs = [{ title: 'Lab 01-01', href: '/DSA-Mastery/labs/...' }]
 defineProps<{ labs: ContentEntry[] }>()
 // 模板中用 withBase(lab.url)；Labs 目录跨页面链接保留 target="_self"。
 </script>
+```
+
+特殊章节标签：
+
+```vue
+<!-- Wrong -->
+第 {{ document.chapter }} 章
+
+<!-- Correct -->
+{{ document.chapterLabel }}
 ```
