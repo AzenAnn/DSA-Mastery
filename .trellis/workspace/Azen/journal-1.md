@@ -69,3 +69,25 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 4: 前言理论语法展示页
+
+**Date**: 2026-08-16
+**Task**: 前言理论语法展示页
+**Branch**: `codex/dsa-mastery-theory-doc-style`
+
+### Summary
+
+新增独立前言章节与唯一理论环境展示文档，接入显式标签、搜索、侧栏和跨平台校验，完成根路径与 Pages base 的构建及 14 项浏览器验收。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `39e9cc0` | (see git log) |
+| `b24e18f` | (see git log) |
+
+### Status
+
+[OK] **Completed**
