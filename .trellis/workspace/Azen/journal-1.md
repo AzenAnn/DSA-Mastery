@@ -47,3 +47,25 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 3: DSA Mastery 理论文档语法与视觉系统
+
+**Date**: 2026-08-16
+**Task**: DSA Mastery 理论文档语法与视觉系统
+**Branch**: `codex/dsa-mastery-theory-doc-style`
+
+### Summary
+
+新增 11 种理论语义容器、行内高亮和代码文件名工具栏，统一浅暗主题与代码工作台；迁移两篇 Chapter 0 教材，补齐作者指南、三层测试、Trellis 规范并完成 Pages 验收。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5f7bcd3` | (see git log) |
+| `3ef6fcb` | (see git log) |
+
+### Status
+
+[OK] **Completed**
