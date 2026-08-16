@@ -27,6 +27,8 @@ index.md / labs/index.md
 
 ```text
 content/:chapter/:page.md       -> learn/:chapter/:page/index.md
+content/chapter-preface/00-theory-environments.md
+                                -> learn/chapter-preface/00-theory-environments/index.md
 labs/:chapter/:lab/README.md    -> labs/:chapter/:lab/index.md
 outDir                         -> dist/pages
 ```
@@ -38,6 +40,7 @@ outDir                         -> dist/pages
 - `.vitepress/content-index.ts` 是结构化课程元数据、侧栏、首页统计、Labs 目录和文档头部的唯一索引；VitePress 原生搜索索引生成页，原生 prev/next 读取同一侧栏顺序，组件不得另建手写清单。
 - 未拆分的课程章节使用 `autoLabChapter` 从 ContentIndex 自动收录对应物理 chapter 的全部 Lab 到“相关 Labs”；不得用 `labSources` 维护一个会漏掉新增 Lab 的手写子集。只有同一物理 chapter 被编排为多个课程章节时，才使用显式 `labSources` 分流，并说明边界。
 - 当课程编排编号与既有文章 `chapter` 元数据不同时，`curriculum/**` 只提供入口和框架，`.vitepress/content-index.ts` 按 `sourcePath` 把唯一的已有 `CourseDocument` 映射进目标 Part/章节。不得移动、改写或复制 `content/**` 正文来适配新编排。
+- 前言是 ContentIndex 中唯一的非数字 `ChapterId`：固定为 `"preface"`，通过显式 `label: "前言"` 与 `chapterRank = -1` 排在 Ch.0 之前。它直接链接唯一展示页，不创建空 outline，也不改变数字章节编号。
 - Node `fs`、`path`、frontmatter 解析和文件遍历只在 config/data loader 构建期执行，不能进入浏览器 bundle。
 - `base` 从 `GITHUB_PAGES_BASE_PATH` 规范化：空值为 `/`；非空值首尾各一个斜杠。
 - 源码 URL 不含 base；Vue 链接使用 `withBase`。相对 `.md` 内容链接先由 validator 检查，再由 config 的 Markdown transform 按 `sourceUrlMap` 改写成 route。
@@ -54,6 +57,7 @@ outDir                         -> dist/pages
 | client bundle 含 `node:fs`/`node:path` | build 或 bundle 审计失败 |
 | base 缺首尾斜杠或出现双前缀 | artifact/Playwright 失败 |
 | rewrite 后旧课程 URL 不存在 | 兼容性测试失败 |
+| 前言通过负数/大数模拟、创建第二篇页面或改变数字章节 | 内容/架构检查失败 |
 | repository-only Markdown 被构建 | 路由清单测试失败 |
 | 相对 `.md` 没有改写到课程 route | discovery/artifact check 失败 |
 | Part/章节只在组件中手写，或框架页复制已有正文 | 架构检查失败；改为 ContentIndex 编排映射 |
@@ -64,6 +68,7 @@ outDir                         -> dist/pages
 ## 5. Good / Base / Bad Cases
 
 - Good：config 和 loader 从同一收集器取得已排序条目；默认主题负责搜索与文档外壳，Vue 只消费序列化结果。
+- Good：前言定义使用 `{ number: 'preface', label: '前言', lessonSources: ['content/chapter-preface/00-theory-environments.md'] }`。
 - Base：本地开发没有环境变量，base 为 `/`。
 - Bad：组件调用 `import.meta.glob` 再建一份索引，或把 `/DSA-Mastery/` 拼进每个 URL。
 - Good：Ch.1 声明 `autoLabChapter: 1`，新增 `labs/chapter-01/lab-*` 后自动进入侧栏。
@@ -75,6 +80,7 @@ outDir                         -> dist/pages
 - `pnpm run test:discovery` 用临时教材/Lab 验证相对链接改写、MathJax、代码、表格、任务列表、导航、搜索和安全清理。
 - `pnpm run test:discovery` 还必须在启用 `autoLabChapter` 的现有章节创建临时 Lab，并从最终 HTML 的章节侧栏确认它自动出现，最后精确清理 fixture。
 - `pnpm run build && pnpm run check:site` 核对 ContentIndex 返回的全部教材/Lab、首页、Labs 索引、404、链接与恰好一个 base。
+- 前言产物检查使用 POSIX 化后的相对路径筛选；Windows 的 `path.join()` 会产生反斜杠，不能直接与 `learn/chapter-preface/` 比较。
 - 在 `/DSA-Mastery/` 下运行 `pnpm run test:pages`，真实点击五组场景并监控网络/控制台错误。
 - 编排变更必须断言每个 Part 的子章节、框架页面、至少一个映射后的旧文章 URL 和旧 Lab URL；同时用 `git diff -- content labs` 证明受保护内容未改动。
 
@@ -98,4 +104,10 @@ const url = `/learn/${chapterSlug}/${pageSlug}/`
 
 ```ts
 { number: '1', title: '线性表', autoLabChapter: 1 }
+```
+
+特殊前言的正确映射：
+
+```ts
+{ number: 'preface', label: '前言', lessonSources: ['content/chapter-preface/00-theory-environments.md'] }
 ```
