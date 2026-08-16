@@ -31,6 +31,34 @@
   --course-font-serif: "Iowan Old Style", "Noto Serif SC", "Songti SC", SimSun, serif;
   --course-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 
+  /* Theory semantics: aliases over the existing brand primitives. */
+  --course-theory-accent: var(--course-accent);
+  --course-theory-ink: var(--course-ink);
+  --course-theory-success: var(--course-success);
+  --course-theory-signal: var(--course-signal);
+  --course-theory-neutral: var(--course-ink-soft);
+  --course-theory-surface-accent: color-mix(in srgb, var(--course-accent-soft) 72%, var(--course-paper-strong));
+  --course-theory-surface-ink: color-mix(in srgb, var(--course-paper-muted) 74%, var(--course-paper-strong));
+  --course-theory-surface-success: color-mix(in srgb, var(--course-success-soft) 74%, var(--course-paper-strong));
+  --course-theory-surface-signal: color-mix(in srgb, var(--course-signal-soft) 78%, var(--course-paper-strong));
+  --course-theory-surface-neutral: color-mix(in srgb, var(--course-paper-muted) 58%, var(--course-paper-strong));
+  --course-highlight-bg: color-mix(in srgb, var(--course-signal) 28%, transparent);
+  --course-highlight-ink: var(--course-ink);
+
+  /* Theory component tokens. */
+  --course-theory-block-padding: 20px 22px 21px;
+  --course-theory-block-radius: var(--course-radius-sm);
+  --course-theory-block-border: var(--course-line);
+  --course-theory-block-shadow: var(--course-shadow-sm);
+  --course-theory-title-size: 14px;
+  --course-theory-code-size: 10px;
+  --course-code-toolbar-height: 44px;
+  --course-code-toolbar-divider: color-mix(in srgb, var(--course-code-text) 12%, transparent);
+  --course-code-toolbar-hover: color-mix(in srgb, var(--course-code-text) 12%, var(--course-code-surface));
+  --course-code-success: var(--course-code-value);
+  --course-code-warning: var(--course-code-signal);
+  --course-code-error: color-mix(in srgb, var(--course-code-signal) 78%, var(--course-code-text));
+
   --vp-c-bg: var(--course-paper);
   --vp-c-bg-alt: var(--course-paper-muted);
   --vp-c-bg-elv: var(--course-paper-strong);
@@ -51,6 +79,12 @@
   --vp-code-block-color: var(--course-code-text);
   --vp-code-line-number-color: var(--course-code-muted);
   --vp-code-line-highlight-color: rgb(130 144 255 / 12%);
+  --vp-code-line-warning-color: color-mix(in srgb, var(--course-code-warning) 16%, transparent);
+  --vp-code-line-error-color: color-mix(in srgb, var(--course-code-error) 16%, transparent);
+  --vp-code-line-diff-add-color: color-mix(in srgb, var(--course-code-success) 14%, transparent);
+  --vp-code-line-diff-add-symbol-color: var(--course-code-success);
+  --vp-code-line-diff-remove-color: color-mix(in srgb, var(--course-code-error) 14%, transparent);
+  --vp-code-line-diff-remove-symbol-color: var(--course-code-error);
   --vp-code-copy-code-bg: var(--course-code-surface);
   --vp-code-copy-code-hover-bg: #2c313d;
   --vp-font-family-base: var(--course-font-sans);
@@ -77,6 +111,12 @@
   --course-signal-soft: #3a261f;
   --course-success: #62d8ad;
   --course-success-soft: #17382d;
+  --course-theory-surface-accent: color-mix(in srgb, var(--course-accent-soft) 82%, var(--course-paper-strong));
+  --course-theory-surface-ink: color-mix(in srgb, var(--course-paper-muted) 82%, var(--course-paper-strong));
+  --course-theory-surface-success: color-mix(in srgb, var(--course-success-soft) 82%, var(--course-paper-strong));
+  --course-theory-surface-signal: color-mix(in srgb, var(--course-signal-soft) 84%, var(--course-paper-strong));
+  --course-theory-surface-neutral: color-mix(in srgb, var(--course-paper-muted) 68%, var(--course-paper-strong));
+  --course-highlight-bg: color-mix(in srgb, var(--course-signal) 34%, transparent);
   --course-shadow-sm: 0 1px 2px rgb(0 0 0 / 20%), 0 8px 24px rgb(0 0 0 / 16%);
   --course-shadow-lg: 0 24px 70px rgb(0 0 0 / 42%);
   color-scheme: dark;
@@ -964,6 +1004,175 @@ input:focus-visible {
   color: var(--course-ink-soft);
 }
 
+/* Native VitePress callouts share the theory system's rhythm and tokens. */
+.course-document-layout .vp-doc .custom-block {
+  --dsa-block-accent: var(--course-theory-neutral);
+  --dsa-block-surface: var(--course-theory-surface-neutral);
+  margin: 26px 0;
+  padding: var(--course-theory-block-padding);
+  border: 1px solid var(--course-theory-block-border);
+  border-left: 4px solid var(--dsa-block-accent);
+  border-radius: var(--course-theory-block-radius);
+  background: var(--dsa-block-surface);
+  box-shadow: var(--course-theory-block-shadow);
+  color: var(--course-ink);
+}
+
+.course-document-layout .vp-doc .custom-block.info,
+.course-document-layout .vp-doc .custom-block.note,
+.course-document-layout .vp-doc .custom-block.important {
+  --dsa-block-accent: var(--course-theory-accent);
+  --dsa-block-surface: var(--course-theory-surface-accent);
+}
+
+.course-document-layout .vp-doc .custom-block.tip {
+  --dsa-block-accent: var(--course-theory-success);
+  --dsa-block-surface: var(--course-theory-surface-success);
+}
+
+.course-document-layout .vp-doc .custom-block.warning,
+.course-document-layout .vp-doc .custom-block.caution,
+.course-document-layout .vp-doc .custom-block.danger {
+  --dsa-block-accent: var(--course-theory-signal);
+  --dsa-block-surface: var(--course-theory-surface-signal);
+}
+
+.course-document-layout .vp-doc .custom-block-title {
+  color: var(--dsa-block-accent);
+  font-size: var(--course-theory-title-size);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.course-document-layout .vp-doc .custom-block > :first-child { margin-top: 0; }
+.course-document-layout .vp-doc .custom-block > :last-child { margin-bottom: 0; }
+
+/* DSA theory containers: meaning is carried by label, rule and color together. */
+.course-document-layout .vp-doc .dsa-theory-block {
+  --dsa-theory-accent: var(--course-theory-neutral);
+  --dsa-theory-surface: var(--course-theory-surface-neutral);
+  position: relative;
+  margin: 28px 0;
+  padding: var(--course-theory-block-padding);
+  border: 1px solid var(--course-theory-block-border);
+  border-left: 4px solid var(--dsa-theory-accent);
+  border-radius: var(--course-theory-block-radius);
+  background: var(--dsa-theory-surface);
+  box-shadow: var(--course-theory-block-shadow);
+  color: var(--course-ink);
+  overflow-wrap: anywhere;
+}
+
+.course-document-layout .vp-doc .dsa-theory-block--definition,
+.course-document-layout .vp-doc .dsa-theory-block--intuition {
+  --dsa-theory-accent: var(--course-theory-accent);
+  --dsa-theory-surface: var(--course-theory-surface-accent);
+}
+
+.course-document-layout .vp-doc .dsa-theory-block--theorem,
+.course-document-layout .vp-doc .dsa-theory-block--lemma,
+.course-document-layout .vp-doc .dsa-theory-block--corollary {
+  --dsa-theory-accent: var(--course-theory-ink);
+  --dsa-theory-surface: var(--course-theory-surface-ink);
+  border-top: 3px double var(--dsa-theory-accent);
+}
+
+.course-document-layout .vp-doc .dsa-theory-block--property,
+.course-document-layout .vp-doc .dsa-theory-block--complexity {
+  --dsa-theory-accent: var(--course-theory-success);
+  --dsa-theory-surface: var(--course-theory-surface-success);
+}
+
+.course-document-layout .vp-doc .dsa-theory-block--proof {
+  --dsa-theory-accent: var(--course-theory-neutral);
+  --dsa-theory-surface: var(--course-theory-surface-neutral);
+  border-style: dashed;
+  border-left-style: solid;
+}
+
+.course-document-layout .vp-doc .dsa-theory-block--example {
+  --dsa-theory-accent: var(--course-theory-accent);
+  --dsa-theory-surface: var(--course-theory-surface-neutral);
+}
+
+.course-document-layout .vp-doc .dsa-theory-block--counterexample,
+.course-document-layout .vp-doc .dsa-theory-block--pitfall {
+  --dsa-theory-accent: var(--course-theory-signal);
+  --dsa-theory-surface: var(--course-theory-surface-signal);
+}
+
+.course-document-layout .vp-doc .dsa-theory-block__title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: var(--dsa-theory-accent);
+  font-family: var(--course-font-serif);
+  font-size: var(--course-theory-title-size);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+}
+
+.course-document-layout .vp-doc .dsa-theory-block__code {
+  flex: 0 0 auto;
+  min-width: 40px;
+  padding: 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--dsa-theory-accent) 34%, transparent);
+  border-radius: 999px;
+  font-family: var(--course-font-mono);
+  font-size: var(--course-theory-code-size);
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.course-document-layout .vp-doc .dsa-theory-block > :first-child { margin-top: 0; }
+.course-document-layout .vp-doc .dsa-theory-block > :last-child { margin-bottom: 0; }
+
+.course-document-layout .vp-doc .dsa-theory-block--proof::after {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: 12px 0 0 auto;
+  border: 1px solid var(--dsa-theory-accent);
+  background: var(--dsa-theory-accent);
+}
+
+/* Inline semantics complement, but never replace, the written label. */
+.course-document-layout .vp-doc mark {
+  margin-inline: 0.08em;
+  padding: 0.08em 0.2em;
+  border-radius: 3px;
+  background: linear-gradient(transparent 30%, var(--course-highlight-bg) 30% 92%, transparent 92%);
+  color: var(--course-highlight-ink);
+  font-weight: 650;
+}
+
+.course-document-layout .vp-doc dfn {
+  color: var(--course-theory-accent);
+  font-style: normal;
+  font-weight: 750;
+}
+
+.course-document-layout .vp-doc kbd {
+  padding: 0.16em 0.48em;
+  border: 1px solid var(--course-line-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--course-paper-strong);
+  color: var(--course-ink);
+  font-family: var(--course-font-mono);
+  font-size: 0.82em;
+  box-shadow: var(--course-shadow-sm);
+}
+
+.course-document-layout .vp-doc .dsa-text-accent { color: var(--course-theory-accent); }
+.course-document-layout .vp-doc .dsa-text-signal { color: var(--course-theory-signal); }
+.course-document-layout .vp-doc .dsa-text-success { color: var(--course-theory-success); }
+.course-document-layout .vp-doc .dsa-text-muted { color: var(--course-theory-neutral); }
+
 .course-document-layout .vp-doc table {
   display: block;
   width: max-content;
@@ -993,6 +1202,7 @@ input:focus-visible {
 
 .course-document-layout .vp-doc div[class*="language-"] {
   position: relative;
+  min-width: 0;
   margin: 27px 0;
   overflow: hidden;
   border: 1px solid var(--course-code-border);
@@ -1001,7 +1211,7 @@ input:focus-visible {
   box-shadow: none;
 }
 
-/* 顶部工具栏：语言标签在左，复制按钮在右（CSDN 风格） */
+/* Code toolbar: language, optional filename and copy action share one stable row. */
 .course-document-layout .vp-doc div[class*="language-"] > span.lang {
   position: absolute;
   z-index: 2; /* pre 自带 z-index: 1，工具栏元素必须更高 */
@@ -1010,9 +1220,9 @@ input:focus-visible {
   right: auto; /* 覆盖原生 right: 8px，避免左右定位把标签拉伸铺满 */
   display: inline-flex;
   align-items: center;
-  height: 34px;
+  height: var(--course-code-toolbar-height);
   padding: 0 14px;
-  border-right: 1px solid rgb(255 255 255 / 9%);
+  border-right: 1px solid var(--course-code-toolbar-divider);
   background: var(--course-code-surface);
   color: var(--course-code-text);
   font-family: var(--course-font-mono);
@@ -1022,20 +1232,49 @@ input:focus-visible {
   text-transform: uppercase;
 }
 
+.course-document-layout .vp-doc .dsa-code-block--titled > span.lang {
+  justify-content: center;
+  width: 58px;
+  padding-inline: 8px;
+  overflow: hidden;
+}
+
+.course-document-layout .vp-doc div[class*="language-"] > .dsa-code-title {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 67px;
+  left: 58px;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: var(--course-code-toolbar-height);
+  padding: 0 12px;
+  overflow: hidden;
+  border-right: 1px solid var(--course-code-toolbar-divider);
+  color: var(--course-code-muted);
+  font-family: var(--course-font-mono);
+  font-size: 11px;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .course-document-layout .vp-doc div[class*="language-"] > button.copy {
   position: absolute;
   z-index: 2; /* pre 自带 z-index: 1，工具栏元素必须更高 */
-  top: 5px;
-  right: 5px;
+  top: 0;
+  right: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px; /* 固定宽度：复制/已复制两种状态同宽，点击后不位移 */
-  height: 22px;
-  padding: 0 6px;
-  border: 1px solid rgb(255 255 255 / 14%);
-  border-radius: 5px;
-  background: rgb(255 255 255 / 7%);
+  width: 67px; /* 固定宽度：复制/已复制两种状态同宽，点击后不位移 */
+  height: var(--course-code-toolbar-height);
+  padding: 0 10px;
+  border: 0;
+  border-left: 1px solid var(--course-code-toolbar-divider);
+  border-radius: 0;
+  background: var(--course-code-surface);
   background-image: none !important;
   color: var(--course-code-text);
   font-size: 10px;
@@ -1055,16 +1294,19 @@ input:focus-visible {
 }
 
 .course-document-layout .vp-doc div[class*="language-"] > button.copy:hover {
-  border-color: rgb(255 255 255 / 26%);
-  background: rgb(255 255 255 / 14%);
-  color: #fff;
+  background: var(--course-code-toolbar-hover);
+  color: var(--course-code-text);
+}
+
+.course-document-layout .vp-doc div[class*="language-"] > button.copy:focus-visible {
+  outline: 2px solid var(--course-code-accent);
+  outline-offset: -3px;
 }
 
 .course-document-layout .vp-doc div[class*="language-"] > button.copy.copied {
-  border-color: color-mix(in srgb, #5bcf7c 45%, transparent);
-  border-radius: 5px; /* 覆盖原生 copied 的直角圆角，保持形状不变 */
-  background: rgb(255 255 255 / 7%);
-  color: #5bcf7c;
+  border-radius: 0;
+  background: var(--course-code-surface);
+  color: var(--course-code-success);
 }
 
 .course-document-layout .vp-doc div[class*="language-"] > button.copy.copied::before,
@@ -1090,7 +1332,67 @@ input:focus-visible {
 
 /* 代码区域为工具栏留出高度，文字统一提亮保证对比度 */
 .course-document-layout .vp-doc [class*="language-"] pre {
-  padding-top: 46px;
+  padding-top: calc(var(--course-code-toolbar-height) + 16px);
+}
+
+.course-document-layout .vp-doc .line-numbers-wrapper {
+  top: var(--course-code-toolbar-height);
+  padding-top: 16px;
+}
+
+.course-document-layout .vp-doc .vp-code-group {
+  margin: 27px 0;
+  overflow: hidden;
+  border: 1px solid var(--course-code-border);
+  border-radius: var(--course-radius-sm);
+  background: var(--course-code-bg);
+}
+
+.course-document-layout .vp-doc .vp-code-group .tabs {
+  margin: 0;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--course-code-toolbar-divider);
+  background: var(--course-code-surface);
+}
+
+.course-document-layout .vp-doc .vp-code-group .tabs label {
+  min-height: var(--course-code-toolbar-height);
+  padding: 0 12px;
+  color: var(--course-code-muted);
+  font-family: var(--course-font-mono);
+  font-size: 11px;
+  line-height: var(--course-code-toolbar-height);
+}
+
+.course-document-layout .vp-doc .vp-code-group .tabs label::after {
+  background-color: var(--course-code-accent);
+}
+
+.course-document-layout .vp-doc .vp-code-group input:checked + label {
+  color: var(--course-code-text);
+}
+
+.course-document-layout .vp-doc .vp-code-group input:focus-visible + label {
+  outline: 2px solid var(--course-code-accent);
+  outline-offset: -3px;
+}
+
+.course-document-layout .vp-doc .vp-code-group div[class*="language-"] {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.course-document-layout .vp-doc [class*="language-"] code .highlighted.warning {
+  box-shadow: inset 3px 0 var(--course-code-warning);
+}
+
+.course-document-layout .vp-doc [class*="language-"] code .highlighted.error {
+  box-shadow: inset 3px 0 var(--course-code-error);
+}
+
+.course-document-layout .vp-doc [class*="language-"] code .has-focus {
+  box-shadow: inset 3px 0 var(--course-code-accent);
 }
 
 /* 样例输入/输出是纯文本，覆盖 log 语法对数字的蓝色高亮，统一为亮白 */
@@ -1351,6 +1653,12 @@ input:focus-visible {
   .course-document-header h1 { font-size: 38px; }
   .course-document-layout .vp-doc { font-size: 14px; }
   .course-document-layout .vp-doc h2 { font-size: 26px; }
+  .course-document-layout .vp-doc .custom-block,
+  .course-document-layout .vp-doc .dsa-theory-block { padding: 17px 16px 18px; }
+  .course-document-layout .vp-doc .dsa-theory-block__title { align-items: flex-start; gap: 8px; }
+  .course-document-layout .vp-doc div[class*="language-"] > .dsa-code-title { padding-inline: 9px; font-size: 10px; }
+  .course-document-layout .vp-doc .vp-code-group .tabs { padding-inline: 6px; }
+  .course-document-layout .vp-doc .vp-code-group .tabs label { padding-inline: 10px; }
   .course-document-meta { align-items: flex-start; }
   .course-document-note { flex-direction: column; }
   .course-document-layout .VPDocFooter .prev-next { grid-template-columns: 1fr; }

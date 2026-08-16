@@ -266,7 +266,7 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   expect(failures).toEqual([]);
 });
 
-test("chapter 0 code contrast, callouts, math, copy, details, tables, and metadata remain functional", async ({ page }) => {
+test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tables, and metadata remain functional", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`);
   const codeContrast = async () =>
@@ -349,8 +349,14 @@ test("chapter 0 code contrast, callouts, math, copy, details, tables, and metada
     "href",
     /content\/chapter-00-introduction\/03-algorithm-complexity-analysis\.md$/,
   );
-  await expect(page.locator(".vp-doc .custom-block.info").first()).toBeVisible();
+  await expect(page.locator(".vp-doc .custom-block.tip").first()).toBeVisible();
   await expect(page.locator(".vp-doc .custom-block.warning").first()).toBeVisible();
+  for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
+    await expect(page.locator(`.vp-doc .dsa-theory-block--${kind}`).first()).toBeVisible();
+  }
+  await expect(page.locator(".vp-doc mark").filter({ hasText: "大 O 本身表示上界" })).toBeVisible();
+  await expect(page.locator(".vp-doc .dsa-code-title").first()).toContainText("first-score.cpp");
+  await expect(page.locator(".vp-doc code .highlighted").first()).toBeVisible();
   await expect(page.locator(".vp-doc mjx-container").first()).toBeVisible();
   const details = page.locator(".vp-doc details").first();
   await expect(details).not.toHaveAttribute("open", "");
@@ -360,6 +366,89 @@ test("chapter 0 code contrast, callouts, math, copy, details, tables, and metada
   await page.goto(`${baseUrl}/learn/chapter-00-introduction/00-overview/`);
   await expect(page.locator(".vp-doc table")).toBeVisible();
   await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", `${pagesBasePath}/favicon.svg`);
+  expect(failures).toEqual([]);
+});
+
+test("theory syntax and code workbench stay accessible at desktop and mobile widths", async ({ page }) => {
+  const failures = monitorPage(page);
+  const route = `${baseUrl}/learn/chapter-00-introduction/01-data-structure-basics/`;
+
+  const readContrast = (selector) => page.locator(selector).first().evaluate((element) => {
+    const parseColor = (value) => {
+      const channels = value.match(/[\d.]+/g)?.map(Number) ?? [];
+      const scale = value.startsWith("color(srgb") ? 255 : 1;
+      return {
+        red: (channels[0] ?? 0) * scale,
+        green: (channels[1] ?? 0) * scale,
+        blue: (channels[2] ?? 0) * scale,
+      };
+    };
+    const luminance = (color) => {
+      const linear = [color.red, color.green, color.blue].map((channel) => {
+        const normalized = channel / 255;
+        return normalized <= 0.04045
+          ? normalized / 12.92
+          : ((normalized + 0.055) / 1.055) ** 2.4;
+      });
+      return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+    };
+    const ratio = (first, second) => {
+      const brighter = Math.max(luminance(first), luminance(second));
+      const darker = Math.min(luminance(first), luminance(second));
+      return (brighter + 0.05) / (darker + 0.05);
+    };
+    const style = globalThis.getComputedStyle(element);
+    const foreground = parseColor(style.color);
+    const background = parseColor(style.backgroundColor);
+    const rail = parseColor(style.borderLeftColor);
+    return {
+      text: ratio(foreground, background),
+      rail: ratio(rail, background),
+    };
+  });
+
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(route);
+    await expect(page.locator(".dsa-theory-block--definition")).toHaveCount(2);
+    await expect(page.locator(".dsa-theory-block--intuition")).toHaveCount(1);
+    await expect(page.locator(".vp-doc mark").first()).toBeVisible();
+    await expect(page.locator(".vp-doc dfn").first()).toHaveText("抽象数据类型");
+    await expect(page.locator(".vp-doc .dsa-code-title")).toContainText("student-list-interface.cpp");
+    await expect(page.locator(".vp-doc .vp-code-group")).toBeVisible();
+    const overflow = await page.evaluate(() =>
+      globalThis.document.documentElement.scrollWidth - globalThis.window.innerWidth,
+    );
+    expect(overflow, `theory page root overflow at ${width}px`).toBeLessThanOrEqual(0);
+  }
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(route);
+  const lightContrast = await readContrast(".dsa-theory-block--definition");
+  expect(lightContrast.text).toBeGreaterThanOrEqual(4.5);
+  expect(lightContrast.rail).toBeGreaterThanOrEqual(3);
+
+  const copyButton = page.locator(".dsa-code-block--titled > button.copy").first();
+  await copyButton.focus();
+  await expect(copyButton).toBeFocused();
+  expect(await copyButton.evaluate((button) => globalThis.getComputedStyle(button).outlineStyle)).toBe("solid");
+
+  const firstCodeGroupInput = page.locator(".vp-code-group input").first();
+  await firstCodeGroupInput.focus();
+  const focusedTabOutline = await firstCodeGroupInput.evaluate((input) =>
+    globalThis.getComputedStyle(input.nextElementSibling).outlineStyle,
+  );
+  expect(focusedTabOutline).toBe("solid");
+  const secondCodeGroupTab = page.locator(".vp-code-group .tabs label").nth(1);
+  await secondCodeGroupTab.hover();
+  await secondCodeGroupTab.click();
+  await expect(page.locator(".vp-code-group input").nth(1)).toBeChecked();
+
+  await page.locator(".VPNavBarAppearance .VPSwitchAppearance").click();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  const darkContrast = await readContrast(".dsa-theory-block--definition");
+  expect(darkContrast.text).toBeGreaterThanOrEqual(4.5);
+  expect(darkContrast.rail).toBeGreaterThanOrEqual(3);
   expect(failures).toEqual([]);
 });
 

@@ -119,6 +119,37 @@ for (const relativePath of [...lessonPages, ...labPages]) {
   if (h1Count !== 1) throw new Error(`${relativePath.replaceAll("\\", "/")}: expected one H1, found ${h1Count}`);
 }
 
+const dataStructureBasicsHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-00-introduction", "01-data-structure-basics", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "dsa-theory-block--definition",
+  "dsa-theory-block--intuition",
+  "<mark>一个逻辑结构可以有多种存储实现</mark>",
+  "<dfn>抽象数据类型</dfn>",
+  "dsa-code-block--titled",
+  "student-list-interface.cpp",
+  "vp-code-group",
+]) {
+  if (!dataStructureBasicsHtml.includes(required)) {
+    throw new Error(`Data-structure basics page is missing theory style artifact: ${required}`);
+  }
+}
+
+const complexityHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-00-introduction", "03-algorithm-complexity-analysis", "index.html"),
+  "utf8",
+);
+for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
+  if (!complexityHtml.includes(`dsa-theory-block--${kind}`)) {
+    throw new Error(`Complexity page is missing theory container: ${kind}`);
+  }
+}
+if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.includes("::: definition")) {
+  throw new Error("Unparsed theory container markers leaked into Chapter 0 artifacts");
+}
+
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
 for (const requiredLabel of [
   "Part IV · 查找与索引",
