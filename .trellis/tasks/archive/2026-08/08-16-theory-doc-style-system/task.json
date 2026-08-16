@@ -13,7 +13,7 @@
   "createdAt": "2026-08-16",
   "completedAt": "2026-08-16",
   "branch": "codex/dsa-mastery-theory-doc-style",
-  "base_branch": "codex/dsa-mastery-theory-doc-style",
+  "base_branch": "main",
   "worktree_path": null,
   "commit": null,
   "pr_url": null,
