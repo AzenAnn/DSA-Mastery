@@ -6,7 +6,7 @@
 
 下载地址：[Git for Windows](https://git-scm.com/download/win) 一般X64处理器选图片这个
 
-![1786954540861](image/WINDOWS_STUDENT_SETUP_GUIDE/1786954540861.png)
+![1786954540861](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954540861.png)
 
 安装时大部分选项保持默认即可。遇到 PATH 相关选项时，选择：
 
@@ -14,7 +14,7 @@
 Add a Git Bash Profile to Windows Terminal
 ```
 
-![1786954716299](image/WINDOWS_STUDENT_SETUP_GUIDE/1786954716299.png)
+![1786954716299](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954716299.png)
 
 安装完成后打开 PowerShell，执行：
 
@@ -24,13 +24,13 @@ git --version
 
 能看到 Git 版本号即可。
 
-![1786954650569](image/WINDOWS_STUDENT_SETUP_GUIDE/1786954650569.png)
+![1786954650569](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954650569.png)
 
 ## 2. 安装 Node.js 和 pnpm
 
 下载地址：[Node.js 官方下载页](https://nodejs.org/zh-cn/download/)
 
-![1786954748479](image/WINDOWS_STUDENT_SETUP_GUIDE/1786954748479.png)
+![1786954748479](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954748479.png)
 
 安装完成后，重新打开 PowerShell，执行：
 
@@ -38,7 +38,7 @@ git --version
 node --version
 ```
 
-![1786954825902](image/WINDOWS_STUDENT_SETUP_GUIDE/1786954825902.png)
+![1786954825902](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954825902.png)
 
 然后启用 Corepack，并确认 pnpm 版本：
 
@@ -56,11 +56,11 @@ pnpm --version
 
 如果 PowerShell 提示找不到 `pnpm`，先关闭当前终端，重新打开一个 PowerShell 再试。
 
-![1786954881969](image/WINDOWS_STUDENT_SETUP_GUIDE/1786954881969.png)
+![1786954881969](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954881969.png)
 
 如果提示：“因为在此系统上禁止运行脚本。有关详细信息”，使用管理员打开powershell执行`Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`然后重试
 
-![1786954954553](image/WINDOWS_STUDENT_SETUP_GUIDE/1786954954553.png)
+![1786954954553](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954954553.png)
 
 3. 安装 MSVC Build Tools
 
@@ -68,7 +68,7 @@ pnpm --version
 
 这里安装的是编译器工具链，不是完整的 Visual Studio IDE。
 
-![1786954979741](image/WINDOWS_STUDENT_SETUP_GUIDE/1786954979741.png)
+![1786954979741](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954979741.png)
 
 在 Visual Studio Installer 中选择工作负载：
 
@@ -82,7 +82,7 @@ Desktop development with C++
 - Windows 10 SDK 或 Windows 11 SDK
 - C++ CMake tools for Windows
 
-![1786955058720](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955058720.png)
+![1786955058720](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955058720.png)
 
 安装完成后，从开始菜单打开：
 
@@ -90,7 +90,7 @@ Desktop development with C++
 Developer Command Prompt for VS
 ```
 
-![1786955292514](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955292514.png)
+![1786955292514](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955292514.png)
 
 执行：
 
@@ -100,7 +100,7 @@ cl
 
 如果输出中包含 Microsoft C/C++ 编译器版本信息，说明 MSVC 已经可以使用。显示“没有输入文件”之类的提示也不代表安装失败；这里主要检查是否能找到 `cl.exe`。
 
-![1786955307760](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955307760.png)
+![1786955307760](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955307760.png)
 
 ## 4. 安装 VS Code
 
@@ -134,13 +134,13 @@ cl
 | MSVC    | Visual Studio 2022，MSVC`19.30` 或更高 |
 | CMake   | `3.25` 或更高                          |
 
-![1786955350420](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955350420.png)
+![1786955350420](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955350420.png)
 
 ## 6. 下载仓库
 
 先创建一个放代码仓库的文件夹，再放本实验仓库过来，路径不要包含中文
 
-![1786955416793](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955416793.png)
+![1786955416793](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955416793.png)
 
 在希望存放代码的目录打开 PowerShell或者 Developer Command Prompt for VS，执行：
 
@@ -162,7 +162,7 @@ pnpm install --frozen-lockfile
 cd C:\Proj\DSA-Mastery
 ```
 
-![1786955571203](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955571203.png)
+![1786955571203](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955571203.png)
 
 先使用环境检查命令：
 
@@ -170,7 +170,7 @@ cd C:\Proj\DSA-Mastery
 pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
 ```
 
-![1786955586099](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955586099.png)
+![1786955586099](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955586099.png)
 
 如果环境检查通过，可以运行公开测试：
 
@@ -178,7 +178,7 @@ pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
 pnpm lab:run -- labs/chapter-01/lab-01-03-problem-template
 ```
 
-![1786955599809](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955599809.png)
+![1786955599809](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955599809.png)
 
 也可以只运行示例测试：
 
@@ -186,7 +186,7 @@ pnpm lab:run -- labs/chapter-01/lab-01-03-problem-template
 pnpm lab:run -- labs/chapter-01/lab-01-03-problem-template --case sample
 ```
 
-![1786955613245](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955613245.png)
+![1786955613245](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955613245.png)
 
 ## 8. 运行 Project Lab
 
@@ -208,4 +208,4 @@ pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding
 pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding --task frequency --case weighted
 ```
 
-![1786955720690](image/WINDOWS_STUDENT_SETUP_GUIDE/1786955720690.png)
+![1786955720690](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955720690.png)

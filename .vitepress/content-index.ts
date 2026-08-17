@@ -89,6 +89,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     lessonSources: [
       "content/chapter-preface/00-theory-environments.md",
       "content/chapter-preface/01-lab-authoring-guide.md",
+      "content/chapter-preface/02-windows-student-setup.md",
     ],
   },
   {

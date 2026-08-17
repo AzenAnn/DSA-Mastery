@@ -156,8 +156,8 @@ if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.include
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 2) {
-  throw new Error(`Preface must contain the theory and Lab author guides, found ${prefacePages.length} pages`);
+if (prefacePages.length !== 3) {
+  throw new Error(`Preface must contain the theory, Lab author, and Windows student guides, found ${prefacePages.length} pages`);
 }
 const prefaceHtml = await readFile(
   path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
@@ -223,6 +223,24 @@ if (labAuthorGuideHtml.includes("@include") || labAuthorGuideHtml.includes("第 
   throw new Error("Lab author guide was not expanded or leaked the internal preface id");
 }
 
+const windowsStudentGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "02-windows-student-setup", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "Windows 学生实验环境安装指南",
+  "Git for Windows",
+  "Visual Studio C++ Build Tools",
+  "第一个 Program Lab",
+]) {
+  if (!windowsStudentGuideHtml.includes(required)) {
+    throw new Error(`Rendered Windows student guide is missing: ${required}`);
+  }
+}
+if (windowsStudentGuideHtml.includes("@include") || windowsStudentGuideHtml.includes("第 preface 章")) {
+  throw new Error("Windows student guide was not expanded or leaked the internal preface id");
+}
+
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
 for (const requiredLabel of [
   "Part IV · 查找与索引",
@@ -265,7 +283,7 @@ if (base !== "/") {
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "第 0 章 绪论", "Lab 01-02：实现并验证单链表"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "第 0 章 绪论", "Lab 01-02：实现并验证单链表"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 
