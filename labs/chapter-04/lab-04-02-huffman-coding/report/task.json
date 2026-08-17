@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "manual",
+  "checklist": [
+    "给出至少三组输入的字符频率、平均码长与压缩率",
+    "说明单字符与空文本的约定",
+    "比较平均码长与信息熵，并解释差距"
+  ]
+}

@@ -216,6 +216,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-preface/00-theory-environments/"]').first(),
   ).toBeVisible();
+  await input.fill("Lab 更新与测试指南");
+  await expect(
+    results.locator('a[href*="/learn/chapter-preface/01-lab-authoring-guide/"]').first(),
+  ).toBeVisible();
   await input.fill("实现并验证单链表");
   const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-linked-list/"]').first();
   await expect(labResult).toBeVisible();
@@ -277,21 +281,48 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   expect(failures).toEqual([]);
 });
 
-test("preface is the first independent chapter and showcases every theory environment", async ({ page }) => {
+test("preface is the first author-guide chapter and exposes all complete guides", async ({ page }) => {
   const failures = monitorPage(page);
-  const route = `${baseUrl}/learn/chapter-preface/00-theory-environments/`;
+  const outlineRoute = `${baseUrl}/learn/outline/chapter-preface/`;
+  const showcaseRoute = `${baseUrl}/learn/chapter-preface/00-theory-environments/`;
+  const labGuideRoute = `${baseUrl}/learn/chapter-preface/01-lab-authoring-guide/`;
+  const windowsStudentGuideRoute = `${baseUrl}/learn/chapter-preface/02-windows-student-setup/`;
 
   await page.goto(`${baseUrl}/learn/`);
   const foundationChapters = page.locator(".course-curriculum-chapters > a");
   await expect(foundationChapters.first()).toContainText("前言");
-  await expect(foundationChapters.first()).toContainText("理论环境展示");
+  await expect(foundationChapters.first()).toContainText("课程作者指南");
   await expect(foundationChapters.nth(1)).toContainText("Ch.0");
   await foundationChapters.first().click();
 
-  await expect(page).toHaveURL(route);
+  await expect(page).toHaveURL(outlineRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("课程作者指南");
+  const resources = page.locator(".course-curriculum-resource-list");
+  await expect(resources).toContainText("前言 · 理论环境展示");
+  const windowsStudentGuideEntry = resources.getByRole("link", { name: /Windows 学生实验环境安装指南/ });
+  await expect(windowsStudentGuideEntry).toBeVisible();
+  await windowsStudentGuideEntry.click();
+  await expect(page).toHaveURL(windowsStudentGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Windows 学生实验环境安装指南");
+  await expect(page.locator(".vp-doc")).toContainText("Visual Studio C++ Build Tools");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "Windows 学生实验环境安装指南", exact: true })).toBeVisible();
+
+  await page.goto(outlineRoute);
+  const outlineResources = page.locator(".course-curriculum-resource-list");
+  const labGuideEntry = outlineResources.getByRole("link", { name: /Lab 更新与测试指南/ });
+  await expect(labGuideEntry).toBeVisible();
+  await labGuideEntry.click();
+
+  await expect(page).toHaveURL(labGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 更新与测试指南");
+  await expect(page.getByRole("heading", { level: 2, name: /先选对 Lab 类型/ })).toBeVisible();
+  await expect(page.locator(".vp-doc")).toContainText("Golden Project");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "Lab 更新与测试指南", exact: true })).toBeVisible();
+
+  await page.goto(showcaseRoute);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("前言 · 理论环境展示");
   await expect(page.locator(".course-breadcrumbs").getByRole("link", { name: "前言" })).toBeVisible();
-  await expect(page.locator(".course-eyebrow")).toHaveText("前言 · 理论环境展示");
+  await expect(page.locator(".course-eyebrow")).toHaveText("前言 · 课程作者指南");
   await expect(page.locator("body")).not.toContainText("第 preface 章");
   await expect(page.locator(".VPSidebar").getByRole("link", { name: "前言", exact: true })).toBeVisible();
 
@@ -338,7 +369,7 @@ test("preface is the first independent chapter and showcases every theory enviro
 
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto(route);
+    await page.goto(showcaseRoute);
     const overflow = await page.evaluate(() =>
       globalThis.document.documentElement.scrollWidth - globalThis.window.innerWidth,
     );
@@ -746,6 +777,8 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 00-03：复杂度计算自测");
   const questions = page.locator(".course-quiz-question");
   await expect(questions).toHaveCount(19);
+  await expect(page.locator(".course-quiz-summary")).toContainText("已答 0/19");
+  await expect(page.locator(".course-quiz-summary")).toContainText("得分 0/20");
 
   // 右侧答题进度导航：19 个圈，初始全部未作答
   const navigator = page.locator(".course-quiz-nav");
@@ -755,6 +788,9 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
 
   // 第 1 题故意选错：立即出现错误反馈、正确答案与题解，导航第 1 圈变红
   const first = questions.first();
+  await expect(first.locator(".course-quiz-hint")).toBeVisible();
+  await first.locator(".course-quiz-hint > summary").click();
+  await expect(first.locator(".course-quiz-hint")).toContainText("2、4、8、16");
   await first.locator(".course-quiz-option").nth(1).click();
   await expect(first.getByRole("radio").nth(1)).toBeChecked();
   await first.getByRole("button", { name: "提交答案" }).click();
@@ -764,6 +800,7 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   await expect(first.locator(".course-quiz-options")).toHaveClass(/is-submitted/);
   await expect(first.getByRole("radio").first()).toBeDisabled();
   await expect(navigator.locator("li").first()).toHaveClass(/is-wrong/);
+  await expect(page.locator(".course-quiz-summary")).toContainText("已答 1/19");
 
   // 第 2 题选对：正确反馈，导航第 2 圈变绿；重新作答后回到未作答状态
   const second = questions.nth(1);
@@ -771,6 +808,8 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   await second.getByRole("button", { name: "提交答案" }).click();
   await expect(second.locator(".course-quiz-feedback")).toContainText("回答正确");
   await expect(navigator.locator("li").nth(1)).toHaveClass(/is-correct/);
+  await expect(page.locator(".course-quiz-summary")).toContainText("正确 1");
+  await expect(page.locator(".course-quiz-summary")).toContainText("得分 1/20");
   await second.getByRole("button", { name: "重新作答" }).click();
   await expect(second.locator(".course-quiz-feedback")).toHaveCount(0);
   await expect(second.getByRole("radio").nth(1)).toBeEnabled();
@@ -866,9 +905,7 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
     await expect(
       page.locator(".vp-doc details > summary").filter({ hasText: "查看答案与解析" }),
     ).toHaveCount(0);
-    await expect(
-      page.locator(".vp-doc details > summary").filter({ hasText: "展开答案表" }),
-    ).toHaveCount(1);
+    await expect(page.locator(".course-quiz-answer-overview > summary")).toHaveCount(1);
 
     const firstQuestion = questions.first();
     await expect(firstQuestion.locator(".course-quiz-feedback")).toHaveCount(0);

@@ -3,8 +3,8 @@ title: "前言 · 理论环境展示"
 description: "集中预览 DSA Mastery 理论文档中的正文、定义、定理、性质、证明、行内语义与代码工作台。"
 order: 0
 chapter: "preface"
-chapterTitle: "理论环境展示"
-updated: "2026-08-16"
+chapterTitle: "课程作者指南"
+updated: "2026-08-17"
 contributors: ["Azen"]
 status: "draft"
 ---
@@ -188,3 +188,7 @@ int factorial(int n) {
 需要复制语法时，请回到完整作者指南：
 
 **地址：** [`docs/THEORY_DOC_STYLE_GUIDE.md`](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/THEORY_DOC_STYLE_GUIDE.md)
+
+需要新增选择题、单题 C++ 作业或大型多任务 Lab 时，请使用统一的 Schema、`make run` 与评分工作流：
+
+**站内阅读：** [Lab 更新与测试指南](./01-lab-authoring-guide.md)

@@ -46,7 +46,12 @@ const groups = computed(() => mode.value === "part" && currentPart.value
       <section class="course-curriculum-detail">
         <div>
           <h2>学习目标</h2>
-          <ul>
+          <ul v-if="currentChapter.number === 'preface'">
+            <li>统一理解课程理论文档与三类 Lab 的作者接口。</li>
+            <li>能够按规范创建、测试、评分和 Review 后续题目。</li>
+            <li>从站内完整指南直接复制经过自动验证的示例。</li>
+          </ul>
+          <ul v-else>
             <li>理解本章核心问题、数据表示与算法之间的联系。</li>
             <li>能够比较主要方案的适用条件与复杂度。</li>
             <li>通过已有文章与 Lab 建立可检查的学习成果。</li>
@@ -54,7 +59,12 @@ const groups = computed(() => mode.value === "part" && currentPart.value
         </div>
         <div>
           <h2>计划栏目</h2>
-          <ul v-if="currentChapter.number === '0+'">
+          <ul v-if="currentChapter.number === 'preface'">
+            <li>理论环境与 Markdown 语法展示</li>
+            <li>Quiz、Program、Project 更新机制</li>
+            <li>本地测试、CI、Review 与发布清单</li>
+          </ul>
+          <ul v-else-if="currentChapter.number === '0+'">
             <li>Peak Finding</li>
             <li>Union-Find</li>
             <li>数据结构的选择如何影响算法效率</li>

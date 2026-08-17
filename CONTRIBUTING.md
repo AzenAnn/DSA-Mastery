@@ -6,9 +6,10 @@
 
 1. 阅读 [项目蓝图](docs/PROJECT_BLUEPRINT.md) 了解范围。
 2. 阅读 [更新工作流](docs/UPDATE_WORKFLOW.md) 了解目录、frontmatter、Review 和版权规则。
-3. 多文件或跨会话任务再阅读 [Trellis 协作入门](docs/TRELLIS_ONBOARDING.md)，用 task 保存方案与上下文。
-4. 大改动先创建 Issue；拼写或明确断链可以直接提交小 PR。
-5. 不确定内容是否适合时，先说明读者问题和希望达到的学习结果。
+3. 新增或迁移 Lab 时，完整阅读 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md)，不要自行分叉 Schema、Makefile 或判题器。
+4. 多文件或跨会话任务再阅读 [Trellis 协作入门](docs/TRELLIS_ONBOARDING.md)，用 task 保存方案与上下文。
+5. 大改动先创建 Issue；拼写或明确断链可以直接提交小 PR。
+6. 不确定内容是否适合时，先说明读者问题和希望达到的学习结果。
 
 ## 本地验证
 
@@ -28,7 +29,7 @@ pnpm run dev
 pnpm test
 ```
 
-`pnpm test` 已包含内容、类型、lint、自动发现、VitePress build 和静态产物检查。涉及导航、Pages base、主题或 Markdown 渲染时，再按 [VitePress 迁移说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)构建 Pages 子路径并运行 `pnpm run test:pages`。Lab 如果有独立命令，请按其 README 从头执行并在 PR 中记录结果。
+`pnpm test` 已包含内容、Lab manifest/判题工具/文档示例、类型、lint、自动发现、VitePress build 和静态产物检查。涉及导航、Pages base、主题或 Markdown 渲染时，再按 [VitePress 迁移说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)构建 Pages 子路径并运行 `pnpm run test:pages`。可执行 Lab 还要按 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md#10-author-checkci-与-review-证据)运行其 `verify`，在 PR 中记录编译器、分数与结果。
 
 ## 提交原则
 
