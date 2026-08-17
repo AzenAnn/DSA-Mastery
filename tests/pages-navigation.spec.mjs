@@ -257,14 +257,21 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   await page.getByRole("link", { name: /Ch\.8 基础查找与树形查找/ }).first().click();
   await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-08-basic-tree-search/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("基础查找与树形查找");
-  await expect(page.locator(".course-curriculum-resource-list")).toContainText("6.1 二叉排序树");
+  await expect(page.locator(".course-curriculum-resource-list")).toContainText(
+    "6.1 基础查找与折半查找",
+  );
+  await expect(page.locator(".course-curriculum-resource-list")).toContainText(
+    "Lab 06-03：查找理论选择题精练",
+  );
 
   await page.goto(`${baseUrl}/learn/outline/chapter-12-divide-conquer-recursion/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("分治与递归");
   await expect(page.locator(".course-curriculum-empty")).toContainText("后续迭代中完善");
 
-  await page.goto(`${baseUrl}/learn/chapter-06-search/01-binary-search-tree/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.1 二叉排序树");
+  await page.goto(`${baseUrl}/learn/chapter-06-search/02-binary-search-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.2 二叉排序树");
+  await page.goto(`${baseUrl}/learn/chapter-06-search/04-b-tree-and-b-plus-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.4 B 树与 B+ 树");
   await page.goto(`${baseUrl}/labs/chapter-06/lab-06-02-hash-table/`);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("散列表");
   expect(failures).toEqual([]);
@@ -890,5 +897,40 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
   await page.goto(`${baseUrl}/labs/chapter-01/lab-01-05-singly-linked-list-quiz/`);
   await expect(page.locator(".course-quiz-question").nth(1).locator("table")).toBeVisible();
 
+  expect(failures).toEqual([]);
+});
+
+test("search theory quiz exposes all 24 questions and reconstructed tree prompts", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/chapter-06/lab-06-03-search-theory-quiz/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Lab 06-03：查找理论选择题精练",
+  );
+
+  const questions = page.locator(".course-quiz-question");
+  await expect(questions).toHaveCount(24);
+  await expect(page.locator(".course-quiz-nav li")).toHaveCount(24);
+  await expect(page.locator(".course-quiz-option")).toHaveCount(96);
+  await expect(page.locator(".course-quiz-meta")).toHaveCount(24);
+  await expect(questions.nth(3).locator("pre")).toContainText("[55,65]");
+  await expect(page.locator(".course-quiz-stem mjx-container").first()).toBeVisible();
+  await expect(page.locator(".vp-doc")).not.toContainText(
+    /查看原始页面|看交互可视化|答案来源说明|答案来源：Codex/,
+  );
+
+  const firstQuestion = questions.first();
+  await firstQuestion.locator(".course-quiz-option").first().click();
+  await firstQuestion.getByRole("button", { name: "提交答案" }).click();
+  await expect(firstQuestion.locator(".course-quiz-feedback")).toContainText("正确答案：D");
+  await expect(firstQuestion.locator(".course-quiz-explanation")).toContainText("B+ 树");
+  await firstQuestion.getByRole("button", { name: "重新作答" }).click();
+  await expect(firstQuestion.locator(".course-quiz-feedback")).toHaveCount(0);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const layout = await page.evaluate(() => ({
+    clientWidth: globalThis.document.documentElement.clientWidth,
+    scrollWidth: globalThis.document.documentElement.scrollWidth,
+  }));
+  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
   expect(failures).toEqual([]);
 });
