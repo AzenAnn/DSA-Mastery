@@ -29,7 +29,6 @@ yarn-error.log*
 .env*
 
 /dist/
-/.output/
 **/.lab-cache/
 /.vitepress/cache/
 /.vitepress/.temp/
