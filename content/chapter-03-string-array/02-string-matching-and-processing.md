@@ -5,7 +5,7 @@ order: 2
 chapter: 3
 chapterTitle: "字符串与数组"
 updated: "2026-08-15"
-contributors: ["Azen"]
+contributors: ["Qing"]
 status: "draft"
 ---
 

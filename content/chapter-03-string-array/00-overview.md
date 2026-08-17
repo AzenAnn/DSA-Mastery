@@ -5,7 +5,7 @@ order: 0
 chapter: 3
 chapterTitle: "字符串与数组"
 updated: "2026-08-14"
-contributors: ["Azen"]
+contributors: ["DSA Mastery Team"]
 status: "draft"
 ---
 
