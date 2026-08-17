@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 4
-- **Last Active**: 2026-08-16
+- **Total Sessions**: 5
+- **Last Active**: 2026-08-17
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~93 | Active |
+| `journal-1.md` | ~118 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 5 | 2026-08-17 | Unified Lab update workflow | `6bf9df6`, `56422aa`, `6ae4ab0`, `c975836`, `732c398` | `codex/unified-lab-update-workflow` |
 | 4 | 2026-08-16 | 前言理论语法展示页 | `39e9cc0`, `b24e18f` | `codex/dsa-mastery-theory-doc-style` |
 | 3 | 2026-08-16 | DSA Mastery 理论文档语法与视觉系统 | `5f7bcd3`, `3ef6fcb` | `codex/dsa-mastery-theory-doc-style` |
 | 2 | 2026-08-14 | 完成线性表第 3、4 篇文章 | `d1e630d` | `codex/linear-list-articles-3-4` |

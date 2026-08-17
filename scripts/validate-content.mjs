@@ -1,5 +1,6 @@
 import { access, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { loadLab, validateQuizReadme } from "../tools/lab/core.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const requiredFields = [
@@ -19,7 +20,7 @@ async function findFiles(root, predicate) {
   const results = [];
   for (const entry of await readdir(root, { withFileTypes: true })) {
     const fullPath = path.join(root, entry.name);
-    if (entry.isDirectory()) results.push(...(await findFiles(fullPath, predicate)));
+    if (entry.isDirectory() && entry.name !== ".lab-cache") results.push(...(await findFiles(fullPath, predicate)));
     else if (predicate(fullPath)) results.push(fullPath);
   }
   return results;
@@ -119,12 +120,12 @@ async function validateQuizLab(file, readme) {
     return 0;
   }
   const relativeQuiz = path.relative(projectRoot, quizPath).replaceAll("\\", "/");
-  if (mountCount !== 1) {
-    throw new Error(`${relativeReadme}: 交互题库 README 必须且只能挂载一次 <QuizSet />`);
+  try {
+    await access(path.join(path.dirname(file), "lab.json"));
+  } catch {
+    throw new Error(`${relativeReadme}: 交互 Quiz Lab 必须提供 schemaVersion 1 的 lab.json`);
   }
-  if (/^### 题 \d+/m.test(readme) || /^::: details 查看答案与解析/m.test(readme)) {
-    throw new Error(`${relativeReadme}: 交互题库不得重复维护静态题目或折叠答案`);
-  }
+  validateQuizReadme(readme, relativeReadme);
 
   let parsed;
   try {
@@ -153,11 +154,24 @@ async function validateQuizLab(file, readme) {
     if (question.options.some((option) => typeof option !== "string" || !option.trim())) {
       throw new Error(`${label}: 每个选项都必须是非空字符串`);
     }
+    const normalizedOptions = question.options.map((option, optionIndex) => {
+      const trimmed = option.trim();
+      if (/^[A-DＡ-Ｄ][.．、:：)）]\s*/i.test(trimmed)) {
+        throw new Error(`${label}: 选项 ${optionIndex + 1} 不要手写 A、B、C、D 前缀`);
+      }
+      return trimmed.replace(/\s+/gu, " ").toLocaleLowerCase();
+    });
+    if (new Set(normalizedOptions).size !== normalizedOptions.length) {
+      throw new Error(`${label}: 选项内容不得重复`);
+    }
     if (!Number.isInteger(question.answer) || question.answer < 0 || question.answer > 3) {
       throw new Error(`${label}: answer 必须是 0～3 的整数`);
     }
-    for (const field of ["title", "source", "difficulty", "targetId", "code"]) {
+    for (const field of ["title", "source", "difficulty", "targetId", "code", "hint"]) {
       assertOptionalString(question[field], field, label);
+    }
+    if (question.points !== undefined && (!Number.isInteger(question.points) || question.points <= 0)) {
+      throw new Error(`${label}: points 必须是正整数`);
     }
     if (
       question.topics !== undefined &&
@@ -178,7 +192,14 @@ const lessonRoot = path.join(projectRoot, "content");
 const labRoot = path.join(projectRoot, "labs");
 const lessonFiles = (await findFiles(lessonRoot, (file) => file.endsWith(".md")))
   .filter((file) => path.basename(file).toLowerCase() !== "readme.md");
-const labFiles = await findFiles(labRoot, (file) => path.basename(file).toLowerCase() === "readme.md");
+const labFiles = (await findFiles(labRoot, (file) => path.basename(file).toLowerCase() === "readme.md"))
+  .filter((file) => /^labs\/chapter-\d{2}\/lab-\d{2}-\d{2}-[a-z0-9-]+\/README\.md$/i.test(
+    path.relative(projectRoot, file).replaceAll("\\", "/"),
+  ));
+const manifestFiles = (await findFiles(labRoot, (file) => path.basename(file).toLowerCase() === "lab.json"))
+  .filter((file) => /^labs\/chapter-\d{2}\/lab-\d{2}-\d{2}-[a-z0-9-]+\/lab\.json$/i.test(
+    path.relative(projectRoot, file).replaceAll("\\", "/"),
+  ));
 
 const seenOrder = new Set();
 let interactiveQuizCount = 0;
@@ -192,7 +213,9 @@ for (const [kind, files] of [["lesson", lessonFiles], ["lab", labFiles]]) {
   }
 }
 
+for (const manifestFile of manifestFiles) await loadLab(path.dirname(manifestFile));
+
 if (!lessonFiles.length) throw new Error("content/ 中没有可渲染的教材页面");
 console.log(
-  `内容检查通过：${lessonFiles.length} 篇教材页面，${labFiles.length} 个 Lab，${interactiveQuizCount} 道交互选择题。`,
+  `内容检查通过：${lessonFiles.length} 篇教材页面，${labFiles.length} 个 Lab，${manifestFiles.length} 个新式 manifest，${interactiveQuizCount} 道交互选择题。`,
 );

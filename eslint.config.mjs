@@ -38,7 +38,7 @@ const eslintConfig = defineConfig([
     },
   },
   {
-    files: ["scripts/**/*.mjs", "tests/**/*.mjs", "*.config.mjs"],
+    files: ["scripts/**/*.mjs", "tools/**/*.mjs", "tests/**/*.mjs", "*.config.mjs"],
     languageOptions: {
       globals: globals.node,
     },

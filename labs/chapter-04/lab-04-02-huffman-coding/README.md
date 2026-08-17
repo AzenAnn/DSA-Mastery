@@ -1,10 +1,10 @@
 ---
 title: "Lab 04-02：Huffman 编码器"
-description: "用最小堆构造 Huffman 树，生成前缀编码并计算平均码长。"
+description: "用三个有依赖关系的任务完成字符频率、Huffman 编解码与实验报告，并聚合自动分和人工分。"
 order: 2
 chapter: 4
 chapterTitle: "树与二叉树"
-updated: "2026-08-12"
+updated: "2026-08-17"
 contributors: ["Azen"]
 status: "draft"
 lab: true
@@ -26,13 +26,37 @@ duration: "120～150 分钟"
 
 120～150 分钟。
 
-## 任务
+## 任务与评分
 
-1. 实现最小堆（或直接用语言标准库优先队列）。
-2. 对输入文本统计字符频率，构造 Huffman 树（叶子带权值，合并时弹出两个最小）。
-3. 沿树生成每个字符的 0/1 编码（左 0 右 1），输出编码表。
-4. 实现编码与解码：编码文本、解码验证一致；解码不得使用分隔符（必须是前缀编码才能工作）。
-5. 计算并输出：文本总长、编码后总长、平均码长、压缩率。
+| Task | 类型 | 权重 | 依赖 | 交付物 |
+| --- | --- | ---: | --- | --- |
+| `frequency` | stdio | 30 | 无 | 字符频率程序 |
+| `codec` | CTest | 50 | frequency | `contracts/huffman.hpp` 的实现 |
+| `report` | manual | 20 | codec | 平均码长、熵与复盘报告 |
+
+顶层评分会分别显示自动分和待人工分。任务依赖用于推荐顺序和定位，不会暗中把前置任务变成“一票否决”。
+
+## 运行与评分
+
+进入本目录后优先使用：
+
+```powershell
+make doctor
+make run
+make run TASK=frequency CASE=weighted
+make run TASK=codec
+make score
+```
+
+Windows 未安装 GNU Make 时，在仓库根使用免 Make 兜底：
+
+```powershell
+pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding
+pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding --task frequency --case weighted
+pnpm lab:score -- labs/chapter-04/lab-04-02-huffman-coding
+```
+
+维护者可用 `--target solution` 验证参考实现自动部分满分。Project 使用 CMake ≥ 3.25 与 CTest；CMake 可选择当前平台的可用生成器，Ninja 只是可选加速项。所有构建产物只写入 `.lab-cache/`。
 
 ## 测试输入
 

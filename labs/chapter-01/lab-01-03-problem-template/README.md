@@ -1,11 +1,11 @@
 ---
 title: "Lab 01-03：编程题页面样板"
-description: "用一道有序表合并编程题展示统一题面排版：题目描述、输入输出格式、数据范围与样例对照。"
+description: "用一道有序表合并编程题演示学生骨架、参考实现、公开测试、本地评分与统一 Make 工作流。"
 order: 3
 chapter: 1
 chapterTitle: "线性表"
-updated: "2026-08-10"
-contributors: ["DSA Mastery Team"]
+updated: "2026-08-17"
+contributors: ["DSA Mastery Team", "Azen"]
 status: "draft"
 lab: true
 difficulty: "入门"
@@ -14,7 +14,7 @@ duration: "15～20 分钟"
 
 # Lab 01-03：编程题页面样板
 
-本 Lab 是一道**有序表合并**编程题的完整题面，用于测试后续 Lab 的统一展示方式：题目名称与描述、任务要求、输入输出格式、数据范围、样例与解释。题目本身请在本地环境完成与验证，不需要在线提交。
+本 Lab 是统一 Program 工作流的 Golden 示例。仓库提供可编译但未完成的 `student/main.cpp`、公开测试、参考实现和标准输出；你可以进入本目录后用一条命令编译、运行并看到 `0～100` 分。
 
 ## 题目
 
@@ -84,11 +84,28 @@ duration: "15～20 分钟"
 
 ## 如何验证
 
-1. 新建 `merge.c`，实现读入、合并与输出；
-2. 编译：`gcc -O2 -Wall merge.c -o merge`；
-3. 运行并粘贴上面的样例输入，检查输出是否与样例输出完全一致（注意行末无多余空格）；
-4. 再自测两组边界：`n = m = 1` 的最小输入，以及一个序列的全部元素都大于另一个序列的情况。
+先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。
+
+```powershell
+# 已进入本 Lab 目录
+make doctor
+make run
+make run CASE=sample
+make interactive
+make score
+```
+
+Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
+
+```powershell
+pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:run -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:run -- labs/chapter-01/lab-01-03-problem-template --case sample
+pnpm lab:score -- labs/chapter-01/lab-01-03-problem-template
+```
+
+`make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。
 
 - [ ] 样例输入与输出完全一致
-- [ ] 两组边界自测通过
+- [ ] 四组公开测试均通过并得到 100 分
 - [ ] 程序满足 O(n + m) 且未使用拼接后排序

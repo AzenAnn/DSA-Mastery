@@ -739,6 +739,8 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 00-03：复杂度计算自测");
   const questions = page.locator(".course-quiz-question");
   await expect(questions).toHaveCount(19);
+  await expect(page.locator(".course-quiz-summary")).toContainText("已答 0/19");
+  await expect(page.locator(".course-quiz-summary")).toContainText("得分 0/20");
 
   // 右侧答题进度导航：19 个圈，初始全部未作答
   const navigator = page.locator(".course-quiz-nav");
@@ -748,6 +750,9 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
 
   // 第 1 题故意选错：立即出现错误反馈、正确答案与题解，导航第 1 圈变红
   const first = questions.first();
+  await expect(first.locator(".course-quiz-hint")).toBeVisible();
+  await first.locator(".course-quiz-hint > summary").click();
+  await expect(first.locator(".course-quiz-hint")).toContainText("2、4、8、16");
   await first.locator(".course-quiz-option").nth(1).click();
   await expect(first.getByRole("radio").nth(1)).toBeChecked();
   await first.getByRole("button", { name: "提交答案" }).click();
@@ -757,6 +762,7 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   await expect(first.locator(".course-quiz-options")).toHaveClass(/is-submitted/);
   await expect(first.getByRole("radio").first()).toBeDisabled();
   await expect(navigator.locator("li").first()).toHaveClass(/is-wrong/);
+  await expect(page.locator(".course-quiz-summary")).toContainText("已答 1/19");
 
   // 第 2 题选对：正确反馈，导航第 2 圈变绿；重新作答后回到未作答状态
   const second = questions.nth(1);
@@ -764,6 +770,8 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   await second.getByRole("button", { name: "提交答案" }).click();
   await expect(second.locator(".course-quiz-feedback")).toContainText("回答正确");
   await expect(navigator.locator("li").nth(1)).toHaveClass(/is-correct/);
+  await expect(page.locator(".course-quiz-summary")).toContainText("正确 1");
+  await expect(page.locator(".course-quiz-summary")).toContainText("得分 1/20");
   await second.getByRole("button", { name: "重新作答" }).click();
   await expect(second.locator(".course-quiz-feedback")).toHaveCount(0);
   await expect(second.getByRole("radio").nth(1)).toBeEnabled();
@@ -859,9 +867,7 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
     await expect(
       page.locator(".vp-doc details > summary").filter({ hasText: "查看答案与解析" }),
     ).toHaveCount(0);
-    await expect(
-      page.locator(".vp-doc details > summary").filter({ hasText: "展开答案表" }),
-    ).toHaveCount(1);
+    await expect(page.locator(".course-quiz-answer-overview > summary")).toHaveCount(1);
 
     const firstQuestion = questions.first();
     await expect(firstQuestion.locator(".course-quiz-feedback")).toHaveCount(0);
