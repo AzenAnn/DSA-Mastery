@@ -116,3 +116,24 @@ Implemented and independently verified the unified Quiz, Program, and Project La
 ### Status
 
 [OK] **Completed**
+
+
+## Session 6: Expose Lab author guide in curriculum
+
+**Date**: 2026-08-17
+**Task**: Expose Lab author guide in curriculum
+**Branch**: `codex/unified-lab-update-workflow`
+
+### Summary
+
+Converted the preface into a real author-guide chapter, exposed the complete Lab update guide through curriculum navigation and search, added route/build/browser regression coverage, and opened follow-up PR #24 after discovering PR #21 had already merged.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `995d05b` | (see git log) |
+
+### Status
+
+[OK] **Completed**

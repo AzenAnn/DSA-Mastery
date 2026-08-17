@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 5
+- **Total Sessions**: 6
 - **Last Active**: 2026-08-17
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~118 | Active |
+| `journal-1.md` | ~139 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 6 | 2026-08-17 | Expose Lab author guide in curriculum | `995d05b` | `codex/unified-lab-update-workflow` |
 | 5 | 2026-08-17 | Unified Lab update workflow | `6bf9df6`, `56422aa`, `6ae4ab0`, `c975836`, `732c398` | `codex/unified-lab-update-workflow` |
 | 4 | 2026-08-16 | 前言理论语法展示页 | `39e9cc0`, `b24e18f` | `codex/dsa-mastery-theory-doc-style` |
 | 3 | 2026-08-16 | DSA Mastery 理论文档语法与视觉系统 | `5f7bcd3`, `3ef6fcb` | `codex/dsa-mastery-theory-doc-style` |
