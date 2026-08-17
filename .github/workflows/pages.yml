@@ -54,6 +54,12 @@ jobs:
       - name: Validate content, types, and source
         run: pnpm run validate
 
+      - name: Test Lab schemas, scaffolding, comparators, and process limits
+        run: pnpm run test:lab-tools
+
+      - name: Validate Lab author-guide examples and entry points
+        run: pnpm run test:lab-docs
+
       - name: Verify automatic Markdown discovery
         run: pnpm run test:discovery
 
@@ -74,6 +80,72 @@ jobs:
         with:
           path: dist/pages
 
+  lab-cpp:
+    name: Lab C++ (${{ matrix.label }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            label: GCC
+            cxx: g++
+          - os: ubuntu-latest
+            label: Clang
+            cxx: clang++
+          - os: windows-latest
+            label: MSVC
+            cxx: cl
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install GNU Make for the Windows-first Make contract
+        if: runner.os == 'Windows'
+        run: choco install make --no-progress -y
+
+      - name: Verify Program and Project Golden Labs (Unix)
+        if: runner.os != 'Windows'
+        env:
+          CXX: ${{ matrix.cxx }}
+        run: |
+          pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
+          pnpm run test:lab-golden
+          pnpm run test:lab-make
+
+      - name: Verify Program and Project Golden Labs (MSVC)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
+          set CXX=cl
+          pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
+          pnpm run test:lab-golden
+          pnpm run test:lab-make
+
+      - name: Confirm Lab builds do not modify tracked sources
+        shell: bash
+        run: |
+          git diff --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
+
   deploy:
     if: github.event_name != 'pull_request'
     permissions:
@@ -83,7 +155,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, lab-cpp]
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
