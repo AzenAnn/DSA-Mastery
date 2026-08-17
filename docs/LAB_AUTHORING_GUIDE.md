@@ -545,7 +545,7 @@ README-only Lab 继续正常渲染，不要求一次重写全部历史内容。�
 5. 执行 validate/verify、网站 discovery/build 和 Review。
 6. 在 PR 中记录未迁移 Lab 清单，不把“尚未迁移”伪装成错误。
 
-现有 6 个交互 Quiz 已迁移到 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
+现有 6 个交互 Quiz 已迁移到 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
 
 ## 12. 常见错误与正确做法
 
