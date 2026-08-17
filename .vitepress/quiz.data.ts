@@ -31,6 +31,10 @@ export interface QuizQuestion {
   explanation: string;
   explanationHtml: string;
   points: number;
+  /** 教材正文即时复习：每个选项对应的原文锚点 id（可选，仅 inline 模式使用）。 */
+  optionTargets?: string[];
+  /** 教材正文即时复习：所属复习块 id，配合 <QuizSet block="..."> 分组挂载（可选）。 */
+  block?: string;
 }
 
 export declare const data: Record<string, QuizQuestion[]>;

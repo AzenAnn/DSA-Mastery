@@ -156,7 +156,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     lessonSources: [
       "content/chapter-03-string-array/00-overview.md",
       "content/chapter-03-string-array/01-string-basics.md",
-      "content/chapter-03-string-array/02-pattern-matching.md",
+      "content/chapter-03-string-array/02-string-matching-and-processing.md",
       "content/chapter-03-string-array/03-array-and-matrix.md",
     ],
     labSources: [

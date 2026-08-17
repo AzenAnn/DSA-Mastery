@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { CheckCircle2, CircleAlert, Info, RotateCcw } from "@lucide/vue";
+import { CheckCircle2, CircleAlert, GraduationCap, Info, RotateCcw } from "@lucide/vue";
 import { useData } from "vitepress";
 import { computed, ref } from "vue";
 import { data as quizIndex, type QuizQuestion } from "../../quiz.data";
+import { data as reviewIndex } from "../../review.data";
 import { quizStatus } from "../quiz-state";
 
 const optionLabel = (index: number) => String.fromCharCode(65 + index);
 
 const { page } = useData();
+const props = defineProps<{ block?: string }>();
 
 // 题目数据来自 data loader 扫描的 quiz.json，组件只负责渲染，不内置题目。
 // 注意：rewrites 会把 README.md 重写为 index.md，两种文件名都要能匹配。
@@ -16,11 +18,32 @@ const labDir = computed(() => {
   return relativePath.replace(/(README|index)\.md$/i, "").replace(/\/+$/, "");
 });
 
-const questions = computed<QuizQuestion[]>(() => quizIndex[labDir.value] ?? []);
+// 教材页即时复习：review.data 按"教材源路径（去掉 .md）"索引。
+// 注意：rewrites 会把 content/...md 重写为 learn/.../index.md，page.relativePath
+// 可能是源路径也可能是重写后的虚拟路径，这里统一归一化回 content/... 源键。
+const lessonKey = computed(() => {
+  const relativePath = page.value.relativePath.replaceAll("\\", "/");
+  const withoutExt = relativePath.replace(/\.md$/i, "");
+  if (withoutExt.startsWith("content/")) return withoutExt;
+  return withoutExt.replace(/^learn\//, "content/").replace(/\/index$/, "");
+});
 
-// 初始化共享答题状态，供右侧 QuizNavigator 读取。
-if (!quizStatus[labDir.value]) {
-  quizStatus[labDir.value] = questions.value.map(() => "pending");
+const labQuestions = computed<QuizQuestion[]>(() => quizIndex[labDir.value] ?? []);
+const reviewQuestions = computed<QuizQuestion[]>(() => {
+  const all = reviewIndex[lessonKey.value] ?? [];
+  if (!props.block) return all;
+  return all.filter((question) => question.block === props.block);
+});
+// Lab 自测优先；教材页没有 quiz.json 时回退到本节即时复习题（inline 模式）。
+const questions = computed<QuizQuestion[]>(() =>
+  labQuestions.value.length > 0 ? labQuestions.value : reviewQuestions.value,
+);
+const isInline = computed(() => labQuestions.value.length === 0 && reviewQuestions.value.length > 0);
+const expanded = ref(false);
+
+// 初始化共享答题状态，供右侧 QuizNavigator 读取（仅 Lab 自测需要）。
+if (labQuestions.value.length > 0 && !quizStatus[labDir.value]) {
+  quizStatus[labDir.value] = labQuestions.value.map(() => "pending");
 }
 
 const selections = ref<Record<string, number | null>>({});
@@ -62,16 +85,45 @@ function retry(questionId: string) {
   const statuses = quizStatus[labDir.value];
   if (index >= 0 && statuses) statuses[index] = "pending";
 }
+
+// 教材正文即时复习：滚到该选项对应的原文句子并短暂高亮。
+function jumpTo(target?: string) {
+  if (!target) return;
+  const anchor = document.getElementById(target);
+  if (!anchor) return;
+  anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+  const block = anchor.closest("p, li, td, div") ?? anchor;
+  block.classList.add("course-review-flash");
+  window.setTimeout(() => block.classList.remove("course-review-flash"), 2400);
+}
 </script>
 
 <template>
-  <section v-if="questions.length" class="course-quiz" aria-label="选择题自测">
+  <section
+    v-if="questions.length"
+    class="course-quiz"
+    :class="{ 'course-quiz-inline': isInline }"
+    :aria-label="isInline ? '本节即时复习' : '选择题自测'"
+  >
     <div class="course-quiz-summary" aria-live="polite">
       <strong>答题进度</strong>
       <span>已答 {{ answeredCount }}/{{ questions.length }}</span>
       <span>正确 {{ correctCount }}</span>
       <span>得分 {{ earnedPoints }}/{{ totalPoints }}</span>
     </div>
+    <button
+      v-if="isInline"
+      type="button"
+      class="course-review-toggle"
+      :aria-expanded="expanded"
+      @click="expanded = !expanded"
+    >
+      <GraduationCap aria-hidden="true" :size="18" />
+      <span>{{ expanded ? "收起即时复习" : "立即复习" }}</span>
+      <span class="course-review-toggle-count">{{ reviewQuestions.length }} 道</span>
+    </button>
+
+    <div v-if="expanded || !isInline">
     <article
       v-for="(question, index) in questions"
       :id="`quiz-q${index + 1}`"
@@ -110,27 +162,40 @@ function retry(questionId: string) {
       <fieldset
         class="course-quiz-options"
         :class="submitted[question.id] ? 'is-submitted' : ''"
-        :disabled="submitted[question.id]"
       >
         <legend class="course-sr-only">请选择一个答案</legend>
-        <label
+        <div
           v-for="(option, optionIndex) in question.options"
           :key="optionIndex"
-          class="course-quiz-option"
-          :class="{
-            'is-answer': isCorrectPick(question, optionIndex),
-            'is-wrong-pick': isWrongPick(question, optionIndex),
-          }"
+          class="course-quiz-option-row"
         >
-          <input
-            v-model="selections[question.id]"
-            type="radio"
-            :name="question.id"
-            :value="optionIndex"
-          />
-          <span class="course-quiz-option-mark" aria-hidden="true">{{ optionLabel(optionIndex) }}</span>
-          <span class="course-quiz-option-text course-quiz-rich" v-html="question.optionHtml[optionIndex]" />
-        </label>
+          <label
+            class="course-quiz-option"
+            :class="{
+              'is-answer': isCorrectPick(question, optionIndex),
+              'is-wrong-pick': isWrongPick(question, optionIndex),
+            }"
+          >
+            <input
+              v-model="selections[question.id]"
+              type="radio"
+              :name="question.id"
+              :value="optionIndex"
+              :disabled="submitted[question.id]"
+            />
+            <span class="course-quiz-option-mark" aria-hidden="true">{{ optionLabel(optionIndex) }}</span>
+            <span class="course-quiz-option-text course-quiz-rich" v-html="question.optionHtml[optionIndex]" />
+          </label>
+          <button
+            v-if="isInline && submitted[question.id] && question.optionTargets?.[optionIndex]"
+            type="button"
+            class="course-quiz-option-ref"
+            :aria-label="`回看原文（选项 ${optionLabel(optionIndex)}）`"
+            @click="jumpTo(question.optionTargets?.[optionIndex])"
+          >
+            回看原文
+          </button>
+        </div>
       </fieldset>
 
       <div class="course-quiz-actions">
@@ -179,7 +244,10 @@ function retry(questionId: string) {
         </li>
       </ol>
     </details>
+    </div>
   </section>
 
-  <p v-else class="course-quiz-empty">本 Lab 暂未配置自测题目。</p>
+  <p v-else class="course-quiz-empty">
+    {{ isInline ? "本节暂未配置即时复习题。" : "本 Lab 暂未配置自测题目。" }}
+  </p>
 </template>
