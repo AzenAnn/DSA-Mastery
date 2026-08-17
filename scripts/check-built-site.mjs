@@ -156,10 +156,13 @@ if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.include
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 1) {
-  throw new Error(`Preface must contain exactly one lesson page, found ${prefacePages.length}`);
+if (prefacePages.length !== 2) {
+  throw new Error(`Preface must contain the theory and Lab author guides, found ${prefacePages.length} pages`);
 }
-const prefaceHtml = await readFile(path.join(artifactRoot, prefacePages[0]), "utf8");
+const prefaceHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
+  "utf8",
+);
 for (const kind of [
   "definition",
   "theorem",
@@ -199,6 +202,25 @@ for (const required of [
 }
 if (prefaceHtml.includes("第 preface 章") || prefaceHtml.includes("::: definition")) {
   throw new Error("Preface leaked an internal chapter id or unparsed theory marker");
+}
+
+const labAuthorGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "01-lab-authoring-guide", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "Lab 更新与测试指南",
+  "先选对 Lab 类型",
+  "make run",
+  "Golden Project",
+  "最终 Definition of Done",
+]) {
+  if (!labAuthorGuideHtml.includes(required)) {
+    throw new Error(`Rendered Lab author guide is missing: ${required}`);
+  }
+}
+if (labAuthorGuideHtml.includes("@include") || labAuthorGuideHtml.includes("第 preface 章")) {
+  throw new Error("Lab author guide was not expanded or leaked the internal preface id");
 }
 
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
@@ -243,7 +265,7 @@ if (base !== "/") {
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "第 0 章 绪论", "Lab 01-02：实现并验证单链表"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "第 0 章 绪论", "Lab 01-02：实现并验证单链表"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

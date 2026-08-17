@@ -14,7 +14,7 @@ const requiredFields = [
   "status",
 ];
 const validStatuses = new Set(["draft", "review", "published"]);
-const prefaceLessonPath = "content/chapter-preface/00-theory-environments.md";
+const prefaceLessonPattern = /^content\/chapter-preface\/\d{2}-[a-z0-9-]+\.md$/;
 
 async function findFiles(root, predicate) {
   const results = [];
@@ -54,10 +54,10 @@ function assertFileContract(file, kind, parsed, seenOrder) {
   if (!/^\d+$/.test(parsed.data.order)) {
     throw new Error(`${relativePath}: order 必须是非负整数`);
   }
-  const isPrefaceLesson = kind === "lesson" && relativePath === prefaceLessonPath;
+  const isPrefaceLesson = kind === "lesson" && prefaceLessonPattern.test(relativePath);
   if (parsed.data.chapter === "preface") {
-    if (!isPrefaceLesson || parsed.data.order !== "0" || parsed.data.chapterTitle !== "理论环境展示") {
-      throw new Error(`${relativePath}: preface 仅允许用于唯一的前言理论环境展示页`);
+    if (!isPrefaceLesson || parsed.data.chapterTitle !== "课程作者指南") {
+      throw new Error(`${relativePath}: preface 仅允许用于 chapter-preface 下的课程作者指南`);
     }
   } else if (!/^\d+$/.test(parsed.data.chapter)) {
     throw new Error(`${relativePath}: chapter 必须是非负整数或受支持的 preface`);

@@ -83,10 +83,13 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     id: "chapter-preface",
     number: "preface",
     label: "前言",
-    title: "理论环境展示",
-    description: "在一篇真实文档中预览定义、定理、证明、行内语义与代码工作台。",
-    url: "/learn/chapter-preface/00-theory-environments/",
-    lessonSources: ["content/chapter-preface/00-theory-environments.md"],
+    title: "课程作者指南",
+    description: "查看理论文档语法，以及 Quiz、Program、Project 三类 Lab 的更新与测试流程。",
+    url: "/learn/outline/chapter-preface/",
+    lessonSources: [
+      "content/chapter-preface/00-theory-environments.md",
+      "content/chapter-preface/01-lab-authoring-guide.md",
+    ],
   },
   {
     id: "chapter-00-memory-foundations",
@@ -393,7 +396,7 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     chapterLabel: chapterLabel(chapter),
     chapterTitle: text(
       parsed.data.chapterTitle,
-      chapter === "preface" ? "理论环境展示" : chapter === 0 ? "绪论" : `第 ${chapter} 章`,
+      chapter === "preface" ? "课程作者指南" : chapter === 0 ? "绪论" : `第 ${chapter} 章`,
     ),
     order: number(parsed.data.order),
     updated: text(parsed.data.updated, "未标注"),
@@ -471,7 +474,14 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
 
 export function createCourseSidebar(index: CourseIndex): DefaultTheme.SidebarItem[] {
   const chapterItem = (chapter: CurriculumChapter): DefaultTheme.SidebarItem => {
-    if (chapter.number === "preface") return { text: chapter.label, link: chapter.url };
+    if (chapter.number === "preface") {
+      return {
+        text: chapter.label,
+        link: chapter.url,
+        collapsed: false,
+        items: chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
+      };
+    }
     return {
       text: `${chapter.label} ${chapter.title}`,
       link: chapter.url,

@@ -154,10 +154,18 @@ for (const relative of [
   "CONTRIBUTING.md",
   "docs/UPDATE_WORKFLOW.md",
   ".trellis/spec/content/index.md",
-  "content/chapter-preface/00-theory-environments.md",
 ]) {
   const source = await readFile(path.join(projectRoot, relative), "utf8");
   if (!source.includes("LAB_AUTHORING_GUIDE.md")) throw new Error(`${relative} 缺少 Lab 作者指南入口`);
+}
+
+const courseGuide = await readFile(path.join(projectRoot, "content/chapter-preface/01-lab-authoring-guide.md"), "utf8");
+if (!courseGuide.includes("../../docs/LAB_AUTHORING_GUIDE.md")) {
+  throw new Error("前言章节的 Lab 作者指南页面没有复用 docs/LAB_AUTHORING_GUIDE.md");
+}
+const prefaceShowcase = await readFile(path.join(projectRoot, "content/chapter-preface/00-theory-environments.md"), "utf8");
+if (!prefaceShowcase.includes("./01-lab-authoring-guide.md")) {
+  throw new Error("理论环境展示页缺少站内 Lab 更新与测试指南入口");
 }
 
 console.log(`Lab 文档检查通过：${jsonBlocks.length} 个语义化 JSON 示例、${commandLines.length} 条命令、${goldenLabs.length} 个 Golden Lab、${commands.length} 个 CLI 入口。`);
