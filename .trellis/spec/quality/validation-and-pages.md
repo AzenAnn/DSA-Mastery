@@ -16,6 +16,15 @@ pnpm install --frozen-lockfile
 pnpm test
 ```
 
+Lab 专项稳定入口：
+
+```powershell
+pnpm run test:lab-tools
+pnpm run test:lab-docs
+pnpm lab:verify -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:verify -- labs/chapter-04/lab-04-02-huffman-coding
+```
+
 `pnpm test` 当前依次执行 `validate`（内容 + `vue-tsc` + lint）、`test:discovery`、最终 `build` 与 `check:site`。涉及 Pages 时，在设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 与 `SITE_URL` 后重新 build/check，再运行 `pnpm run test:pages`。
 
 Pages 构建输入/输出：
@@ -40,6 +49,9 @@ actions/configure-pages base_path
 - 真实点击覆盖：首页 CTA → 教材、顶栏 Labs → Labs 索引、Labs 索引 → Lab。
 - 浏览器收集 `pageerror`、`console.error`、request failure 和同源 4xx/5xx；任何非明确允许项都失败。
 - 理论 Markdown、行内高亮或 fence renderer 改动必须同时经过 discovery 解析、静态产物和 Pages 浏览器三层验证；不能只凭组件截图通过。
+- `pnpm test` 必须包含 Lab Schema/路径/比较器/进程限制单测和作者指南示例检查；内容 validator 遍历所有已存在的 `lab.json`，README-only 旧 Lab 保持兼容。
+- C++ CI 与 Pages deploy job 隔离：Ubuntu 使用 GCC/Clang，Windows 使用 MSVC；执行代码的 job 只有 `contents: read`，不接收 Pages 写权限或部署秘密。
+- Golden Program/Project 的 `verify` 同时断言 reference 自动满分、starter 非满分和 oracle/权重稳定；Project manual 分始终显示 pending。
 
 ## 4. Validation & Error Matrix
 
@@ -57,6 +69,8 @@ actions/configure-pages base_path
 | 交互题库 JSON 损坏却被 loader 静默跳过 | 发布阻塞；validator 与构建都必须报错 |
 | 章节实际 Lab 集合与“相关 Labs”侧栏不完整 | discovery/Pages 发布阻塞 |
 | 理论标题未转义、`:::` 泄漏、搜索丢失正文或代码组文件名重复 | 发布阻塞 |
+| Lab tool 单测、Golden verify 或学生包自包含检查失败 | Lab/工具 PR 阻塞 |
+| 外部 PR 的 C++ job 获得写 token/秘密，或把评分器宣称为沙箱 | 安全设计失败 |
 | `==` 误解析行内代码、fenced code 或 MathJax | 发布阻塞 |
 
 ## 5. Good / Base / Bad Cases
@@ -75,6 +89,8 @@ actions/configure-pages base_path
 - 理论文档：11 种容器、默认/自定义/恶意标题、嵌套 Markdown、搜索内容、mark 边界、独立文件名、代码组去重与 Shiki highlight/focus/diff/warning/error。
 - 理论视觉：浅暗主题正文至少 4.5:1、语义边栏/键盘焦点至少 3:1，390/1440px 根页面无横向溢出；复制与 code-group tabs 必须以键盘和点击保持可用。
 - 交互题库：内容 validator 检查 schema、唯一挂载点与无静态重复；Pages 浏览器真实选择并提交，检查反馈、题解、重试、题量和每题四个选项。
+- Lab 工具：未知版本、越界/空格路径、分值/依赖/环、薄 Makefile、exact/tokens/float、CRLF、全部 verdict、timeout/output cap 和 JSON report。
+- C++ Golden：Program 与 Project 分别在 GCC/Clang/MSVC 上 verify；student pack 排除 solution/cache/binary 并脱离仓库 validate/run。
 - 视觉：对照 `docs/assets/migration-baseline/` 的桌面/移动、浅/暗证据。
 
 ## 7. Wrong vs Correct
@@ -91,3 +107,14 @@ PR 也执行 deploy，且没有最终产物的点击测试。
 ### Correct
 
 build job 在 PR/push 均运行全部门禁并上传 `dist/pages`；deploy job 依赖 build，且显式排除 `pull_request`。
+
+Lab CI 的错误与正确边界：
+
+```yaml
+# Wrong: 执行 PR 代码的 job 拥有写权限
+permissions: write-all
+
+# Correct
+permissions:
+  contents: read
+```

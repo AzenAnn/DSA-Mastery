@@ -44,6 +44,8 @@ pnpm test
 
 `pnpm test` 会串行执行内容校验、Vue/TypeScript 检查、ESLint、临时内容自动发现、VitePress 生产构建和最终产物审计。`validate:content` 会检查必填字段、章节顺序和 Markdown 相对 `.md` 链接。涉及 Pages base、导航或主题时，还需按 [迁移与回滚说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)运行 `pnpm run test:pages`。
 
+做 C++ Lab 时，Windows、Linux 与 macOS 的首选入口是进入题目目录后运行 `make run`；Windows 未安装 GNU Make 时，使用 `pnpm lab:run -- <lab-path>`。环境、三类 Lab 结构、判题器、测试数据和 Review 的完整约定见 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md)。
+
 ## 内容如何自动更新
 
 教材正文位于 `content/chapter-*/`。网站会扫描这些目录中的 `.md` 文件，并依据 frontmatter 中的 `chapter` 与 `order` 自动排序；URL 由目录和文件名推导，因此新增页面后不需要手工注册路由或修改导航。
@@ -75,7 +77,7 @@ duration: "45～60 分钟"
 
 正文之间可以直接使用 `./01-page.md` 或跨目录相对 `.md` 链接：内容校验先检查源文件存在，VitePress 构建再改写为 Pages-aware 课程 URL。不要在正文中硬编码 `/DSA-Mastery/`。
 
-保存文件后，开发模式会更新页面；正式合并前运行测试即可验证站点。完整步骤、命名规则与检查清单见 [更新工作流](docs/UPDATE_WORKFLOW.md)。
+保存文件后，开发模式会更新页面；正式合并前运行测试即可验证站点。教材协作见 [更新工作流](docs/UPDATE_WORKFLOW.md)，Quiz、Program、Project 的机器接口与完整模板见 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md)。
 
 通过 Review 的改动合并到 `main` 后，GitHub Actions 会自动完成内容检查、网站测试、静态构建与 GitHub Pages 发布。维护者无需提交 `dist/` 等生成目录；发布状态可在仓库的 **Actions** 页面查看。
 
@@ -98,12 +100,16 @@ dsa-mastery/
 │  └─ chapter-01/
 ├─ public/                      # 网站静态资源
 ├─ scripts/                     # 内容、自动发现与静态产物检查
+├─ tools/lab/                   # 统一 Lab CLI、判题器与共享 Make 规则
+├─ schemas/                     # Lab、Quiz、Cases、Task 的 v1 Schema
 ├─ tests/                       # Pages 最终产物浏览器测试
 ├─ .trellis/                    # 团队任务、规范与协作工作流
 ├─ .agents/、.codex/            # Trellis 提供的 Agent/Codex 集成
 ├─ docs/
 │  ├─ PROJECT_BLUEPRINT.md      # 项目定位、架构、路线图与风险
 │  ├─ UPDATE_WORKFLOW.md        # 日常新增章节、Lab 与 Review 流程
+│  ├─ LAB_AUTHORING_GUIDE.md    # 三类 Lab 的创建、运行、评分与迁移手册
+│  ├─ LAB_MIGRATION_TRACKER.md  # README-only Lab 的渐进迁移清单
 │  ├─ TRELLIS_ONBOARDING.md     # 团队任务与规范入门
 │  ├─ VITEPRESS_MIGRATION.md    # 迁移结果、已知风险与回滚
 │  └─ CLEANUP_REPORT.md         # 旧栈删除证据与恢复边界
@@ -115,6 +121,7 @@ dsa-mastery/
 - 想读教材：访问[在线课程网站](https://azenann.github.io/DSA-Mastery/)，或进入 `content/` 阅读 Markdown。
 - 想做实验：进入 `labs/`，按 Lab 的目标、步骤和验收清单完成。
 - 想参与更新：先读 [CONTRIBUTING.md](CONTRIBUTING.md)、[更新工作流](docs/UPDATE_WORKFLOW.md) 和 [Trellis 协作入门](docs/TRELLIS_ONBOARDING.md)。
+- 想新增或迁移 Lab：按 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md) 使用统一 Schema、脚手架、Make 与评分工作流。
 - 想理解长期规划：阅读 [项目蓝图](docs/PROJECT_BLUEPRINT.md)。
 - 想了解站点架构、Pages 验证或回滚：阅读 [VitePress 迁移说明](docs/VITEPRESS_MIGRATION.md)。
 
@@ -127,7 +134,7 @@ content/chapter-*/*.md ─────► 教程网站
      └─ 未来：统一导出流程 ──────► PDF / 全书归档
 
 labs/**/README.md ──────────► Lab 页面与实验入口
-labs 中的源码/测试（未来） ─► 可运行结果与质量验证
+labs 中的 manifest/源码/测试 ─► 统一 CLI、Make、评分与质量验证
 ```
 
 原则很简单：
