@@ -91,3 +91,28 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 5: Unified Lab update workflow
+
+**Date**: 2026-08-17
+**Task**: Unified Lab update workflow
+**Branch**: `codex/unified-lab-update-workflow`
+
+### Summary
+
+Implemented and independently verified the unified Quiz, Program, and Project Lab authoring, judging, Make, packaging, CI, migration, and documentation workflow.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `6bf9df6` | (see git log) |
+| `56422aa` | (see git log) |
+| `6ae4ab0` | (see git log) |
+| `c975836` | (see git log) |
+| `732c398` | (see git log) |
+
+### Status
+
+[OK] **Completed**
