@@ -26,6 +26,16 @@ if (!quizStatus[labDir.value]) {
 const selections = ref<Record<string, number | null>>({});
 const submitted = ref<Record<string, boolean>>({});
 
+const answeredCount = computed(() => questions.value.filter((question) => submitted.value[question.id]).length);
+const correctCount = computed(() => questions.value.filter(
+  (question) => submitted.value[question.id] && selections.value[question.id] === question.answer,
+).length);
+const totalPoints = computed(() => questions.value.reduce((total, question) => total + question.points, 0));
+const earnedPoints = computed(() => questions.value.reduce(
+  (total, question) => total + (submitted.value[question.id] && selections.value[question.id] === question.answer ? question.points : 0),
+  0,
+));
+
 const isSelected = (question: QuizQuestion, optionIndex: number) =>
   selections.value[question.id] === optionIndex;
 const isCorrectPick = (question: QuizQuestion, optionIndex: number) =>
@@ -56,6 +66,12 @@ function retry(questionId: string) {
 
 <template>
   <section v-if="questions.length" class="course-quiz" aria-label="选择题自测">
+    <div class="course-quiz-summary" aria-live="polite">
+      <strong>答题进度</strong>
+      <span>已答 {{ answeredCount }}/{{ questions.length }}</span>
+      <span>正确 {{ correctCount }}</span>
+      <span>得分 {{ earnedPoints }}/{{ totalPoints }}</span>
+    </div>
     <article
       v-for="(question, index) in questions"
       :id="`quiz-q${index + 1}`"
@@ -63,7 +79,7 @@ function retry(questionId: string) {
       class="course-quiz-question"
     >
       <header class="course-quiz-heading">
-        <span class="course-quiz-number">第 {{ index + 1 }} 题</span>
+        <span class="course-quiz-number">第 {{ index + 1 }} 题 · {{ question.points }} 分</span>
         <div class="course-quiz-heading-content">
           <div
             v-if="question.source || question.difficulty || question.topics?.length || question.targetId"
@@ -85,6 +101,11 @@ function retry(questionId: string) {
         </div>
         <div class="course-quiz-code-body" v-html="question.codeHtml" />
       </div>
+
+      <details v-if="question.hintHtml && !submitted[question.id]" class="course-quiz-hint">
+        <summary>查看提示</summary>
+        <div class="course-quiz-rich" v-html="question.hintHtml" />
+      </details>
 
       <fieldset
         class="course-quiz-options"
@@ -150,6 +171,14 @@ function retry(questionId: string) {
         </div>
       </div>
     </article>
+    <details class="course-quiz-answer-overview">
+      <summary>答案总览（建议完成全部题目后查看）</summary>
+      <ol>
+        <li v-for="(question, index) in questions" :key="question.id">
+          第 {{ index + 1 }} 题：<strong>{{ optionLabel(question.answer) }}</strong>
+        </li>
+      </ol>
+    </details>
   </section>
 
   <p v-else class="course-quiz-empty">本 Lab 暂未配置自测题目。</p>
