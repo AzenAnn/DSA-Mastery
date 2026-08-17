@@ -274,11 +274,12 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   expect(failures).toEqual([]);
 });
 
-test("preface is the first author-guide chapter and exposes both complete guides", async ({ page }) => {
+test("preface is the first author-guide chapter and exposes all complete guides", async ({ page }) => {
   const failures = monitorPage(page);
   const outlineRoute = `${baseUrl}/learn/outline/chapter-preface/`;
   const showcaseRoute = `${baseUrl}/learn/chapter-preface/00-theory-environments/`;
   const labGuideRoute = `${baseUrl}/learn/chapter-preface/01-lab-authoring-guide/`;
+  const windowsStudentGuideRoute = `${baseUrl}/learn/chapter-preface/02-windows-student-setup/`;
 
   await page.goto(`${baseUrl}/learn/`);
   const foundationChapters = page.locator(".course-curriculum-chapters > a");
@@ -291,7 +292,17 @@ test("preface is the first author-guide chapter and exposes both complete guides
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("课程作者指南");
   const resources = page.locator(".course-curriculum-resource-list");
   await expect(resources).toContainText("前言 · 理论环境展示");
-  const labGuideEntry = resources.getByRole("link", { name: /Lab 更新与测试指南/ });
+  const windowsStudentGuideEntry = resources.getByRole("link", { name: /Windows 学生实验环境安装指南/ });
+  await expect(windowsStudentGuideEntry).toBeVisible();
+  await windowsStudentGuideEntry.click();
+  await expect(page).toHaveURL(windowsStudentGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Windows 学生实验环境安装指南");
+  await expect(page.locator(".vp-doc")).toContainText("Visual Studio C++ Build Tools");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "Windows 学生实验环境安装指南", exact: true })).toBeVisible();
+
+  await page.goto(outlineRoute);
+  const outlineResources = page.locator(".course-curriculum-resource-list");
+  const labGuideEntry = outlineResources.getByRole("link", { name: /Lab 更新与测试指南/ });
   await expect(labGuideEntry).toBeVisible();
   await labGuideEntry.click();
 
