@@ -363,6 +363,9 @@ test("CLI JSON mode is versioned, color-free, and uses exit 2 for unknown comman
   assert.equal(valid.code, 0);
   assert.equal(JSON.parse(valid.stdout).reportVersion, 1);
   assert.equal(valid.stdout.includes(String.fromCharCode(27)), false);
+  const forwarded = await runProcess(process.execPath, ["tools/lab/cli.mjs", "validate", "--", root, "--json", "--no-color"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
+  assert.equal(forwarded.code, 0);
+  assert.equal(JSON.parse(forwarded.stdout).lab.path, root);
   const unknown = await runProcess(process.execPath, ["tools/lab/cli.mjs", "unknown", "--json"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
   assert.equal(unknown.code, 2);
   assert.equal(JSON.parse(unknown.stdout).error.code, "COMMAND_UNKNOWN");

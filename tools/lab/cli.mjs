@@ -10,7 +10,8 @@ import { buildProject, formatProject, interactiveProjectTask, refreshProjectExpe
 import { createLab } from "./scaffold.mjs";
 
 function parseArgs(argv) {
-  const [command, ...rest] = argv;
+  const [command, ...forwarded] = argv;
+  const rest = forwarded[0] === "--" ? forwarded.slice(1) : forwarded;
   const options = {};
   const positional = [];
   for (let index = 0; index < rest.length; index += 1) {

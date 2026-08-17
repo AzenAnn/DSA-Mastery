@@ -134,7 +134,13 @@ jobs:
         if: runner.os == 'Windows'
         shell: cmd
         run: |
-          call "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
+          for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VS_INSTALL=%%i"
+          if not defined VS_INSTALL (
+            echo No Visual Studio C++ toolchain was found by vswhere.
+            exit /b 2
+          )
+          call "%VS_INSTALL%\Common7\Tools\VsDevCmd.bat" -arch=x64
+          if errorlevel 1 exit /b %errorlevel%
           set CXX=cl
           pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
           pnpm run test:lab-golden
