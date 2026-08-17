@@ -1,0 +1,32 @@
+{
+  "id": "search-chapter-content-and-quiz",
+  "name": "search-chapter-content-and-quiz",
+  "title": "完成查找章节理论内容与选择题",
+  "description": "完善第 6 章查找理论框架与五篇正文，并新增 24 道历年 408 理论选择题交互 Lab",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "content/chapter-06-search and labs/chapter-06",
+  "package": null,
+  "priority": "P2",
+  "creator": "RichardYi-SYSU-Mac",
+  "assignee": "RichardYi-SYSU-Mac",
+  "createdAt": "2026-08-15",
+  "completedAt": "2026-08-17",
+  "branch": "codex/search",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "content/chapter-06-search",
+    "labs/chapter-06",
+    ".trellis/spec/content/frontmatter-and-routing.md",
+    ".trellis/spec/content/labs.md",
+    ".trellis/spec/quality/validation-and-pages.md"
+  ],
+  "notes": "Supersedes the narrower unstarted chapter-06 search content scope for this branch; keeps content draft pending independent knowledge review.",
+  "meta": {}
+}
