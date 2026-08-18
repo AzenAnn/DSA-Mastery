@@ -156,10 +156,13 @@ if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.include
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 1) {
-  throw new Error(`Preface must contain exactly one lesson page, found ${prefacePages.length}`);
+if (prefacePages.length !== 3) {
+  throw new Error(`Preface must contain the theory, Lab author, and Windows student guides, found ${prefacePages.length} pages`);
 }
-const prefaceHtml = await readFile(path.join(artifactRoot, prefacePages[0]), "utf8");
+const prefaceHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
+  "utf8",
+);
 for (const kind of [
   "definition",
   "theorem",
@@ -199,6 +202,43 @@ for (const required of [
 }
 if (prefaceHtml.includes("第 preface 章") || prefaceHtml.includes("::: definition")) {
   throw new Error("Preface leaked an internal chapter id or unparsed theory marker");
+}
+
+const labAuthorGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "01-lab-authoring-guide", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "Lab 更新与测试指南",
+  "先选对 Lab 类型",
+  "make run",
+  "Golden Project",
+  "最终 Definition of Done",
+]) {
+  if (!labAuthorGuideHtml.includes(required)) {
+    throw new Error(`Rendered Lab author guide is missing: ${required}`);
+  }
+}
+if (labAuthorGuideHtml.includes("@include") || labAuthorGuideHtml.includes("第 preface 章")) {
+  throw new Error("Lab author guide was not expanded or leaked the internal preface id");
+}
+
+const windowsStudentGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "02-windows-student-setup", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "Windows 学生实验环境安装指南",
+  "Git for Windows",
+  "Visual Studio C++ Build Tools",
+  "第一个 Program Lab",
+]) {
+  if (!windowsStudentGuideHtml.includes(required)) {
+    throw new Error(`Rendered Windows student guide is missing: ${required}`);
+  }
+}
+if (windowsStudentGuideHtml.includes("@include") || windowsStudentGuideHtml.includes("第 preface 章")) {
+  throw new Error("Windows student guide was not expanded or leaked the internal preface id");
 }
 
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
@@ -243,7 +283,7 @@ if (base !== "/") {
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "第 0 章 绪论", "Lab 01-02：实现并验证单链表"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "第 0 章 绪论", "Lab 01-02：实现并验证单链表"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

@@ -216,6 +216,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-preface/00-theory-environments/"]').first(),
   ).toBeVisible();
+  await input.fill("Lab 更新与测试指南");
+  await expect(
+    results.locator('a[href*="/learn/chapter-preface/01-lab-authoring-guide/"]').first(),
+  ).toBeVisible();
   await input.fill("实现并验证单链表");
   const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-linked-list/"]').first();
   await expect(labResult).toBeVisible();
@@ -270,21 +274,48 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   expect(failures).toEqual([]);
 });
 
-test("preface is the first independent chapter and showcases every theory environment", async ({ page }) => {
+test("preface is the first author-guide chapter and exposes all complete guides", async ({ page }) => {
   const failures = monitorPage(page);
-  const route = `${baseUrl}/learn/chapter-preface/00-theory-environments/`;
+  const outlineRoute = `${baseUrl}/learn/outline/chapter-preface/`;
+  const showcaseRoute = `${baseUrl}/learn/chapter-preface/00-theory-environments/`;
+  const labGuideRoute = `${baseUrl}/learn/chapter-preface/01-lab-authoring-guide/`;
+  const windowsStudentGuideRoute = `${baseUrl}/learn/chapter-preface/02-windows-student-setup/`;
 
   await page.goto(`${baseUrl}/learn/`);
   const foundationChapters = page.locator(".course-curriculum-chapters > a");
   await expect(foundationChapters.first()).toContainText("前言");
-  await expect(foundationChapters.first()).toContainText("理论环境展示");
+  await expect(foundationChapters.first()).toContainText("课程作者指南");
   await expect(foundationChapters.nth(1)).toContainText("Ch.0");
   await foundationChapters.first().click();
 
-  await expect(page).toHaveURL(route);
+  await expect(page).toHaveURL(outlineRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("课程作者指南");
+  const resources = page.locator(".course-curriculum-resource-list");
+  await expect(resources).toContainText("前言 · 理论环境展示");
+  const windowsStudentGuideEntry = resources.getByRole("link", { name: /Windows 学生实验环境安装指南/ });
+  await expect(windowsStudentGuideEntry).toBeVisible();
+  await windowsStudentGuideEntry.click();
+  await expect(page).toHaveURL(windowsStudentGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Windows 学生实验环境安装指南");
+  await expect(page.locator(".vp-doc")).toContainText("Visual Studio C++ Build Tools");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "Windows 学生实验环境安装指南", exact: true })).toBeVisible();
+
+  await page.goto(outlineRoute);
+  const outlineResources = page.locator(".course-curriculum-resource-list");
+  const labGuideEntry = outlineResources.getByRole("link", { name: /Lab 更新与测试指南/ });
+  await expect(labGuideEntry).toBeVisible();
+  await labGuideEntry.click();
+
+  await expect(page).toHaveURL(labGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 更新与测试指南");
+  await expect(page.getByRole("heading", { level: 2, name: /先选对 Lab 类型/ })).toBeVisible();
+  await expect(page.locator(".vp-doc")).toContainText("Golden Project");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "Lab 更新与测试指南", exact: true })).toBeVisible();
+
+  await page.goto(showcaseRoute);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("前言 · 理论环境展示");
   await expect(page.locator(".course-breadcrumbs").getByRole("link", { name: "前言" })).toBeVisible();
-  await expect(page.locator(".course-eyebrow")).toHaveText("前言 · 理论环境展示");
+  await expect(page.locator(".course-eyebrow")).toHaveText("前言 · 课程作者指南");
   await expect(page.locator("body")).not.toContainText("第 preface 章");
   await expect(page.locator(".VPSidebar").getByRole("link", { name: "前言", exact: true })).toBeVisible();
 
@@ -331,7 +362,7 @@ test("preface is the first independent chapter and showcases every theory enviro
 
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto(route);
+    await page.goto(showcaseRoute);
     const overflow = await page.evaluate(() =>
       globalThis.document.documentElement.scrollWidth - globalThis.window.innerWidth,
     );
