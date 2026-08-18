@@ -38,6 +38,9 @@ export interface CurriculumChapter {
   title: string;
   description: string;
   url: string;
+  learningObjectives?: string[];
+  focusTitle?: string;
+  focusAreas?: string[];
   lessons: CourseDocument[];
   labs: CourseDocument[];
 }
@@ -118,8 +121,19 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     id: "chapter-02-stack-queue",
     number: "2",
     title: "栈与队列",
-    description: "掌握受限线性结构及其在表达式、递归和层序处理中的应用。",
+    description: "从 LIFO/FIFO 的结构语义出发，掌握栈、循环队列及其在表达式、回溯与逐层扩散中的应用。",
     url: "/learn/outline/chapter-02-stack-queue/",
+    learningObjectives: [
+      "区分栈的后进先出与队列的先进先出语义，并据此选择合适结构。",
+      "实现顺序栈、链栈、循环队列与链队列，处理空、满和扩容边界。",
+      "使用栈与队列完成表达式、单调栈、逐层扩散及综合场景建模。",
+    ],
+    focusTitle: "学习路径",
+    focusAreas: [
+      "2.1 栈：ADT、顺序/链式实现、边界与括号匹配",
+      "2.2 队列：FIFO、循环队列、链队列与边界测试",
+      "2.3 应用：表达式、单调栈、逐层扩散与三个综合 Lab",
+    ],
     lessonSources: [
       "content/chapter-02-stack-queue/00-overview.md",
       "content/chapter-02-stack-queue/01-stack.md",

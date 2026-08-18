@@ -93,7 +93,7 @@ $$
 $$
 
 ::: warning 物理长度不等于有效容量
-物理长度为 `m` 的数组最多保存 `m - 1` 个队列元素。若题目中的 `capacity` 表示“最多可保存的元素数”，底层就需要分配 `capacity + 1` 个槽位。实现前必须先说明参数采用哪一种含义， 不能混用。
+物理长度为 `m` 的数组最多保存 `m - 1` 个队列元素。若题目中的 `capacity` 表示“最多可保存的元素数”，底层就需要分配 `capacity + 1` 个槽位。实现前必须先说明参数采用哪一种含义，不能混用。
 :::
 
 ### 为什么空出一个位置
@@ -225,6 +225,10 @@ private:
 ```cpp:line-numbers [linked-queue.cpp]
 class LinkedQueue {
 public:
+    LinkedQueue() = default;
+    LinkedQueue(const LinkedQueue&) = delete;
+    LinkedQueue& operator=(const LinkedQueue&) = delete;
+
     ~LinkedQueue() {
         int ignored;
         while (dequeue(ignored)) {}
@@ -278,7 +282,7 @@ private:
 };
 ```
 
-这里沿用第 1 章链表中的裸指针写法：`new` 创建节点，`delete` 释放已经出队的节点，析构函数负责在队列销毁前清空剩余节点。
+这里沿用第 1 章链表中的裸指针写法：`new` 创建节点，`delete` 释放已经出队的节点，析构函数负责在队列销毁前清空剩余节点。由于默认复制只会复制指针、导致两个队列重复释放同一批节点，因此示例显式禁用了复制构造和复制赋值。
 
 链队列最重要的边界是空队列与单元素队列：
 

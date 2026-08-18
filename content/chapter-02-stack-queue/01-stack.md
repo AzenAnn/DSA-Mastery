@@ -4,7 +4,7 @@ description: "受限线性表的后进先出语义，以及顺序栈与链栈的
 order: 1
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-16"
+updated: "2026-08-18"
 contributors: ["qzmqzm123"]
 status: "draft"
 ---
@@ -232,7 +232,7 @@ int main() {
 
 - **用例 2：单元素**
   - 操作：`push(42) -> top -> pop -> empty`
-  - 预期：依次得到 `42`、`42`、最终为空
+  - 预期：`top()` 得到 `42`，执行 `pop()` 后 `empty()` 为 `true`
 
 - **用例 3：扩容**
   - 操作：小容量连续 `push`

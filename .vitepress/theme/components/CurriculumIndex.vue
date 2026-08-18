@@ -13,6 +13,37 @@ const allChapters = computed(() => [
 ]);
 const currentChapter = computed(() => allChapters.value.find((chapter) => currentPath.value.endsWith(`/outline/${chapter.id}`)));
 const mode = computed(() => currentChapter.value ? "chapter" : currentPart.value ? "part" : "index");
+const defaultLearningObjectives = [
+  "理解本章核心问题、数据表示与算法之间的联系。",
+  "能够比较主要方案的适用条件与复杂度。",
+  "通过已有文章与 Lab 建立可检查的学习成果。",
+];
+const defaultFocusAreas = [
+  "核心概念与问题模型",
+  "表示、算法与复杂度",
+  "习题、Lab 与边界验证",
+];
+const currentObjectives = computed(() => currentChapter.value?.learningObjectives?.length
+  ? currentChapter.value.learningObjectives
+  : defaultLearningObjectives);
+const currentFocusTitle = computed(() => currentChapter.value?.focusTitle ?? "计划栏目");
+const currentFocusAreas = computed(() => {
+  if (currentChapter.value?.focusAreas?.length) return currentChapter.value.focusAreas;
+  if (currentChapter.value?.number === "0+") {
+    return ["Peak Finding", "Union-Find", "数据结构的选择如何影响算法效率"];
+  }
+  return defaultFocusAreas;
+});
+const currentChapterStatus = computed(() => {
+  const documents = [...(currentChapter.value?.lessons ?? []), ...(currentChapter.value?.labs ?? [])];
+  if (!documents.length || documents.some((document) => document.status === "draft")) {
+    return { key: "draft", label: "draft · 草稿" } as const;
+  }
+  if (documents.some((document) => document.status === "review")) {
+    return { key: "review", label: "review · 复核中" } as const;
+  }
+  return { key: "published", label: "published · 已发布" } as const;
+});
 const groups = computed(() => mode.value === "part" && currentPart.value
   ? [{ id: currentPart.value.id, label: `Part ${currentPart.value.numeral} · ${currentPart.value.title}`, url: currentPart.value.url, chapters: currentPart.value.chapters }]
   : [
@@ -29,7 +60,7 @@ const groups = computed(() => mode.value === "part" && currentPart.value
         <p class="course-curriculum-kicker">Ch.{{ currentChapter.number }}</p>
         <h1>{{ currentChapter.title }}</h1>
         <p>{{ currentChapter.description }}</p>
-        <span class="course-status-badge draft">draft · 内容待完善</span>
+        <span class="course-status-badge" :class="`is-${currentChapterStatus.key}`">{{ currentChapterStatus.label }}</span>
       </template>
       <template v-else-if="mode === 'part' && currentPart">
         <p class="course-curriculum-kicker">Part {{ currentPart.numeral }}</p>
@@ -47,22 +78,13 @@ const groups = computed(() => mode.value === "part" && currentPart.value
         <div>
           <h2>学习目标</h2>
           <ul>
-            <li>理解本章核心问题、数据表示与算法之间的联系。</li>
-            <li>能够比较主要方案的适用条件与复杂度。</li>
-            <li>通过已有文章与 Lab 建立可检查的学习成果。</li>
+            <li v-for="objective in currentObjectives" :key="objective">{{ objective }}</li>
           </ul>
         </div>
         <div>
-          <h2>计划栏目</h2>
-          <ul v-if="currentChapter.number === '0+'">
-            <li>Peak Finding</li>
-            <li>Union-Find</li>
-            <li>数据结构的选择如何影响算法效率</li>
-          </ul>
-          <ul v-else>
-            <li>核心概念与问题模型</li>
-            <li>表示、算法与复杂度</li>
-            <li>习题、Lab 与边界验证</li>
+          <h2>{{ currentFocusTitle }}</h2>
+          <ul>
+            <li v-for="area in currentFocusAreas" :key="area">{{ area }}</li>
           </ul>
         </div>
       </section>
@@ -70,7 +92,7 @@ const groups = computed(() => mode.value === "part" && currentPart.value
         <h2>已有内容入口</h2>
         <div v-if="currentChapter.lessons.length || currentChapter.labs.length" class="course-curriculum-resource-list">
           <a v-for="lesson in currentChapter.lessons" :key="lesson.url" :href="withBase(lesson.url)">
-            <BookOpen aria-hidden="true" :size="18" /><span><strong>{{ lesson.title }}</strong><small>理论文章</small></span><ArrowRight aria-hidden="true" :size="16" />
+            <BookOpen aria-hidden="true" :size="18" /><span><strong>{{ lesson.title }}</strong><small>{{ lesson.order === 0 ? "章节导读" : "理论文章" }}</small></span><ArrowRight aria-hidden="true" :size="16" />
           </a>
           <a v-for="lab in currentChapter.labs" :key="lab.url" :href="withBase(lab.url)" target="_self">
             <FlaskConical aria-hidden="true" :size="18" /><span><strong>{{ lab.title }}</strong><small>相关 Lab</small></span><ArrowRight aria-hidden="true" :size="16" />

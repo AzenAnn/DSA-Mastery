@@ -5,7 +5,7 @@ order: 3
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-18"
-contributors: ["Azen", "Jeff"]
+contributors: ["Jeff"]
 status: "draft"
 ---
 
@@ -104,7 +104,7 @@ int eval_postfix(std::string_view expr) {
 }
 ```
 
-再看中缀转后缀，使用**调度场算法**（shunting-yard，由 Edsger Dijkstra 提出）：操作数直接输出，运算符与栈顶比较优先级。定义优先级 `P`：
+再看中缀转后缀，使用**调度场算法**（shunting-yard，由 Edsger Dijkstra 提出）：操作数直接输出，运算符与栈顶比较优先级。为了聚焦栈操作，下面约定每个操作数都是单个字母或数字，只支持二元 `+`、`-`、`*`、`/`；相邻操作数、一元运算符和空括号都属于非法输入。定义优先级 `P`：
 
 $$
 P(o) = \begin{cases} 2 & o \in \{*, /\},\\ 1 & o \in \{+, -\},\\ 0 & o \text{ 是左括号。} \end{cases}
@@ -130,29 +130,38 @@ int precedence(char op) {
 std::string infix_to_postfix(std::string_view expr) {
     std::stack<char> ops;
     std::string out;
+    bool expect_operand = true;
     for (char ch : expr) {
         if (ch == ' ') continue;
         const auto uch = static_cast<unsigned char>(ch);
         if (std::isalpha(uch) || std::isdigit(uch)) {
-            out += ch;                            // 操作数直接输出
+            if (!expect_operand) throw std::invalid_argument("操作数之间缺少运算符");
+            out += ch;
+            expect_operand = false;
         } else if (ch == '(') {
+            if (!expect_operand) throw std::invalid_argument("左括号前缺少运算符");
             ops.push(ch);
         } else if (ch == ')') {
+            if (expect_operand) throw std::invalid_argument("右括号前缺少操作数");
             while (!ops.empty() && ops.top() != '(') {
                 out += ops.top(); ops.pop();
             }
             if (ops.empty()) throw std::invalid_argument("括号不匹配");
             ops.pop();                            // 弹出 '('
+            expect_operand = false;
         } else if (is_operator(ch)) {
+            if (expect_operand) throw std::invalid_argument("运算符前缺少操作数");
             while (!ops.empty() && ops.top() != '(' &&
                    precedence(ops.top()) >= precedence(ch)) {
                 out += ops.top(); ops.pop();
             }
             ops.push(ch);
+            expect_operand = true;
         } else {
             throw std::invalid_argument("未知字符");
         }
     }
+    if (expect_operand) throw std::invalid_argument("表达式不完整");
     while (!ops.empty()) {
         if (ops.top() == '(') throw std::invalid_argument("括号不匹配");
         out += ops.top(); ops.pop();
@@ -213,9 +222,15 @@ $$
 
 ```cpp:line-numbers [bfs-level.cpp]
 #include <queue>
+#include <stdexcept>
 #include <vector>
 
 int min_steps(int start, int target, int limit) {
+    if (limit <= 0 || start < 0 || start >= limit ||
+        target < 0 || target >= limit) {
+        throw std::invalid_argument("位置必须位于 [0, limit) 内");
+    }
+
     std::queue<int> q;
     std::vector<int> dist(limit, -1);             // dist[x] = 到达 x 的最少步数，-1 表示未访问
     q.push(start);

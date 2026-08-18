@@ -40,13 +40,19 @@ status: "draft"
 1. 先学习[栈](./01-stack.md)，建立"后进先出 + 表尾操作"的模型。
 2. 再学习[队列](./02-queue.md)，重点理解循环队列判空判满的边界约定。
 3. 接着学习[应用](./03-applications.md)，用真实问题检验前两篇的结论。
-4. 最后完成配套 Lab：实现可撤销浏览器与停车场管理，把栈与队列的语义落实为可运行的工程系统。
+4. 最后依次完成可撤销浏览器、超市收银模拟与停车场管理三个 Lab，把栈、队列及二者联动的语义落实为可运行的工程系统。
 
 ## 配套 Labs
 
-- [Lab 02-03：可撤销浏览器——栈的超级大综合](../../labs/chapter-02/lab-02-03-undoable-browser/README.md)
-- [Lab 02-04：超市收银模拟——队列的大综合](../../labs/chapter-02/lab-02-04-supermarket-checkout/README.md)
-- [Lab 02-05：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md)
+| 实践主题 | 对应 Lab | 验收重点 |
+| --- | --- | --- |
+| 栈、导航历史与 Undo/Redo | [Lab 02-03：可撤销浏览器](../../labs/chapter-02/lab-02-03-undoable-browser/README.md) | 用完整页面状态协调后退、前进和页面级命令历史 |
+| FIFO、多队列与离散时间 | [Lab 02-04：超市收银模拟](../../labs/chapter-02/lab-02-04-supermarket-checkout/README.md) | 统一时间口径，验证等待、逗留、忙碌率和队列峰值 |
+| 栈与队列联动 | [Lab 02-05：停车场管理](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md) | 完成倒车、便道补位、中间删除与统计 |
+
+::: info Lab 编号说明
+Lab 02-01 与 Lab 02-02 预留给后续内容，当前可执行的综合实践从 Lab 02-03 开始。
+:::
 
 ## 学习建议
 
