@@ -1,0 +1,50 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-no-rotate",
+    "input": "tests/002-no-rotate.in",
+    "expected": "tests/002-no-rotate.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-single",
+    "input": "tests/003-single.in",
+    "expected": "tests/003-single.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-k-larger",
+    "input": "tests/004-k-larger.in",
+    "expected": "tests/004-k-larger.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-k-zero",
+    "input": "tests/005-k-zero.in",
+    "expected": "tests/005-k-zero.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ]
+  }
+]

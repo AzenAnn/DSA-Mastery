@@ -42,6 +42,7 @@ type ContentEntry = {
 - `DocumentHeader.vue` 与 `DocumentFooterNote.vue` 补充课程元信息和人工复核提示；
 - `course.ts` 只消费 data loader 的可序列化索引。
 - `quiz.data.ts` 在构建期校验并渲染所有 Lab 的 `quiz.json`；`QuizSet.vue` 是唯一选择题交互组件，兼容纯文本与 Markdown 富文本题面、选项和解析。
+- `QuizSet` 的根 Grid 轨道使用 `minmax(0, 1fr)`，题卡作为 Grid item 设置 `min-width: 0`。题面允许代码块、公式和表格横向滚动，但不得用内容的 min-content 宽度撑开整页。
 
 复用优先：
 
@@ -74,6 +75,8 @@ type ContentEntry = {
 - Bad：`Home.vue` 内维护 `const chapters = [...]`，搜索组件另维护 `const items = [...]`。
 - Good：新选择题 Lab 只新增 README 挂载点和 `quiz.json`，既有 QuizSet 自动加载。
 - Bad：为“线性表选择题”复制一个 `LinearListQuiz.vue`，形成第二套提交和反馈逻辑。
+- Good：宽文本树或表格在题卡内部滚动，390px 视口下 `documentElement.scrollWidth <= clientWidth`。
+- Bad：Grid 轨道保留默认 `auto` 最小值，让某一道宽题面把所有题卡和页面整体撑宽。
 
 ## 6. Tests Required
 
@@ -82,7 +85,7 @@ type ContentEntry = {
 - 最终产物 Playwright 覆盖 draft 徽章、中文搜索、教材/Lab 跳转、默认 prev/next 与移动侧栏。
 - 键盘覆盖搜索打开/关闭、焦点、主题切换、移动目录和可见焦点。
 - 生产构建验证 SSR，无 hydration 或控制台错误。
-- Quiz 回归覆盖四选一、禁用未选择提交、正确/错误状态、题解、重试、进度导航和富文本无溢出；原 Lab 00-03 继续通过，证明通用增强向后兼容。
+- Quiz 回归覆盖四选一、禁用未选择提交、正确/错误状态、题解、重试、进度导航和富文本无溢出；至少在 390px 视口断言 `documentElement.scrollWidth <= clientWidth`。原 Lab 00-03 继续通过，证明通用增强向后兼容。
 
 ## 7. Wrong vs Correct
 

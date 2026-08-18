@@ -1,0 +1,41 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 25,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-capacity-one",
+    "input": "tests/002-capacity-one.in",
+    "expected": "tests/002-capacity-one.out",
+    "points": 25,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-update-existing",
+    "input": "tests/003-update-existing.in",
+    "expected": "tests/003-update-existing.out",
+    "points": 25,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-miss-all",
+    "input": "tests/004-miss-all.in",
+    "expected": "tests/004-miss-all.out",
+    "points": 25,
+    "tags": [
+      "boundary"
+    ]
+  }
+]
