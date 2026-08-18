@@ -4,8 +4,8 @@ description: "从栈与队列的特性出发，理解它们为何能匹配不同
 order: 3
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-17"
-contributors: ["Azen"]
+updated: "2026-08-18"
+contributors: ["Azen", "Jeff"]
 status: "draft"
 ---
 
@@ -117,10 +117,14 @@ $$
 #include <string>
 #include <string_view>
 
+bool is_operator(char op) {
+    return op == '+' || op == '-' || op == '*' || op == '/';
+}
+
 int precedence(char op) {
     if (op == '*' || op == '/') return 2;
     if (op == '+' || op == '-') return 1;
-    return 0;                                     // '('
+    throw std::invalid_argument("未知运算符");
 }
 
 std::string infix_to_postfix(std::string_view expr) {
@@ -128,7 +132,8 @@ std::string infix_to_postfix(std::string_view expr) {
     std::string out;
     for (char ch : expr) {
         if (ch == ' ') continue;
-        if (std::isalpha(ch) || std::isdigit(ch)) {
+        const auto uch = static_cast<unsigned char>(ch);
+        if (std::isalpha(uch) || std::isdigit(uch)) {
             out += ch;                            // 操作数直接输出
         } else if (ch == '(') {
             ops.push(ch);
@@ -138,11 +143,14 @@ std::string infix_to_postfix(std::string_view expr) {
             }
             if (ops.empty()) throw std::invalid_argument("括号不匹配");
             ops.pop();                            // 弹出 '('
-        } else {                                  // 运算符
-            while (!ops.empty() && precedence(ops.top()) >= precedence(ch)) {
+        } else if (is_operator(ch)) {
+            while (!ops.empty() && ops.top() != '(' &&
+                   precedence(ops.top()) >= precedence(ch)) {
                 out += ops.top(); ops.pop();
             }
             ops.push(ch);
+        } else {
+            throw std::invalid_argument("未知字符");
         }
     }
     while (!ops.empty()) {
@@ -170,7 +178,7 @@ std::string infix_to_postfix(std::string_view expr) {
 
 问题：给定数组，对每个位置求"右边第一个比它大的元素"。暴力做法对每个位置向右扫描，时间 `O(n^2)`。
 
-**单调栈**维护一个栈内元素严格递减的栈（栈顶最小）。从左到右扫描，当新元素比栈顶大时，栈顶元素的"下一个更大元素"就是当前元素，于是弹栈并记录答案；否则新元素入栈。
+**单调栈**维护一个从栈底到栈顶单调不增的栈（栈顶最小；相等元素可以同时保留）。从左到右扫描，当新元素比栈顶大时，栈顶元素的"下一个更大元素"就是当前元素，于是弹栈并记录答案；否则新元素入栈。
 
 ```cpp:line-numbers [monotonic-stack.cpp]
 #include <stack>
@@ -179,7 +187,7 @@ std::string infix_to_postfix(std::string_view expr) {
 std::vector<int> next_greater(const std::vector<int>& nums) {
     int n = static_cast<int>(nums.size());
     std::vector<int> ans(n, -1);                  // 默认没有下一个更大元素
-    std::stack<int> st;                           // 存下标，栈内对应值单调递减
+    std::stack<int> st;                           // 存下标，对应值从栈底到栈顶单调不增
     for (int i = 0; i < n; ++i) {
         while (!st.empty() && nums[st.top()] < nums[i]) {
             ans[st.top()] = nums[i];              // 栈顶找到了下一个更大元素
@@ -285,7 +293,7 @@ int min_steps(int start, int target, int limit) {
 
 ::: details 查看参考思路
 1. `(a + b) * (c - d)` 转后缀为 `a b + c d - *`；求值：先算 `a+b`、`c-d`，再相乘。
-2. 能。改为维护栈内**递增**（栈顶最小），从左到右扫描时，栈顶小于当前元素则弹出并记录"左边第一个更小"。
+2. 能。从左到右扫描并维护一个从栈底到栈顶严格递增的候选栈。处理当前元素时，先弹出所有大于或等于当前值的元素；此时若栈非空，栈顶就是左边第一个更小的元素，记录答案后再把当前元素入栈。
 3. 入队时标记可防止同一位置被反复入队（`x-1` 与 `x+1` 互指），保证逐层性；出队时才标记会让队列被重复节点撑爆。
 4. 不清空前进栈，后退后再访问新页，前进栈里会残留"旧未来"，导致前进到与当前浏览路径无关的页面。
 5. "后到先处理"是后进先出，用栈；"等待最久先处理"是先进先出，用队列。

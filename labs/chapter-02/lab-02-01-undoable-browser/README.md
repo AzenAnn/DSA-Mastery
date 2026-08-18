@@ -4,8 +4,8 @@ description: "用双栈导航与命令栈撤销重做，实现一个支持前进
 order: 1
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-17"
-contributors: ["Azen"]
+updated: "2026-08-18"
+contributors: ["Azen", "Jeff"]
 status: "draft"
 lab: true
 difficulty: "综合"
@@ -39,15 +39,16 @@ duration: "300～420 分钟"
 
 ## 数据结构与模块总览
 
-整个内核由 **5 个栈** 协作完成，全部是 LIFO 语义：
+整个内核由导航双栈与页面内命令双栈协作完成。导航栈不能只保存 URL，而要保存完整的 `PageState`，这样后退和前进时才能连同页面内容及 Undo/Redo 历史一起恢复：
 
-| 栈                | 作用     | 存什么                               |
-| ---------------- | ------ | --------------------------------- |
-| `back_stack_`    | 后退栈    | 当前页之前访问过的 URL                     |
-| `forward_stack_` | 前进栈    | 从当前页后退出去、还能前进回去的 URL              |
-| `undo_stack_`    | 撤销栈    | 当前页已执行、可撤销的命令                     |
-| `redo_stack_`    | 重做栈    | 当前页已撤销、可重做的命令                     |
-| `tab_archive_`   | 跨页面存档栈 | 离开页面时暂存的 `(url, undo栈, redo栈)` 快照 |
+| 栈 | 作用 | 存什么 |
+| --- | --- | --- |
+| `back_stack_` | 后退栈 | 当前页之前访问过的完整 `PageState` |
+| `forward_stack_` | 前进栈 | 从当前页后退出去、还能前进回去的完整 `PageState` |
+| `current_page_->undo_stack` | 撤销栈 | 当前页已执行、可撤销的命令 |
+| `current_page_->redo_stack` | 重做栈 | 当前页已撤销、可重做的命令 |
+
+`PageState` 是只移动、不复制的页面快照。它至少包含 URL、页面文档以及该页面自己的两个命令栈。命令对象可持有指向 `PageDocument` 的引用；建议用 `std::unique_ptr<PageDocument>` 保持页面状态在移动前后的地址稳定。
 
 ## 任务
 
@@ -67,16 +68,18 @@ public:
 };
 ```
 
-**底层**：`std::stack<std::string> back_stack_, forward_stack_;` 加一个 `std::string current_url_;`
+**底层**：`std::stack<PageState> back_stack_, forward_stack_;` 加一个表示当前页的 `std::optional<PageState> current_page_;`。程序启动时没有当前页，`current()` 返回空字符串。
 
 **行为约束**（这是本模块的精华，务必逐条实现）：
 
-| 操作             | 语义                                                                                                                                             |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `visit(url)`   | 把 `current_url_` 压入 `back_stack_`；**清空 `forward_stack_`**（访问新页后，前进历史作废）；`current_url_ = url`                                                   |
-| `back(k)`      | 连续 k 次：`forward_stack_.push(current_url_)` → `current_url_ = back_stack_.top()` → `back_stack_.pop()`。若某次 `back_stack_` 已空，**停在当前页并提前结束**，不抛异常 |
-| `forward(k)`   | 与 `back(k)` 对称，从 `forward_stack_` 弹                                                                                                            |
-| 首页执行 `back(1)` | `back_stack_` 为空 → 直接返回当前页，什么都不做                                                                                                               |
+| 操作 | 语义 |
+| --- | --- |
+| `visit(url)` | 若已有当前页，先把整个 `current_page_` 移入 `back_stack_`；首次访问不压入空页面。随后**清空 `forward_stack_`**，并创建 URL 为 `url`、文档和命令栈均为空的新页面 |
+| `back(k)` | 连续 k 次：若后退栈非空，把当前 `PageState` 移入 `forward_stack_`，再把 `back_stack_` 栈顶移为当前页；若栈已空则停在当前页并提前结束 |
+| `forward(k)` | 与 `back(k)` 对称，把当前 `PageState` 移入 `back_stack_`，再从 `forward_stack_` 恢复页面 |
+| 初始状态执行 `back(1)` | 后退栈为空，保持“无当前页”状态并返回空字符串，不抛异常 |
+
+> 移动 `PageState` 时必须移动其中的 `std::unique_ptr`，不能复制。每次状态转移应先完成所有可能失败的检查，再修改导航栈。
 
 ### 模块二：页面级 Undo / Redo（必做）
 
@@ -94,8 +97,22 @@ public:
 };
 ```
 
-1. 维护 `std::stack<std::unique_ptr<Command>> undo_stack_, redo_stack_;`
-2. 提供三个 API：
+2. 定义页面状态，让每个页面独立拥有文档与命令历史：
+
+```cpp
+struct PageDocument {
+    std::string text;
+};
+
+struct PageState {
+    std::string url;
+    std::unique_ptr<PageDocument> document;
+    std::stack<std::unique_ptr<Command>> undo_stack;
+    std::stack<std::unique_ptr<Command>> redo_stack;
+};
+```
+
+3. 为当前页面提供三个 API：
 
 ```cpp
 void doCommand(std::unique_ptr<Command> cmd);   // 执行并压入 undo 栈
@@ -107,9 +124,9 @@ bool redo();                                    // 重做一次
 
 | 操作               | 语义                                                                                              |
 | ---------------- | ----------------------------------------------------------------------------------------------- |
-| `doCommand(cmd)` | 若 `cmd` 不满足业务前置条件（见模块三）→ 抛异常，不执行、不压栈；否则执行 `execute()`，成功后压入 `undo_stack_`，并**清空 `redo_stack_`** |
-| `undo()`         | `undo_stack_` 空 → 返回 `false`；否则弹顶调用 `undo()`，再压入 `redo_stack_`，返回 `true`                        |
-| `redo()`         | `redo_stack_` 空 → 返回 `false`；否则弹顶调用 `execute()`，再压入 `undo_stack_`，返回 `true`                     |
+| `doCommand(cmd)` | 没有当前页或 `cmd` 不满足业务前置条件（见模块三）→ 抛异常，不执行、不压栈；否则执行 `execute()`，成功后压入当前页的 `undo_stack`，并**清空当前页的 `redo_stack`** |
+| `undo()` | 当前页不存在或其 `undo_stack` 为空 → 返回 `false`；否则弹顶调用 `undo()`，再压入同一页面的 `redo_stack`，返回 `true` |
+| `redo()` | 当前页不存在或其 `redo_stack` 为空 → 返回 `false`；否则弹顶调用 `execute()`，再压入同一页面的 `undo_stack`，返回 `true` |
 
 ### 模块三：命令样例与业务约束（必做）
 
@@ -162,7 +179,7 @@ BACK 1
 BACK 1
 FORWARD 2
 VISIT https://github.com
-DO INPUT "lab02-04 = done"
+DO INPUT "lab02-01 = done"
 DO SUBMIT
 UNDO
 REDO
@@ -180,7 +197,7 @@ EXIT
 [10:00:20] back(1)                            | current=home.sysu.edu.cn       | back=[]            | fwd=[dsa, cs]
 [10:00:25] forward(2)                         | current=dsa.sysu.edu.cn/lab02 | back=[home, cs]    | fwd=[]
 [10:00:30] visit  https://github.com          | current=github.com             | back=[home, cs, dsa] | fwd=[]   # 前进栈被清空
-[10:00:40] DO INPUT "lab02-04 = done"         | undo=[INPUT]                   | redo=[]
+[10:00:40] DO INPUT "lab02-01 = done"         | undo=[INPUT]                   | redo=[]
 [10:00:42] DO SUBMIT                          | undo=[INPUT, SUBMIT]           | redo=[]
 [10:00:45] UNDO                               | undo=[INPUT]                   | redo=[SUBMIT]
 [10:00:48] REDO                               | undo=[INPUT, SUBMIT]           | redo=[]
@@ -188,7 +205,7 @@ HISTORY:
   back_stack_  = [home.sysu.edu.cn, cs.sysu.edu.cn, dsa.sysu.edu.cn/lab02]
   current      = github.com
   forward_stack_ = []
-  undo_stack_  = [INPUT "lab02-04 = done", SUBMIT]
+  undo_stack_  = [INPUT "lab02-01 = done", SUBMIT]
   redo_stack_  = []
 EXIT
 ```
@@ -199,7 +216,7 @@ EXIT
 
 | # | 错误场景     | 输入                 | 预期行为                             |
 | - | -------- | ------------------ | -------------------------------- |
-| 1 | 首页后退     | 启动后直接 `BACK 1`     | 返回首页，不崩溃，不改变状态                   |
+| 1 | 初始状态后退 | 启动后直接 `BACK 1` | 返回空字符串，不崩溃，仍保持无当前页状态 |
 | 2 | 后退步数超过历史 | 访问 2 页后 `BACK 99`  | 停在最早可达页，不越界                      |
 | 3 | 无输入直接提交  | 新页直接 `DO SUBMIT`   | 抛出"未输入不可提交"，不压栈，`undo_stack_` 为空 |
 | 4 | 空撤销      | 新页直接 `UNDO`        | 返回失败信息，程序继续运行                    |
@@ -211,7 +228,7 @@ EXIT
 ## 提示点与易错点
 
 - **前进栈何时清空**：只有 `visit()` 清空 `forward_stack_`，`back()`/`forward()` 都不清空。很多同学在 `back()` 里误清前进栈，导致"后退再前进"失败。这是本 Lab 最容易错的一处，先写测试再写实现。
-- **撤销栈跨页面不能共享**：切到新页面时，旧页面的 `undo_stack_`/`redo_stack_` 必须存档，否则"回到旧页还能撤销"或"新页撤销到旧页的操作"都会出错。存档用栈（`tab_archive_`），保证"按栈序回退到上次访问的页面"。
+- **导航栈必须保存完整页面状态**：切换页面时要把 URL、文档与 Undo/Redo 栈作为一个 `PageState` 整体移动。只保存 URL 或额外维护一个单独的存档栈，都无法同时保证反复后退、前进和重复 URL 场景下恢复正确状态。
 - **`back()` 越界用"提前结束"而非抛异常**：真实浏览器的后退按钮在没历史时是灰的，不是弹窗报错。语义上应"尽力后退，不足则停"。
 - **`doCommand` 预检要在 `execute()` 之前**：先验证业务约束，验证通过才执行并压栈；验证失败时栈状态必须保持不变（强异常安全）。
 - **智能指针转移所有权**：`undo_stack_` 存 `std::unique_ptr<Command>`，`undo()` 时要把指针从 undo 栈 move 到 redo 栈，不要复制（命令对象不可复制）。
@@ -223,12 +240,12 @@ EXIT
 
 1. 导航模块 `visit` / `back` / `forward` 单次操作的时间复杂度与空间复杂度各是多少？
 2. `undo` / `redo` 单次操作的复杂度？
-3. 跨页面存档 `tab_archive_` 在最坏情况下（访问 N 个页面、每个页面 K 条命令）的总空间复杂度？
+3. 两个导航栈保存完整 `PageState` 时，在最坏情况下（访问 N 个页面、每个页面 K 条命令）的总空间复杂度？
 4. 用队列代替 `back_stack_` 会发生什么？给出一个具体反例（用 3 个 URL 演示）。
 
 ## 提交物
 
-1. 完整可运行源码，建议目录 `labs/chapter-02/lab-02-03-undoable-browser/`：
+1. 完整可运行源码，建议目录 `labs/chapter-02/lab-02-01-undoable-browser/`：
    - `browser.h` / `browser.cpp`（导航 + Undo/Redo + 存档）
    - `command.h` / `command.cpp`（`Command` 基类与三个子类）
    - `logger.h` / `logger.cpp`（结构化日志）
@@ -246,15 +263,16 @@ EXIT
 - [ ] `forward(99)` 在超过前进栈长度时停在最远页，不崩溃
 - [ ] `visit(new_url)` 后 `forward_stack_` 被清空（关键行为）
 - [ ] `can_go_back()` / `can_go_forward()` 与栈空状态一致
-- [ ] 初始页（无任何 `visit`）`back(1)` 返回自身
+- [ ] 无任何 `visit` 时，`back(1)` 返回空字符串并保持无当前页状态
 
 ### 模块二：Undo / Redo
 
 - [ ] `doCommand` 后对应命令出现在 `undo_stack_` 顶，`redo_stack_` 清空
 - [ ] `undo()` 把命令从 undo 栈移到 redo 栈，反向操作可观测
 - [ ] `redo()` 把命令从 redo 栈移回 undo 栈，重做可观测
-- [ ] `visit(new_url)` 后旧页 undo/redo 栈被存档，新页从空栈开始
-- [ ] `back()` 回到旧页时，undo/redo 栈恢复为离开时状态
+- [ ] `visit(new_url)` 后旧的完整 `PageState` 进入后退栈，新页从空文档、空命令栈开始
+- [ ] `back()` / `forward()` 反复切换时，每页文档与 Undo/Redo 栈都恢复为离开时状态
+- [ ] 重复访问同一 URL 时，各次访问仍作为独立 `PageState`，不会按 URL 错配历史
 
 ### 模块三：业务约束
 
@@ -278,4 +296,4 @@ EXIT
 
 1. 真实浏览器的"后退 30 天"历史是按时间排序的线性表，为什么这里用栈就够建模前进/后退？
 2. 如果页面级操作不是"栈式撤销"，而是"选择性撤销某一步"，栈还够用吗？需要换成什么结构？（提示：这指向后续章节的链表 / 树）
-3. `tab_archive_` 用栈 vs 用哈希表（`unordered_map<url, 栈>`）各有什么取舍？后者为什么本 Lab 不采用？
+3. 导航栈直接保存 `PageState` 与使用哈希表（`unordered_map<url, 页面状态>`）各有什么取舍？为什么仅按 URL 查状态无法正确区分同一 URL 的多次独立访问？

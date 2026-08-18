@@ -4,7 +4,7 @@ description: "从队列的操作约定出发，掌握循环队列与链队列的
 order: 2
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-16"
+updated: "2026-08-18"
 contributors: ["沃克"]
 status: "draft"
 ---
