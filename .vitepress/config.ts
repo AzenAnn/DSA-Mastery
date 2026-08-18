@@ -1,7 +1,10 @@
 import path from "node:path";
 import { tasklist } from "@mdit/plugin-tasklist";
+import { Blocks, BookOpen, FlaskConical } from "@lucide/vue";
 import type MarkdownIt from "markdown-it";
 import { defineConfig } from "vitepress";
+import { h } from "vue";
+import { renderToString } from "vue/server-renderer";
 import {
   collectCourseIndex,
   createCourseSidebar,
@@ -11,7 +14,12 @@ import {
 import { installTheoryMarkdown } from "./markdown/theory";
 
 const course = collectCourseIndex();
-const sidebar = createCourseSidebar(course);
+const sidebarIconProps = { size: 16, strokeWidth: 2, "aria-hidden": true, focusable: "false" };
+const sidebar = createCourseSidebar(course, {
+  theory: await renderToString(h(BookOpen, sidebarIconProps)),
+  exercise: await renderToString(h(FlaskConical, sidebarIconProps)),
+  project: await renderToString(h(Blocks, sidebarIconProps)),
+});
 const sourceRoutes = sourceUrlMap(course);
 const virtualSources = new Map(
   [...course.lessons, ...course.labs].map((document) => [

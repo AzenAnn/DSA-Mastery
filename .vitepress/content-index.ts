@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
@@ -6,6 +6,7 @@ import type { DefaultTheme } from "vitepress";
 
 export type DocumentKind = "lesson" | "lab";
 export type DocumentStatus = "draft" | "review" | "published";
+export type LabCategory = "theory" | "exercise" | "project";
 export type ChapterId = number | "preface";
 
 export interface CourseDocument {
@@ -24,6 +25,7 @@ export interface CourseDocument {
   status: DocumentStatus;
   difficulty?: string;
   duration?: string;
+  labCategory?: LabCategory;
   readingMinutes: number;
 }
 
@@ -65,6 +67,8 @@ export interface CourseIndex {
   chapters: CourseChapter[];
   curriculum: CurriculumOutline;
 }
+
+export type LabSidebarIcons = Record<LabCategory, string>;
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
@@ -384,6 +388,37 @@ function estimateReadingMinutes(markdown: string): number {
   return Math.max(1, Math.ceil(cjkCharacters / 420 + latinWords / 190));
 }
 
+const manifestTypeToCategory: Record<string, LabCategory> = {
+  quiz: "theory",
+  program: "exercise",
+  project: "project",
+};
+
+function resolveLabCategory(file: string, data: Record<string, unknown>): LabCategory | undefined {
+  const manifestPath = path.join(path.dirname(file), "lab.json");
+  if (existsSync(manifestPath)) {
+    let manifest: unknown;
+    try {
+      manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    } catch (error) {
+      throw new Error(`${path.relative(projectRoot, manifestPath)}: cannot parse lab.json`, { cause: error });
+    }
+    const type = text((manifest as { type?: unknown }).type).trim();
+    const category = manifestTypeToCategory[type];
+    if (!category) {
+      throw new Error(`${path.relative(projectRoot, manifestPath)}: type must be quiz, program, or project`);
+    }
+    return category;
+  }
+
+  const declared = text(data.labCategory).trim();
+  if (!declared) return undefined;
+  if (!(["theory", "exercise", "project"] as const).includes(declared as LabCategory)) {
+    throw new Error(`${path.relative(projectRoot, file)}: labCategory must be theory, exercise, or project`);
+  }
+  return declared as LabCategory;
+}
+
 function createDocument(root: string, file: string, kind: DocumentKind): CourseDocument {
   const source = readFileSync(file, "utf8");
   const parsed = matter(source);
@@ -417,6 +452,7 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     status: text(parsed.data.status, "draft") as DocumentStatus,
     difficulty: text(parsed.data.difficulty) || undefined,
     duration: text(parsed.data.duration) || undefined,
+    labCategory: kind === "lab" ? resolveLabCategory(file, parsed.data) : undefined,
     readingMinutes: estimateReadingMinutes(parsed.content),
   };
 }
@@ -433,6 +469,11 @@ function sortDocuments(documents: CourseDocument[]): CourseDocument[] {
 export function collectCourseIndex(root = projectRoot): CourseIndex {
   const lessons = sortDocuments(listLessonFiles(root).map((file) => createDocument(root, file, "lesson")));
   const labs = sortDocuments(listLabFiles(root).map((file) => createDocument(root, file, "lab")));
+  for (const lab of labs.filter((document) => document.chapter === 1)) {
+    if (!lab.labCategory) {
+      throw new Error(`${lab.sourcePath}: Chapter 1 Labs must declare a category through lab.json or labCategory`);
+    }
+  }
   const chapterNumbers = [...new Set([...lessons, ...labs].map((document) => document.chapter))].sort(
     (left, right) => chapterRank(left) - chapterRank(right),
   );
@@ -485,7 +526,44 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
   };
 }
 
-export function createCourseSidebar(index: CourseIndex): DefaultTheme.SidebarItem[] {
+function sidebarCategoryLabel(
+  category: LabCategory,
+  label: string,
+  icon: string,
+): string {
+  return `<span class="course-lab-category course-lab-category--${category}">${icon}<span>${label}</span></span>`;
+}
+
+function chapterLabGroup(
+  labs: CourseDocument[],
+  icons: LabSidebarIcons,
+): DefaultTheme.SidebarItem {
+  const categories: Array<{ category: LabCategory; label: string; empty: string }> = [
+    { category: "theory", label: "理论 Theory", empty: "暂无理论型 Lab" },
+    { category: "exercise", label: "实验 Exercise", empty: "暂无实验型 Lab" },
+    { category: "project", label: "工程 Project", empty: "暂无工程型 Lab" },
+  ];
+
+  return {
+    text: '<span class="course-lab-nav__title">本章 Labs</span>',
+    collapsed: false,
+    items: categories.map(({ category, label, empty }) => {
+      const categoryLabs = labs.filter((lab) => lab.labCategory === category);
+      return {
+        text: sidebarCategoryLabel(category, label, icons[category]),
+        collapsed: category !== "project",
+        items: categoryLabs.length
+          ? categoryLabs.map((lab) => ({ text: lab.title, link: lab.url }))
+          : [{ text: `<span class="course-lab-category__empty">${empty}</span>` }],
+      };
+    }),
+  };
+}
+
+export function createCourseSidebar(
+  index: CourseIndex,
+  icons: LabSidebarIcons,
+): DefaultTheme.SidebarItem[] {
   const chapterItem = (chapter: CurriculumChapter): DefaultTheme.SidebarItem => {
     if (chapter.number === "preface") {
       return {
@@ -501,7 +579,17 @@ export function createCourseSidebar(index: CourseIndex): DefaultTheme.SidebarIte
       collapsed: true,
       items: [
         ...chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
-        ...(chapter.labs.length ? [{ text: "相关 Labs", collapsed: true, items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })) }] : []),
+        ...(chapter.labs.length
+          ? [
+              chapter.number === "1"
+                ? chapterLabGroup(chapter.labs, icons)
+                : {
+                    text: "相关 Labs",
+                    collapsed: true,
+                    items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })),
+                  },
+            ]
+          : []),
       ],
     };
   };

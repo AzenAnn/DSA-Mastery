@@ -129,7 +129,7 @@ const grouped: boolean = true
 const lab = `---
 title: "Lab 99-01：自动发现验证"
 description: "验证新增 Lab 会自动进入页面、导航、搜索和统计。"
-order: 0
+order: 1
 chapter: 99
 chapterTitle: "自动发现验证"
 updated: "2026-08-10"
@@ -149,7 +149,7 @@ duration: "1 分钟"
 
 const sidebarLab = `---
 title: "Lab 01-99：章节侧栏自动收录验证"
-description: "验证新增线性表 Lab 会自动进入本章相关 Labs。"
+description: "验证新增线性表 Lab 会自动进入本章 Labs 的实验分类。"
 order: 99
 chapter: 1
 chapterTitle: "线性表"
@@ -159,13 +159,14 @@ status: "draft"
 lab: true
 difficulty: "测试"
 duration: "1 分钟"
+labCategory: exercise
 ---
 
 # Lab 01-99：章节侧栏自动收录验证
 
 ## 验收标准
 
-- [ ] 本 Lab 自动出现在 Ch.1 线性表的相关 Labs 中。
+- [ ] 本 Lab 自动出现在 Ch.1 线性表的实验 Exercise 中。
 `;
 
 function runNpm(args) {
@@ -316,12 +317,15 @@ try {
   if (
     sidebarStart < 0 ||
     sidebarEnd < 0 ||
+    !sidebarHtml.includes("本章 Labs") ||
+    !sidebarHtml.includes("实验 Exercise") ||
+    !sidebarHtml.includes("course-lab-category--exercise") ||
     !sidebarHtml.includes("Lab 01-99：章节侧栏自动收录验证") ||
     !sidebarHtml.includes(
       'href="/DSA-Mastery/labs/chapter-01/lab-01-99-sidebar-discovery-fixture/"',
     )
   ) {
-    throw new Error("Temporary chapter-01 Lab did not enter Ch.1 related Labs sidebar automatically");
+    throw new Error("Temporary chapter-01 Lab did not enter Ch.1 Exercise sidebar automatically");
   }
 } catch (error) {
   primaryError = error;
@@ -345,4 +349,4 @@ try {
 }
 
 if (primaryError) throw primaryError;
-console.log("自动发现检查通过：临时教材与 Lab 已进入构建、导航、搜索及章节相关 Labs，并被安全清理。");
+console.log("自动发现检查通过：临时教材与 Lab 已进入构建、导航、搜索及第 1 章分类 Labs，并被安全清理。");

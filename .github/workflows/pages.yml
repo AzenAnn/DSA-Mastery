@@ -126,7 +126,7 @@ jobs:
         env:
           CXX: ${{ matrix.cxx }}
         run: |
-          pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
+          pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
           pnpm run test:lab-golden
           pnpm run test:lab-make
 
@@ -142,7 +142,7 @@ jobs:
           call "%VS_INSTALL%\Common7\Tools\VsDevCmd.bat" -arch=x64
           if errorlevel 1 exit /b %errorlevel%
           set CXX=cl
-          pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
+          pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
           pnpm run test:lab-golden
           pnpm run test:lab-make
 
