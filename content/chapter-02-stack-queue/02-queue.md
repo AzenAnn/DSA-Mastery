@@ -4,7 +4,7 @@ description: "从队列的操作约定出发，掌握循环队列与链队列的
 order: 2
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-16"
+updated: "2026-08-18"
 contributors: ["沃克"]
 status: "draft"
 ---
@@ -358,4 +358,4 @@ private:
 - [LeetCode 622：设计循环队列](https://leetcode.cn/problems/design-circular-queue/)：检查环形下标、判空与判满。
 - [LeetCode 232：用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/)：检查结构组合与摊还分析。
 
-完成理论后，进入 [Lab 02-02：循环队列的边界测试](../../labs/chapter-02/lab-02-02-cycle-queue/README.md)，把本节的不变量转化为可运行断言；还可以通过 [Lab 02-03：银行服务排队模拟](../../labs/chapter-02/lab-02-03-bank-service-simulation/README.md)比较两种排队策略。
+完成理论后，进入 [Lab 02-05：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md)，用队列模拟门外便道，把本节的不变量（判空、判满、环绕）转化为可运行断言。
