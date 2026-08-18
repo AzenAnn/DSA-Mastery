@@ -1,0 +1,41 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 25,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-single",
+    "input": "tests/002-single.in",
+    "expected": "tests/002-single.out",
+    "points": 25,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-empty",
+    "input": "tests/003-empty.in",
+    "expected": "tests/003-empty.out",
+    "points": 25,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-two-nodes",
+    "input": "tests/004-two-nodes.in",
+    "expected": "tests/004-two-nodes.out",
+    "points": 25,
+    "tags": [
+      "boundary"
+    ]
+  }
+]
