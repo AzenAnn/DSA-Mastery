@@ -56,14 +56,25 @@ status: "draft"
 > 本章代码以 **C++** 为主；理论表述与 C 课程一致。  
 > 在 C 中实现同样接口时，通常需要手工管理内存（`malloc/free` 或动态数组扩容）。
 
+### 栈的不变量
+
+无论采用顺序存储还是链式存储，栈的实现都应保持：
+
+- `size() >= 0`；
+- `empty()` 当且仅当 `size() == 0`；
+- 非空时，`top()` 返回最后一次尚未被 `pop()` 的 `push()` 元素；
+- 失败的操作不应破坏栈原有状态。
+
+那么，接下去开始实现。
+
 ### 3.1 顺序栈（数组实现）
 
-**核心思想**：栈顶就在数组尾部，`push/pop/top` 都在尾部操作。
+栈顶就在数组尾部，`push/pop/top` 都在尾部操作。
 
-对应 `std::stack` 明确指定 vector 作为底层容器，即：`std::stack<int, std::vector<int>> seqStack;`
+这一种实现对应的 `std::stack` 明确指定 vector 作为底层容器，即：`std::stack<int, std::vector<int>> seqStack;`
 
 <details>
-<summary><strong>C++ 具体实现示例（可展开）</strong></summary>
+<summary><strong>C++ 具体实现（点击展开）</strong></summary>
 
 ```cpp
 #include <iostream>
@@ -113,10 +124,7 @@ int main() {
 顺序栈满时需要扩容并复制旧元素。单次扩容可能是 `O(n)`，但若按“翻倍扩容”，长期平均每次 `push` 仍是摊还 `O(1)`。
 
 ### 3.2 链栈（链表实现）
-
-**核心思想**：把链表头当栈顶，头插入、头删除。
-
-对应 `std::stack` 明确指定 list 作为底层容器，即 `std::stack<int, std::list<int>> linkStack;`
+把链表头当栈顶，头插入、头删除。对应 `std::stack` 明确指定 list 作为底层容器，即 `std::stack<int, std::list<int>> linkStack;`
 
 为了更清楚地展示链栈与顺序栈的区别，下面的实现示例采用了自己实现链表的方式，没有直接使用 `std::list`。
 
