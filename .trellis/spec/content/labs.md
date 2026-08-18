@@ -17,6 +17,8 @@ labs/chapter-NN/lab-NN-LL-slug/quiz.json
 
 Lab 由同一个内容索引收集，`kind` 固定为 `lab`；其 `chapter + order` 只在 Lab 集合内唯一。
 
+新式 Lab 的机器接口另见 [Lab v1 机器接口、评分与分发合同](lab-tooling.md)。README-only 旧 Lab 继续兼容；有维护需求时按作者指南渐进迁移，不一次性重写全部历史内容。
+
 ## 3. Contracts
 
 Lab 继承教材八个字段，并额外要求：
@@ -26,6 +28,9 @@ Lab 继承教材八个字段，并额外要求：
 | `lab` | YAML 布尔值 `true`，不能写字符串 `"true"` |
 | `difficulty` | 非空、面向读者的级别，如“入门”“基础” |
 | `duration` | 非空、可理解的预计时长，如“45～60 分钟” |
+| `labCategory` | README-only Lab 接入分类侧栏时可选；只能是 `theory`、`exercise`、`project`，不得按标题推断 |
+
+网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。当前第 1 章启用“本章 Labs”三分类并要求所有 Lab 可分类，其他章节继续使用“相关 Labs”。
 
 README 至少说明：
 
@@ -62,15 +67,18 @@ README 至少说明：
 | `answer` | `0`～`3` 的整数 |
 | `explanation` | 非空 Markdown 解析，提交前不显示 |
 | `code` | 可选；需要独立代码窗时使用 |
+| `hint` | 可选；提交前由学习者主动展开的 Markdown 提示 |
+| `points` | 可选正整数，省略为 1；用于当前分/总分 |
 | `title/source/difficulty/topics/targetId` | 可选通用字段；个人题库导入时应保留现有元信息 |
 
-构建期只渲染仓库内受信任 Markdown，并关闭原始 HTML；浏览器组件负责选择、提交、即时反馈、正确答案、题解、重试和答题进度。README 不得再重复 `### 题 N` 或 `::: details 查看答案与解析`，避免同一道题出现两份来源。
+构建期只渲染仓库内受信任 Markdown，并关闭原始 HTML；浏览器组件负责选择、提示、提交、即时反馈、正确答案、题解、重试、答题进度、正确数、当前分/总分和 JSON 派生的折叠答案总览。README 不得再重复 `### 题 N`、静态答案速查或 `::: details 查看答案与解析`，避免同一道题出现两份来源。选项文本不得手写 A～D 前缀，也不得在规范化空白后重复。
 
 ## 4. Validation & Error Matrix
 
 | 条件 | 结果 |
 | --- | --- |
 | 目录编号、chapter、order 不一致 | 内容校验失败 |
+| 分类侧栏章节的 README-only Lab 缺 `labCategory`，或值非法 | 内容校验/构建失败 |
 | `lab` 不是布尔值 true | 内容校验失败 |
 | 缺 difficulty/duration | 内容校验失败 |
 | README 没有客观完成标准 | Review blocking |
@@ -82,6 +90,7 @@ README 至少说明：
 | README 使用 QuizSet 但无 `quiz.json`，或挂载次数不是 1 | `validate:content` 失败 |
 | 交互题库仍重复维护静态题目/折叠答案 | `validate:content` 失败 |
 | 选择题只有静态 A～D，不能选择、提交或重试 | Pages Playwright / Review blocking |
+| 新式 manifest 路径越界、未知主版本、分值/依赖错误或薄 Makefile 漂移 | `lab:validate` 失败；详见 lab-tooling |
 
 ## 5. Good / Base / Bad Cases
 
@@ -104,6 +113,7 @@ README 至少说明：
 - 个人题库导入任务必须对目标 Lab 运行 `rg -n '查看原始页面|看交互可视化|答案来源说明|答案来源：.*Codex'`，断言没有匹配；再人工确认题目来源名称、题目标识、答案和解析仍在。
 - 内容校验必须遍历每个存在 `quiz.json` 的 Lab，检查 JSON、字段、唯一挂载点和静态内容重复；数据 loader 对损坏文件必须让构建失败，不能当成“没有题库”静默跳过。
 - Pages Playwright 至少在一份交互题库中真实完成“选择 → 提交 → 对错反馈 → 题解 → 重试”，并核对四选项数量、答题进度、公式/表格和移动端无横向溢出。
+- Golden Program/Project 还必须通过 `lab:verify`；reference 自动满分、starter 可编译且非满分，构建只写 `.lab-cache/`。
 
 ## 7. Wrong vs Correct
 

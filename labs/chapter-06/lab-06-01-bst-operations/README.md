@@ -4,8 +4,8 @@ description: "实现 BST 的查找插入删除，用有序插入演示退化并�
 order: 1
 chapter: 6
 chapterTitle: "查找"
-updated: "2026-08-12"
-contributors: ["Azen"]
+updated: "2026-08-15"
+contributors: ["Azen", "RichardYi-SYSU-Mac"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -20,7 +20,7 @@ duration: "90～120 分钟"
 
 ## 前置知识
 
-- 第 6.1 节 BST 的三种删除情况与退化分析。
+- [第 6.2 节 二叉排序树](../../../content/chapter-06-search/02-binary-search-tree.md)中的三种删除情况与退化分析。
 
 ## 建议用时
 

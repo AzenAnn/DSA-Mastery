@@ -1,0 +1,44 @@
+[
+  {
+    "id": "001-sample-even",
+    "input": "tests/001-sample-even.in",
+    "expected": "tests/001-sample-even.out",
+    "points": 25,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-sample-odd",
+    "input": "tests/002-sample-odd.in",
+    "expected": "tests/002-sample-odd.out",
+    "points": 25,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "003-single",
+    "input": "tests/003-single.in",
+    "expected": "tests/003-single.out",
+    "points": 25,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-two-nodes",
+    "input": "tests/004-two-nodes.in",
+    "expected": "tests/004-two-nodes.out",
+    "points": 25,
+    "tags": [
+      "boundary"
+    ]
+  }
+]

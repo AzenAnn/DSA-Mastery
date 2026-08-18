@@ -1,0 +1,51 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-single",
+    "input": "tests/002-single.in",
+    "expected": "tests/002-single.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-all-negative",
+    "input": "tests/003-all-negative.in",
+    "expected": "tests/003-all-negative.out",
+    "points": 20,
+    "tags": [
+      "boundary",
+      "negative"
+    ]
+  },
+  {
+    "id": "004-max-element",
+    "input": "tests/004-max-element.in",
+    "expected": "tests/004-max-element.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-min-element",
+    "input": "tests/005-min-element.in",
+    "expected": "tests/005-min-element.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  }
+]

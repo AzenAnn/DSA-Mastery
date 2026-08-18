@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsa-mastery.local/schemas/lab.schema.json",
+  "title": "DSA Mastery Lab manifest",
+  "type": "object",
+  "required": ["schemaVersion", "type"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "type": { "enum": ["quiz", "program", "project"] },
+    "distribution": { "enum": ["source", "student"] },
+    "quiz": {
+      "type": "object",
+      "required": ["questions"],
+      "properties": {
+        "questions": { "type": "string" },
+        "questionType": { "const": "single-choice" },
+        "reveal": { "const": "after-submit" },
+        "scoring": { "enum": ["equal", "points"] }
+      },
+      "additionalProperties": false
+    },
+    "language": { "const": "cpp" },
+    "toolchain": {
+      "type": "object",
+      "required": ["standard"],
+      "properties": {
+        "standard": { "enum": ["c++17", "c++20"] },
+        "profile": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "targets": {
+      "type": "object",
+      "required": ["student"],
+      "properties": {
+        "student": { "$ref": "#/$defs/target" },
+        "solution": { "$ref": "#/$defs/target" }
+      },
+      "additionalProperties": false
+    },
+    "judge": { "$ref": "#/$defs/judge" },
+    "buildSystem": { "const": "cmake" },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/projectTask" }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "type": { "const": "quiz" } }, "required": ["type"] },
+      "then": { "required": ["quiz"] }
+    },
+    {
+      "if": { "properties": { "type": { "const": "program" } }, "required": ["type"] },
+      "then": { "required": ["language", "toolchain", "targets", "judge"] }
+    },
+    {
+      "if": {
+        "allOf": [
+          { "properties": { "type": { "const": "program" } }, "required": ["type"] },
+          { "not": { "properties": { "distribution": { "const": "student" } }, "required": ["distribution"] } }
+        ]
+      },
+      "then": { "properties": { "targets": { "required": ["student", "solution"] } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "project" } }, "required": ["type"] },
+      "then": { "required": ["language", "toolchain", "buildSystem", "tasks"] }
+    }
+  ],
+  "$defs": {
+    "target": {
+      "type": "object",
+      "required": ["sources"],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "includeDirs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "compare": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["exact", "tokens", "float"] },
+        "absTol": { "type": "number", "minimum": 0 },
+        "relTol": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "timeMs": { "type": "integer", "minimum": 1 },
+        "outputKb": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "judge": {
+      "type": "object",
+      "required": ["kind", "cases"],
+      "properties": {
+        "kind": { "const": "stdio" },
+        "cases": { "type": "string", "minLength": 1 },
+        "compare": { "$ref": "#/$defs/compare" },
+        "limits": { "$ref": "#/$defs/limits" }
+      },
+      "additionalProperties": false
+    },
+    "projectTask": {
+      "type": "object",
+      "required": ["id", "path", "weight", "kind"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "path": { "type": "string", "minLength": 1 },
+        "weight": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "kind": { "enum": ["stdio", "ctest", "manual"] },
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

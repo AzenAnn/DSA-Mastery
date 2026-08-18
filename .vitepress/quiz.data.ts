@@ -23,11 +23,18 @@ export interface QuizQuestion {
   code?: string;
   /** 构建期用 shiki 高亮后的代码 HTML，渲染在深色代码窗口内。 */
   codeHtml?: string;
+  hint?: string;
+  hintHtml?: string;
   options: string[];
   optionHtml: string[];
   answer: number;
   explanation: string;
   explanationHtml: string;
+  points: number;
+  /** 教材正文即时复习：每个选项对应的原文锚点 id（可选，仅 inline 模式使用）。 */
+  optionTargets?: string[];
+  /** 教材正文即时复习：所属复习块 id，配合 <QuizSet block="..."> 分组挂载（可选）。 */
+  block?: string;
 }
 
 export declare const data: Record<string, QuizQuestion[]>;
@@ -50,7 +57,7 @@ function optionalString(value: unknown, field: string, source: string): string |
   return value;
 }
 
-function parseQuestion(value: unknown, index: number, source: string): Omit<QuizQuestion, "stemHtml" | "codeHtml" | "optionHtml" | "explanationHtml"> {
+function parseQuestion(value: unknown, index: number, source: string): Omit<QuizQuestion, "stemHtml" | "codeHtml" | "hintHtml" | "optionHtml" | "explanationHtml"> {
   const label = `${source}: 第 ${index + 1} 题`;
   if (!isRecord(value)) throw new Error(`${label} 必须是对象`);
 
@@ -65,13 +72,21 @@ function parseQuestion(value: unknown, index: number, source: string): Omit<Quiz
     if (typeof option !== "string" || !option.trim()) {
       throw new Error(`${label} 的选项 ${optionIndex + 1} 必须是非空字符串`);
     }
+    if (/^[A-DＡ-Ｄ][.．、:：)）]\s*/i.test(option.trim())) {
+      throw new Error(`${label} 的选项 ${optionIndex + 1} 不要手写 A、B、C、D 前缀`);
+    }
     return option;
   });
+  const normalizedOptions = options.map((option) => option.trim().replace(/\s+/gu, " ").toLocaleLowerCase());
+  if (new Set(normalizedOptions).size !== normalizedOptions.length) throw new Error(`${label} 含重复选项`);
   if (!Number.isInteger(value.answer) || Number(value.answer) < 0 || Number(value.answer) >= options.length) {
     throw new Error(`${label} answer 必须是 0～3 的整数`);
   }
   if (value.topics !== undefined && (!Array.isArray(value.topics) || value.topics.some((topic) => typeof topic !== "string" || !topic.trim()))) {
     throw new Error(`${label} topics 必须是非空字符串数组`);
+  }
+  if (value.points !== undefined && (!Number.isInteger(value.points) || Number(value.points) <= 0)) {
+    throw new Error(`${label} points 必须是正整数`);
   }
 
   return {
@@ -83,9 +98,11 @@ function parseQuestion(value: unknown, index: number, source: string): Omit<Quiz
     targetId: optionalString(value.targetId, "targetId", label),
     stem,
     code: optionalString(value.code, "code", label),
+    hint: optionalString(value.hint, "hint", label),
     options,
     answer: Number(value.answer),
     explanation,
+    points: value.points === undefined ? 1 : Number(value.points),
   };
 }
 
@@ -129,6 +146,7 @@ export default defineLoader({
             ...question,
             stemHtml: markdown.render(question.stem),
             codeHtml: question.code ? await highlightCode(question.code) : undefined,
+            hintHtml: question.hint ? markdown.render(question.hint) : undefined,
             optionHtml: question.options.map((option) => markdown.renderInline(option)),
             explanationHtml: markdown.render(question.explanation),
           })),

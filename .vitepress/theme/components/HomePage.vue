@@ -17,6 +17,7 @@ const curriculumGroups = [
   { id: "foundations", label: "基础部分", chapters: courseIndex.curriculum.foundations },
   ...courseIndex.curriculum.parts.map((part) => ({ id: part.id, label: `Part ${part.numeral} · ${part.title}`, chapters: part.chapters })),
 ];
+const chapterEntryCount = curriculumGroups.reduce((total, group) => total + group.chapters.length, 0);
 const firstLessonUrl = courseIndex.curriculum.url;
 
 function courseHref(path: string): string {
@@ -78,7 +79,7 @@ function courseHref(path: string): string {
       </div>
 
       <div class="course-hero-stats">
-        <div><strong>17</strong><span>个章节入口</span></div>
+        <div><strong>{{ chapterEntryCount }}</strong><span>个章节入口</span></div>
         <div><strong>{{ courseIndex.lessons.length }}</strong><span>篇教程页面</span></div>
         <div><strong>{{ courseIndex.labs.length }}</strong><span>个动手实验</span></div>
         <div><strong>1</strong><span>条理论到实践的路径</span></div>
@@ -112,7 +113,7 @@ function courseHref(path: string): string {
         <h3>{{ group.label }}</h3>
         <div class="course-chapter-grid">
           <article v-for="chapter in group.chapters" :key="chapter.id" class="course-chapter-card">
-            <div class="course-chapter-number">CH.{{ chapter.number }}</div>
+            <div class="course-chapter-number">{{ chapter.label.toUpperCase() }}</div>
             <BookOpen aria-hidden="true" class="course-chapter-icon" :size="25" />
             <h3>{{ chapter.title }}</h3>
             <p>{{ chapter.description }}</p>

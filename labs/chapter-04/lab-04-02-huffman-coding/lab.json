@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../schemas/lab.schema.json",
+  "schemaVersion": 1,
+  "type": "project",
+  "language": "cpp",
+  "toolchain": {
+    "standard": "c++17",
+    "profile": "course-default"
+  },
+  "buildSystem": "cmake",
+  "tasks": [
+    {
+      "id": "frequency",
+      "path": "tasks/task-01-frequency",
+      "weight": 30,
+      "kind": "stdio",
+      "dependsOn": []
+    },
+    {
+      "id": "codec",
+      "path": "tasks/task-02-codec",
+      "weight": 50,
+      "kind": "ctest",
+      "dependsOn": ["frequency"]
+    },
+    {
+      "id": "report",
+      "path": "report",
+      "weight": 20,
+      "kind": "manual",
+      "dependsOn": ["codec"]
+    }
+  ]
+}

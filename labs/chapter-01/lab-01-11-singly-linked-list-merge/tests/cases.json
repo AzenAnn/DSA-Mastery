@@ -1,0 +1,42 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 25,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-one-empty",
+    "input": "tests/002-one-empty.in",
+    "expected": "tests/002-one-empty.out",
+    "points": 25,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-all-same",
+    "input": "tests/003-all-same.in",
+    "expected": "tests/003-all-same.out",
+    "points": 25,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "004-separated",
+    "input": "tests/004-separated.in",
+    "expected": "tests/004-separated.out",
+    "points": 25,
+    "tags": [
+      "boundary"
+    ]
+  }
+]

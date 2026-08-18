@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
@@ -6,6 +6,8 @@ import type { DefaultTheme } from "vitepress";
 
 export type DocumentKind = "lesson" | "lab";
 export type DocumentStatus = "draft" | "review" | "published";
+export type LabCategory = "theory" | "exercise" | "project";
+export type ChapterId = number | "preface";
 
 export interface CourseDocument {
   kind: DocumentKind;
@@ -14,7 +16,8 @@ export interface CourseDocument {
   sourcePath: string;
   title: string;
   description: string;
-  chapter: number;
+  chapter: ChapterId;
+  chapterLabel: string;
   chapterTitle: string;
   order: number;
   updated: string;
@@ -22,11 +25,12 @@ export interface CourseDocument {
   status: DocumentStatus;
   difficulty?: string;
   duration?: string;
+  labCategory?: LabCategory;
   readingMinutes: number;
 }
 
 export interface CourseChapter {
-  chapter: number;
+  chapter: ChapterId;
   title: string;
   lessons: CourseDocument[];
   labs: CourseDocument[];
@@ -35,6 +39,7 @@ export interface CourseChapter {
 export interface CurriculumChapter {
   id: string;
   number: string;
+  label: string;
   title: string;
   description: string;
   url: string;
@@ -66,11 +71,14 @@ export interface CourseIndex {
   curriculum: CurriculumOutline;
 }
 
+export type LabSidebarIcons = Record<LabCategory, string>;
+
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
-const chapterDirectoryPattern = /^chapter-\d{2}-[a-z0-9-]+$/;
+const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
 const labDirectoryPattern = /^lab-\d{2}-\d{2}-[a-z0-9-]+$/;
 
-type CurriculumChapterDefinition = Omit<CurriculumChapter, "lessons" | "labs"> & {
+type CurriculumChapterDefinition = Omit<CurriculumChapter, "label" | "lessons" | "labs"> & {
+  label?: string;
   lessonSources?: string[];
   labSources?: string[];
   /** 未拆分章节使用：自动收录该物理 chapter 下的全部 Lab。 */
@@ -79,12 +87,38 @@ type CurriculumChapterDefinition = Omit<CurriculumChapter, "lessons" | "labs"> &
 
 const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
   {
+    id: "chapter-preface",
+    number: "preface",
+    label: "前言",
+    title: "课程作者指南",
+    description: "查看理论文档语法，以及 Quiz、Program、Project 三类 Lab 的更新与测试流程。",
+    url: "/learn/outline/chapter-preface/",
+    learningObjectives: [
+      "统一理解课程理论文档与三类 Lab 的作者接口。",
+      "能够按规范创建、测试、评分和 Review 后续题目。",
+      "从站内完整指南直接复制经过自动验证的示例。",
+    ],
+    focusAreas: [
+      "理论环境与 Markdown 语法展示",
+      "Quiz、Program、Project 更新机制",
+      "本地测试、CI、Review 与发布清单",
+    ],
+    lessonSources: [
+      "content/chapter-preface/00-theory-environments.md",
+      "content/chapter-preface/01-lab-authoring-guide.md",
+      "content/chapter-preface/02-windows-student-setup.md",
+    ],
+  },
+  {
     id: "chapter-00-memory-foundations",
     number: "0",
     title: "内存基础",
     description: "从内存组织方式理解数据结构为何具有不同的表示与操作成本。",
     url: "/learn/outline/chapter-00-memory-foundations/",
-    lessonSources: ["content/chapter-00-introduction/01-data-structure-basics.md"],
+    lessonSources: [
+      "content/chapter-00-introduction/01-data-structure-basics.md",
+      "content/chapter-00-introduction/02-memory-perspective.md",
+    ],
     labSources: ["labs/chapter-00/lab-00-02-operation-counter/README.md"],
   },
   {
@@ -93,10 +127,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "算法思维体验",
     description: "通过 Peak Finding 与 Union-Find 体验数据结构选择如何改变算法效率。",
     url: "/learn/outline/chapter-00-plus-algorithm-thinking/",
-    lessonSources: [
-      "content/chapter-00-introduction/02-algorithm-complexity-analysis.md",
-      "content/chapter-00-introduction/03-memory-perspective.md",
-    ],
+    lessonSources: ["content/chapter-00-introduction/03-algorithm-complexity-analysis.md"],
     labSources: [
       "labs/chapter-00/lab-00-01-learning-map/README.md",
       "labs/chapter-00/lab-00-03-complexity-quiz/README.md",
@@ -114,6 +145,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-01-linear-list/02-sequential-list.md",
       "content/chapter-01-linear-list/03-linked-list.md",
       "content/chapter-01-linear-list/04-comparison-and-selection.md",
+      "content/chapter-01-linear-list/05-real-world-practices.md",
     ],
     autoLabChapter: 1,
   },
@@ -155,7 +187,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     lessonSources: [
       "content/chapter-03-string-array/00-overview.md",
       "content/chapter-03-string-array/01-string-basics.md",
-      "content/chapter-03-string-array/02-pattern-matching.md",
+      "content/chapter-03-string-array/02-string-matching-and-processing.md",
       "content/chapter-03-string-array/03-array-and-matrix.md",
     ],
     labSources: [
@@ -222,18 +254,29 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-08-basic-tree-search/",
     lessonSources: [
       "content/chapter-06-search/00-overview.md",
-      "content/chapter-06-search/01-binary-search-tree.md",
+      "content/chapter-06-search/01-linear-and-binary-search.md",
+      "content/chapter-06-search/02-binary-search-tree.md",
+      "content/chapter-06-search/03-balanced-search-tree.md",
     ],
-    labSources: ["labs/chapter-06/lab-06-01-bst-operations/README.md"],
+    labSources: [
+      "labs/chapter-06/lab-06-01-bst-operations/README.md",
+      "labs/chapter-06/lab-06-03-search-theory-quiz/README.md",
+    ],
   },
   {
     id: "chapter-09-hashing-indexes",
     number: "9",
     title: "散列与索引结构",
-    description: "理解散列函数、冲突处理和面向查找效率的索引结构。",
+    description: "理解多路索引、散列函数、冲突处理和外存查找结构。",
     url: "/learn/outline/chapter-09-hashing-indexes/",
-    lessonSources: ["content/chapter-06-search/02-hash-table.md"],
-    labSources: ["labs/chapter-06/lab-06-02-hash-table/README.md"],
+    lessonSources: [
+      "content/chapter-06-search/04-b-tree-and-b-plus-tree.md",
+      "content/chapter-06-search/05-hash-table.md",
+    ],
+    labSources: [
+      "labs/chapter-06/lab-06-02-hash-table/README.md",
+      "labs/chapter-06/lab-06-03-search-theory-quiz/README.md",
+    ],
   },
   {
     id: "chapter-10-basic-sorting",
@@ -334,6 +377,18 @@ function number(value: unknown, fallback = 0): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function chapterId(value: unknown): ChapterId {
+  return text(value).trim() === "preface" ? "preface" : number(value);
+}
+
+function chapterRank(value: ChapterId): number {
+  return value === "preface" ? -1 : value;
+}
+
+function chapterLabel(value: ChapterId): string {
+  return value === "preface" ? "前言" : `第 ${value} 章`;
+}
+
 function contributors(value: unknown): string[] {
   if (Array.isArray(value)) return value.map(String).filter(Boolean);
   return typeof value === "string" && value.trim() ? [value.trim()] : [];
@@ -358,13 +413,44 @@ function estimateReadingMinutes(markdown: string): number {
   return Math.max(1, Math.ceil(cjkCharacters / 420 + latinWords / 190));
 }
 
+const manifestTypeToCategory: Record<string, LabCategory> = {
+  quiz: "theory",
+  program: "exercise",
+  project: "project",
+};
+
+function resolveLabCategory(file: string, data: Record<string, unknown>): LabCategory | undefined {
+  const manifestPath = path.join(path.dirname(file), "lab.json");
+  if (existsSync(manifestPath)) {
+    let manifest: unknown;
+    try {
+      manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    } catch (error) {
+      throw new Error(`${path.relative(projectRoot, manifestPath)}: cannot parse lab.json`, { cause: error });
+    }
+    const type = text((manifest as { type?: unknown }).type).trim();
+    const category = manifestTypeToCategory[type];
+    if (!category) {
+      throw new Error(`${path.relative(projectRoot, manifestPath)}: type must be quiz, program, or project`);
+    }
+    return category;
+  }
+
+  const declared = text(data.labCategory).trim();
+  if (!declared) return undefined;
+  if (!(["theory", "exercise", "project"] as const).includes(declared as LabCategory)) {
+    throw new Error(`${path.relative(projectRoot, file)}: labCategory must be theory, exercise, or project`);
+  }
+  return declared as LabCategory;
+}
+
 function createDocument(root: string, file: string, kind: DocumentKind): CourseDocument {
   const source = readFileSync(file, "utf8");
   const parsed = matter(source);
   const sourcePath = path.relative(root, file).replaceAll("\\", "/");
   const relativeContentPath = sourcePath.replace(/^(content|labs)\//, "");
   const slug = relativeContentPath.replace(/\.md$/i, "").replace(/\/README$/i, "");
-  const chapter = number(parsed.data.chapter);
+  const chapter = chapterId(parsed.data.chapter);
   const title = text(parsed.data.title);
   const description = text(parsed.data.description);
 
@@ -380,13 +466,18 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     title,
     description,
     chapter,
-    chapterTitle: text(parsed.data.chapterTitle, chapter === 0 ? "绪论" : `第 ${chapter} 章`),
+    chapterLabel: chapterLabel(chapter),
+    chapterTitle: text(
+      parsed.data.chapterTitle,
+      chapter === "preface" ? "课程作者指南" : chapter === 0 ? "绪论" : `第 ${chapter} 章`,
+    ),
     order: number(parsed.data.order),
     updated: text(parsed.data.updated, "未标注"),
     contributors: contributors(parsed.data.contributors),
     status: text(parsed.data.status, "draft") as DocumentStatus,
     difficulty: text(parsed.data.difficulty) || undefined,
     duration: text(parsed.data.duration) || undefined,
+    labCategory: kind === "lab" ? resolveLabCategory(file, parsed.data) : undefined,
     readingMinutes: estimateReadingMinutes(parsed.content),
   };
 }
@@ -394,7 +485,7 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
 function sortDocuments(documents: CourseDocument[]): CourseDocument[] {
   return documents.sort(
     (left, right) =>
-      left.chapter - right.chapter ||
+      chapterRank(left.chapter) - chapterRank(right.chapter) ||
       left.order - right.order ||
       left.title.localeCompare(right.title, "zh-CN"),
   );
@@ -403,8 +494,13 @@ function sortDocuments(documents: CourseDocument[]): CourseDocument[] {
 export function collectCourseIndex(root = projectRoot): CourseIndex {
   const lessons = sortDocuments(listLessonFiles(root).map((file) => createDocument(root, file, "lesson")));
   const labs = sortDocuments(listLabFiles(root).map((file) => createDocument(root, file, "lab")));
+  for (const lab of labs.filter((document) => document.chapter === 1)) {
+    if (!lab.labCategory) {
+      throw new Error(`${lab.sourcePath}: Chapter 1 Labs must declare a category through lab.json or labCategory`);
+    }
+  }
   const chapterNumbers = [...new Set([...lessons, ...labs].map((document) => document.chapter))].sort(
-    (left, right) => left - right,
+    (left, right) => chapterRank(left) - chapterRank(right),
   );
   const chapters = chapterNumbers.map((chapter) => {
     const chapterLessons = lessons.filter((document) => document.chapter === chapter);
@@ -419,8 +515,9 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
 
   const documentsBySource = new Map([...lessons, ...labs].map((document) => [document.sourcePath, document]));
   const outlineChapters = curriculumChapterDefinitions.map(
-    ({ lessonSources = [], labSources = [], autoLabChapter, ...chapter }) => ({
+    ({ label, lessonSources = [], labSources = [], autoLabChapter, ...chapter }) => ({
       ...chapter,
+      label: label ?? `Ch.${chapter.number}`,
       lessons: lessonSources
         .map((source) => documentsBySource.get(source))
         .filter((item): item is CourseDocument => Boolean(item)),
@@ -446,22 +543,81 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
     chapters,
     curriculum: {
       url: "/learn/",
-      foundations: outlineChapters.filter((chapter) => chapter.number === "0" || chapter.number === "0+"),
+      foundations: outlineChapters.filter((chapter) =>
+        chapter.number === "preface" || chapter.number === "0" || chapter.number === "0+"
+      ),
       parts,
     },
   };
 }
 
-export function createCourseSidebar(index: CourseIndex): DefaultTheme.SidebarItem[] {
-  const chapterItem = (chapter: CurriculumChapter): DefaultTheme.SidebarItem => ({
-    text: `Ch.${chapter.number} ${chapter.title}`,
-    link: chapter.url,
-    collapsed: true,
-    items: [
-      ...chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
-      ...(chapter.labs.length ? [{ text: "相关 Labs", collapsed: true, items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })) }] : []),
-    ],
-  });
+function sidebarCategoryLabel(
+  category: LabCategory,
+  label: string,
+  icon: string,
+): string {
+  return `<span class="course-lab-category course-lab-category--${category}">${icon}<span>${label}</span></span>`;
+}
+
+function chapterLabGroup(
+  labs: CourseDocument[],
+  icons: LabSidebarIcons,
+): DefaultTheme.SidebarItem {
+  const categories: Array<{ category: LabCategory; label: string; empty: string }> = [
+    { category: "theory", label: "理论 Theory", empty: "暂无理论型 Lab" },
+    { category: "exercise", label: "实验 Exercise", empty: "暂无实验型 Lab" },
+    { category: "project", label: "工程 Project", empty: "暂无工程型 Lab" },
+  ];
+
+  return {
+    text: '<span class="course-lab-nav__title">本章 Labs</span>',
+    collapsed: false,
+    items: categories.map(({ category, label, empty }) => {
+      const categoryLabs = labs.filter((lab) => lab.labCategory === category);
+      return {
+        text: sidebarCategoryLabel(category, label, icons[category]),
+        collapsed: category !== "project",
+        items: categoryLabs.length
+          ? categoryLabs.map((lab) => ({ text: lab.title, link: lab.url }))
+          : [{ text: `<span class="course-lab-category__empty">${empty}</span>` }],
+      };
+    }),
+  };
+}
+
+export function createCourseSidebar(
+  index: CourseIndex,
+  icons: LabSidebarIcons,
+): DefaultTheme.SidebarItem[] {
+  const chapterItem = (chapter: CurriculumChapter): DefaultTheme.SidebarItem => {
+    if (chapter.number === "preface") {
+      return {
+        text: chapter.label,
+        link: chapter.url,
+        collapsed: false,
+        items: chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
+      };
+    }
+    return {
+      text: `${chapter.label} ${chapter.title}`,
+      link: chapter.url,
+      collapsed: true,
+      items: [
+        ...chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
+        ...(chapter.labs.length
+          ? [
+              chapter.number === "1"
+                ? chapterLabGroup(chapter.labs, icons)
+                : {
+                    text: "相关 Labs",
+                    collapsed: true,
+                    items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })),
+                  },
+            ]
+          : []),
+      ],
+    };
+  };
 
   return [
     { text: "课程总目录", link: index.curriculum.url },

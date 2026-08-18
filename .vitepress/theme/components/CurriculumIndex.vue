@@ -57,7 +57,7 @@ const groups = computed(() => mode.value === "part" && currentPart.value
     <header class="course-curriculum-hero">
       <div class="course-eyebrow">DSA MASTERY · CURRICULUM</div>
       <template v-if="mode === 'chapter' && currentChapter">
-        <p class="course-curriculum-kicker">Ch.{{ currentChapter.number }}</p>
+        <p class="course-curriculum-kicker">{{ currentChapter.label }}</p>
         <h1>{{ currentChapter.title }}</h1>
         <p>{{ currentChapter.description }}</p>
         <span class="course-status-badge" :class="`is-${currentChapterStatus.key}`">{{ currentChapterStatus.label }}</span>
@@ -107,7 +107,7 @@ const groups = computed(() => mode.value === "part" && currentPart.value
         <header><a :href="withBase(group.url)"><h2>{{ group.label }}</h2><ArrowRight aria-hidden="true" :size="18" /></a></header>
         <div class="course-curriculum-chapters">
           <a v-for="chapter in group.chapters" :key="chapter.id" :href="withBase(chapter.url)">
-            <span>Ch.{{ chapter.number }}</span><strong>{{ chapter.title }}</strong><small>{{ chapter.description }}</small>
+            <span>{{ chapter.label }}</span><strong>{{ chapter.title }}</strong><small>{{ chapter.description }}</small>
           </a>
         </div>
       </section>

@@ -17,6 +17,18 @@ body:
       description: 简述输入、操作、预期输出与建议时长。
     validations:
       required: true
+  - type: dropdown
+    id: lab_type
+    attributes:
+      label: Lab 类型
+      description: 按 Lab 作者指南选择；纯纸笔内容可选择 README-only。
+      options:
+        - Quiz（四选一理论题）
+        - Program（单个 stdio C++ 作业）
+        - Project（多 task / CMake / 人工混合评分）
+        - README-only（无需机器执行）
+    validations:
+      required: true
   - type: textarea
     id: acceptance
     attributes:

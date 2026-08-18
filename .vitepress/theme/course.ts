@@ -1,5 +1,5 @@
 import { data as rawCourseIndex } from "../content.data";
-import type { CourseChapter, CourseDocument, CourseIndex } from "../content-index";
+import type { ChapterId, CourseChapter, CourseDocument, CourseIndex } from "../content-index";
 
 const loadedIndex = rawCourseIndex as Partial<CourseIndex>;
 
@@ -31,7 +31,7 @@ export function findCourseDocument(path: string): CourseDocument | undefined {
 export function getCourseChapters(): CourseChapter[] {
   if (courseIndex.chapters.length) return courseIndex.chapters;
 
-  const chapters = new Map<number, CourseChapter>();
+  const chapters = new Map<ChapterId, CourseChapter>();
   for (const document of [...courseIndex.lessons, ...courseIndex.labs]) {
     const chapter = chapters.get(document.chapter) ?? {
       chapter: document.chapter,
@@ -43,11 +43,16 @@ export function getCourseChapters(): CourseChapter[] {
     chapters.set(document.chapter, chapter);
   }
 
-  return [...chapters.values()].sort((left, right) => left.chapter - right.chapter);
+  const rank = (chapter: ChapterId) => chapter === "preface" ? -1 : chapter;
+  return [...chapters.values()].sort((left, right) => rank(left.chapter) - rank(right.chapter));
 }
 
 export function getChapterLanding(document: CourseDocument): string {
   if (document.kind === "lab") return "/labs/";
+  if (document.chapter === "preface") {
+    const preface = courseIndex.curriculum.foundations.find((chapter) => chapter.number === "preface");
+    if (preface) return preface.url;
+  }
   return courseIndex.lessons.find((entry) => entry.chapter === document.chapter)?.url
     ?? document.url;
 }
