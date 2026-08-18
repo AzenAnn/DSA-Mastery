@@ -1695,12 +1695,14 @@ input:focus-visible {
 
 .course-quiz {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   margin: 30px 0 34px;
 }
 
 /* 题目卡 */
 .course-quiz-question {
+  min-width: 0;
   scroll-margin-top: calc(var(--vp-nav-height) + 26px);
   padding: 26px 28px;
   border: 1px solid var(--course-line);
