@@ -405,4 +405,4 @@ public:
 5. 哈希表保证键能找到对应链表节点；链表保证从最近到最久的顺序，且每个缓存项恰好出现一次。
 :::
 
-现在可以回到[第 1 章总览](./00-overview.md)复盘两种实现，或完成 [Lab 01-01：顺序表](../../labs/chapter-01/lab-01-01-sequence-list/README.md) 与 [Lab 01-02：单链表](../../labs/chapter-01/lab-01-02-linked-list/README.md)，用同一组行为测试比较实现差异。
+现在可以继续阅读[1.5 现实中的 List 与工程扩展](./05-real-world-practices.md)，或回到[第 1 章总览](./00-overview.md)复盘两种实现。也可以完成 [Lab 01-01：顺序表](../../labs/chapter-01/lab-01-01-sequence-list/README.md) 与 [Lab 01-02：单链表](../../labs/chapter-01/lab-01-02-linked-list/README.md)，用同一组行为测试比较实现差异。
