@@ -68,7 +68,7 @@ int free_head = 1;              // 空闲链表的首槽位
 
 已知前驱游标时，插入或删除只修改常数个 `next` 字段，是 $O(1)$；但按逻辑位序访问第 $i$ 个元素仍然需要沿游标走 $i-1$ 步，是 $O(i)$。**数组下标是物理槽位，不等于逻辑位序。** 比如逻辑序列是 `slots[7] -> slots[2] -> slots[19]`，第二个逻辑元素在 `slots[2]`，第三个在 `slots[19]`，你不能直接用 `slots[i]` 取第 $i$ 个逻辑元素。
 
-可以先完成 [Lab 01-08：静态链表选择题精练](../../labs/chapter-01/lab-01-08-static-linked-list-quiz/README.md)，再用上面的约束复核每个选项的前提。
+可以先完成 [Lab 01-05：静态链表选择题精练](../../labs/chapter-01/lab-01-05-static-linked-list-quiz/README.md)，再用上面的约束复核每个选项的前提。
 
 ## 5.3 LRU：组合结构与线程安全边界
 

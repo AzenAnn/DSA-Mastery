@@ -1,6 +1,6 @@
 # DSA Mastery Lab 更新与测试指南
 
-> 适用版本：Lab Schema v1 · 更新日期：2026-08-17
+> 适用版本：Lab Schema v1 · 更新日期：2026-08-18
 
 这份手册是 Quiz、Program 和 Project 三类 Lab 的统一作者 API。面向网页的说明仍写在 Lab 的 `README.md`，机器行为只由 `lab.json`、`quiz.json`、`cases.json`、`task.json` 和共享工具决定。后续开发者应从本文提供的脚手架开始，而不是复制旧 Lab 后自行发明目录、Make 规则或评分脚本。
 
@@ -22,7 +22,7 @@
 三份可运行参照物：
 
 - Golden Quiz：`labs/chapter-00/lab-00-03-complexity-quiz`
-- Golden Program：`labs/chapter-01/lab-01-03-problem-template`
+- Golden Program：`labs/chapter-01/lab-01-06-sequential-list-deduplication`
 - Golden Project：`labs/chapter-04/lab-04-02-huffman-coding`
 
 ## 2. 平台与工具链基线
@@ -59,7 +59,7 @@ GNU Make 是首选学习入口，但不是必装依赖。Makefile 只转发到 N
 安装后先检查，不要让 `doctor` 替你修改 PATH：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
 ## 3. 统一命令与退出码
@@ -67,7 +67,7 @@ pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
 在 Program/Project Lab 内，首选体验是：
 
 ```powershell
-cd labs/chapter-01/lab-01-03-problem-template
+cd labs/chapter-01/lab-01-06-sequential-list-deduplication
 make doctor
 make run
 ```
@@ -75,15 +75,15 @@ make run
 没有 GNU Make 时，在仓库根使用官方兜底：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
-pnpm lab:run -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
 CLI 不带路径时会从当前目录向上寻找最近的 `lab.json`。维护者也可从仓库根使用 Make：
 
 ```powershell
-make run LAB=labs/chapter-01/lab-01-03-problem-template
-make run LAB=labs/chapter-01/lab-01-03-problem-template CASE=sample
+make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
+make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sample
 ```
 
 | 命令 | 目的 | 关键选项 |
@@ -149,6 +149,24 @@ pnpm lab:new -- --type project --chapter 4 --order 3 --slug tree-index
 ```
 
 脚手架拒绝覆盖已存在目录。生成后仍必须替换占位题面、参考实现、测试和章节标题；“能生成”不是“可发布”。
+
+### 4.1 网站侧栏的分类接口
+
+网站的 Lab 分类属于统一 `CourseIndex`，不是另一份手写导航。目前第 1 章使用“本章 Labs”三分类；后续章节需要同样结构时，应复用以下接口扩展，不要在侧栏组件里复制 Lab 名单：
+
+| Lab 机器类型 | 侧栏分类 | 展示标签 |
+| --- | --- | --- |
+| `quiz` | `theory` | 理论 Theory |
+| `program` | `exercise` | 实验 Exercise |
+| `project` | `project` | 工程 Project |
+
+有 `lab.json` 时，内容索引直接从 `type` 派生分类。没有 manifest 的 README-only Lab 若需要进入分类目录，必须在 frontmatter 显式声明：
+
+```yaml
+labCategory: exercise # theory | exercise | project
+```
+
+不要按标题、slug 或关键词猜测类型。新增或调整分类后，至少运行 `pnpm run validate`、`pnpm run test:discovery`、`pnpm run build` 和 `pnpm run check:site`；涉及侧栏范围、样式或 Pages base 时，再运行 `pnpm run test:pages`。侧栏、Labs 首页、搜索与路由必须继续消费同一 `CourseIndex`。
 
 ## 5. Quiz：理论选择题
 
@@ -345,13 +363,13 @@ include ../../../tools/lab/lab.mk
 
 ```powershell
 # 只预览差异，不写文件
-pnpm lab:refresh-expected -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:refresh-expected -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 
 # 人工确认 diff 后显式更新
-pnpm lab:refresh-expected -- labs/chapter-01/lab-01-03-problem-template --write
+pnpm lab:refresh-expected -- labs/chapter-01/lab-01-06-sequential-list-deduplication --write
 
 # 检查 solution=100、starter<100、.out 无漂移
-pnpm lab:verify -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
 不要手工运行 solution 后用重定向悄悄覆盖 `.out`。标准输出是可 Review 的稳定 oracle；任何改变都应先看到 diff。
@@ -480,7 +498,7 @@ Provisional total: 80/100
 完整公开仓库保留 solution，适合自学与维护。需要只发作业时：
 
 ```powershell
-pnpm lab:pack -- labs/chapter-01/lab-01-03-problem-template --profile student
+pnpm lab:pack -- labs/chapter-01/lab-01-06-sequential-list-deduplication --profile student
 ```
 
 包生成到该 Lab 的 `.lab-cache/packages/`，不会回写源码。学生包：
@@ -524,7 +542,7 @@ pnpm lab:pack -- labs/chapter-01/lab-01-03-problem-template --profile student
 
 ```powershell
 pnpm test
-pnpm lab:verify -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 pnpm lab:verify -- labs/chapter-04/lab-04-02-huffman-coding
 ```
 

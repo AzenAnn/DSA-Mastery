@@ -180,10 +180,10 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("用实验把理解落到代码上");
   expect(failures, "lesson → Labs index navigation").toEqual([]);
 
-  await page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-02：实现并验证单链表" }).click();
-  await expect(page).toHaveURL(`${baseUrl}/labs/chapter-01/lab-01-02-linked-list/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 01-02：实现并验证单链表");
-  await expect(page.locator('.vp-doc input[type="checkbox"]')).toHaveCount(5);
+  await page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-06：有序顺序表去重" }).click();
+  await expect(page).toHaveURL(`${baseUrl}/labs/chapter-01/lab-01-06-sequential-list-deduplication/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 01-06：有序顺序表去重");
+  await expect(page.locator('.vp-doc input[type="checkbox"]')).toHaveCount(4);
   await expect(page.locator('.vp-doc input[type="checkbox"]').first()).toBeDisabled();
 
   expect(failures).toEqual([]);
@@ -206,7 +206,7 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   ).toBeVisible();
   await input.fill("静态链表选择题精练");
   await expect(
-    results.locator('a[href*="/labs/chapter-01/lab-01-08-static-linked-list-quiz/"]').first(),
+    results.locator('a[href*="/labs/chapter-01/lab-01-05-static-linked-list-quiz/"]').first(),
   ).toBeVisible();
   await input.fill("算法复杂度与算法分析");
   await expect(
@@ -220,12 +220,12 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-preface/01-lab-authoring-guide/"]').first(),
   ).toBeVisible();
-  await input.fill("实现并验证单链表");
-  const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-linked-list/"]').first();
+  await input.fill("单链表选择题精练");
+  const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-singly-linked-list-quiz/"]').first();
   await expect(labResult).toBeVisible();
   await labResult.click();
   await expect(page).toHaveURL(
-    (url) => url.pathname === `${pagesBasePath}/labs/chapter-01/lab-01-02-linked-list/`,
+    (url) => url.pathname === `${pagesBasePath}/labs/chapter-01/lab-01-02-singly-linked-list-quiz/`,
   );
   expect(failures).toEqual([]);
 });
@@ -589,6 +589,16 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
   await expect(page.locator(".VPSidebar.open")).toContainText("1.2 第一种实现——顺序表 (动态数组)");
   await expect(page.locator(".VPSidebar.open")).toContainText("1.3 第二种实现——链表与演进设计");
   await expect(page.locator(".VPSidebar.open")).toContainText("1.4 比较与权衡");
+  await expect(page.locator(".VPSidebar.open")).toContainText("本章 Labs");
+  await expect(page.locator(".VPSidebar.open")).toContainText("理论 Theory");
+  await expect(page.locator(".VPSidebar.open")).toContainText("实验 Exercise");
+  await expect(page.locator(".VPSidebar.open")).toContainText("工程 Project");
+  await expect(page.locator(".VPSidebar.open")).toContainText("暂无工程型 Lab");
+  const mobileLayout = await page.evaluate(() => ({
+    clientWidth: globalThis.document.documentElement.clientWidth,
+    scrollWidth: globalThis.document.documentElement.scrollWidth,
+  }));
+  expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.clientWidth);
   await page.keyboard.press("Escape");
   await expect(page.locator(".VPSidebar")).toBeHidden();
 
@@ -822,10 +832,10 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   expect(failures).toEqual([]);
 });
 
-test("programming problem template renders the standard problem sections", async ({ page }) => {
+test("the deduplication Golden Program renders the standard problem sections", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-03-problem-template/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 01-03：编程题页面样板");
+  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-06-sequential-list-deduplication/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 01-06：有序顺序表去重");
 
   // 题面 7 要素全部渲染
   for (const heading of ["题目", "输入格式", "输出格式", "数据范围与限制", "样例", "如何验证"]) {
@@ -835,20 +845,20 @@ test("programming problem template renders the standard problem sections", async
   await expect(page.locator(".vp-doc h3").filter({ hasText: "任务要求" })).toHaveCount(1);
 
   // 样例输入与输出代码块
-  const sampleInput = page.locator(".vp-doc pre").filter({ hasText: "1 3 5 7" });
+  const sampleInput = page.locator(".vp-doc pre").filter({ hasText: "1 1 2 2 3 4 4 5" });
   await expect(sampleInput).toBeVisible();
-  await expect(page.locator(".vp-doc pre").filter({ hasText: "1 2 3 4 5 6 7" })).toBeVisible();
+  await expect(page.locator(".vp-doc pre").filter({ hasText: "1 2 3 4 5" })).toBeVisible();
 
   // 数据范围表格与样例解释表格
   await expect(page.locator(".vp-doc table")).toHaveCount(2);
 
   // 验证清单的 checkbox 渲染
-  await expect(page.locator('.vp-doc input[type="checkbox"]')).toHaveCount(3);
+  await expect(page.locator('.vp-doc input[type="checkbox"]')).toHaveCount(4);
 
   // 页内链接到该 Lab 的入口在 Labs 索引中存在
   await page.goto(`${baseUrl}/labs/`);
   await expect(
-    page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-03：编程题页面样板" }),
+    page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-06：有序顺序表去重" }),
   ).toBeVisible();
 
   expect(failures).toEqual([]);
@@ -858,28 +868,28 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
   const failures = monitorPage(page);
   const quizLabs = [
     {
-      slug: "lab-01-04-sequential-list-quiz",
-      title: "Lab 01-04：顺序表选择题精练",
+      slug: "lab-01-01-sequential-list-quiz",
+      title: "Lab 01-01：顺序表选择题精练",
       questions: 10,
     },
     {
-      slug: "lab-01-05-singly-linked-list-quiz",
-      title: "Lab 01-05：单链表选择题精练",
+      slug: "lab-01-02-singly-linked-list-quiz",
+      title: "Lab 01-02：单链表选择题精练",
       questions: 10,
     },
     {
-      slug: "lab-01-06-doubly-linked-list-quiz",
-      title: "Lab 01-06：双链表选择题精练",
+      slug: "lab-01-03-doubly-linked-list-quiz",
+      title: "Lab 01-03：双链表选择题精练",
       questions: 10,
     },
     {
-      slug: "lab-01-07-circular-linked-list-quiz",
-      title: "Lab 01-07：循环链表选择题精练",
+      slug: "lab-01-04-circular-linked-list-quiz",
+      title: "Lab 01-04：循环链表选择题精练",
       questions: 2,
     },
     {
-      slug: "lab-01-08-static-linked-list-quiz",
-      title: "Lab 01-08：静态链表选择题精练",
+      slug: "lab-01-05-static-linked-list-quiz",
+      title: "Lab 01-05：静态链表选择题精练",
       questions: 4,
     },
   ];
@@ -924,16 +934,140 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
     );
   }
 
-  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-04-sequential-list-quiz/`);
+  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-01-sequential-list-quiz/`);
   const chapterSidebar = page.locator(".VPSidebar");
+  const theorySidebarGroup = chapterSidebar.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
+  );
+  await expect(theorySidebarGroup).not.toHaveClass(/collapsed/);
   for (const quiz of quizLabs) {
-    await expect(chapterSidebar.getByRole("link", { name: quiz.title, exact: true })).toHaveCount(1);
+    await expect(theorySidebarGroup.getByRole("link", { name: quiz.title, exact: true })).toHaveCount(
+      1,
+    );
   }
   await expect(page.locator(".course-quiz-stem mjx-container").first()).toBeVisible();
 
-  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-05-singly-linked-list-quiz/`);
+  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-02-singly-linked-list-quiz/`);
   await expect(page.locator(".course-quiz-question").nth(1).locator("table")).toBeVisible();
 
+  expect(failures).toEqual([]);
+});
+
+test("chapter 1 Lab sidebar groups remain native, categorized, and visually distinct", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${baseUrl}/learn/outline/chapter-01-linear-list/`);
+
+  const sidebar = page.locator(".VPSidebar");
+  const labGroup = sidebar.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
+  );
+  await expect(labGroup).toHaveCount(1);
+  await expect(labGroup).not.toHaveClass(/collapsed/);
+
+  const theoryGroup = sidebar.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
+  );
+  const exerciseGroup = sidebar.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)",
+  );
+  const projectGroup = sidebar.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--project)",
+  );
+  await expect(theoryGroup).toHaveClass(/collapsed/);
+  await expect(exerciseGroup).toHaveClass(/collapsed/);
+  await expect(projectGroup).not.toHaveClass(/collapsed/);
+  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText("暂无工程型 Lab");
+
+  for (const group of [theoryGroup, exerciseGroup, projectGroup]) {
+    const icon = group.locator(":scope > .item svg.lucide");
+    await expect(icon).toHaveCount(1);
+    await expect(icon).toHaveAttribute("aria-hidden", "true");
+  }
+
+  await theoryGroup.locator(":scope > .item").focus();
+  await page.keyboard.press("Enter");
+  await expect(theoryGroup).not.toHaveClass(/collapsed/);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(5);
+
+  await exerciseGroup.locator(":scope > .item").focus();
+  await page.keyboard.press("Enter");
+  await expect(exerciseGroup).not.toHaveClass(/collapsed/);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(15);
+
+  await projectGroup.locator(":scope > .item").focus();
+  await page.keyboard.press("Enter");
+  await expect(projectGroup).toHaveClass(/collapsed/);
+  await page.keyboard.press("Enter");
+  await expect(projectGroup).not.toHaveClass(/collapsed/);
+
+  const readLabNavVisual = () => page.evaluate(() => {
+    const root = globalThis.document.querySelector(
+      ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
+    );
+    const colors = ["theory", "exercise", "project"].map((category) => {
+      const label = globalThis.document.querySelector(`.course-lab-category--${category}`);
+      return label ? globalThis.getComputedStyle(label).color : "";
+    });
+    const style = root ? globalThis.getComputedStyle(root) : undefined;
+    const parseColor = (color) => {
+      const channels = (color.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
+      return color.startsWith("color(srgb") ? channels : channels.map((channel) => channel / 255);
+    };
+    const luminance = (color) => {
+      const channels = parseColor(color).map((normalized) => {
+        return normalized <= 0.04045
+          ? normalized / 12.92
+          : ((normalized + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+    };
+    const background = style?.backgroundColor ?? "rgb(255, 255, 255)";
+    const contrasts = colors.map((color) => {
+      const first = luminance(color);
+      const second = luminance(background);
+      return (Math.max(first, second) + 0.05) / (Math.min(first, second) + 0.05);
+    });
+    return {
+      colors,
+      contrasts,
+      borderStyle: style?.borderTopStyle,
+      borderRadius: Number.parseFloat(style?.borderTopLeftRadius ?? "0"),
+      backgroundColor: style?.backgroundColor,
+    };
+  });
+
+  const lightVisual = await readLabNavVisual();
+  expect(new Set(lightVisual.colors).size).toBe(3);
+  expect(
+    lightVisual.contrasts.every((contrast) => contrast >= 4.5),
+    JSON.stringify(lightVisual),
+  ).toBe(true);
+  expect(lightVisual.borderStyle).toBe("solid");
+  expect(lightVisual.borderRadius).toBeGreaterThan(0);
+  expect(lightVisual.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
+
+  await page.locator(".VPNavBarAppearance .VPSwitchAppearance").click();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  const darkVisual = await readLabNavVisual();
+  expect(new Set(darkVisual.colors).size).toBe(3);
+  expect(
+    darkVisual.contrasts.every((contrast) => contrast >= 4.5),
+    JSON.stringify(darkVisual),
+  ).toBe(true);
+
+  await labGroup.locator(":scope > .item").focus();
+  await page.keyboard.press("Enter");
+  await expect(labGroup).toHaveClass(/collapsed/);
+  await page.keyboard.press("Enter");
+  await expect(labGroup).not.toHaveClass(/collapsed/);
+
+  await page.goto(`${baseUrl}/labs/chapter-02/lab-02-01-stack-simulator/`);
+  const chapter2Group = page.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-02-stack-queue/"])',
+  );
+  await expect(chapter2Group).toContainText("相关 Labs");
+  await expect(chapter2Group.locator(".course-lab-nav__title")).toHaveCount(0);
   expect(failures).toEqual([]);
 });
 

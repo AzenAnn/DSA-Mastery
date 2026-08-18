@@ -156,7 +156,7 @@ pnpm install --frozen-lockfile
 
 使用Developer Command Prompt for VS来运行
 
-先cd过去，比如刚刚我放在`C:\Proj\DSA-Mastery`
+先进入仓库目录，例如仓库放在 `C:\Proj\DSA-Mastery`
 
 ```
 cd C:\Proj\DSA-Mastery
@@ -167,7 +167,7 @@ cd C:\Proj\DSA-Mastery
 先使用环境检查命令：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
 ![1786955586099](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955586099.png)
@@ -175,7 +175,7 @@ pnpm lab:doctor -- labs/chapter-01/lab-01-03-problem-template
 如果环境检查通过，可以运行公开测试：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
 ![1786955599809](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955599809.png)
@@ -183,7 +183,7 @@ pnpm lab:run -- labs/chapter-01/lab-01-03-problem-template
 也可以只运行示例测试：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/lab-01-03-problem-template --case sample
+pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --case 001-sample
 ```
 
 ![1786955613245](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955613245.png)

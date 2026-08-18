@@ -622,4 +622,4 @@ left->next = node;
 5. 防范悬空指针。节点释放后，旧地址不能再读取；工程中常用受控迭代器、句柄或明确生命周期约束。
 :::
 
-接下来完成 [Lab 01-02：实现并验证单链表](../../labs/chapter-01/lab-01-02-linked-list/README.md)，用同一组黑盒测试覆盖空表、单节点和头中尾操作。下一篇将把这些实现放到同一张决策表中：[1.4 比较与权衡](./04-comparison-and-selection.md)。
+接下来完成 [Lab 01-09：单链表逆置](../../labs/chapter-01/lab-01-09-singly-linked-list-reverse/README.md)，用可运行测试覆盖空表、单节点和多节点链接修改。下一篇将把这些实现放到同一张决策表中：[1.4 比较与权衡](./04-comparison-and-selection.md)。

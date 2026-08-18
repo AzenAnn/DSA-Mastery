@@ -14,6 +14,7 @@ const requiredFields = [
   "status",
 ];
 const validStatuses = new Set(["draft", "review", "published"]);
+const validLabCategories = new Set(["theory", "exercise", "project"]);
 const prefaceLessonPattern = /^content\/chapter-preface\/\d{2}-[a-z0-9-]+\.md$/;
 
 async function findFiles(root, predicate) {
@@ -72,6 +73,27 @@ function assertFileContract(file, kind, parsed, seenOrder) {
   if (kind === "lab") {
     for (const field of ["lab", "difficulty", "duration"]) {
       if (!parsed.data[field]) throw new Error(`${relativePath}: Lab 缺少字段 ${field}`);
+    }
+    if (parsed.data.labCategory && !validLabCategories.has(parsed.data.labCategory)) {
+      throw new Error(`${relativePath}: labCategory 必须是 theory、exercise 或 project`);
+    }
+    const pathMatch = relativePath.match(
+      /^labs\/chapter-(\d{2})\/lab-(\d{2})-(\d{2})-[a-z0-9-]+\/README\.md$/,
+    );
+    if (
+      !pathMatch ||
+      Number(pathMatch[1]) !== Number(parsed.data.chapter) ||
+      Number(pathMatch[2]) !== Number(parsed.data.chapter) ||
+      Number(pathMatch[3]) !== Number(parsed.data.order)
+    ) {
+      throw new Error(`${relativePath}: 目录编号必须与 frontmatter chapter/order 一致`);
+    }
+    const expectedTitlePrefix = `Lab ${pathMatch[2]}-${pathMatch[3]}：`;
+    if (!parsed.data.title.startsWith(expectedTitlePrefix)) {
+      throw new Error(`${relativePath}: title 必须以 ${expectedTitlePrefix} 开头`);
+    }
+    if (!parsed.body.includes(`# ${parsed.data.title}`)) {
+      throw new Error(`${relativePath}: H1 必须与 frontmatter title 一致`);
     }
   }
   const orderKey = `${kind}:${parsed.data.chapter}:${parsed.data.order}`;
@@ -208,6 +230,17 @@ for (const [kind, files] of [["lesson", lessonFiles], ["lab", labFiles]]) {
     const source = await readFile(file, "utf8");
     const parsed = parseFrontmatter(source, path.relative(projectRoot, file));
     assertFileContract(file, kind, parsed, seenOrder);
+    if (kind === "lab" && parsed.data.chapter === "1") {
+      let hasManifest = true;
+      try {
+        await access(path.join(path.dirname(file), "lab.json"));
+      } catch {
+        hasManifest = false;
+      }
+      if (!hasManifest && !parsed.data.labCategory) {
+        throw new Error(`${path.relative(projectRoot, file)}: 第 1 章 README-only Lab 必须显式声明 labCategory`);
+      }
+    }
     await validateLinks(file, source);
     if (kind === "lab") interactiveQuizCount += await validateQuizLab(file, source);
   }

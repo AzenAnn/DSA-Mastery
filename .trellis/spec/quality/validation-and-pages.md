@@ -21,7 +21,7 @@ Lab 专项稳定入口：
 ```powershell
 pnpm run test:lab-tools
 pnpm run test:lab-docs
-pnpm lab:verify -- labs/chapter-01/lab-01-03-problem-template
+pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 pnpm lab:verify -- labs/chapter-04/lab-04-02-huffman-coding
 ```
 
@@ -67,7 +67,7 @@ actions/configure-pages base_path
 | PR workflow 触发 deploy | workflow 设计失败 |
 | fixture 未清理，工作树变脏 | 测试失败 |
 | 交互题库 JSON 损坏却被 loader 静默跳过 | 发布阻塞；validator 与构建都必须报错 |
-| 章节实际 Lab 集合与“相关 Labs”侧栏不完整 | discovery/Pages 发布阻塞 |
+| 章节实际 Lab 集合与“相关 Labs”或第 1 章分类侧栏不完整 | discovery/Pages 发布阻塞 |
 | 理论标题未转义、`:::` 泄漏、搜索丢失正文或代码组文件名重复 | 发布阻塞 |
 | Lab tool 单测、Golden verify 或学生包自包含检查失败 | Lab/工具 PR 阻塞 |
 | 外部 PR 的 C++ job 获得写 token/秘密，或把评分器宣称为沙箱 | 安全设计失败 |
@@ -83,7 +83,8 @@ actions/configure-pages base_path
 
 - 内容：字段、类型、路径、章一致性、排序、相对文件与站内路由。
 - 依赖：直接导入与 `package.json` 的直接依赖一致；无内置声明的 JavaScript 包具有直接 `@types/*` 依赖，并在冻结锁文件安装后通过 `typecheck`。
-- 自动发现：临时教材和 Lab 在 `try/finally` 内创建，贯穿验证、导航、搜索和 build；另在自动收录章节创建临时 Lab 并证明进入“相关 Labs”。
+- 自动发现：临时教材和 Lab 在 `try/finally` 内创建，贯穿验证、导航、搜索和 build；另在自动收录章节创建临时 Lab，并证明进入“相关 Labs”或第 1 章指定分类。
+- 第 1 章目录迁移：静态合同断言恰好 20 个连续编号 Lab、三个 Demo 产物不存在、分类为 5/15/0；Pages 浏览器覆盖四层原生折叠、三色三图标、Project 空状态、明暗主题与 390px 无溢出。
 - 产物：期望 HTML、favicon/OG、内部链接、asset、404、恰好一个 base。
 - 浏览器：三段真实点击、搜索教材/Lab、主题持久化、移动目录、代表性公式/代码/表格/任务列表、edit link。
 - 理论文档：11 种容器、默认/自定义/恶意标题、嵌套 Markdown、搜索内容、mark 边界、独立文件名、代码组去重与 Shiki highlight/focus/diff/warning/error。
