@@ -586,7 +586,7 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
 
   await page.locator(".VPLocalNav .menu").click();
   await expect(page.locator(".VPSidebar.open")).toBeVisible();
-  await expect(page.locator(".VPSidebar.open")).toContainText("1.2 顺序表");
+  await expect(page.locator(".VPSidebar.open")).toContainText("1.2 第一种实现——顺序表 (动态数组)");
   await expect(page.locator(".VPSidebar.open")).toContainText("1.3 第二种实现——链表与演进设计");
   await expect(page.locator(".VPSidebar.open")).toContainText("1.4 比较与权衡");
   await page.keyboard.press("Escape");
