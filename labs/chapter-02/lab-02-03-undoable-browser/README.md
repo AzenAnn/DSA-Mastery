@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-01：可撤销浏览器——栈的超级大综合"
+title: "Lab 02-03：可撤销浏览器——栈的超级大综合"
 description: "用双栈导航与命令栈撤销重做，实现一个支持前进/后退与 Undo/Redo 的可撤销浏览器内核。"
-order: 1
+order: 3
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-18"
@@ -12,13 +12,13 @@ difficulty: "综合"
 duration: "300～420 分钟"
 ---
 
-# Lab 02-01：可撤销浏览器——栈的超级大综合
+# Lab 02-03：可撤销浏览器——栈的超级大综合
 
 ## 目标 
 
 实现一个"可撤销浏览器"内核：它既能像真实浏览器一样前进 / 后退导航，又能在每个页面上支持撤销 / 重做输入操作。本 Lab 是**栈这一章的超级大综合**，要求你把线性结构、命令模式（Command Pattern，命令模式）、边界处理与异常安全四个工程能力整合进同一个系统。
 
-> 注意：本 Lab 希望**只允许使用栈**（必要时退化为 `std::vector` 或链表），而不使用 `queue`、`map`、`set`、优先队列等容器，确保考察点严格落在栈上。栈 + 队列联动的综合题是 Lab 02-03 停车场管理。
+> 注意：本 Lab 希望**只允许使用栈**（必要时退化为 `std::vector` 或链表），而不使用 `queue`、`map`、`set`、优先队列等容器，确保考察点严格落在栈上。栈 + 队列联动的综合题是 Lab 02-05 停车场管理。
 
 ## 背景阐述
 
@@ -179,7 +179,7 @@ BACK 1
 BACK 1
 FORWARD 2
 VISIT https://github.com
-DO INPUT "lab02-01 = done"
+DO INPUT "lab02-03 = done"
 DO SUBMIT
 UNDO
 REDO
@@ -197,7 +197,7 @@ EXIT
 [10:00:20] back(1)                            | current=home.sysu.edu.cn       | back=[]            | fwd=[dsa, cs]
 [10:00:25] forward(2)                         | current=dsa.sysu.edu.cn/lab02 | back=[home, cs]    | fwd=[]
 [10:00:30] visit  https://github.com          | current=github.com             | back=[home, cs, dsa] | fwd=[]   # 前进栈被清空
-[10:00:40] DO INPUT "lab02-01 = done"         | undo=[INPUT]                   | redo=[]
+[10:00:40] DO INPUT "lab02-03 = done"         | undo=[INPUT]                   | redo=[]
 [10:00:42] DO SUBMIT                          | undo=[INPUT, SUBMIT]           | redo=[]
 [10:00:45] UNDO                               | undo=[INPUT]                   | redo=[SUBMIT]
 [10:00:48] REDO                               | undo=[INPUT, SUBMIT]           | redo=[]
@@ -205,7 +205,7 @@ HISTORY:
   back_stack_  = [home.sysu.edu.cn, cs.sysu.edu.cn, dsa.sysu.edu.cn/lab02]
   current      = github.com
   forward_stack_ = []
-  undo_stack_  = [INPUT "lab02-01 = done", SUBMIT]
+  undo_stack_  = [INPUT "lab02-03 = done", SUBMIT]
   redo_stack_  = []
 EXIT
 ```
@@ -245,7 +245,7 @@ EXIT
 
 ## 提交物
 
-1. 完整可运行源码，建议目录 `labs/chapter-02/lab-02-01-undoable-browser/`：
+1. 完整可运行源码，建议目录 `labs/chapter-02/lab-02-03-undoable-browser/`：
    - `browser.h` / `browser.cpp`（导航 + Undo/Redo + 存档）
    - `command.h` / `command.cpp`（`Command` 基类与三个子类）
    - `logger.h` / `logger.cpp`（结构化日志）

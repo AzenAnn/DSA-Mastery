@@ -358,4 +358,4 @@ private:
 - [LeetCode 622：设计循环队列](https://leetcode.cn/problems/design-circular-queue/)：检查环形下标、判空与判满。
 - [LeetCode 232：用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/)：检查结构组合与摊还分析。
 
-完成理论后，进入 [Lab 02-03：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-03-parking-lot-management/README.md)，用队列模拟门外便道，把本节的不变量（判空、判满、环绕）转化为可运行断言。
+完成理论后，进入 [Lab 02-05：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md)，用队列模拟门外便道，把本节的不变量（判空、判满、环绕）转化为可运行断言。

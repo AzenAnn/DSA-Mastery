@@ -44,9 +44,9 @@ status: "draft"
 
 ## 配套 Labs
 
-- [Lab 02-01：可撤销浏览器——栈的超级大综合](../../labs/chapter-02/lab-02-01-undoable-browser/README.md)
-- [Lab 02-02：超市收银模拟——队列的大综合](../../labs/chapter-02/lab-02-02-supermarket-checkout/README.md)
-- [Lab 02-03：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-03-parking-lot-management/README.md)
+- [Lab 02-03：可撤销浏览器——栈的超级大综合](../../labs/chapter-02/lab-02-03-undoable-browser/README.md)
+- [Lab 02-04：超市收银模拟——队列的大综合](../../labs/chapter-02/lab-02-04-supermarket-checkout/README.md)
+- [Lab 02-05：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md)
 
 ## 学习建议
 
