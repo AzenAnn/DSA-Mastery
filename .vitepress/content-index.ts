@@ -89,6 +89,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     lessonSources: [
       "content/chapter-preface/00-theory-environments.md",
       "content/chapter-preface/01-lab-authoring-guide.md",
+      "content/chapter-preface/02-windows-student-setup.md",
     ],
   },
   {
@@ -127,6 +128,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-01-linear-list/02-sequential-list.md",
       "content/chapter-01-linear-list/03-linked-list.md",
       "content/chapter-01-linear-list/04-comparison-and-selection.md",
+      "content/chapter-01-linear-list/05-real-world-practices.md",
     ],
     autoLabChapter: 1,
   },
@@ -156,7 +158,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     lessonSources: [
       "content/chapter-03-string-array/00-overview.md",
       "content/chapter-03-string-array/01-string-basics.md",
-      "content/chapter-03-string-array/02-pattern-matching.md",
+      "content/chapter-03-string-array/02-string-matching-and-processing.md",
       "content/chapter-03-string-array/03-array-and-matrix.md",
     ],
     labSources: [
@@ -223,18 +225,29 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-08-basic-tree-search/",
     lessonSources: [
       "content/chapter-06-search/00-overview.md",
-      "content/chapter-06-search/01-binary-search-tree.md",
+      "content/chapter-06-search/01-linear-and-binary-search.md",
+      "content/chapter-06-search/02-binary-search-tree.md",
+      "content/chapter-06-search/03-balanced-search-tree.md",
     ],
-    labSources: ["labs/chapter-06/lab-06-01-bst-operations/README.md"],
+    labSources: [
+      "labs/chapter-06/lab-06-01-bst-operations/README.md",
+      "labs/chapter-06/lab-06-03-search-theory-quiz/README.md",
+    ],
   },
   {
     id: "chapter-09-hashing-indexes",
     number: "9",
     title: "散列与索引结构",
-    description: "理解散列函数、冲突处理和面向查找效率的索引结构。",
+    description: "理解多路索引、散列函数、冲突处理和外存查找结构。",
     url: "/learn/outline/chapter-09-hashing-indexes/",
-    lessonSources: ["content/chapter-06-search/02-hash-table.md"],
-    labSources: ["labs/chapter-06/lab-06-02-hash-table/README.md"],
+    lessonSources: [
+      "content/chapter-06-search/04-b-tree-and-b-plus-tree.md",
+      "content/chapter-06-search/05-hash-table.md",
+    ],
+    labSources: [
+      "labs/chapter-06/lab-06-02-hash-table/README.md",
+      "labs/chapter-06/lab-06-03-search-theory-quiz/README.md",
+    ],
   },
   {
     id: "chapter-10-basic-sorting",

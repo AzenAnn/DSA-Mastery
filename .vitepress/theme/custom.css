@@ -1695,12 +1695,14 @@ input:focus-visible {
 
 .course-quiz {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   margin: 30px 0 34px;
 }
 
 /* 题目卡 */
 .course-quiz-question {
+  min-width: 0;
   scroll-margin-top: calc(var(--vp-nav-height) + 26px);
   padding: 26px 28px;
   border: 1px solid var(--course-line);
@@ -2301,5 +2303,100 @@ input:focus-visible {
 
   .course-quiz-feedback {
     padding: 15px 14px;
+  }
+}
+
+/* 教材正文即时复习（QuizSet inline 模式） */
+.course-review-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 18px;
+  border: 1px dashed color-mix(in srgb, var(--course-line-strong) 70%, transparent);
+  border-radius: var(--course-radius-sm);
+  background: var(--course-paper-strong);
+  color: var(--course-ink);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    border-color var(--course-motion-fast),
+    color var(--course-motion-fast),
+    background-color var(--course-motion-fast);
+}
+
+.course-review-toggle:hover {
+  border-color: var(--course-accent);
+  background: color-mix(in srgb, var(--course-accent-soft) 55%, var(--course-paper-strong));
+  color: var(--course-accent);
+}
+
+.course-review-toggle svg {
+  flex: 0 0 auto;
+}
+
+.course-review-toggle-count {
+  margin-left: auto;
+  color: var(--course-ink-faint);
+  font-family: var(--course-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.course-quiz-inline .course-quiz-question {
+  margin-top: 14px;
+}
+
+/* 选项行：提交后每个选项右侧出现“回看原文” */
+.course-quiz-option-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.course-quiz-option-row .course-quiz-option {
+  flex: 1 1 auto;
+}
+
+.course-quiz-option-ref {
+  flex: 0 0 auto;
+  padding: 6px 11px;
+  border: 1px solid color-mix(in srgb, var(--course-accent) 45%, var(--course-line));
+  border-radius: 999px;
+  background: var(--course-accent-soft);
+  color: var(--course-accent);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    border-color var(--course-motion-fast),
+    background-color var(--course-motion-fast);
+}
+
+.course-quiz-option-ref:hover {
+  border-color: var(--course-accent);
+  background: color-mix(in srgb, var(--course-accent-soft) 70%, var(--course-paper-strong));
+}
+
+/* 原文定位与高亮 */
+.course-review-target {
+  scroll-margin-top: calc(var(--vp-nav-height) + 26px);
+}
+
+.course-review-flash {
+  animation: course-review-flash 2.4s ease 1;
+  border-radius: 6px;
+}
+
+@keyframes course-review-flash {
+  0%,
+  45% {
+    background-color: color-mix(in srgb, #ffd25e 55%, transparent);
+  }
+  100% {
+    background-color: transparent;
   }
 }

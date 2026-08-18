@@ -4,8 +4,8 @@ description: "实现链地址法与线性探测两种散列表，统计冲突并
 order: 2
 chapter: 6
 chapterTitle: "查找"
-updated: "2026-08-12"
-contributors: ["Azen"]
+updated: "2026-08-15"
+contributors: ["Azen", "RichardYi-SYSU-Mac"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -20,7 +20,7 @@ duration: "90～120 分钟"
 
 ## 前置知识
 
-- 第 6.2 节散列函数、链地址法、开放定址法与负载因子。
+- [第 6.5 节 散列表](../../../content/chapter-06-search/05-hash-table.md)中的散列函数、链地址法、开放定址法与装填因子。
 
 ## 建议用时
 
