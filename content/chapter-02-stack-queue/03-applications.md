@@ -1,6 +1,6 @@
 ---
 title: "2.3 栈与队列的应用"
-description: "从栈与队列的特性出发，理解它们为何能匹配不同的数学问题与真实场景，并用表达式求值、单调栈与逐层扩散落地为可运行代码。"
+description: "从栈与队列的访问语义出发，理解表达式求值、单调栈与逐层扩散，并落地为可编译的核心实现。"
 order: 3
 chapter: 2
 chapterTitle: "栈与队列"
@@ -80,9 +80,10 @@ status: "draft"
 先看后缀求值：操作数压栈，运算符弹出两个操作数计算后压回。
 
 ```cpp:line-numbers [postfix-eval.cpp]
+#include <cctype>
 #include <stack>
-#include <string_view>
 #include <stdexcept>
+#include <string_view>
 
 int apply(int a, int b, char op) {
     switch (op) {
@@ -92,25 +93,30 @@ int apply(int a, int b, char op) {
         case '/':
             if (b == 0) throw std::domain_error("除零");
             return a / b;
-        default:  throw std::invalid_argument("未知运算符");
+        default: throw std::invalid_argument("未知运算符");
     }
 }
 
 int eval_postfix(std::string_view expr) {
     std::stack<int> st;
     for (char ch : expr) {
-        if (ch >= '0' && ch <= '9') {
-            st.push(ch - '0');                    // 操作数入栈（简化为单个数字）
-        } else if (ch == ' ') {
+        const auto uch = static_cast<unsigned char>(ch);
+        if (std::isdigit(uch)) {
+            st.push(ch - '0');                    // 操作数简化为单个数字
+        } else if (std::isspace(uch)) {
             continue;
         } else {
             if (st.size() < 2) throw std::invalid_argument("操作数不足");
-            int b = st.top(); st.pop();
-            int a = st.top(); st.pop();
+            int b = st.top();                     // 先弹出右操作数
+            st.pop();
+            int a = st.top();                     // 再弹出左操作数
+            st.pop();
             st.push(apply(a, b, ch));
         }
     }
-    if (st.size() != 1) throw std::invalid_argument("多余操作数");
+    if (st.size() != 1) {
+        throw std::invalid_argument("后缀表达式必须产生且只产生一个结果");
+    }
     return st.top();
 }
 ```
@@ -141,10 +147,11 @@ int precedence(char op) {
 std::string infix_to_postfix(std::string_view expr) {
     std::stack<char> ops;
     std::string out;
+    out.reserve(expr.size());
     bool expect_operand = true;
     for (char ch : expr) {
-        if (ch == ' ') continue;
         const auto uch = static_cast<unsigned char>(ch);
+        if (std::isspace(uch)) continue;
         if (std::isalpha(uch) || std::isdigit(uch)) {
             if (!expect_operand) throw std::invalid_argument("操作数之间缺少运算符");
             out += ch;
@@ -155,7 +162,8 @@ std::string infix_to_postfix(std::string_view expr) {
         } else if (ch == ')') {
             if (expect_operand) throw std::invalid_argument("右括号前缺少操作数");
             while (!ops.empty() && ops.top() != '(') {
-                out += ops.top(); ops.pop();
+                out += ops.top();
+                ops.pop();
             }
             if (ops.empty()) throw std::invalid_argument("括号不匹配");
             ops.pop();                            // 弹出 '('
@@ -164,7 +172,8 @@ std::string infix_to_postfix(std::string_view expr) {
             if (expect_operand) throw std::invalid_argument("运算符前缺少操作数");
             while (!ops.empty() && ops.top() != '(' &&
                    precedence(ops.top()) >= precedence(ch)) {
-                out += ops.top(); ops.pop();
+                out += ops.top();
+                ops.pop();
             }
             ops.push(ch);
             expect_operand = true;
@@ -175,18 +184,21 @@ std::string infix_to_postfix(std::string_view expr) {
     if (expect_operand) throw std::invalid_argument("表达式不完整");
     while (!ops.empty()) {
         if (ops.top() == '(') throw std::invalid_argument("括号不匹配");
-        out += ops.top(); ops.pop();
+        out += ops.top();
+        ops.pop();
     }
     return out;
 }
 ```
 
+当前函数使用单字符 token，实际返回值不包含分隔空格。例如 `a + b * c` 返回 `abc*+`；下面的推导加入空格只是为了区分 token。
+
 ::: complexity 复杂度 · 调度场与后缀求值
-每个运算符至多入栈一次、出栈一次，所以中缀转后缀的时间复杂度为 $O(n)$；后缀求值对每个 token 处理一次，时间复杂度同样为 $O(n)$。两个过程的辅助空间都是 $O(n)$。
+令输入长度为 $n$。两个过程都必须扫描全部输入；每个运算符至多入栈一次、出栈一次，因此中缀转后缀与后缀求值的时间复杂度均为 $\Theta(n)$，最坏辅助空间复杂度均为 $\Theta(n)$。
 :::
 
 ::: warning 示例边界
-为突出栈操作，示例只支持单字符操作数和二元 `+`、`-`、`*`、`/`。`eval_postfix` 只计算单个十进制数字，并假设所有中间结果都落在 `int` 范围内；工程实现还需要分词、多位数解析、溢出检查和明确的整数除法语义。
+为突出栈操作，示例只支持单字符操作数以及左结合的二元 `+`、`-`、`*`、`/`，并忽略空白字符。`eval_postfix()` 只计算单个十进制数字，且假设所有中间结果都落在 `int` 范围内；工程实现还需要分词、多位数解析、溢出检查和明确的整数除法语义。
 :::
 
 ::: details 用调度场转换 `a + b * c` 的全过程
@@ -197,7 +209,11 @@ std::string infix_to_postfix(std::string_view expr) {
 5. 读 `c`：输出 → `a b c`。
 6. 结束：依次弹出 → `a b c * +`。
 
-得到后缀表达式 `a b c * +`，与"乘法优先于加法"一致。
+得到 token 序列 `a b c * +`，即函数实际返回的 `abc*+`，与“乘法优先于加法”一致。
+:::
+
+::: example 示例 · 完整转换并求值
+中缀表达式 `(2 + 3) * (7 - 4)` 转换为 `23+74-*`。后缀求值先用 `2 3 +` 得到 `5`，再用 `7 4 -` 得到 `3`，最后计算 `5 3 *`，结果为 `15`。
 :::
 
 ### 单调栈：下一个更大元素
@@ -206,17 +222,24 @@ std::string infix_to_postfix(std::string_view expr) {
 
 **单调栈**维护一个从栈底到栈顶对应值单调不增的下标栈（栈顶对应值最小；相等元素可以同时保留）。从左到右扫描，当新元素比栈顶对应值大时，栈顶位置的“下一个更大元素”就是当前元素，于是记录答案并弹栈；之后再把新元素的下标入栈。
 
+::: property 性质 · 单调栈的候选不变量
+处理下标 `i` 之前，栈中只保存右侧第一个更大元素尚未出现的下标；这些下标按扫描顺序排列，对应值从栈底到栈顶单调不增。
+:::
+
+代码使用 `std::optional<int>` 区分“答案恰好为 `-1`”与“不存在更大元素”，避免用合法元素值充当失败标记。
+
 ```cpp:line-numbers [monotonic-stack.cpp]
+#include <cstddef>
+#include <optional>
 #include <stack>
 #include <vector>
 
-std::vector<int> next_greater(const std::vector<int>& nums) {
-    int n = static_cast<int>(nums.size());
-    std::vector<int> ans(n, -1);                  // 默认没有下一个更大元素
-    std::stack<int> st;                           // 存下标，对应值从栈底到栈顶单调不增
-    for (int i = 0; i < n; ++i) {
+std::vector<std::optional<int>> next_greater(const std::vector<int>& nums) {
+    std::vector<std::optional<int>> ans(nums.size());
+    std::stack<std::size_t> st;                   // 存下标，对应值从栈底到栈顶单调不增
+    for (std::size_t i = 0; i < nums.size(); ++i) {
         while (!st.empty() && nums[st.top()] < nums[i]) {
-            ans[st.top()] = nums[i];              // 栈顶找到了下一个更大元素
+            ans[st.top()] = nums[i];
             st.pop();
         }
         st.push(i);
@@ -225,14 +248,16 @@ std::vector<int> next_greater(const std::vector<int>& nums) {
 }
 ```
 
+::: proof 正确性说明
+下标 `j` 被当前位置 `i` 弹出时有 `nums[i] > nums[j]`。如果 `j` 与 `i` 之间曾出现更大的元素，`j` 应在处理那个元素时就已出栈；因此 `nums[i]` 正是 `nums[j]` 右边第一个更大的元素。扫描结束后仍留在栈中的下标从未遇到更大元素，其答案保持为空。
+:::
+
+::: example 示例 · 下一个更大元素
+输入 `[2, 1, 2, 4, 3]` 时，结果为 `[4, 2, 4, 无, 无]`。两个“无”分别表示 `4` 和 `3` 的右边不存在更大元素。
+:::
+
 ::: complexity 复杂度 · 单调栈
-每个下标最多入栈一次、出栈一次。内层 `while` 虽然在某一步可能连续弹出多个元素，但整次扫描的弹栈总数不超过 $n$，因此
-
-$$
-T(n) = O(n).
-$$
-
-答案数组与栈都最多保存 $n$ 个元素，空间复杂度为 $O(n)$。
+每个下标恰好入栈一次、最多出栈一次。内层 `while` 虽然在某一步可能连续弹出多个下标，但整次扫描的弹栈总数不超过 $n$，因此时间复杂度为 $\Theta(n)$。结果数组占用 $\Theta(n)$ 空间，辅助栈的最坏空间复杂度为 $O(n)$。
 :::
 
 ### 队列与逐层扩散
@@ -253,11 +278,12 @@ int min_steps(int start, int target, int limit) {
     }
 
     std::queue<int> q;
-    std::vector<int> dist(limit, -1);             // dist[x] = 到达 x 的最少步数，-1 表示未访问
+    std::vector<int> dist(limit, -1);             // dist[x] = 最少步数，-1 表示未访问
     q.push(start);
     dist[start] = 0;
     while (!q.empty()) {
-        int cur = q.front(); q.pop();
+        int cur = q.front();
+        q.pop();
         if (cur == target) return dist[cur];
         const long long candidates[] = {
             static_cast<long long>(cur) - 1,
@@ -267,84 +293,101 @@ int min_steps(int start, int target, int limit) {
         for (long long candidate : candidates) {
             if (candidate < 0 || candidate >= limit) continue;
             const int nxt = static_cast<int>(candidate);
-            if (dist[nxt] != -1) continue;        // 已访问，跳过
-            dist[nxt] = dist[cur] + 1;
+            if (dist[nxt] != -1) continue;
+            dist[nxt] = dist[cur] + 1;             // 入队时立即标记
             q.push(nxt);
         }
     }
-    return -1;                                    // 不可达
+    return -1;                                    // 当前移动规则下理论上不会执行
 }
 ```
 
 ::: property 性质 · 单位代价下第一次到达即最短
-队列严格按层处理：先扩展步数为 0 的起点，再扩展步数为 1 的所有位置，之后才是步数为 2 的位置。由于每次移动的代价都为 1，并且状态在入队时立即标记，第一次到达 `target` 时记录的步数必然最小。若换成栈，搜索可能沿某条路径不断深入，不能保证先遇到最短路径。
+队列中的状态按 `dist` 非递减的顺序出队。由于每次移动的代价都为 1，某状态第一次入队时写入的 `dist` 必然是最少步数；代码随后在该状态出队时返回这个值。若换成栈，搜索可能沿某条路径不断深入，不能保证先遇到最短路径。
 :::
 
-::: warning 广度优先的完整图论部分在第 5 章
-这里只展示"队列在逐层扩散中的作用"。真正的图广度优先遍历（BFS，Breadth-First Search）、邻接表与最短路径，将在第 5 章"图的遍历与应用"系统展开。本节的关键收获是：**队列的 FIFO 顺序恰好对应"按层处理"**。
+::: example 示例 · 从 5 到 17
+当 `start = 5`、`target = 17`、`limit = 100` 时，一条最短移动序列是 `5 → 10 → 9 → 18 → 17`，共 4 步。
+:::
+
+::: complexity 复杂度 · 一维逐层扩散
+令状态范围大小为 $L=\text{limit}$。每个位置最多入队一次，每次只检查三个候选位置，因此最坏时间复杂度为 $\Theta(L)$；`dist` 数组和队列的最坏空间复杂度均为 $\Theta(L)$。若提前到达目标，实际访问的状态可能少于 $L$。
+:::
+
+::: warning 广度优先的完整图论部分在后续章节
+这里只展示“队列在逐层扩散中的作用”。图的存储、广度优先遍历和最短路径将在[图的遍历](../chapter-05-graph/02-traversal.md)中系统展开。本节的关键收获是：**队列的 FIFO 顺序恰好对应“按层处理”**。
 :::
 
 ## 场景应用：用数据结构构造真实系统
 
-抽象应用是"解一道算法题"；场景应用是"建一个系统"。后者把"数据结构 + 流程代码范式"拼起来，是工程能力的集中体现，也对应本章的三个配套 Lab。
+抽象应用是“解一道算法题”；场景应用是“建一个系统”。后者把“数据结构 + 流程代码范式”拼起来，是工程能力的集中体现，也对应本章的三个配套 Lab。
 
 ### 栈的场景：浏览器与编辑器
 
-- **浏览器前进 / 后退**：维护后退栈 `back` 与前进栈 `forward`。访问新页面时把当前页压入 `back`，并**清空 `forward`**（前进历史作废）。这就是"最近优先"语义：后退永远是回到最近访问过的页。
-- **文本编辑器 Undo / Redo**：把每次操作封装成命令对象压入撤销栈，撤销时弹栈反向执行，再压入重做栈。撤销的永远是"最近一次操作"。
+- **浏览器前进 / 后退**：维护后退栈 `back` 与前进栈 `forward`。访问新页面时把当前页压入 `back`，并**清空 `forward`**（前进历史作废）。这就是“最近优先”语义：后退永远是回到最近访问过的页。
+- **文本编辑器 Undo / Redo**：把每次操作封装成命令对象压入撤销栈，撤销时弹栈反向执行，再压入重做栈。撤销的永远是“最近一次操作”。
 
-两者都可以用栈建模。一次栈顶转移的容器操作通常为 $O(1)$；`back(k)`、`forward(k)` 需要 $O(k)$ 次转移，而命令本身对文档的修改成本还取决于数据量，不能笼统地说完整业务操作都是 $O(1)$。任务说明见 [Lab 02-03：可撤销浏览器——栈的超级大综合](../../labs/chapter-02/lab-02-03-undoable-browser/README.md)。
+两者都可以用栈建模。任务说明见 [Lab 02-03：可撤销浏览器——栈的超级大综合](../../labs/chapter-02/lab-02-03-undoable-browser/README.md)。
 
 ### 队列的场景：收银与调度
 
-- **超市收银 / 银行排队**：多个窗口各有一条顾客队列，顾客选最短队入队，收银员先到先服务。这正是"先到先处理"的公平性，复用 2.2 节的循环队列。
-- **Round-Robin 调度**（round-robin，时间片轮转）：进程按到达顺序排成一队，用完一个时间片就回到队尾。队头永远是"下一个被调度"的进程。
+- **超市收银 / 银行排队**：多个窗口各有一条顾客队列，顾客选最短队入队，收银员先到先服务。这正是“先到先处理”的公平性，复用 2.2 节的循环队列。
+- **Round Robin（时间片轮转）**：进程按到达顺序排成一队，用完一个时间片就回到队尾。队头永远是“下一个被调度”的进程。
 
-完整实现见 [Lab 02-04：超市收银模拟——队列的大综合](../../labs/chapter-02/lab-02-04-supermarket-checkout/README.md)。
+任务说明见 [Lab 02-04：超市收银模拟——队列的大综合](../../labs/chapter-02/lab-02-04-supermarket-checkout/README.md)。
 
 ### 栈 + 队列联动：停车场管理
 
-停车场内部车道用**栈**（后进的车堵住先进的车，取车要倒出来），门外便道用**队列**（先到先进场）。这是"最近优先"与"先到优先"在同一业务流程里协作的典型例子。完整实现见 [Lab 02-05：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md)。
+停车场内部车道用**栈**（后进的车堵住先进的车，取车要倒出来），门外便道用**队列**（先到先进场）。这是“最近优先”与“先到优先”在同一业务流程里协作的典型例子。任务说明见 [Lab 02-05：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md)。
+
+::: complexity 复杂度 · 容器操作不等于业务操作
+一次栈顶转移或队列首尾操作通常为 $O(1)$，但完整业务可能包含多次基础操作：浏览器 `back(k)`、`forward(k)` 需要 $O(k)$ 次转移；从 $m$ 个收银窗口中线性寻找最短队列需要 $O(m)$；让停车场栈中深度为 $k$ 的车辆离开，需要临时移出并恢复其上方车辆，时间复杂度为 $O(k)$。
+:::
 
 ## 常见错误汇总
 
 把上面各应用最容易犯的错集中在这里，供自查：
 
+::: pitfall 易错点 · 应用中的契约错误
+
 | 应用 | 常见错误 | 正确做法 |
 | --- | --- | --- |
-| 表达式求值 | 右括号处理时忘了先检查栈空；除零未拦截 | 遇到 `)` 先确认栈里有 `(`；`/` 的右操作数为 0 时显式报错 |
-| 表达式求值 | 运算符弹出前栈里不足两个操作数 | 先检查 `size() >= 2` |
-| 单调栈 | 单调方向搞反（该递减却写成递增） | 写代码前先问"栈顶该是尚未找到答案的元素里最可能被解锁的吗" |
-| 逐层扩散 | 出队时才标记访问，导致重复入队 | 入队时立即标记（`dist` 赋值），防止 `x-1` 与 `x+1` 互相倒灌 |
-| 浏览器后退 | 访问新页后没有清空前进栈 | `visit` 时必须清空 `forward`，否则前进到无关页面 |
+| 中缀转换 | 右括号处理时忘了检查是否存在对应左括号 | 弹出运算符后确认栈顶确实存在 `(` |
+| 后缀求值 | 把先弹出的值当成左操作数，错误计算成 `b op a` | 先弹出右操作数 `b`，再弹出左操作数 `a`，计算 `a op b` |
+| 后缀求值 | 运算符弹出前栈里不足两个操作数；除零未拦截 | 先检查 `size() >= 2`，并在除法前检查右操作数 |
+| 单调栈 | 单调方向搞反 | 先确认栈中保存哪些“尚未得到答案的候选”，再确定单调方向 |
+| 逐层扩散 | 出队时才标记访问，导致重复入队 | 入队时立即写入 `dist`，确保每个状态只入队一次 |
+| 浏览器后退 | 访问新页后没有清空前进栈 | `visit` 时必须清空 `forward`，否则会进入与当前路径无关的页面 |
+
+:::
 
 ## 小结
 
 栈与队列的应用，归根结底是**语义的延伸**：
 
-- 栈的"后进先出"对应"最近优先"，于是匹配括号、表达式、递归、撤销、后退这类**嵌套或回溯**问题；
-- 队列的"先进先出"对应"先到优先"，于是匹配逐层扩散、排队、调度这类**顺序或公平**问题。
+- 栈的“后进先出”对应“最近优先”，于是匹配括号、表达式、递归、撤销、后退这类**嵌套或回溯**问题；
+- 队列的“先进先出”对应“先到优先”，于是匹配逐层扩散、排队、调度这类**顺序或公平**问题。
 
-理解"特性 → 数学原理 → 应用"这条链，比背应用名单更本质：遇到新问题时，先判断它是"最近优先"还是"先到优先"，结构自然就选出来了。
+理解“特性 → 问题结构 → 应用”这条链，比背应用名单更本质：遇到新问题时，先判断它是“最近优先”还是“先到优先”，结构自然就选出来了。
 
 ## 练习
 
-1. 把 `(a + b) * (c - d)` 转换为后缀表达式，并给出完整求值步骤。
-2. 单调栈能求出"左边第一个比它小"的元素吗？需要维护什么性质的栈？
-3. 在"农夫抓牛"中，为什么入队时标记 `dist` 而非出队时标记？
+1. 把 `(2 + 3) * (7 - 4)` 转换为后缀表达式，并用栈给出完整求值过程。
+2. 单调栈能求出“左边第一个比它小”的元素吗？需要维护什么性质的栈？
+3. 在“农夫抓牛”中，为什么入队时写入 `dist`，而不是等到出队时才标记？
 4. 浏览器访问新页面时为什么要清空前进栈？不清空会发生什么？（可对照 Lab 02-03）
-5. 一个系统需要"后到的请求先处理"（如撤销栈），它该用栈还是队列？如果改成"等待最久的请求先处理"呢？
+5. 一个系统需要“后到的请求先处理”（如撤销栈），它该用栈还是队列？如果改成“等待最久的请求先处理”呢？
 
 ::: details 查看参考思路
-1. `(a + b) * (c - d)` 转后缀为 `a b + c d - *`；求值：先算 `a+b`、`c-d`，再相乘。
+1. 后缀表达式为 `23+74-*`：`2 3 +` 得到 `5`，`7 4 -` 得到 `3`，最后 `5 3 *` 得到 `15`。
 2. 能。从左到右扫描并维护一个从栈底到栈顶严格递增的候选栈。处理当前元素时，先弹出所有大于或等于当前值的元素；此时若栈非空，栈顶就是左边第一个更小的元素，记录答案后再把当前元素入栈。
-3. 入队时标记可防止同一位置被反复入队（`x-1` 与 `x+1` 互指），保证逐层性；出队时才标记会让队列被重复节点撑爆。
-4. 不清空前进栈，后退后再访问新页，前进栈里会残留"旧未来"，导致前进到与当前浏览路径无关的页面。
-5. "后到先处理"是后进先出，用栈；"等待最久先处理"是先进先出，用队列。
+3. FIFO 队列负责按距离分层；入队时写入 `dist` 则保证每个状态只入队一次，而且第一次写入的就是最短距离。若出队时才标记，同一状态可能在出队前被多个前驱重复加入队列。
+4. 不清空前进栈，后退后再访问新页，前进栈里会残留“旧未来”，导致前进到与当前浏览路径无关的页面。
+5. “后到先处理”是后进先出，用栈；“等待最久先处理”是先进先出，用队列。
 :::
 
 ## 延伸阅读
 
 - Edsger W. Dijkstra 在 1961 年的 [ALGOL 60 Translation（EWD 35）](https://www.cs.utexas.edu/~EWD/transcriptions/EWD00xx/EWD35.html)中描述了后来被称为 shunting-yard 的翻译方法。
 - 单调栈与单调队列可继续练习 LeetCode 496 / 503 / 739（下一个更大元素、每日温度）与 239（滑动窗口最大值）。
-- 广度优先遍历的完整图论部分见本课程第 5 章。
+- 广度优先遍历的完整图论内容见[图的遍历](../chapter-05-graph/02-traversal.md)。

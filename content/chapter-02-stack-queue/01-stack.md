@@ -43,7 +43,7 @@ status: "draft"
 
 | 操作 | 语义 | 前置条件或失败方式 |
 | --- | --- | --- |
-| `push(value)` | 将 `value` 压入栈顶 | 动态实现可能因分配失败而抛异常 |
+| `push(value)` | 将 `value` 压入栈顶 | 动态实现可能因内存分配或元素构造失败而抛异常 |
 | `pop()` | 删除当前栈顶元素 | 本文自实现版本在空栈时抛出 `std::out_of_range` |
 | `top()` | 返回栈顶元素但不删除 | 本文自实现版本在空栈时抛出 `std::out_of_range` |
 | `empty()` | 判断栈是否为空 | 不修改状态 |
@@ -57,7 +57,7 @@ status: "draft"
 
 栈的语义不变，但实现可变：
 
-- 顺序栈：数组（连续内存）
+- 顺序栈：动态数组（连续内存）
 - 链栈：链表（离散内存）
 - `std::stack`：C++ 标准库适配器（默认底层是 `deque`）
 
@@ -73,23 +73,26 @@ status: "draft"
 无论采用顺序存储还是链式存储，每次公开操作结束后都应满足：
 
 - `empty()` 当且仅当 `size() == 0`；
-- 非空时，`top()` 返回最后一次尚未被 `pop()` 的 `push()` 元素；
-- 成功 `push` 后，原有元素的相对次序不变，新元素成为栈顶；
-- 成功 `pop` 后，原栈顶被删除，其下方元素成为新栈顶；
-- 失败操作不改变栈的逻辑状态。
+- 非空时，`top()` 返回尚未被 `pop()` 删除的元素中最后压入者；
+- 成功执行 `push()` 后，原有元素的相对次序不变，新元素成为栈顶；
+- 成功执行 `pop()` 后，原栈顶被删除，其下方元素成为新栈顶；
+- 本文示例在空栈上执行 `top()` 或 `pop()` 失败时，栈的逻辑状态不变。
 :::
+
+这里的失败状态约束专指本文声明的空栈操作；`push()` 因内存分配或元素构造而失败时能提供何种异常保证，还取决于底层容器和元素类型。
 
 下面分别用连续存储与链式存储实现这些约束。
 
-### 3.1 顺序栈（数组实现）
+### 3.1 顺序栈（动态数组实现）
 
-栈顶就在数组尾部，`push/pop/top` 都在尾部操作。
+栈顶就在动态数组尾部，`push()`、`pop()` 与 `top()` 都只访问尾端。
 
 若希望 `std::stack` 明确使用 `std::vector` 作为底层容器，可以写成 `std::stack<int, std::vector<int>> seqStack;`。
 
 ::: details C++ 具体实现（点击展开）
 
-```cpp
+```cpp [seq-stack.cpp]
+#include <cstddef>
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -97,21 +100,22 @@ status: "draft"
 template <typename T>
 class SeqStack {
 public:
-    bool empty() const { return data_.empty(); }//判空
-    std::size_t size() const { return data_.size(); }//大小
+    bool empty() const { return data_.empty(); }
+    std::size_t size() const { return data_.size(); }
 
-    void push(const T& x) { data_.push_back(x); }//压栈
+    void push(const T& x) { data_.push_back(x); }
 
-    void pop() {//弹栈
+    void pop() {
         if (empty()) throw std::out_of_range("stack is empty");
         data_.pop_back();
     }
 
-    T& top() {//查询栈顶
+    T& top() {
         if (empty()) throw std::out_of_range("stack is empty");
         return data_.back();
     }
-    const T& top() const {//查询栈顶
+
+    const T& top() const {
         if (empty()) throw std::out_of_range("stack is empty");
         return data_.back();
     }
@@ -146,7 +150,7 @@ int main() {
 
 ::: details C++ 具体实现示例（点击展开）
 
-```cpp
+```cpp [linked-stack.cpp]
 #include <cstddef>
 #include <iostream>
 #include <stdexcept>
@@ -159,18 +163,17 @@ public:
 
     LinkedStack(const LinkedStack&) = delete;
     LinkedStack& operator=(const LinkedStack&) = delete;
-    //防止出现浅拷贝。实际上，std::list实现了深拷贝，使用指定 list 作为底层容器的 stack 时可以进行拷贝赋值操作。深拷贝具体实现方式不在此赘述。
 
-    bool empty() const { return head_ == nullptr; }//判空
-    std::size_t size() const { return size_; }//大小
+    bool empty() const { return head_ == nullptr; }
+    std::size_t size() const { return size_; }
 
-    void push(const T& x) {//压栈
+    void push(const T& x) {
         Node* node = new Node{x, head_};
         head_ = node;
         ++size_;
     }
 
-    void pop() {//弹栈
+    void pop() {
         if (empty()) throw std::out_of_range("stack is empty");
         Node* old = head_;
         head_ = head_->next;
@@ -178,11 +181,12 @@ public:
         --size_;
     }
 
-    T& top() {//查询栈顶
+    T& top() {
         if (empty()) throw std::out_of_range("stack is empty");
         return head_->value;
     }
-    const T& top() const {//查询栈顶
+
+    const T& top() const {
         if (empty()) throw std::out_of_range("stack is empty");
         return head_->value;
     }
@@ -193,7 +197,7 @@ private:
         Node* next;
     };
 
-    void clear() {//清空，防止内存泄漏
+    void clear() {
         while (head_ != nullptr) {
             Node* old = head_;
             head_ = head_->next;
@@ -218,17 +222,19 @@ int main() {
 
 :::
 
-该示例通过析构函数释放节点，并显式删除复制操作，避免默认浅拷贝导致重复释放。由于它也没有实现移动操作，因此这是一个安全但不可复制、不可移动的教学版本；需要值语义的工程容器还应完整实现 Rule of Five，或改用智能指针表达所有权。
+该示例通过析构函数释放节点，并显式删除复制操作，避免默认浅拷贝导致重复释放。由于它也没有实现移动操作，因此这是一个安全但不可复制、不可移动的教学版本；需要值语义的工程容器还应完整实现五法则（Rule of Five），或改用智能指针表达所有权。
 
 ### 3.3 顺序栈与链栈对比
 
+以下复杂度假设单个元素的复制、移动与析构为 $O(1)$，并采用节点分配和释放为 $O(1)$ 的常见单位代价模型。
+
 | 维度 | 顺序栈 | 链栈 |
 | --- | --- | --- |
-| `push` | 摊还 `O(1)` | `O(1)` |
-| `pop/top` | `O(1)` | `O(1)` |
-| 空间 | 连续，局部性好 | 分散，每节点多指针 |
-| 容量 | 需扩容策略 | 按需增长，不需专门扩容 |
-| 适用场景 | 规模可估计、追求性能 | 规模变化大、上限未知 |
+| `push()` | 摊还 $O(1)$ | $O(1)$ |
+| `pop()` / `top()` | $O(1)$ | $O(1)$ |
+| 空间 | 连续，局部性好 | 分散，每个节点额外保存一个指针 |
+| 容量 | 需要扩容策略 | 按节点增长，不需要整体扩容 |
+| 适用场景 | 规模可估计、重视局部性 | 不希望申请大块连续空间、可接受节点开销 |
 
 ## 4. 边界问题与测试
 
@@ -242,16 +248,16 @@ int main() {
 ### 4.2 测试用例示例
 
 - **用例 1：空栈**
-  - 操作：创建后直接 `top/pop`
-  - 预期：失败或抛异常
+  - 操作：创建后分别调用 `top()` 与 `pop()`
+  - 预期：两次调用均抛出 `std::out_of_range`；捕获异常后仍有 `empty() == true` 且 `size() == 0`
 
 - **用例 2：单元素**
   - 操作：`push(42) -> top -> pop -> empty`
   - 预期：`top()` 得到 `42`，执行 `pop()` 后 `empty()` 为 `true`
 
-- **用例 3：扩容**
-  - 操作：小容量连续 `push`
-  - 预期：扩容前后元素顺序不变
+- **用例 3：容量增长**
+  - 操作：依次 `push(0)` 到 `push(999)`，再反复检查栈顶并弹栈
+  - 预期：每轮依次得到 `999` 到 `0`，全部弹出后 `empty()` 为 `true`
 
 - **用例 4：混合**
   - 操作：`push(1), push(2), pop(), push(3)`
@@ -273,20 +279,28 @@ int main() {
 - 合法：`()`, `(())`, `[]{}()`, `{[()]}`
 - 非法：`(]`, `([)]`, `(()`
 
-给定一个只包含括号与其他普通字符的字符串，可以按下面的规则判断其中的括号是否合法。
+给定一个由括号和其他普通字符组成的字符串，可以忽略普通字符，并按下面的规则判断括号是否匹配。
 
 ::: details 思路（点击展开）
 
 - 遇到左括号，压栈；
 - 遇到右括号，检查栈顶是否匹配；
 - 匹配就弹栈，否则直接判定失败；
-- 最后，所有括号都必须被完全消耗掉。
+- 扫描结束后，栈必须为空。
 
+:::
+
+::: property 性质 · 扫描不变量
+处理完任意前缀后，栈中从底到顶依次保存该前缀内尚未匹配的左括号；栈顶是最近遇到的未匹配左括号，也是下一个右括号唯一可能合法匹配的对象。
+:::
+
+::: proof 正确性说明
+遇到左括号时将其压栈，不变量成立；普通字符不改变匹配状态。遇到右括号时，若栈为空或栈顶类型不同，就不存在保持正确嵌套关系的匹配方式；若类型相同，弹出栈顶后不变量继续成立。扫描结束时，栈为空当且仅当所有左括号都已按正确类型和嵌套顺序匹配。
 :::
 
 ::: details C++ 代码示例（点击展开）
 
-```cpp
+```cpp [bracket-matching.cpp]
 #include <iostream>
 #include <stack>
 #include <string>
@@ -320,6 +334,10 @@ int main() {
 这段代码使用 C++ 标准库中的 `std::stack`。`std::stack` 默认以 `std::deque` 为底层容器；`std::deque` 通常采用分段连续存储，与本节展示的单一连续数组和逐节点链表都不完全相同。
 :::
 
+::: complexity 复杂度 · 括号匹配
+令字符串长度为 $n$。算法只扫描字符串一次，每个括号最多入栈和出栈各一次，因此时间复杂度为 $\Theta(n)$。当字符串前缀全部由左括号组成时，栈最多保存 $n$ 个元素，所以最坏辅助空间复杂度为 $\Theta(n)$。
+:::
+
 ## 7. 小结
 
 - 栈是“只能在栈顶操作”的受限线性表；
@@ -330,7 +348,7 @@ int main() {
 
 1. 空栈上调用 `top/pop`，你会选“返回失败”还是“抛异常”？为什么？
 2. 若顺序栈每次只扩 1 个单位，连续压栈 `n` 次总复杂度是多少？
-3. 入栈序列 `1,2,3,4`，列举合法出栈序列并说明判定思路。
+3. 对入栈序列 `1,2,3,4`，判断出栈序列 `2,1,4,3` 与 `3,1,4,2` 是否合法，并写出栈状态的变化过程。
 4. 设计一个最小用例，专门验证“扩容后顺序不乱”。
 5. 用栈判断 `([{}])`、`([)]`、`(()` 是否匹配，并说明理由。
 
