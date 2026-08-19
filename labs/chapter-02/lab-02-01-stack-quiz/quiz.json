@@ -59,13 +59,13 @@
     "targetId": "stack-drill-004",
     "stem": "在不使用头结点的链栈中，`top` 指向栈顶结点。空栈的判定条件是（）。",
     "options": [
-      "`top == null`",
+      "`top == nullptr`",
       "`top.next == top`",
       "`top.data == 0`",
       "`top == -1`"
     ],
     "answer": 0,
-    "explanation": "**答案：A**。链栈无结点时栈顶指针为空，即 `top == null`。"
+    "explanation": "**答案：A**。在 C++ 中，链栈无结点时栈顶指针为空，即 `top == nullptr`。"
   },
   {
     "id": "stack-drill-005",
@@ -99,7 +99,7 @@
       "`b,c,e`"
     ],
     "answer": 3,
-    "explanation": "**答案：D**。按题意模拟操作过程：Push a；Push b；Pop → 出栈 b；Push c；Pop → 出栈 c；Push d；Push e；Pop → 出栈 e。因此出栈序列为 `b,c,e`。[reference:0]"
+    "explanation": "**答案：D**。按题意模拟操作过程：Push a；Push b；Pop → 出栈 b；Push c；Pop → 出栈 c；Push d；Push e；Pop → 出栈 e。因此出栈序列为 `b,c,e`。"
   },
   {
     "id": "stack-drill-007",
@@ -121,7 +121,7 @@
   {
     "id": "stack-drill-008",
     "title": "巩固题 8",
-    "source": "改编自 408 真题",
+    "source": "原创改编题（出栈序列判定）",
     "difficulty": "★★",
     "topics": ["栈", "出栈序列", "LIFO"],
     "targetId": "stack-drill-008",

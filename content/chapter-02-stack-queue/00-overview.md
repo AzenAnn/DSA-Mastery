@@ -4,8 +4,8 @@ description: "学习受限线性结构的后进先出与先进先出语义，以
 order: 0
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-18"
-contributors: ["Azen", "Jeff", "walker2398"]
+updated: "2026-08-19"
+contributors: ["Azen", "Jeff", "walker2398", "qzmqzm123"]
 status: "draft"
 ---
 
@@ -37,21 +37,22 @@ status: "draft"
 
 ## 推荐学习顺序
 
-1. 先学习[栈](./01-stack.md)，建立"后进先出 + 表尾操作"的模型。
+1. 先学习[栈](./01-stack.md)，建立"后进先出 + 表尾操作"的模型，再完成 [Lab 02-01 栈选择题精练](../../labs/chapter-02/lab-02-01-stack-quiz/README.md)检查基础概念。
 2. 再学习[队列](./02-queue.md)，重点理解循环队列判空判满的边界约定。
 3. 接着学习[应用](./03-applications.md)，用真实问题检验前两篇的结论。
-4. 最后依次完成可撤销浏览器、超市收银模拟与停车场管理三个 Lab，把栈、队列及二者联动的语义落实为可运行的工程系统。
+4. 最后依次完成可撤销浏览器、超市收银模拟与停车场管理三个综合 Lab，把栈、队列及二者联动的语义落实为可运行的工程系统。
 
 ## 配套 Labs
 
 | 实践主题 | 对应 Lab | 验收重点 |
 | --- | --- | --- |
+| 栈的概念、边界与复杂度 | [Lab 02-01：栈选择题精练](../../labs/chapter-02/lab-02-01-stack-quiz/README.md) | 独立判断出栈序列、空满条件、括号匹配与基本操作复杂度 |
 | 栈、导航历史与 Undo/Redo | [Lab 02-03：可撤销浏览器](../../labs/chapter-02/lab-02-03-undoable-browser/README.md) | 用完整页面状态协调后退、前进和页面级命令历史 |
 | FIFO、多队列与离散时间 | [Lab 02-04：超市收银模拟](../../labs/chapter-02/lab-02-04-supermarket-checkout/README.md) | 统一时间口径，验证等待、逗留、忙碌率和队列峰值 |
 | 栈与队列联动 | [Lab 02-05：停车场管理](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md) | 完成倒车、便道补位、中间删除与统计 |
 
 ::: info Lab 编号说明
-Lab 02-01 与 Lab 02-02 预留给后续内容，当前可执行的综合实践从 Lab 02-03 开始。
+Lab 02-02 预留给后续队列基础练习；Lab 02-01 是栈的概念自测，综合实践仍从 Lab 02-03 开始。
 :::
 
 ## 学习建议
