@@ -1,6 +1,6 @@
 # 旧 Lab 渐进迁移清单
 
-> 更新日期：2026-08-17 · 迁移接口以 [Lab 更新与测试指南](LAB_AUTHORING_GUIDE.md)为准。
+> 更新日期：2026-08-19 · 迁移接口以 [Lab 更新与测试指南](LAB_AUTHORING_GUIDE.md)为准。
 
 迁移不改变既有 URL，不要求一次重写全部 Lab。只有对应章节实际进入维护周期、题面与参考实现有人负责 Review 时才迁移；分类是候选，不代替 Owner 的学习目标判断。
 
@@ -10,6 +10,7 @@
 - [x] `lab-01-03-problem-template`：Golden Program
 - [x] `lab-04-02-huffman-coding`：Golden Project
 - [x] `lab-01-04`～`lab-01-08`：Quiz manifest 迁移
+- [x] `lab-03-01-string-basics-quiz` / `lab-03-02-string-matching-quiz`：原 Program 候选改名转 Quiz（串基础与模式匹配选择题）
 
 ## README-only 保留
 
@@ -22,8 +23,6 @@
 - [ ] `lab-01-02-linked-list`
 - [ ] `lab-02-01-stack-simulator`
 - [ ] `lab-02-02-cycle-queue`
-- [ ] `lab-03-01-string-matcher`
-- [ ] `lab-03-02-sparse-matrix`
 - [ ] `lab-04-01-binary-tree-traversal`
 - [ ] `lab-05-01-bfs-maze`
 - [ ] `lab-05-02-dijkstra-path`

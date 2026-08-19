@@ -44,12 +44,12 @@ status: "draft"
 2. 再学习[串的模式匹配与处理实践](./02-string-matching-and-processing.md)，这是本章的核心难点。
 3. 然后学习[数组寻址与特殊矩阵](./03-array-and-matrix.md)，难度相对平缓。
 4. 最后学习[广义表与递归算法](./04-generalized-list.md)，体会递归定义如何贯穿存储与算法。
-5. 阅读后完成配套 Lab：实现朴素与 KMP 匹配的对比实验，并用三元组实现稀疏矩阵转置。
+5. 阅读后完成配套 Lab：3.1 串基础与 3.2 模式匹配的选择题精练，检验术语、存储与 KMP 的理解。
 
 ## 配套 Labs
 
-- [Lab 03-01：字符串匹配工具](../../labs/chapter-03/lab-03-01-string-matcher/README.md)
-- [Lab 03-02：稀疏矩阵三元组转置](../../labs/chapter-03/lab-03-02-sparse-matrix/README.md)
+- [Lab 03-01：串的基础选择题精练（3.1）](../../labs/chapter-03/lab-03-01-string-basics-quiz/README.md)
+- [Lab 03-02：模式匹配选择题精练（3.2）](../../labs/chapter-03/lab-03-02-string-matching-quiz/README.md)
 
 ## 学习建议
 
