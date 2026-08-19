@@ -173,6 +173,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-02-stack-queue/03-applications.md",
     ],
     labSources: [
+      "labs/chapter-02/lab-02-01-stack-quiz/README.md",
       "labs/chapter-02/lab-02-03-undoable-browser/README.md",
       "labs/chapter-02/lab-02-04-supermarket-checkout/README.md",
       "labs/chapter-02/lab-02-05-parking-lot-management/README.md",
