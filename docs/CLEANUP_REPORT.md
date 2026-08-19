@@ -324,3 +324,15 @@ labs/index.md
 - 合并后：通过新的 Review PR 逆序 revert 迁移提交，并重新部署最后一个绿色 Pages artifact。
 - 如果只有 Pages 发布失败：先恢复上一份绿色 artifact；不要为了快速恢复而重新引入 `.openai/hosting.json` 或第二生产主机。
 - Git 只能恢复第 4 节的受跟踪文件与配置历史；受忽略的缓存、日志和测试产物没有版本化副本，需要通过 `npm ci`、构建或测试重新生成。
+
+## 11. 2026-08-18 第 1 章 Demo Lab 精确清理
+
+本节是第 9.3 节“不得删除已有 Lab”的显式、经维护者授权的例外，只覆盖下表三个早期 Demo。第 1 章其余 20 个正式 Lab 保留完整题面、实现、答案和测试，仅重新编号。
+
+| 候选路径 | 旧职责 | 替代物 | 无引用与替代证据 | 决定 | 回滚方式 |
+| --- | --- | --- | --- | --- | --- |
+| `labs/chapter-01/lab-01-01-sequence-list` | README-only 顺序表演示 | 重编号后的五个 Theory Quiz 与十五个 Exercise Program | 正式题目已覆盖线性表概念和实现训练；删除后执行全仓引用、内容、构建与 Pages 检查 | 删除 | 合并前放弃分支；合并后 revert 本任务提交 |
+| `labs/chapter-01/lab-01-02-linked-list` | README-only 单链表演示 | 重编号后的链表 Quiz 与多道链表 Program | 正式题目已覆盖链表概念、边界和代码练习；删除后执行同一门禁 | 删除 | 同上 |
+| `labs/chapter-01/lab-01-03-problem-template` | Program 模板兼 Golden 示例 | 新 `lab-01-06-sequential-list-deduplication` Golden Program | 新示例必须通过 solution=100、starter<100、oracle 与 Make 一致性验证后交付 | 删除 | 同上 |
+
+执行前已逐项解析三个绝对路径并确认它们均位于 `labs/chapter-01` 内。旧产品引用会清零；本报告和 Trellis 任务中的历史名称只作为删除、编号映射和回滚证据保留。

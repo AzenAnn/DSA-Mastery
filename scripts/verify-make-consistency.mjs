@@ -5,7 +5,7 @@ import path from "node:path";
 import { runProcess } from "../tools/lab/process.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
-const lab = "labs/chapter-01/lab-01-03-problem-template";
+const lab = "labs/chapter-01/lab-01-06-sequential-list-deduplication";
 const labRoot = path.join(projectRoot, lab);
 const projectLabRoot = path.join(projectRoot, "labs", "chapter-04", "lab-04-02-huffman-coding");
 
@@ -29,9 +29,9 @@ async function runJson(command, args, cwd = projectRoot) {
   return JSON.parse(result.stdout);
 }
 
-const makeReport = await runJson(make, ["run", `LAB=${lab}`, "CASE=sample", "TARGET=solution", "JSON=1"]);
-const localMakeReport = await runJson(make, ["run", "CASE=sample", "TARGET=solution", "JSON=1"], labRoot);
-const cliReport = await runJson(process.execPath, ["tools/lab/cli.mjs", "run", lab, "--case", "sample", "--target", "solution", "--json"]);
+const makeReport = await runJson(make, ["run", `LAB=${lab}`, "CASE=001-sample", "TARGET=solution", "JSON=1"]);
+const localMakeReport = await runJson(make, ["run", "CASE=001-sample", "TARGET=solution", "JSON=1"], labRoot);
+const cliReport = await runJson(process.execPath, ["tools/lab/cli.mjs", "run", lab, "--case", "001-sample", "--target", "solution", "--json"]);
 
 function stable(report) {
   return {
@@ -54,7 +54,7 @@ assert.equal(doctor.code, 0, doctor.stderr || doctor.stdout);
 const build = await runProcess(make, ["build", "TARGET=solution"], { cwd: labRoot, timeMs: 60_000, outputKb: 4096 });
 assert.equal(build.code, 0, build.stderr || build.stdout);
 
-const sampleInput = "4\n1 3 5 7\n3\n2 4 6\n";
+const sampleInput = "8\n1 1 2 2 3 4 4 5\n";
 const interactive = await runProcess(make, ["interactive", "TARGET=solution"], {
   cwd: labRoot,
   input: sampleInput,
@@ -62,7 +62,7 @@ const interactive = await runProcess(make, ["interactive", "TARGET=solution"], {
   outputKb: 4096,
 });
 assert.equal(interactive.code, 0, interactive.stderr || interactive.stdout);
-assert.match(interactive.stdout, /1 2 3 4 5 6 7/);
+assert.match(interactive.stdout, /1 2 3 4 5/);
 
 const learnerRun = await runProcess(make, ["run", "TARGET=student", "JSON=1"], {
   cwd: labRoot,
@@ -73,7 +73,7 @@ assert.equal(learnerRun.code, 0, `make run must hide non-full-score exit status:
 assert.ok(JSON.parse(learnerRun.stdout).result.score < 100, "starter should remain non-full under make run");
 assert.doesNotMatch(`${learnerRun.stdout}\n${learnerRun.stderr}`, /\*\*\*/i, "make run must not print Make failure noise for WA");
 
-const strict = await runProcess(make, ["score", `LAB=${lab}`, "CASE=sample", "TARGET=student", "JSON=1"], {
+const strict = await runProcess(make, ["score", `LAB=${lab}`, "CASE=001-sample", "TARGET=student", "JSON=1"], {
   cwd: projectRoot,
   timeMs: 60_000,
   outputKb: 4096,

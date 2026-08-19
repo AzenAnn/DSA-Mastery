@@ -50,7 +50,7 @@ GitHub Pages 的 base 只从 `actions/configure-pages` 输出写入 `GITHUB_PAGE
 
 ```md
 [数据结构基础概念](./01-data-structure-basics.md)
-[对应 Lab](../../labs/chapter-01/lab-01-02-linked-list/README.md)
+[对应 Lab](../../labs/chapter-01/lab-01-02-singly-linked-list-quiz/README.md)
 ```
 
 `pnpm run validate:content` 先检查目标源文件存在；VitePress 构建时再把可识别的相对 `.md` 链接改写为无扩展名课程路由，并由统一 base 处理部署前缀。不要把 `/DSA-Mastery/` 写进正文。

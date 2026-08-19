@@ -28,6 +28,9 @@ Lab 继承教材八个字段，并额外要求：
 | `lab` | YAML 布尔值 `true`，不能写字符串 `"true"` |
 | `difficulty` | 非空、面向读者的级别，如“入门”“基础” |
 | `duration` | 非空、可理解的预计时长，如“45～60 分钟” |
+| `labCategory` | README-only Lab 接入分类侧栏时可选；只能是 `theory`、`exercise`、`project`，不得按标题推断 |
+
+网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。当前第 1 章启用“本章 Labs”三分类并要求所有 Lab 可分类，其他章节继续使用“相关 Labs”。
 
 README 至少说明：
 
@@ -84,6 +87,7 @@ README 至少说明：
 | 条件 | 结果 |
 | --- | --- |
 | 目录编号、chapter、order 不一致 | 内容校验失败 |
+| 分类侧栏章节的 README-only Lab 缺 `labCategory`，或值非法 | 内容校验/构建失败 |
 | `lab` 不是布尔值 true | 内容校验失败 |
 | 缺 difficulty/duration | 内容校验失败 |
 | README 没有客观完成标准 | Review blocking |

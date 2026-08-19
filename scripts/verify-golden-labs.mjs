@@ -9,7 +9,7 @@ import { runProcess } from "../tools/lab/process.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const quiz = await loadLab(path.join(projectRoot, "labs/chapter-00/lab-00-03-complexity-quiz"));
-const program = await loadLab(path.join(projectRoot, "labs/chapter-01/lab-01-03-problem-template"));
+const program = await loadLab(path.join(projectRoot, "labs/chapter-01/lab-01-06-sequential-list-deduplication"));
 const project = await loadLab(path.join(projectRoot, "labs/chapter-04/lab-04-02-huffman-coding"));
 assert.equal(quiz.quizResult.count, 19, "Golden Quiz question count must stay stable");
 assert.equal(quiz.quizResult.totalPoints, 20, "Golden Quiz points must stay stable");

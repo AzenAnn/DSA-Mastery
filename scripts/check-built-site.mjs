@@ -79,6 +79,39 @@ function artifactTarget(urlPath) {
 }
 
 const { lessonPages, labPages, curriculumPages } = await expectedCoursePages();
+const chapterOneLabPages = labPages.filter((relativePath) =>
+  relativePath.replaceAll("\\", "/").startsWith("labs/chapter-01/"),
+);
+const chapterOneProductionPages = chapterOneLabPages.filter((relativePath) => {
+  const order = path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1];
+  return order && Number(order) >= 1 && Number(order) <= 20;
+});
+const chapterOneDiscoveryFixture = path.join(
+  "labs",
+  "chapter-01",
+  "lab-01-99-sidebar-discovery-fixture",
+  "index.html",
+);
+const unexpectedChapterOnePages = chapterOneLabPages.filter(
+  (relativePath) =>
+    !chapterOneProductionPages.includes(relativePath) && relativePath !== chapterOneDiscoveryFixture,
+);
+if (chapterOneProductionPages.length !== 20 || unexpectedChapterOnePages.length) {
+  throw new Error(
+    `Chapter 1 must generate exactly 20 production Labs; found ${chapterOneProductionPages.length}` +
+      (unexpectedChapterOnePages.length
+        ? `, unexpected: ${unexpectedChapterOnePages.join(", ")}`
+        : ""),
+  );
+}
+const chapterOneOrders = chapterOneProductionPages
+  .map((relativePath) => path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1])
+  .filter(Boolean)
+  .sort();
+const expectedChapterOneOrders = Array.from({ length: 20 }, (_, index) => String(index + 1).padStart(2, "0"));
+if (JSON.stringify(chapterOneOrders) !== JSON.stringify(expectedChapterOneOrders)) {
+  throw new Error(`Chapter 1 Lab numbering is not continuous: ${chapterOneOrders.join(", ")}`);
+}
 const expectedPages = ["index.html", "labs/index.html", "404.html", ...curriculumPages, ...lessonPages, ...labPages];
 const missingPages = [];
 for (const relativePath of expectedPages) {
@@ -87,6 +120,15 @@ for (const relativePath of expectedPages) {
 if (missingPages.length) throw new Error(`Missing generated pages:\n${missingPages.join("\n")}`);
 if (await exists(path.join(artifactRoot, "AGENTS.html"))) {
   throw new Error("Repository-only AGENTS.md leaked into the public course artifact");
+}
+for (const retiredRoute of [
+  ["labs", "chapter-01", "lab-01-01-sequence-list", "index.html"],
+  ["labs", "chapter-01", "lab-01-02-linked-list", "index.html"],
+  ["labs", "chapter-01", "lab-01-03-problem-template", "index.html"],
+]) {
+  if (await exists(path.join(artifactRoot, ...retiredRoute))) {
+    throw new Error(`Retired Chapter 1 Demo route still exists: ${retiredRoute.join("/")}`);
+  }
 }
 
 const allFiles = await filesRecursively(artifactRoot);
@@ -213,6 +255,8 @@ for (const required of [
   "先选对 Lab 类型",
   "make run",
   "Golden Project",
+  "网站侧栏的分类接口",
+  "labCategory",
   "最终 Definition of Done",
 ]) {
   if (!labAuthorGuideHtml.includes(required)) {
@@ -283,7 +327,7 @@ if (base !== "/") {
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "第 0 章 绪论", "Lab 01-02：实现并验证单链表"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "第 0 章 绪论", "Lab 01-02：单链表选择题精练"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

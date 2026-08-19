@@ -141,7 +141,7 @@ for (const line of commandLines) {
 
 const goldenLabs = [
   "labs/chapter-00/lab-00-03-complexity-quiz",
-  "labs/chapter-01/lab-01-03-problem-template",
+  "labs/chapter-01/lab-01-06-sequential-list-deduplication",
   "labs/chapter-04/lab-04-02-huffman-coding",
 ];
 for (const relative of goldenLabs) {

@@ -2,14 +2,14 @@
 
 > 更新日期：2026-08-19 · 迁移接口以 [Lab 更新与测试指南](LAB_AUTHORING_GUIDE.md)为准。
 
-迁移不改变既有 URL，不要求一次重写全部 Lab。只有对应章节实际进入维护周期、题面与参考实现有人负责 Review 时才迁移；分类是候选，不代替 Owner 的学习目标判断。
+常规 manifest 迁移不改变既有 URL，也不要求一次重写全部 Lab。第 1 章在 2026-08-18 经显式决策删除三个 Demo 并整体重编号，是一次不保留旧 URL 的结构迁移例外。只有对应章节实际进入维护周期、题面与参考实现有人负责 Review 时才迁移；分类是候选，不代替 Owner 的学习目标判断。
 
 ## 已完成的 v1 Golden 与 Quiz
 
 - [x] `lab-00-03-complexity-quiz`：Golden Quiz
-- [x] `lab-01-03-problem-template`：Golden Program
+- [x] `lab-01-06-sequential-list-deduplication`：Golden Program
 - [x] `lab-04-02-huffman-coding`：Golden Project
-- [x] `lab-01-04`～`lab-01-08`：Quiz manifest 迁移
+- [x] `lab-01-01`～`lab-01-05`：Quiz manifest 迁移
 - [x] `lab-03-01-string-basics-quiz` / `lab-03-02-string-matching-quiz`：原 Program 候选改名转 Quiz（串基础与模式匹配选择题）
 
 ## README-only 保留
@@ -19,8 +19,6 @@
 ## Program 候选
 
 - [ ] `lab-00-02-operation-counter`
-- [ ] `lab-01-01-sequence-list`
-- [ ] `lab-01-02-linked-list`
 - [ ] `lab-02-01-stack-simulator`
 - [ ] `lab-02-02-cycle-queue`
 - [ ] `lab-04-01-binary-tree-traversal`
@@ -40,7 +38,7 @@
 
 ## 每次迁移的关闭条件
 
-- [ ] 原 README 知识内容、frontmatter 和公开 URL 保持兼容。
+- [ ] 原 README 知识内容、frontmatter 和公开 URL 保持兼容；若任务明确批准重编号，记录映射与 404 风险。
 - [ ] `pnpm lab:validate -- <path>` 与 `pnpm lab:verify -- <path>` 通过。
 - [ ] reference 自动满分，starter 可编译且非满分。
 - [ ] README 的 `make run` 与 pnpm 兜底在干净环境复现。

@@ -14,6 +14,11 @@
   --course-signal-soft: #fff0e9;
   --course-success: #12805c;
   --course-success-soft: #e5f5ee;
+  --course-lab-theory: var(--course-accent-strong);
+  --course-lab-exercise: #0b6849;
+  --course-lab-project: #a84423;
+  --course-lab-nav-border: color-mix(in srgb, var(--course-accent) 34%, var(--course-line));
+  --course-lab-nav-surface: color-mix(in srgb, var(--course-accent-soft) 46%, var(--course-paper));
   --course-code-bg: #171a22;
   --course-code-surface: #222632;
   --course-code-border: #292e3a;
@@ -111,6 +116,9 @@
   --course-signal-soft: #3a261f;
   --course-success: #62d8ad;
   --course-success-soft: #17382d;
+  --course-lab-theory: var(--course-accent-strong);
+  --course-lab-exercise: var(--course-success);
+  --course-lab-project: var(--course-signal);
   --course-theory-surface-accent: color-mix(in srgb, var(--course-accent-soft) 82%, var(--course-paper-strong));
   --course-theory-surface-ink: color-mix(in srgb, var(--course-paper-muted) 82%, var(--course-paper-strong));
   --course-theory-surface-success: color-mix(in srgb, var(--course-success-soft) 82%, var(--course-paper-strong));
@@ -355,6 +363,97 @@ input:focus-visible {
 .VPSidebarItem .caret {
   width: 44px;
   height: 44px;
+}
+
+/* Chapter 1 Lab navigation keeps the native VitePress disclosure behavior. */
+.VPSidebarItem:has(> .item > .text .course-lab-nav__title) {
+  margin-block: 10px 4px;
+  padding: 7px 9px 9px;
+  border: 1px solid var(--course-lab-nav-border);
+  border-radius: var(--course-radius-md);
+  background: var(--course-lab-nav-surface);
+}
+
+.VPSidebarItem:has(> .item > .text .course-lab-nav__title) > .item {
+  min-height: 44px;
+  align-items: center;
+}
+
+.VPSidebarItem:has(> .item > .text .course-lab-nav__title) > .item > .text {
+  color: var(--course-accent);
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.03em;
+}
+
+.VPSidebarItem:has(> .item > .text .course-lab-nav__title) > .items {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.course-lab-nav__title,
+.course-lab-category {
+  min-width: 0;
+}
+
+.course-lab-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.course-lab-category svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  pointer-events: none;
+}
+
+.course-lab-category--theory {
+  color: var(--course-lab-theory);
+}
+
+.course-lab-category--exercise {
+  color: var(--course-lab-exercise);
+}
+
+.course-lab-category--project {
+  color: var(--course-lab-project);
+}
+
+.VPSidebarItem:has(> .item > .text .course-lab-category) > .item {
+  min-height: 44px;
+  align-items: center;
+  padding-left: 7px;
+  border-radius: var(--course-radius-sm);
+}
+
+.VPSidebarItem:has(> .item > .text .course-lab-category) > .item:hover {
+  background: color-mix(in srgb, currentColor 7%, transparent);
+}
+
+.VPSidebarItem:has(> .item > .text .course-lab-category--theory) > .items {
+  border-left-color: color-mix(in srgb, var(--course-lab-theory) 38%, var(--course-line));
+}
+
+.VPSidebarItem:has(> .item > .text .course-lab-category--exercise) > .items {
+  border-left-color: color-mix(in srgb, var(--course-lab-exercise) 38%, var(--course-line));
+}
+
+.VPSidebarItem:has(> .item > .text .course-lab-category--project) > .items {
+  border-left-color: color-mix(in srgb, var(--course-lab-project) 38%, var(--course-line));
+}
+
+.course-lab-category__empty {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: var(--course-ink-faint);
+  font-size: 11px;
+  font-style: italic;
+  line-height: 1.5;
 }
 
 .VPLocalNav {
