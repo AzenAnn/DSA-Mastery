@@ -539,4 +539,4 @@ C++ 标准库中的 `std::queue` 是**容器适配器**：它提供 `push`、`po
 - [`std::queue`](https://en.cppreference.com/w/cpp/container/queue.html)：容器适配器的接口与默认底层容器。
 - [`std::deque`](https://en.cppreference.com/w/cpp/container/deque.html)：双端操作、复杂度与迭代器失效规则。
 
-完成理论后，先进入 [Lab 02-04：超市收银模拟——队列的大综合](../../labs/chapter-02/lab-02-04-supermarket-checkout/README.md)，把 Queue ADT、FIFO、边界断言和多队列调度组合成完整模拟；再进入 [Lab 02-05：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md)，验证栈与队列协作时的状态不变量。
+完成理论后，先进入 [Lab 02-02：队列选择题精练](../../labs/chapter-02/lab-02-02-queue-quiz/README.md)，检查 FIFO 操作、循环下标、链队列边界和实现取舍；再进入 [Lab 02-04：超市收银模拟——队列的大综合](../../labs/chapter-02/lab-02-04-supermarket-checkout/README.md)，把 Queue ADT、FIFO、边界断言和多队列调度组合成完整模拟；最后进入 [Lab 02-05：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md)，验证栈与队列协作时的状态不变量。

@@ -174,6 +174,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     ],
     labSources: [
       "labs/chapter-02/lab-02-01-stack-quiz/README.md",
+      "labs/chapter-02/lab-02-02-queue-quiz/README.md",
       "labs/chapter-02/lab-02-03-undoable-browser/README.md",
       "labs/chapter-02/lab-02-04-supermarket-checkout/README.md",
       "labs/chapter-02/lab-02-05-parking-lot-management/README.md",
