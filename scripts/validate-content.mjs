@@ -230,7 +230,7 @@ for (const [kind, files] of [["lesson", lessonFiles], ["lab", labFiles]]) {
     const source = await readFile(file, "utf8");
     const parsed = parseFrontmatter(source, path.relative(projectRoot, file));
     assertFileContract(file, kind, parsed, seenOrder);
-    if (kind === "lab" && parsed.data.chapter === "1") {
+    if (kind === "lab" && ["1", "2"].includes(parsed.data.chapter)) {
       let hasManifest = true;
       try {
         await access(path.join(path.dirname(file), "lab.json"));
@@ -238,7 +238,7 @@ for (const [kind, files] of [["lesson", lessonFiles], ["lab", labFiles]]) {
         hasManifest = false;
       }
       if (!hasManifest && !parsed.data.labCategory) {
-        throw new Error(`${path.relative(projectRoot, file)}: 第 1 章 README-only Lab 必须显式声明 labCategory`);
+        throw new Error(`${path.relative(projectRoot, file)}: 分类章节 README-only Lab 必须显式声明 labCategory`);
       }
     }
     await validateLinks(file, source);

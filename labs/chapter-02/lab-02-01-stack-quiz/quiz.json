@@ -1,0 +1,172 @@
+[
+  {
+    "id": "stack-drill-001",
+    "title": "巩固题 1",
+    "source": "原创题",
+    "difficulty": "★★",
+    "topics": ["栈", "出栈序列", "LIFO"],
+    "targetId": "stack-drill-001",
+    "stem": "元素按 1,2,3,4 的顺序依次入栈（允许在任意时刻出栈）。下列哪一个序列不可能作为出栈序列？",
+    "options": [
+      "2,1,4,3",
+      "3,2,4,1",
+      "3,4,2,1",
+      "3,1,4,2"
+    ],
+    "answer": 3,
+    "explanation": "**答案：D**。弹出 3 之后，栈内为 [1,2]（栈顶是 2），不可能在 2 之前弹出 1，因此 `3,1,4,2` 不可能。其余三个序列都可通过合法 push/pop 操作得到。"
+  },
+  {
+    "id": "stack-drill-002",
+    "title": "巩固题 2",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["顺序栈", "栈顶指针", "边界"],
+    "targetId": "stack-drill-002",
+    "stem": "顺序栈容量为 5，下标范围为 0~4，约定空栈时 `top = -1`。若当前 `top = 3`，再执行一次成功的 `push` 后，`top` 的值是（）。",
+    "options": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answer": 2,
+    "explanation": "**答案：C**。成功入栈会先将栈顶上移一位，因此 `top` 从 3 变为 4。"
+  },
+  {
+    "id": "stack-drill-003",
+    "title": "巩固题 3",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["顺序栈", "满栈判定"],
+    "targetId": "stack-drill-003",
+    "stem": "顺序栈容量为 `m`，空栈约定 `top = -1`。其满栈判定条件应为（）。",
+    "options": [
+      "`top == m`",
+      "`top == m - 1`",
+      "`top == 0`",
+      "`top == -1`"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。可用下标是 `0 ... m-1`，当 `top == m-1` 时最后一个位置已被占用，栈满。"
+  },
+  {
+    "id": "stack-drill-004",
+    "title": "巩固题 4",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["链栈", "空栈判定"],
+    "targetId": "stack-drill-004",
+    "stem": "在不使用头结点的链栈中，`top` 指向栈顶结点。空栈的判定条件是（）。",
+    "options": [
+      "`top == nullptr`",
+      "`top.next == top`",
+      "`top.data == 0`",
+      "`top == -1`"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A**。在 C++ 中，链栈无结点时栈顶指针为空，即 `top == nullptr`。"
+  },
+  {
+    "id": "stack-drill-005",
+    "title": "巩固题 5",
+    "source": "原创题",
+    "difficulty": "★★",
+    "topics": ["括号匹配", "栈应用"],
+    "targetId": "stack-drill-005",
+    "stem": "下列括号串中，只有一个是合法匹配（仅含 `()[]{}`），它是（）。",
+    "options": [
+      "`([)]`",
+      "`(()`",
+      "`{[()()]}`",
+      "`)(`"
+    ],
+    "answer": 2,
+    "explanation": "**答案：C**。A 是交叉嵌套错误，B 左括号未闭合，D 右括号先出现；只有 C 全部按最近未匹配左括号原则正确配对。"
+  },
+  {
+    "id": "stack-drill-006",
+    "title": "巩固题 6",
+    "source": "2020 年 408 真题",
+    "difficulty": "★★",
+    "topics": ["栈", "Push", "Pop", "出栈序列"],
+    "targetId": "stack-drill-006",
+    "stem": "对空栈 S 进行 Push 和 Pop 操作，入栈序列为 `a,b,c,d,e`。经过 `Push, Push, Pop, Push, Pop, Push, Push, Pop` 操作后，得到的出栈序列是（）。",
+    "options": [
+      "`b,a,c`",
+      "`b,a,e`",
+      "`b,c,a`",
+      "`b,c,e`"
+    ],
+    "answer": 3,
+    "explanation": "**答案：D**。按题意模拟操作过程：Push a；Push b；Pop → 出栈 b；Push c；Pop → 出栈 c；Push d；Push e；Pop → 出栈 e。因此出栈序列为 `b,c,e`。"
+  },
+  {
+    "id": "stack-drill-007",
+    "title": "巩固题 7",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["时间复杂度", "栈基本操作"],
+    "targetId": "stack-drill-007",
+    "stem": "在不考虑扩容重分配开销的前提下，栈的 `push`、`pop`、`top` 三个基本操作的时间复杂度是（）。",
+    "options": [
+      "都为 `O(1)`",
+      "`push` 为 `O(n)`，其余为 `O(1)`",
+      "`pop` 为 `O(n)`，其余为 `O(1)`",
+      "都为 `O(n)`"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A**。三者都只访问/修改栈顶附近常数个位置，复杂度均为常数级。"
+  },
+  {
+    "id": "stack-drill-008",
+    "title": "巩固题 8",
+    "source": "原创改编题（出栈序列判定）",
+    "difficulty": "★★",
+    "topics": ["栈", "出栈序列", "LIFO"],
+    "targetId": "stack-drill-008",
+    "stem": "元素按 `a,b,c,d,e` 依次入栈（允许任意时刻出栈），下列哪个序列一定不可能是出栈序列？",
+    "options": [
+      "c,b,e,d,a",
+      "b,a,d,c,e",
+      "b,d,a,e,c",
+      "e,d,c,b,a"
+    ],
+    "answer": 2,
+    "explanation": "**答案：C**。要得到 `b,d,a,e,c`：先弹出 `b` 后，若继续得到 `d`，必须把 `c,d` 入栈并弹出 `d`，此时栈顶是 `c`。接下来要求弹出 `a`，但 `c` 还在 `a` 上方，违反 LIFO，因此该序列不可能。其余序列都可通过合法入栈/出栈实现。"
+  },
+  {
+    "id": "stack-drill-009",
+    "title": "巩固题 9",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["栈语义", "典型场景"],
+    "targetId": "stack-drill-009",
+    "stem": "下列场景中，最适合优先使用“栈”作为核心结构的是（）。",
+    "options": [
+      "按到达顺序处理打印任务",
+      "函数调用返回过程管理",
+      "最短路径的层序扩展",
+      "按优先级调度任务"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。函数调用/返回天然符合后进先出；A 更像队列，C 常用队列，D 常用优先队列（堆）。"
+  },
+  {
+    "id": "stack-drill-010",
+    "title": "巩固题 10",
+    "source": "2022 年 408 真题",
+    "difficulty": "★★★",
+    "topics": ["栈", "出栈序列", "合法性判定"],
+    "targetId": "stack-drill-010",
+    "stem": "给定有限符号集 S，`in` 和 `out` 均为 S 中所有元素的任意排列。对于初始为空的栈 ST，下列叙述中，正确的是（）。",
+    "options": [
+      "若 `in` 是 `ST` 的入栈序列，则不能判断 `out` 是否为其可能的出栈序列",
+      "若 `out` 是 `ST` 的出栈序列，则不能判断 `in` 是否为其可能的入栈序列",
+      "若 `in` 是 `ST` 的入栈序列，`out` 是对应 `in` 的出栈序列，则 `in` 与 `out` 一定不同",
+      "若 `in` 是 `ST` 的入栈序列，`out` 是对应 `in` 的出栈序列，则 `in` 与 `out` 可能互为倒序"
+    ],
+    "answer": 3,
+    "explanation": "**答案：D**。如果给定一个入栈序列，我们可以得到其所有可能的出栈序列，所以当给定一个出栈序列时，我们可以判断其是否正确，所以A、B错误；C错误，可以通过每次 `push` 后都紧跟一个 `pop` 实现 `in` 和 `out` 相同；D正确，可通过全部入栈后再全部出栈实现。"
+  }
+]

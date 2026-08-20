@@ -1,0 +1,59 @@
+[
+  {
+    "id": "rev-2-2-capacity",
+    "block": "circular-queue",
+    "stem": "采用“空出一个物理位置”的循环队列，底层数组有 `m = 8` 个槽位时，有效容量是多少？",
+    "options": [
+      "8",
+      "7",
+      "6",
+      "9"
+    ],
+    "answer": 1,
+    "optionTargets": [
+      "rev-2-2-capacity",
+      "rev-2-2-capacity",
+      "rev-2-2-capacity",
+      "rev-2-2-capacity"
+    ],
+    "explanation": "空一格方案用一个物理槽位消除空、满状态的歧义，因此有效容量为 `m - 1 = 7`。"
+  },
+  {
+    "id": "rev-2-2-full",
+    "block": "circular-queue",
+    "stem": "约定 `front` 指向队头元素、`rear` 指向下一次写入位置时，哪一个条件表示循环队列已满？",
+    "options": [
+      "`front == rear`",
+      "`rear == m`",
+      "`(rear + 1) % m == front`",
+      "`size() == m`"
+    ],
+    "answer": 2,
+    "optionTargets": [
+      "rev-2-2-full",
+      "rev-2-2-full",
+      "rev-2-2-full",
+      "rev-2-2-full"
+    ],
+    "explanation": "空一格方案中，`front == rear` 表示空；当 `rear` 的下一个循环位置等于 `front` 时才表示满。"
+  },
+  {
+    "id": "rev-2-2-failure",
+    "block": "circular-queue",
+    "stem": "固定容量循环队列已经满时，再执行一次 `enqueue`，正确的失败语义是什么？",
+    "options": [
+      "覆盖队头元素并推进两个下标",
+      "清空队列后写入新元素",
+      "只推进 `rear`，数组保持不变",
+      "报告失败，数组和全部状态保持不变"
+    ],
+    "answer": 3,
+    "optionTargets": [
+      "rev-2-2-failure",
+      "rev-2-2-failure",
+      "rev-2-2-failure",
+      "rev-2-2-failure"
+    ],
+    "explanation": "失败操作必须具有稳定状态语义：既不写数组，也不改变 `front`、`rear` 或由它们推导出的队列长度。"
+  }
+]
