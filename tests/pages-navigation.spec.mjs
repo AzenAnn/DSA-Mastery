@@ -935,7 +935,9 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
   }
 
   await page.goto(`${baseUrl}/labs/chapter-01/lab-01-01-sequential-list-quiz/`);
-  const chapterSidebar = page.locator(".VPSidebar");
+  const chapterSidebar = page.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-01-linear-list/"])',
+  );
   const theorySidebarGroup = chapterSidebar.locator(
     ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
   );
@@ -959,19 +961,23 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   await page.goto(`${baseUrl}/learn/outline/chapter-01-linear-list/`);
 
   const sidebar = page.locator(".VPSidebar");
-  const labGroup = sidebar.locator(
+  const chapterGroup = sidebar.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-01-linear-list/"])',
+  );
+  const labGroup = chapterGroup.locator(
     ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
   );
+  await expect(chapterGroup).toHaveCount(1);
   await expect(labGroup).toHaveCount(1);
   await expect(labGroup).not.toHaveClass(/collapsed/);
 
-  const theoryGroup = sidebar.locator(
+  const theoryGroup = chapterGroup.locator(
     ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
   );
-  const exerciseGroup = sidebar.locator(
+  const exerciseGroup = chapterGroup.locator(
     ".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)",
   );
-  const projectGroup = sidebar.locator(
+  const projectGroup = chapterGroup.locator(
     ".VPSidebarItem:has(> .item > .text > .course-lab-category--project)",
   );
   await expect(theoryGroup).toHaveClass(/collapsed/);
@@ -1068,6 +1074,59 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   );
   await expect(chapter2Group).toContainText("相关 Labs");
   await expect(chapter2Group.locator(".course-lab-nav__title")).toHaveCount(0);
+  expect(failures).toEqual([]);
+});
+
+test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${baseUrl}/learn/outline/chapter-03-string-array-matrix/`);
+
+  const sidebar = page.locator(".VPSidebar");
+  const chapterGroup = sidebar.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-03-string-array-matrix/"])',
+  );
+  const labGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
+  );
+  await expect(chapterGroup).toHaveCount(1);
+  await expect(labGroup).toHaveCount(1);
+  await expect(labGroup).not.toHaveClass(/collapsed/);
+
+  const theoryGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
+  );
+  const exerciseGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)",
+  );
+  const projectGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--project)",
+  );
+  await expect(theoryGroup).toHaveClass(/collapsed/);
+  await expect(exerciseGroup).toHaveClass(/collapsed/);
+  await expect(projectGroup).not.toHaveClass(/collapsed/);
+
+  await theoryGroup.locator(":scope > .item").focus();
+  await page.keyboard.press("Enter");
+  await expect(theoryGroup).not.toHaveClass(/collapsed/);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(2);
+  await expect(
+    theoryGroup.getByRole("link", { name: "Lab 03-01：串的基础选择题精练", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    theoryGroup.getByRole("link", { name: "Lab 03-02：模式匹配选择题精练", exact: true }),
+  ).toHaveCount(1);
+
+  await exerciseGroup.locator(":scope > .item").focus();
+  await page.keyboard.press("Enter");
+  await expect(exerciseGroup).not.toHaveClass(/collapsed/);
+  await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无实验型 Lab",
+  );
+  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无工程型 Lab",
+  );
+
   expect(failures).toEqual([]);
 });
 

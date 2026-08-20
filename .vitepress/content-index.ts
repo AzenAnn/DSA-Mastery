@@ -43,6 +43,7 @@ export interface CurriculumChapter {
   title: string;
   description: string;
   url: string;
+  autoLabChapter?: number;
   lessons: CourseDocument[];
   labs: CourseDocument[];
 }
@@ -166,10 +167,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-03-string-array/03-array-and-matrix.md",
       "content/chapter-03-string-array/04-generalized-list.md",
     ],
-    labSources: [
-      "labs/chapter-03/lab-03-01-string-basics-quiz/README.md",
-      "labs/chapter-03/lab-03-02-string-matching-quiz/README.md",
-    ],
+    autoLabChapter: 3,
   },
   {
     id: "chapter-04-tree-binary-tree",
@@ -470,9 +468,18 @@ function sortDocuments(documents: CourseDocument[]): CourseDocument[] {
 export function collectCourseIndex(root = projectRoot): CourseIndex {
   const lessons = sortDocuments(listLessonFiles(root).map((file) => createDocument(root, file, "lesson")));
   const labs = sortDocuments(listLabFiles(root).map((file) => createDocument(root, file, "lab")));
-  for (const lab of labs.filter((document) => document.chapter === 1)) {
+  const categorizedLabChapters = new Set(
+    curriculumChapterDefinitions
+      .map((definition) => definition.autoLabChapter)
+      .filter((chapter): chapter is number => chapter !== undefined),
+  );
+  for (const lab of labs.filter((document) =>
+    categorizedLabChapters.has(document.chapter as number),
+  )) {
     if (!lab.labCategory) {
-      throw new Error(`${lab.sourcePath}: Chapter 1 Labs must declare a category through lab.json or labCategory`);
+      throw new Error(
+        `${lab.sourcePath}: 分类章节（本章 Labs）的 Lab 必须通过 lab.json 或 labCategory 声明分类`,
+      );
     }
   }
   const chapterNumbers = [...new Set([...lessons, ...labs].map((document) => document.chapter))].sort(
@@ -491,17 +498,17 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
 
   const documentsBySource = new Map([...lessons, ...labs].map((document) => [document.sourcePath, document]));
   const outlineChapters = curriculumChapterDefinitions.map(
-    ({ label, lessonSources = [], labSources = [], autoLabChapter, ...chapter }) => ({
+    ({ label, lessonSources = [], labSources = [], ...chapter }) => ({
       ...chapter,
       label: label ?? `Ch.${chapter.number}`,
       lessons: lessonSources
         .map((source) => documentsBySource.get(source))
         .filter((item): item is CourseDocument => Boolean(item)),
-      labs: autoLabChapter === undefined
+      labs: chapter.autoLabChapter === undefined
         ? labSources
             .map((source) => documentsBySource.get(source))
             .filter((item): item is CourseDocument => Boolean(item))
-        : labs.filter((lab) => lab.chapter === autoLabChapter),
+        : labs.filter((lab) => lab.chapter === chapter.autoLabChapter),
     }),
   );
   const outlineByNumber = new Map(outlineChapters.map((chapter) => [chapter.number, chapter]));
@@ -582,7 +589,7 @@ export function createCourseSidebar(
         ...chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
         ...(chapter.labs.length
           ? [
-              chapter.number === "1"
+              chapter.autoLabChapter !== undefined
                 ? chapterLabGroup(chapter.labs, icons)
                 : {
                     text: "相关 Labs",
