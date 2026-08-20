@@ -1,0 +1,56 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-overlap",
+    "input": "tests/002-overlap.in",
+    "expected": "tests/002-overlap.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-no-match",
+    "input": "tests/003-no-match.in",
+    "expected": "tests/003-no-match.out",
+    "points": 15,
+    "tags": [
+      "error"
+    ]
+  },
+  {
+    "id": "004-tail-boundary",
+    "input": "tests/004-tail-boundary.in",
+    "expected": "tests/004-tail-boundary.out",
+    "points": 15,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-delete-empty-v",
+    "input": "tests/005-delete-empty-v.in",
+    "expected": "tests/005-delete-empty-v.out",
+    "points": 15,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-stress",
+    "input": "tests/006-stress.in",
+    "expected": "tests/006-stress.out",
+    "points": 15,
+    "tags": [
+      "stress"
+    ]
+  }
+]

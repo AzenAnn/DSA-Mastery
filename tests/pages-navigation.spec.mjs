@@ -1183,9 +1183,16 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
-  await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveText(
-    "暂无实验型 Lab",
-  );
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(5);
+  for (const title of [
+    "Lab 03-04：KMP 模式匹配（首次出现位置）",
+    "Lab 03-05：next 与 nextval 数组推导",
+    "Lab 03-06：朴素匹配与 KMP 比较次数",
+    "Lab 03-07：串的非重叠替换 Replace",
+    "Lab 03-08：UTF-8 串长与字符数",
+  ]) {
+    await expect(exerciseGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+  }
   await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
     "暂无工程型 Lab",
   );
