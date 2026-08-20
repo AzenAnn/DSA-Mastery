@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "ctest",
+  "ctest": {
+    "tests": [
+      { "name": "runner-semantic-equivalence", "points": 40 },
+      { "name": "runner-cost-accounting", "points": 35 },
+      { "name": "runner-invalid-input", "points": 25 }
+    ]
+  }
+}
