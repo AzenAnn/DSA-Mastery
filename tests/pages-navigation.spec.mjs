@@ -1062,7 +1062,7 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   await page.keyboard.press("Enter");
   await expect(labGroup).not.toHaveClass(/collapsed/);
 
-  await page.goto(`${baseUrl}/labs/chapter-02/lab-02-01-stack-simulator/`);
+  await page.goto(`${baseUrl}/labs/chapter-02/lab-02-01-stack-quiz/`);
   const chapter2Group = page.locator(
     '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-02-stack-queue/"])',
   );
