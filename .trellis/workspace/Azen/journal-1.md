@@ -116,3 +116,24 @@ Implemented and independently verified the unified Quiz, Program, and Project La
 ### Status
 
 [OK] **Completed**
+
+
+## Session 6: Chapter 1 list workload Project Lab
+
+**Date**: 2026-08-20
+**Task**: Chapter 1 list workload Project Lab
+**Branch**: `lab/ch01-list-workload-project`
+
+### Summary
+
+Implemented and verified Lab 01-21 with dual list implementations, deterministic workload runner, grading, student package, Chapter 1 site integration, and local preview.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `afca69d` | (see git log) |
+
+### Status
+
+[OK] **Completed**

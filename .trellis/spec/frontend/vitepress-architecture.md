@@ -83,7 +83,7 @@ outDir                         -> dist/pages
 - `pnpm run validate` 覆盖内容、类型与 lint。
 - `pnpm run test:discovery` 用临时教材/Lab 验证相对链接改写、MathJax、代码、表格、任务列表、导航、搜索和安全清理。
 - `pnpm run test:discovery` 还必须在启用 `autoLabChapter` 的现有章节创建临时 Lab，并从最终 HTML 的章节侧栏确认它自动出现，最后精确清理 fixture。
-- 第 1 章 fixture 若为 README-only，必须显式声明 `labCategory`，并证明它进入对应分类；产物与浏览器测试还要断言 5 个 Theory、15 个 Exercise、可见的 Project 空状态和原生折叠行为。
+- 第 1 章 fixture 若为 README-only，必须显式声明 `labCategory`，并证明它进入对应分类；产物与浏览器测试还要断言 5 个 Theory、15 个 Exercise、1 个 Project，以及 Project 分组的原生折叠行为。
 - `pnpm run build && pnpm run check:site` 核对 ContentIndex 返回的全部教材/Lab、首页、Labs 索引、404、链接与恰好一个 base。
 - 前言产物检查使用 POSIX 化后的相对路径筛选；断言两篇文章、章节 outline、站内搜索和侧栏入口全部存在。Windows 的 `path.join()` 会产生反斜杠，不能直接与 `learn/chapter-preface/` 比较。
 - 在 `/DSA-Mastery/` 下运行 `pnpm run test:pages`，真实点击五组场景并监控网络/控制台错误。

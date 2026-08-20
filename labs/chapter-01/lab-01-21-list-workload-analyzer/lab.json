@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../schemas/lab.schema.json",
+  "schemaVersion": 1,
+  "type": "project",
+  "language": "cpp",
+  "toolchain": {
+    "standard": "c++17",
+    "profile": "course-default"
+  },
+  "buildSystem": "cmake",
+  "tasks": [
+    {
+      "id": "sequential-list",
+      "path": "tasks/task-01-sequential-list",
+      "weight": 25,
+      "kind": "ctest",
+      "dependsOn": []
+    },
+    {
+      "id": "linked-list",
+      "path": "tasks/task-02-linked-list",
+      "weight": 25,
+      "kind": "ctest",
+      "dependsOn": []
+    },
+    {
+      "id": "workload-runner",
+      "path": "tasks/task-03-workload-runner",
+      "weight": 30,
+      "kind": "ctest",
+      "dependsOn": ["sequential-list", "linked-list"]
+    },
+    {
+      "id": "report",
+      "path": "report",
+      "weight": 20,
+      "kind": "manual",
+      "dependsOn": ["workload-runner"]
+    }
+  ]
+}

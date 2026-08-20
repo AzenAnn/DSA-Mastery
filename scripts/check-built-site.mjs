@@ -84,7 +84,7 @@ const chapterOneLabPages = labPages.filter((relativePath) =>
 );
 const chapterOneProductionPages = chapterOneLabPages.filter((relativePath) => {
   const order = path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1];
-  return order && Number(order) >= 1 && Number(order) <= 20;
+  return order && Number(order) >= 1 && Number(order) <= 21;
 });
 const chapterOneDiscoveryFixture = path.join(
   "labs",
@@ -96,9 +96,9 @@ const unexpectedChapterOnePages = chapterOneLabPages.filter(
   (relativePath) =>
     !chapterOneProductionPages.includes(relativePath) && relativePath !== chapterOneDiscoveryFixture,
 );
-if (chapterOneProductionPages.length !== 20 || unexpectedChapterOnePages.length) {
+if (chapterOneProductionPages.length !== 21 || unexpectedChapterOnePages.length) {
   throw new Error(
-    `Chapter 1 must generate exactly 20 production Labs; found ${chapterOneProductionPages.length}` +
+    `Chapter 1 must generate exactly 21 production Labs; found ${chapterOneProductionPages.length}` +
       (unexpectedChapterOnePages.length
         ? `, unexpected: ${unexpectedChapterOnePages.join(", ")}`
         : ""),
@@ -108,7 +108,7 @@ const chapterOneOrders = chapterOneProductionPages
   .map((relativePath) => path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1])
   .filter(Boolean)
   .sort();
-const expectedChapterOneOrders = Array.from({ length: 20 }, (_, index) => String(index + 1).padStart(2, "0"));
+const expectedChapterOneOrders = Array.from({ length: 21 }, (_, index) => String(index + 1).padStart(2, "0"));
 if (JSON.stringify(chapterOneOrders) !== JSON.stringify(expectedChapterOneOrders)) {
   throw new Error(`Chapter 1 Lab numbering is not continuous: ${chapterOneOrders.join(", ")}`);
 }
@@ -327,7 +327,7 @@ if (base !== "/") {
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "第 0 章 绪论", "Lab 01-02：单链表选择题精练"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "第 0 章 绪论", "Lab 01-02：单链表选择题精练", "Lab 01-21：线性表双实现与工作负载评测器"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "ctest",
+  "ctest": {
+    "tests": [
+      { "name": "sequential-contract", "points": 30 },
+      { "name": "sequential-boundaries", "points": 25 },
+      { "name": "sequential-resize", "points": 30 },
+      { "name": "sequential-invariants", "points": 15 }
+    ]
+  }
+}

@@ -4,7 +4,7 @@ description: "从抽象操作到顺序与链式存储，理解线性表的设计
 order: 0
 chapter: 1
 chapterTitle: "线性表"
-updated: "2026-08-13"
+updated: "2026-08-20"
 contributors: ["DSA Mastery Team", "Azen"]
 status: "draft"
 ---
@@ -54,7 +54,11 @@ status: "draft"
 
 建议先用前两篇冻结操作契约并理解连续存储，再沿第 3 篇观察链表从裸节点到双向循环哨兵的演进，用第 4 篇的决策表完成选型，最后在第 5 篇把结论连接到标准库与工程约束。
 
-配套实践位于 `labs/chapter-01/`。
+## 配套 Project Lab
+
+- [Lab 01-21：线性表双实现与工作负载评测器](../../labs/chapter-01/lab-01-21-list-workload-analyzer/README.md)：在同一套 `IntList` 契约下实现动态顺序表与双向循环链表，用可复现工作负载比较元素搬移、节点跳转、扩容、链接改写、空间估算和实际耗时。
+
+建议在完成 1.4「比较与权衡」后进入该项目。Project 会把本章的 ADT、边界语义、复杂度、不变量和工程选型串成一个闭环；其余选择题与单点编码 Lab 可从侧栏按需选做。
 
 ## 章节小结
 

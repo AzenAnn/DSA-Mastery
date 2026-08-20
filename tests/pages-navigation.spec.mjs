@@ -593,7 +593,7 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
   await expect(page.locator(".VPSidebar.open")).toContainText("理论 Theory");
   await expect(page.locator(".VPSidebar.open")).toContainText("实验 Exercise");
   await expect(page.locator(".VPSidebar.open")).toContainText("工程 Project");
-  await expect(page.locator(".VPSidebar.open")).toContainText("暂无工程型 Lab");
+  await expect(page.locator(".VPSidebar.open")).toContainText("Lab 01-21：线性表双实现与工作负载评测器");
   const mobileLayout = await page.evaluate(() => ({
     clientWidth: globalThis.document.documentElement.clientWidth,
     scrollWidth: globalThis.document.documentElement.scrollWidth,
@@ -977,7 +977,16 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   await expect(theoryGroup).toHaveClass(/collapsed/);
   await expect(exerciseGroup).toHaveClass(/collapsed/);
   await expect(projectGroup).not.toHaveClass(/collapsed/);
-  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText("暂无工程型 Lab");
+  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveCount(0);
+  const projectLink = projectGroup.getByRole("link", {
+    name: "Lab 01-21：线性表双实现与工作负载评测器",
+    exact: true,
+  });
+  await expect(projectLink).toHaveCount(1);
+  await expect(projectLink).toHaveAttribute(
+    "href",
+    /\/labs\/chapter-01\/lab-01-21-list-workload-analyzer\/$/,
+  );
 
   for (const group of [theoryGroup, exerciseGroup, projectGroup]) {
     const icon = group.locator(":scope > .item svg.lucide");
@@ -994,6 +1003,7 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
   await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(15);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(1);
 
   await projectGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
