@@ -548,4 +548,4 @@ int Vector<T>::find(const T& value) const {
 5. 删除操作是要填补被删除位置留下的空洞，必须从前向后正序平移（`_data[i-1] = _data[i]`），让后一个元素覆盖前一个空洞；若倒序平移，最后一个元素会提前把前一个槽位覆盖，破坏中间有效数据。
 :::
 
-接下来可以完成 [Lab 01-01：实现并验证动态顺序表](../../labs/chapter-01/lab-01-01-sequence-list/README.md) 与 [Lab 01-04：顺序表选择题精练](../../labs/chapter-01/lab-01-04-sequential-list-quiz/README.md)，在代码中实操动态扩缩容与边界防御。
+接下来可以完成 [Lab 01-01：顺序表选择题精练](../../labs/chapter-01/lab-01-01-sequential-list-quiz/README.md) 与 [Lab 01-06：顺序表去重](../../labs/chapter-01/lab-01-06-sequential-list-deduplication/README.md)，在实践中检验对动态扩缩容与平移操作的理解。
