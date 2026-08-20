@@ -43,6 +43,7 @@ export interface CurriculumChapter {
   title: string;
   description: string;
   url: string;
+  autoLabChapter?: number;
   learningObjectives?: string[];
   focusTitle?: string;
   focusAreas?: string[];
@@ -172,13 +173,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-02-stack-queue/02-queue.md",
       "content/chapter-02-stack-queue/03-applications.md",
     ],
-    labSources: [
-      "labs/chapter-02/lab-02-01-stack-quiz/README.md",
-      "labs/chapter-02/lab-02-02-queue-quiz/README.md",
-      "labs/chapter-02/lab-02-03-undoable-browser/README.md",
-      "labs/chapter-02/lab-02-04-supermarket-checkout/README.md",
-      "labs/chapter-02/lab-02-05-parking-lot-management/README.md",
-    ],
+    autoLabChapter: 2,
   },
   {
     id: "chapter-03-string-array-matrix",
@@ -496,9 +491,18 @@ function sortDocuments(documents: CourseDocument[]): CourseDocument[] {
 export function collectCourseIndex(root = projectRoot): CourseIndex {
   const lessons = sortDocuments(listLessonFiles(root).map((file) => createDocument(root, file, "lesson")));
   const labs = sortDocuments(listLabFiles(root).map((file) => createDocument(root, file, "lab")));
-  for (const lab of labs.filter((document) => document.chapter === 1)) {
+  const categorizedLabChapters = new Set(
+    curriculumChapterDefinitions
+      .map((definition) => definition.autoLabChapter)
+      .filter((chapter): chapter is number => chapter !== undefined),
+  );
+  for (const lab of labs.filter((document) =>
+    typeof document.chapter === "number" && categorizedLabChapters.has(document.chapter),
+  )) {
     if (!lab.labCategory) {
-      throw new Error(`${lab.sourcePath}: Chapter 1 Labs must declare a category through lab.json or labCategory`);
+      throw new Error(
+        `${lab.sourcePath}: categorized chapter Labs must declare a category through lab.json or labCategory`,
+      );
     }
   }
   const chapterNumbers = [...new Set([...lessons, ...labs].map((document) => document.chapter))].sort(
@@ -517,17 +521,17 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
 
   const documentsBySource = new Map([...lessons, ...labs].map((document) => [document.sourcePath, document]));
   const outlineChapters = curriculumChapterDefinitions.map(
-    ({ label, lessonSources = [], labSources = [], autoLabChapter, ...chapter }) => ({
+    ({ label, lessonSources = [], labSources = [], ...chapter }) => ({
       ...chapter,
       label: label ?? `Ch.${chapter.number}`,
       lessons: lessonSources
         .map((source) => documentsBySource.get(source))
         .filter((item): item is CourseDocument => Boolean(item)),
-      labs: autoLabChapter === undefined
+      labs: chapter.autoLabChapter === undefined
         ? labSources
             .map((source) => documentsBySource.get(source))
             .filter((item): item is CourseDocument => Boolean(item))
-        : labs.filter((lab) => lab.chapter === autoLabChapter),
+        : labs.filter((lab) => lab.chapter === chapter.autoLabChapter),
     }),
   );
   const outlineByNumber = new Map(outlineChapters.map((chapter) => [chapter.number, chapter]));
@@ -608,7 +612,7 @@ export function createCourseSidebar(
         ...chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
         ...(chapter.labs.length
           ? [
-              chapter.number === "1"
+              chapter.autoLabChapter !== undefined
                 ? chapterLabGroup(chapter.labs, icons)
                 : {
                     text: "相关 Labs",

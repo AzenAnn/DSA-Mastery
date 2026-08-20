@@ -8,6 +8,7 @@ updated: "2026-08-19"
 contributors: ["Azen", "Jeff"]
 status: "draft"
 lab: true
+labCategory: "project"
 difficulty: "综合"
 duration: "300～420 分钟"
 ---
