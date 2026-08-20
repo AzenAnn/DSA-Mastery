@@ -19,6 +19,9 @@
 .DS_Store
 *.pem
 
+# local package manager config (pnpm hoisted for Windows sandbox, machine-specific)
+.npmrc
+
 # debug
 npm-debug.log*
 yarn-debug.log*

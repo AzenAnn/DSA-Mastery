@@ -44,6 +44,9 @@ export interface CurriculumChapter {
   description: string;
   url: string;
   autoLabChapter?: number;
+  learningObjectives?: string[];
+  focusTitle?: string;
+  focusAreas?: string[];
   lessons: CourseDocument[];
   labs: CourseDocument[];
 }
@@ -91,6 +94,16 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "课程作者指南",
     description: "查看理论文档语法，以及 Quiz、Program、Project 三类 Lab 的更新与测试流程。",
     url: "/learn/outline/chapter-preface/",
+    learningObjectives: [
+      "统一理解课程理论文档与三类 Lab 的作者接口。",
+      "能够按规范创建、测试、评分和 Review 后续题目。",
+      "从站内完整指南直接复制经过自动验证的示例。",
+    ],
+    focusAreas: [
+      "理论环境与 Markdown 语法展示",
+      "Quiz、Program、Project 更新机制",
+      "本地测试、CI、Review 与发布清单",
+    ],
     lessonSources: [
       "content/chapter-preface/00-theory-environments.md",
       "content/chapter-preface/01-lab-authoring-guide.md",
@@ -141,18 +154,26 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     id: "chapter-02-stack-queue",
     number: "2",
     title: "栈与队列",
-    description: "掌握受限线性结构及其在表达式、递归和层序处理中的应用。",
+    description: "从 LIFO/FIFO 的结构语义出发，掌握栈、循环队列及其在表达式、回溯与逐层扩散中的应用。",
     url: "/learn/outline/chapter-02-stack-queue/",
+    learningObjectives: [
+      "区分栈的后进先出与队列的先进先出语义，并据此选择合适结构。",
+      "实现顺序栈、链栈、循环队列与链队列，处理空、满和扩容边界。",
+      "使用栈与队列完成表达式、单调栈、逐层扩散及综合场景建模。",
+    ],
+    focusTitle: "学习路径",
+    focusAreas: [
+      "2.1 栈：ADT、顺序/链式实现、边界与括号匹配",
+      "2.2 队列：FIFO、循环队列、链队列与边界测试",
+      "2.3 应用：表达式、单调栈、逐层扩散与三个综合 Lab",
+    ],
     lessonSources: [
       "content/chapter-02-stack-queue/00-overview.md",
       "content/chapter-02-stack-queue/01-stack.md",
       "content/chapter-02-stack-queue/02-queue.md",
       "content/chapter-02-stack-queue/03-applications.md",
     ],
-    labSources: [
-      "labs/chapter-02/lab-02-01-stack-simulator/README.md",
-      "labs/chapter-02/lab-02-02-cycle-queue/README.md",
-    ],
+    autoLabChapter: 2,
   },
   {
     id: "chapter-03-string-array-matrix",
@@ -474,11 +495,11 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
       .filter((chapter): chapter is number => chapter !== undefined),
   );
   for (const lab of labs.filter((document) =>
-    categorizedLabChapters.has(document.chapter as number),
+    typeof document.chapter === "number" && categorizedLabChapters.has(document.chapter),
   )) {
     if (!lab.labCategory) {
       throw new Error(
-        `${lab.sourcePath}: 分类章节（本章 Labs）的 Lab 必须通过 lab.json 或 labCategory 声明分类`,
+        `${lab.sourcePath}: categorized chapter Labs must declare a category through lab.json or labCategory`,
       );
     }
   }
