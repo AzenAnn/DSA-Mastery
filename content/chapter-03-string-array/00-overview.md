@@ -50,11 +50,13 @@ status: "draft"
 
 - [Lab 03-01：串的基础选择题精练（3.1）](../../labs/chapter-03/lab-03-01-string-basics-quiz/README.md)
 - [Lab 03-02：模式匹配选择题精练（3.2）](../../labs/chapter-03/lab-03-02-string-matching-quiz/README.md)
-- [Lab 03-04：KMP 模式匹配（首次出现位置）](../../labs/chapter-03/lab-03-04-kmp-match/README.md)
-- [Lab 03-05：next 与 nextval 数组推导](../../labs/chapter-03/lab-03-05-next-array/README.md)
-- [Lab 03-06：朴素匹配与 KMP 比较次数](../../labs/chapter-03/lab-03-06-match-comparison/README.md)
-- [Lab 03-07：串的非重叠替换 Replace](../../labs/chapter-03/lab-03-07-string-replace/README.md)
-- [Lab 03-08：UTF-8 串长与字符数](../../labs/chapter-03/lab-03-08-utf8-char-count/README.md)
+- [Lab 03-03：数组与矩阵选择题精练（3.3）](../../labs/chapter-03/lab-03-03-array-matrix-quiz/README.md)
+- [Lab 03-04：广义表选择题精练（3.4）](../../labs/chapter-03/lab-03-04-generalized-list-quiz/README.md)
+- [Lab 03-05：KMP 模式匹配（首次出现位置）](../../labs/chapter-03/lab-03-05-kmp-match/README.md)
+- [Lab 03-06：next 与 nextval 数组推导](../../labs/chapter-03/lab-03-06-next-array/README.md)
+- [Lab 03-07：朴素匹配与 KMP 比较次数](../../labs/chapter-03/lab-03-07-match-comparison/README.md)
+- [Lab 03-08：串的非重叠替换 Replace](../../labs/chapter-03/lab-03-08-string-replace/README.md)
+- [Lab 03-09：UTF-8 串长与字符数](../../labs/chapter-03/lab-03-09-utf8-char-count/README.md)
 
 ## 学习建议
 

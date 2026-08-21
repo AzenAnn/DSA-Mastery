@@ -109,7 +109,6 @@ function jumpTo(target?: string) {
       <strong>答题进度</strong>
       <span>已答 {{ answeredCount }}/{{ questions.length }}</span>
       <span>正确 {{ correctCount }}</span>
-      <span>得分 {{ earnedPoints }}/{{ totalPoints }}</span>
     </div>
     <button
       v-if="isInline"
@@ -131,14 +130,13 @@ function jumpTo(target?: string) {
       class="course-quiz-question"
     >
       <header class="course-quiz-heading">
-        <span class="course-quiz-number">第 {{ index + 1 }} 题 · {{ question.points }} 分</span>
+        <span class="course-quiz-number">第 {{ index + 1 }} 题</span>
         <div class="course-quiz-heading-content">
           <div
-            v-if="question.source || question.difficulty || question.topics?.length || question.targetId"
+            v-if="question.difficulty || question.topics?.length || question.targetId"
             class="course-quiz-meta"
             aria-label="题目信息"
           >
-            <span v-if="question.source"><strong>来源</strong>{{ question.source }}</span>
             <span v-if="question.difficulty"><strong>难度</strong>{{ question.difficulty }}</span>
             <span v-if="question.topics?.length"><strong>考点</strong>{{ question.topics.join("、") }}</span>
             <span v-if="question.targetId"><strong>标识</strong><code>{{ question.targetId }}</code></span>
