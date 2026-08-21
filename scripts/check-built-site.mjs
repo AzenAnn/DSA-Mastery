@@ -198,8 +198,8 @@ if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.include
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 3) {
-  throw new Error(`Preface must contain the theory, Lab author, and Windows student guides, found ${prefacePages.length} pages`);
+if (prefacePages.length !== 4) {
+  throw new Error(`Preface must contain the theory, Lab author, Windows student, and Lab command guides, found ${prefacePages.length} pages`);
 }
 const prefaceHtml = await readFile(
   path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
@@ -285,6 +285,30 @@ if (windowsStudentGuideHtml.includes("@include") || windowsStudentGuideHtml.incl
   throw new Error("Windows student guide was not expanded or leaked the internal preface id");
 }
 
+const labCommandGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "03-lab-cli-command-guide", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "Lab 命令与接口使用指南",
+  "30 秒选择入口",
+  "三类 Lab 的能力边界",
+  "pnpm 操作总表",
+  "参数字典",
+  "Program：从运行到定位单个错误",
+  "Project：task、CTest 与人工评分",
+  "Make：同一套能力的短命令",
+  "lab:refresh-expected",
+  "NO_COLOR",
+]) {
+  if (!labCommandGuideHtml.includes(required)) {
+    throw new Error(`Rendered Lab command guide is missing: ${required}`);
+  }
+}
+if (labCommandGuideHtml.includes("@include") || labCommandGuideHtml.includes("第 preface 章")) {
+  throw new Error("Lab command guide was not expanded or leaked the internal preface id");
+}
+
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
 for (const requiredLabel of [
   "Part IV · 查找与索引",
@@ -327,7 +351,7 @@ if (base !== "/") {
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "第 0 章 绪论", "Lab 01-02：单链表选择题精练", "Lab 01-21：线性表双实现与工作负载评测器"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "Lab 命令与接口使用指南", "第 0 章 绪论", "Lab 01-02：单链表选择题精练", "Lab 01-21：线性表双实现与工作负载评测器"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

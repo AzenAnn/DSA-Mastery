@@ -8,7 +8,9 @@
 content/
 ├── chapter-preface/
 │   ├── 00-theory-environments.md
-│   └── 01-lab-authoring-guide.md
+│   ├── 01-lab-authoring-guide.md
+│   ├── 02-windows-student-setup.md
+│   └── 03-lab-cli-command-guide.md
 ├── chapter-00-introduction/
 │   ├── 00-overview.md
 │   ├── 01-data-structure-basics.md
