@@ -37,7 +37,7 @@ duration: "45～60 分钟"
 
 ## 输出格式
 
-`PUSH` 不输出；`POP` 输出被删除值；`TOP`、`MIN`、`SIZE` 和 `EMPTY` 分别输出查询结果。空栈上的 `POP`、`TOP`、`MIN` 输出 `EMPTY`；`EMPTY` 输出 `YES` 或 `NO`。
+`PUSH` 不输出；`POP` 输出被删除的值；`TOP`、`MIN`、`SIZE`、`EMPTY` 分别输出对应的查询结果。栈为空时，`POP`、`TOP`、`MIN` 输出字符串 `EMPTY`；`EMPTY` 命令输出 `YES` 或 `NO`。
 
 ## 数据范围与限制
 

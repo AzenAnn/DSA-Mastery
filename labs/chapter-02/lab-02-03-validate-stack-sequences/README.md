@@ -97,7 +97,7 @@ pnpm lab:run -- labs/chapter-02/lab-02-03-validate-stack-sequences --case 001-va
 pnpm lab:score -- labs/chapter-02/lab-02-03-validate-stack-sequences
 ```
 
-`make run` 在答案尚未全对时仍正常返回，便于查看各用例结果；`make score` 是严格入口，只有得到 100 分才返回成功。样例采用精确输出比较；`007-scale` 使用较大的合法序列检查实现能否在时限内完成，而不是要求新的输入语法。
+`make run` 在答案尚未全对时仍正常返回，便于查看各用例结果；`make score` 是严格入口，只有得到 100 分才返回成功。样例采用精确输出比较；`007-scale` 是一组规模较大的合法序列，用于检查实现能否在时限内完成。
 
 - [ ] 参考样例与全部公开测试通过
 - [ ] 空序列、单元素、立即出栈和延迟出栈均有自测
