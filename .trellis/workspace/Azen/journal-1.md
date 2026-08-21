@@ -158,3 +158,48 @@ Implemented and verified Lab 01-21 with dual list implementations, deterministic
 ### Status
 
 [OK] **Completed**
+
+
+## Session 8: 第三章串匹配文本处理引擎工程题
+
+**Date**: 2026-08-21
+**Task**: 第三章串匹配文本处理引擎工程题
+**Branch**: `chapter/03-string-array`
+
+### Summary
+
+实现 lab-03-14 串匹配与文本处理引擎（matcher stdio 30 + engine CTest 50 + report manual 20），合并远端第三章 Lab 重排（理论 03-01~04、实验 03-05~09），同步编号引用、总览与页面测试，清理旧编号缓存残留。全部门禁通过。
+
+### Main Changes
+
+- 实现 lab-03-14：统一 Matcher 契约下朴素/KMP/nextval + 文本处理命令 + UTF-8 边界 + 固定 seed 工作负载
+- 合并远端 PR #49 重排并更新工程题引用（03-05~09）与第三章侧栏测试（理论 4 / 实验 5 / 工程 1）
+- 修复合并引入的 QuizSet.vue 未用变量 lint 报错，移除旧编号目录缓存残留
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `6d7e8eb` | (see git log) |
+| `70ecc6a` | (see git log) |
+| `45241de` | (see git log) |
+| `eb7e620` | (see git log) |
+| `a5d370f` | (see git log) |
+| `09b740c` | (see git log) |
+| `c21635b` | (see git log) |
+| `4983274` | (see git log) |
+| `d96a6b6` | (see git log) |
+
+### Testing
+
+- [OK] lab:verify 参考 80/80、学生骨架 31.5/80、人工 20 待评
+- [OK] pnpm test 全绿（51 个 Lab、161 个 HTML）
+- [OK] test:pages 19/19
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 推送 chapter/03-string-array 分支并开 PR

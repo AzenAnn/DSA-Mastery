@@ -59,6 +59,10 @@ JSON 报告顶层：
 - student pack 排除全部 solution、cache、object/binary，内置 runner 与独立 Makefile，不依赖源仓库相对路径。
 - 评分器以 `spawn(command, args, { shell: false })` 执行；本地评分不是恶意代码沙箱，PR job 不注入秘密或写 token。
 
+> **Warning**: 新增 Program/Project 用例时，`tests/*.out` 必须先存在，`refresh-expected` 才能写入。
+>
+> `loadCases` 在加载阶段就要求 `expected` 文件存在，因此“先建空 `.out` 占位 → `refresh-expected --write` 用 solution 输出覆盖”是唯一可行顺序；直接对缺失 `.out` 运行 validate/refresh 会得到 `FILE_NOT_FOUND`。脚手架只生成 `001-sample.out` 一个占位，其余用例需作者补建。
+
 ## 4. Validation & Error Matrix
 
 | 条件 | code / 行为 |

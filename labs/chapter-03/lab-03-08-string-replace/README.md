@@ -1,18 +1,18 @@
 ---
-title: "Lab 03-07：串的非重叠替换 Replace"
+title: "Lab 03-08：串的非重叠替换 Replace"
 description: "实现 Replace(S, T, V)：把 S 中所有非重叠的 T 替换为 V，组合定位与拼接操作。"
-order: 7
+order: 8
 chapter: 3
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
-contributors: ["DSA Mastery Team"]
+contributors: ["Qing"]
 status: "draft"
 lab: true
 difficulty: "进阶"
 duration: "60～90 分钟"
 ---
 
-# Lab 03-07：串的非重叠替换 Replace
+# Lab 03-08：串的非重叠替换 Replace
 
 > 题目来源：陈守孔《算法与数据结构考研试题精析》串置换题（`replace(s, t, v)`：把 s 中所有非重叠的 t 用 v 代替）。
 
@@ -146,9 +146,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/lab-03-07-string-replace
-pnpm lab:run -- labs/chapter-03/lab-03-07-string-replace
-pnpm lab:score -- labs/chapter-03/lab-03-07-string-replace
+pnpm lab:doctor -- labs/chapter-03/lab-03-08-string-replace
+pnpm lab:run -- labs/chapter-03/lab-03-08-string-replace
+pnpm lab:score -- labs/chapter-03/lab-03-08-string-replace
 ```
 
 - [ ] 五个样例全部通过；

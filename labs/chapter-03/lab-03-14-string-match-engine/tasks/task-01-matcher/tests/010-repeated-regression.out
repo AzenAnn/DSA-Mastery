@@ -1,0 +1,3 @@
+naive first=5 comparisons=30 prefix=0
+kmp first=5 comparisons=15 prefix=3
+nextval first=5 comparisons=15 prefix=3

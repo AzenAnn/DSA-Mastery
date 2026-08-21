@@ -1,18 +1,18 @@
 ---
-title: "Lab 03-06：朴素匹配与 KMP 比较次数"
+title: "Lab 03-07：朴素匹配与 KMP 比较次数"
 description: "统计朴素匹配与 KMP 匹配阶段的字符比较次数，用数据对比 O(n·m) 与 O(n+m)。"
-order: 6
+order: 7
 chapter: 3
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
-contributors: ["DSA Mastery Team"]
+contributors: ["Qing"]
 status: "draft"
 lab: true
 difficulty: "进阶"
 duration: "60～90 分钟"
 ---
 
-# Lab 03-06：朴素匹配与 KMP 比较次数
+# Lab 03-07：朴素匹配与 KMP 比较次数
 
 > 题目来源：王道《数据结构》习题集 4.2、408 统考风格（如 2019 年 KMP 比较次数题）。
 
@@ -119,9 +119,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/lab-03-06-match-comparison
-pnpm lab:run -- labs/chapter-03/lab-03-06-match-comparison
-pnpm lab:score -- labs/chapter-03/lab-03-06-match-comparison
+pnpm lab:doctor -- labs/chapter-03/lab-03-07-match-comparison
+pnpm lab:run -- labs/chapter-03/lab-03-07-match-comparison
+pnpm lab:score -- labs/chapter-03/lab-03-07-match-comparison
 ```
 
 - [ ] 三个样例全部通过，且能手工复述每一趟的比较次数；

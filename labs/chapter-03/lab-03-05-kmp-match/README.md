@@ -1,18 +1,18 @@
 ---
-title: "Lab 03-04：KMP 模式匹配（首次出现位置）"
+title: "Lab 03-05：KMP 模式匹配（首次出现位置）"
 description: "用 KMP 求模式串在主串中首次出现的位置，练习 next 数组构造与匹配指针不回退。"
-order: 4
+order: 5
 chapter: 3
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
-contributors: ["DSA Mastery Team"]
+contributors: ["Qing"]
 status: "draft"
 lab: true
 difficulty: "进阶"
 duration: "45～60 分钟"
 ---
 
-# Lab 03-04：KMP 模式匹配（首次出现位置）
+# Lab 03-05：KMP 模式匹配（首次出现位置）
 
 > 题目来源：改编自 LeetCode 28「找出字符串中第一个匹配项的下标」、洛谷 P3375【模板】KMP 字符串匹配、PTA 7-2 串的模式匹配。
 
@@ -126,9 +126,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/lab-03-04-kmp-match
-pnpm lab:run -- labs/chapter-03/lab-03-04-kmp-match
-pnpm lab:score -- labs/chapter-03/lab-03-04-kmp-match
+pnpm lab:doctor -- labs/chapter-03/lab-03-05-kmp-match
+pnpm lab:run -- labs/chapter-03/lab-03-05-kmp-match
+pnpm lab:score -- labs/chapter-03/lab-03-05-kmp-match
 ```
 
 - [ ] 四个样例全部通过；

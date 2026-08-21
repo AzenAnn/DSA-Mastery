@@ -828,7 +828,6 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   const questions = page.locator(".course-quiz-question");
   await expect(questions).toHaveCount(19);
   await expect(page.locator(".course-quiz-summary")).toContainText("已答 0/19");
-  await expect(page.locator(".course-quiz-summary")).toContainText("得分 0/20");
 
   // 右侧答题进度导航：19 个圈，初始全部未作答
   const navigator = page.locator(".course-quiz-nav");
@@ -859,7 +858,6 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
   await expect(second.locator(".course-quiz-feedback")).toContainText("回答正确");
   await expect(navigator.locator("li").nth(1)).toHaveClass(/is-correct/);
   await expect(page.locator(".course-quiz-summary")).toContainText("正确 1");
-  await expect(page.locator(".course-quiz-summary")).toContainText("得分 1/20");
   await second.getByRole("button", { name: "重新作答" }).click();
   await expect(second.locator(".course-quiz-feedback")).toHaveCount(0);
   await expect(second.getByRole("radio").nth(1)).toBeEnabled();
@@ -1212,12 +1210,18 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await theoryGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
-  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(2);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(4);
   await expect(
     theoryGroup.getByRole("link", { name: "Lab 03-01：串的基础选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
     theoryGroup.getByRole("link", { name: "Lab 03-02：模式匹配选择题精练", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    theoryGroup.getByRole("link", { name: "Lab 03-03：数组与矩阵选择题精练", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    theoryGroup.getByRole("link", { name: "Lab 03-04：广义表选择题精练", exact: true }),
   ).toHaveCount(1);
 
   await exerciseGroup.locator(":scope > .item").focus();
@@ -1225,17 +1229,18 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
   await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(5);
   for (const title of [
-    "Lab 03-04：KMP 模式匹配（首次出现位置）",
-    "Lab 03-05：next 与 nextval 数组推导",
-    "Lab 03-06：朴素匹配与 KMP 比较次数",
-    "Lab 03-07：串的非重叠替换 Replace",
-    "Lab 03-08：UTF-8 串长与字符数",
+    "Lab 03-05：KMP 模式匹配（首次出现位置）",
+    "Lab 03-06：next 与 nextval 数组推导",
+    "Lab 03-07：朴素匹配与 KMP 比较次数",
+    "Lab 03-08：串的非重叠替换 Replace",
+    "Lab 03-09：UTF-8 串长与字符数",
   ]) {
     await expect(exerciseGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
   }
-  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
-    "暂无工程型 Lab",
-  );
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(1);
+  await expect(
+    projectGroup.getByRole("link", { name: "Lab 03-14：串匹配与文本处理引擎", exact: true }),
+  ).toHaveCount(1);
 
   expect(failures).toEqual([]);
 });

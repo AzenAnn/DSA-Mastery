@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "ctest",
+  "ctest": {
+    "tests": [
+      { "name": "engine-semantic-equivalence", "points": 30 },
+      { "name": "engine-next-and-nextval", "points": 15 },
+      { "name": "engine-text-ops-and-utf8", "points": 30 },
+      { "name": "engine-cost-accounting", "points": 15 },
+      { "name": "engine-workload-determinism", "points": 10 }
+    ]
+  }
+}
