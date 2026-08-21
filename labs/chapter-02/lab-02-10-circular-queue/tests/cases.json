@@ -1,0 +1,61 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-wraparound",
+    "input": "tests/002-wraparound.in",
+    "expected": "tests/002-wraparound.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-capacity-one",
+    "input": "tests/003-capacity-one.in",
+    "expected": "tests/003-capacity-one.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-empty-stability",
+    "input": "tests/004-empty-stability.in",
+    "expected": "tests/004-empty-stability.out",
+    "points": 15,
+    "tags": [
+      "error"
+    ]
+  },
+  {
+    "id": "005-negative-duplicates",
+    "input": "tests/005-negative-duplicates.in",
+    "expected": "tests/005-negative-duplicates.out",
+    "points": 15,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-scale-wraparound",
+    "input": "tests/006-scale-wraparound.in",
+    "expected": "tests/006-scale-wraparound.out",
+    "points": 10,
+    "tags": [
+      "scale",
+      "complexity",
+      "wraparound"
+    ]
+  }
+]

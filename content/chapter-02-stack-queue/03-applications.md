@@ -4,7 +4,7 @@ description: "从栈与队列的访问语义出发，理解表达式求值、单
 order: 3
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-19"
+updated: "2026-08-21"
 contributors: ["Jeff"]
 status: "draft"
 ---
@@ -260,6 +260,8 @@ std::vector<std::optional<int>> next_greater(const std::vector<int>& nums) {
 每个下标恰好入栈一次、最多出栈一次。内层 `while` 虽然在某一步可能连续弹出多个下标，但整次扫描的弹栈总数不超过 $n$，因此时间复杂度为 $\Theta(n)$。结果数组占用 $\Theta(n)$ 空间，辅助栈的最坏空间复杂度为 $O(n)$。
 :::
 
+完成 [Lab 02-14：柱状图中最大的矩形](../../labs/chapter-02/lab-02-14-largest-rectangle-histogram/README.md)，进一步练习用单调栈确定左右边界与矩形宽度。
+
 ### 队列与逐层扩散
 
 当问题要求“按到达顺序处理”时，队列是自然选择。下面用一维状态空间体会“逐层扩散”，不需要预先学习图的存储结构。
@@ -372,8 +374,8 @@ int min_steps(int start, int target, int limit) {
 
 ## 练习
 
-1. 把 `(2 + 3) * (7 - 4)` 转换为后缀表达式，并用栈给出完整求值过程。
-2. 单调栈能求出“左边第一个比它小”的元素吗？需要维护什么性质的栈？
+1. 把 `(2 + 3) * (7 - 4)` 转换为后缀表达式，并用栈给出完整求值过程；随后在 [Lab 02-07：逆波兰表达式求值](../../labs/chapter-02/lab-02-07-evaluate-rpn/README.md)中实现并测试求值器。
+2. 单调栈能求出“左边第一个比它小”的元素吗？需要维护什么性质的栈？完成 [Lab 02-14：柱状图中最大的矩形](../../labs/chapter-02/lab-02-14-largest-rectangle-histogram/README.md)后，再比较“寻找相邻边界”和“结算矩形宽度”的弹栈条件。
 3. 在“农夫抓牛”中，为什么入队时写入 `dist`，而不是等到出队时才标记？
 4. 浏览器访问新页面时为什么要清空前进栈？不清空会发生什么？（可对照 Lab 02-03）
 5. 一个系统需要“后到的请求先处理”（如撤销栈），它该用栈还是队列？如果改成“等待最久的请求先处理”呢？
@@ -389,5 +391,5 @@ int min_steps(int start, int target, int limit) {
 ## 延伸阅读
 
 - Edsger W. Dijkstra 在 1961 年的 [ALGOL 60 Translation（EWD 35）](https://www.cs.utexas.edu/~EWD/transcriptions/EWD00xx/EWD35.html)中描述了后来被称为 shunting-yard 的翻译方法。
-- 单调栈与单调队列可继续练习 LeetCode 496 / 503 / 739（下一个更大元素、每日温度）与 239（滑动窗口最大值）。
+- 完成 [Lab 02-13：滑动窗口最大值](../../labs/chapter-02/lab-02-13-sliding-window-maximum/README.md)，把单调候选从栈扩展到支持队头过期的双端队列；还可继续练习 LeetCode 496 / 503（下一个更大元素）。
 - 广度优先遍历的完整图论内容见[图的遍历](../chapter-05-graph/02-traversal.md)。

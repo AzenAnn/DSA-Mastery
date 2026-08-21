@@ -1,0 +1,70 @@
+[
+  {
+    "id": "001-duplicate-minimum",
+    "input": "tests/001-duplicate-minimum.in",
+    "expected": "tests/001-duplicate-minimum.out",
+    "points": 15,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-empty-contract",
+    "input": "tests/002-empty-contract.in",
+    "expected": "tests/002-empty-contract.out",
+    "points": 20,
+    "tags": [
+      "boundary",
+      "error"
+    ]
+  },
+  {
+    "id": "003-negative-duplicates",
+    "input": "tests/003-negative-duplicates.in",
+    "expected": "tests/003-negative-duplicates.out",
+    "points": 15,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-single",
+    "input": "tests/004-single.in",
+    "expected": "tests/004-single.out",
+    "points": 15,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-restore-chain",
+    "input": "tests/005-restore-chain.in",
+    "expected": "tests/005-restore-chain.out",
+    "points": 15,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-mixed-values",
+    "input": "tests/006-mixed-values.in",
+    "expected": "tests/006-mixed-values.out",
+    "points": 10,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "007-scale",
+    "input": "tests/007-scale.in",
+    "expected": "tests/007-scale.out",
+    "points": 10,
+    "tags": [
+      "scale",
+      "complexity"
+    ]
+  }
+]
