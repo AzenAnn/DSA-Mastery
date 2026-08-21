@@ -1233,9 +1233,10 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   ]) {
     await expect(exerciseGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
   }
-  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
-    "暂无工程型 Lab",
-  );
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(1);
+  await expect(
+    projectGroup.getByRole("link", { name: "Lab 03-14：串匹配与文本处理引擎", exact: true }),
+  ).toHaveCount(1);
 
   expect(failures).toEqual([]);
 });
