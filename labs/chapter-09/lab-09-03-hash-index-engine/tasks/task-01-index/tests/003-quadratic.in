@@ -1,0 +1,10 @@
+quadratic 7
+put 1 1
+put 8 2
+put 15 3
+put 22 4
+get 22
+erase 8
+contains 22
+size
+probes 22

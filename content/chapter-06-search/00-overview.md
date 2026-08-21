@@ -67,9 +67,12 @@ status: "draft"
 
 ## 配套 Labs
 
-- [Lab 06-01：BST 增删查与边界测试](../../labs/chapter-06/lab-06-01-bst-operations/README.md)
-- [Lab 06-02：散列表实现与冲突统计](../../labs/chapter-06/lab-06-02-hash-table/README.md)
-- [Lab 06-03：查找理论选择题精练](../../labs/chapter-06/lab-06-03-search-theory-quiz/README.md)
+- [Lab 08-01：查找理论选择题精练](../../labs/chapter-08/lab-08-01-search-theory-quiz/README.md)
+- [Lab 08-02：BST 增删查与边界测试](../../labs/chapter-08/lab-08-02-bst-operations/README.md)
+- [Lab 08-03：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/lab-08-03-avl-tree-rotations/README.md)
+- [Lab 09-01：散列与索引选择题精练](../../labs/chapter-09/lab-09-01-hash-index-theory-quiz/README.md)
+- [Lab 09-02：散列表实现与冲突统计](../../labs/chapter-09/lab-09-02-hash-table/README.md)
+- [Lab 09-03：散列索引引擎——冲突策略与再散列大综合](../../labs/chapter-09/lab-09-03-hash-index-engine/README.md)
 
 ## 选型时先问什么
 

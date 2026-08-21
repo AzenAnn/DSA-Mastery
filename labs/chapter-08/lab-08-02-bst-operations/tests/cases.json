@@ -1,0 +1,42 @@
+[
+  {
+    "id": "001-basic",
+    "input": "tests/001-basic.in",
+    "expected": "tests/001-basic.out",
+    "points": 20,
+    "tags": ["normal"],
+    "compare": { "mode": "exact" }
+  },
+  {
+    "id": "002-delete-leaf",
+    "input": "tests/002-delete-leaf.in",
+    "expected": "tests/002-delete-leaf.out",
+    "points": 20,
+    "tags": ["normal"],
+    "compare": { "mode": "exact" }
+  },
+  {
+    "id": "003-delete-single-child",
+    "input": "tests/003-delete-single-child.in",
+    "expected": "tests/003-delete-single-child.out",
+    "points": 20,
+    "tags": ["normal"],
+    "compare": { "mode": "exact" }
+  },
+  {
+    "id": "004-delete-two-child",
+    "input": "tests/004-delete-two-child.in",
+    "expected": "tests/004-delete-two-child.out",
+    "points": 20,
+    "tags": ["normal"],
+    "compare": { "mode": "exact" }
+  },
+  {
+    "id": "005-missing-and-empty",
+    "input": "tests/005-missing-and-empty.in",
+    "expected": "tests/005-missing-and-empty.out",
+    "points": 20,
+    "tags": ["boundary"],
+    "compare": { "mode": "exact" }
+  }
+]

@@ -11,6 +11,9 @@
 - [x] `lab-04-02-huffman-coding`：Golden Project
 - [x] `lab-01-01`～`lab-01-05`：Quiz manifest 迁移
 - [x] `lab-03-01-string-basics-quiz` / `lab-03-02-string-matching-quiz`：原 Program 候选改名转 Quiz（串基础与模式匹配选择题）
+- [x] `lab-06-01-bst-operations` → `lab-08-02-bst-operations`：迁为 Program，随第 8 章分类重编号
+- [x] `lab-06-02-hash-table` → `lab-09-02-hash-table`：迁为 Program，随第 9 章分类重编号
+- [x] `lab-06-03-search-theory-quiz`：拆分为 `lab-08-01`（查找 6 题）与 `lab-09-01`（散列与索引 18 题）
 
 ## README-only 保留
 
@@ -24,8 +27,6 @@
 - [ ] `lab-04-01-binary-tree-traversal`
 - [ ] `lab-05-01-bfs-maze`
 - [ ] `lab-05-02-dijkstra-path`
-- [ ] `lab-06-01-bst-operations`
-- [ ] `lab-06-02-hash-table`
 
 每项迁移必须补齐：stdin/stdout、可编译 starter、经审阅 solution、合计 100 的 normal/boundary/regression cases、薄 Makefile、`verify` 证据和学生包检查。
 
