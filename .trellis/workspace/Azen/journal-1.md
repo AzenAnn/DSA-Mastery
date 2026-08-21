@@ -137,3 +137,24 @@ Implemented and verified Lab 01-21 with dual list implementations, deterministic
 ### Status
 
 [OK] **Completed**
+
+
+## Session 7: Lab 命令与接口指南
+
+**Date**: 2026-08-21
+**Task**: Lab 命令与接口指南
+**Branch**: `codex/docs-lab-cli-guide`
+
+### Summary
+
+审计并整理 Quiz、Program、Project 的 pnpm/Make 操作与参数，新增前言指南、导航接入和三层验证，完成桌面/移动及浅暗主题本地预览。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `cec757f` | (see git log) |
+
+### Status
+
+[OK] **Completed**

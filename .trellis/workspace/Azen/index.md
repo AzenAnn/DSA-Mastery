@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 6
-- **Last Active**: 2026-08-20
+- **Total Sessions**: 7
+- **Last Active**: 2026-08-21
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~139 | Active |
+| `journal-1.md` | ~160 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 7 | 2026-08-21 | Lab 命令与接口指南 | `cec757f` | `codex/docs-lab-cli-guide` |
 | 6 | 2026-08-20 | Chapter 1 list workload Project Lab | `afca69d` | `lab/ch01-list-workload-project` |
 | 5 | 2026-08-17 | Unified Lab update workflow | `6bf9df6`, `56422aa`, `6ae4ab0`, `c975836`, `732c398` | `codex/unified-lab-update-workflow` |
 | 4 | 2026-08-16 | 前言理论语法展示页 | `39e9cc0`, `b24e18f` | `codex/dsa-mastery-theory-doc-style` |

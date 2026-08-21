@@ -92,22 +92,25 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     number: "preface",
     label: "前言",
     title: "课程作者指南",
-    description: "查看理论文档语法，以及 Quiz、Program、Project 三类 Lab 的更新与测试流程。",
+    description: "查看理论文档语法、实验环境，以及 Quiz、Program、Project 的命令、更新与测试流程。",
     url: "/learn/outline/chapter-preface/",
     learningObjectives: [
       "统一理解课程理论文档与三类 Lab 的作者接口。",
       "能够按规范创建、测试、评分和 Review 后续题目。",
+      "能够选择 pnpm 或 Make 运行、定位和严格评分当前 Lab。",
       "从站内完整指南直接复制经过自动验证的示例。",
     ],
     focusAreas: [
       "理论环境与 Markdown 语法展示",
       "Quiz、Program、Project 更新机制",
+      "pnpm 参数、Make 映射与判定语义",
       "本地测试、CI、Review 与发布清单",
     ],
     lessonSources: [
       "content/chapter-preface/00-theory-environments.md",
       "content/chapter-preface/01-lab-authoring-guide.md",
       "content/chapter-preface/02-windows-student-setup.md",
+      "content/chapter-preface/03-lab-cli-command-guide.md",
     ],
   },
   {

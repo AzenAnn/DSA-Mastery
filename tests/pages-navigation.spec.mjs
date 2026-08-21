@@ -220,6 +220,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-preface/01-lab-authoring-guide/"]').first(),
   ).toBeVisible();
+  await input.fill("Lab 命令与接口使用指南");
+  await expect(
+    results.locator('a[href*="/learn/chapter-preface/03-lab-cli-command-guide/"]').first(),
+  ).toBeVisible();
   await input.fill("单链表选择题精练");
   const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-singly-linked-list-quiz/"]').first();
   await expect(labResult).toBeVisible();
@@ -287,6 +291,7 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   const showcaseRoute = `${baseUrl}/learn/chapter-preface/00-theory-environments/`;
   const labGuideRoute = `${baseUrl}/learn/chapter-preface/01-lab-authoring-guide/`;
   const windowsStudentGuideRoute = `${baseUrl}/learn/chapter-preface/02-windows-student-setup/`;
+  const labCommandGuideRoute = `${baseUrl}/learn/chapter-preface/03-lab-cli-command-guide/`;
 
   await page.goto(`${baseUrl}/learn/`);
   const foundationChapters = page.locator(".course-curriculum-chapters > a");
@@ -319,6 +324,38 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   await expect(page.locator(".vp-doc")).toContainText("Golden Project");
   await expect(page.locator(".VPSidebar").getByRole("link", { name: "Lab 更新与测试指南", exact: true })).toBeVisible();
 
+  await page.goto(outlineRoute);
+  const commandGuideEntry = page.locator(".course-curriculum-resource-list").getByRole("link", { name: /Lab 命令与接口使用指南/ });
+  await expect(commandGuideEntry).toBeVisible();
+  await commandGuideEntry.click();
+
+  await expect(page).toHaveURL(labCommandGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 命令与接口使用指南");
+  await expect(page.getByRole("heading", { level: 2, name: /30 秒选择入口/ })).toBeVisible();
+  await expect(page.locator(".vp-doc")).toContainText("一套评分内核，两种命令外壳");
+  await expect(page.locator(".vp-doc")).toContainText("pnpm lab:run");
+  await expect(page.locator(".vp-doc")).toContainText("make run");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "Lab 命令与接口使用指南", exact: true })).toBeVisible();
+  await expect(page.locator(".vp-code-group").first()).toBeVisible();
+
+  const assertCommandGuideOverflow = async (theme) => {
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(labCommandGuideRoute);
+      const overflow = await page.evaluate(() =>
+        globalThis.document.documentElement.scrollWidth - globalThis.window.innerWidth,
+      );
+      expect(overflow, `Lab command guide root overflow in ${theme} theme at ${width}px`).toBeLessThanOrEqual(0);
+    }
+  };
+  await assertCommandGuideOverflow("light");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(labCommandGuideRoute);
+  await page.locator(".VPNavBarAppearance .VPSwitchAppearance").click();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await assertCommandGuideOverflow("dark");
+
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(showcaseRoute);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("前言 · 理论环境展示");
   await expect(page.locator(".course-breadcrumbs").getByRole("link", { name: "前言" })).toBeVisible();
