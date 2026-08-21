@@ -1,7 +1,7 @@
 ---
-title: "Lab 03-08：UTF-8 串长与字符数"
+title: "Lab 03-09：UTF-8 串长与字符数"
 description: "按 UTF-8 首字节规则统计字节数与字符数，验证'串长不等于字节数'。"
-order: 8
+order: 9
 chapter: 3
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
@@ -12,7 +12,7 @@ difficulty: "基础"
 duration: "30～45 分钟"
 ---
 
-# Lab 03-08：UTF-8 串长与字符数
+# Lab 03-09：UTF-8 串长与字符数
 
 > 题目来源：牛客“字符数量”题与 3.1 字符编码知识点（UTF-8 变长编码、串长不等于字节数）。
 
@@ -140,9 +140,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/lab-03-08-utf8-char-count
-pnpm lab:run -- labs/chapter-03/lab-03-08-utf8-char-count
-pnpm lab:score -- labs/chapter-03/lab-03-08-utf8-char-count
+pnpm lab:doctor -- labs/chapter-03/lab-03-09-utf8-char-count
+pnpm lab:run -- labs/chapter-03/lab-03-09-utf8-char-count
+pnpm lab:score -- labs/chapter-03/lab-03-09-utf8-char-count
 ```
 
 - [ ] 五个样例全部通过；

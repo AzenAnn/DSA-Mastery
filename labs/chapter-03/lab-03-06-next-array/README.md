@@ -1,7 +1,7 @@
 ---
-title: "Lab 03-05：next 与 nextval 数组推导"
+title: "Lab 03-06：next 与 nextval 数组推导"
 description: "输入模式串，输出 next 与 nextval 数组，掌握 KMP 失配回退的两种约定。"
-order: 5
+order: 6
 chapter: 3
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
@@ -12,7 +12,7 @@ difficulty: "进阶"
 duration: "45～60 分钟"
 ---
 
-# Lab 03-05：next 与 nextval 数组推导
+# Lab 03-06：next 与 nextval 数组推导
 
 > 题目来源：严蔚敏《数据结构》第 4 章习题、王道《数据结构》习题集 4.2。
 
@@ -112,9 +112,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/lab-03-05-next-array
-pnpm lab:run -- labs/chapter-03/lab-03-05-next-array
-pnpm lab:score -- labs/chapter-03/lab-03-05-next-array
+pnpm lab:doctor -- labs/chapter-03/lab-03-06-next-array
+pnpm lab:run -- labs/chapter-03/lab-03-06-next-array
+pnpm lab:score -- labs/chapter-03/lab-03-06-next-array
 ```
 
 - [ ] 三个样例全部通过；
