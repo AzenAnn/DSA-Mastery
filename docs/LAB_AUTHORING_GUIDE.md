@@ -1,6 +1,6 @@
 # DSA Mastery Lab 更新与测试指南
 
-> 适用版本：Lab Schema v1 · 更新日期：2026-08-18
+> 适用版本：Lab Schema v1 · 更新日期：2026-08-21
 
 这份手册是 Quiz、Program 和 Project 三类 Lab 的统一作者 API。面向网页的说明仍写在 Lab 的 `README.md`，机器行为只由 `lab.json`、`quiz.json`、`cases.json`、`task.json` 和共享工具决定。后续开发者应从本文提供的脚手架开始，而不是复制旧 Lab 后自行发明目录、Make 规则或评分脚本。
 
@@ -109,6 +109,22 @@ make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sa
 `make run` 故意把“完成评分但未满分”转换为成功，因此 WA 不会附带 Make 自身的失败噪声；`make score` 保留严格非零退出码，供 CI 使用。
 
 除直接接管终端输入输出的 `interactive` 外，所有命令支持 `--json`；报告顶层包含 `reportVersion`、`command`、`ok`、Lab 身份和命令结果。有效的学生 WA/CE 仍是一次成功完成的评分报告；环境、配置或 IE 必须同时得到 exit 2 与顶层 `ok: false`。脚本消费者必须先检查 `reportVersion`，不能解析人类表格。
+
+### 3.1 终端结果与颜色
+
+Lab CLI 在交互终端自动增强关键信息，但状态文字和 `x/y` 分数始终保留，颜色不是判定合同：
+
+- AC、PASS 与满分使用绿色；WA、CE、RE、IE 与未满分的实际得分使用红色；TLE、OLE、PENDING 使用黄色。
+- 未满分继续显示为“红色实际分/绿色满分上限”，例如 `80/100`；Project 的 manual task 显示 `PENDING`，不伪装为最终满分。
+- Program 失败会展开首处差异、期望、实际和可复制的单用例 `Retry` 命令；Project 分开显示 automated、manual pending 和 provisional total。
+- 表头、路径和命令只提供视觉层级；编译器、CMake、CTest 与学生 stderr 正文保持可复制，不整块染色。
+
+需要纯文本时在任一非 interactive 命令添加 `--no-color`。设置 `NO_COLOR`、使用 `TERM=dumb` 或把输出重定向到文件时也会自动关闭颜色。`--json` 永远不含 ANSI 控制码，脚本与 CI 必须消费 JSON 字段而非带样式的人类输出。
+
+```powershell
+pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --no-color
+pnpm lab:score -- labs/chapter-01/lab-01-06-sequential-list-deduplication --json
+```
 
 ## 4. 公共目录、命名与路径安全
 
