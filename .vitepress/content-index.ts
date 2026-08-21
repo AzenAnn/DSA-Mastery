@@ -256,10 +256,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-06-search/02-binary-search-tree.md",
       "content/chapter-06-search/03-balanced-search-tree.md",
     ],
-    labSources: [
-      "labs/chapter-06/lab-06-01-bst-operations/README.md",
-      "labs/chapter-06/lab-06-03-search-theory-quiz/README.md",
-    ],
+    autoLabChapter: 8,
   },
   {
     id: "chapter-09-hashing-indexes",
@@ -271,10 +268,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-06-search/04-b-tree-and-b-plus-tree.md",
       "content/chapter-06-search/05-hash-table.md",
     ],
-    labSources: [
-      "labs/chapter-06/lab-06-02-hash-table/README.md",
-      "labs/chapter-06/lab-06-03-search-theory-quiz/README.md",
-    ],
+    autoLabChapter: 9,
   },
   {
     id: "chapter-10-basic-sorting",

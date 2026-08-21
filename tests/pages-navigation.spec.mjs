@@ -269,7 +269,10 @@ test("curriculum exposes every Part and the required search, sorting, and algori
     "6.1 基础查找与折半查找",
   );
   await expect(page.locator(".course-curriculum-resource-list")).toContainText(
-    "Lab 06-03：查找理论选择题精练",
+    "Lab 08-01：查找理论选择题精练",
+  );
+  await expect(page.locator(".course-curriculum-resource-list")).toContainText(
+    "Lab 08-02：BST 增删查与边界测试",
   );
 
   await page.goto(`${baseUrl}/learn/outline/chapter-12-divide-conquer-recursion/`);
@@ -280,7 +283,7 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.2 二叉排序树");
   await page.goto(`${baseUrl}/learn/chapter-06-search/04-b-tree-and-b-plus-tree/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.4 B 树与 B+ 树");
-  await page.goto(`${baseUrl}/labs/chapter-06/lab-06-02-hash-table/`);
+  await page.goto(`${baseUrl}/labs/chapter-09/lab-09-02-hash-table/`);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("散列表");
   expect(failures).toEqual([]);
 });
@@ -1237,19 +1240,19 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   expect(failures).toEqual([]);
 });
 
-test("search theory quiz exposes all 24 questions and reconstructed tree prompts", async ({ page }) => {
+test("chapter 9 hash index theory quiz exposes all 18 questions and reconstructed tree prompts", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/labs/chapter-06/lab-06-03-search-theory-quiz/`);
+  await page.goto(`${baseUrl}/labs/chapter-09/lab-09-01-hash-index-theory-quiz/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Lab 06-03：查找理论选择题精练",
+    "Lab 09-01：散列与索引选择题精练",
   );
 
   const questions = page.locator(".course-quiz-question");
-  await expect(questions).toHaveCount(24);
-  await expect(page.locator(".course-quiz-nav li")).toHaveCount(24);
-  await expect(page.locator(".course-quiz-option")).toHaveCount(96);
-  await expect(page.locator(".course-quiz-meta")).toHaveCount(24);
-  await expect(questions.nth(3).locator("pre")).toContainText("[55,65]");
+  await expect(questions).toHaveCount(18);
+  await expect(page.locator(".course-quiz-nav li")).toHaveCount(18);
+  await expect(page.locator(".course-quiz-option")).toHaveCount(72);
+  await expect(page.locator(".course-quiz-meta")).toHaveCount(18);
+  await expect(questions.nth(2).locator("pre")).toContainText("[55,65]");
   await expect(page.locator(".course-quiz-stem mjx-container").first()).toBeVisible();
   await expect(page.locator(".vp-doc")).not.toContainText(
     /查看原始页面|看交互可视化|答案来源说明|答案来源：Codex/,
@@ -1269,5 +1272,23 @@ test("search theory quiz exposes all 24 questions and reconstructed tree prompts
     scrollWidth: globalThis.document.documentElement.scrollWidth,
   }));
   expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
+  expect(failures).toEqual([]);
+});
+
+test("chapter 8 search theory quiz exposes all 6 questions", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/chapter-08/lab-08-01-search-theory-quiz/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Lab 08-01：查找理论选择题精练",
+  );
+
+  const questions = page.locator(".course-quiz-question");
+  await expect(questions).toHaveCount(6);
+  await expect(page.locator(".course-quiz-nav li")).toHaveCount(6);
+  await expect(page.locator(".course-quiz-option")).toHaveCount(24);
+  await expect(page.locator(".course-quiz-meta")).toHaveCount(6);
+  await expect(page.locator(".vp-doc")).not.toContainText(
+    /查看原始页面|看交互可视化|答案来源说明|答案来源：Codex/,
+  );
   expect(failures).toEqual([]);
 });

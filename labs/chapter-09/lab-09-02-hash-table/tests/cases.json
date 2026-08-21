@@ -1,0 +1,42 @@
+[
+  {
+    "id": "001-chaining-basic",
+    "input": "tests/001-chaining-basic.in",
+    "expected": "tests/001-chaining-basic.out",
+    "points": 20,
+    "tags": ["normal"],
+    "compare": { "mode": "exact" }
+  },
+  {
+    "id": "002-chaining-delete",
+    "input": "tests/002-chaining-delete.in",
+    "expected": "tests/002-chaining-delete.out",
+    "points": 20,
+    "tags": ["normal"],
+    "compare": { "mode": "exact" }
+  },
+  {
+    "id": "003-probing-cluster",
+    "input": "tests/003-probing-cluster.in",
+    "expected": "tests/003-probing-cluster.out",
+    "points": 20,
+    "tags": ["normal"],
+    "compare": { "mode": "exact" }
+  },
+  {
+    "id": "004-probing-tombstone",
+    "input": "tests/004-probing-tombstone.in",
+    "expected": "tests/004-probing-tombstone.out",
+    "points": 20,
+    "tags": ["boundary"],
+    "compare": { "mode": "exact" }
+  },
+  {
+    "id": "005-probing-fail-asl",
+    "input": "tests/005-probing-fail-asl.in",
+    "expected": "tests/005-probing-fail-asl.out",
+    "points": 20,
+    "tags": ["normal"],
+    "compare": { "mode": "exact" }
+  }
+]

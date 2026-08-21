@@ -1,0 +1,10 @@
+probing
+5
+insert 1
+insert 6
+insert 11
+delete 6
+find 11
+probe 11
+find 6
+dump

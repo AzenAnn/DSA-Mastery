@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "ctest",
+  "ctest": {
+    "tests": [
+      { "name": "avl-insert-rotations", "points": 40 },
+      { "name": "avl-delete-rebalance", "points": 35 },
+      { "name": "avl-balanced-height", "points": 25 }
+    ]
+  }
+}

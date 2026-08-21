@@ -1,0 +1,9 @@
+insert 5
+insert 3
+insert 7
+insert 1
+insert 6
+insert 8
+remove 3
+inorder
+find 3
