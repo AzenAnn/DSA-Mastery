@@ -62,7 +62,7 @@ pnpm --version
 
 ![1786954954553](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954954553.png)
 
-3. 安装 MSVC Build Tools
+## 3. 安装 MSVC Build Tools
 
 下载地址：[Visual Studio C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 
@@ -102,6 +102,38 @@ cl
 
 ![1786955307760](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955307760.png)
 
+### 可选：添加path
+
+访问`C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC`，找到里面包含`cl.exe`的文件夹，添加path
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/msvc1.png)
+
+比如我这里是：`C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64`，其中版本号`14.51.36231`可能会根据你的安装版本发生改变
+
+在搜索打开编辑环境变量
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path.png)
+
+点击高级 环境变量
+
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path2.png)
+
+插入下面两个路径，第一个路径和你前面找的路径一样，点确定返回（一共有三次确定）
+```
+C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64
+C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin
+```
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path3.png)
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path4.png)
+
+之后重新打开新的powershell（或者重启电脑），输入cmake，cl就能显示了
+
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/pwsh.png)
+
 ## 4. 安装 VS Code
 
 下载地址：[Visual Studio Code 官方下载页](https://code.visualstudio.com/Download)
@@ -113,9 +145,10 @@ cl
 
 VS Code 是编辑器，不包含 C++ 编译器。即使已经安装 VS Code，仍然需要安装前面的 MSVC Build Tools。
 
+
 ## 5. 验证完整环境
 
-建议从 **Developer PowerShell for VS 2022** 打开 VS Code 的终端，依次执行：
+建议从 **developer Command Prompt for VS** 或者 **Powershell**（需加PATH） 打开 VS Code 的终端，依次执行：
 
 ```powershell
 git --version
