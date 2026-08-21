@@ -1,0 +1,49 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "student",
+      "binaryDir": "${sourceDir}/.lab-cache/cmake/student",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD": "17",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "LAB_USE_SOLUTION": "OFF"
+      }
+    },
+    {
+      "name": "solution",
+      "binaryDir": "${sourceDir}/.lab-cache/cmake/solution",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD": "17",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "LAB_USE_SOLUTION": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "student",
+      "configurePreset": "student"
+    },
+    {
+      "name": "solution",
+      "configurePreset": "solution"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "student",
+      "configurePreset": "student",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "solution",
+      "configurePreset": "solution",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}
