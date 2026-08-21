@@ -5,7 +5,7 @@ order: 8
 chapter: 3
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
-contributors: ["DSA Mastery Team"]
+contributors: ["Qing"]
 status: "draft"
 lab: true
 difficulty: "基础"
