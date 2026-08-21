@@ -23,7 +23,7 @@
    - CTest 五组（semantic 30 / next 15 / textops 30 / cost 15 / workload 10）与 `task.json` 分值一一对应；
    - starter 可编译但不满分。
 5. `report/`：`task.json` checklist + `template.md`。
-6. README：frontmatter（`lab: true`、`difficulty: 综合`、`duration: 5～7 小时`、`order: 14`、`status: draft`）；正文含目标、前置、协议、正常/边界/错误、完成清单、复盘；写明与 lab-03-06 的差异与 UTF-8 冻结语义。
+6. README：frontmatter（`lab: true`、`difficulty: 综合`、`duration: 5～7 小时`、`order: 14`、`status: draft`）；正文含目标、前置、协议、正常/边界/错误、完成清单、复盘；写明与 lab-03-07 的差异与 UTF-8 冻结语义。
 7. 逐 task 验证：
    ```powershell
    pnpm lab:validate -- labs/chapter-03/lab-03-14-string-match-engine

@@ -18,7 +18,7 @@
 - 章节内容：3.1 串存储与最小操作子集；3.2 朴素/KMP/nextval、工程陷阱与词索引表；3.3 数组与矩阵、3.4 广义表均不在本工程题范围；
 - 工程题共同模式（lab-01-21 / 04-02 / 08-03 / 09-03）：统一契约 + 确定性指标 + 人工报告；`stdio 30 + ctest 50 + manual 20` 是当前 Golden Project 结构；
 - Lab v1 机器合同（`.trellis/spec/content/lab-tooling.md`、`docs/LAB_AUTHORING_GUIDE.md`）：`type=project`、C++17、CMake ≥ 3.25、task 权重合计 100 且无环、薄 Makefile、构建产物只写 `.lab-cache/`；
-- 与 lab-03-06 的边界：单题 Program 只比较一对输入；本工程题要求统一契约、多命令、UTF-8 边界、确定性工作负载与报告，README 需写明差异。
+- 与 lab-03-07 的边界：单题 Program 只比较一对输入；本工程题要求统一契约、多命令、UTF-8 边界、确定性工作负载与报告，README 需写明差异。
 
 ## Requirements
 
@@ -43,7 +43,7 @@
 - [ ] `engine` 的 CTest 名与 `task.json` 完全一致，task 内分值合计 100；
 - [ ] 朴素/KMP/nextval 对同一输入返回相同位置，比较次数满足理论上下界回归（如最坏 01 串朴素为 O(n·m) 计数、KMP 不超线性计数口径）；
 - [ ] next/nextval 对已知样例（如 `ababc`、`aaaab`）输出精确表值；
-- [ ] `replace` 与 lab-03-07 非重叠语义一致；UTF-8 命中边界用例通过，跨边界命中行为符合冻结语义；
+- [ ] `replace` 与 lab-03-08 非重叠语义一致；UTF-8 命中边界用例通过，跨边界命中行为符合冻结语义；
 - [ ] 五类 profile 在固定 seed 下可复现，结果一致性与计数确定性有自动测试；
 - [ ] 顶层评分显示 `Automated: 80/80` + `Manual pending: 20`，不伪造满分；
 - [ ] `pnpm test`、`pnpm run validate`、`pnpm run test:discovery`、`pnpm run build`、`pnpm run check:site`、`pnpm run test:pages` 通过；

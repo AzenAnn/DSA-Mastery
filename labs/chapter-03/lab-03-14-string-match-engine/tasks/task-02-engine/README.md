@@ -53,7 +53,7 @@ Linux/macOS 对应路径为 `.lab-cache/cmake/student/match_engine_cli`。
 
 - [ ] 三种匹配器在全部用例上位置一致；
 - [ ] next/nextval 表值与正文推导一致；
-- [ ] `replace` 与 lab-03-07 的非重叠语义一致；
+- [ ] `replace` 与 lab-03-08 的非重叠语义一致；
 - [ ] UTF-8 命中落在字符边界，跨边界命中被拒绝；
 - [ ] 固定 seed 下同一 profile 两次运行结果与计数一致；
 - [ ] reference 自动满分，starter 可编译但未满分。

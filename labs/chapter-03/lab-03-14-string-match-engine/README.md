@@ -29,7 +29,7 @@ duration: "5～7 小时"
 - 第 3.1 节：串的存储与最小操作子集；
 - 第 3.2 节：朴素匹配、KMP、next/nextval 推导与复杂度论证（约定 `next[0] = -1`）；
 - 第 3.2 节"字符串的烦恼"：编码、容量与边界陷阱；
-- 建议先完成 Lab 03-04～03-08（KMP、next 推导、比较次数、替换、UTF-8）。
+- 建议先完成 Lab 03-05～03-09（KMP、next 推导、比较次数、替换、UTF-8）。
 
 ## 环境
 
@@ -77,7 +77,7 @@ kmp first=<pos> comparisons=<n> prefix=<p>
 nextval first=<pos> comparisons=<n> prefix=<p>
 ```
 
-`<pos>` 为 0-based 首次出现位置，未找到输出 `-1`，空模式输出 `0`；`<n>` 为匹配阶段字符比较次数（含失配）；`<p>` 为构建 next/nextval 的比较次数（朴素为 0）。缺第二行时向 stderr 输出诊断并以非零退出码结束。本任务与 `lab-03-06` 的口径一致，但统一输出三种实现。
+`<pos>` 为 0-based 首次出现位置，未找到输出 `-1`，空模式输出 `0`；`<n>` 为匹配阶段字符比较次数（含失配）；`<p>` 为构建 next/nextval 的比较次数（朴素为 0）。缺第二行时向 stderr 输出诊断并以非零退出码结束。本任务与 `lab-03-07` 的口径一致，但统一输出三种实现。
 
 ## Task 2：engine（CTest，50 分）
 
@@ -100,7 +100,7 @@ nextval first=<pos> comparisons=<n> prefix=<p>
 
 ### 计数口径
 
-- `comparisons`：匹配阶段真实执行的字符比较次数，**含失配**；与 lab-03-06 一致；
+- `comparisons`：匹配阶段真实执行的字符比较次数，**含失配**；与 lab-03-07 一致；
 - `prefixComparisons`：构建 next（以及由 next 派生 nextval）时真实执行的字符比较次数；`k == -1` 的直接扩展不计；
 - 不同字段单位不同，不得相加成"综合性能分"；墙钟时间不进入自动评分。
 
@@ -152,7 +152,7 @@ pnpm lab:verify -- labs/chapter-03/lab-03-14-string-match-engine
 
 - [ ] 三种匹配器通过相同语义与边界用例；
 - [ ] next/nextval 表值与正文推导一致；
-- [ ] replace 与 lab-03-07 非重叠语义一致，UTF-8 边界用例通过；
+- [ ] replace 与 lab-03-08 非重叠语义一致，UTF-8 边界用例通过；
 - [ ] 五类 profile 在固定 seed 下可复现且三实现结果一致；
 - [ ] reference 自动部分 80/80，starter 可编译但未满分；
 - [ ] 构建产物只位于 `.lab-cache/`。
@@ -165,9 +165,9 @@ pnpm lab:verify -- labs/chapter-03/lab-03-14-string-match-engine
 4. 若主串只能顺序读一遍（磁带、网络流），KMP 相比朴素有什么本质优势？
 5. 记录一个被测试捕获的错误、不变量破坏方式和最小回归用例。
 
-## 与 lab-03-06 的差异
+## 与 lab-03-07 的差异
 
-`lab-03-06` 是单题 Program，只对一对输入输出朴素与 KMP 的比较次数；本 Lab 的 `matcher` 统一输出三种实现，`engine` 进一步提供契约、文本处理命令、UTF-8 边界与可复现工作负载，并包含人工报告分。
+`lab-03-07` 是单题 Program，只对一对输入输出朴素与 KMP 的比较次数；本 Lab 的 `matcher` 统一输出三种实现，`engine` 进一步提供契约、文本处理命令、UTF-8 边界与可复现工作负载，并包含人工报告分。
 ## 完成清单
 
 - [ ] 正常、边界和错误情况都有可复现证据。

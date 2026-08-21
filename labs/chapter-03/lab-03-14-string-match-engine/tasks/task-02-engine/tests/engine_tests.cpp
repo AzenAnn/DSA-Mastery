@@ -83,7 +83,7 @@ int textops() {
     if (dsa::count_occurrences(kmp, "aaaaa", "aa") != 2) return 1;
     if (dsa::count_occurrences(nextval, "banana", "na") != 2) return 1;
 
-    // 非重叠替换（与 lab-03-07 语义一致）。
+    // 非重叠替换（与 lab-03-08 语义一致）。
     if (dsa::replace_all(naive, "banana", "na", "NA") != "baNANA") return 1;
     if (dsa::replace_all(kmp, "hello world", "l", "L") != "heLLo worLd") return 1;
 

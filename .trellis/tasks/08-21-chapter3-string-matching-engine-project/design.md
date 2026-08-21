@@ -88,7 +88,7 @@ cases 设计（合计 100）：
 | stress | 15 | 大 text、长 pattern、01 串最坏情况 |
 | regression | 10 | 每个曾逃过测试的错误留下最小反例 |
 
-与 lab-03-06 的边界：lab-03-06 是单题比较次数练习；本 task 是统一三实现的命令行入口，输出合同不同，README 需写明。
+与 lab-03-07 的边界：lab-03-07 是单题比较次数练习；本 task 是统一三实现的命令行入口，输出合同不同，README 需写明。
 
 ## 5. Task 2：engine（ctest，50 分）
 
@@ -102,14 +102,14 @@ CMake target 连接 `contracts/` 与学生/参考实现。CTest 名与 `task.jso
 | `engine-cost-accounting` | 15 | 固定小样例 comparisons/prefix 精确值；朴素最坏 O(n·m) 计数上界、KMP/nextval 线性计数口径回归 |
 | `engine-workload-determinism` | 10 | 五类 profile 固定 seed 可复现、三实现位置一致、worst-case 朴素显著多于 KMP |
 
-引擎命令：`first / count / findall / replace / compare`；人类表格 + `--json`（顶层含 `reportVersion`）。`replace` 自左向右、非重叠，与 lab-03-07 语义一致；空 pattern 时报错（避免死循环），行为写入 README。
+引擎命令：`first / count / findall / replace / compare`；人类表格 + `--json`（顶层含 `reportVersion`）。`replace` 自左向右、非重叠，与 lab-03-08 语义一致；空 pattern 时报错（避免死循环），行为写入 README。
 
 ## 6. UTF-8 设计决策（冻结）
 
 - 输入按字节读入 `std::string`，匹配在字节层执行；
 - UTF-8 是自同步变长编码：合法码点边界是安全对齐起点；命中必须满足“命中起点是码点边界，且命中长度等于 pattern 字节长（pattern 自身必须是完整码点序列）”；
 - 跨码点边界的字节命中：引擎拒绝该命中并跳过，stdio 层可将诊断写 stderr；README 与测试固定该语义；
-- 字符数（lab-03-08 语义）只在报告/`compare` 输出中作为辅助信息，不进入自动判定。
+- 字符数（lab-03-09 语义）只在报告/`compare` 输出中作为辅助信息，不进入自动判定。
 
 ## 7. Task 3：report（manual，20 分）
 
@@ -152,7 +152,7 @@ CMake target 连接 `contracts/` 与学生/参考实现。CTest 名与 `task.jso
 
 ## 10. 兼容、风险与回滚
 
-- 与 lab-03-06 概念重叠：README 明确差异；engine 不复制其 stdin 协议；
+- 与 lab-03-07 概念重叠：README 明确差异；engine 不复制其 stdin 协议；
 - UTF-8 语义是新增考点：决策冻结于 README + 测试，避免学生与 Reviewer 各执一词；
 - 换行与 oracle：`.out` 一律 LF，比较与写入前先统一 CRLF/LF，只经 `refresh-expected --write` 更新；
 - 依赖：不依赖数组 Labs；前置为 3.1/3.2 与现有 04–08 Labs；
