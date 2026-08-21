@@ -62,7 +62,7 @@ pnpm --version
 
 ![1786954954553](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954954553.png)
 
-3. 安装 MSVC Build Tools
+## 3. 安装 MSVC Build Tools
 
 下载地址：[Visual Studio C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 
@@ -102,6 +102,38 @@ cl
 
 ![1786955307760](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955307760.png)
 
+### 可选：添加path
+
+访问`C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC`，找到里面包含`cl.exe`的文件夹，添加path
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/msvc1.png)
+
+比如我这里是：`C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64`，其中版本号`14.51.36231`可能会根据你的安装版本发生改变
+
+在搜索打开编辑环境变量
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path.png)
+
+点击高级 环境变量
+
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path2.png)
+
+插入下面两个路径，第一个路径和你前面找的路径一样，点确定返回（一共有三次确定）
+```
+C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64
+C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin
+```
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path3.png)
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path4.png)
+
+之后重新打开新的powershell（或者重启电脑），输入cmake，cl就能显示了
+
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/pwsh.png)
+
 ## 4. 安装 VS Code
 
 下载地址：[Visual Studio Code 官方下载页](https://code.visualstudio.com/Download)
@@ -113,9 +145,30 @@ cl
 
 VS Code 是编辑器，不包含 C++ 编译器。即使已经安装 VS Code，仍然需要安装前面的 MSVC Build Tools。
 
-## 5. 验证完整环境
+## 5. (可选)安装make代替pnpm
 
-建议从 **Developer PowerShell for VS 2022** 打开 VS Code 的终端，依次执行：
+1.  **以管理员身份打开 PowerShell**：右键点击“开始”菜单，选择“Windows PowerShell (管理员)”或“终端 (管理员)”。
+2.  **安装 Chocolatey**：复制并粘贴以下命令，按回车执行：
+    ```powershell
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+    ```
+3.  **关闭并重新打开**管理员 PowerShell 窗口。
+4.  **安装 GNU Make**：在管理员 PowerShell 中执行以下命令：
+    ```powershell
+    choco install make
+    ```
+    安装过程中如果提示确认，输入 `y` 并按回车。
+5.  **验证安装**：关闭并重新打开任意 PowerShell 或 CMD 窗口，输入以下命令，如果显示版本信息则说明安装成功：
+    ```powershell
+    make --version
+    ```
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/make.png)
+
+
+## 6. 验证完整环境
+
+建议从 **developer Command Prompt for VS** 或者 **Powershell**（需加PATH） 打开 VS Code 的终端，依次执行：
 
 ```powershell
 git --version
@@ -136,7 +189,7 @@ cl
 
 ![1786955350420](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955350420.png)
 
-## 6. 下载仓库
+## 7. 下载仓库
 
 先创建一个放代码仓库的文件夹，再放本实验仓库过来，路径不要包含中文
 
@@ -152,7 +205,7 @@ pnpm install --frozen-lockfile
 
 也可以通过下载zip来放置，但是下载zip不方便同步最新的仓库
 
-## 7. 运行第一个 Program Lab
+## 8. 运行第一个 Program Lab
 
 使用Developer Command Prompt for VS来运行
 
@@ -170,6 +223,12 @@ cd C:\Proj\DSA-Mastery
 pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
+如果已安装 GNU Make，也可以使用等价命令：
+
+```powershell
+make doctor LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
+```
+
 ![1786955586099](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955586099.png)
 
 如果环境检查通过，可以运行公开测试：
@@ -178,7 +237,13 @@ pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
-结果中的 `AC`、`PASS` 和满分会显示为绿色；未通过状态及未满分的实际得分会醒目标出，Project 的待人工评分会显示 `PENDING`。颜色只帮助阅读，不改变判定；如果终端不适合显示颜色，可以在命令末尾加 `--no-color`。没有安装 GNU Make 也不影响这里的 `pnpm lab:*` 入口。
+使用 Make 时可以运行：
+
+```powershell
+make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
+```
+
+结果中的 `AC`、`PASS` 和满分会显示为绿色；未通过状态及未满分的实际得分会醒目标出，Project 的待人工评分会显示 `PENDING`。颜色只帮助阅读，不改变判定；如果终端不适合显示颜色，可以在命令末尾加 `--no-color`。没有安装 GNU Make 也不影响使用 `pnpm lab:*` 入口。
 
 ![1786955599809](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955599809.png)
 
@@ -188,14 +253,43 @@ pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --case 001-sample
 ```
 
+对应的 Make 命令是：
+
+```powershell
+make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sample
+```
+
 ![1786955613245](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955613245.png)
 
-## 8. 运行 Project Lab
+## 9. 运行 Project Lab
 
 Project Lab 除了 MSVC，还需要 CMake。可以先检查：
 
 ```powershell
 pnpm lab:doctor -- labs/chapter-04/lab-04-02-huffman-coding
+```
+
+使用 Make 时可以运行：
+
+```powershell
+make doctor LAB=labs/chapter-04/lab-04-02-huffman-coding
+```
+
+make也可以在对应目录内执行：
+
+```powershell
+PS C:\Proj\DSA-Mastery> cd labs/chapter-04/lab-04-02-huffman-coding
+PS C:\Proj\DSA-Mastery\labs\chapter-04\lab-04-02-huffman-coding> make doctor
+PASS 环境检查
+平台：win32/x64 · Node v24.19.0
+
+GCC                  NOT FOUND
+Clang                NOT FOUND
+MSVC                 AVAILABLE   19.51.36256 (>= 19.30.0)
+CMake                AVAILABLE   4.3.1 (>= 3.25.0)
+GNU Make             AVAILABLE   4.4.1 (>= 4.0.0)
+
+GNU Make 为推荐项而非必装依赖；免 Make 入口： pnpm lab:run -- <lab-path>
 ```
 
 然后运行 Project Lab：
@@ -204,10 +298,22 @@ pnpm lab:doctor -- labs/chapter-04/lab-04-02-huffman-coding
 pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding
 ```
 
+对应的 Make 命令是：
+
+```powershell
+make run LAB=labs/chapter-04/lab-04-02-huffman-coding
+```
+
 也可以运行指定 task 和测试用例：
 
 ```powershell
 pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding --task frequency --case weighted
+```
+
+使用 Make 时可以运行：
+
+```powershell
+make run LAB=labs/chapter-04/lab-04-02-huffman-coding TASK=frequency CASE=weighted
 ```
 
 ![1786955720690](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955720690.png)
