@@ -145,8 +145,28 @@ C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\Common7\IDE\CommonE
 
 VS Code 是编辑器，不包含 C++ 编译器。即使已经安装 VS Code，仍然需要安装前面的 MSVC Build Tools。
 
+## 5. (可选)安装make代替pnpm
 
-## 5. 验证完整环境
+1.  **以管理员身份打开 PowerShell**：右键点击“开始”菜单，选择“Windows PowerShell (管理员)”或“终端 (管理员)”。
+2.  **安装 Chocolatey**：复制并粘贴以下命令，按回车执行：
+    ```powershell
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+    ```
+3.  **关闭并重新打开**管理员 PowerShell 窗口。
+4.  **安装 GNU Make**：在管理员 PowerShell 中执行以下命令：
+    ```powershell
+    choco install make
+    ```
+    安装过程中如果提示确认，输入 `y` 并按回车。
+5.  **验证安装**：关闭并重新打开任意 PowerShell 或 CMD 窗口，输入以下命令，如果显示版本信息则说明安装成功：
+    ```powershell
+    make --version
+    ```
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/make.png)
+
+
+## 6. 验证完整环境
 
 建议从 **developer Command Prompt for VS** 或者 **Powershell**（需加PATH） 打开 VS Code 的终端，依次执行：
 
@@ -169,7 +189,7 @@ cl
 
 ![1786955350420](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955350420.png)
 
-## 6. 下载仓库
+## 7. 下载仓库
 
 先创建一个放代码仓库的文件夹，再放本实验仓库过来，路径不要包含中文
 
@@ -185,7 +205,7 @@ pnpm install --frozen-lockfile
 
 也可以通过下载zip来放置，但是下载zip不方便同步最新的仓库
 
-## 7. 运行第一个 Program Lab
+## 8. 运行第一个 Program Lab
 
 使用Developer Command Prompt for VS来运行
 
@@ -223,7 +243,7 @@ pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --case 0
 
 ![1786955613245](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955613245.png)
 
-## 8. 运行 Project Lab
+## 9. 运行 Project Lab
 
 Project Lab 除了 MSVC，还需要 CMake。可以先检查：
 
