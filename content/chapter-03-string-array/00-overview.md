@@ -44,7 +44,7 @@ status: "draft"
 2. 再学习[串的模式匹配与处理实践](./02-string-matching-and-processing.md)，这是本章的核心难点。
 3. 然后学习[数组寻址与特殊矩阵](./03-array-and-matrix.md)，难度相对平缓。
 4. 最后学习[广义表与递归算法](./04-generalized-list.md)，体会递归定义如何贯穿存储与算法。
-5. 阅读后完成配套 Lab：3.1 串基础与 3.2 模式匹配的选择题精练，检验术语、存储与 KMP 的理解。
+5. 阅读后完成配套 Lab：先做 3.1 串基础与 3.2 模式匹配的选择题精练检验术语与存储，再依次完成 KMP、next 推导、比较次数、替换与 UTF-8 实验，最后用 Lab 03-14 工程题把本章串知识收口。
 
 ## 配套 Labs
 
@@ -55,6 +55,7 @@ status: "draft"
 - [Lab 03-06：朴素匹配与 KMP 比较次数](../../labs/chapter-03/lab-03-06-match-comparison/README.md)
 - [Lab 03-07：串的非重叠替换 Replace](../../labs/chapter-03/lab-03-07-string-replace/README.md)
 - [Lab 03-08：UTF-8 串长与字符数](../../labs/chapter-03/lab-03-08-utf8-char-count/README.md)
+- [Lab 03-14：串匹配与文本处理引擎（工程题）](../../labs/chapter-03/lab-03-14-string-match-engine/README.md)
 
 ## 学习建议
 
