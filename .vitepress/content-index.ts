@@ -310,6 +310,13 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "贪心算法",
     description: "理解局部选择、最优子结构以及贪心正确性的证明思路。",
     url: "/learn/outline/chapter-13-greedy/",
+    lessonSources: [
+      "content/chapter-13-greedy/00-overview.md",
+      "content/chapter-13-greedy/01-greedy-basics.md",
+      "content/chapter-13-greedy/02-classic-problems.md",
+      "content/chapter-13-greedy/03-correctness-proof.md",
+      "content/chapter-13-greedy/04-greedy-vs-dp.md",
+    ],
   },
   {
     id: "chapter-14-dynamic-programming",
