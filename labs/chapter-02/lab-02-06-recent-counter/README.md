@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-09：最近请求计数器"
+title: "Lab 02-06：最近请求计数器"
 description: "使用队列维护递增时间流中的滑动窗口，计算最近 3000 时间单位内的请求数量。"
-order: 9
+order: 6
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "基础"
 duration: "30～45 分钟"
 ---
 
-# Lab 02-09：最近请求计数器
+# Lab 02-06：最近请求计数器
 
 > 题目来源：改编自 [LeetCode 933：最近的请求次数](https://leetcode.cn/problems/number-of-recent-calls/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
 
@@ -93,10 +93,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/lab-02-09-recent-counter
-pnpm lab:run -- labs/chapter-02/lab-02-09-recent-counter
-pnpm lab:run -- labs/chapter-02/lab-02-09-recent-counter --case 001-sample
-pnpm lab:score -- labs/chapter-02/lab-02-09-recent-counter
+pnpm lab:doctor -- labs/chapter-02/lab-02-06-recent-counter
+pnpm lab:run -- labs/chapter-02/lab-02-06-recent-counter
+pnpm lab:run -- labs/chapter-02/lab-02-06-recent-counter --case 001-sample
+pnpm lab:score -- labs/chapter-02/lab-02-06-recent-counter
 ```
 
 `make run` 用于查看各用例；`make score` 只有得到 100 分才返回成功。样例采用精确输出比较；`006-scale` 使用五万个密集时间戳，避免每次重新扫描全部历史请求的低效实现获得满分。

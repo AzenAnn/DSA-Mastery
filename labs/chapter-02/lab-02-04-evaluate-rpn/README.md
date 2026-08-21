@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-07：逆波兰表达式求值"
+title: "Lab 02-04：逆波兰表达式求值"
 description: "使用操作数栈计算逆波兰表达式，处理左右操作数顺序、负数、除法和非法表达式。"
-order: 7
+order: 4
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "基础"
 duration: "40～60 分钟"
 ---
 
-# Lab 02-07：逆波兰表达式求值
+# Lab 02-04：逆波兰表达式求值
 
 > 题目来源：改编自 [LeetCode 150：逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
 
@@ -96,10 +96,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/lab-02-07-evaluate-rpn
-pnpm lab:run -- labs/chapter-02/lab-02-07-evaluate-rpn
-pnpm lab:run -- labs/chapter-02/lab-02-07-evaluate-rpn --case 001-sample
-pnpm lab:score -- labs/chapter-02/lab-02-07-evaluate-rpn
+pnpm lab:doctor -- labs/chapter-02/lab-02-04-evaluate-rpn
+pnpm lab:run -- labs/chapter-02/lab-02-04-evaluate-rpn
+pnpm lab:run -- labs/chapter-02/lab-02-04-evaluate-rpn --case 001-sample
+pnpm lab:score -- labs/chapter-02/lab-02-04-evaluate-rpn
 ```
 
 `make run` 在答案尚未全对时仍正常返回；`make score` 只有得到 100 分才返回成功。样例采用精确输出比较；`009-scale` 使用近四万个 token 检查一次扫描能否在时限内完成。

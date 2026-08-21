@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-11：用栈实现队列"
+title: "Lab 02-08：用栈实现队列"
 description: "使用输入栈和输出栈实现先进先出队列，掌握延迟转移与摊还复杂度。"
-order: 11
+order: 8
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "进阶"
 duration: "45～60 分钟"
 ---
 
-# Lab 02-11：用栈实现队列
+# Lab 02-08：用栈实现队列
 
 > 题目来源：改编自 [LeetCode 232：用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
 
@@ -108,10 +108,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/lab-02-11-queue-using-stacks
-pnpm lab:run -- labs/chapter-02/lab-02-11-queue-using-stacks
-pnpm lab:run -- labs/chapter-02/lab-02-11-queue-using-stacks --case 001-lazy-transfer
-pnpm lab:score -- labs/chapter-02/lab-02-11-queue-using-stacks
+pnpm lab:doctor -- labs/chapter-02/lab-02-08-queue-using-stacks
+pnpm lab:run -- labs/chapter-02/lab-02-08-queue-using-stacks
+pnpm lab:run -- labs/chapter-02/lab-02-08-queue-using-stacks --case 001-lazy-transfer
+pnpm lab:score -- labs/chapter-02/lab-02-08-queue-using-stacks
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`006-scale-transfer` 会让“每次访问后再把元素搬回”的实现承担大量重复工作，用于检查延迟转移策略。

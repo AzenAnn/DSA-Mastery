@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-08：最小栈"
+title: "Lab 02-05：最小栈"
 description: "实现支持常数时间最小值查询的栈，正确维护重复最小值和空栈失败语义。"
-order: 8
+order: 5
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "进阶"
 duration: "45～60 分钟"
 ---
 
-# Lab 02-08：最小栈
+# Lab 02-05：最小栈
 
 > 题目来源：改编自 [LeetCode 155：最小栈](https://leetcode.cn/problems/min-stack/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
 
@@ -104,10 +104,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/lab-02-08-min-stack
-pnpm lab:run -- labs/chapter-02/lab-02-08-min-stack
-pnpm lab:run -- labs/chapter-02/lab-02-08-min-stack --case 001-duplicate-minimum
-pnpm lab:score -- labs/chapter-02/lab-02-08-min-stack
+pnpm lab:doctor -- labs/chapter-02/lab-02-05-min-stack
+pnpm lab:run -- labs/chapter-02/lab-02-05-min-stack
+pnpm lab:run -- labs/chapter-02/lab-02-05-min-stack --case 001-duplicate-minimum
+pnpm lab:score -- labs/chapter-02/lab-02-05-min-stack
 ```
 
 `make run` 用于查看各用例结果；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`007-scale` 在大量元素上连续执行 `MIN`，会让每次线性扫描的实现超时，从而落实 `O(1)` 查询要求。

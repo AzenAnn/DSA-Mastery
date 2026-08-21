@@ -541,10 +541,10 @@ C++ 标准库中的 `std::queue` 是**容器适配器**：它提供 `push`、`po
 
 完成理论后，先进入 [Lab 02-02：队列选择题精练](../../labs/chapter-02/lab-02-02-queue-quiz/README.md)检查概念，再完成以下可自动评分的实现练习：
 
-- [Lab 02-09：最近请求计数器](../../labs/chapter-02/lab-02-09-recent-counter/README.md)：用队头淘汰维护时间窗口；
-- [Lab 02-10：设计循环队列](../../labs/chapter-02/lab-02-10-circular-queue/README.md)：实现空一格约定、环绕下标和稳定失败状态；
-- [Lab 02-11：用栈实现队列](../../labs/chapter-02/lab-02-11-queue-using-stacks/README.md)：通过延迟转移理解摊还 `O(1)`；
-- [Lab 02-12：设计循环双端队列](../../labs/chapter-02/lab-02-12-circular-deque/README.md)：把环绕扩展到两端插入和删除；
-- [Lab 02-13：滑动窗口最大值](../../labs/chapter-02/lab-02-13-sliding-window-maximum/README.md)：学完 2.3 的单调候选思想后，用双端队列维护窗口最大值。
+- [Lab 02-06：最近请求计数器](../../labs/chapter-02/lab-02-06-recent-counter/README.md)：用队头淘汰维护时间窗口；
+- [Lab 02-07：设计循环队列](../../labs/chapter-02/lab-02-07-circular-queue/README.md)：实现空一格约定、环绕下标和稳定失败状态；
+- [Lab 02-08：用栈实现队列](../../labs/chapter-02/lab-02-08-queue-using-stacks/README.md)：通过延迟转移理解摊还 `O(1)`；
+- [Lab 02-09：设计循环双端队列](../../labs/chapter-02/lab-02-09-circular-deque/README.md)：把环绕扩展到两端插入和删除；
+- [Lab 02-10：滑动窗口最大值](../../labs/chapter-02/lab-02-10-sliding-window-maximum/README.md)：学完 2.3 的单调候选思想后，用双端队列维护窗口最大值。
 
-随后进入 [Lab 02-04：超市收银模拟](../../labs/chapter-02/lab-02-04-supermarket-checkout/README.md)和 [Lab 02-05：停车场管理](../../labs/chapter-02/lab-02-05-parking-lot-management/README.md)，把接口、边界断言和调度状态组合成综合系统。
+随后进入 [Lab 02-13：超市收银模拟](../../labs/chapter-02/lab-02-13-supermarket-checkout/README.md)和 [Lab 02-14：停车场管理](../../labs/chapter-02/lab-02-14-parking-lot-management/README.md)，把接口、边界断言和调度状态组合成综合系统。

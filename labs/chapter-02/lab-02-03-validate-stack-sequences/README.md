@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-06：验证栈序列"
+title: "Lab 02-03：验证栈序列"
 description: "按给定入栈顺序模拟栈，判断目标出栈序列是否合法，并定位第一个未匹配位置。"
-order: 6
+order: 3
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "基础"
 duration: "35～50 分钟"
 ---
 
-# Lab 02-06：验证栈序列
+# Lab 02-03：验证栈序列
 
 > 题目来源：改编自 [LeetCode 946：验证栈序列](https://leetcode.cn/problems/validate-stack-sequences/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
 
@@ -91,10 +91,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/lab-02-06-validate-stack-sequences
-pnpm lab:run -- labs/chapter-02/lab-02-06-validate-stack-sequences
-pnpm lab:run -- labs/chapter-02/lab-02-06-validate-stack-sequences --case 001-valid-sample
-pnpm lab:score -- labs/chapter-02/lab-02-06-validate-stack-sequences
+pnpm lab:doctor -- labs/chapter-02/lab-02-03-validate-stack-sequences
+pnpm lab:run -- labs/chapter-02/lab-02-03-validate-stack-sequences
+pnpm lab:run -- labs/chapter-02/lab-02-03-validate-stack-sequences --case 001-valid-sample
+pnpm lab:score -- labs/chapter-02/lab-02-03-validate-stack-sequences
 ```
 
 `make run` 在答案尚未全对时仍正常返回，便于查看各用例结果；`make score` 是严格入口，只有得到 100 分才返回成功。样例采用精确输出比较；`007-scale` 使用较大的合法序列检查实现能否在时限内完成，而不是要求新的输入语法。

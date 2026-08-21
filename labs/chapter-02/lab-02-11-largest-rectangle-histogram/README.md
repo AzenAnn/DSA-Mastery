@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-14：柱状图中最大的矩形"
+title: "Lab 02-11：柱状图中最大的矩形"
 description: "使用单调栈确定每根柱子的左右边界，并计算最大矩形面积。"
-order: 14
+order: 11
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "进阶"
 duration: "60～75 分钟"
 ---
 
-# Lab 02-14：柱状图中最大的矩形
+# Lab 02-11：柱状图中最大的矩形
 
 > 题目来源：改编自 [LeetCode 84：柱状图中最大的矩形](https://leetcode.cn/problems/largest-rectangle-in-histogram/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
 
@@ -94,10 +94,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/lab-02-14-largest-rectangle-histogram
-pnpm lab:run -- labs/chapter-02/lab-02-14-largest-rectangle-histogram
-pnpm lab:run -- labs/chapter-02/lab-02-14-largest-rectangle-histogram --case 001-sample
-pnpm lab:score -- labs/chapter-02/lab-02-14-largest-rectangle-histogram
+pnpm lab:doctor -- labs/chapter-02/lab-02-11-largest-rectangle-histogram
+pnpm lab:run -- labs/chapter-02/lab-02-11-largest-rectangle-histogram
+pnpm lab:run -- labs/chapter-02/lab-02-11-largest-rectangle-histogram --case 001-sample
+pnpm lab:score -- labs/chapter-02/lab-02-11-largest-rectangle-histogram
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`009-scale` 使用五万根等高柱子，使枚举所有左右边界的 `O(n²)` 实现难以在时限内完成。

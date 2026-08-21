@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-12：设计循环双端队列"
+title: "Lab 02-09：设计循环双端队列"
 description: "使用循环数组实现双端队列，在固定容量内完成两端插入、删除和双向环绕。"
-order: 12
+order: 9
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "进阶"
 duration: "60～90 分钟"
 ---
 
-# Lab 02-12：设计循环双端队列
+# Lab 02-09：设计循环双端队列
 
 > 题目来源：改编自 [LeetCode 641：设计循环双端队列](https://leetcode.cn/problems/design-circular-deque/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
 
@@ -113,10 +113,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/lab-02-12-circular-deque
-pnpm lab:run -- labs/chapter-02/lab-02-12-circular-deque
-pnpm lab:run -- labs/chapter-02/lab-02-12-circular-deque --case 001-sample
-pnpm lab:score -- labs/chapter-02/lab-02-12-circular-deque
+pnpm lab:doctor -- labs/chapter-02/lab-02-09-circular-deque
+pnpm lab:run -- labs/chapter-02/lab-02-09-circular-deque
+pnpm lab:run -- labs/chapter-02/lab-02-09-circular-deque --case 001-sample
+pnpm lab:score -- labs/chapter-02/lab-02-09-circular-deque
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`006-scale-wraparound` 在满载状态下持续删除头部并插入尾部，使两个下标完成环绕并检查常数时间操作。
