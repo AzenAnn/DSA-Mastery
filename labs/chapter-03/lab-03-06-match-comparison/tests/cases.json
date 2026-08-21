@@ -1,0 +1,56 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-classic",
+    "input": "tests/002-classic.in",
+    "expected": "tests/002-classic.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-no-match",
+    "input": "tests/003-no-match.in",
+    "expected": "tests/003-no-match.out",
+    "points": 15,
+    "tags": [
+      "error"
+    ]
+  },
+  {
+    "id": "004-head-match",
+    "input": "tests/004-head-match.in",
+    "expected": "tests/004-head-match.out",
+    "points": 15,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-repeated",
+    "input": "tests/005-repeated.in",
+    "expected": "tests/005-repeated.out",
+    "points": 15,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-worst-stress",
+    "input": "tests/006-worst-stress.in",
+    "expected": "tests/006-worst-stress.out",
+    "points": 15,
+    "tags": [
+      "stress"
+    ]
+  }
+]

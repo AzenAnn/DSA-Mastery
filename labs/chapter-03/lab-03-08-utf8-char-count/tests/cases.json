@@ -1,0 +1,47 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-ascii",
+    "input": "tests/002-ascii.in",
+    "expected": "tests/002-ascii.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-mixed",
+    "input": "tests/003-mixed.in",
+    "expected": "tests/003-mixed.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-emoji",
+    "input": "tests/004-emoji.in",
+    "expected": "tests/004-emoji.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-empty",
+    "input": "tests/005-empty.in",
+    "expected": "tests/005-empty.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  }
+]

@@ -26,27 +26,35 @@ status: "draft"
 - 实现朴素模式匹配并分析最好、一般、最坏复杂度，理解 KMP 如何避免指针回退；
 - 由最大长度表手工推导 next 与 nextval 数组（约定 `next[0] = -1`），并论证 KMP 的复杂度为什么是 `O(n + m)`；
 - 由多维数组的下标推导一维存储的寻址公式；
-- 用压缩方式存储对称、三角矩阵和稀疏矩阵，并解释空间收益。
+- 用压缩方式存储对称、三角矩阵和稀疏矩阵，并解释空间收益；
+- 描述广义表的递归结构，正确计算表头、表尾、长度与深度。
 
-## 三篇文章如何分工
+## 四篇文章如何分工
 
 | 学习问题 | 对应文章 | 完成后的可检查能力 |
 | --- | --- | --- |
 | 字符串怎样定义、怎样编码、怎样存储？基本操作与代价如何？ | [3.1 字符串的定义、存储与编码](./01-string-basics.md) | 能说明字符编码与三种存储的取舍，实现基本串操作并分析复杂度 |
 | C 标准串函数有哪些？如何快速查找子串？串处理有哪些工程陷阱？ | [3.2 串的模式匹配与处理实践](./02-string-matching-and-processing.md) | 能说明串函数库基础，由最大长度表手工推导 next/nextval 并论证 `O(n + m)` |
 | 多维数组怎样寻址？矩阵如何压缩？ | [3.3 数组寻址与特殊矩阵](./03-array-and-matrix.md) | 能推导寻址公式，比较压缩方案的收益 |
+| 广义表怎样递归定义、存储与操作？ | [3.4 广义表与递归算法](./04-generalized-list.md) | 能区分表头表尾、求长度深度，并实现求深度等递归算法 |
 
 ## 推荐学习顺序
 
 1. 先学习[字符串的定义、存储与编码](./01-string-basics.md)，建立串的模型与最小操作子集。
 2. 再学习[串的模式匹配与处理实践](./02-string-matching-and-processing.md)，这是本章的核心难点。
-3. 最后学习[数组寻址与特殊矩阵](./03-array-and-matrix.md)，难度相对平缓。
-4. 阅读后完成配套 Lab：实现朴素与 KMP 匹配的对比实验，并用三元组实现稀疏矩阵转置。
+3. 然后学习[数组寻址与特殊矩阵](./03-array-and-matrix.md)，难度相对平缓。
+4. 最后学习[广义表与递归算法](./04-generalized-list.md)，体会递归定义如何贯穿存储与算法。
+5. 阅读后完成配套 Lab：3.1 串基础与 3.2 模式匹配的选择题精练，检验术语、存储与 KMP 的理解。
 
 ## 配套 Labs
 
-- [Lab 03-01：字符串匹配工具](../../labs/chapter-03/lab-03-01-string-matcher/README.md)
-- [Lab 03-02：稀疏矩阵三元组转置](../../labs/chapter-03/lab-03-02-sparse-matrix/README.md)
+- [Lab 03-01：串的基础选择题精练（3.1）](../../labs/chapter-03/lab-03-01-string-basics-quiz/README.md)
+- [Lab 03-02：模式匹配选择题精练（3.2）](../../labs/chapter-03/lab-03-02-string-matching-quiz/README.md)
+- [Lab 03-04：KMP 模式匹配（首次出现位置）](../../labs/chapter-03/lab-03-04-kmp-match/README.md)
+- [Lab 03-05：next 与 nextval 数组推导](../../labs/chapter-03/lab-03-05-next-array/README.md)
+- [Lab 03-06：朴素匹配与 KMP 比较次数](../../labs/chapter-03/lab-03-06-match-comparison/README.md)
+- [Lab 03-07：串的非重叠替换 Replace](../../labs/chapter-03/lab-03-07-string-replace/README.md)
+- [Lab 03-08：UTF-8 串长与字符数](../../labs/chapter-03/lab-03-08-utf8-char-count/README.md)
 
 ## 学习建议
 

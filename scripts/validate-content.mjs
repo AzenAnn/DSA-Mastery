@@ -230,7 +230,7 @@ for (const [kind, files] of [["lesson", lessonFiles], ["lab", labFiles]]) {
     const source = await readFile(file, "utf8");
     const parsed = parseFrontmatter(source, path.relative(projectRoot, file));
     assertFileContract(file, kind, parsed, seenOrder);
-    if (kind === "lab" && ["1", "2"].includes(parsed.data.chapter)) {
+    if (kind === "lab" && ["1", "2", "3"].includes(parsed.data.chapter)) {
       let hasManifest = true;
       try {
         await access(path.join(path.dirname(file), "lab.json"));

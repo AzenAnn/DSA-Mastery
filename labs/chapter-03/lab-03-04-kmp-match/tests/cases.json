@@ -1,0 +1,65 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-classic",
+    "input": "tests/002-classic.in",
+    "expected": "tests/002-classic.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-at-head",
+    "input": "tests/003-at-head.in",
+    "expected": "tests/003-at-head.out",
+    "points": 15,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-at-tail",
+    "input": "tests/004-at-tail.in",
+    "expected": "tests/004-at-tail.out",
+    "points": 15,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-not-found",
+    "input": "tests/005-not-found.in",
+    "expected": "tests/005-not-found.out",
+    "points": 10,
+    "tags": [
+      "error"
+    ]
+  },
+  {
+    "id": "006-overlap-stress",
+    "input": "tests/006-overlap-stress.in",
+    "expected": "tests/006-overlap-stress.out",
+    "points": 10,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "007-empty-pattern",
+    "input": "tests/007-empty-pattern.in",
+    "expected": "tests/007-empty-pattern.out",
+    "points": 10,
+    "tags": [
+      "boundary"
+    ]
+  }
+]

@@ -1140,6 +1140,66 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   expect(failures).toEqual([]);
 });
 
+test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${baseUrl}/learn/outline/chapter-03-string-array-matrix/`);
+
+  const sidebar = page.locator(".VPSidebar");
+  const chapterGroup = sidebar.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-03-string-array-matrix/"])',
+  );
+  const labGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
+  );
+  await expect(chapterGroup).toHaveCount(1);
+  await expect(labGroup).toHaveCount(1);
+  await expect(labGroup).not.toHaveClass(/collapsed/);
+
+  const theoryGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
+  );
+  const exerciseGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)",
+  );
+  const projectGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--project)",
+  );
+  await expect(theoryGroup).toHaveClass(/collapsed/);
+  await expect(exerciseGroup).toHaveClass(/collapsed/);
+  await expect(projectGroup).not.toHaveClass(/collapsed/);
+
+  await theoryGroup.locator(":scope > .item").focus();
+  await page.keyboard.press("Enter");
+  await expect(theoryGroup).not.toHaveClass(/collapsed/);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(2);
+  await expect(
+    theoryGroup.getByRole("link", { name: "Lab 03-01：串的基础选择题精练", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    theoryGroup.getByRole("link", { name: "Lab 03-02：模式匹配选择题精练", exact: true }),
+  ).toHaveCount(1);
+
+  await exerciseGroup.locator(":scope > .item").focus();
+  await page.keyboard.press("Enter");
+  await expect(exerciseGroup).not.toHaveClass(/collapsed/);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(5);
+  for (const title of [
+    "Lab 03-04：KMP 模式匹配（首次出现位置）",
+    "Lab 03-05：next 与 nextval 数组推导",
+    "Lab 03-06：朴素匹配与 KMP 比较次数",
+    "Lab 03-07：串的非重叠替换 Replace",
+    "Lab 03-08：UTF-8 串长与字符数",
+  ]) {
+    await expect(exerciseGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+  }
+  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无工程型 Lab",
+  );
+
+  expect(failures).toEqual([]);
+});
+
 test("search theory quiz exposes all 24 questions and reconstructed tree prompts", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/labs/chapter-06/lab-06-03-search-theory-quiz/`);
