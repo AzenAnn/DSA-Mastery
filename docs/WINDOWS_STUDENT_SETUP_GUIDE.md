@@ -223,6 +223,12 @@ cd C:\Proj\DSA-Mastery
 pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
+如果已安装 GNU Make，也可以使用等价命令：
+
+```powershell
+make doctor LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
+```
+
 ![1786955586099](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955586099.png)
 
 如果环境检查通过，可以运行公开测试：
@@ -231,7 +237,13 @@ pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
-结果中的 `AC`、`PASS` 和满分会显示为绿色；未通过状态及未满分的实际得分会醒目标出，Project 的待人工评分会显示 `PENDING`。颜色只帮助阅读，不改变判定；如果终端不适合显示颜色，可以在命令末尾加 `--no-color`。没有安装 GNU Make 也不影响这里的 `pnpm lab:*` 入口。
+使用 Make 时可以运行：
+
+```powershell
+make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
+```
+
+结果中的 `AC`、`PASS` 和满分会显示为绿色；未通过状态及未满分的实际得分会醒目标出，Project 的待人工评分会显示 `PENDING`。颜色只帮助阅读，不改变判定；如果终端不适合显示颜色，可以在命令末尾加 `--no-color`。没有安装 GNU Make 也不影响使用 `pnpm lab:*` 入口。
 
 ![1786955599809](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955599809.png)
 
@@ -239,6 +251,12 @@ pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 
 ```powershell
 pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --case 001-sample
+```
+
+对应的 Make 命令是：
+
+```powershell
+make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sample
 ```
 
 ![1786955613245](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955613245.png)
@@ -251,16 +269,51 @@ Project Lab 除了 MSVC，还需要 CMake。可以先检查：
 pnpm lab:doctor -- labs/chapter-04/lab-04-02-huffman-coding
 ```
 
+使用 Make 时可以运行：
+
+```powershell
+make doctor LAB=labs/chapter-04/lab-04-02-huffman-coding
+```
+
+make也可以在对应目录内执行：
+
+```powershell
+PS C:\Proj\DSA-Mastery> cd labs/chapter-04/lab-04-02-huffman-coding
+PS C:\Proj\DSA-Mastery\labs\chapter-04\lab-04-02-huffman-coding> make doctor
+PASS 环境检查
+平台：win32/x64 · Node v24.19.0
+
+GCC                  NOT FOUND
+Clang                NOT FOUND
+MSVC                 AVAILABLE   19.51.36256 (>= 19.30.0)
+CMake                AVAILABLE   4.3.1 (>= 3.25.0)
+GNU Make             AVAILABLE   4.4.1 (>= 4.0.0)
+
+GNU Make 为推荐项而非必装依赖；免 Make 入口： pnpm lab:run -- <lab-path>
+```
+
 然后运行 Project Lab：
 
 ```powershell
 pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding
 ```
 
+对应的 Make 命令是：
+
+```powershell
+make run LAB=labs/chapter-04/lab-04-02-huffman-coding
+```
+
 也可以运行指定 task 和测试用例：
 
 ```powershell
 pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding --task frequency --case weighted
+```
+
+使用 Make 时可以运行：
+
+```powershell
+make run LAB=labs/chapter-04/lab-04-02-huffman-coding TASK=frequency CASE=weighted
 ```
 
 ![1786955720690](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955720690.png)
