@@ -178,6 +178,8 @@ pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ```
 
+结果中的 `AC`、`PASS` 和满分会显示为绿色；未通过状态及未满分的实际得分会醒目标出，Project 的待人工评分会显示 `PENDING`。颜色只帮助阅读，不改变判定；如果终端不适合显示颜色，可以在命令末尾加 `--no-color`。没有安装 GNU Make 也不影响这里的 `pnpm lab:*` 入口。
+
 ![1786955599809](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955599809.png)
 
 也可以只运行示例测试：

@@ -29,7 +29,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "check:site": "node scripts/check-built-site.mjs",
     "test:discovery": "node scripts/test-content-discovery.mjs",
-    "test:lab-tools": "node --test tests/lab-tools.test.mjs",
+    "test:lab-tools": "node --test tests/lab-tools.test.mjs tests/lab-terminal.test.mjs",
     "test:lab-docs": "node scripts/validate-lab-docs.mjs",
     "test:lab-golden": "node scripts/verify-golden-labs.mjs",
     "test:lab-make": "node scripts/verify-make-consistency.mjs",

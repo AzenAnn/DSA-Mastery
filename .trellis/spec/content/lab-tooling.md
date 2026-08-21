@@ -22,6 +22,8 @@ pnpm lab:clean -- [lab-path]
 
 Program/Project Lab 内固定支持 `make doctor|validate|build|run|interactive|score|verify|refresh-expected|pack|clean|help`；根 Makefile 使用同名 target 与 `LAB=<path>`。`CASE`、`TASK`、`TARGET` 分别映射为 CLI 选项。
 
+除 `interactive` 外，所有人类可读入口接受 `--no-color`。交互 TTY 默认着色；存在 `--no-color`、`NO_COLOR`、`TERM=dumb` 或 stdout/stderr 非 TTY 时必须输出无 ANSI 的纯文本。
+
 JSON 报告顶层：
 
 ```json
@@ -48,6 +50,9 @@ JSON 报告顶层：
 - Program 必须有可编译但不满分的 `student`、100 分 `solution`、合计 100 的 cases；stdout 判题、stderr 诊断。
 - 比较器与 oracle 写入都先统一 CRLF/LF；`.out` 固定写为 LF，`exact` 逐字符，`tokens` 按空白 token，`float` 对数值 token 使用 `absTol/relTol`。
 - 判定固定为 `AC|WA|TLE|RE|CE|OLE|IE`；IE 不得伪装成学生 0 分。
+- 人类终端输出固定语义：AC/PASS/满分为 success，WA/CE/RE/IE/未满分实际分为 danger，TLE/OLE/PENDING 为 warning；未满分仍保留 `actual/maximum`，且 maximum 使用 success。颜色只增强文字，不得成为唯一状态信号。
+- Program 人类输出必须有逐 case 表格、PASS/NOT FULL 总结；失败时展示首差异和可复制单 case 重试。Project 必须分开 automated、manual pending、provisional total，并保持 task/case 层级。先 pad 原始单元格再加 ANSI，外部编译/CTest/stderr 正文不得被整块改色。
+- `--json` 必须绕过全部人类 formatter，保持 reportVersion/字段/退出码不变且永远不含 ANSI 控制码。
 - Project task kind 为 `stdio|ctest|manual`；顶层权重合计 100，ID 唯一，依赖存在且无环；自动分和人工待评分分开。
 - Program/Project 源仓库 Makefile 必须与三行薄模板逐字一致，真实逻辑只在 `tools/lab/lab.mk` 和 CLI。
 - 所有生成物只写 `.lab-cache/`。`refresh-expected` 默认只预览，只有 `--write` 覆盖 `.out`；Project 通过 `--task`/`TASK=` 选择 stdio task，并在 `verify` 中检查其 oracle 漂移。
@@ -86,6 +91,7 @@ JSON 报告顶层：
 
 - Node 单测：坏 JSON、未知版本、绝对/`..`/符号链接路径、空格路径、case/task ID、权重、依赖环和薄 Makefile 漂移。
 - 比较/进程单测：exact/tokens/float、CRLF、首差异、AC/WA/TLE/RE/CE/OLE/IE、真实 timeout/output cap、shell false。
+- 终端格式单测：TTY 自动色、`--no-color`、`NO_COLOR`、`TERM=dumb`、非 TTY、全部 verdict、满分/未满分、WA/CE、Project manual pending、全部人类 reporter、strip-ANSI 后列宽以及 JSON 无 ANSI。
 - Golden Quiz：四选一、hint、points、进度、正确数、总分、答案总览、重试、移动端和安全 Markdown。
 - Golden Program：reference 100、starter 编译且非满分、单 case、JSON、oracle drift、学生包脱离仓库运行。
 - Oracle 生命周期：预览不得改文件，只有 `--write` 可写；写入内容必须为 LF，且不得改 student/solution/input。

@@ -1,0 +1,2 @@
+{"file":".trellis/spec/content/lab-tooling.md","reason":"实现共享终端主题、人类 reporter、Program/Project 格式器与无色/JSON 兼容。"}
+{"file":".trellis/spec/quality/validation-and-pages.md","reason":"按稳定命令完成专项、Golden、lint、typecheck、全量站点测试。"}

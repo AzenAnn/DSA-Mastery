@@ -4,6 +4,7 @@ import { compareOutput } from "./compare.mjs";
 import { compileTarget } from "./compiler.mjs";
 import { LabError } from "./errors.mjs";
 import { runProcess } from "./process.mjs";
+import { cleanTerminalText, createTheme, quoteCommandArg } from "./terminal.mjs";
 
 function limitsFor(manifest, testCase) {
   return {
@@ -85,20 +86,53 @@ export async function runInteractive(lab, target = "student") {
   return { verdict: execution.code === 0 ? "AC" : "RE", compilation, execution, code: execution.code ?? 1 };
 }
 
-export function formatJudge(result) {
+function retryCommand(command, labPath, taskId, caseId) {
+  if (!labPath || !caseId) return undefined;
+  const parts = [command, "--", quoteCommandArg(labPath)];
+  if (taskId) parts.push("--task", quoteCommandArg(taskId));
+  parts.push("--case", quoteCommandArg(caseId));
+  return parts.join(" ");
+}
+
+function differenceLocation(difference) {
+  return difference.kind === "token"
+    ? `第 ${difference.index} 个 token`
+    : `第 ${difference.line} 行第 ${difference.column} 列`;
+}
+
+export function formatJudge(result, options = {}) {
+  const theme = options.theme ?? createTheme({ color: false });
   if (result.verdict === "CE") {
-    return `编译失败（CE）\n${result.compilation.stderr || result.compilation.stdout}`.trim();
+    const diagnostic = cleanTerminalText(result.compilation.stderr || result.compilation.stdout).trim();
+    return [
+      `${theme.danger("COMPILE ERROR")} ${theme.verdict("CE")}`,
+      diagnostic && theme.heading("诊断"),
+      diagnostic,
+    ].filter(Boolean).join("\n");
   }
-  const rows = ["CASE                 RESULT   TIME       SCORE"];
+  const caseWidth = Math.max(20, ...result.cases.map((item) => item.id.length));
+  const rows = [
+    `${theme.cell("CASE", caseWidth, theme.muted)} ${theme.cell("RESULT", 8, theme.muted)} ${theme.cell("TIME", 10, theme.muted)} ${theme.muted("SCORE")}`,
+  ];
   for (const item of result.cases) {
-    rows.push(`${item.id.padEnd(20)} ${item.verdict.padEnd(8)} ${`${Math.round(item.durationMs)} ms`.padEnd(10)} ${item.points}/${item.maxPoints}`);
+    rows.push(`${theme.cell(item.id, caseWidth)} ${theme.cell(item.verdict, 8, theme.verdict)} ${theme.cell(`${Math.round(item.durationMs)} ms`, 10, theme.muted)} ${theme.score(item.points, item.maxPoints)}`);
     if (item.comparison && !item.comparison.equal) {
       const difference = item.comparison.difference;
-      rows.push(`  首处差异：${difference.kind === "token" ? `第 ${difference.index} 个 token` : `第 ${difference.line} 行第 ${difference.column} 列`}；期望 ${JSON.stringify(difference.expected)}，实际 ${JSON.stringify(difference.actual)}`);
+      rows.push(
+        `  ${theme.heading("首处差异：")}${differenceLocation(difference)}`,
+        `  ${theme.muted("期望：")} ${JSON.stringify(difference.expected)}`,
+        `  ${theme.muted("实际：")} ${JSON.stringify(difference.actual)}`,
+      );
     }
-    if (item.stderr) rows.push(`  stderr: ${item.stderr.trim().slice(0, 500)}`);
+    if (item.stderr) rows.push(`  ${theme.heading("stderr")}`, cleanTerminalText(item.stderr).trim().slice(0, 500));
   }
-  rows.push("".padEnd(40, "-"));
-  rows.push(`TOTAL                                      ${result.score}/${result.maxScore}`);
+  const passedCases = result.cases.filter((item) => item.verdict === "AC").length;
+  const totalDuration = result.cases.reduce((total, item) => total + item.durationMs, 0);
+  const full = result.score === result.maxScore && passedCases === result.cases.length;
+  rows.push(theme.separator(Math.max(56, caseWidth + 37)));
+  rows.push(`${theme.status(full ? "PASS" : "NOT FULL")}  ${passedCases}/${result.cases.length} cases · ${theme.score(result.score, result.maxScore)} · ${theme.muted(`${Math.round(totalDuration)} ms`)}`);
+  const firstFailure = result.cases.find((item) => item.verdict !== "AC");
+  const retry = retryCommand(options.command ?? "pnpm lab:run", options.labPath, options.taskId, firstFailure?.id);
+  if (retry) rows.push(`${theme.heading("Retry：")} ${theme.command(retry)}`);
   return rows.join("\n");
 }
