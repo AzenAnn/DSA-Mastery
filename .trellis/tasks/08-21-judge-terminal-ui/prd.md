@@ -58,7 +58,7 @@
 - [x] AC5：`--no-color`、`NO_COLOR`、非 TTY 与 `--json` 均不包含 ANSI；JSON schema 与退出码不变。
 - [x] AC6：无新增运行时依赖，Windows/Linux/macOS 共享实现，ANSI 不破坏表格对齐，外部诊断正文保持可复制。
 - [x] AC7：专项单测、Golden Program/Project、lint 和全量 `pnpm test` 通过，并有真实本地彩色运行证据。
-- [ ] AC8：用户确认本地效果后，分支同步最新 main，提交、推送并创建符合项目合同的 PR。
+- [x] AC8：用户确认本地效果后，分支同步最新 main，提交、推送并创建符合项目合同的 PR。
 
 ## Out of Scope
 
