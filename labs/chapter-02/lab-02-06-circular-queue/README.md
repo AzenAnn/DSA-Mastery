@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-07：设计循环队列"
+title: "Lab 02-06：设计循环队列"
 description: "用空出一个物理槽位的循环数组实现固定容量队列，覆盖判空判满和下标环绕。"
-order: 7
+order: 6
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "进阶"
 duration: "60～90 分钟"
 ---
 
-# Lab 02-07：设计循环队列
+# Lab 02-06：设计循环队列
 
 > 题目来源：改编自 [LeetCode 622：设计循环队列](https://leetcode.cn/problems/design-circular-queue/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
 
@@ -113,10 +113,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/lab-02-07-circular-queue
-pnpm lab:run -- labs/chapter-02/lab-02-07-circular-queue
-pnpm lab:run -- labs/chapter-02/lab-02-07-circular-queue --case 001-sample
-pnpm lab:score -- labs/chapter-02/lab-02-07-circular-queue
+pnpm lab:doctor -- labs/chapter-02/lab-02-06-circular-queue
+pnpm lab:run -- labs/chapter-02/lab-02-06-circular-queue
+pnpm lab:run -- labs/chapter-02/lab-02-06-circular-queue --case 001-sample
+pnpm lab:score -- labs/chapter-02/lab-02-06-circular-queue
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`006-scale-wraparound` 让队头和队尾在保持满载时完整环绕，检查实现是否真正做到常数时间更新。

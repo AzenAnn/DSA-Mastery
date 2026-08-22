@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-12：可撤销浏览器——栈的超级大综合"
+title: "Lab 02-11：可撤销浏览器——栈的超级大综合"
 description: "用双栈导航与命令栈撤销重做，实现一个支持前进/后退与 Undo/Redo 的可撤销浏览器内核。"
-order: 12
+order: 11
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-19"
@@ -13,14 +13,14 @@ difficulty: "综合"
 duration: "300～420 分钟"
 ---
 
-# Lab 02-12：可撤销浏览器——栈的超级大综合
+# Lab 02-11：可撤销浏览器——栈的超级大综合
 
 ## 目标 
 
 实现一个"可撤销浏览器"内核：它既能像真实浏览器一样前进 / 后退导航，又能在每个页面上支持撤销 / 重做输入操作。本 Lab 是**栈这一章的超级大综合**，要求你把线性结构、命令模式（Command Pattern，命令模式）、边界处理与异常安全四个工程能力整合进同一个系统。
 
 ::: info 容器范围
-本 Lab 只允许使用栈语义的容器（必要时可用 `std::vector` 或链表实现栈），不使用 `queue`、`map`、`set` 或优先队列，确保考察点落在栈上。栈与队列联动的综合题是 Lab 02-14 停车场管理。
+本 Lab 只允许使用栈语义的容器（必要时可用 `std::vector` 或链表实现栈），不使用 `queue`、`map`、`set` 或优先队列，确保考察点落在栈上。栈与队列联动的综合题是 Lab 02-13 停车场管理。
 :::
 
 ## 背景阐述
@@ -252,7 +252,7 @@ EXIT
 
 ## 提交物
 
-1. 完整可运行源码，建议目录 `labs/chapter-02/lab-02-12-undoable-browser/`：
+1. 完整可运行源码，建议目录 `labs/chapter-02/lab-02-11-undoable-browser/`：
    - `browser.h` / `browser.cpp`（导航 + Undo/Redo + 存档）
    - `command.h` / `command.cpp`（`Command` 基类与三个子类）
    - `logger.h` / `logger.cpp`（结构化日志）

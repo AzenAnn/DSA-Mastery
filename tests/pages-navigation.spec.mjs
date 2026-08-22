@@ -1125,19 +1125,18 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
   await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
-  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(9);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(8);
   const exerciseLabs = [
     { title: "Lab 02-03：验证栈序列", slug: "lab-02-03-validate-stack-sequences" },
-    { title: "Lab 02-04：逆波兰表达式求值", slug: "lab-02-04-evaluate-rpn" },
-    { title: "Lab 02-05：最小栈", slug: "lab-02-05-min-stack" },
-    { title: "Lab 02-06：最近请求计数器", slug: "lab-02-06-recent-counter" },
-    { title: "Lab 02-07：设计循环队列", slug: "lab-02-07-circular-queue" },
-    { title: "Lab 02-08：用栈实现队列", slug: "lab-02-08-queue-using-stacks" },
-    { title: "Lab 02-09：设计循环双端队列", slug: "lab-02-09-circular-deque" },
-    { title: "Lab 02-10：滑动窗口最大值", slug: "lab-02-10-sliding-window-maximum" },
+    { title: "Lab 02-04：最小栈", slug: "lab-02-04-min-stack" },
+    { title: "Lab 02-05：最近请求计数器", slug: "lab-02-05-recent-counter" },
+    { title: "Lab 02-06：设计循环队列", slug: "lab-02-06-circular-queue" },
+    { title: "Lab 02-07：用栈实现队列", slug: "lab-02-07-queue-using-stacks" },
+    { title: "Lab 02-08：设计循环双端队列", slug: "lab-02-08-circular-deque" },
+    { title: "Lab 02-09：滑动窗口最大值", slug: "lab-02-09-sliding-window-maximum" },
     {
-      title: "Lab 02-11：柱状图中最大的矩形",
-      slug: "lab-02-11-largest-rectangle-histogram",
+      title: "Lab 02-10：柱状图中最大的矩形",
+      slug: "lab-02-10-largest-rectangle-histogram",
     },
   ];
   for (const { title, slug } of exerciseLabs) {
@@ -1148,9 +1147,9 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
 
   await expect(projectGroup.locator(":scope > .items a")).toHaveCount(3);
   for (const title of [
-    "Lab 02-12：可撤销浏览器——栈的超级大综合",
-    "Lab 02-13：超市收银模拟——队列的大综合",
-    "Lab 02-14：停车场管理——栈与队列的大综合",
+    "Lab 02-11：可撤销浏览器——栈的超级大综合",
+    "Lab 02-12：超市收银模拟——队列的大综合",
+    "Lab 02-13：停车场管理——栈与队列的大综合",
   ]) {
     await expect(projectGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
   }

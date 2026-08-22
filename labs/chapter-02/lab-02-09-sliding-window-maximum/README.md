@@ -1,7 +1,7 @@
 ---
-title: "Lab 02-10：滑动窗口最大值"
+title: "Lab 02-09：滑动窗口最大值"
 description: "使用单调队列在线性时间内求出每个固定长度窗口的最大值。"
-order: 10
+order: 9
 chapter: 2
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "进阶"
 duration: "45～60 分钟"
 ---
 
-# Lab 02-10：滑动窗口最大值
+# Lab 02-09：滑动窗口最大值
 
 > 题目来源：改编自 [LeetCode 239：滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
 
@@ -99,10 +99,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/lab-02-10-sliding-window-maximum
-pnpm lab:run -- labs/chapter-02/lab-02-10-sliding-window-maximum
-pnpm lab:run -- labs/chapter-02/lab-02-10-sliding-window-maximum --case 001-sample
-pnpm lab:score -- labs/chapter-02/lab-02-10-sliding-window-maximum
+pnpm lab:doctor -- labs/chapter-02/lab-02-09-sliding-window-maximum
+pnpm lab:run -- labs/chapter-02/lab-02-09-sliding-window-maximum
+pnpm lab:run -- labs/chapter-02/lab-02-09-sliding-window-maximum --case 001-sample
+pnpm lab:score -- labs/chapter-02/lab-02-09-sliding-window-maximum
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`008-scale` 使用五万个元素和宽窗口，使逐窗口扫描或排序的实现难以在时限内完成。
