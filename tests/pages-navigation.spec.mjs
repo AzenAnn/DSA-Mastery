@@ -1162,17 +1162,48 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
-  await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveText(
-    "暂无实验型 Lab",
-  );
+  await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(8);
+  const exerciseLabs = [
+    { title: "Lab 02-03：验证栈序列", slug: "lab-02-03-validate-stack-sequences" },
+    { title: "Lab 02-04：最小栈", slug: "lab-02-04-min-stack" },
+    { title: "Lab 02-05：最近请求计数器", slug: "lab-02-05-recent-counter" },
+    { title: "Lab 02-06：设计循环队列", slug: "lab-02-06-circular-queue" },
+    { title: "Lab 02-07：用栈实现队列", slug: "lab-02-07-queue-using-stacks" },
+    { title: "Lab 02-08：设计循环双端队列", slug: "lab-02-08-circular-deque" },
+    { title: "Lab 02-09：滑动窗口最大值", slug: "lab-02-09-sliding-window-maximum" },
+    {
+      title: "Lab 02-10：柱状图中最大的矩形",
+      slug: "lab-02-10-largest-rectangle-histogram",
+    },
+  ];
+  for (const { title, slug } of exerciseLabs) {
+    const link = exerciseGroup.getByRole("link", { name: title, exact: true });
+    await expect(link).toHaveCount(1);
+    await expect(link).toHaveAttribute("href", new RegExp(`/labs/chapter-02/${slug}/$`));
+  }
 
   await expect(projectGroup.locator(":scope > .items a")).toHaveCount(3);
   for (const title of [
-    "Lab 02-03：可撤销浏览器——栈的超级大综合",
-    "Lab 02-04：超市收银模拟——队列的大综合",
-    "Lab 02-05：停车场管理——栈与队列的大综合",
+    "Lab 02-11：可撤销浏览器——栈的超级大综合",
+    "Lab 02-12：超市收银模拟——队列的大综合",
+    "Lab 02-13：停车场管理——栈与队列的大综合",
   ]) {
     await expect(projectGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+  }
+
+  for (const { title, slug } of exerciseLabs) {
+    await page.goto(`${baseUrl}/labs/chapter-02/${slug}/`);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
+    await expect(page.getByRole("heading", { level: 2, name: /^输入格式/ })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2, name: /^输出格式/ })).toBeVisible();
+    const layout = await page.evaluate(() => ({
+      clientWidth: globalThis.document.documentElement.clientWidth,
+      scrollWidth: globalThis.document.documentElement.scrollWidth,
+    }));
+    expect(layout.scrollWidth, `${slug} should not overflow horizontally`).toBeLessThanOrEqual(
+      layout.clientWidth,
+    );
   }
 
   expect(failures).toEqual([]);

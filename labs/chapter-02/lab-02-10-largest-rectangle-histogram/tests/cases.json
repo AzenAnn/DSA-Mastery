@@ -1,0 +1,68 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 15,
+    "tags": ["sample"],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-single-bar",
+    "input": "tests/002-single-bar.in",
+    "expected": "tests/002-single-bar.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-increasing",
+    "input": "tests/003-increasing.in",
+    "expected": "tests/003-increasing.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "004-decreasing",
+    "input": "tests/004-decreasing.in",
+    "expected": "tests/004-decreasing.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "005-equal-heights",
+    "input": "tests/005-equal-heights.in",
+    "expected": "tests/005-equal-heights.out",
+    "points": 10,
+    "tags": ["regression"]
+  },
+  {
+    "id": "006-zero-gaps",
+    "input": "tests/006-zero-gaps.in",
+    "expected": "tests/006-zero-gaps.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "007-valley",
+    "input": "tests/007-valley.in",
+    "expected": "tests/007-valley.out",
+    "points": 10,
+    "tags": ["regression"]
+  },
+  {
+    "id": "008-large-area",
+    "input": "tests/008-large-area.in",
+    "expected": "tests/008-large-area.out",
+    "points": 5,
+    "tags": ["overflow"]
+  },
+  {
+    "id": "009-scale",
+    "input": "tests/009-scale.in",
+    "expected": "tests/009-scale.out",
+    "points": 10,
+    "tags": ["scale", "complexity"]
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "id": "001-valid-sample",
+    "input": "tests/001-valid-sample.in",
+    "expected": "tests/001-valid-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-invalid-middle",
+    "input": "tests/002-invalid-middle.in",
+    "expected": "tests/002-invalid-middle.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-invalid-after-first",
+    "input": "tests/003-invalid-after-first.in",
+    "expected": "tests/003-invalid-after-first.out",
+    "points": 15,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "004-single",
+    "input": "tests/004-single.in",
+    "expected": "tests/004-single.out",
+    "points": 15,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-empty",
+    "input": "tests/005-empty.in",
+    "expected": "tests/005-empty.out",
+    "points": 10,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-all-delayed",
+    "input": "tests/006-all-delayed.in",
+    "expected": "tests/006-all-delayed.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-scale",
+    "input": "tests/007-scale.in",
+    "expected": "tests/007-scale.out",
+    "points": 10,
+    "tags": [
+      "scale",
+      "complexity"
+    ]
+  }
+]
