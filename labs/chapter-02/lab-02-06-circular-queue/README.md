@@ -172,6 +172,14 @@ pnpm lab:score -- labs/chapter-02/lab-02-06-circular-queue
 1. 为什么物理槽位数必须是 `capacity + 1`？
 2. 怎样从 `front`、`rear` 和物理长度推导 `size`？
 
+<details>
+<summary>查看参考答案</summary>
+
+1. **因为本题用“始终空出一个槽位”来区分空和满。** `front == rear` 被固定用作空队列状态；若允许所有物理槽位都存元素，队满时也可能出现 `front == rear`，两个状态就无法只靠下标区分。要保存 `capacity` 个有效元素，就需要 `capacity + 1` 个物理槽位，其中一个永远不存有效元素。也可以额外维护元素数量来区分空满，但那不是本 Lab 指定的实现方案。
+2. **`size` 是从 `front` 沿循环方向走到 `rear` 的距离。** 设物理长度为 `M`：当 `rear >= front` 时长度是 `rear-front`；发生环绕时长度是 `(M-front)+rear`。两种情况可统一写成 `(rear + M - front) % M`。由于始终留有一个空槽，结果范围是 `0..M-1`，也就是 `0..capacity`。
+
+</details>
+
 ## 题解
 
 <details>

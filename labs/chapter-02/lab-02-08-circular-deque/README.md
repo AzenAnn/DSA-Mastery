@@ -175,6 +175,14 @@ pnpm lab:score -- labs/chapter-02/lab-02-08-circular-deque
 1. `INSERT_FRONT` 为什么要先移动 `front` 再写入？
 2. `DELETE_LAST` 为什么要先移动 `rear` 再读取？
 
+<details>
+<summary>查看参考答案</summary>
+
+1. **因为 `front` 当前指向的是原队头元素。** 新元素要成为新的队头，应该写入原队头前面的槽位，所以必须先执行 `front = previous(front)`，再在新的 `front` 位置写入。若先写入，就会覆盖原队头；若写入后不移动，`front` 也仍会指向错误位置。
+2. **因为 `rear` 指向的是队尾后面的空位置，而不是队尾元素。** 删除队尾时，必须先执行 `rear = previous(rear)` 回到真正的队尾槽位，再读取并删除该值。若先读取 `rear`，读到的是预留的空槽。队空检查必须发生在移动下标之前，失败时才能保持状态不变。
+
+</details>
+
 ## 题解
 
 <details>
