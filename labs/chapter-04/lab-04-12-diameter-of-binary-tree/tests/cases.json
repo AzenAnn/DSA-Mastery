@@ -1,0 +1,62 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-single",
+    "input": "tests/002-single.in",
+    "expected": "tests/002-single.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-empty",
+    "input": "tests/003-empty.in",
+    "expected": "tests/003-empty.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-not-through-root",
+    "input": "tests/004-not-through-root.in",
+    "expected": "tests/004-not-through-root.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-linear",
+    "input": "tests/005-linear.in",
+    "expected": "tests/005-linear.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]

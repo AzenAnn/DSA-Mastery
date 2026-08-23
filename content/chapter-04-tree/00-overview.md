@@ -44,8 +44,8 @@ status: "draft"
 
 ## 配套 Labs
 
-- [Lab 04-01：二叉树遍历实现](../../labs/chapter-04/lab-04-01-binary-tree-traversal/README.md)
-- [Lab 04-02：Huffman 编码器](../../labs/chapter-04/lab-04-02-huffman-coding/README.md)
+本章配套实验涵盖二叉树形态性质、层序/视图、序列重构、线索展开与经典路径/LCA/树形 DP，可直接在左侧边栏「本章 Labs」中按需选做。
+
 
 ## 学习建议
 

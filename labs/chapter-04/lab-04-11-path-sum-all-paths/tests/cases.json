@@ -1,0 +1,62 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-no-path",
+    "input": "tests/002-no-path.in",
+    "expected": "tests/002-no-path.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-single-match",
+    "input": "tests/003-single-match.in",
+    "expected": "tests/003-single-match.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-negative",
+    "input": "tests/004-negative.in",
+    "expected": "tests/004-negative.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-skewed",
+    "input": "tests/005-skewed.in",
+    "expected": "tests/005-skewed.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]
