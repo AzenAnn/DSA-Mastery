@@ -11,7 +11,7 @@
 | 子任务 | 章节 | 内容分工 | 配套 Labs | 依赖 | 工作量 |
 | --- | --- | --- | --- | --- | --- |
 | chapter-03-string-and-array | 3 字符串与数组 | 01-string（存储与朴素匹配）/ 02-kmp（KMP 与 next 递推）/ 03-matrix（数组寻址、特殊矩阵压缩） | 字符串匹配工具、稀疏矩阵三元组 | 无强依赖 | 中 |
-| chapter-04-tree | 4 树与二叉树 | 01-binary-tree（定义、性质、遍历）/ 02-tree-applications（Huffman、表达式树）/ 03-heap（堆与优先队列） | 二叉树遍历实现、Huffman 编码 | 第 2 章（栈做非递归遍历、队列做层序） | 大 |
+| chapter-04-tree | 4 树与二叉树 | 00-overview（树的概念、ADT、存储与一般树实现）/ 01-binary-tree（二叉树形态、性质、存储与生命周期） | 二叉树遍历实现、Huffman 编码 | 第 2 章（栈做非递归遍历、队列做层序） | 大 |
 | chapter-05-graph | 5 图 | 01-representation（邻接矩阵/邻接表）/ 02-traversal（DFS/BFS）/ 03-applications（MST、最短路径） | BFS 迷宫、Dijkstra 路径 | 第 4 章（树的遍历思维） | 大 |
 | chapter-06-search | 6 查找 | 01-binary-search-tree / 02-hash-table（散列与冲突处理） | 散列表实现、BST 增删查 | 第 4 章（树） | 中 |
 | chapter-07-sort | 7 排序 | 01-compare-sort（插入/冒泡/快排/归并）/ 02-heap-sort-and-radix（堆排、基数） | 排序稳定性对比、性能基准测试 | 第 4 章（堆） | 中偏大 |
