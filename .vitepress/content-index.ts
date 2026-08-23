@@ -211,10 +211,6 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "树的应用",
     description: "把树结构用于 Huffman 编码、表达式树、堆与优先队列。",
     url: "/learn/outline/chapter-05-tree-applications/",
-    lessonSources: [
-      "content/chapter-04-tree/02-tree-applications.md",
-      "content/chapter-04-tree/03-heap.md",
-    ],
     labSources: ["labs/chapter-04/lab-04-02-huffman-coding/README.md"],
   },
   {
