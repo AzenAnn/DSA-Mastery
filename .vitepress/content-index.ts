@@ -219,10 +219,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "图的基础与存储",
     description: "学习图的基本概念，以及邻接矩阵和邻接表的表示取舍。",
     url: "/learn/outline/chapter-06-graph-foundations-storage/",
-    lessonSources: [
-      "content/chapter-05-graph/00-overview.md",
-      "content/chapter-05-graph/01-representation.md",
-    ],
+    lessonSources: ["content/chapter-06-graph-foundations/01-adjacency-matrix.md"],
   },
   {
     id: "chapter-07-graph-traversal-applications",
@@ -230,15 +227,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "图的遍历与应用",
     description: "从 DFS、BFS 走向最小生成树、最短路径等图算法。",
     url: "/learn/outline/chapter-07-graph-traversal-applications/",
-    lessonSources: [
-      "content/chapter-05-graph/02-traversal.md",
-      "content/chapter-05-graph/03-applications.md",
-      "content/chapter-05-graph/04-astar-visualization.md",
-    ],
-    labSources: [
-      "labs/chapter-05/lab-05-01-bfs-maze/README.md",
-      "labs/chapter-05/lab-05-02-dijkstra-path/README.md",
-    ],
+    lessonSources: ["content/chapter-07-graph-traversal/01-breadth-first-search.md"],
   },
   {
     id: "chapter-08-basic-tree-search",

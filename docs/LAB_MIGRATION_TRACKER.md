@@ -25,8 +25,6 @@
 - [ ] `lab-02-01-stack-simulator`
 - [ ] `lab-02-02-cycle-queue`
 - [ ] `lab-04-01-binary-tree-traversal`
-- [ ] `lab-05-01-bfs-maze`
-- [ ] `lab-05-02-dijkstra-path`
 
 每项迁移必须补齐：stdin/stdout、可编译 starter、经审阅 solution、合计 100 的 normal/boundary/regression cases、薄 Makefile、`verify` 证据和学生包检查。
 
