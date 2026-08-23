@@ -266,7 +266,7 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-08-basic-tree-search/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("基础查找与树形查找");
   await expect(page.locator(".course-curriculum-resource-list")).toContainText(
-    "6.1 基础查找与折半查找",
+    "8.1 基础查找与折半查找",
   );
   await expect(page.locator(".course-curriculum-resource-list")).toContainText(
     "Lab 08-01：查找理论选择题精练",
@@ -279,10 +279,10 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("分治与递归");
   await expect(page.locator(".course-curriculum-empty")).toContainText("后续迭代中完善");
 
-  await page.goto(`${baseUrl}/learn/chapter-06-search/02-binary-search-tree/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.2 二叉排序树");
-  await page.goto(`${baseUrl}/learn/chapter-06-search/04-b-tree-and-b-plus-tree/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.4 B 树与 B+ 树");
+  await page.goto(`${baseUrl}/learn/chapter-08-search/02-binary-search-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.2 二叉排序树");
+  await page.goto(`${baseUrl}/learn/chapter-08-search/04-b-tree-and-b-plus-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.4 B 树与 B+ 树");
   await page.goto(`${baseUrl}/labs/chapter-09/lab-09-02-hash-table/`);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("散列表");
   expect(failures).toEqual([]);

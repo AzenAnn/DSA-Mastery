@@ -27,7 +27,7 @@ duration: "20～30 分钟"
 
 ## 前置知识
 
-建议先阅读 [6.1 基础查找与折半查找](../../../content/chapter-06-search/01-linear-and-binary-search.md)，并复习 6.2 节二叉排序树中"查找路径"的对比视角。
+建议先阅读 [8.1 基础查找与折半查找](../../../content/chapter-08-search/01-linear-and-binary-search.md)，并复习 8.2 节二叉排序树中"查找路径"的对比视角。
 
 ## 环境、输入与预期输出
 

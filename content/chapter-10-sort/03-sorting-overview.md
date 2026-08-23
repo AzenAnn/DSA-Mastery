@@ -1,15 +1,15 @@
 ---
-title: "7.3 排序总览与比较排序下界"
+title: "10.3 排序总览与比较排序下界"
 description: "十大排序复杂度一览、比较排序 vs 非比较排序的本质区别，以及比较排序 Ω(n log n) 下界的决策树证明。"
 order: 3
-chapter: 7
+chapter: 10
 chapterTitle: "排序"
 updated: "2026-08-21"
 contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 7.3 排序总览与比较排序下界
+# 10.3 排序总览与比较排序下界
 
 排序问题可以粗略分成两大类：
 

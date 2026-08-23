@@ -20,7 +20,7 @@ duration: "90～120 分钟"
 
 ## 前置知识
 
-建议先阅读[第 6.2 节 二叉排序树](../../../content/chapter-06-search/02-binary-search-tree.md)，掌握三类删除情况（叶结点、单孩子、双孩子用中序后继）与退化分析。
+建议先阅读[第 8.2 节 二叉排序树](../../../content/chapter-08-search/02-binary-search-tree.md)，掌握三类删除情况（叶结点、单孩子、双孩子用中序后继）与退化分析。
 
 ## 输入输出格式
 

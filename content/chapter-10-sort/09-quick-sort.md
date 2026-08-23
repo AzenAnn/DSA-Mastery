@@ -1,15 +1,15 @@
 ---
-title: "7.9 快速排序"
+title: "10.9 快速排序"
 description: "快速排序的枢轴划分原理、正确性证明、最坏退化分析与工程优化策略。"
 order: 9
-chapter: 7
+chapter: 10
 chapterTitle: "排序"
 updated: "2026-08-21"
 contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 7.9 快速排序
+# 10.9 快速排序
 
 快速排序选定一个枢轴元素 `pivot`，将数组划分为两部分：
 
