@@ -1,0 +1,62 @@
+[
+  {
+    "id": "001-lazy-transfer",
+    "input": "tests/001-lazy-transfer.in",
+    "expected": "tests/001-lazy-transfer.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-empty",
+    "input": "tests/002-empty.in",
+    "expected": "tests/002-empty.out",
+    "points": 20,
+    "tags": [
+      "boundary",
+      "error"
+    ]
+  },
+  {
+    "id": "003-multiple-transfers",
+    "input": "tests/003-multiple-transfers.in",
+    "expected": "tests/003-multiple-transfers.out",
+    "points": 20,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "004-duplicates",
+    "input": "tests/004-duplicates.in",
+    "expected": "tests/004-duplicates.out",
+    "points": 15,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-alternating",
+    "input": "tests/005-alternating.in",
+    "expected": "tests/005-alternating.out",
+    "points": 15,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-scale-transfer",
+    "input": "tests/006-scale-transfer.in",
+    "expected": "tests/006-scale-transfer.out",
+    "points": 10,
+    "tags": [
+      "scale",
+      "complexity",
+      "amortized"
+    ]
+  }
+]

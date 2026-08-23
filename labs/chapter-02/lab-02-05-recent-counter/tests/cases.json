@@ -1,0 +1,60 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 15,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-inclusive-boundary",
+    "input": "tests/002-inclusive-boundary.in",
+    "expected": "tests/002-inclusive-boundary.out",
+    "points": 15,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-sparse",
+    "input": "tests/003-sparse.in",
+    "expected": "tests/003-sparse.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-dense",
+    "input": "tests/004-dense.in",
+    "expected": "tests/004-dense.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-large-time",
+    "input": "tests/005-large-time.in",
+    "expected": "tests/005-large-time.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-scale",
+    "input": "tests/006-scale.in",
+    "expected": "tests/006-scale.out",
+    "points": 10,
+    "tags": [
+      "scale",
+      "complexity"
+    ]
+  }
+]
