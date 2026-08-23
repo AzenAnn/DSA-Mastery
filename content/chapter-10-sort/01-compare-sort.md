@@ -1,15 +1,15 @@
 ---
-title: "7.1 比较排序"
+title: "10.1 比较排序"
 description: "从 O(n²) 到 O(n log n) 的五类比较排序，稳定性分析与决策树下界。"
 order: 1
-chapter: 7
+chapter: 10
 chapterTitle: "排序"
 updated: "2026-08-12"
 contributors: ["Azen"]
 status: "draft"
 ---
 
-# 7.1 比较排序
+# 10.1 比较排序
 
 **比较排序**通过两两比较关键字的大小决定顺序。本节从三类 $O(n^2)$ 基础方法讲起，再介绍两类 $O(n \log n)$ 方法，最后用决策树证明：比较排序不可能快于 $\Omega(n \log n)$。
 

@@ -1,15 +1,15 @@
 ---
-title: "第 7 章 排序"
+title: "第 10 章 排序"
 description: "掌握 O(n²) 与 O(n log n) 两类比较排序、稳定性与复杂度下界，以及突破下界的基数排序。"
 order: 0
-chapter: 7
+chapter: 10
 chapterTitle: "排序"
 updated: "2026-08-12"
 contributors: ["Azen"]
 status: "draft"
 ---
 
-# 第 7 章 排序
+# 第 10 章 排序
 
 排序是数据结构课程的收官主题：它把前面所有章节的结构（数组、树、堆）串起来，也引出算法分析的核心问题——**一个问题的下界是多少**。
 
@@ -31,19 +31,19 @@ status: "draft"
 
 | 学习问题 | 对应文章 | 完成后的可检查能力 |
 | --- | --- | --- |
-| 比较排序能做到多快？ | [7.1 比较排序](./01-compare-sort.md) | 能实现五类比较排序并分析复杂度与稳定性 |
-| 如何突破比较下界？ | [7.2 堆排序与基数排序](./02-heap-and-radix-sort.md) | 能实现堆排序与基数排序并解释下界的适用范围 |
+| 比较排序能做到多快？ | [10.1 比较排序](./01-compare-sort.md) | 能实现五类比较排序并分析复杂度与稳定性 |
+| 如何突破比较下界？ | [10.2 堆排序与基数排序](./02-heap-and-radix-sort.md) | 能实现堆排序与基数排序并解释下界的适用范围 |
 
 ## 推荐学习顺序
 
-1. 先学[7.1 比较排序](./01-compare-sort.md)，从 $O(n^2)$ 的基础方法到 $O(n \log n)$ 的归并与快排。
-2. 再学[7.2 堆排序与基数排序](./02-heap-and-radix-sort.md)：堆排序复用第 4 章的堆，基数排序展示非比较思路。
+1. 先学[10.1 比较排序](./01-compare-sort.md)，从 $O(n^2)$ 的基础方法到 $O(n \log n)$ 的归并与快排。
+2. 再学[10.2 堆排序与基数排序](./02-heap-and-radix-sort.md)：堆排序复用第 4 章的堆，基数排序展示非比较思路。
 3. 最后完成配套 Lab：稳定性对比实验与多算法性能基准。
 
 ## 配套 Labs
 
-- [Lab 07-01：排序稳定性对比](../../labs/chapter-07/lab-07-01-stability-compare/README.md)
-- [Lab 07-02：排序性能基准](../../labs/chapter-07/lab-07-02-performance-benchmark/README.md)
+- [Lab 10-01：排序稳定性对比](../../labs/chapter-10/lab-10-01-stability-compare/README.md)
+- [Lab 10-02：排序性能基准](../../labs/chapter-10/lab-10-02-performance-benchmark/README.md)
 
 ## 学习建议
 
@@ -51,4 +51,4 @@ status: "draft"
 排序算法没有绝对最优：数据规模小用插入排序最快（常数小），内存紧张用堆排序（原地），要稳定用归并，数据随机且可递归用快排。学习时把"时间复杂度、稳定性、额外空间"三个维度做成表格反复对比。
 :::
 
-准备好后，从[7.1 比较排序](./01-compare-sort.md)开始。
+准备好后，从[10.1 比较排序](./01-compare-sort.md)开始。

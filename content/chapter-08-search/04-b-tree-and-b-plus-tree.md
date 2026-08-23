@@ -1,15 +1,15 @@
 ---
-title: "6.4 B 树与 B+ 树"
+title: "8.4 B 树与 B+ 树"
 description: "多路平衡查找树的阶、结点边界、增删调整，以及 B+ 树索引特性。"
 order: 4
-chapter: 6
+chapter: 8
 chapterTitle: "查找"
 updated: "2026-08-21"
 contributors: ["RichardYi-SYSU-Mac"]
 status: "draft"
 ---
 
-# 6.4 B 树与 B+ 树
+# 8.4 B 树与 B+ 树
 
 平衡二叉树能把高度控制在 $O(\log n)$，但每个结点只有两个分支。如果结点存放在磁盘页中，一次 I/O 只带回一个关键字会浪费整页带宽。B 树让一个结点容纳多个关键字和子树，用更大的分支因子换取更低的树高。
 

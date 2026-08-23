@@ -1,15 +1,15 @@
 ---
-title: "6.3 平衡查找树"
+title: "8.3 平衡查找树"
 description: "AVL 的平衡因子与旋转，以及红黑树的性质、修复思路和工程取舍。"
 order: 3
-chapter: 6
+chapter: 8
 chapterTitle: "查找"
 updated: "2026-08-21"
 contributors: ["RichardYi-SYSU-Mac"]
 status: "draft"
 ---
 
-# 6.3 平衡查找树
+# 8.3 平衡查找树
 
 普通 BST 的问题不是查找规则，而是树形没有约束。平衡查找树保留"左小右大"，并在插入或删除破坏高度条件时做局部调整，以换取最坏 $O(\log n)$ 的查找路径。
 

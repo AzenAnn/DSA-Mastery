@@ -1,15 +1,15 @@
 ---
-title: "7.7 希尔排序"
+title: "10.7 希尔排序"
 description: "希尔排序的缩小增量原理、正确性论证、增量序列与复杂度分析。"
 order: 7
-chapter: 7
+chapter: 10
 chapterTitle: "排序"
 updated: "2026-08-21"
 contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 7.7 希尔排序
+# 10.7 希尔排序
 
 希尔排序不是一次性按相邻元素比较，而是先按"间隔 $gap$"分组，组内做插入排序；随后逐渐缩小 $gap$，直到 $gap = 1$。
 

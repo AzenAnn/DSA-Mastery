@@ -1,15 +1,15 @@
 ---
-title: "6.2 二叉排序树"
+title: "8.2 二叉排序树"
 description: "BST 的查找、插入、三类删除、平均查找长度与退化分析。"
 order: 2
-chapter: 6
+chapter: 8
 chapterTitle: "查找"
 updated: "2026-08-21"
 contributors: ["Azen", "RichardYi-SYSU-Mac"]
 status: "draft"
 ---
 
-# 6.2 二叉排序树
+# 8.2 二叉排序树
 
 有序数组能折半查找，却要为中间插入付出元素移动。二叉排序树把有序关系放进树的链接中：查找仍能不断缩小范围，插入和删除则只改动路径附近的指针。
 
