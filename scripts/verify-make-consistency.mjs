@@ -7,7 +7,7 @@ import { runProcess } from "../tools/lab/process.mjs";
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const lab = "labs/chapter-01/lab-01-06-sequential-list-deduplication";
 const labRoot = path.join(projectRoot, lab);
-const projectLabRoot = path.join(projectRoot, "labs", "chapter-04", "lab-04-02-huffman-coding");
+const projectLabRoot = path.join(projectRoot, "labs", "chapter-08", "lab-08-03-avl-tree-rotations");
 
 async function chooseMake() {
   for (const command of [process.env.MAKE, "make", "mingw32-make"].filter(Boolean)) {
@@ -95,17 +95,17 @@ try {
   await rm(spacedParent, { recursive: true, force: true });
 }
 
-const projectTask = await runJson(make, ["run", "TASK=frequency", "TARGET=solution", "JSON=1"], projectLabRoot);
-assert.deepEqual(projectTask.result.tasks.map((task) => task.id), ["frequency"], "Project Make TASK must select exactly one task");
+const projectTask = await runJson(make, ["run", "TASK=bst", "TARGET=solution", "JSON=1"], projectLabRoot);
+assert.deepEqual(projectTask.result.tasks.map((task) => task.id), ["bst"], "Project Make TASK must select exactly one task");
 assert.equal(projectTask.result.automatedScore, 30);
 assert.equal(projectTask.result.automatedMax, 30);
-const projectRefresh = await runJson(make, ["refresh-expected", "TASK=frequency", "JSON=1"], projectLabRoot);
+const projectRefresh = await runJson(make, ["refresh-expected", "TASK=bst", "JSON=1"], projectLabRoot);
 assert.equal(projectRefresh.refresh.changed, 0, "Project stdio oracle must be stable through Make");
 
 const clean = await runProcess(make, ["clean"], { cwd: labRoot, timeMs: 30_000, outputKb: 2048 });
 assert.equal(clean.code, 0, clean.stderr || clean.stdout);
 const cleanProject = await runProcess(make, ["clean"], { cwd: projectLabRoot, timeMs: 30_000, outputKb: 2048 });
 assert.equal(cleanProject.code, 0, cleanProject.stderr || cleanProject.stdout);
-await assert.rejects(access(path.join(projectLabRoot, "tasks", "task-01-frequency", ".lab-cache")), undefined, "Project clean must remove task-local caches");
+await assert.rejects(access(path.join(projectLabRoot, "tasks", "task-01-bst", ".lab-cache")), undefined, "Project clean must remove task-local caches");
 
 console.log(`Make/CLI 一致性检查通过：${make}，根/本地/学生包 run 一致，interactive 与 Project TASK/oracle 可用，student strict score 返回非零。`);
