@@ -203,3 +203,25 @@ Implemented and verified Lab 01-21 with dual list implementations, deterministic
 ### Next Steps
 
 - 推送 chapter/03-string-array 分支并开 PR
+
+
+## Session 9: 第 4 章树与二叉树两篇文章重写
+
+**Date**: 2026-08-23
+**Task**: 第 4 章树与二叉树两篇文章重写
+**Branch**: `chapter4`
+
+### Summary
+
+在 chapter4 分支重写树的基本概念与存储结构、二叉树两篇理论文章，删除旧 Demo，完成 C/C++、完整测试及桌面/移动端验收。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `720d7c8` | (see git log) |
+| `13beb89` | (see git log) |
+
+### Status
+
+[OK] **Completed**
