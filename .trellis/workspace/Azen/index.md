@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 9
-- **Last Active**: 2026-08-23
+- **Total Sessions**: 10
+- **Last Active**: 2026-08-24
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~227 | Active |
+| `journal-1.md` | ~264 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 10 | 2026-08-24 | 第 4 章树与二叉树理论题 | `076cd97` | `codex/chapter4-theory-exercises` |
 | 9 | 2026-08-23 | 第 4 章树与二叉树两篇文章重写 | `720d7c8`, `13beb89` | `chapter4` |
 | 8 | 2026-08-21 | 第三章串匹配文本处理引擎工程题 | `6d7e8eb`, `70ecc6a`, `45241de`, `eb7e620`, `a5d370f`, `09b740c`, `c21635b`, `4983274`, `d96a6b6` | `chapter/03-string-array` |
 | 7 | 2026-08-21 | Lab 命令与接口指南 | `cec757f` | `codex/docs-lab-cli-guide` |
