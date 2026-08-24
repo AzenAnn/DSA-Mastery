@@ -32,8 +32,8 @@
 
 ## Project 候选
 
-- [ ] `lab-07-01-stability-compare`：可拆“正确性/稳定性验证 + 分析报告”。
-- [ ] `lab-07-02-performance-benchmark`：可拆“基准执行 + 结果分析 + 人工报告”。
+- [ ] `lab-10-01-stability-compare`：可拆“正确性/稳定性验证 + 分析报告”。
+- [ ] `lab-10-02-performance-benchmark`：可拆“基准执行 + 结果分析 + 人工报告”。
 
 升级前先证明存在多个可独立验收 task、共享接口或人工分；否则保持 Program，避免为目录复杂度而使用 Project。
 

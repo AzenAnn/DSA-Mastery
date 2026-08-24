@@ -1,0 +1,30 @@
+{
+  "id": "chapter-04-tree",
+  "name": "chapter-04-tree",
+  "title": "第 4 章 树与二叉树",
+  "description": "重写树的基本概念与存储结构、二叉树两篇理论文章",
+  "status": "completed",
+  "dev_type": "docs",
+  "scope": "content/chapter-04-tree",
+  "package": "content",
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-08-12",
+  "completedAt": "2026-08-23",
+  "branch": "chapter4",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-12-roadmap-chapters-3-7",
+  "relatedFiles": [
+    "content/chapter-04-tree/00-overview.md",
+    "content/chapter-04-tree/01-binary-tree.md",
+    ".vitepress/content-index.ts"
+  ],
+  "notes": "本轮只交付图片指定的 4.1 与 4.2 两篇文章；旧应用与堆 Demo 删除，人工验收前不归档。",
+  "meta": {}
+}

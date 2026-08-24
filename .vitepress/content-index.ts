@@ -211,10 +211,6 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "树的应用",
     description: "把树结构用于 Huffman 编码、表达式树、堆与优先队列。",
     url: "/learn/outline/chapter-05-tree-applications/",
-    lessonSources: [
-      "content/chapter-04-tree/02-tree-applications.md",
-      "content/chapter-04-tree/03-heap.md",
-    ],
   },
   {
     id: "chapter-06-graph-foundations-storage",
@@ -250,10 +246,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "从基础查找策略过渡到二叉搜索树及其操作。",
     url: "/learn/outline/chapter-08-basic-tree-search/",
     lessonSources: [
-      "content/chapter-06-search/00-overview.md",
-      "content/chapter-06-search/01-linear-and-binary-search.md",
-      "content/chapter-06-search/02-binary-search-tree.md",
-      "content/chapter-06-search/03-balanced-search-tree.md",
+      "content/chapter-08-search/00-overview.md",
+      "content/chapter-08-search/01-linear-and-binary-search.md",
+      "content/chapter-08-search/02-binary-search-tree.md",
+      "content/chapter-08-search/03-balanced-search-tree.md",
     ],
     autoLabChapter: 8,
   },
@@ -264,8 +260,8 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "理解多路索引、散列函数、冲突处理和外存查找结构。",
     url: "/learn/outline/chapter-09-hashing-indexes/",
     lessonSources: [
-      "content/chapter-06-search/04-b-tree-and-b-plus-tree.md",
-      "content/chapter-06-search/05-hash-table.md",
+      "content/chapter-08-search/04-b-tree-and-b-plus-tree.md",
+      "content/chapter-08-search/05-hash-table.md",
     ],
     autoLabChapter: 9,
   },
@@ -276,10 +272,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "比较插入、交换与选择类排序的过程、稳定性和复杂度。",
     url: "/learn/outline/chapter-10-basic-sorting/",
     lessonSources: [
-      "content/chapter-07-sort/00-overview.md",
-      "content/chapter-07-sort/01-compare-sort.md",
+      "content/chapter-10-sort/00-overview.md",
+      "content/chapter-10-sort/01-compare-sort.md",
     ],
-    labSources: ["labs/chapter-07/lab-07-01-stability-compare/README.md"],
+    labSources: ["labs/chapter-10/lab-10-01-stability-compare/README.md"],
   },
   {
     id: "chapter-11-advanced-external-sorting",
@@ -288,10 +284,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "组织快速、归并、堆、基数与外部排序的进阶学习框架。",
     url: "/learn/outline/chapter-11-advanced-external-sorting/",
     lessonSources: [
-      "content/chapter-07-sort/01-compare-sort.md",
-      "content/chapter-07-sort/02-heap-and-radix-sort.md",
+      "content/chapter-10-sort/01-compare-sort.md",
+      "content/chapter-10-sort/02-heap-and-radix-sort.md",
     ],
-    labSources: ["labs/chapter-07/lab-07-02-performance-benchmark/README.md"],
+    labSources: ["labs/chapter-10/lab-10-02-performance-benchmark/README.md"],
   },
   {
     id: "chapter-12-divide-conquer-recursion",
