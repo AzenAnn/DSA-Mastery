@@ -176,7 +176,7 @@ pnpm lab:new -- --type project --chapter 4 --order 3 --slug tree-index
 | `program` | `exercise` | 实验 Exercise |
 | `project` | `project` | 工程 Project |
 
-空分类的固定文案依次为“暂无理论型 Lab”“暂无实验型 Lab”“暂无工程型 Lab”。当前 Ch.5“树的应用”只开放这三个空槽位，不创建占位 README、manifest 或虚假题目；收到正式题目后先按学习目标确定 `quiz`、`program` 或 `project`，再让统一索引把它放进对应分类。
+空分类的固定文案依次为“暂无理论型 Lab”“暂无实验型 Lab”“暂无工程型 Lab”。Ch.5“树的应用”现有 5 个正式 `quiz`，由统一索引自动进入 Theory；Exercise 与 Project 仍显示各自空状态。新增题目仍应先按学习目标确定 `quiz`、`program` 或 `project`，不能为了填满槽位创建占位 README、manifest 或虚假题目。
 
 有 `lab.json` 时，内容索引直接从 `type` 派生分类。没有 manifest 的 README-only Lab 若需要进入分类目录，必须在 frontmatter 显式声明：
 
@@ -582,7 +582,7 @@ README-only Lab 继续正常渲染，不要求一次重写全部历史内容。�
 5. 执行 validate/verify、网站 discovery/build 和 Review。
 6. 在 PR 中记录未迁移 Lab 清单，不把“尚未迁移”伪装成错误。
 
-现有 22 个交互 Quiz 已使用 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
+现有交互 Quiz 均已使用 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
 
 ## 12. 常见错误与正确做法
 

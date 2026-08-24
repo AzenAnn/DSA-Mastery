@@ -96,8 +96,8 @@ status: "review"
 
 ## 本章 Labs
 
-::: info 题目接口已预留
-侧栏中的“本章 Labs”已经提供三个统一分类：**理论 Theory**、**实验 Exercise**、**工程 Project**。当前三类均为空，不放置占位题或虚假提交入口；后续收到正式题目后，会依据[站内 Lab 更新与测试指南](../chapter-preface/01-lab-authoring-guide.md)选择 Quiz、Program 或 Project，并自动进入相应分类。
+::: info 理论题库已开放
+侧栏“本章 Labs”的 **理论 Theory** 分类现已提供森林转换、树与森林遍历、赫夫曼编码、并查集和堆五组交互题库。每组选择题都可直接提交、查看解析并重新作答；源材料已有的综合题也保留在对应页面中。**实验 Exercise** 与 **工程 Project** 仍保留空槽位，收到可执行题目后再依据[站内 Lab 更新与测试指南](../chapter-preface/01-lab-authoring-guide.md)选择类型并接入。
 :::
 
 ## 学习方法
