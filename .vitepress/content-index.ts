@@ -203,7 +203,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-04-tree/00-overview.md",
       "content/chapter-04-tree/01-binary-tree.md",
     ],
-    labSources: ["labs/chapter-04/lab-04-01-binary-tree-traversal/README.md"],
+    autoLabChapter: 4,
   },
   {
     id: "chapter-05-tree-applications",
@@ -211,7 +211,6 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "树的应用",
     description: "把树结构用于 Huffman 编码、表达式树、堆与优先队列。",
     url: "/learn/outline/chapter-05-tree-applications/",
-    labSources: ["labs/chapter-04/lab-04-02-huffman-coding/README.md"],
   },
   {
     id: "chapter-06-graph-foundations-storage",
