@@ -84,7 +84,7 @@
 - [x] 第 4 章概览能导航到全部八个新 Lab，Labs 目录、搜索与侧栏“理论 Theory”分类自动发现这些 Quiz。
 - [x] 所有相关本地校验、构建、Pages base 与浏览器交互检查通过，工作树不包含构建产物、缓存、临时脚本或 `09` 之后的源内容。
 - [x] 本地预览地址可供用户验收；在用户确认前没有 commit、push 或 PR。
-- [ ] PR 最终以 `codex/chapter4-theory-exercises` 为源、`chapter/04` 为目标，并说明 AI 仅用于格式整理，知识正确性仍需人工复核。
+- [x] PR 最终以 `codex/chapter4-theory-exercises` 为源、`chapter/04` 为目标，并说明 AI 用于摘取、格式整理和机械校验，知识正确性仍需人工复核。
 
 ## Out of Scope
 

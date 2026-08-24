@@ -50,8 +50,8 @@
 
 - [x] 用户明确确认本地预览无问题，并要求提交 PR。
 - [x] 重新核对工作树与必要门禁，准备按 Conventional Commits 提交内容和 Trellis 记录。
-- [ ] 推送 `codex/chapter4-theory-exercises`。
-- [ ] 创建目标分支为 `chapter/04` 的 PR，记录题量、验证结果、AI 参与范围和人工复核风险。
+- [x] 推送 `codex/chapter4-theory-exercises`。
+- [x] 创建目标分支为 `chapter/04` 的 PR #58，记录题量、验证结果、AI 参与范围和人工复核风险。
 
 ## 8. User Preview Feedback
 
