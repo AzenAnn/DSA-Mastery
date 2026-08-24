@@ -1276,6 +1276,71 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   expect(failures).toEqual([]);
 });
 
+test("chapter 5 exposes three empty Lab category slots without placeholder pages", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${baseUrl}/learn/outline/chapter-05-tree-applications/`);
+
+  const chapterGroup = page.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-05-tree-applications/"])',
+  );
+  const labGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
+  );
+  await expect(chapterGroup).toHaveCount(1);
+  await expect(labGroup).toHaveCount(1);
+  await expect(labGroup).not.toHaveClass(/collapsed/);
+  await expect(chapterGroup).not.toContainText("相关 Labs");
+
+  const categories = [
+    { kind: "theory", label: "理论 Theory", empty: "暂无理论型 Lab", collapsed: true },
+    { kind: "exercise", label: "实验 Exercise", empty: "暂无实验型 Lab", collapsed: true },
+    { kind: "project", label: "工程 Project", empty: "暂无工程型 Lab", collapsed: false },
+  ];
+  for (const category of categories) {
+    const group = chapterGroup.locator(
+      `.VPSidebarItem:has(> .item > .text > .course-lab-category--${category.kind})`,
+    );
+    await expect(group).toHaveCount(1);
+    await expect(group.locator(`.course-lab-category--${category.kind}`)).toContainText(
+      category.label,
+    );
+    if (category.collapsed) {
+      await expect(group).toHaveClass(/collapsed/);
+      await group.locator(":scope > .item > .caret").click();
+      await expect(group).not.toHaveClass(/collapsed/);
+    } else {
+      await expect(group).not.toHaveClass(/collapsed/);
+    }
+    await expect(group.locator(":scope > .items a")).toHaveCount(0);
+    await expect(group.locator(".course-lab-category__empty")).toHaveText(category.empty);
+  }
+
+  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(3);
+  await expect(labGroup.locator(".course-lab-category svg")).toHaveCount(3);
+  const labPanelStyle = await labGroup.evaluate((element) => {
+    const style = globalThis.getComputedStyle(element);
+    return {
+      borderStyle: style.borderTopStyle,
+      borderRadius: Number.parseFloat(style.borderTopLeftRadius),
+      backgroundColor: style.backgroundColor,
+    };
+  });
+  expect(labPanelStyle.borderStyle).toBe("solid");
+  expect(labPanelStyle.borderRadius).toBeGreaterThan(0);
+  expect(labPanelStyle.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
+
+  await page.locator(".VPNavBarAppearance .VPSwitchAppearance").click();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await page.setViewportSize({ width: 390, height: 844 });
+  const layout = await page.evaluate(() => ({
+    clientWidth: globalThis.document.documentElement.clientWidth,
+    scrollWidth: globalThis.document.documentElement.scrollWidth,
+  }));
+  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
+  expect(failures).toEqual([]);
+});
+
 test("chapter 9 hash index theory quiz exposes all 18 questions and reconstructed tree prompts", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/labs/chapter-09/lab-09-01-hash-index-theory-quiz/`);

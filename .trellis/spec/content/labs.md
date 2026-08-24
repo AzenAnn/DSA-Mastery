@@ -30,7 +30,7 @@ Lab 继承教材八个字段，并额外要求：
 | `duration` | 非空、可理解的预计时长，如“45～60 分钟” |
 | `labCategory` | README-only Lab 接入分类侧栏时可选；只能是 `theory`、`exercise`、`project`，不得按标题推断 |
 
-网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。当前第 1 章启用“本章 Labs”三分类并要求所有 Lab 可分类，其他章节继续使用“相关 Labs”。
+网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。声明 `autoLabChapter` 的课程章节启用“本章 Labs”三分类并要求所有 Lab 可分类；即使集合为空，也显示 Theory/Exercise/Project 与各自空状态。当前 Ch.5 只开放三个空槽位，不创建占位 Lab；未启用分类的章节继续使用“相关 Labs”。
 
 README 至少说明：
 
