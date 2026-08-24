@@ -262,3 +262,61 @@ Implemented and verified Lab 01-21 with dual list implementations, deterministic
 ### Next Steps
 
 - Review Owner 独立核对题面、答案、解析与版权适用性后合并 PR #58。
+
+
+## Session 11: 完成第 5 章树的应用并创建 PR
+
+**Date**: 2026-08-24
+**Task**: 完成第 5 章树的应用并创建 PR
+**Branch**: `chapter05`
+
+### Summary
+
+完成 Ch.5 六篇树应用教材与三个空 Lab 分类接口，将旧图内容迁移到 Ch.6/Ch.7，验证后创建 PR #61。
+
+### Main Changes
+
+- 新增 Ch.5 树的应用 22 个指定小节并切换为 review
+- 复用统一 ContentIndex 显示 Theory/Exercise/Project 三个空槽位
+- 迁移旧图正文与 BFS/Dijkstra Lab 到物理 Ch.6/Ch.7
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `a6d8c81` | (see git log) |
+
+### Testing
+
+- [OK] pnpm test 通过
+- [OK] pnpm run test:pages 20/20 通过
+- [OK] 最终 validate/build/check:site 与 C++ 示例语法检查通过
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 由 Review Owner 在 PR #61 完成人工知识审阅，勿由作者自行合并
+
+
+## Session 12: 第 5 章树结构题库 Lab
+
+**Date**: 2026-08-24
+**Task**: 第 5 章树结构题库 Lab
+**Branch**: `codex/chapter05-tree-labs`
+
+### Summary
+
+从本地 09 至 13 题库生成五个 Chapter 5 Theory Quiz Lab，共 67 道选择题和 9 道综合题；清除公开来源痕迹，更新课程入口与测试合同，并完成构建、页面和浏览器验收。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `baa23fe` | (see git log) |
+
+### Status
+
+[OK] **Completed**

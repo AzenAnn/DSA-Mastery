@@ -1,6 +1,6 @@
 # 旧 Lab 渐进迁移清单
 
-> 更新日期：2026-08-19 · 迁移接口以 [Lab 更新与测试指南](LAB_AUTHORING_GUIDE.md)为准。
+> 更新日期：2026-08-24 · 迁移接口以 [Lab 更新与测试指南](LAB_AUTHORING_GUIDE.md)为准。
 
 常规 manifest 迁移不改变既有 URL，也不要求一次重写全部 Lab。第 1 章在 2026-08-18 经显式决策删除三个 Demo 并整体重编号，是一次不保留旧 URL 的结构迁移例外。只有对应章节实际进入维护周期、题面与参考实现有人负责 Review 时才迁移；分类是候选，不代替 Owner 的学习目标判断。
 
@@ -26,8 +26,8 @@
 - [ ] `lab-02-01-stack-simulator`
 - [ ] `lab-02-02-cycle-queue`
 - [ ] `lab-04-01-binary-tree-traversal`
-- [ ] `lab-05-01-bfs-maze`
-- [ ] `lab-05-02-dijkstra-path`
+- [ ] `lab-07-01-bfs-maze`（由旧物理 Ch.5 路径迁入 Ch.7）
+- [ ] `lab-07-02-dijkstra-path`（由旧物理 Ch.5 路径迁入 Ch.7）
 
 每项迁移必须补齐：stdin/stdout、可编译 starter、经审阅 solution、合计 100 的 normal/boundary/regression cases、薄 Makefile、`verify` 证据和学生包检查。
 

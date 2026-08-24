@@ -216,8 +216,28 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     id: "chapter-05-tree-applications",
     number: "5",
     title: "树的应用",
-    description: "把树结构用于 Huffman 编码、表达式树、堆与优先队列。",
+    description: "学习搜索树与平衡、堆与优先队列、赫夫曼编码、并查集及多路索引树。",
     url: "/learn/outline/chapter-05-tree-applications/",
+    learningObjectives: [
+      "根据有序、平衡、偏序、权重与集合不变量选择并维护合适的树结构。",
+      "实现 BST/AVL、堆、赫夫曼树与并查集的核心操作，并准确分析复杂度前提。",
+      "解释 B 树与 B+ 树如何用高分支降低外存 I/O，并比较点查与范围查询。",
+    ],
+    focusTitle: "本章路径",
+    focusAreas: [
+      "二叉搜索树、AVL 与局部旋转",
+      "堆、优先队列与赫夫曼编码",
+      "并查集、B 树与 B+ 树",
+    ],
+    lessonSources: [
+      "content/chapter-05-tree-applications/00-overview.md",
+      "content/chapter-05-tree-applications/01-binary-search-tree-and-avl.md",
+      "content/chapter-05-tree-applications/02-heap-and-priority-queue.md",
+      "content/chapter-05-tree-applications/03-huffman-tree-and-coding.md",
+      "content/chapter-05-tree-applications/04-disjoint-set-union.md",
+      "content/chapter-05-tree-applications/05-b-tree-and-b-plus-tree.md",
+    ],
+    autoLabChapter: 5,
   },
   {
     id: "chapter-06-graph-foundations-storage",
@@ -226,8 +246,8 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "学习图的基本概念，以及邻接矩阵和邻接表的表示取舍。",
     url: "/learn/outline/chapter-06-graph-foundations-storage/",
     lessonSources: [
-      "content/chapter-05-graph/00-overview.md",
-      "content/chapter-05-graph/01-representation.md",
+      "content/chapter-06-graph-foundations/00-overview.md",
+      "content/chapter-06-graph-foundations/01-representation.md",
     ],
   },
   {
@@ -237,13 +257,13 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "从 DFS、BFS 走向最小生成树、最短路径等图算法。",
     url: "/learn/outline/chapter-07-graph-traversal-applications/",
     lessonSources: [
-      "content/chapter-05-graph/02-traversal.md",
-      "content/chapter-05-graph/03-applications.md",
-      "content/chapter-05-graph/04-astar-visualization.md",
+      "content/chapter-07-graph-applications/01-traversal.md",
+      "content/chapter-07-graph-applications/02-applications.md",
+      "content/chapter-07-graph-applications/03-astar-visualization.md",
     ],
     labSources: [
-      "labs/chapter-05/lab-05-01-bfs-maze/README.md",
-      "labs/chapter-05/lab-05-02-dijkstra-path/README.md",
+      "labs/chapter-07/lab-07-01-bfs-maze/README.md",
+      "labs/chapter-07/lab-07-02-dijkstra-path/README.md",
     ],
   },
   {
@@ -614,17 +634,17 @@ export function createCourseSidebar(
       collapsed: true,
       items: [
         ...chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
-        ...(chapter.labs.length
-          ? [
-              chapter.autoLabChapter !== undefined
-                ? chapterLabGroup(chapter.labs, icons)
-                : {
-                    text: "相关 Labs",
-                    collapsed: true,
-                    items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })),
-                  },
-            ]
-          : []),
+        ...(chapter.autoLabChapter !== undefined
+          ? [chapterLabGroup(chapter.labs, icons)]
+          : chapter.labs.length
+            ? [
+                {
+                  text: "相关 Labs",
+                  collapsed: true,
+                  items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })),
+                },
+              ]
+            : []),
       ],
     };
   };

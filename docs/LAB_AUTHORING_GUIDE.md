@@ -168,13 +168,15 @@ pnpm lab:new -- --type project --chapter 4 --order 3 --slug tree-index
 
 ### 4.1 网站侧栏的分类接口
 
-网站的 Lab 分类属于统一 `CourseIndex`，不是另一份手写导航。目前第 1 章使用“本章 Labs”三分类；后续章节需要同样结构时，应复用以下接口扩展，不要在侧栏组件里复制 Lab 名单：
+网站的 Lab 分类属于统一 `CourseIndex`，不是另一份手写导航。课程定义只要声明 `autoLabChapter`，侧栏就统一显示“本章 Labs”的三个分类；即使当前没有任何 Lab，也必须保留三类空槽位，不要在侧栏组件里复制 Lab 名单：
 
 | Lab 机器类型 | 侧栏分类 | 展示标签 |
 | --- | --- | --- |
 | `quiz` | `theory` | 理论 Theory |
 | `program` | `exercise` | 实验 Exercise |
 | `project` | `project` | 工程 Project |
+
+空分类的固定文案依次为“暂无理论型 Lab”“暂无实验型 Lab”“暂无工程型 Lab”。Ch.5“树的应用”现有 5 个正式 `quiz`，由统一索引自动进入 Theory；Exercise 与 Project 仍显示各自空状态。新增题目仍应先按学习目标确定 `quiz`、`program` 或 `project`，不能为了填满槽位创建占位 README、manifest 或虚假题目。
 
 有 `lab.json` 时，内容索引直接从 `type` 派生分类。没有 manifest 的 README-only Lab 若需要进入分类目录，必须在 frontmatter 显式声明：
 
@@ -580,7 +582,7 @@ README-only Lab 继续正常渲染，不要求一次重写全部历史内容。�
 5. 执行 validate/verify、网站 discovery/build 和 Review。
 6. 在 PR 中记录未迁移 Lab 清单，不把“尚未迁移”伪装成错误。
 
-现有 22 个交互 Quiz 已使用 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
+现有交互 Quiz 均已使用 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
 
 ## 12. 常见错误与正确做法
 
