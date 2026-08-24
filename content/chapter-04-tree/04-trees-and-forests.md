@@ -43,16 +43,35 @@ status: "draft"
 
 当我们将 `firstChild` 当作二叉树的 `left`，将 `nextSibling` 当作二叉树的 `right` 时，一般多叉树就自然转换为了一棵二叉树。
 
-```text [tree-to-binary-concept.txt]
-一般多叉树:               孩子兄弟二叉树:
-      A                        A
-   /  |  \                    /
-  B   C   D                  B
-      |                       \
-      E                        C
-                              / \
-                             E   D
+```graphviz
+digraph TreeToBinary {
+  rankdir=TB;
+  node [shape=circle];
+  subgraph cluster_tree {
+    label="一般多叉树";
+    A_tree [label="A"];
+    B_tree [label="B"];
+    C_tree [label="C"];
+    D_tree [label="D"];
+    E_tree [label="E"];
+    A_tree -> {B_tree C_tree D_tree};
+    C_tree -> E_tree;
+  }
+  subgraph cluster_lcrs {
+    label="孩子兄弟二叉树";
+    A_lcrs [label="A"];
+    B_lcrs [label="B"];
+    C_lcrs [label="C"];
+    D_lcrs [label="D"];
+    E_lcrs [label="E"];
+    A_lcrs -> B_lcrs [label="firstChild"];
+    B_lcrs -> C_lcrs [label="nextSibling"];
+    C_lcrs -> D_lcrs [label="nextSibling"];
+    C_lcrs -> E_lcrs [label="firstChild"];
+  }
+}
 ```
+<!-- diagram id="tree-to-binary-concept" caption: "firstChild 映射左指针，nextSibling 映射右指针" -->
 
 ### 2. 树转二叉树的直观几何规则（三步法）
 
@@ -60,16 +79,49 @@ status: "draft"
 2. **抹线**：对树中的每一个节点，只保留它与**第一个孩子节点（最左孩子）**的连线，抹去它与其他所有孩子节点的连线；
 3. **旋转平移**：以根节点为轴心，顺时针旋转 $45^\circ$。原来的长子成为左孩子，原来的水平兄弟链成为右斜向下的右孩子链。
 
-```text [three-step-rule.txt]
-步骤 1: 加线 (B-C-D 相连)       步骤 2: 抹线 (只留 A-B, C-E)      步骤 3: 顺时针旋转 45 度
-        A                             A                               A
-     /  |  \                        /                                /
-    B - C - D                      B - C - D                        B
-        |                              |                             \
-        E                              E                              C
-                                                                     / \
-                                                                    E   D
+```graphviz
+digraph ThreeStepRule {
+  rankdir=TB;
+  node [shape=circle];
+  subgraph cluster_add {
+    label="步骤 1：加线";
+    A_add [label="A"];
+    B_add [label="B"];
+    C_add [label="C"];
+    D_add [label="D"];
+    E_add [label="E"];
+    A_add -> {B_add C_add D_add};
+    B_add -> C_add [style=dashed];
+    C_add -> D_add [style=dashed];
+    C_add -> E_add;
+  }
+  subgraph cluster_keep {
+    label="步骤 2：抹线";
+    A_keep [label="A"];
+    B_keep [label="B"];
+    C_keep [label="C"];
+    D_keep [label="D"];
+    E_keep [label="E"];
+    A_keep -> B_keep;
+    B_keep -> C_keep [style=dashed];
+    C_keep -> D_keep [style=dashed];
+    C_keep -> E_keep;
+  }
+  subgraph cluster_rotate {
+    label="步骤 3：旋转 45 度";
+    A_rotate [label="A"];
+    B_rotate [label="B"];
+    C_rotate [label="C"];
+    D_rotate [label="D"];
+    E_rotate [label="E"];
+    A_rotate -> B_rotate;
+    B_rotate -> C_rotate;
+    C_rotate -> D_rotate;
+    C_rotate -> E_rotate;
+  }
+}
 ```
+<!-- diagram id="tree-three-step-rule" caption: "加线、抹线、旋转是树到孩子兄弟二叉树的三步转换" -->
 
 ::: property 性质 · 单树转换二叉树的根右链为空
 由任意一棵**单棵树**转换得到的二叉树，其**根节点的右子树一定为空（`root->right == nullptr`）**。
@@ -97,26 +149,19 @@ $$
 2. 第一棵二叉树 $B_1$ 的根节点直接作为整棵二叉树的根；
 3. 从 $B_2$ 开始，依次将后一棵二叉树的根节点，作为前一棵二叉树根节点的**右孩子（`right`）**连接起来。
 
-```text [forest-to-binary.txt]
-森林 F = { 树 T1, 树 T2, 树 T3 }:
-    T1:          T2:       T3:
-     A            D         G
-   /   \          |
-  B     C         E
-                  |
-                  F
-
-转换后的唯一二叉树 B:
-        A (T1 根)
-       / \
-      B   D (T2 根)
-       \   \
-        C   G (T3 根)
-           /
-          E
-           \
-            F
+```graphviz
+digraph ForestToBinary {
+  rankdir=TB;
+  node [shape=circle];
+  A -> B [label="left"];
+  B -> C [label="right"];
+  A -> D [label="right"];
+  D -> E [label="left"];
+  D -> G [label="right"];
+  E -> F [label="left"];
+}
 ```
+<!-- diagram id="forest-to-binary" caption: "森林的各棵树根沿右链串联，得到唯一的二叉树" -->
 
 ### 2. 二叉树还原为森林
 

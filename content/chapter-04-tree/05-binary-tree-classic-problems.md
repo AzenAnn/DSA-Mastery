@@ -96,14 +96,23 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
 
 而判断一棵树是否是**关于中心轴对称的镜像二叉树**，要求“左子树的外侧与右子树的外侧对称，左子树的内侧与右子树的内侧对称”：
 
-```text [symmetric-tree.txt]
-        1
-      /   \
-    2       2
-   / \     / \
-  3   4   4   3
- (外) (内) (内) (外)
+```graphviz
+digraph SymmetricTree {
+  rankdir=TB;
+  node [shape=circle];
+  root [label="1"];
+  left [label="2\n外"];
+  right [label="2\n外"];
+  left_inner [label="3\n外"];
+  left_outer [label="4\n内"];
+  right_inner [label="4\n内"];
+  right_outer [label="3\n外"];
+  root -> {left right};
+  left -> {left_inner left_outer};
+  right -> {right_inner right_outer};
+}
 ```
+<!-- diagram id="symmetric-tree" caption: "对称树的镜像节点逐层对应，外侧与内侧同时匹配" -->
 
 ```cpp:line-numbers [is-symmetric.cpp]
 class Solution {
@@ -213,15 +222,35 @@ TreeNode* invertTree(TreeNode* root) {
 
 要求**原地（In-place）**将二叉树重构为一条沿 `right` 指针向下的单链表，节点顺序与前序遍历相同，且所有 `left` 指针置为空。
 
-```text [flatten-tree.txt]
-    1                 1
-   / \                 \
-  2   5      ===>       2
- / \   \                 \
-3   4   6                 3
-                           \
-                            4 ...
+```graphviz
+digraph FlattenTree {
+  rankdir=LR;
+  node [shape=circle];
+  subgraph cluster_before {
+    label="展开前";
+    one_before [label="1"];
+    two_before [label="2"];
+    five_before [label="5"];
+    three_before [label="3"];
+    four_before [label="4"];
+    six_before [label="6"];
+    one_before -> {two_before five_before};
+    two_before -> {three_before four_before};
+    five_before -> six_before;
+  }
+  subgraph cluster_after {
+    label="按前序展开后";
+    one_after [label="1"];
+    two_after [label="2"];
+    three_after [label="3"];
+    four_after [label="4"];
+    five_after [label="5"];
+    six_after [label="6"];
+    one_after -> two_after -> three_after -> four_after -> five_after -> six_after;
+  }
+}
 ```
+<!-- diagram id="flatten-tree" caption: "二叉树原地展开为按前序排列的右链" -->
 
 ::: property 寻找前驱节点的 O(1) 空间解法
 对于当前节点 `curr`，若其拥有左子树：
@@ -328,15 +357,16 @@ private:
 
 二叉树的高级算法题往往看似毫无头绪，但只要将其拆解为两种基本递归形态，问题迎刃而解：
 
-```text [recursive-framework.txt]
-【模式 A：自顶向下 (Top-Down / 前序传递)】
-父节点携带参数向子节点下发（如累积路径、祖先约束、当前层数）。
-处理时机在递归子树之前。
-
-【模式 B：自底向上 (Bottom-Up / 后序汇总)】
-子树向上层汇报汇总信息（如子树高度、LCA 状态、最大贡献值）。
-处理时机在递归子树返回之后（树形 DP 核心）。
+```graphviz
+digraph RecursiveFramework {
+  rankdir=LR;
+  node [shape=box];
+  top_down [label="模式 A：自顶向下\n父节点向子节点传递路径、约束或层数\n处理时机：递归子树之前"];
+  bottom_up [label="模式 B：自底向上\n子树向父节点汇报高度、LCA 或最大贡献\n处理时机：递归子树返回之后"];
+  top_down -> bottom_up [style=dashed, label="两种递归状态传递"];
+}
 ```
+<!-- diagram id="recursive-framework" caption: "树递归的自顶向下传参与自底向上汇总框架" -->
 
 ### 1. 二叉树的最近公共祖先（Lowest Common Ancestor, LCA）
 

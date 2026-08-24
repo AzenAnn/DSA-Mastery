@@ -21,6 +21,21 @@ status: "draft"
 - 解释 BFS 为什么得到无权图最短步数；
 - 根据连通性、分层和回溯需求选择遍历方式。
 
+下面这张小图同时包含一个回路和从 `A` 出发的多条路径。DFS 会沿一条路径深入后回溯，BFS 则按距离逐层发现顶点；两者都必须在发现顶点时记录 `visited`。
+
+```graphviz
+graph TraversalExample {
+  rankdir=LR;
+  node [shape=circle];
+  A -- B;
+  A -- C;
+  B -- D;
+  C -- D;
+  C -- E;
+}
+```
+<!-- diagram id="graph-traversal-example" caption: "同一张无向图上的 DFS 深入与 BFS 分层" -->
+
 ## DFS：深度优先
 
 从起点出发，访问一个顶点后立刻深入它的某个未访问邻居；没有可继续的邻居时回溯。

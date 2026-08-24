@@ -70,16 +70,18 @@ $$
 
 ### 2. 传统二叉链表的寻亲痛点
 
-```text [threaded-motivation.txt]
-中序遍历序列: D -> B -> E -> A -> C
-
-        A
-       / \
-      B   C (C->left 为空, C->right 为空)
-     / \
-(D) D   E (E->left 为空, E->right 为空)
- (D->left 为空, D->right 为空)
+```graphviz
+digraph ThreadedMotivation {
+  rankdir=TB;
+  node [shape=circle];
+  A -> {B C};
+  B -> {D E};
+  D -> B [style=dashed, label="后继"];
+  E -> A [style=dashed, label="后继"];
+  C -> A [style=dashed, label="前驱"];
+}
 ```
+<!-- diagram id="threaded-motivation" caption: "空指针改存中序前驱或后继，得到 D、B、E、A、C 的线索" -->
 
 在上面的中序序列中：
 - 节点 `E` 的中序直接后继是 `A`，但从节点 `E` 本身出发，没有任何指针指向 `A`；
@@ -98,11 +100,13 @@ $$
 
 为此，我们必须在每个节点内部增加两个布尔标志位 `ltag` 和 `rtag`：
 
-```text [threaded-node-struct.txt]
-+--------+--------+-------+--------+--------+
-|  left  |  ltag  |  val  |  rtag  | right  |
-+--------+--------+-------+--------+--------+
+```graphviz
+digraph ThreadedNodeStruct {
+  node [shape=record];
+  node_layout [label="{left|ltag|val|rtag|right}"];
+}
 ```
+<!-- diagram id="threaded-node-struct" caption: "线索二叉树节点在左右指针旁增加 ltag 与 rtag" -->
 
 ::: definition 标志位语义约定
 - $\text{ltag} = 0$（`Link`）：`left` 指向真正的**左孩子节点**；
@@ -141,17 +145,23 @@ struct ThreadNode {
 4. 更新前驱指针：`prev = curr`；
 5. 递归线索化右子树：`inThreading(curr->right)`。
 
-```text [threaded-tree-diagram.txt]
-中序遍历: D -> B -> E -> A -> C
-
-          A (ltag=0, rtag=0)
-        /   \
-       B     C (ltag=1, rtag=1, left指向A, right为nullptr)
-      / \   
-     D   E (ltag=1, rtag=1, left指向B, right指向A)
-    / \
- (left=null, right指向B, ltag=1, rtag=1)
+```graphviz
+digraph ThreadedTreeDiagram {
+  rankdir=TB;
+  node [shape=circle];
+  A [label="A\nltag=0 rtag=0"];
+  B [label="B\nltag=1 rtag=1"];
+  C [label="C\nltag=1 rtag=1"];
+  D [label="D\n前驱空 后继 B"];
+  E [label="E\n前驱 B 后继 A"];
+  A -> {B C};
+  B -> {D E};
+  D -> B [style=dashed, label="后继"];
+  E -> A [style=dashed, label="后继"];
+  C -> A [style=dashed, label="前驱"];
+}
 ```
+<!-- diagram id="threaded-tree-diagram" caption: "线索标志区分孩子指针与中序前驱/后继线索" -->
 
 ::: details 中序线索化完整实现（点击展开）
 
@@ -311,13 +321,16 @@ void traverseInorderThreaded(ThreadNode* root) {
 - **核心思想**：利用二叉树中大量叶节点的空闲 `right` 指针，在遍历过程中**动态临时建立指向后继的回边**，在访问完毕回溯时**再将指针恢复为 `nullptr`**！
 - **最大优势**：**不需要对树的结构定义增加任何标志位**，真正实现“原地复用空指针、遍历完完美复原树形态”的 $O(1)$ 额外空间、$\Theta(n)$ 时间遍历。
 
-```text [morris-concept.txt]
-      A
-     /
-    B
-     \
-      C ----(临时动态线索: C->right = A)----> A
+```graphviz
+digraph MorrisConcept {
+  rankdir=TB;
+  node [shape=circle];
+  A -> B;
+  B -> C;
+  C -> A [style=dashed, label="临时线索"];
+}
 ```
+<!-- diagram id="morris-concept" caption: "Morris 遍历利用前驱节点的右指针建立临时线索，再恢复现场" -->
 
 ---
 

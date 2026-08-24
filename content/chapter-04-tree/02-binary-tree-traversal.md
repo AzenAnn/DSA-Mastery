@@ -48,16 +48,24 @@ status: "draft"
 
 递归遍历代码极短，但初学者常对其调用过程感到抽象。我们可以借助**欧拉环游轨迹（Euler Tour）**来观察计算机执行递归时的真实流动过程：
 
-```text [traversal-trace.txt]
-          1 (A)
-         /     \
-      2 (B)     3 (C)
-     /     \
-  4 (D)   5 (E)
-
-递归访问全路径（沿树的外轮廓绕行一周）：
-A(下) -> B(下) -> D(下) -> D(左空回) -> D(右空回) -> B(中) -> E(下) -> E(左空回) -> E(右空回) -> B(上) -> A(中) -> C(下) -> C(左空回) -> C(右空回) -> A(上)
+```graphviz
+digraph TraversalTrace {
+  rankdir=TB;
+  node [shape=circle];
+  A [label="1 (A)"];
+  B [label="2 (B)"];
+  C [label="3 (C)"];
+  D [label="4 (D)"];
+  E [label="5 (E)"];
+  A -> {B C};
+  B -> {D E};
+  D -> B [style=dashed, label="回溯"];
+  E -> B [style=dashed, label="回溯"];
+  B -> A [style=dashed, label="回溯"];
+  C -> A [style=dashed, label="回溯"];
+}
 ```
+<!-- diagram id="traversal-trace" caption: "递归遍历沿树的外轮廓下降、访问并回溯" -->
 
 ::: property 性质 · 三遍路过模型（Three-Pass Invariant）
 在递归遍历中，计算机实际上会**三次路过**每一个非空节点：
@@ -133,14 +141,24 @@ void postorder(const TreeNode* root, const std::function<void(int)>& visit) {
 2. 直到左指针为空，说明栈顶节点是最左侧的最小单元；弹出栈顶并访问它；
 3. 将当前指针转向该节点的右孩子，重复上述过程。
 
-```text [inorder-stack.txt]
-      A
-     / \        1. A 入栈，B 入栈，D 入栈 -> 栈 [A, B, D]
-    B   C       2. D 无左孩子 -> 弹出 D 访问，转向 D 的右孩子 (空)
-   / \          3. 栈顶为 B -> 弹出 B 访问，转向 B 的右孩子 E
-  D   E         4. E 入栈 -> 栈 [A, E] -> 弹出 E 访问，转向 E 右孩子 (空)
-                5. 栈顶为 A -> 弹出 A 访问，转向 A 的右孩子 C -> C 入栈 ...
+```graphviz
+digraph InorderStack {
+  rankdir=TB;
+  node [shape=circle];
+  A -> {B C};
+  B -> {D E};
+  D -> stack_d [style=dashed, label="入栈/弹出"];
+  B -> stack_b [style=dashed, label="入栈/弹出"];
+  E -> stack_e [style=dashed, label="入栈/弹出"];
+  A -> stack_a [style=dashed, label="最后访问"];
+  node [shape=box, style=rounded];
+  stack_d [label="栈 [A,B,D]"];
+  stack_b [label="栈 [A,E]"];
+  stack_e [label="访问 E"];
+  stack_a [label="访问 A"];
+}
 ```
+<!-- diagram id="inorder-stack" caption: "中序遍历迭代实现沿左链入栈，再弹出并转向右子树" -->
 
 ::: details 中序遍历迭代实现（点击展开）
 
@@ -289,23 +307,27 @@ std::vector<int> postorderTraversal(TreeNode* root) {
 
 由于先被发现的父节点，其孩子节点也必须先被访问，这种“先来先服务”的特性决定了层序遍历必须借助**先进先出（FIFO）的队列（Queue）**实现。
 
-```text [levelorder-trace.txt]
-        1 (A)             第 1 层: [A]
-       /     \
-    2 (B)     3 (C)       第 2 层: [B, C]
-   /     \       \
-4 (D)   5 (E)     6 (F)   第 3 层: [D, E, F]
-
-队列流动过程：
-入队 A -> [A]
-出队 A，访问 A；入队 B, C -> [B, C]
-出队 B，访问 B；入队 D, E -> [C, D, E]
-出队 C，访问 C；入队 F    -> [D, E, F]
-出队 D，访问 D；无孩子    -> [E, F]
-出队 E，访问 E；无孩子    -> [F]
-出队 F，访问 F；无孩子    -> [] (队列空，结束)
-输出序列：A -> B -> C -> D -> E -> F
+```graphviz
+digraph LevelorderTrace {
+  rankdir=TB;
+  node [shape=circle];
+  A [label="1 (A)\n第 1 层"];
+  B [label="2 (B)\n第 2 层"];
+  C [label="3 (C)\n第 2 层"];
+  D [label="4 (D)\n第 3 层"];
+  E [label="5 (E)\n第 3 层"];
+  F [label="6 (F)\n第 3 层"];
+  A -> {B C};
+  B -> {D E};
+  C -> F;
+  A -> B [style=dashed, label="队列"];
+  B -> C [style=dashed, label="队列"];
+  C -> D [style=dashed, label="队列"];
+  D -> E [style=dashed, label="队列"];
+  E -> F [style=dashed, label="队列"];
+}
 ```
+<!-- diagram id="levelorder-trace" caption: "层序遍历按队列顺序逐层输出 A、B、C、D、E、F" -->
 
 ### 分层输出模板（Level-by-Level）
 
@@ -376,12 +398,16 @@ std::vector<std::vector<int>> levelOrder(TreeNode* root) {
    - 右子树前序区间为 `[preL + leftLen + 1, preR]`，中序区间为 `[k + 1, inR]`；
 5. 用哈希表（`std::unordered_map`）预处理中序下标，将查找根位置的时间由 $O(n)$ 降为 $O(1)$，使整体构造时间达到线性的 $\Theta(n)$。
 
-```text [reconstruct-pre-in.txt]
-前序: [ 3 | 9 | 20 15 7 ]
-       根  左子    右子
-中序: [ 9 | 3 | 15 20 7 ]
-       左子 根    右子
+```graphviz
+digraph ReconstructPreIn {
+  rankdir=LR;
+  node [shape=plain];
+  preorder [label="前序：3 | 9 | 20 15 7\n根  左子    右子"];
+  inorder [label="中序：9 | 3 | 15 20 7\n左子 根    右子"];
+  preorder -> inorder [label="根在中序中分割左右子树"];
+}
 ```
+<!-- diagram id="reconstruct-pre-in" caption: "前序确定根节点，中序确定左右子树范围" -->
 
 ::: details 前序+中序构造二叉树实现（点击展开）
 

@@ -21,6 +21,21 @@ status: "draft"
 - 根据图的稠密度、表示和操作结构给出准确复杂度；
 - 处理不连通、不可达、零权、多重边与距离溢出边界。
 
+下面的带权图用于手算 Prim、Kruskal 或 Dijkstra。边权是非负的，因此可以用 Dijkstra；从 `A` 出发时，`A-B-C-D` 的路径权值为 `6`。
+
+```graphviz
+graph WeightedExample {
+  rankdir=LR;
+  node [shape=circle];
+  A -- B [label="2"];
+  A -- C [label="5"];
+  B -- C [label="1"];
+  B -- D [label="6"];
+  C -- D [label="3"];
+}
+```
+<!-- diagram id="graph-weighted-example" caption: "带非负权边的图：可用于最短路径与生成树练习" -->
+
 ## Prim 算法
 
 Prim 从任意顶点开始维护树内集合 `S`，每一步选择连接 `S` 与 `V-S` 的最小权边，把一个新顶点加入树。

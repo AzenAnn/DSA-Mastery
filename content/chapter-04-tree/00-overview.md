@@ -39,15 +39,23 @@ status: "draft"
 
 先观察一棵课程目录树：
 
-```text [course-tree.txt]
-数据结构
-├─ 线性结构
-│  ├─ 线性表
-│  └─ 栈与队列
-└─ 非线性结构
-   ├─ 树
-   └─ 图
+```graphviz
+digraph CourseTree {
+  rankdir=TB;
+  node [shape=box];
+  data [label="数据结构"];
+  linear [label="线性结构"];
+  list [label="线性表"];
+  stack [label="栈与队列"];
+  nonlinear [label="非线性结构"];
+  tree [label="树"];
+  graph_node [label="图"];
+  data -> {linear nonlinear};
+  linear -> {list stack};
+  nonlinear -> {tree graph_node};
+}
 ```
+<!-- diagram id="course-tree" caption: "数据结构课程中线性结构与非线性结构的层次关系" -->
 
 下面统一约定：根在第 $1$ 层；节点深度按“从根到该节点经过的边数”计算，因此根的深度为 $0$；节点高度按“从该节点到最远叶节点经过的边数”计算，因此叶节点高度为 $0$。
 
@@ -202,19 +210,35 @@ struct ChildrenNode {
 - `firstChild`：指向第一个孩子；
 - `nextSibling`：指向下一个兄弟。
 
-```text [child-sibling.txt]
-逻辑树：              孩子兄弟链接：
-
-    A                  A
-  / | \                |
- B  C  D          firstChild
-    |                  v
-    E                  B --nextSibling--> C --nextSibling--> D
-                                          |
-                                     firstChild
-                                          v
-                                          E
+```graphviz
+digraph ChildSibling {
+  rankdir=TB;
+  node [shape=circle];
+  subgraph cluster_logical {
+    label="逻辑树";
+    A_tree [label="A"];
+    B_tree [label="B"];
+    C_tree [label="C"];
+    D_tree [label="D"];
+    E_tree [label="E"];
+    A_tree -> {B_tree C_tree D_tree};
+    C_tree -> E_tree;
+  }
+  subgraph cluster_links {
+    label="孩子兄弟链接";
+    A_link [label="A"];
+    B_link [label="B"];
+    C_link [label="C"];
+    D_link [label="D"];
+    E_link [label="E"];
+    A_link -> B_link [label="firstChild"];
+    B_link -> C_link [label="nextSibling"];
+    C_link -> D_link [label="nextSibling"];
+    C_link -> E_link [label="firstChild"];
+  }
+}
 ```
+<!-- diagram id="child-sibling" caption: "firstChild 与 nextSibling 把一般树编码为二叉链接结构" -->
 
 任意度的一般树因此被编码成了一个“左边走向第一个孩子、右边走向下一个兄弟”的二叉链接结构。每个节点链接数固定为 $2$，既能保留孩子次序，也不需要为最大度预留指针槽。
 
