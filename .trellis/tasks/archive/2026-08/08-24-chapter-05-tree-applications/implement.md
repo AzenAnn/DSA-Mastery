@@ -73,9 +73,9 @@
 - [x] 仅在用户明确确认预览后，把页面状态从 `draft` 调整为约定的评审状态。
 - [x] 加载 `trellis-check` 做最终全量质量审计并修正阻塞项。
 - [x] 更新必要 Trellis spec/任务记录，记录验证证据。
-- [ ] 只暂存本任务文件，按 Conventional Commit 提交。
-- [ ] 推送 `chapter05` 并创建目标为 `main` 的 PR；PR 说明范围、非目标、验证结果、知识风险、AI 参与和人工 Review 要求。
-- [ ] 不自行批准或合并 PR。
+- [x] 只暂存本任务文件，按 Conventional Commit 提交。
+- [x] 推送 `chapter05` 并创建目标为 `main` 的 PR；PR 说明范围、非目标、验证结果、知识风险、AI 参与和人工 Review 要求。
+- [x] 不自行批准或合并 PR。
 
 ## Verification Evidence
 

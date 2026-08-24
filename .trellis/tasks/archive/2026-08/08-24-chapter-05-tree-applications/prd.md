@@ -100,14 +100,14 @@
 
 ## Acceptance Criteria
 
-- [ ] `chapter05` 分支基于任务开始时的最新 `origin/main`，Trellis task 的 creator/assignee 均为 Azen。
-- [ ] 物理 Chapter 05 只保留“树的应用”教材；旧图内容完整迁移到 Ch.6/Ch.7 并继续可访问，不发生重复 order、错误标题或断链。
-- [ ] 章首页 + 5 篇文章均被站点自动发现，图片中的 22 个小节逐项可在页面标题与实质正文中定位。
-- [ ] 5 篇文章满足项目理论样式、frontmatter、相对链接、复杂度前提、例子、易错点与练习要求。
-- [ ] Chapter 05 的“本章 Labs”显示 Theory / Exercise / Project 三个空分类，且 `labs/chapter-05/` 不含伪造题目或占位 Lab 页面。
-- [ ] 内容、Lab、发现、构建、静态产物与完整测试全部通过，并记录真实命令与结果。
-- [ ] 本地预览可访问，代表性桌面/移动与浅/暗页面经检查。
-- [ ] 用户确认预览后才创建 PR；PR 描述包含范围、验证证据、风险、AI 参与和人工复核要求，目标分支为 `main`。
+- [x] `chapter05` 分支基于任务开始时的最新 `origin/main`，Trellis task 的 creator/assignee 均为 Azen。
+- [x] 物理 Chapter 05 只保留“树的应用”教材；旧图内容完整迁移到 Ch.6/Ch.7 并继续可访问，不发生重复 order、错误标题或断链。
+- [x] 章首页 + 5 篇文章均被站点自动发现，图片中的 22 个小节逐项可在页面标题与实质正文中定位。
+- [x] 5 篇文章满足项目理论样式、frontmatter、相对链接、复杂度前提、例子、易错点与练习要求。
+- [x] Chapter 05 的“本章 Labs”显示 Theory / Exercise / Project 三个空分类，且 `labs/chapter-05/` 不含伪造题目或占位 Lab 页面。
+- [x] 内容、Lab、发现、构建、静态产物与完整测试全部通过，并记录真实命令与结果。
+- [x] 本地预览可访问，代表性桌面/移动与浅/暗页面经检查。
+- [x] 用户确认预览后才创建 PR；PR 描述包含范围、验证证据、风险、AI 参与和人工复核要求，目标分支为 `main`。
 
 ## Out of Scope
 
