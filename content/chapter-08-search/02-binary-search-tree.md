@@ -126,6 +126,27 @@ Node* insert(Node* root, int key) {
 两组关键字的**中序序列完全相同**（都是 `1 2 3 4 5`），但查找复杂度从 $O(\log n)$ 退化为 $O(n)$。这就是"中序序列不能唯一确定 BST"的含义。
 :::
 
+## 交互式演示
+
+这个演示把"同一组关键字、不同插入顺序"画成一张可操作的树。先点"退化链"感受高度 5 的细长树，再换平衡序列对比树高与成功 ASL——两边中序序列完全一样，但查找成本天差地别；也可以点击任意结点，亲手体验删除的叶、单孩、双孩三种情况。
+
+<script setup>
+import { withBase } from "vitepress";
+
+const demoUrl = withBase("/demos/bst-explorer.html");
+</script>
+
+<iframe
+  :src="demoUrl"
+  title="二叉排序树 · 退化与删除可视化"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 观察什么
+分别用 `1,2,3,4,5` 和 `3,1,2,5,4` 插入，比较树高与成功 ASL。再用 `40,20,60,10,30,50,70` 建树后依次删除叶、单孩、双孩结点，每一步核对中序遍历是否仍严格升序。
+:::
+
 例如依次插入 `5, 3, 7, 1, 4, 6, 8`，得到的树接近平衡；依次插入 `1, 2, 3, 4, 5`，每个结点都只有右孩子，树退化成链。
 
 ## 删除的三种情况
@@ -297,3 +318,21 @@ BST 把"有序数组里的折半方向"变成了可动态修改的左右链接�
 3. 给出两种插入顺序，使关键字 `{1,2,3,4,5,6,7}` 分别形成高度 3 和高度 7 的 BST。
 4. 一棵 BST 的先序序列是 `8, 3, 1, 6, 4, 7, 10, 14, 13`。不用建树，写出其中序序列；再判断树高。
 5. 若要支持"第 $k$ 小"查询，应在每个结点额外维护什么信息？插入和删除时如何更新？
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1100px;
+  }
+}
+</style>

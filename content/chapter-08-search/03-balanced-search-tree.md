@@ -111,6 +111,27 @@ RL 完全对称：先右旋右孩子，再左旋失衡结点。
 三键序列每一种都触发一种旋转，旋转后树高都从 3 降到 2。这组"三键万能例"适合快速判断一种输入属于哪种失衡形态。
 :::
 
+## 交互式演示
+
+用四个"三键"预设亲手跑一遍 LL / RR / LR / RL：插入后每个结点旁会标注平衡因子，失衡结点被高亮，播放时自动执行对应旋转恢复平衡。也可以观察 `30, 20, 10, 25, 28, 27` 这组，看连续的插入如何依次触发不同形态的旋转。
+
+<script setup>
+import { withBase } from "vitepress";
+
+const demoUrl = withBase("/demos/avl-lab.html");
+</script>
+
+<iframe
+  :src="demoUrl"
+  title="AVL 树 · 旋转实验室"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 对应到正文
+把演示里的四种预设对应到上方表格：`3,2,1`→LL、`1,2,3`→RR、`3,1,2`→LR、`1,3,2`→RL。注意"LL 用右旋、RR 用左旋"，名字与旋转方向相反。
+:::
+
 ## AVL 插入流程
 
 1. 按普通 BST 规则插入新结点；
@@ -264,3 +285,21 @@ AVL 用精确高度约束获得更矮的树，红黑树用颜色和黑高换取�
 3. 证明右旋不改变子树的中序序列。
 4. 一棵红黑树某条根到 NIL 路径的黑高为 4，它的内部结点路径最长可能有多少层？
 5. 为什么新插入的红黑树结点通常先染红而不是染黑？分别说明对性质 4、5 的影响。
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1100px;
+  }
+}
+</style>

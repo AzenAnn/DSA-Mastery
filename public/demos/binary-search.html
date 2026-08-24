@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>折半查找 · 判定树可视化</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#171a1f; --panel:#282c34; --panel2:#21252b; --line:#3e4451;
+      --text:#d7dae0; --muted:#8b929f; --cyan:#56b6c2; --yellow:#e5c07b;
+      --green:#98c379; --red:#e06c75; --purple:#c678dd; --blue:#61afef;
+      --cell:#303641;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0,#283445 0,transparent 35%),linear-gradient(145deg,#171a1f,#20252d);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,select,input{font:inherit}
+    .app{width:min(1180px,calc(100% - 28px));margin:22px auto 38px}
+    .hero,.card{border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 95%,transparent);box-shadow:0 18px 50px #090b1066}
+    .hero{position:relative;overflow:hidden;border-radius:22px;padding:25px 27px}
+    .hero::after{content:"½";position:absolute;right:26px;top:-18px;font:900 120px/1 ui-monospace;color:#61afef0c;pointer-events:none}
+    .eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}
+    h1{margin:2px 0 5px;color:#f5f7fa;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15}
+    .hero p{max-width:760px;margin:0;color:var(--muted)}
+    .layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.82fr);gap:16px;margin-top:16px}
+    .card{border-radius:18px;padding:17px}
+    .toolbar,.controls,.legend,.stats{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+    .toolbar{justify-content:space-between;margin-bottom:13px}
+    .toolbar strong{color:#f4f6f9;font-size:1.05rem}
+    button,select,input{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:8px 13px;background:#2c313c;color:#edf1f7;cursor:pointer;touch-action:manipulation}
+    button:hover,select:hover{border-color:var(--cyan)}
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+    button.primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#14202b;border:0;font-weight:850}
+    input[type=number]{width:92px;text-align:center;min-height:42px}
+    .array-shell{background:#1d2128;border:1px solid var(--line);border-radius:16px;padding:clamp(10px,2vw,18px)}
+    .cells{display:grid;gap:clamp(3px,.55vw,6px);margin:10px auto 8px}
+    .cell{position:relative;min-height:52px;border:1px solid #424a58;border-radius:8px;background:var(--cell);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;transition:background .2s ease,border-color .2s ease,transform .18s ease;user-select:none}
+    .cell:hover{transform:translateY(-2px);border-color:#8390a3}
+    .cell .v{font:800 clamp(.9rem,2.4vw,1.25rem) ui-monospace;color:#fff}
+    .cell .idx{font:600 .66rem ui-monospace;color:var(--muted)}
+    .cell.in-range{border-color:#3f5d75;box-shadow:inset 0 0 0 1px #61afef18}
+    .cell.mid{background:#1e4752;border-color:#8fe5ee;box-shadow:0 0 0 2px #56b6c250,0 0 16px #56b6c266;z-index:2;transform:scale(1.05)}
+    .cell.excl-l{background:#3a2f33;border-color:#5e4048;opacity:.5}
+    .cell.excl-r{background:#2f2a3a;border-color:#4e4260;opacity:.5}
+    .cell.hit{background:#25502f;border-color:var(--green);box-shadow:0 0 0 2px #98c37955,0 0 18px #98c37955;opacity:1}
+    .pointer-label{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font:800 .62rem ui-monospace;color:var(--yellow);opacity:0;transition:opacity .2s}
+    .cell.mid .pointer-label.mid{opacity:1;color:var(--cyan)}
+    .nav{position:relative;height:0}
+    .legend{margin:30px 2px 3px;color:var(--muted);font-size:.85rem}
+    .key{display:inline-flex;align-items:center;gap:5px}.swatch{width:11px;height:11px;border-radius:3px;background:var(--c)}
+    .controls{border-top:1px solid var(--line);margin-top:13px;padding-top:13px}
+    input[type=range]{flex:1 1 180px;min-height:42px;accent-color:var(--purple);cursor:pointer}
+    .side{display:flex;flex-direction:column;gap:16px}
+    .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem;margin-bottom:8px}
+    .badge{border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--yellow);background:#e5c07b12}
+    .badge.found{color:var(--green);background:#98c37912}.badge.fail{color:var(--red);background:#e06c7512}
+    .narration{min-height:76px;border-left:4px solid var(--cyan);border-radius:9px;background:#20242b;padding:12px 13px;color:#eef1f5}
+    .tree{background:#1d2128;border:1px solid var(--line);border-radius:14px;padding:8px;overflow:auto}
+    .tree svg{display:block;width:100%;height:auto}
+    .t-node text{font:800 12px ui-monospace;fill:#fff}
+    .t-node circle{fill:#262b34;stroke:#4b5260;stroke-width:1.5}
+    .t-node.path circle{fill:#3a3446;stroke:var(--yellow)}
+    .t-node.cur circle{fill:#1e4752;stroke:#8fe5ee;stroke-width:2.5;filter:drop-shadow(0 0 6px #56b6c2aa)}
+    .t-node.hit circle{fill:#25502f;stroke:var(--green);stroke-width:2.5;filter:drop-shadow(0 0 6px #98c379aa)}
+    .t-node.fail circle{fill:#4a2730;stroke:var(--red);stroke-width:2.5;filter:drop-shadow(0 0 6px #e06c75aa)}
+    .t-line{stroke:#4b5260;stroke-width:1.4}
+    .stats{margin-top:12px}.stat{flex:1;min-width:78px;background:#20242b;border-radius:10px;padding:7px 9px}.stat small{display:block;color:var(--muted)}.stat strong{color:#fff}
+    .tip{margin:10px 2px 0;color:var(--muted);font-size:.84rem}
+    .formula{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+    .formula div{flex:1;text-align:center;background:#20242b;border:1px solid var(--line);border-radius:10px;padding:8px 4px}
+    .formula b{display:block;font:850 1.15rem ui-monospace;color:#fff}.formula span{color:var(--muted);font-size:.74rem}
+    .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:860px){.app{width:min(100% - 16px,680px);margin:8px auto 24px}.layout{grid-template-columns:1fr}.hero,.card{border-radius:14px}.hero{padding:20px}.side{display:grid;grid-template-columns:1fr}.cell{min-height:44px}}
+    @media(max-width:430px){.hero::after{display:none}.cells{gap:2px}.cell .idx{display:none}.legend{gap:8px}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="hero">
+    <div class="eyebrow">Interactive Algorithm Lab</div>
+    <h1>折半查找 · 判定树可视化</h1>
+    <p>每次比较中间元素，就知道目标落在哪一半。这个演示把“比较序列”画成一棵判定树：每走一层就是一次比较，命中在第几层、失败停在哪条空指针，一眼看清。</p>
+  </header>
+  <section class="layout">
+    <div class="card">
+      <div class="toolbar">
+        <strong>有序数组</strong>
+        <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">
+          <select data-role="dataset" aria-label="选择数据组">
+            <option value="demo">示例：7,13,19,25,31,37,43,49,55</option>
+            <option value="n16">1..16（n=16，最坏 5 次比较）</option>
+            <option value="eleven">11 个有序数（练习 1）</option>
+          </select>
+          <label style="color:var(--muted);font-size:.88rem">目标
+            <input data-role="target" type="number" aria-label="查找目标" value="37">
+          </label>
+          <button data-action="apply">查找</button>
+        </div>
+      </div>
+      <div class="array-shell">
+        <div id="cells" class="cells" aria-label="折半查找数组"></div>
+        <div class="nav"></div>
+      </div>
+      <div class="legend" aria-label="图例">
+        <span class="key"><i class="swatch" style="--c:#303641"></i>未定</span>
+        <span class="key"><i class="swatch" style="--c:#1e4752"></i>当前中点</span>
+        <span class="key"><i class="swatch" style="--c:#3f5d75"></i>候选区间</span>
+        <span class="key"><i class="swatch" style="--c:#5e4048"></i>已淘汰（更小侧）</span>
+        <span class="key"><i class="swatch" style="--c:#4e4260"></i>已淘汰（更大侧）</span>
+        <span class="key"><i class="swatch" style="--c:var(--green)"></i>命中</span>
+      </div>
+      <p class="tip" style="margin-top:30px">提示：点击某个格子可把它设为查找目标；也可以用“1..16”那组，看看 16 个元素为什么最多比较 5 次。</p>
+      <div class="controls" aria-label="播放控制">
+        <button data-action="reset">↺ 重置</button>
+        <button data-action="prev">← 上一步</button>
+        <button class="primary" data-action="play">▶ 播放</button>
+        <button data-action="next">下一步 →</button>
+        <input data-role="timeline" type="range" min="0" value="0" aria-label="时间线进度">
+        <select data-role="speed" aria-label="播放速度">
+          <option value="900">0.5× 慢速</option><option value="480" selected>1× 正常</option><option value="220">2× 快速</option><option value="80">4× 极速</option>
+        </select>
+      </div>
+    </div>
+    <aside class="side">
+      <section class="card">
+        <div class="meta"><span id="counter">步骤 0/0</span><span id="status" class="badge">准备</span></div>
+        <div id="narration" class="narration" aria-live="polite">准备好了。选择一个目标，点击“查找”或“播放”，观察区间如何每一步砍掉一半。</div>
+        <div class="formula" aria-label="本轮信息">
+          <div><b id="compCount">0</b><span>关键字比较</span></div><div><b id="rangeKind">—</b><span>当前区间</span></div><div><b id="treeH">—</b><span>判定树高度 h</span></div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="meta"><span>折半判定树</span><span>层数 = 比较次数</span></div>
+        <div id="tree" class="tree" aria-label="折半查找判定树"></div>
+      </section>
+      <section class="card">
+        <div class="meta"><span>统计</span><span>数据规模 n</span></div>
+        <div class="stats">
+          <div class="stat"><small>数组长度</small><strong id="nval">—</strong></div>
+          <div class="stat"><small>最多比较（⌊log₂n⌋+1）</small><strong id="maxc">—</strong></div>
+          <div class="stat"><small>本次命中层数</small><strong id="hitLayer">—</strong></div>
+        </div>
+      </section>
+    </aside>
+  </section>
+  <div id="live" class="sr" aria-live="assertive"></div>
+</main>
+<script>
+(() => {
+  "use strict";
+  const DATASETS={
+    demo:{arr:[7,13,19,25,31,37,43,49,55],target:37},
+    n16:{arr:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],target:13},
+    eleven:{arr:[10,20,30,40,50,60,70,80,90,10512,11000],target:60}
+  };
+  let data={...DATASETS.demo}, frames=[], index=0, timer=null, treeNodes=[], rootIndex=null;
+  const $=s=>document.querySelector(s);
+  const ui={cells:$("#cells"),tree:$("#tree"),timeline:$("[data-role=timeline]"),speed:$("[data-role=speed]"),target:$("[data-role=target]"),dataset:$("[data-role=dataset]"),counter:$("#counter"),status:$("#status"),narration:$("#narration"),comp:$("#compCount"),range:$("#rangeKind"),treeH:$("#treeH"),nval:$("#nval"),maxc:$("#maxc"),hit:$("#hitLayer"),live:$("#live"),play:$("[data-action=play]")};
+
+  // ---- 构建折半判定树：每个数组索引恰好是一个结点，中序即数组顺序 ----
+  function buildDecisionTree(arr){
+    const nodes=[];
+    function build(lo,hi,depth,parent){
+      if(lo>hi) return null;
+      const mid=Math.floor((lo+hi)/2);
+      const node={idx:mid,val:arr[mid],depth,parent,left:null,right:null,inOrderPos:null};
+      node.left=build(lo,mid-1,depth+1,mid);
+      node.right=build(mid+1,hi,depth+1,mid);
+      nodes[mid]=node;
+      return mid;
+    }
+    const root=build(0,arr.length-1,0,null);
+    treeNodes=nodes;
+    rootIndex=root;
+    // 中序编号 x 坐标
+    let pos=0,depthMax=0;
+    (function walk(i){ if(i==null)return; const n=nodes[i]; walk(n.left); n.inOrderPos=pos++; depthMax=Math.max(depthMax,n.depth); walk(n.right); })(rootIndex);
+    return depthMax;
+  }
+
+  // ---- 查找事件序列（沿判定树走）----
+  function buildTrace(arr,target,comparisonsTarget){
+    const trace=[];
+    let lo=0,hi=arr.length-1,comp=0;
+    const path=new Set();
+    trace.push({lo,hi,mid:null,path:[],comp:0,status:"ready",message:`在长度为 ${arr.length} 的有序表中查找 ${target}。候选区间是整张表。`});
+    while(lo<=hi){
+      const mid=Math.floor((lo+hi)/2);
+      const val=arr[mid];comp++;
+      const curPath=[...path,mid];
+      if(val===target){
+        trace.push({lo,hi,mid,path:curPath,comp,status:"found",hitDepth:treeNodes[mid].depth,message:`比较第 ${mid+1} 个元素 ${val}：正好等于 ${target}，命中！共比较 ${comp} 次，位于判定树第 ${treeNodes[mid].depth+1} 层。`});
+        return trace;
+      }
+      let newLo=lo,newHi=hi,dir;
+      if(val<target){ newLo=mid+1; dir="r"; }
+      else { newHi=mid-1; dir="l"; }
+      trace.push({lo,hi,mid,path:curPath,comp,status:"running",dir,
+        message:`比较中点 ${val}：${val<target?`${val} 更小，目标在右半段，保留 [${newLo}…${hi}]。`:`${val} 更大，目标在左半段，保留 [${lo}…${newHi}]。`} 已排除 ${val<target?"左侧":"右侧"} ${mid-(newLo-1)} 个元素。`});
+      lo=newLo;hi=newHi;
+    }
+    trace.push({lo,hi,mid:null,path:[...path],comp,status:"failed",message:`区间已经为空仍未找到 ${target}：查找失败。一共比较 ${comp} 次，对应判定树中一条到空指针的路径。`});
+    return trace;
+  }
+
+  function buildFrames(){
+    const target=ui.target.value===""?data.target:Number(ui.target.value);
+    const events=buildTrace(data.arr,target);
+    frames=events;
+    index=0;
+    ui.timeline.max=frames.length-1;
+    rebuildTreeLayout();
+    render();
+  }
+
+  function rebuildTreeLayout(){
+    const svg=ui.tree.querySelector("svg");
+    if(svg) svg.remove();
+    const arr=data.arr,n=arr.length;
+    const W=Math.max(560,n*40+80),pad=40,stepY=70;
+    const H=treeNodesDepth*stepY+70;
+    const ns="http://www.w3.org/2000/svg";
+    const s=document.createElementNS(ns,"svg");
+    s.setAttribute("viewBox",`0 0 ${W} ${H}`);
+    s.setAttribute("role","img");
+    s.setAttribute("aria-label","折半查找判定树");
+    const px=i=>pad+treeNodes[i].inOrderPos*((W-2*pad)/Math.max(1,n-1));
+    const py=d=>20+d*stepY;
+    let frag="";
+    const edges=[];
+    (function walk(i){ if(i==null)return; const n=treeNodes[i]; if(n.left!=null){edges.push([i,n.left]);walk(n.left);} if(n.right!=null){edges.push([i,n.right]);walk(n.right);} })(rootIndex);
+    for(const [a,b] of edges) frag+=`<line class="t-line" x1="${px(a)}" y1="${py(treeNodes[a].depth)}" x2="${px(b)}" y2="${py(treeNodes[b].depth)}"/>`;
+    for(let i=0;i<n;i++) frag+=`<g class="t-node" data-i="${i}" transform="translate(${px(i)},${py(treeNodes[i].depth)})"><circle r="15"/><text y="4" text-anchor="middle">${arr[i]}</text></g>`;
+    s.innerHTML=frag;
+    ui.tree.appendChild(s);
+    window.__treePx={px,py,nodes:treeNodes};
+  }
+
+  function render(){
+    const f=frames[index],arr=data.arr,n=arr.length;
+    // 数组
+    const cells=[];
+    for(let i=0;i<n;i++){
+      const c=document.createElement("div");c.className="cell";c.dataset.i=i;
+      const inRange=f.lo!=null&&i>=f.lo&&i<=f.hi;
+      if(f.lo==null){ /* ready 未开始 */ }
+      if(inRange)c.classList.add("in-range");
+      if(i===f.mid)c.classList.add("mid");
+      if(f.status==="running"||f.status==="found"||f.status==="failed"){
+        if(i<f.lo)c.classList.add("excl-l");
+        else if(i>f.hi)c.classList.add("excl-r");
+      }
+      if(f.status==="found"&&i===f.mid)c.classList.add("hit");
+      const v=document.createElement("span");v.className="v";v.textContent=arr[i];
+      const ix=document.createElement("span");ix.className="idx";ix.textContent=i;
+      let lab="";
+      if(i===f.mid){const m=document.createElement("span");m.className="pointer-label mid";m.textContent="mid";c.append(m);}
+      c.append(v,ix);
+      c.setAttribute("aria-label",`下标 ${i}，值 ${arr[i]}`);
+      c.setAttribute("role","button");
+      c.tabIndex=0;
+      cells.push(c);
+    }
+    ui.cells.style.gridTemplateColumns=`repeat(${n},minmax(0,1fr))`;
+    ui.cells.replaceChildren(...cells);
+    // 判定树
+    const nodes=ui.tree.querySelectorAll(".t-node"),path=new Set(f.path);
+    nodes.forEach(g=>{
+      const i=Number(g.dataset.i);
+      g.classList.toggle("path",path.has(i));
+      g.classList.toggle("cur",i===f.mid);
+      g.classList.toggle("hit",f.status==="found"&&i===f.mid);
+      g.classList.toggle("fail",f.status==="failed"&&i===(f.path[f.path.length-1]??-999));
+    });
+    // 面板
+    ui.timeline.value=index;ui.counter.textContent=`步骤 ${index}/${frames.length-1}`;
+    const statusMap={ready:["准备"],running:["查找中"],found:["已命中"],failed:["查找失败"]};
+    const badge=ui.status;badge.textContent=statusMap[f.status][0];badge.className="badge"+(f.status==="found"?" found":f.status==="failed"?" fail":"");
+    badge.style.color=f.status==="found"?"var(--green)":f.status==="failed"?"var(--red)":"var(--yellow)";
+    ui.narration.textContent=f.message;
+    ui.comp.textContent=f.comp;
+    ui.range.textContent=f.lo==null?"—":`[${f.lo},${f.hi}]（${f.hi-f.lo+1} 个）`;
+    ui.treeH.textContent=treeNodesDepth+1;
+    ui.nval.textContent=n;
+    ui.maxc.textContent=Math.floor(Math.log2(n))+1;
+    ui.hit.textContent=f.status==="found"?`第 ${(f.hitDepth??0)+1} 层`:(f.status==="failed"?`停在 ${f.comp} 次后失败`:"—");
+    ui.play.textContent=timer?"❚❚ 暂停":"▶ 播放";
+  }
+  let treeNodesDepth=0;
+  function pause(redraw=true){if(timer){clearInterval(timer);timer=null;}if(redraw&&frames.length)render();}
+  function play(){if(timer){pause();return;}if(index>=frames.length-1)index=0;timer=setInterval(()=>{if(index>=frames.length-1){pause();return;}index++;render();},Number(ui.speed.value));render();}
+  function move(delta){pause(false);index=Math.max(0,Math.min(frames.length-1,index+delta));render();}
+  function init(arr,target){
+    data={arr,target};
+    treeNodesDepth=buildDecisionTree(arr);
+    ui.target.value=arr.includes(target)?target:(ui.target.value||arr[Math.floor(arr.length/2)]);
+    buildFrames();
+    ui.live.textContent="折半查找演示已初始化。";
+  }
+  // 建初始树深度
+  treeNodesDepth=buildDecisionTree(data.arr);
+
+  ui.cells.addEventListener("click",e=>{const c=e.target.closest(".cell");if(!c)return;ui.target.value=data.arr[Number(c.dataset.i)];buildFrames();});
+  ui.cells.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.closest(".cell")){e.preventDefault();const c=e.target.closest(".cell");ui.target.value=data.arr[Number(c.dataset.i)];buildFrames();}});
+  $("[data-action=apply]").addEventListener("click",buildFrames);
+  ui.target.addEventListener("keydown",e=>{if(e.key==="Enter")buildFrames();});
+  ui.dataset.addEventListener("change",()=>{const d=DATASETS[ui.dataset.value];init(d.arr,d.target);});
+  $("[data-action=play]").addEventListener("click",play);
+  $("[data-action=prev]").addEventListener("click",()=>move(-1));
+  $("[data-action=next]").addEventListener("click",()=>move(1));
+  $("[data-action=reset]").addEventListener("click",()=>init(data.arr,data.target));
+  ui.timeline.addEventListener("input",()=>{pause(false);index=Number(ui.timeline.value);render();});
+  ui.speed.addEventListener("change",()=>{if(timer){pause(false);play();}});
+  document.addEventListener("keydown",e=>{if(e.target.matches("input,select,button"))return;if(e.key==="ArrowRight")move(1);if(e.key==="ArrowLeft")move(-1);if(e.key===" "){e.preventDefault();play();}});
+  init(data.arr,data.target);
+})();
+</script>
+</body>
+</html>
