@@ -41,3 +41,24 @@
 ### Next Steps
 
 - 无
+
+
+## Session 2: 新增第 13 章盛最多水的容器 Lab
+
+**Date**: 2026-08-24
+**Task**: 新增第 13 章盛最多水的容器 Lab
+**Branch**: `codex/chapter-13-container-with-most-water`
+
+### Summary
+
+在 codex/chapter-13-container-with-most-water 上新增可自动发现的 C++17 Program Lab，加入 LeetCode 11 题面、题图、学生模板、双指针参考实现和 7 个测试夹具；完成 lab verify、pnpm test、VitePress 构建、站点检查及使用本机 Tabbit Chromium 的 19/19 页面测试。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `3a9f2f5` | (see git log) |
+
+### Status
+
+[OK] **Completed**
