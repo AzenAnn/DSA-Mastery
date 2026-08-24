@@ -299,3 +299,24 @@ Implemented and verified Lab 01-21 with dual list implementations, deterministic
 ### Next Steps
 
 - 由 Review Owner 在 PR #61 完成人工知识审阅，勿由作者自行合并
+
+
+## Session 12: 第 5 章树结构题库 Lab
+
+**Date**: 2026-08-24
+**Task**: 第 5 章树结构题库 Lab
+**Branch**: `codex/chapter05-tree-labs`
+
+### Summary
+
+从本地 09 至 13 题库生成五个 Chapter 5 Theory Quiz Lab，共 67 道选择题和 9 道综合题；清除公开来源痕迹，更新课程入口与测试合同，并完成构建、页面和浏览器验收。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `baa23fe` | (see git log) |
+
+### Status
+
+[OK] **Completed**
