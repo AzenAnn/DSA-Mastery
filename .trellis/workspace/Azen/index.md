@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 11
+- **Total Sessions**: 12
 - **Last Active**: 2026-08-24
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~301 | Active |
+| `journal-1.md` | ~322 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 12 | 2026-08-24 | 第 5 章树结构题库 Lab | `baa23fe` | `codex/chapter05-tree-labs` |
 | 11 | 2026-08-24 | 完成第 5 章树的应用并创建 PR | `a6d8c81` | `chapter05` |
 | 10 | 2026-08-24 | 第 4 章树与二叉树理论题 | `076cd97` | `codex/chapter4-theory-exercises` |
 | 9 | 2026-08-23 | 第 4 章树与二叉树两篇文章重写 | `720d7c8`, `13beb89` | `chapter4` |

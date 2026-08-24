@@ -1276,7 +1276,7 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   expect(failures).toEqual([]);
 });
 
-test("chapter 5 exposes three empty Lab category slots without placeholder pages", async ({ page }) => {
+test("chapter 5 exposes five Theory Labs and keeps Exercise and Project slots empty", async ({ page }) => {
   const failures = monitorPage(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`${baseUrl}/learn/outline/chapter-05-tree-applications/`);
@@ -1292,12 +1292,31 @@ test("chapter 5 exposes three empty Lab category slots without placeholder pages
   await expect(labGroup).not.toHaveClass(/collapsed/);
   await expect(chapterGroup).not.toContainText("相关 Labs");
 
-  const categories = [
-    { kind: "theory", label: "理论 Theory", empty: "暂无理论型 Lab", collapsed: true },
+  const theoryGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
+  );
+  await expect(theoryGroup).toHaveCount(1);
+  await expect(theoryGroup.locator(".course-lab-category--theory")).toContainText("理论 Theory");
+  await expect(theoryGroup).toHaveClass(/collapsed/);
+  await theoryGroup.locator(":scope > .item > .caret").click();
+  await expect(theoryGroup).not.toHaveClass(/collapsed/);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(5);
+  for (const title of [
+    "Lab 05-01：森林与二叉树转换题精练",
+    "Lab 05-02：树与森林遍历题精练",
+    "Lab 05-03：哈夫曼树与编码题精练",
+    "Lab 05-04：并查集题精练",
+    "Lab 05-05：堆题精练",
+  ]) {
+    await expect(theoryGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+  }
+  await expect(theoryGroup.locator(".course-lab-category__empty")).toHaveCount(0);
+
+  const emptyCategories = [
     { kind: "exercise", label: "实验 Exercise", empty: "暂无实验型 Lab", collapsed: true },
     { kind: "project", label: "工程 Project", empty: "暂无工程型 Lab", collapsed: false },
   ];
-  for (const category of categories) {
+  for (const category of emptyCategories) {
     const group = chapterGroup.locator(
       `.VPSidebarItem:has(> .item > .text > .course-lab-category--${category.kind})`,
     );
@@ -1316,7 +1335,7 @@ test("chapter 5 exposes three empty Lab category slots without placeholder pages
     await expect(group.locator(".course-lab-category__empty")).toHaveText(category.empty);
   }
 
-  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(3);
+  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(2);
   await expect(labGroup.locator(".course-lab-category svg")).toHaveCount(3);
   const labPanelStyle = await labGroup.evaluate((element) => {
     const style = globalThis.getComputedStyle(element);

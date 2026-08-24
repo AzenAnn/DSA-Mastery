@@ -371,22 +371,28 @@ for (const required of [
   "理论 Theory",
   "实验 Exercise",
   "工程 Project",
-  "暂无理论型 Lab",
+  "Lab 05-01：森林与二叉树转换题精练",
+  "Lab 05-02：树与森林遍历题精练",
+  "Lab 05-03：哈夫曼树与编码题精练",
+  "Lab 05-04：并查集题精练",
+  "Lab 05-05：堆题精练",
   "暂无实验型 Lab",
   "暂无工程型 Lab",
 ]) {
   if (!chapterFiveItem.includes(required)) {
-    throw new Error(`Chapter 5 empty Lab interface is missing: ${required}`);
+    throw new Error(`Chapter 5 categorized Lab interface is missing: ${required}`);
   }
 }
+const chapterFiveLabLinks = chapterFiveItem.match(/\/labs\/chapter-05\//g) ?? [];
 if (
   chapterFiveSidebarStart < 0 ||
   chapterFiveSidebarEnd < 0 ||
   chapterFiveItemStart < 0 ||
   chapterFiveItemEnd < 0 ||
-  chapterFiveItem.includes("/labs/chapter-05/")
+  chapterFiveLabLinks.length !== 5 ||
+  chapterFiveItem.includes("暂无理论型 Lab")
 ) {
-  throw new Error("Chapter 5 empty Lab interface contains an unexpected Lab link");
+  throw new Error("Chapter 5 Theory Labs or empty Exercise/Project slots are inconsistent");
 }
 
 if (base !== "/") {
