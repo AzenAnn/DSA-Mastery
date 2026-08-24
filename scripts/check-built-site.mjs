@@ -339,6 +339,56 @@ if (prefacePosition < 0 || chapterZeroPosition < 0 || prefacePosition >= chapter
   throw new Error("Preface chapter is missing or does not appear before Ch.0 in the curriculum");
 }
 
+const chapterFiveOutlineHtml = await readFile(
+  path.join(
+    artifactRoot,
+    "learn",
+    "outline",
+    "chapter-05-tree-applications",
+    "index.html",
+  ),
+  "utf8",
+);
+const chapterFiveSidebarStart = chapterFiveOutlineHtml.indexOf('<aside class="VPSidebar"');
+const chapterFiveSidebarEnd = chapterFiveOutlineHtml.indexOf(
+  "</aside>",
+  chapterFiveSidebarStart,
+);
+const chapterFiveSidebar = chapterFiveOutlineHtml.slice(
+  chapterFiveSidebarStart,
+  chapterFiveSidebarEnd,
+);
+const chapterFiveItemStart = chapterFiveSidebar.indexOf(
+  "/learn/outline/chapter-05-tree-applications/",
+);
+const chapterFiveItemEnd = chapterFiveSidebar.indexOf(
+  "Part III · 图结构",
+  chapterFiveItemStart,
+);
+const chapterFiveItem = chapterFiveSidebar.slice(chapterFiveItemStart, chapterFiveItemEnd);
+for (const required of [
+  "本章 Labs",
+  "理论 Theory",
+  "实验 Exercise",
+  "工程 Project",
+  "暂无理论型 Lab",
+  "暂无实验型 Lab",
+  "暂无工程型 Lab",
+]) {
+  if (!chapterFiveItem.includes(required)) {
+    throw new Error(`Chapter 5 empty Lab interface is missing: ${required}`);
+  }
+}
+if (
+  chapterFiveSidebarStart < 0 ||
+  chapterFiveSidebarEnd < 0 ||
+  chapterFiveItemStart < 0 ||
+  chapterFiveItemEnd < 0 ||
+  chapterFiveItem.includes("/labs/chapter-05/")
+) {
+  throw new Error("Chapter 5 empty Lab interface contains an unexpected Lab link");
+}
+
 if (base !== "/") {
   const duplicate = `${base}${base.replace(/^\//, "")}`;
   for (const file of allFiles.filter((entry) => /\.(?:html|js|css|xml)$/.test(entry))) {
