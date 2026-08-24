@@ -225,3 +225,40 @@ Implemented and verified Lab 01-21 with dual list implementations, deterministic
 ### Status
 
 [OK] **Completed**
+
+
+## Session 10: 第 4 章树与二叉树理论题
+
+**Date**: 2026-08-24
+**Task**: 第 4 章树与二叉树理论题
+**Branch**: `codex/chapter4-theory-exercises`
+
+### Summary
+
+新增 Lab 04-15～04-22，共 117 道选择题和 16 道综合题；更新目录与作者规范，完成本地和 Pages 校验，并创建 PR #58。
+
+### Main Changes
+
+- 新增 8 个第 4 章 Theory Quiz Lab，并写入章节概览。
+- 按验收反馈移除来源、来源链接与题目标识，保留稳定内部 ID。
+- 同步 Lab 作者规范、迁移追踪和 Windows 指南。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `076cd97` | (see git log) |
+
+### Testing
+
+- [OK] pnpm test
+- [OK] Pages base 构建、check:site 与 test:pages（19/19）
+- [OK] 8 个 Lab、117/16 题量、唯一 ID 和隐藏字段专项审计
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- Review Owner 独立核对题面、答案、解析与版权适用性后合并 PR #58。

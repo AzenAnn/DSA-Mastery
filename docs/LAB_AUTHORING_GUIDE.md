@@ -239,6 +239,7 @@ README 只能挂载一次：
 - `answer` 是 `0～3` 的整数索引，不是答案字母。
 - `explanation` 必填，提交前不显示；`hint` 可选，提交前由学习者主动展开。
 - `points` 是正整数，省略时为 1；页面显示已答数、正确数和当前分/总分。
+- `source` 与 `targetId` 是可选元信息。个人题库默认保留可追溯来源；若维护者在页面验收中明确要求隐藏，则可同时省略这两个字段并移除题面中的来源行，但必须保留稳定内部 `id`，并在 task/PR 中记录该决定。
 - 题面、选项、提示和解析由构建期 Markdown 安全渲染，原始 HTML 关闭。
 
 ### 5.3 Quiz 作者检查
@@ -246,7 +247,7 @@ README 只能挂载一次：
 1. `pnpm lab:validate -- <lab-path>`。
 2. 在网站真实完成“选择 → 提交 → 反馈 → 题解 → 重试”。
 3. 检查 390px 移动端无根页面横向溢出。
-4. 人工逐题核对答案索引、干扰项、解析和来源。
+4. 人工逐题核对答案索引、干扰项、解析和来源；若来源按维护者决定不公开，则核对 task/PR 中的省略记录。
 5. 确认 README 没有第二份答案，个人导出痕迹已清除。
 
 ## 6. Program：单题 C++ 作业
@@ -579,7 +580,7 @@ README-only Lab 继续正常渲染，不要求一次重写全部历史内容。�
 5. 执行 validate/verify、网站 discovery/build 和 Review。
 6. 在 PR 中记录未迁移 Lab 清单，不把“尚未迁移”伪装成错误。
 
-现有 6 个交互 Quiz 已迁移到 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
+现有 22 个交互 Quiz 已使用 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
 
 ## 12. 常见错误与正确做法
 

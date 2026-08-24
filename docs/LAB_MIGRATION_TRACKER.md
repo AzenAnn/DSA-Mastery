@@ -8,9 +8,10 @@
 
 - [x] `lab-00-03-complexity-quiz`：Golden Quiz
 - [x] `lab-01-06-sequential-list-deduplication`：Golden Program
-- [x] `lab-04-15-huffman-coding`：Golden Project
+- [x] `lab-08-03-avl-tree-rotations`：Golden Project
 - [x] `lab-01-01`～`lab-01-05`：Quiz manifest 迁移
 - [x] `lab-03-01-string-basics-quiz` / `lab-03-02-string-matching-quiz`：原 Program 候选改名转 Quiz（串基础与模式匹配选择题）
+- [x] `lab-04-15`～`lab-04-22`：树与二叉树八组理论 Quiz（117 道选择题、16 道综合题）
 - [x] `lab-06-01-bst-operations` → `lab-08-02-bst-operations`：迁为 Program，随第 8 章分类重编号
 - [x] `lab-06-02-hash-table` → `lab-09-02-hash-table`：迁为 Program，随第 9 章分类重编号
 - [x] `lab-06-03-search-theory-quiz`：拆分为 `lab-08-01`（查找 6 题）与 `lab-09-01`（散列与索引 18 题）
