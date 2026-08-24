@@ -8,7 +8,7 @@
 
 - [x] `lab-00-03-complexity-quiz`：Golden Quiz
 - [x] `lab-01-06-sequential-list-deduplication`：Golden Program
-- [x] `lab-04-02-huffman-coding`：Golden Project
+- [x] `lab-04-15-huffman-coding`：Golden Project
 - [x] `lab-01-01`～`lab-01-05`：Quiz manifest 迁移
 - [x] `lab-03-01-string-basics-quiz` / `lab-03-02-string-matching-quiz`：原 Program 候选改名转 Quiz（串基础与模式匹配选择题）
 - [x] `lab-06-01-bst-operations` → `lab-08-02-bst-operations`：迁为 Program，随第 8 章分类重编号

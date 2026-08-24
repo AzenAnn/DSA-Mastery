@@ -1,0 +1,62 @@
+[
+  {
+    "id": "001-sample-true",
+    "input": "tests/001-sample-true.in",
+    "expected": "tests/001-sample-true.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-sample-false",
+    "input": "tests/002-sample-false.in",
+    "expected": "tests/002-sample-false.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-single",
+    "input": "tests/003-single.in",
+    "expected": "tests/003-single.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-empty",
+    "input": "tests/004-empty.in",
+    "expected": "tests/004-empty.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-asymmetric",
+    "input": "tests/005-asymmetric.in",
+    "expected": "tests/005-asymmetric.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]
