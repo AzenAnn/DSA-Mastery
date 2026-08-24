@@ -219,6 +219,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "学习图的基本概念，以及邻接矩阵和邻接表的表示取舍。",
     url: "/learn/outline/chapter-06-graph-foundations-storage/",
     lessonSources: ["content/chapter-06-graph-foundations/01-adjacency-matrix.md"],
+    autoLabChapter: 6,
   },
   {
     id: "chapter-07-graph-traversal-applications",
@@ -230,6 +231,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-07-graph-traversal/01-breadth-first-search.md",
       "content/chapter-07-graph-traversal/02-minimum-spanning-tree-and-shortest-path.md",
     ],
+    autoLabChapter: 7,
   },
   {
     id: "chapter-08-basic-tree-search",
