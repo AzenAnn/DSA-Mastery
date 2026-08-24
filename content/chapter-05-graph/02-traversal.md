@@ -20,6 +20,21 @@ status: "draft"
 - 分析两种遍历的时间与空间复杂度；
 - 说出 DFS 与 BFS 各自适合解决的问题类型。
 
+下面这张小图同时包含一个回路和从 `A` 出发的多条路径。DFS 会沿一条路径深入后回溯，BFS 则按距离逐层发现顶点；两者都必须在发现顶点时记录 `visited`。
+
+```graphviz
+graph TraversalExample {
+  rankdir=LR;
+  node [shape=circle];
+  A -- B;
+  A -- C;
+  B -- D;
+  C -- D;
+  C -- E;
+}
+```
+<!-- diagram id="graph-traversal-example" caption: "同一张无向图上的 DFS 深入与 BFS 分层" -->
+
 ## DFS：深度优先
 
 从起点出发，访问一个顶点后**立刻深入**它的第一个未访问邻居，递归地进行；走不通时回溯。递归实现即"在访问时标记，再对每个邻居递归"。

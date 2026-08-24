@@ -45,13 +45,25 @@ $$
 ::: counterexample 反例 · 一个孩子不等于一个无方向孩子
 下面两棵树的数据相同、节点度数也相同，但不是同一棵二叉树：
 
-```text [left-or-right.txt]
-左孩子：       右孩子：
-
-   A              A
-  /                \
- B                  B
+```graphviz
+digraph LeftOrRight {
+  rankdir=TB;
+  node [shape=circle];
+  subgraph cluster_left {
+    label="左孩子";
+    A_left [label="A"];
+    B_left [label="B"];
+    A_left -> B_left;
+  }
+  subgraph cluster_right {
+    label="右孩子";
+    A_right [label="A"];
+    B_right [label="B"];
+    A_right -> B_right;
+  }
+}
 ```
+<!-- diagram id="binary-left-or-right" caption: "同一节点放在左槽与右槽是两种不同的二叉树" -->
 
 在一般无序树中，它们可能被视为同一种父子关系；在二叉树中，“B 位于左槽”与“B 位于右槽”是不同结构。
 :::
@@ -76,25 +88,30 @@ $$
 
 ### Full：每个节点要么没有孩子，要么左右俱全
 
-```text [full-binary-tree.txt]
-      A
-     / \
-    B   C
-       / \
-      D   E
+```graphviz
+digraph FullBinaryTree {
+  rankdir=TB;
+  node [shape=circle];
+  A -> {B C};
+  C -> {D E};
+}
 ```
+<!-- diagram id="full-binary-tree" caption: "正则（Full）二叉树：每个节点的孩子数只能是 0 或 2" -->
 
 这棵树是 Full：`A`、`C` 都有两个孩子，`B`、`D`、`E` 都是叶。但叶不在同一层，所以它不是 Perfect；最后一层又没有从左侧连续填充，所以它也不是 Complete。
 
 ### Complete：像数组一样逐层、从左到右填入
 
-```text [complete-binary-tree.txt]
-      A
-     / \
-    B   C
-   / \  /
-  D  E F
+```graphviz
+digraph CompleteBinaryTree {
+  rankdir=TB;
+  node [shape=circle];
+  A -> {B C};
+  B -> {D E};
+  C -> F;
+}
 ```
+<!-- diagram id="complete-binary-tree" caption: "完全二叉树：最后一层从左向右连续填充" -->
 
 完全二叉树只允许最后一层不满，而且最后一层节点必须靠左连续。因此：
 
@@ -104,13 +121,16 @@ $$
 
 ### Perfect：每一层全部填满
 
-```text [perfect-binary-tree.txt]
-      A
-     / \
-    B   C
-   / \ / \
-  D  E F  G
+```graphviz
+digraph PerfectBinaryTree {
+  rankdir=TB;
+  node [shape=circle];
+  A -> {B C};
+  B -> {D E};
+  C -> {F G};
+}
 ```
+<!-- diagram id="perfect-binary-tree" caption: "完美二叉树：每一层都被完全填满" -->
 
 若 Perfect 二叉树共有 $k$ 层，则叶节点数为 $2^{k-1}$，总节点数为 $2^k-1$。
 
@@ -352,19 +372,27 @@ ThreadedNode* nextInorder(ThreadedNode* node) {
 
 例如：
 
-```text [preorder-serialization.txt]
-A B D # # E # # C # F # #
+```graphviz
+digraph PreorderSerialization {
+  rankdir=LR;
+  node [shape=box];
+  sequence [label="前序序列：A B D # # E # # C # F # #"];
+}
 ```
+<!-- diagram id="preorder-serialization" caption: "前序序列用 # 标记空子树，保证结构信息不丢失" -->
 
 对应：
 
-```text [rebuilt-tree.txt]
-      A
-     / \
-    B   C
-   / \   \
-  D   E   F
+```graphviz
+digraph RebuiltTree {
+  rankdir=TB;
+  node [shape=circle];
+  A -> {B C};
+  B -> {D E};
+  C -> F;
+}
 ```
+<!-- diagram id="rebuilt-tree" caption: "由前序序列和空指针标记还原出的二叉树" -->
 
 ### C：显式报告失败并清理部分结果
 

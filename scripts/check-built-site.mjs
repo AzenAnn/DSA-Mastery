@@ -198,8 +198,8 @@ if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.include
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 4) {
-  throw new Error(`Preface must contain the theory, Lab author, Windows student, and Lab command guides, found ${prefacePages.length} pages`);
+if (prefacePages.length !== 5) {
+  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, and Graphviz authoring guides, found ${prefacePages.length} pages`);
 }
 const prefaceHtml = await readFile(
   path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
@@ -307,6 +307,25 @@ for (const required of [
 }
 if (labCommandGuideHtml.includes("@include") || labCommandGuideHtml.includes("第 preface 章")) {
   throw new Error("Lab command guide was not expanded or leaked the internal preface id");
+}
+
+const graphvizGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "04-graphviz-authoring-guide", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "Graphviz 图示作者指南",
+  "Graphviz Online",
+  "Kroki Inspector",
+  "KROKI_SERVER_URL",
+  "public/diagrams/",
+]) {
+  if (!graphvizGuideHtml.includes(required)) {
+    throw new Error(`Rendered Graphviz authoring guide is missing: ${required}`);
+  }
+}
+if (graphvizGuideHtml.includes("@include") || graphvizGuideHtml.includes("第 preface 章")) {
+  throw new Error("Graphviz authoring guide was not expanded or leaked the internal preface id");
 }
 
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");

@@ -20,6 +20,21 @@ status: "draft"
 - 实现 Dijkstra 并说明其正确性为什么要求非负权；
 - 说出何时选择哪种算法。
 
+下面的带权图用于手算 Prim、Kruskal 或 Dijkstra。边权是非负的，因此可以用 Dijkstra；从 `A` 出发时，`A-B-C-D` 的路径权值为 `6`。
+
+```graphviz
+graph WeightedExample {
+  rankdir=LR;
+  node [shape=circle];
+  A -- B [label="2"];
+  A -- C [label="5"];
+  B -- C [label="1"];
+  B -- D [label="6"];
+  C -- D [label="3"];
+}
+```
+<!-- diagram id="graph-weighted-example" caption: "带非负权边的图：可用于最短路径与生成树练习" -->
+
 ## Prim 算法
 
 从任意顶点开始，维护一棵逐渐生长的树：每一步选择**连接树内与树外**的最小权边，把新顶点并入树，直到覆盖全部顶点。以邻接矩阵或距离数组实现时：

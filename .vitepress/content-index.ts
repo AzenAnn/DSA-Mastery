@@ -98,6 +98,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "统一理解课程理论文档与三类 Lab 的作者接口。",
       "能够按规范创建、测试、评分和 Review 后续题目。",
       "能够选择 pnpm 或 Make 运行、定位和严格评分当前 Lab。",
+      "能够用 Graphviz DOT 编写、预览和验证树与图示例。",
       "从站内完整指南直接复制经过自动验证的示例。",
     ],
     focusAreas: [
@@ -105,12 +106,14 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "Quiz、Program、Project 更新机制",
       "pnpm 参数、Make 映射与判定语义",
       "本地测试、CI、Review 与发布清单",
+      "Graphviz DOT、Kroki 与响应式图示",
     ],
     lessonSources: [
       "content/chapter-preface/00-theory-environments.md",
       "content/chapter-preface/01-lab-authoring-guide.md",
       "content/chapter-preface/02-windows-student-setup.md",
       "content/chapter-preface/03-lab-cli-command-guide.md",
+      "content/chapter-preface/04-graphviz-authoring-guide.md",
     ],
   },
   {

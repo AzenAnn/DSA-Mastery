@@ -224,6 +224,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-preface/03-lab-cli-command-guide/"]').first(),
   ).toBeVisible();
+  await input.fill("Graphviz 图示作者指南");
+  await expect(
+    results.locator('a[href*="/learn/chapter-preface/04-graphviz-authoring-guide/"]').first(),
+  ).toBeVisible();
   await input.fill("单链表选择题精练");
   const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-singly-linked-list-quiz/"]').first();
   await expect(labResult).toBeVisible();
@@ -295,6 +299,7 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   const labGuideRoute = `${baseUrl}/learn/chapter-preface/01-lab-authoring-guide/`;
   const windowsStudentGuideRoute = `${baseUrl}/learn/chapter-preface/02-windows-student-setup/`;
   const labCommandGuideRoute = `${baseUrl}/learn/chapter-preface/03-lab-cli-command-guide/`;
+  const graphvizGuideRoute = `${baseUrl}/learn/chapter-preface/04-graphviz-authoring-guide/`;
 
   await page.goto(`${baseUrl}/learn/`);
   const foundationChapters = page.locator(".course-curriculum-chapters > a");
@@ -340,6 +345,16 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   await expect(page.locator(".vp-doc")).toContainText("make run");
   await expect(page.locator(".VPSidebar").getByRole("link", { name: "Lab 命令与接口使用指南", exact: true })).toBeVisible();
   await expect(page.locator(".vp-code-group").first()).toBeVisible();
+
+  await page.goto(outlineRoute);
+  const graphvizGuideEntry = page.locator(".course-curriculum-resource-list").getByRole("link", { name: /Graphviz 图示作者指南/ });
+  await expect(graphvizGuideEntry).toBeVisible();
+  await graphvizGuideEntry.click();
+  await expect(page).toHaveURL(graphvizGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Graphviz 图示作者指南");
+  await expect(page.locator(".vp-doc")).toContainText("Graphviz Online");
+  await expect(page.locator(".vp-doc")).toContainText("KROKI_SERVER_URL");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "Graphviz 图示作者指南", exact: true })).toBeVisible();
 
   const assertCommandGuideOverflow = async (theme) => {
     for (const width of [1440, 390]) {

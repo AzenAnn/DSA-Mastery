@@ -3,6 +3,7 @@ import { tasklist } from "@mdit/plugin-tasklist";
 import { Blocks, BookOpen, FlaskConical } from "@lucide/vue";
 import type MarkdownIt from "markdown-it";
 import { defineConfig } from "vitepress";
+import { createBuildTimeDiagramsPlugin } from "vitepress-plugin-diagrams";
 import { h } from "vue";
 import { renderToString } from "vue/server-renderer";
 import {
@@ -28,6 +29,14 @@ const virtualSources = new Map(
   ]),
 );
 const base = normalizePagesBase();
+const { configureMarkdown: configureDiagramsMarkdown, vitePlugin: createDiagramsVitePlugin } =
+  createBuildTimeDiagramsPlugin({
+    diagramsDir: "public/diagrams",
+    publicPath: `${base}diagrams`,
+    diagramsDistDir: "diagrams",
+    krokiServerUrl: process.env.KROKI_SERVER_URL ?? "https://kroki.io",
+    enableFileImports: false,
+  });
 const absoluteSiteUrl = process.env.SITE_URL ?? `https://azenann.github.io${base}`;
 const withBase = (asset: string) => `${base}${asset.replace(/^\//, "")}`;
 const courseDescription =
@@ -110,6 +119,7 @@ export default defineConfig({
   vite: {
     // Keep `.vitepress/config.ts` as the sole Vite configuration boundary.
     configFile: false,
+    plugins: [createDiagramsVitePlugin()],
   },
   head: [
     ["link", { rel: "icon", type: "image/svg+xml", href: withBase("favicon.svg") }],
@@ -133,6 +143,7 @@ export default defineConfig({
       // plugin publishes the equivalent @types/markdown-it signature.
       tasklist(md as unknown as Parameters<typeof tasklist>[0]);
       installTheoryMarkdown(md as unknown as MarkdownIt);
+      configureDiagramsMarkdown(md);
       md.core.ruler.after("block", "dsa-course-source-transform", (state) => {
         const renderedPath =
           typeof state.env?.relativePath === "string"
