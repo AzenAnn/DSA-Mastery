@@ -227,7 +227,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-10-basic-sorting/",
     lessonSources: [
       "content/chapter-07-sort/00-overview.md",
-      "content/chapter-07-sort/01-compare-sort.md",
+      "content/chapter-07-sort/01-ten-sorts-detailed.md",
     ],
     labSources: ["labs/chapter-07/lab-07-01-stability-compare/README.md"],
   },
@@ -238,7 +238,6 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "组织快速、归并、堆、基数与外部排序的进阶学习框架。",
     url: "/learn/outline/chapter-11-advanced-external-sorting/",
     lessonSources: [
-      "content/chapter-07-sort/01-compare-sort.md",
       "content/chapter-07-sort/02-heap-and-radix-sort.md",
     ],
     labSources: ["labs/chapter-07/lab-07-02-performance-benchmark/README.md"],
