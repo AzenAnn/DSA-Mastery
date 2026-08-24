@@ -4,7 +4,7 @@ description: "从树的术语与基本性质出发，比较双亲、孩子、孩
 order: 0
 chapter: 4
 chapterTitle: "树与二叉树"
-updated: "2026-08-23"
+updated: "2026-08-24"
 contributors: ["Azen"]
 status: "draft"
 ---
@@ -401,6 +401,21 @@ std::size_t height(const Node& root) {
 ::: complexity 复杂度 · 一般树遍历与释放
 无论采用孩子表还是孩子兄弟表示，只要每个节点和每条父子边各处理常数次，完整遍历与释放的时间都是 $\Theta(n)$。递归实现的辅助空间为 $\Theta(h)$，其中 $h$ 是按边数计算的树高；存储全部节点与关系需要 $\Theta(n)$ 空间。
 :::
+
+## 配套理论题
+
+本章理论练习按知识主题拆成八组。选择题可在网页中即时提交和重做；综合题先独立推导，再展开参考答案核对。题量不足上限的主题按现有题目全部收录，不跨主题补题。
+
+| 顺序 | 主题与入口 | 选择题 | 综合题 |
+| ---: | --- | ---: | ---: |
+| 15 | [二叉树基础（性质与存储）理论题精练](../../labs/chapter-04/lab-04-15-binary-tree-basics-quiz/README.md) | 20 | 5 |
+| 16 | [前序遍历理论题精练](../../labs/chapter-04/lab-04-16-preorder-traversal-quiz/README.md) | 12 | 1 |
+| 17 | [中序遍历理论题精练](../../labs/chapter-04/lab-04-17-inorder-traversal-quiz/README.md) | 11 | 3 |
+| 18 | [后序遍历理论题精练](../../labs/chapter-04/lab-04-18-postorder-traversal-quiz/README.md) | 14 | 0 |
+| 19 | [层序遍历理论题精练](../../labs/chapter-04/lab-04-19-level-order-traversal-quiz/README.md) | 8 | 0 |
+| 20 | [由遍历序列构造二叉树理论题精练](../../labs/chapter-04/lab-04-20-reconstruct-binary-tree-quiz/README.md) | 18 | 2 |
+| 21 | [线索二叉树理论题精练](../../labs/chapter-04/lab-04-21-threaded-binary-tree-quiz/README.md) | 14 | 0 |
+| 22 | [树与森林理论题精练](../../labs/chapter-04/lab-04-22-trees-and-forests-quiz/README.md) | 20 | 5 |
 
 ## 小结与自测
 
