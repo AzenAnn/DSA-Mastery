@@ -25,13 +25,27 @@ status: "draft"
 
 旋转只改变少量父子链接，不改变关键字的中序次序。以右旋为例，设失衡结点为 `y`，它的左孩子为 `x`，`x` 的右子树为 `T2`：
 
-```text
-        y                 x
-       / \               / \
-      x   C    右旋      A   y
-     / \      ───→          / \
-    A  T2                  T2  C
+```graphviz
+digraph RightRotate {
+  rankdir=TB;
+  node [shape=circle];
+  subgraph cluster_before {
+    label="旋转前";
+    y -> x;
+    y -> C;
+    x -> A;
+    x -> T2;
+  }
+  subgraph cluster_after {
+    label="旋转后";
+    x -> A;
+    x -> y;
+    y -> T2;
+    y -> C;
+  }
+}
 ```
+<!-- diagram id="avl-right-rotate" caption: "右旋：把失衡结点 y 的左孩子 x 提升为子树根，y 成为 x 的右孩子，T2 移作 y 的左子树" -->
 
 旋转前后的中序序列都是 `A, x, T2, y, C`。因此，只要原子树满足 BST 次序，旋转后仍满足。
 
@@ -74,13 +88,23 @@ $$
 
 依次插入 `30, 20, 10`。结点 30 的左子树比右子树高 2，新值位于左孩子 20 的左侧，因此是 LL：
 
-```text
-    30              20
-   /      右旋     /  \
-  20      ───→   10  30
- /
-10
+```graphviz
+digraph LlRotate {
+  rankdir=TB;
+  node [shape=circle];
+  subgraph cluster_before {
+    label="LL（对 30 右旋）";
+    30 -> 20;
+    20 -> 10;
+  }
+  subgraph cluster_after {
+    label="旋转后";
+    20 -> 10;
+    20 -> 30;
+  }
+}
 ```
+<!-- diagram id="avl-ll-rotate" caption: "LL 失衡：依次插入 30,20,10 后，对失衡结点 30 右旋，20 成为新根" -->
 
 ### RR：一次左旋
 
@@ -90,13 +114,28 @@ $$
 
 依次插入 `30, 10, 20` 时，路径是左后右。先对 10 左旋，把它变成 LL，再对 30 右旋：
 
-```text
-    30          30             20
-   /           /              /  \
-  10    →     20      →      10  30
-    \         /
-    20       10
+```graphviz
+digraph LrRotate {
+  rankdir=LR;
+  node [shape=circle];
+  subgraph cluster_s1 {
+    label="插入 30,10,20";
+    30 -> 10;
+    10 -> 20;
+  }
+  subgraph cluster_s2 {
+    label="对 10 左旋";
+    30 -> 20;
+    20 -> 10;
+  }
+  subgraph cluster_s3 {
+    label="对 30 右旋";
+    20 -> 10;
+    20 -> 30;
+  }
+}
 ```
+<!-- diagram id="avl-lr-rotate" caption: "LR 失衡：先对左孩子 10 左旋拉直成 LL，再对失衡结点 30 右旋，20 成为新根" -->
 
 RL 完全对称：先右旋右孩子，再左旋失衡结点。
 

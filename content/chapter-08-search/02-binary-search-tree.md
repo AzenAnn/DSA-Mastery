@@ -101,27 +101,31 @@ Node* insert(Node* root, int key) {
 
 - 按 **`3, 1, 2, 5, 4`** 插入，得到较平衡的树，高度约 3：
 
-```text
-      3
-     / \
-    1   5
-     \ /
-      2 4
+```graphviz
+digraph BalancedBST {
+  rankdir=TB;
+  node [shape=circle];
+  3 -> 1;
+  3 -> 5;
+  1 -> 2 [style=dashed];
+  5 -> 4 [style=dashed];
+}
 ```
+<!-- diagram id="bst-balanced-insert" caption: "按 3,1,2,5,4 插入得到较平衡的 BST，高度约 3" -->
 
 - 按 **`1, 2, 3, 4, 5`** 插入，每个结点都挂在右孩子上，树退化成一条链，高度 5：
 
-```text
-1
- \
-  2
-   \
-    3
-     \
-      4
-       \
-        5
+```graphviz
+digraph DegenerateBST {
+  rankdir=TB;
+  node [shape=circle];
+  1 -> 2;
+  2 -> 3;
+  3 -> 4;
+  4 -> 5;
+}
 ```
+<!-- diagram id="bst-degenerate-chain" caption: "按 1,2,3,4,5 插入退化成一条右链，高度为 5" -->
 
 两组关键字的**中序序列完全相同**（都是 `1 2 3 4 5`），但查找复杂度从 $O(\log n)$ 退化为 $O(n)$。这就是"中序序列不能唯一确定 BST"的含义。
 :::
@@ -199,43 +203,61 @@ Node* remove(Node* root, int key) {
 ::: example 示例 · 三种删除的完整走一遍
 对下面这棵 BST：
 
-```text
-        40
-       /  \
-      20   60
-     / \   / \
-    10 30 50 70
+```graphviz
+digraph BstRemovalStart {
+  rankdir=TB;
+  node [shape=circle];
+  40 -> 20;
+  40 -> 60;
+  20 -> 10;
+  20 -> 30;
+  60 -> 50;
+  60 -> 70;
+}
 ```
+<!-- diagram id="bst-removal-start" caption: "删除演示用的初始 BST：40 为根，左右子树均平衡" -->
 
 **删除叶结点 10**：10 没有孩子，直接让 20 的左孩子指向空，树变为：
 
-```text
-        40
-       /  \
-      20   60
-       \   / \
-       30 50 70
+```graphviz
+digraph BstRemovalLeaf {
+  rankdir=TB;
+  node [shape=circle];
+  40 -> 20;
+  40 -> 60;
+  20 -> 30;
+  60 -> 50;
+  60 -> 70;
+}
 ```
+<!-- diagram id="bst-removal-leaf" caption: "删除叶结点 10 后：20 的左孩子置空" -->
 
 **删除单孩子结点 60**：60 有右孩子 70（没有左孩子），让 40 的右孩子直接指向 70：
 
-```text
-        40
-       /  \
-      20   70
-       \
-       30
+```graphviz
+digraph BstRemovalSingle {
+  rankdir=TB;
+  node [shape=circle];
+  40 -> 20;
+  40 -> 70;
+  20 -> 30;
+}
 ```
+<!-- diagram id="bst-removal-single-child" caption: "删除单孩子结点 60 后：40 的右孩子直接指向 70" -->
 
 **删除双孩子结点 40（根）**：找右子树 70 的最小结点，即 70 本身（无左孩子）。用 70 替换根的关键字，再删除原来的 70：
 
-```text
-        70
-       /  \
-      20   空
-       \
-       30
+```graphviz
+digraph BstRemovalDouble {
+  rankdir=TB;
+  node [shape=circle];
+  70 -> 20;
+  empty [label="空", shape=plaintext, style=dashed, color=grey, fontcolor=grey];
+  70 -> empty [style=dashed];
+  20 -> 30;
+}
 ```
+<!-- diagram id="bst-removal-double" caption: "删除双孩子结点 40 后：用中序后继 70 替换根，原 40 的右孩子位置为空" -->
 
 每一步之后中序遍历都严格升序，BST 性质保持。
 :::
