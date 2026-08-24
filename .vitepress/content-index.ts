@@ -203,7 +203,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-04-tree/00-overview.md",
       "content/chapter-04-tree/01-binary-tree.md",
     ],
-    labSources: ["labs/chapter-04/lab-04-01-binary-tree-traversal/README.md"],
+    autoLabChapter: 4,
   },
   {
     id: "chapter-05-tree-applications",
@@ -215,7 +215,6 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-04-tree/02-tree-applications.md",
       "content/chapter-04-tree/03-heap.md",
     ],
-    labSources: ["labs/chapter-04/lab-04-02-huffman-coding/README.md"],
   },
   {
     id: "chapter-06-graph-foundations-storage",
