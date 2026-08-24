@@ -23,7 +23,7 @@ duration: "60～75 分钟"
 
 ## 前置知识
 
-完成前建议先阅读[第 7.1 节 BFS 按层遍历示例](../../../content/chapter-07-graph-traversal/01-breadth-first-search.md)。你需要准备支持 C++17 的编译器；可先运行 `make doctor` 检查环境。
+完成前建议先阅读[第 7.1 节 图的遍历：DFS 与 BFS](../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。你需要准备支持 C++17 的编译器；可先运行 `make doctor` 检查环境。
 
 ## 输入格式
 
