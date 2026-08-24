@@ -19,6 +19,7 @@
 - [ ] 将 `lab.json` 设置为 schema v1、`type: "program"`、C++17、student/solution targets、stdio tokens judge。
 - [ ] 保留三行薄 Makefile，不添加私有编译或判题逻辑。
 - [ ] 写入可编译但输出固定 `0` 的 student starter，确保它不是完整答案。
+- [ ] 在写 solution 前，按完整实施计划中的七组 cases 与 fixtures 先运行 student，观察合法但 `NOT FULL` 的红色结果；这一步证明测试能捕获不完整算法。
 - [ ] 写入使用 `long long`、相向双指针、O(n) 时间和 O(1) 辅助空间的 solution。
 - [ ] 写入七个测试用例：官方样例、最小数组、全零、两端等高、递增数组、局部高点和大数值；分值必须为 20/10/10/15/15/15/15，总计 100。
 - [ ] README 使用 `Lab 13-01：盛最多水的容器` 标题与完整 frontmatter，包含题面、图片、输入输出、约束、贪心说明、复杂度、运行命令、完成清单和思考题。

@@ -130,7 +130,17 @@ int main() {
 
 This starter compiles, reads the declared input, and is intentionally not a complete solution.
 
-- [ ] **Step 4: Write the reviewed O(n), O(1) reference solution.**
+- [ ] **Step 4: Run the red phase before writing the reference implementation.**
+
+Create `tests/cases.json` and all fourteen `.in`/`.out` files using the exact seven-case JSON and fixture table in the next case-contract step, then run the generated student target:
+
+```bash
+pnpm lab:run -- labs/chapter-13/lab-13-01-container-with-most-water --target student --no-color
+```
+
+Expected result: the command completes as a valid student run but reports `NOT FULL`; the zero-output starter may pass only the all-zero case and must not score 100. This is the required failing test observation for the algorithm implementation.
+
+- [ ] **Step 5: Write the reviewed O(n), O(1) reference solution.**
 
 Write `solution/main.cpp` as:
 
@@ -172,7 +182,9 @@ int main() {
 
 The equal-height branch moves the right pointer consistently. The implementation uses `long long` for the area while retaining the problem's O(n) time and O(1) auxiliary-space algorithm.
 
-- [ ] **Step 5: Replace `tests/cases.json` with seven 100-point cases.**
+- [ ] **Step 6: Confirm the seven-case, 100-point test contract.**
+
+The test files must be created before the reference solution in the red phase above. Confirm their exact contents now, and keep the following JSON/table as the single test contract:
 
 Write:
 
@@ -252,7 +264,7 @@ The points total exactly 100. Create the matching fixtures with these exact cont
 
 Use `apply_patch` for text fixtures so the committed files have LF line endings. Do not use the downloaded source file as a runtime dependency.
 
-- [ ] **Step 6: Author the learner README without duplicating the solution source.**
+- [ ] **Step 7: Author the learner README without duplicating the solution source.**
 
 Write `README.md` with this frontmatter:
 
@@ -292,7 +304,7 @@ The body must contain these sections and facts:
 
 Do not include the downloaded local path, crawl/API metadata, multi-language function signatures, or a second full reference implementation.
 
-- [ ] **Step 7: Validate the Lab contract before course integration.**
+- [ ] **Step 8: Validate the Lab contract before course integration.**
 
 Run:
 
