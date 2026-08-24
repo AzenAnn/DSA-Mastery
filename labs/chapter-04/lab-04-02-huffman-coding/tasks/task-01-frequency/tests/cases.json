@@ -1,5 +1,0 @@
-[
-  { "id": "weighted", "input": "tests/001-weighted.in", "expected": "tests/001-weighted.out", "points": 40, "tags": ["normal"] },
-  { "id": "single-symbol", "input": "tests/002-single.in", "expected": "tests/002-single.out", "points": 30, "tags": ["boundary"] },
-  { "id": "empty", "input": "tests/003-empty.in", "expected": "tests/003-empty.out", "points": 30, "tags": ["boundary"] }
-]

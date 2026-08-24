@@ -1,0 +1,62 @@
+[
+  {
+    "id": "001-sample-true",
+    "input": "tests/001-sample-true.in",
+    "expected": "tests/001-sample-true.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-sample-false",
+    "input": "tests/002-sample-false.in",
+    "expected": "tests/002-sample-false.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-identical",
+    "input": "tests/003-identical.in",
+    "expected": "tests/003-identical.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-single-match",
+    "input": "tests/004-single-match.in",
+    "expected": "tests/004-single-match.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-no-match",
+    "input": "tests/005-no-match.in",
+    "expected": "tests/005-no-match.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]

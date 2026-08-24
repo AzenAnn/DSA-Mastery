@@ -7,7 +7,7 @@
 | 工程题 | 路径 | 结构 | 模式 |
 | --- | --- | --- | --- |
 | 第 1 章 线性表双实现与工作负载评测器 | `labs/chapter-01/lab-01-21-list-workload-analyzer` | ctest 25/25/30 + manual 20 | 双实现同一契约 + 工作负载对拍 + 选型报告 |
-| 第 4 章 Huffman 编码（Golden） | `labs/chapter-04/lab-04-02-huffman-coding` | stdio 30 + ctest 50 + manual 20 | 计数 → 编解码引擎 → 报告 |
+| 第 4 章 Huffman 编码（Golden） | `labs/chapter-08/lab-08-03-avl-tree-rotations` | stdio 30 + ctest 50 + manual 20 | 计数 → 编解码引擎 → 报告 |
 | 第 8 章 AVL 旋转维护 | `labs/chapter-08/lab-08-03-avl-tree-rotations` | stdio 30 + ctest 50 + manual 20 | 基线(BST) → 高级实现(AVL) → 退化对比报告 |
 | 第 9 章 散列索引引擎 | `labs/chapter-09/lab-09-03-hash-index-engine` | stdio 30 + ctest 50 + manual 20 | 三种策略同契约 + 探测计数 → 报告 |
 
