@@ -408,14 +408,14 @@ std::size_t height(const Node& root) {
 
 | 顺序 | 主题与入口 | 选择题 | 综合题 |
 | ---: | --- | ---: | ---: |
-| 15 | [二叉树基础（性质与存储）理论题精练](../../labs/chapter-04/lab-04-15-binary-tree-basics-quiz/README.md) | 20 | 5 |
-| 16 | [前序遍历理论题精练](../../labs/chapter-04/lab-04-16-preorder-traversal-quiz/README.md) | 12 | 1 |
-| 17 | [中序遍历理论题精练](../../labs/chapter-04/lab-04-17-inorder-traversal-quiz/README.md) | 11 | 3 |
-| 18 | [后序遍历理论题精练](../../labs/chapter-04/lab-04-18-postorder-traversal-quiz/README.md) | 14 | 0 |
-| 19 | [层序遍历理论题精练](../../labs/chapter-04/lab-04-19-level-order-traversal-quiz/README.md) | 8 | 0 |
-| 20 | [由遍历序列构造二叉树理论题精练](../../labs/chapter-04/lab-04-20-reconstruct-binary-tree-quiz/README.md) | 18 | 2 |
-| 21 | [线索二叉树理论题精练](../../labs/chapter-04/lab-04-21-threaded-binary-tree-quiz/README.md) | 14 | 0 |
-| 22 | [树与森林理论题精练](../../labs/chapter-04/lab-04-22-trees-and-forests-quiz/README.md) | 20 | 5 |
+| 01 | [二叉树基础（性质与存储）理论题精练](../../labs/chapter-04/lab-04-01-binary-tree-basics-quiz/README.md) | 20 | 5 |
+| 02 | [前序遍历理论题精练](../../labs/chapter-04/lab-04-02-preorder-traversal-quiz/README.md) | 12 | 1 |
+| 03 | [中序遍历理论题精练](../../labs/chapter-04/lab-04-03-inorder-traversal-quiz/README.md) | 11 | 3 |
+| 04 | [后序遍历理论题精练](../../labs/chapter-04/lab-04-04-postorder-traversal-quiz/README.md) | 14 | 0 |
+| 05 | [层序遍历理论题精练](../../labs/chapter-04/lab-04-05-level-order-traversal-quiz/README.md) | 8 | 0 |
+| 06 | [由遍历序列构造二叉树理论题精练](../../labs/chapter-04/lab-04-06-reconstruct-binary-tree-quiz/README.md) | 18 | 2 |
+| 07 | [线索二叉树理论题精练](../../labs/chapter-04/lab-04-07-threaded-binary-tree-quiz/README.md) | 14 | 0 |
+| 08 | [树与森林理论题精练](../../labs/chapter-04/lab-04-08-trees-and-forests-quiz/README.md) | 20 | 5 |
 
 ## 小结与自测
 
