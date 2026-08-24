@@ -202,6 +202,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     lessonSources: [
       "content/chapter-04-tree/00-overview.md",
       "content/chapter-04-tree/01-binary-tree.md",
+      "content/chapter-04-tree/02-binary-tree-traversal.md",
+      "content/chapter-04-tree/03-threaded-binary-tree.md",
+      "content/chapter-04-tree/04-trees-and-forests.md",
+      "content/chapter-04-tree/05-binary-tree-classic-problems.md",
     ],
     autoLabChapter: 4,
   },
