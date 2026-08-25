@@ -259,8 +259,9 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-07-graph-traversal-applications/",
     lessonSources: [
       "content/chapter-07-graph-traversal/01-dfs-and-bfs.md",
-      "content/chapter-07-graph-traversal/02-minimum-spanning-tree-and-shortest-path.md",
-      "content/chapter-07-graph-applications/03-astar-visualization.md",
+      "content/chapter-07-graph-traversal/02-minimum-spanning-tree.md",
+      "content/chapter-07-graph-traversal/03-shortest-path.md",
+      "content/chapter-07-graph-applications/04-astar-visualization.md",
     ],
     autoLabChapter: 7,
   },

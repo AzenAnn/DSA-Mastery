@@ -36,7 +36,7 @@ status: "draft"
 | --- | --- | --- |
 | 图有哪些基本对象，怎样选择存储？ | [6.1 图的表示](./01-representation.md) | 能实现两种表示并按操作成本作选择 |
 | DFS 与 BFS 如何处理回路和非连通图？ | [7.1 图的遍历](../chapter-07-graph-traversal/01-dfs-and-bfs.md) | 能实现并比较两种遍历 |
-| MST 与最短路径怎样利用贪心？ | [7.2 最小生成树与最短路径](../chapter-07-graph-traversal/02-minimum-spanning-tree-and-shortest-path.md) | 能说明算法前提与复杂度 |
+| MST 与最短路径分别如何求解？ | [7.2 最小生成树](../chapter-07-graph-traversal/02-minimum-spanning-tree.md)、[7.3 最短路径](../chapter-07-graph-traversal/03-shortest-path.md) | 能说明算法前提与复杂度 |
 
 ## 推荐学习顺序
 

@@ -1,10 +1,10 @@
 ---
-title: "7.3 A* 寻路可视化"
+title: "7.4 A* 寻路可视化"
 description: "通过交互式网格理解 A* 如何结合实际代价与启发式估计寻找最短路径。"
-order: 3
+order: 4
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-24"
+updated: "2026-08-25"
 contributors: ["Azen"]
 status: "draft"
 ---
@@ -15,7 +15,7 @@ import { withBase } from "vitepress";
 const demoUrl = withBase("/demos/astar-pathfinding.html");
 </script>
 
-# 7.3 A* 寻路可视化
+# 7.4 A* 寻路可视化
 
 A* 既记录从起点到当前状态已经付出的代价，也估计当前状态到终点还需要多远，并优先探索总评分较小的候选：
 
