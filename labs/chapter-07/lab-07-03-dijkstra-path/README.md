@@ -25,7 +25,7 @@ duration: "120～150 分钟"
 
 ## 前置知识
 
-- [7.2 最小生成树与最短路径](../../../content/chapter-07-graph-traversal/02-minimum-spanning-tree-and-shortest-path.md)；
+- [7.3 最短路径](../../../content/chapter-07-graph-traversal/03-shortest-path.md)；
 - [5.2 堆与优先队列](../../../content/chapter-05-tree-applications/02-heap-and-priority-queue.md)。
 
 ## 环境与输入约定

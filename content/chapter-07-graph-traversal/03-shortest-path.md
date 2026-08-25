@@ -203,6 +203,7 @@ std::vector<int> bfs(const std::vector<std::vector<int>>& graph, int s) {
 std::vector<int> dijkstra(int s, const std::vector<std::vector<std::pair<int,int>>>& graph,
                           std::vector<int>& prev) {
     int n = static_cast<int>(graph.size());
+    prev.assign(n, -1);
     const int INF = std::numeric_limits<int>::max();
     std::vector<int> dist(n, INF);
     std::vector<bool> done(n, false);      // done[u]：u 是否已确定
@@ -227,8 +228,8 @@ std::vector<int> dijkstra(int s, const std::vector<std::vector<std::pair<int,int
 
 两个细节值得关注：
 
-- 第 14 行跳过 `done[u]` 的记录：懒惰删除的堆里同一个顶点可能有多条过期记录，只有等于当前 `dist[u]` 的那条是新鲜的。确定即永不再动。
-- 第 17 行对已确定顶点不再松弛——保证（并要求）不变量成立。
+- 第 15 行跳过 `done[u]` 的记录：懒惰删除的堆里同一个顶点可能有多条过期记录，只有等于当前 `dist[u]` 的那条是新鲜的。确定即永不再动。
+- 第 18 行对已确定顶点不再松弛——保证（并要求）不变量成立。
 
 ### 手算 Dijkstra：例图全程
 
@@ -253,7 +254,7 @@ std::vector<int> dijkstra(int s, const std::vector<std::vector<std::pair<int,int
 由 `prev` 链 $F\leftarrow E\leftarrow D\leftarrow B\leftarrow A$ 还原出路径 $A\to B\to D\to E\to F$，总耗时 $7$。
 
 ::: complexity 复杂度
-邻接表 + 二叉堆：每个顶点恰好出队（确定）一次，出队时扫描其全部出边，每条边在整个算法中只被扫描一次；每次生效的松弛伴随一次 $O(\log n)$ 的入堆，故入堆总数不超过 $m$（另有源点初始入堆一次）。加上 $n$ 次出队的堆操作，总计 $O\big((n+m)\log n\big)$。稠密图（$m\approx n^2$）改用朴素数组版（每轮线性扫最小、总 $O(n^2)$）反而更优。
+邻接表 + 二叉堆：每个可达顶点至多被确定一次，确定时扫描其全部出边，因此每条边在整个算法中至多被扫描一次。每次生效的松弛会产生一条新堆记录，最多 $m$ 次；连同源点的初始记录，以及随后弹出的过期记录，入堆与出堆操作总数均为 $O(n+m)$。每次堆操作耗时 $O(\log n)$，总计 $O\big((n+m)\log n\big)$。稠密图（$m\approx n^2$）改用朴素数组版（每轮线性扫最小、总 $O(n^2)$）反而更优。
 :::
 
 ### 论证 Dijkstra 的正确性
@@ -372,7 +373,7 @@ void floyd(std::vector<std::vector<int>>& d, std::vector<std::vector<int>>& nxt,
 | $A$ | 无 | 没有任何边指向 $A$，$A$ 当不了中转站 |
 | $B$ | $(A,D)\!:\ \infty\!\to\!4$ | 发现 $A\to B\to D$ |
 | $C$ | $(A,E)\!:\ \infty\!\to\!9$；$(B,E)\!:\ \infty\!\to\!13$ | 经 $C$ 到 $E$；$(A,D)$ 尝试 $4+1=5>4$ 不动 |
-| $D$ | $(A,E)\!:\ 9\!\to\!6$；$(B,E)\!:\ 13\!\to\!5$；$(C,E)\!:\ \infty\!\to\!3$；$(B,F)\!:\ \infty\!\to\!9$；$(C,F)\!:\ \infty\!\to\!7$ | 大丰收；$(A,F)$ 尝试 $4+6=10$ 与现状并列，不动 |
+| $D$ | $(A,E)\!:\ 9\!\to\!6$；$(B,E)\!:\ 13\!\to\!5$；$(C,E)\!:\ 5\!\to\!3$；$(B,F)\!:\ \infty\!\to\!9$；$(C,F)\!:\ \infty\!\to\!7$ | 大丰收；$(A,F)$ 尝试 $4+6=10$ 与现状并列，不动 |
 | $E$ | $(A,F)\!:\ 10\!\to\!7$；$(B,F)\!:\ 9\!\to\!6$；$(C,F)\!:\ 7\!\to\!4$；$(D,F)\!:\ 6\!\to\!3$ | 每行都经 $E$ 最后一跳压低 |
 | $F$ | 无 | $F$ 没有出边，当不了中转站 |
 
