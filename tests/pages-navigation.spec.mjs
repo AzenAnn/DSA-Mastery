@@ -401,6 +401,9 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   const copyButton = page.locator(".dsa-code-block--titled > button.copy").first();
   await copyButton.click();
   await expect(copyButton).toHaveClass(/copied/);
+  const copiedCode = await page.evaluate(() => navigator.clipboard.readText());
+  expect(copiedCode).toContain("#include <vector>");
+  expect(copiedCode).not.toContain("theory-environment-demo.cpp");
   const codeGroup = page.locator(".vp-code-group");
   await expect(codeGroup).toBeVisible();
   await expect(codeGroup.locator(".tabs label")).toHaveCount(2);
