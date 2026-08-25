@@ -1513,9 +1513,16 @@ input:focus-visible {
 
 .course-document-layout .vp-doc .katex-display,
 .course-document-layout .vp-doc mjx-container[display="true"] {
+  display: block;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 10px 0;
+}
+
+/* 行内公式不撑宽正文：允许在长公式处换行。 */
+.course-document-layout .vp-doc mjx-container:not([display="true"]) {
+  max-width: 100%;
 }
 
 /* Graphviz/Kroki output stays readable without widening the document column. */
