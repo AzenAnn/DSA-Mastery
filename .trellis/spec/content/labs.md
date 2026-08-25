@@ -30,7 +30,7 @@ Lab 继承教材八个字段，并额外要求：
 | `duration` | 非空、可理解的预计时长，如“45～60 分钟” |
 | `labCategory` | README-only Lab 接入分类侧栏时可选；只能是 `theory`、`exercise`、`project`，不得按标题推断 |
 
-网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。当前第 1 章启用“本章 Labs”三分类并要求所有 Lab 可分类，其他章节继续使用“相关 Labs”。
+网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。声明 `autoLabChapter` 的课程章节启用“本章 Labs”三分类并要求所有 Lab 可分类；即使集合为空，也显示 Theory/Exercise/Project 与各自空状态。当前 Ch.5 有 5 个正式 Quiz，Theory 显示五个自动收录入口，Exercise/Project 继续显示空状态；不得为填满空分类创建占位 Lab。未启用分类的章节继续使用“相关 Labs”。
 
 README 至少说明：
 
@@ -52,6 +52,8 @@ README 至少说明：
 - 作者机器路径、个人工作流说明和仅供个人复习的提示。
 
 题目的考试年份、书目名称、难度、考点和题目标识不属于个人痕迹，可以保留。知识正确性仍通过 `status: draft`、Review Owner 人工核验和 PR 证据管理，不在每道答案中重复展示生成过程。
+
+默认保留可追溯的题源名称和题目标识。若维护者在页面验收中明确要求公开题库不展示这些信息，可以省略 Quiz 的可选 `source`、`targetId` 字段，并移除 `stem` / README 中的来源行；题库仍必须保留稳定唯一的内部 `id`、答案和解析，并在 Trellis task 与 PR 中记录这项展示决定。该例外不代表可以跳过版权确认或知识复核。
 
 ### 交互选择题 Lab
 
@@ -119,7 +121,7 @@ README 至少说明：
 - 有代码的 Lab 执行其 README 命令，PR 记录退出码和关键断言。
 - Playwright 从 Labs 索引实际点击至少一个 Lab；检查标题、时长、状态和无同源错误。
 - Review Owner 从清晰环境独立复现至少一个关键步骤或反例。
-- 个人题库导入任务必须对目标 Lab 运行 `rg -n '查看原始页面|看交互可视化|答案来源说明|答案来源：.*Codex'`，断言没有匹配；再人工确认题目来源名称、题目标识、答案和解析仍在。
+- 个人题库导入任务必须对目标 Lab 运行 `rg -n '查看原始页面|看交互可视化|答案来源说明|答案来源：.*Codex'`，断言没有匹配。默认再人工确认题目来源名称、题目标识、答案和解析仍在；若维护者明确要求隐藏公开来源，则改为断言 `source`、`targetId` 和可见来源行均不存在，同时确认内部 `id`、答案与解析完整。
 - 内容校验必须遍历每个存在 `quiz.json` 的 Lab，检查 JSON、字段、唯一挂载点和静态内容重复；数据 loader 对损坏文件必须让构建失败，不能当成“没有题库”静默跳过。
 - Pages Playwright 至少在一份交互题库中真实完成“选择 → 提交 → 对错反馈 → 题解 → 重试”，并核对四选项数量、答题进度、公式/表格和移动端无横向溢出。
 - Golden Program/Project 还必须通过 `lab:verify`；reference 自动满分、starter 可编译且非满分，构建只写 `.lab-cache/`。
