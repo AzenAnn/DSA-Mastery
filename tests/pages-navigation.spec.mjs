@@ -1294,7 +1294,7 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   expect(failures).toEqual([]);
 });
 
-test("chapter 5 exposes five Theory Labs and keeps Exercise and Project slots empty", async ({ page }) => {
+test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty Project slot", async ({ page }) => {
   const failures = monitorPage(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`${baseUrl}/learn/outline/chapter-05-tree-applications/`);
@@ -1330,30 +1330,39 @@ test("chapter 5 exposes five Theory Labs and keeps Exercise and Project slots em
   }
   await expect(theoryGroup.locator(".course-lab-category__empty")).toHaveCount(0);
 
-  const emptyCategories = [
-    { kind: "exercise", label: "实验 Exercise", empty: "暂无实验型 Lab", collapsed: true },
-    { kind: "project", label: "工程 Project", empty: "暂无工程型 Lab", collapsed: false },
-  ];
-  for (const category of emptyCategories) {
-    const group = chapterGroup.locator(
-      `.VPSidebarItem:has(> .item > .text > .course-lab-category--${category.kind})`,
-    );
-    await expect(group).toHaveCount(1);
-    await expect(group.locator(`.course-lab-category--${category.kind}`)).toContainText(
-      category.label,
-    );
-    if (category.collapsed) {
-      await expect(group).toHaveClass(/collapsed/);
-      await group.locator(":scope > .item > .caret").click();
-      await expect(group).not.toHaveClass(/collapsed/);
-    } else {
-      await expect(group).not.toHaveClass(/collapsed/);
-    }
-    await expect(group.locator(":scope > .items a")).toHaveCount(0);
-    await expect(group.locator(".course-lab-category__empty")).toHaveText(category.empty);
+  const exerciseGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)",
+  );
+  await expect(exerciseGroup).toHaveCount(1);
+  await expect(exerciseGroup.locator(".course-lab-category--exercise")).toContainText(
+    "实验 Exercise",
+  );
+  await expect(exerciseGroup).toHaveClass(/collapsed/);
+  await exerciseGroup.locator(":scope > .item > .caret").click();
+  await expect(exerciseGroup).not.toHaveClass(/collapsed/);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(17);
+  for (const title of [
+    "Lab 05-06：二叉搜索树的插入与查找",
+    "Lab 05-22：B+ 树的范围查询",
+  ]) {
+    await expect(exerciseGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
   }
+  await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
 
-  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(2);
+  const projectGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--project)",
+  );
+  await expect(projectGroup).toHaveCount(1);
+  await expect(projectGroup.locator(".course-lab-category--project")).toContainText(
+    "工程 Project",
+  );
+  await expect(projectGroup).not.toHaveClass(/collapsed/);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(0);
+  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无工程型 Lab",
+  );
+
+  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(1);
   await expect(labGroup.locator(".course-lab-category svg")).toHaveCount(3);
   const labPanelStyle = await labGroup.evaluate((element) => {
     const style = globalThis.getComputedStyle(element);
