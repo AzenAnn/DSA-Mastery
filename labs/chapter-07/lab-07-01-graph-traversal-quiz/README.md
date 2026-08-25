@@ -23,7 +23,7 @@ duration: "50～70 分钟"
 
 ## 前置知识
 
-建议先阅读[第 7.1 节 图的遍历：DFS 与 BFS](../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)，再开始本组练习。其中第 6、8 题涉及括号化定理与 DFS 边分类，属于 7.1 正文之外的拓展内容，可结合题解学习。
+建议先阅读[第 7.1 节 图的遍历：DFS 与 BFS](../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)，再开始本组练习。其中第 6、8 题涉及的括号化定理与 DFS 边分类，已在 7.1 正文的"DFS 时间戳与边分类"小节讲解。
 
 ## 环境、输入与预期输出
 
