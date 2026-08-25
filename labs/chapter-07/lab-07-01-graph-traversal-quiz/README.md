@@ -5,7 +5,7 @@ order: 1
 chapter: 7
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-25"
-contributors: ["Gaoqp"]
+contributors: ["Qing"]
 status: "draft"
 lab: true
 difficulty: "基础～进阶（含拓展题）"

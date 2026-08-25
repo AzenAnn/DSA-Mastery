@@ -37,13 +37,17 @@ status: "draft"
 
 下面这张图有 5 个顶点、4 条边。本节所有示例都用它，方便对比两种走法：
 
-```text
-     1 ─── 3
-    / \
-   0   4
-   |
-   2
+```graphviz
+graph TraversalExample {
+  rankdir=TB;
+  node [shape=circle];
+  1 -- 3;
+  0 -- 1;
+  0 -- 4;
+  0 -- 2;
+}
 ```
+<!-- diagram id="dfs-bfs-example-graph" caption: "7.1 示例图：5 个顶点、4 条边的无向图" -->
 
 从顶点 `0` 出发：
 
