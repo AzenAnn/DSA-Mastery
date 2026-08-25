@@ -1066,6 +1066,7 @@ input:focus-visible {
   color: var(--course-ink-soft);
   font-size: 15px;
   line-height: 1.85;
+  min-width: 0;
 }
 
 .course-document-layout .vp-doc h2,
@@ -2437,6 +2438,14 @@ input:focus-visible {
 
   .course-quiz-feedback {
     padding: 15px 14px;
+  }
+
+  /* 窄屏放宽表格单元格最小宽度，避免多列表格（4 列 × 110px = 440px）
+     撑破 375px 视口的正文列。 */
+  .course-document-layout .vp-doc th,
+  .course-document-layout .vp-doc td {
+    min-width: 72px;
+    padding: 8px 10px;
   }
 }
 
