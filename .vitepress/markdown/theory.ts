@@ -68,10 +68,8 @@ function addStandaloneCodeTitles(md: MarkdownIt): void {
       /^(<div class="[^"]+)/,
       "$1 dsa-code-block--titled",
     );
-    return titledWrapper.replace(
-      /(<span class="lang">[^<]*<\/span>)/,
-      `$1<span class="dsa-code-title" title="${escapedTitle}">${escapedTitle}</span>`,
-    );
+    const titleMarkup = `<span class="dsa-code-title" title="${escapedTitle}">${escapedTitle}</span>`;
+    return titledWrapper.replace(/(<\/pre>)/, `$1${titleMarkup}`);
   };
 }
 

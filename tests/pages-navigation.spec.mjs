@@ -224,6 +224,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-preface/03-lab-cli-command-guide/"]').first(),
   ).toBeVisible();
+  await input.fill("Graphviz 图示作者指南");
+  await expect(
+    results.locator('a[href*="/learn/chapter-preface/04-graphviz-authoring-guide/"]').first(),
+  ).toBeVisible();
   await input.fill("单链表选择题精练");
   const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-singly-linked-list-quiz/"]').first();
   await expect(labResult).toBeVisible();
@@ -266,7 +270,7 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-08-basic-tree-search/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("基础查找与树形查找");
   await expect(page.locator(".course-curriculum-resource-list")).toContainText(
-    "6.1 基础查找与折半查找",
+    "8.1 基础查找与折半查找",
   );
   await expect(page.locator(".course-curriculum-resource-list")).toContainText(
     "Lab 08-01：查找理论选择题精练",
@@ -279,10 +283,10 @@ test("curriculum exposes every Part and the required search, sorting, and algori
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("分治与递归");
   await expect(page.locator(".course-curriculum-empty")).toContainText("后续迭代中完善");
 
-  await page.goto(`${baseUrl}/learn/chapter-06-search/02-binary-search-tree/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.2 二叉排序树");
-  await page.goto(`${baseUrl}/learn/chapter-06-search/04-b-tree-and-b-plus-tree/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("6.4 B 树与 B+ 树");
+  await page.goto(`${baseUrl}/learn/chapter-08-search/02-binary-search-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.2 二叉排序树");
+  await page.goto(`${baseUrl}/learn/chapter-08-search/04-b-tree-and-b-plus-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.4 B 树与 B+ 树");
   await page.goto(`${baseUrl}/labs/chapter-09/lab-09-02-hash-table/`);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("散列表");
   expect(failures).toEqual([]);
@@ -295,6 +299,7 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   const labGuideRoute = `${baseUrl}/learn/chapter-preface/01-lab-authoring-guide/`;
   const windowsStudentGuideRoute = `${baseUrl}/learn/chapter-preface/02-windows-student-setup/`;
   const labCommandGuideRoute = `${baseUrl}/learn/chapter-preface/03-lab-cli-command-guide/`;
+  const graphvizGuideRoute = `${baseUrl}/learn/chapter-preface/04-graphviz-authoring-guide/`;
 
   await page.goto(`${baseUrl}/learn/`);
   const foundationChapters = page.locator(".course-curriculum-chapters > a");
@@ -340,6 +345,16 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   await expect(page.locator(".vp-doc")).toContainText("make run");
   await expect(page.locator(".VPSidebar").getByRole("link", { name: "Lab 命令与接口使用指南", exact: true })).toBeVisible();
   await expect(page.locator(".vp-code-group").first()).toBeVisible();
+
+  await page.goto(outlineRoute);
+  const graphvizGuideEntry = page.locator(".course-curriculum-resource-list").getByRole("link", { name: /Graphviz 图示作者指南/ });
+  await expect(graphvizGuideEntry).toBeVisible();
+  await graphvizGuideEntry.click();
+  await expect(page).toHaveURL(graphvizGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Graphviz 图示作者指南");
+  await expect(page.locator(".vp-doc")).toContainText("Graphviz Online");
+  await expect(page.locator(".vp-doc")).toContainText("KROKI_SERVER_URL");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "Graphviz 图示作者指南", exact: true })).toBeVisible();
 
   const assertCommandGuideOverflow = async (theme) => {
     for (const width of [1440, 390]) {
@@ -401,6 +416,9 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   const copyButton = page.locator(".dsa-code-block--titled > button.copy").first();
   await copyButton.click();
   await expect(copyButton).toHaveClass(/copied/);
+  const copiedCode = await page.evaluate(() => navigator.clipboard.readText());
+  expect(copiedCode).toContain("#include <vector>");
+  expect(copiedCode).not.toContain("theory-environment-demo.cpp");
   const codeGroup = page.locator(".vp-code-group");
   await expect(codeGroup).toBeVisible();
   await expect(codeGroup.locator(".tabs label")).toHaveCount(2);
@@ -1273,6 +1291,90 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
     projectGroup.getByRole("link", { name: "Lab 03-14：串匹配与文本处理引擎", exact: true }),
   ).toHaveCount(1);
 
+  expect(failures).toEqual([]);
+});
+
+test("chapter 5 exposes five Theory Labs and keeps Exercise and Project slots empty", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${baseUrl}/learn/outline/chapter-05-tree-applications/`);
+
+  const chapterGroup = page.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-05-tree-applications/"])',
+  );
+  const labGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
+  );
+  await expect(chapterGroup).toHaveCount(1);
+  await expect(labGroup).toHaveCount(1);
+  await expect(labGroup).not.toHaveClass(/collapsed/);
+  await expect(chapterGroup).not.toContainText("相关 Labs");
+
+  const theoryGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
+  );
+  await expect(theoryGroup).toHaveCount(1);
+  await expect(theoryGroup.locator(".course-lab-category--theory")).toContainText("理论 Theory");
+  await expect(theoryGroup).toHaveClass(/collapsed/);
+  await theoryGroup.locator(":scope > .item > .caret").click();
+  await expect(theoryGroup).not.toHaveClass(/collapsed/);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(5);
+  for (const title of [
+    "Lab 05-01：森林与二叉树转换题精练",
+    "Lab 05-02：树与森林遍历题精练",
+    "Lab 05-03：哈夫曼树与编码题精练",
+    "Lab 05-04：并查集题精练",
+    "Lab 05-05：堆题精练",
+  ]) {
+    await expect(theoryGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+  }
+  await expect(theoryGroup.locator(".course-lab-category__empty")).toHaveCount(0);
+
+  const emptyCategories = [
+    { kind: "exercise", label: "实验 Exercise", empty: "暂无实验型 Lab", collapsed: true },
+    { kind: "project", label: "工程 Project", empty: "暂无工程型 Lab", collapsed: false },
+  ];
+  for (const category of emptyCategories) {
+    const group = chapterGroup.locator(
+      `.VPSidebarItem:has(> .item > .text > .course-lab-category--${category.kind})`,
+    );
+    await expect(group).toHaveCount(1);
+    await expect(group.locator(`.course-lab-category--${category.kind}`)).toContainText(
+      category.label,
+    );
+    if (category.collapsed) {
+      await expect(group).toHaveClass(/collapsed/);
+      await group.locator(":scope > .item > .caret").click();
+      await expect(group).not.toHaveClass(/collapsed/);
+    } else {
+      await expect(group).not.toHaveClass(/collapsed/);
+    }
+    await expect(group.locator(":scope > .items a")).toHaveCount(0);
+    await expect(group.locator(".course-lab-category__empty")).toHaveText(category.empty);
+  }
+
+  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(2);
+  await expect(labGroup.locator(".course-lab-category svg")).toHaveCount(3);
+  const labPanelStyle = await labGroup.evaluate((element) => {
+    const style = globalThis.getComputedStyle(element);
+    return {
+      borderStyle: style.borderTopStyle,
+      borderRadius: Number.parseFloat(style.borderTopLeftRadius),
+      backgroundColor: style.backgroundColor,
+    };
+  });
+  expect(labPanelStyle.borderStyle).toBe("solid");
+  expect(labPanelStyle.borderRadius).toBeGreaterThan(0);
+  expect(labPanelStyle.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
+
+  await page.locator(".VPNavBarAppearance .VPSwitchAppearance").click();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await page.setViewportSize({ width: 390, height: 844 });
+  const layout = await page.evaluate(() => ({
+    clientWidth: globalThis.document.documentElement.clientWidth,
+    scrollWidth: globalThis.document.documentElement.scrollWidth,
+  }));
+  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
   expect(failures).toEqual([]);
 });
 

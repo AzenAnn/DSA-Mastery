@@ -98,6 +98,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "统一理解课程理论文档与三类 Lab 的作者接口。",
       "能够按规范创建、测试、评分和 Review 后续题目。",
       "能够选择 pnpm 或 Make 运行、定位和严格评分当前 Lab。",
+      "能够用 Graphviz DOT 编写、预览和验证树与图示例。",
       "从站内完整指南直接复制经过自动验证的示例。",
     ],
     focusAreas: [
@@ -105,12 +106,14 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "Quiz、Program、Project 更新机制",
       "pnpm 参数、Make 映射与判定语义",
       "本地测试、CI、Review 与发布清单",
+      "Graphviz DOT、Kroki 与响应式图示",
     ],
     lessonSources: [
       "content/chapter-preface/00-theory-environments.md",
       "content/chapter-preface/01-lab-authoring-guide.md",
       "content/chapter-preface/02-windows-student-setup.md",
       "content/chapter-preface/03-lab-cli-command-guide.md",
+      "content/chapter-preface/04-graphviz-authoring-guide.md",
     ],
   },
   {
@@ -202,16 +205,39 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     lessonSources: [
       "content/chapter-04-tree/00-overview.md",
       "content/chapter-04-tree/01-binary-tree.md",
+      "content/chapter-04-tree/02-binary-tree-traversal.md",
+      "content/chapter-04-tree/03-threaded-binary-tree.md",
+      "content/chapter-04-tree/04-trees-and-forests.md",
+      "content/chapter-04-tree/05-binary-tree-classic-problems.md",
     ],
-    labSources: ["labs/chapter-04/lab-04-01-binary-tree-traversal/README.md"],
+    autoLabChapter: 4,
   },
   {
     id: "chapter-05-tree-applications",
     number: "5",
     title: "树的应用",
-    description: "把树结构用于 Huffman 编码、表达式树、堆与优先队列。",
+    description: "学习搜索树与平衡、堆与优先队列、赫夫曼编码、并查集及多路索引树。",
     url: "/learn/outline/chapter-05-tree-applications/",
-    labSources: ["labs/chapter-04/lab-04-02-huffman-coding/README.md"],
+    learningObjectives: [
+      "根据有序、平衡、偏序、权重与集合不变量选择并维护合适的树结构。",
+      "实现 BST/AVL、堆、赫夫曼树与并查集的核心操作，并准确分析复杂度前提。",
+      "解释 B 树与 B+ 树如何用高分支降低外存 I/O，并比较点查与范围查询。",
+    ],
+    focusTitle: "本章路径",
+    focusAreas: [
+      "二叉搜索树、AVL 与局部旋转",
+      "堆、优先队列与赫夫曼编码",
+      "并查集、B 树与 B+ 树",
+    ],
+    lessonSources: [
+      "content/chapter-05-tree-applications/00-overview.md",
+      "content/chapter-05-tree-applications/01-binary-search-tree-and-avl.md",
+      "content/chapter-05-tree-applications/02-heap-and-priority-queue.md",
+      "content/chapter-05-tree-applications/03-huffman-tree-and-coding.md",
+      "content/chapter-05-tree-applications/04-disjoint-set-union.md",
+      "content/chapter-05-tree-applications/05-b-tree-and-b-plus-tree.md",
+    ],
+    autoLabChapter: 5,
   },
   {
     id: "chapter-06-graph-foundations-storage",
@@ -220,9 +246,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "学习图的基本概念，以及邻接矩阵和邻接表的表示取舍。",
     url: "/learn/outline/chapter-06-graph-foundations-storage/",
     lessonSources: [
-      "content/chapter-05-graph/00-overview.md",
-      "content/chapter-05-graph/01-representation.md",
+      "content/chapter-06-graph-foundations/00-overview.md",
+      "content/chapter-06-graph-foundations/01-representation.md",
     ],
+    autoLabChapter: 6,
   },
   {
     id: "chapter-07-graph-traversal-applications",
@@ -231,14 +258,11 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "从 DFS、BFS 走向最小生成树、最短路径等图算法。",
     url: "/learn/outline/chapter-07-graph-traversal-applications/",
     lessonSources: [
-      "content/chapter-05-graph/02-traversal.md",
-      "content/chapter-05-graph/03-applications.md",
-      "content/chapter-05-graph/04-astar-visualization.md",
+      "content/chapter-07-graph-traversal/01-dfs-and-bfs.md",
+      "content/chapter-07-graph-traversal/02-minimum-spanning-tree-and-shortest-path.md",
+      "content/chapter-07-graph-applications/03-astar-visualization.md",
     ],
-    labSources: [
-      "labs/chapter-05/lab-05-01-bfs-maze/README.md",
-      "labs/chapter-05/lab-05-02-dijkstra-path/README.md",
-    ],
+    autoLabChapter: 7,
   },
   {
     id: "chapter-08-basic-tree-search",
@@ -247,10 +271,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "从基础查找策略过渡到二叉搜索树及其操作。",
     url: "/learn/outline/chapter-08-basic-tree-search/",
     lessonSources: [
-      "content/chapter-06-search/00-overview.md",
-      "content/chapter-06-search/01-linear-and-binary-search.md",
-      "content/chapter-06-search/02-binary-search-tree.md",
-      "content/chapter-06-search/03-balanced-search-tree.md",
+      "content/chapter-08-search/00-overview.md",
+      "content/chapter-08-search/01-linear-and-binary-search.md",
+      "content/chapter-08-search/02-binary-search-tree.md",
+      "content/chapter-08-search/03-balanced-search-tree.md",
     ],
     autoLabChapter: 8,
   },
@@ -261,8 +285,8 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "理解多路索引、散列函数、冲突处理和外存查找结构。",
     url: "/learn/outline/chapter-09-hashing-indexes/",
     lessonSources: [
-      "content/chapter-06-search/04-b-tree-and-b-plus-tree.md",
-      "content/chapter-06-search/05-hash-table.md",
+      "content/chapter-08-search/04-b-tree-and-b-plus-tree.md",
+      "content/chapter-08-search/05-hash-table.md",
     ],
     autoLabChapter: 9,
   },
@@ -273,10 +297,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "比较插入、交换与选择类排序的过程、稳定性和复杂度。",
     url: "/learn/outline/chapter-10-basic-sorting/",
     lessonSources: [
-      "content/chapter-07-sort/00-overview.md",
-      "content/chapter-07-sort/01-compare-sort.md",
+      "content/chapter-10-sort/00-overview.md",
+      "content/chapter-10-sort/01-compare-sort.md",
     ],
-    labSources: ["labs/chapter-07/lab-07-01-stability-compare/README.md"],
+    labSources: ["labs/chapter-10/lab-10-01-stability-compare/README.md"],
   },
   {
     id: "chapter-11-advanced-external-sorting",
@@ -285,10 +309,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "组织快速、归并、堆、基数与外部排序的进阶学习框架。",
     url: "/learn/outline/chapter-11-advanced-external-sorting/",
     lessonSources: [
-      "content/chapter-07-sort/01-compare-sort.md",
-      "content/chapter-07-sort/02-heap-and-radix-sort.md",
+      "content/chapter-10-sort/01-compare-sort.md",
+      "content/chapter-10-sort/02-heap-and-radix-sort.md",
     ],
-    labSources: ["labs/chapter-07/lab-07-02-performance-benchmark/README.md"],
+    labSources: ["labs/chapter-10/lab-10-02-performance-benchmark/README.md"],
   },
   {
     id: "chapter-12-divide-conquer-recursion",
@@ -608,17 +632,17 @@ export function createCourseSidebar(
       collapsed: true,
       items: [
         ...chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
-        ...(chapter.labs.length
-          ? [
-              chapter.autoLabChapter !== undefined
-                ? chapterLabGroup(chapter.labs, icons)
-                : {
-                    text: "相关 Labs",
-                    collapsed: true,
-                    items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })),
-                  },
-            ]
-          : []),
+        ...(chapter.autoLabChapter !== undefined
+          ? [chapterLabGroup(chapter.labs, icons)]
+          : chapter.labs.length
+            ? [
+                {
+                  text: "相关 Labs",
+                  collapsed: true,
+                  items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })),
+                },
+              ]
+            : []),
       ],
     };
   };

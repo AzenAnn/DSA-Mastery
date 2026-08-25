@@ -12,7 +12,7 @@
 - 第 1 章侧栏已由统一 CourseIndex 按 `quiz -> theory`、`program -> exercise`、`project -> project` 分类；新增 `lab.json.type = project` 后应自动进入“工程 Project”，不得手写导航清单。
 - `scripts/check-built-site.mjs:87-111` 当前把 Chapter 1 生产 Lab 数量固定为 20；新增 Lab 后必须更新为连续的 21 个。
 - `tests/pages-navigation.spec.mjs:956-1002` 当前断言 Project 分组为空；新增 Lab 后必须改为断言唯一 Project 链接与键盘折叠行为。
-- Project Schema v1 支持 `ctest|stdio|manual` task、顶层权重、依赖图和自动/人工分离；现有 Golden Project 为 `labs/chapter-04/lab-04-02-huffman-coding`。
+- Project Schema v1 支持 `ctest|stdio|manual` task、顶层权重、依赖图和自动/人工分离；现有 Golden Project 为 `labs/chapter-08/lab-08-03-avl-tree-rotations`。
 - 用户已确认采用 `docs/CHAPTER_01_PROJECT_REDESIGN.md` 的“线性表双实现与工作负载评测器”方向，并要求全部实现、本地预览，PR 必须等待用户确认。
 - 当前开发身份由 Trellis 识别为 `Azen`；工作分支为 `lab/ch01-list-workload-project`，基于最新 `origin/main`。
 

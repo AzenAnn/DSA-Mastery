@@ -45,7 +45,7 @@
 - [x] `pnpm run test:lab-docs`
 - [x] `pnpm run test:lab-golden`
 - [x] `pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication`
-- [x] `pnpm lab:verify -- labs/chapter-04/lab-04-02-huffman-coding`
+- [x] `pnpm lab:verify -- labs/chapter-08/lab-08-03-avl-tree-rotations`
 - [x] `pnpm run lint`
 - [x] `pnpm test`
 - [x] `git diff --check`

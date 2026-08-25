@@ -23,7 +23,7 @@
 
 - Golden Quiz：`labs/chapter-00/lab-00-03-complexity-quiz`
 - Golden Program：`labs/chapter-01/lab-01-06-sequential-list-deduplication`
-- Golden Project：`labs/chapter-04/lab-04-02-huffman-coding`
+- Golden Project：`labs/chapter-08/lab-08-03-avl-tree-rotations`
 
 ## 2. 平台与工具链基线
 
@@ -168,13 +168,15 @@ pnpm lab:new -- --type project --chapter 4 --order 3 --slug tree-index
 
 ### 4.1 网站侧栏的分类接口
 
-网站的 Lab 分类属于统一 `CourseIndex`，不是另一份手写导航。目前第 1 章使用“本章 Labs”三分类；后续章节需要同样结构时，应复用以下接口扩展，不要在侧栏组件里复制 Lab 名单：
+网站的 Lab 分类属于统一 `CourseIndex`，不是另一份手写导航。课程定义只要声明 `autoLabChapter`，侧栏就统一显示“本章 Labs”的三个分类；即使当前没有任何 Lab，也必须保留三类空槽位，不要在侧栏组件里复制 Lab 名单：
 
 | Lab 机器类型 | 侧栏分类 | 展示标签 |
 | --- | --- | --- |
 | `quiz` | `theory` | 理论 Theory |
 | `program` | `exercise` | 实验 Exercise |
 | `project` | `project` | 工程 Project |
+
+空分类的固定文案依次为“暂无理论型 Lab”“暂无实验型 Lab”“暂无工程型 Lab”。Ch.5“树的应用”现有 5 个正式 `quiz`，由统一索引自动进入 Theory；Exercise 与 Project 仍显示各自空状态。新增题目仍应先按学习目标确定 `quiz`、`program` 或 `project`，不能为了填满槽位创建占位 README、manifest 或虚假题目。
 
 有 `lab.json` 时，内容索引直接从 `type` 派生分类。没有 manifest 的 README-only Lab 若需要进入分类目录，必须在 frontmatter 显式声明：
 
@@ -239,6 +241,7 @@ README 只能挂载一次：
 - `answer` 是 `0～3` 的整数索引，不是答案字母。
 - `explanation` 必填，提交前不显示；`hint` 可选，提交前由学习者主动展开。
 - `points` 是正整数，省略时为 1；页面显示已答数、正确数和当前分/总分。
+- `source` 与 `targetId` 是可选元信息。个人题库默认保留可追溯来源；若维护者在页面验收中明确要求隐藏，则可同时省略这两个字段并移除题面中的来源行，但必须保留稳定内部 `id`，并在 task/PR 中记录该决定。
 - 题面、选项、提示和解析由构建期 Markdown 安全渲染，原始 HTML 关闭。
 
 ### 5.3 Quiz 作者检查
@@ -246,7 +249,7 @@ README 只能挂载一次：
 1. `pnpm lab:validate -- <lab-path>`。
 2. 在网站真实完成“选择 → 提交 → 反馈 → 题解 → 重试”。
 3. 检查 390px 移动端无根页面横向溢出。
-4. 人工逐题核对答案索引、干扰项、解析和来源。
+4. 人工逐题核对答案索引、干扰项、解析和来源；若来源按维护者决定不公开，则核对 task/PR 中的省略记录。
 5. 确认 README 没有第二份答案，个人导出痕迹已清除。
 
 ## 6. Program：单题 C++ 作业
@@ -496,7 +499,7 @@ make run TASK=frequency
 make run TASK=codec
 make refresh-expected TASK=frequency
 make score
-pnpm lab:verify -- labs/chapter-04/lab-04-02-huffman-coding
+pnpm lab:verify -- labs/chapter-08/lab-08-03-avl-tree-rotations
 ```
 
 结果明确区分：
@@ -559,7 +562,7 @@ pnpm lab:pack -- labs/chapter-01/lab-01-06-sequential-list-deduplication --profi
 ```powershell
 pnpm test
 pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
-pnpm lab:verify -- labs/chapter-04/lab-04-02-huffman-coding
+pnpm lab:verify -- labs/chapter-08/lab-08-03-avl-tree-rotations
 ```
 
 PR 记录：操作系统、Node/pnpm、编译器/CMake 版本、实际命令、关键分数、未执行项及原因。CI 在 Ubuntu 验证 GCC/Clang，在 Windows 验证 MSVC；网站 job 验证静态契约、构建、Pages 产物和浏览器交互。外部 PR 只获得只读 token，不向执行学生代码的 job 注入部署秘密。
@@ -579,7 +582,7 @@ README-only Lab 继续正常渲染，不要求一次重写全部历史内容。�
 5. 执行 validate/verify、网站 discovery/build 和 Review。
 6. 在 PR 中记录未迁移 Lab 清单，不把“尚未迁移”伪装成错误。
 
-现有 6 个交互 Quiz 已迁移到 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
+现有交互 Quiz 均已使用 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
 
 ## 12. 常见错误与正确做法
 

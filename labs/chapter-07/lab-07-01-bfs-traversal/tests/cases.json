@@ -1,0 +1,37 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-disconnected",
+    "input": "tests/002-disconnected.in",
+    "expected": "tests/002-disconnected.out",
+    "points": 20,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-single-vertex",
+    "input": "tests/003-single-vertex.in",
+    "expected": "tests/003-single-vertex.out",
+    "points": 20,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-cycle",
+    "input": "tests/004-cycle.in",
+    "expected": "tests/004-cycle.out",
+    "points": 20,
+    "tags": ["normal"]
+  },
+  {
+    "id": "005-nonzero-start",
+    "input": "tests/005-nonzero-start.in",
+    "expected": "tests/005-nonzero-start.out",
+    "points": 20,
+    "tags": ["normal"]
+  }
+]

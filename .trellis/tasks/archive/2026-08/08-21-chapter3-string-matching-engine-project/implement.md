@@ -6,7 +6,7 @@
 
 - `prd.md`、`design.md` 已由用户 Review 通过；
 - 环境：Node 22 / pnpm 11.1.1、GCC 11 / Clang 14 / MSVC 19.30、CMake ≥ 3.25；
-- 参考：`docs/LAB_AUTHORING_GUIDE.md`、`.trellis/spec/content/lab-tooling.md`、Golden Project `labs/chapter-04/lab-04-02-huffman-coding`、`labs/chapter-01/lab-01-21-list-workload-analyzer`。
+- 参考：`docs/LAB_AUTHORING_GUIDE.md`、`.trellis/spec/content/lab-tooling.md`、Golden Project `labs/chapter-08/lab-08-03-avl-tree-rotations`、`labs/chapter-01/lab-01-21-list-workload-analyzer`。
 
 ## 顺序清单
 

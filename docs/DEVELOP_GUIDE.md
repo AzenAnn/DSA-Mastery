@@ -46,6 +46,8 @@ trellis init -u your-name
 
 ## 开发教程
 
+Graphviz 树图和图算法示例的 DOT 写法、在线预览和本地构建方法见[Graphviz 图示作者指南](./GRAPHVIZ_AUTHORING_GUIDE.md)。
+
 ### 创建分支
 
 在vscode侧边栏先回到main分支，在最新main分支基础上创建分支
