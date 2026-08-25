@@ -83,7 +83,7 @@ actions/configure-pages base_path
 
 - 内容：字段、类型、路径、章一致性、排序、相对文件与站内路由。
 - 依赖：直接导入与 `package.json` 的直接依赖一致；无内置声明的 JavaScript 包具有直接 `@types/*` 依赖，并在冻结锁文件安装后通过 `typecheck`。
-- 自动发现：临时教材和 Lab 在 `try/finally` 内创建，贯穿验证、导航、搜索和 build；另在自动收录章节创建临时 Lab，并证明进入指定分类；对 Ch.5 断言 Theory 恰有五个自动收录入口且不显示理论空态，Exercise/Project 各自保留空槽位和固定文案。
+- 自动发现：临时教材和 Lab 在 `try/finally` 内创建，贯穿验证、导航、搜索和 build；另在自动收录章节创建临时 Lab，并证明进入指定分类；对 Ch.5 断言 Theory 恰有 5 个、Exercise 恰有 17 个自动收录入口且两者不显示空态，Project 保留空槽位和固定文案。
 - 第 1 章目录迁移：静态合同断言恰好 20 个连续编号 Lab、三个 Demo 产物不存在、分类为 5/15/0；Pages 浏览器覆盖四层原生折叠、三色三图标、Project 空状态、明暗主题与 390px 无溢出。
 - 产物：期望 HTML、favicon/OG、内部链接、asset、404、恰好一个 base。
 - 浏览器：三段真实点击、搜索教材/Lab、主题持久化、移动目录、代表性公式/代码/表格/任务列表、edit link；前言还需从资源目录进入五篇完整指南，并在 Lab 命令指南的浅/暗主题与 390/1440px 下断言无根页面溢出。

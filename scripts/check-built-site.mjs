@@ -386,7 +386,8 @@ for (const required of [
   "Lab 05-03：哈夫曼树与编码题精练",
   "Lab 05-04：并查集题精练",
   "Lab 05-05：堆题精练",
-  "暂无实验型 Lab",
+  "Lab 05-06：二叉搜索树的插入与查找",
+  "Lab 05-22：B+ 树的范围查询",
   "暂无工程型 Lab",
 ]) {
   if (!chapterFiveItem.includes(required)) {
@@ -399,10 +400,11 @@ if (
   chapterFiveSidebarEnd < 0 ||
   chapterFiveItemStart < 0 ||
   chapterFiveItemEnd < 0 ||
-  chapterFiveLabLinks.length !== 5 ||
-  chapterFiveItem.includes("暂无理论型 Lab")
+  chapterFiveLabLinks.length !== 22 ||
+  chapterFiveItem.includes("暂无理论型 Lab") ||
+  chapterFiveItem.includes("暂无实验型 Lab")
 ) {
-  throw new Error("Chapter 5 Theory Labs or empty Exercise/Project slots are inconsistent");
+  throw new Error("Chapter 5 Theory/Exercise Labs or empty Project slot are inconsistent");
 }
 
 if (base !== "/") {
