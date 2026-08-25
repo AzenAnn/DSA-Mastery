@@ -14,8 +14,8 @@ content/
 ├── chapter-00-introduction/
 │   ├── 00-overview.md
 │   ├── 01-data-structure-basics.md
-│   ├── 02-memory-perspective.md
-│   └── 04-time-and-space-complexity.md
+│   ├── 02-time-and-space-complexity.md
+│   └── 03-memory-perspective.md
 └── chapter-01-linear-list/
     ├── 00-overview.md
     ├── 01-abstract-data-type.md

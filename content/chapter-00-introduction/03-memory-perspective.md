@@ -1,7 +1,7 @@
 ---
-title: "0.2 从内存视角理解复杂度"
+title: "0.3 从内存视角理解复杂度"
 description: "从缓存行与内存布局出发，理解大 O 记不住的那一项——单次操作的代价。"
-order: 2
+order: 3
 chapter: 0
 chapterTitle: "绪论"
 updated: "2026-08-14"
@@ -15,7 +15,7 @@ import { withBase } from "vitepress";
 const demoUrl = withBase("/demos/memory-perspective.html");
 </script>
 
-# 0.2 从内存视角理解复杂度
+# 0.3 从内存视角理解复杂度
 
 ## 学习目标
 
@@ -29,7 +29,7 @@ const demoUrl = withBase("/demos/memory-perspective.html");
 ## 从一句话开始
 
 ::: tip 阅读提示
-本节会反复使用 O(n)、O(log n) 这类记号。如果还没有时间复杂度基础，请先阅读 [0+.1 时间与空间复杂度概论](./04-time-and-space-complexity.md)，再回到本节。
+本节会反复使用 O(n)、O(log n) 这类记号。如果还没有时间复杂度基础，请先阅读 [0.2 时间与空间复杂度概论](./02-time-and-space-complexity.md)，再回到本节。
 :::
 
 数据结构是对内存的布局，算法是对数据的操作。

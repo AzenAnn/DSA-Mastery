@@ -120,7 +120,7 @@ CPU 的算术逻辑单元（ALU）用一条基址变址寻址指令（如 x86 �
 ---
 
 ### 2.1.3 缓存局部性与遍历加速
-正如在 [0.2 从内存视角理解复杂度](../chapter-00-introduction/02-memory-perspective.md) 中所述，现代 CPU 访问主存时会以 **Cache Line（通常 64 字节）** 为单位批量加载连续内存。
+正如在 [0.3 从内存视角理解复杂度](../chapter-00-introduction/03-memory-perspective.md) 中所述，现代 CPU 访问主存时会以 **Cache Line（通常 64 字节）** 为单位批量加载连续内存。
 
 ::: intuition 缓存加速 · 顺序表的空间局部性红利
 得益于**空间局部性 (Spatial Locality)**，当 CPU 访问 $a_0$ 时，硬件会自动将同一 Cache Line 内的后续连续元素预载进高速缓存。因此，顺序表的顺序遍历能获得极高的缓存命中率，实际运行常数极小。
@@ -478,10 +478,10 @@ int Vector<T>::find(const T& value) const {
 
 * **最好情况**：目标元素位于表头（`index = 0`），仅需 1 次比对，耗时 **$O(1)$**；
 * **最坏情况**：目标元素位于表尾或不存在，需遍历全部 $n$ 个元素，耗时 **$O(n)$**；
-* **平均情况**：假设等概率分布，平均比较次数为 $\frac{n+1}{2}$（推导参见 [0+.1 节](../chapter-00-introduction/04-time-and-space-complexity.md)），耗时 **$O(n)$**。
+* **平均情况**：假设等概率分布，平均比较次数为 $\frac{n+1}{2}$（推导参见 [0.2 节](../chapter-00-introduction/02-time-and-space-complexity.md)），耗时 **$O(n)$**。
 
 ::: tip 知识延伸：二分查找的物理与逻辑前提
-无序顺序表只能进行 $O(n)$ 线性扫描。若要使用 [0+.1 节](../chapter-00-introduction/04-time-and-space-complexity.md) 介绍的 $O(\log n)$ **二分查找**（Binary Search），必须同时满足两个前提：
+无序顺序表只能进行 $O(n)$ 线性扫描。若要使用 [0.2 节](../chapter-00-introduction/02-time-and-space-complexity.md) 介绍的 $O(\log n)$ **二分查找**（Binary Search），必须同时满足两个前提：
 1. **逻辑前提（数据有序）**：序列元素已预先按大小排列；
 2. **物理前提（随机存取）**：底层存储必须支持 $O(1)$ 访问任意中点 `_data[mid]`（这正是顺序表的物理特长；后续的链表因无法常数时间定位中点而无法直接二分）。
 :::
