@@ -1,7 +1,7 @@
 ---
-title: "Lab 07-01：BFS 遍历与无权距离"
+title: "Lab 07-04：BFS 遍历与无权距离"
 description: "使用队列完成确定性 BFS 遍历，并计算起点到各顶点的无权最短距离。"
-order: 1
+order: 4
 chapter: 7
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-24"
@@ -12,7 +12,7 @@ difficulty: "基础"
 duration: "60～75 分钟"
 ---
 
-# Lab 07-01：BFS 遍历与无权距离
+# Lab 07-04：BFS 遍历与无权距离
 
 ## 学习目标
 
@@ -94,9 +94,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-07/lab-07-01-bfs-traversal
-pnpm lab:run -- labs/chapter-07/lab-07-01-bfs-traversal
-pnpm lab:score -- labs/chapter-07/lab-07-01-bfs-traversal
+pnpm lab:doctor -- labs/chapter-07/lab-07-04-bfs-traversal
+pnpm lab:run -- labs/chapter-07/lab-07-04-bfs-traversal
+pnpm lab:score -- labs/chapter-07/lab-07-04-bfs-traversal
 ```
 
 ## 完成清单

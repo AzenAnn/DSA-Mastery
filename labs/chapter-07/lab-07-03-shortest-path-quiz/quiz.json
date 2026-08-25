@@ -1,0 +1,444 @@
+[
+  {
+    "id": "sp-001",
+    "title": "Dijkstra 的“确定即永久”不变量",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["Dijkstra", "不变量", "性质判断"],
+    "targetId": "sp-001",
+    "stem": "在标准 Dijkstra（边权非负）中，关于“顶点一旦被选出并标记为已确定，其 dist 就永不反悔”这一不变量，下列描述正确的是？",
+    "options": [
+      "顶点 u 一旦被标记为已确定，其 dist[u] 就恒等于真实最短距离 d(u)，且后续松弛不会再改变它",
+      "即使图中存在负权边，该不变量依然成立",
+      "dist[u] 确定后还可能被某个更小非负值覆盖",
+      "该不变量依赖“每一次松弛都生效”才成立"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A**。在非负权图上，每次选取当前 dist 最小的未确定顶点，能保证该顶点的估计已经等于真实最短距离；`done` 只是把这个数学结论记录下来并避免重复处理，并不是正确性的来源。B 错（负权会使首次选出的距离未必永久正确），C、D 也都违背该不变量。"
+  },
+  {
+    "id": "sp-002",
+    "title": "松弛操作的统一定义",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["松弛", "主线"],
+    "targetId": "sp-002",
+    "stem": "最短路径算法的统一微观操作“松弛（relaxation）”指的是？",
+    "options": [
+      "把当前最短路径上所有边权相加",
+      "用一条已知路径尝试压短某个距离估计：dist[v] = min(dist[v], dist[u] + w(u,v))",
+      "从图中删除权值最大的边",
+      "直接把 dist[v] 设为某条具体路径的长度"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。松弛就是用“经过 u 再到 v”这条路去尝试压低对 v 的距离估计；BFS、Dijkstra、Floyd 本质都是同一操作在不同“调度顺序”下的产物。"
+  },
+  {
+    "id": "sp-003",
+    "title": "BFS 是 Dijkstra 的特例",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["BFS", "Dijkstra", "对比"],
+    "targetId": "sp-003",
+    "stem": "常说“BFS 求无权最短路可视为 Dijkstra 的特例”，其依据是？",
+    "options": [
+      "BFS 用队列而 Dijkstra 用堆，实现不同",
+      "当所有边权相等（如均为 1）时，按“距离”贪心等价于按“层数”扩展",
+      "BFS 总比 Dijkstra 快",
+      "Dijkstra 不能处理无权图"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。边权全部相等时，“距离最小”与“层数最小”一致，Dijkstra 的贪心退化成 BFS 的逐层扩展；A 是实现差异而非本质依据，C、D 均错。"
+  },
+  {
+    "id": "sp-004",
+    "title": "最短路径的最优子结构",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["最优子结构", "性质判断"],
+    "targetId": "sp-004",
+    "stem": "关于最短路径的“最优子结构”性质，下列说法正确的是？",
+    "options": [
+      "最短路径上的任一子路径，也必是对应端点之间的最短路径",
+      "最短路径必然唯一",
+      "最短路径不可能经过任何中间顶点",
+      "最优子结构只在边权非负时才成立"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A**。若某子路径不是端点间最短路，替换它会得到更短的整体路径，矛盾；B 错（可有多条等长最短路），C 错（可经中间点），D 错（最短路的最优子结构对正负权都成立，只是负环时无最短路）。"
+  },
+  {
+    "id": "sp-005",
+    "title": "Floyd 对边权的要求",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["Floyd", "负权", "负环"],
+    "targetId": "sp-005",
+    "stem": "关于 Floyd 算法对边权的要求，下列正确的是？",
+    "options": [
+      "必须所有边权非负",
+      "允许存在负权边，但不能包含总权为负的环",
+      "既不能含负权边也不能含负环",
+      "对负权与负环都完全兼容"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。Floyd 单纯枚举所有中转组合，负边带来的“更短”会被正常捕捉；但它无法处理负环（绕环趋于 −∞），故要求无负环。A、C 过严，D 错在负环。"
+  },
+  {
+    "id": "sp-006",
+    "title": "负环的后果",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["负环", "性质判断"],
+    "targetId": "sp-006",
+    "stem": "若从源点 s 能到达一个总权为负的环，并且从该负环又能到达顶点 v，则 d(s,v) 会怎样？",
+    "options": [
+      "一定是某个有限负数",
+      "没有有限下界，可记为 −∞",
+      "仍可由 Dijkstra 正确确定",
+      "只要 s 不在负环上就不受影响"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。从 s 到达负环后可以绕任意多圈，再前往 v；每多绕一圈路径长度都会下降，因此 d(s,v) 没有有限下界。负环只影响从 s 可达该环、且从该环可达的顶点；其他顶点的最短距离仍可能有良好定义。A、C、D 均忽略了这一可达性条件或负环的无界影响。"
+  },
+  {
+    "id": "sp-007",
+    "title": "Floyd 检测负环",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["Floyd", "负环检测"],
+    "targetId": "sp-007",
+    "stem": "用 Floyd 判断图中是否存在负环，应当检查什么？",
+    "options": [
+      "是否存在某条边权为负",
+      "算法结束后是否出现某个 d(i,i) < 0",
+      "是否存在 d(i,j) = ∞",
+      "迭代轮数是否超过 n"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。若存在总权为负的闭路，Floyd 跑完后该路上某顶点 i 会出现 d(i,i) < 0，对角线即现成的负环探测器；A 错（单条负边不等于负环），C、D 无关。"
+  },
+  {
+    "id": "sp-008",
+    "title": "稠密图下 Dijkstra 的实现选型",
+    "source": "原创题（选型）",
+    "difficulty": "★",
+    "topics": ["Dijkstra", "复杂度", "选型"],
+    "targetId": "sp-008",
+    "stem": "对于边稠密的图（m ≈ n²），单源 Dijkstra 用“朴素数组实现”与“二叉堆实现”的时间复杂度分别约为？",
+    "options": [
+      "O(n²) 与 O((n+m)log n)，稠密时前者更优",
+      "O(n log n) 与 O(n²)",
+      "两者都是 O(n³)",
+      "O(m log n) 与 O(n²)，堆实现更优"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A**。朴素版每轮线性扫描最小 dist，共 O(n²)；堆版为 O((n+m)log n)。稠密图 m≈n² 时堆版是 O(n² log n)，反而慢于朴素 O(n²)。"
+  },
+  {
+    "id": "sp-009",
+    "title": "Floyd 的时间复杂度",
+    "source": "原创题",
+    "difficulty": "★",
+    "topics": ["Floyd", "复杂度"],
+    "targetId": "sp-009",
+    "stem": "Floyd-Warshall 求全源最短路的时间复杂度是？",
+    "options": [
+      "O(n²)",
+      "O(n³)",
+      "O(nm)",
+      "O(nm log n)"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。Floyd 是三层嵌套循环，每层规模 n，总计 O(n³)。"
+  },
+  {
+    "id": "sp-010",
+    "title": "Prim 与 Dijkstra 的根本区别",
+    "source": "408 改编题",
+    "difficulty": "★★",
+    "topics": ["Prim", "Dijkstra", "对比", "贪心"],
+    "targetId": "sp-010",
+    "stem": "Prim（最小生成树）与 Dijkstra 都基于“每步贪心选最小者”，二者的根本区别是？",
+    "options": [
+      "Prim 维护已连通顶点集，每次选跨越该集合的最小权边；Dijkstra 维护距源点已确定最短距离的顶点集，每次选 dist 最小的顶点",
+      "两者完全等价，只是目标表述不同",
+      "两者都只能用于有向图",
+      "Prim 需要边权非负，而 Dijkstra 允许负权"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A**。Prim 贪心的是连接已选集合与外部的最小权边，目标是最小生成树；Dijkstra 贪心的是离源点最近的未确定顶点，目标是单源最短路，二者度量对象不同。B 错（目标和状态含义都不同），C 错（Prim 通常用于连通无向图），D 把条件说反了：Prim 可处理负权边，Dijkstra 才要求边权非负。"
+  },
+  {
+    "id": "sp-011",
+    "title": "例图 Dijkstra 第 3 轮出队",
+    "source": "原创题（例图）",
+    "difficulty": "★★",
+    "topics": ["Dijkstra", "步骤模拟", "例图"],
+    "targetId": "sp-011",
+    "stem": "在 03 文档例图（源点 A，边权见边表）上运行 Dijkstra。第 3 轮出队确定的顶点是？",
+    "options": [
+      "B",
+      "C",
+      "D",
+      "E"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B（C）**。出队顺序为 A(0) → B(1) → C(4) → D(4) → E(6) → F(7)；第 3 轮为 C。注意 C 与 D 同为 dist=4，按字母序 C 先出队，不影响最终结果。"
+  },
+  {
+    "id": "sp-012",
+    "title": "例图 Dijkstra 的 dist[E]",
+    "source": "原创题（例图）",
+    "difficulty": "★★",
+    "topics": ["Dijkstra", "步骤模拟", "例图"],
+    "targetId": "sp-012",
+    "stem": "同例图（源点 A）运行 Dijkstra，算法结束时 dist[E] 的值是？",
+    "options": [
+      "9",
+      "6",
+      "5",
+      "∞"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B（6）**。第 3 轮 C 出队经 C→E 把 E 压到 9；第 4 轮 D 出队经 D→E 把 E 进一步压到 6（A→B→D→E = 1+3+2）。此后 E 不再变动。"
+  },
+  {
+    "id": "sp-013",
+    "title": "例图 BFS 与 Dijkstra 对比",
+    "source": "原创题（例图）",
+    "difficulty": "★★",
+    "topics": ["BFS", "Dijkstra", "对比", "例图"],
+    "targetId": "sp-013",
+    "stem": "在例图上，把边权看作“跳数”（无权）时 BFS 求得的 A→F 距离，与 Dijkstra 加权最短路长度，分别是？",
+    "options": [
+      "1 跳 与 7",
+      "4 跳 与 7",
+      "1 跳 与 10",
+      "7 跳 与 7"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A**。BFS 视作无权图：A→F 有直达边，只需 1 跳，距离为 1；Dijkstra 加权最短路为 A→B→D→E→F，总长 1+3+2+1 = 7。这正是“BFS 只数跳数会推荐绕远路”的崩溃现场。"
+  },
+  {
+    "id": "sp-014",
+    "title": "例图 Floyd 的 d(B,F)",
+    "source": "原创题（例图）",
+    "difficulty": "★★",
+    "topics": ["Floyd", "步骤模拟", "例图"],
+    "targetId": "sp-014",
+    "stem": "在例图上运行 Floyd，最终矩阵中 d(B,F) 的值是？",
+    "options": [
+      "9",
+      "6",
+      "10",
+      "∞"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B（6）**。B→D→E→F = 3+2+1 = 6，优于 B→D→F = 9 与 B→C→…→F。与 Dijkstra 从 B 出发的结果一致。"
+  },
+  {
+    "id": "sp-015",
+    "title": "例图 Floyd 的 d(C,F)",
+    "source": "原创题（例图）",
+    "difficulty": "★★",
+    "topics": ["Floyd", "步骤模拟", "例图"],
+    "targetId": "sp-015",
+    "stem": "同例图 Floyd 最终矩阵中 d(C,F) 的值是？",
+    "options": [
+      "4",
+      "5",
+      "7",
+      "8"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A（4）**。C→D→E→F = 1+2+1 = 4，优于 C→E→F = 5+1 = 6。对应 Dijkstra 从 C 出发的路径。"
+  },
+  {
+    "id": "sp-016",
+    "title": "Dijkstra 证明中非负权的唯一上场处",
+    "source": "原创题（证明）",
+    "difficulty": "★★",
+    "topics": ["Dijkstra", "正确性证明", "非负权"],
+    "targetId": "sp-016",
+    "stem": "在 Dijkstra 正确性的反证法（“第一个错误顶点”）中，“边权非负”这一前提唯一在哪一步被使用？",
+    "options": [
+      "初始化 dist[s] = 0",
+      "证明“路径前缀的长度不超过整条最短路的全长”（即 y→u 尾段权非负）",
+      "选择当前 dist 最小的未确定顶点",
+      "把 u 标记为已确定"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。反证链条 dist[u] ≤ dist[y] ≤ ℓ ≤ d(u) ≤ dist[u] 中，只有“ℓ ≤ d(u)”（前缀不超过全长）用到 y→u 尾段非负；其余步骤对负边同样成立，所以负边摧毁 Dijkstra 的方式非常精准——恰好断在这一环。"
+  },
+  {
+    "id": "sp-017",
+    "title": "Floyd 循环顺序 k 必须最外层",
+    "source": "408 改编题",
+    "difficulty": "★★",
+    "topics": ["Floyd", "循环顺序", "反例"],
+    "targetId": "sp-017",
+    "stem": "把 Floyd 三重循环写成 for i for j for k（k 在最内层），对图 A→B(1)、B→D(1)、D→C(1)（正确 d(A,C)=3）会得到错误结果。其根本原因是？",
+    "options": [
+      "递推式写反了",
+      "处理 (A,C) 时所需的中间值 d(A,D) 尚未就绪（D 在本轮作为 j 排在 C 之后）",
+      "k 必须在最内层才能正确",
+      "该图含负环"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。状态转移要求“先备齐前 k−1 轮的结果”，k 放最内层时，计算 (A,C) 需要的 d(A,D) 要等到 j=D 才算出，而 j=D 排在 j=C 之后，故 (A,C) 错误保持 ∞；正确值应为 3（A→B→D→C）。"
+  },
+  {
+    "id": "sp-018",
+    "title": "三点负权图 Dijkstra 失效",
+    "source": "原创题（负权反例）",
+    "difficulty": "★★",
+    "topics": ["Dijkstra", "负权", "反例"],
+    "targetId": "sp-018",
+    "stem": "三点图 A→B(1)、A→C(2)、C→B(−2)，真实 d(A,B)=0（走 A→C→B）。Dijkstra 会输出 dist[B] = ？",
+    "options": [
+      "0",
+      "1",
+      "−2",
+      "∞"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B（1）**。Dijkstra 先出队 A，把 B 估计为 1、C 估计为 2；接着出队 B（dist 最小）并锁定 dist[B]=1。待 C 出队想经 C→B 松弛时，B 已 done 被拦截，最终给出错误的 1 而非真值 0。"
+  },
+  {
+    "id": "sp-019",
+    "title": "四个算法的松弛顺序",
+    "source": "原创题（主线）",
+    "difficulty": "★★",
+    "topics": ["松弛", "调度顺序", "对比"],
+    "targetId": "sp-019",
+    "stem": "关于 BFS、Dijkstra、Floyd、Bellman-Ford 的“松弛顺序”，下列配对正确的是？",
+    "options": [
+      "BFS：按中转点松弛；Floyd：按层松弛",
+      "BFS：按层松弛；Dijkstra：按当前 dist 最小顶点松弛；Floyd：按中转点松弛",
+      "Dijkstra：按层松弛；BFS：按 dist 最小顶点松弛",
+      "Floyd：无差别全边松弛 n−1 轮"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。BFS 按层（先近后远）、Dijkstra 按当前 dist 最小顶点贪心、Floyd 按中转点（DP）；“无差别全边松弛 n−1 轮”是 Bellman-Ford，不是 Floyd，故 D 错。"
+  },
+  {
+    "id": "sp-020",
+    "title": "最短路径树的唯一性",
+    "source": "原创题",
+    "difficulty": "★★",
+    "topics": ["最短路径树", "性质判断"],
+    "targetId": "sp-020",
+    "stem": "关于从源点出发的“最短路径树”（由各点的最短路径前驱构成），下列说法正确的是？",
+    "options": [
+      "对任何图都唯一",
+      "不一定唯一：当存在多条等长最短路时，树的结构可能不同",
+      "一定包含图中所有顶点",
+      "与最小生成树是同一棵树"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。若到某点存在多条等长最短路，选择不同前驱会得到不同的最短路径树；A 错，C 错（不可达顶点不在树中），D 错（MST 连全图、SSSP 到各点，目标完全不同）。"
+  },
+  {
+    "id": "sp-021",
+    "title": "不使用 done 的懒惰堆实现",
+    "source": "CLRS 风格（拔高）",
+    "difficulty": "★★★",
+    "topics": ["Dijkstra", "不变量", "边界"],
+    "targetId": "sp-021",
+    "stem": "在正权图的堆优化 Dijkstra 中，去掉 done 数组，允许同一顶点因距离下降而多次入堆；弹出记录后仍按“只有更短才更新”的规则松弛。此时结果如何？",
+    "options": [
+      "结果仍然正确，但若不跳过过期堆记录，可能做额外工作",
+      "一定错误，因为没有 done 就无法保证最短距离",
+      "只有稠密图上的结果正确",
+      "算法会自动变成 Bellman-Ford"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A**。Dijkstra 的正确性来自非负权和每次优先处理当前最小距离，而不是 `done` 数组本身。懒惰堆实现可以不设 `done`：通常在弹出 `(du,u)` 时用 `du != dist[u]` 跳过过期记录；即使不跳过，较大的旧记录在严格取更小值的松弛规则下也不会把答案改坏，只会增加扫描。B、C、D 均错误。"
+  },
+  {
+    "id": "sp-022",
+    "title": "稠密图的全源选型",
+    "source": "408 改编题（选型）",
+    "difficulty": "★★★",
+    "topics": ["Floyd", "Dijkstra", "选型", "复杂度"],
+    "targetId": "sp-022",
+    "stem": "给定 n 个顶点的稠密带权图（m ≈ n²）、边权非负，要一次性求出所有点对最短路，下列哪种最合适？",
+    "options": [
+      "跑 n 次堆优化 Dijkstra，复杂度约 O(n³ log n)",
+      "直接 Floyd-Warshall，复杂度 O(n³)，比 A 更优",
+      "跑 n 次 Bellman-Ford",
+      "对每个源点跑 BFS"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。稠密图上 n 次堆优化 Dijkstra 为 O(n·(n²)log n)=O(n³log n)，而 Floyd 仅 O(n³)，更优；C、D 不适用于带权图全源。"
+  },
+  {
+    "id": "sp-023",
+    "title": "负权无负环时的单源选型",
+    "source": "原创题（选型）",
+    "difficulty": "★★★",
+    "topics": ["Bellman-Ford", "Dijkstra", "负权", "选型"],
+    "targetId": "sp-023",
+    "stem": "若图中允许负权边但保证无负环，求单源最短路应选用？",
+    "options": [
+      "Dijkstra",
+      "Bellman-Ford（或 SPFA）",
+      "Floyd",
+      "BFS"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。Dijkstra 要求非负权，负权下失效；Floyd 虽能处理负权但求的是全源、且 O(n³) 偏重；Bellman-Ford 支持负权并可在第 n 轮检测负环，是单源负权场景的正确选择。"
+  },
+  {
+    "id": "sp-024",
+    "title": "Floyd 二维滚动的安全性",
+    "source": "原创题（证明）",
+    "difficulty": "★★★",
+    "topics": ["Floyd", "空间优化", "负环"],
+    "targetId": "sp-024",
+    "stem": "Floyd 能把三维状态 d(k,i,j) 优化为二维数组 d(i,j)（原地更新），其安全性依赖什么？",
+    "options": [
+      "k 必须在最外层循环",
+      "无负环时，第 k 轮不会修改第 k 行与第 k 列（即 d(k,k)=0，经 k 绕回 k 不会更短）",
+      "图必须无向",
+      "边权必须非负"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。要修改 d(i,k) 需用 d(i,k)+d(k,k)<d(i,k)，即 d(k,k)<0，这意味存在过 k 的负环；无负环时 d(k,k)=0，第 k 行/列本轮不变，故原地读到的值与“上一轮”一致，第三维可安全滚掉。A 是另一独立要求（状态转移顺序），并非二维滚动安全性的直接依据。"
+  },
+  {
+    "id": "sp-025",
+    "title": "松弛的“上界性”不变量",
+    "source": "原创题（主线）",
+    "difficulty": "★",
+    "topics": ["松弛", "不变量", "性质判断"],
+    "targetId": "sp-025",
+    "stem": "松弛操作带来的“上界性”不变量是指：算法运行过程中，任意时刻都有？",
+    "options": [
+      "dist[v] ≤ d(v)（估计可能低估真实最短路）",
+      "dist[v] ≥ d(v)（估计永不低估真实最短路）",
+      "dist[v] = d(v)（估计始终精确）",
+      "dist[v] 只可能增大"
+    ],
+    "answer": 1,
+    "explanation": "**答案：B**。松弛只用真实存在的路径去尝试压低估计，故 dist[v] 始终 ≥ d(v)（上界）；它只减不增（单调性），且这一论证不依赖边权符号——负边也只会把上界往下压。"
+  },
+  {
+    "id": "sp-026",
+    "title": "例图 Dijkstra 的 dist[D]",
+    "source": "原创题（例图）",
+    "difficulty": "★★",
+    "topics": ["Dijkstra", "步骤模拟", "例图"],
+    "targetId": "sp-026",
+    "stem": "同例图（源点 A）运行 Dijkstra，dist[D] 在第 2 轮经 B 被设为 4，后来 C 也提供一条 A→C→D（权 4+1=5）的路。Dijkstra 结束时 dist[D] 为？",
+    "options": [
+      "4",
+      "5",
+      "3",
+      "6"
+    ],
+    "answer": 0,
+    "explanation": "**答案：A（4）**。第 2 轮 B 出队经 B→D 把 D 设为 4；第 3 轮 C 出队时 A→C→D 为 5 > 4，松弛不生效，故 D 锁定在 4。这也体现了“候选路径没有更短就不更新”的教学点。"
+  }
+]

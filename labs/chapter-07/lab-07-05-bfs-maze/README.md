@@ -1,7 +1,7 @@
 ---
-title: "Lab 07-02：BFS 迷宫寻路"
+title: "Lab 07-05：BFS 迷宫寻路"
 description: "把迷宫建模为无权图，用 BFS 求最短路径并输出路径。"
-order: 2
+order: 5
 chapter: 7
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-24"
@@ -13,7 +13,7 @@ difficulty: "基础"
 duration: "90～120 分钟"
 ---
 
-# Lab 07-02：BFS 迷宫寻路
+# Lab 07-05：BFS 迷宫寻路
 
 ## 学习目标
 
