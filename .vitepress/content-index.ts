@@ -249,6 +249,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-06-graph-foundations/00-overview.md",
       "content/chapter-06-graph-foundations/01-representation.md",
     ],
+    autoLabChapter: 6,
   },
   {
     id: "chapter-07-graph-traversal-applications",
@@ -257,14 +258,11 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "从 DFS、BFS 走向最小生成树、最短路径等图算法。",
     url: "/learn/outline/chapter-07-graph-traversal-applications/",
     lessonSources: [
-      "content/chapter-07-graph-applications/01-traversal.md",
-      "content/chapter-07-graph-applications/02-applications.md",
+      "content/chapter-07-graph-traversal/01-dfs-and-bfs.md",
+      "content/chapter-07-graph-traversal/02-minimum-spanning-tree-and-shortest-path.md",
       "content/chapter-07-graph-applications/03-astar-visualization.md",
     ],
-    labSources: [
-      "labs/chapter-07/lab-07-01-bfs-maze/README.md",
-      "labs/chapter-07/lab-07-02-dijkstra-path/README.md",
-    ],
+    autoLabChapter: 7,
   },
   {
     id: "chapter-08-basic-tree-search",

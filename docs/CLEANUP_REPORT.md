@@ -345,10 +345,10 @@ labs/index.md
 | --- | --- | --- | --- | --- | --- |
 | `content/chapter-05-graph/00-overview.md` | 旧物理 Ch.5 图总览，被课程映射到 Ch.6 | `content/chapter-06-graph-foundations/00-overview.md` | 新页保留图基础导览并链接 Ch.7；内容、构建与 Pages 检查后旧产品引用必须为零 | 迁移 | 合并前放弃分支；合并后 revert 本任务提交 |
 | `content/chapter-05-graph/01-representation.md` | 图的表示正文，被课程映射到 Ch.6 | `content/chapter-06-graph-foundations/01-representation.md` | 新页保留邻接矩阵/表、复杂度与练习并改为 `chapter: 6` | 迁移 | 同上 |
-| `content/chapter-05-graph/02-traversal.md` | 图遍历正文，被课程映射到 Ch.7 | `content/chapter-07-graph-applications/01-traversal.md` | 新页保留 DFS/BFS、非连通与复杂度并改为 `chapter: 7` | 迁移 | 同上 |
-| `content/chapter-05-graph/03-applications.md` | MST/最短路径正文，被课程映射到 Ch.7 | `content/chapter-07-graph-applications/02-applications.md` | 新页保留 Prim/Kruskal/Dijkstra 并修正并查集、堆跨章链接 | 迁移 | 同上 |
+| `content/chapter-05-graph/02-traversal.md` | 图遍历正文，被课程映射到 Ch.7 | `content/chapter-07-graph-traversal/01-dfs-and-bfs.md` | 新页保留并扩展 DFS/BFS、非连通与复杂度内容，编号改为 `chapter: 7` | 迁移 | 同上 |
+| `content/chapter-05-graph/03-applications.md` | MST/最短路径正文，被课程映射到 Ch.7 | `content/chapter-07-graph-traversal/02-minimum-spanning-tree-and-shortest-path.md` | 新页保留并扩展 Prim/Kruskal/Dijkstra 内容，编号改为 `chapter: 7` | 迁移 | 同上 |
 | `content/chapter-05-graph/04-astar-visualization.md` | A* 交互正文，被课程映射到 Ch.7 | `content/chapter-07-graph-applications/03-astar-visualization.md` | 新页保留原演示路由并改用现有主题令牌 | 迁移 | 同上 |
-| `labs/chapter-05/lab-05-01-bfs-maze` | 旧图 BFS README-only Lab，被课程映射到 Ch.7 | `labs/chapter-07/lab-07-01-bfs-maze` | 新 Lab 保留学习成果并补齐正常、边界、错误与复盘合同 | 迁移 | 同上 |
-| `labs/chapter-05/lab-05-02-dijkstra-path` | 旧图 Dijkstra README-only Lab，被课程映射到 Ch.7 | `labs/chapter-07/lab-07-02-dijkstra-path` | 新 Lab 保留非负权、路径与复杂度目标并修正章节链接 | 迁移 | 同上 |
+| `labs/chapter-05/lab-05-01-bfs-maze` | 旧图 BFS README-only Lab，被课程映射到 Ch.7 | `labs/chapter-07/lab-07-02-bfs-maze` | 新 Lab 保留学习成果并补齐正常、边界、错误与复盘合同；因 Ch.7 已有可执行 BFS Lab，顺延为 07-02 | 迁移 | 同上 |
+| `labs/chapter-05/lab-05-02-dijkstra-path` | 旧图 Dijkstra README-only Lab，被课程映射到 Ch.7 | `labs/chapter-07/lab-07-03-dijkstra-path` | 新 Lab 保留非负权、路径与复杂度目标并修正章节链接；顺延为 07-03 | 迁移 | 同上 |
 
 迁移前目标目录经只读检查确认不存在受跟踪文件冲突。旧产品路径将在 source map、正文、脚本、测试和文档中清零；旧 Trellis 规划任务中的路径只作为历史证据保留。替代页必须通过 frontmatter/链接校验、自动发现、构建、静态产物检查与 Pages 浏览器测试，失败则回退整组迁移，不留下半套编号。

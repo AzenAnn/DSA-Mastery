@@ -1,18 +1,19 @@
 ---
-title: "Lab 07-01：BFS 迷宫寻路"
+title: "Lab 07-02：BFS 迷宫寻路"
 description: "把迷宫建模为无权图，用 BFS 求最短路径并输出路径。"
-order: 1
+order: 2
 chapter: 7
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-24"
 contributors: ["Azen"]
 status: "draft"
 lab: true
+labCategory: "exercise"
 difficulty: "基础"
 duration: "90～120 分钟"
 ---
 
-# Lab 07-01：BFS 迷宫寻路
+# Lab 07-02：BFS 迷宫寻路
 
 ## 学习目标
 
@@ -23,7 +24,7 @@ duration: "90～120 分钟"
 
 ## 前置知识
 
-- [7.1 图的遍历](../../../content/chapter-07-graph-applications/01-traversal.md)；
+- [7.1 图的遍历：DFS 与 BFS](../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)；
 - 队列、二维数组与坐标边界检查。
 
 ## 环境与输入约定

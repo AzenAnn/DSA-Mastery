@@ -132,4 +132,4 @@ DFS/BFS 的控制逻辑相同，但邻接矩阵需要对每个取出的顶点扫
 4. 邻接表中怎样把指定边查询从线性扫描加速？代价是什么？
 5. 分别说明矩阵和邻接表上的 BFS 总时间。
 
-下一章继续学习[7.1 图的遍历](../chapter-07-graph-applications/01-traversal.md)。
+下一章继续学习[7.1 图的遍历](../chapter-07-graph-traversal/01-dfs-and-bfs.md)。

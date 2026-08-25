@@ -1,18 +1,19 @@
 ---
-title: "Lab 07-02：Dijkstra 最短路径"
+title: "Lab 07-03：Dijkstra 最短路径"
 description: "实现堆优化 Dijkstra，输出单源最短距离和路径，并验证非负权前提。"
-order: 2
+order: 3
 chapter: 7
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-24"
 contributors: ["Azen"]
 status: "draft"
 lab: true
+labCategory: "exercise"
 difficulty: "基础"
 duration: "120～150 分钟"
 ---
 
-# Lab 07-02：Dijkstra 最短路径
+# Lab 07-03：Dijkstra 最短路径
 
 ## 学习目标
 
@@ -24,7 +25,7 @@ duration: "120～150 分钟"
 
 ## 前置知识
 
-- [7.2 最小生成树与最短路径](../../../content/chapter-07-graph-applications/02-applications.md)；
+- [7.2 最小生成树与最短路径](../../../content/chapter-07-graph-traversal/02-minimum-spanning-tree-and-shortest-path.md)；
 - [5.2 堆与优先队列](../../../content/chapter-05-tree-applications/02-heap-and-priority-queue.md)。
 
 ## 环境与输入约定
