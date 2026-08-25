@@ -29,27 +29,39 @@ int main() {
     }
     tail->next = head;
 
-    std::size_t first_len = (n + 1) / 2;
-    Node* mid = head;
-    for (std::size_t i = 1; i < first_len; ++i) mid = mid->next;
+    if (head->next == head) {
+        std::cout << head->value << "\n\n";
+        return 0;
+    }
 
-    Node* second_head = mid->next;
-    mid->next = head;
-    tail->next = second_head;
+    Node* slow = head;
+    Node* fast = head;
+    while (fast->next != head && fast->next->next != head) {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    if (fast->next->next == head) {
+        fast = fast->next;
+    }
 
-    auto print = [&](Node* h, std::size_t len) {
+    Node* head1 = head;
+    Node* head2 = slow->next;
+
+    slow->next = head1;
+    fast->next = head2;
+
+    auto print_circle = [](Node* h) {
         bool first = true;
         Node* p = h;
-        for (std::size_t i = 0; i < len; ++i) {
+        do {
             if (!first) std::cout << ' ';
             std::cout << p->value;
             first = false;
             p = p->next;
-        }
+        } while (p != h);
+        std::cout << '\n';
     };
 
-    print(head, first_len);
-    std::cout << '\n';
-    print(second_head, n - first_len);
-    std::cout << '\n';
+    print_circle(head1);
+    print_circle(head2);
 }

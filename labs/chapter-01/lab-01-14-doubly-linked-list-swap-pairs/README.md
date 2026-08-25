@@ -204,24 +204,32 @@ int main() {
         else { tail->next = node; tail = node; }
     }
 
+    Node dummy{0, nullptr, head};
+    if (head) head->prev = &dummy;
+
+    Node* prev = &dummy;
     Node* curr = head;
+
     while (curr && curr->next) {
-        Node* a = curr;
-        Node* b = curr->next;
-        Node* p = a->prev;
-        Node* s = b->next;
+        Node* first = curr;
+        Node* second = curr->next;
+        Node* next_pair = second->next;
 
-        b->prev = p;
-        b->next = a;
-        a->prev = b;
-        a->next = s;
+        prev->next = second;
+        second->prev = prev;
 
-        if (p) p->next = b;
-        else head = b;
-        if (s) s->prev = a;
+        second->next = first;
+        first->prev = second;
 
-        curr = a->next;
+        first->next = next_pair;
+        if (next_pair) next_pair->prev = first;
+
+        prev = first;
+        curr = next_pair;
     }
+
+    head = dummy.next;
+    if (head) head->prev = nullptr;
 
     bool first = true;
     for (Node* p = head; p; p = p->next) {
