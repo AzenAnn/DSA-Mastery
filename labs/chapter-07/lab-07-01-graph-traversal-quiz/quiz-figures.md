@@ -1,6 +1,14 @@
+---
+title: "Lab 07-01 题库配图源（构建专用）"
+head:
+  - - meta
+    - name: robots
+      content: noindex, nofollow
+---
+
 # 题库配图源（构建期生成 SVG，不面向学习者）
 
-本文件仅用于让 `vitepress-plugin-diagrams` 在构建期生成选择题配图：构建后 SVG 会写入 `public/diagrams/`，由同目录 `quiz.json` 的题面或解析引用。学习者不需要访问本页。
+本文件仅用于让 `vitepress-plugin-diagrams` 在构建期生成选择题配图：构建后 SVG 会写入 `public/diagrams/`，由同目录 `quiz.json` 的题面或解析引用。本页已配置 robots noindex，并从站点 sitemap 中排除，学习者不需要访问本页。
 
 ## 第 4 题：BFS 分层示例图
 

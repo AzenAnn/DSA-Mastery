@@ -96,7 +96,10 @@ export default defineConfig({
     "playwright-report/**",
     "test-results/**",
   ],
-  sitemap: { hostname: absoluteSiteUrl },
+  sitemap: {
+    hostname: absoluteSiteUrl,
+    transformItems: (items) => items.filter((item) => !item.url.includes("quiz-figures")),
+  },
   transformHead({ pageData }) {
     const route = routeForSource(pageData.relativePath);
     const pageTitle = pageData.title
