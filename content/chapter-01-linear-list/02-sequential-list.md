@@ -478,10 +478,10 @@ int Vector<T>::find(const T& value) const {
 
 * **最好情况**：目标元素位于表头（`index = 0`），仅需 1 次比对，耗时 **$O(1)$**；
 * **最坏情况**：目标元素位于表尾或不存在，需遍历全部 $n$ 个元素，耗时 **$O(n)$**；
-* **平均情况**：假设等概率分布，平均比较次数为 $\frac{n+1}{2}$（推导参见 [0.3 节](../chapter-00-introduction/03-algorithm-complexity-analysis.md)），耗时 **$O(n)$**。
+* **平均情况**：假设等概率分布，平均比较次数为 $\frac{n+1}{2}$（推导参见 [0+.1 节](../chapter-00-introduction/04-time-and-space-complexity.md)），耗时 **$O(n)$**。
 
 ::: tip 知识延伸：二分查找的物理与逻辑前提
-无序顺序表只能进行 $O(n)$ 线性扫描。若要使用 [0.3 节](../chapter-00-introduction/03-algorithm-complexity-analysis.md) 介绍的 $O(\log n)$ **二分查找**（Binary Search），必须同时满足两个前提：
+无序顺序表只能进行 $O(n)$ 线性扫描。若要使用 [0+.1 节](../chapter-00-introduction/04-time-and-space-complexity.md) 介绍的 $O(\log n)$ **二分查找**（Binary Search），必须同时满足两个前提：
 1. **逻辑前提（数据有序）**：序列元素已预先按大小排列；
 2. **物理前提（随机存取）**：底层存储必须支持 $O(1)$ 访问任意中点 `_data[mid]`（这正是顺序表的物理特长；后续的链表因无法常数时间定位中点而无法直接二分）。
 :::

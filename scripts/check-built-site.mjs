@@ -182,16 +182,7 @@ for (const required of [
   }
 }
 
-const complexityHtml = await readFile(
-  path.join(artifactRoot, "learn", "chapter-00-introduction", "03-algorithm-complexity-analysis", "index.html"),
-  "utf8",
-);
-for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
-  if (!complexityHtml.includes(`dsa-theory-block--${kind}`)) {
-    throw new Error(`Complexity page is missing theory container: ${kind}`);
-  }
-}
-if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.includes("::: definition")) {
+if (dataStructureBasicsHtml.includes("::: definition")) {
   throw new Error("Unparsed theory container markers leaked into Chapter 0 artifacts");
 }
 

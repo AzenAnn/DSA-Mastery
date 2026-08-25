@@ -29,7 +29,7 @@ const demoUrl = withBase("/demos/memory-perspective.html");
 ## 从一句话开始
 
 ::: tip 阅读提示
-本节会反复使用 O(n)、O(log n) 这类记号。如果还没有时间复杂度基础，请先阅读 [0.3 算法复杂度与算法分析](./03-algorithm-complexity-analysis.md)，再回到本节。
+本节会反复使用 O(n)、O(log n) 这类记号。如果还没有时间复杂度基础，请先阅读 [0+.1 时间与空间复杂度概论](./04-time-and-space-complexity.md)，再回到本节。
 :::
 
 数据结构是对内存的布局，算法是对数据的操作。

@@ -1,7 +1,7 @@
 ---
-title: "10.12 桶排序"
+title: "10.9 桶排序"
 description: "桶排序的分桶原理、正确性证明、均匀分布下的线性复杂度与最坏退化。"
-order: 12
+order: 9
 chapter: 10
 chapterTitle: "排序"
 updated: "2026-08-21"
@@ -9,7 +9,7 @@ contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 10.12 桶排序
+# 10.9 桶排序
 
 桶排序把值域划分成若干个区间（桶），把元素放进对应桶中，再在每个桶内排序，最后按桶序合并。
 

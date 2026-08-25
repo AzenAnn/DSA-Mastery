@@ -1,7 +1,7 @@
 ---
-title: "10.6 冒泡排序"
+title: "10.3 冒泡排序"
 description: "冒泡排序的原理、正确性证明、复杂度分析与早停优化。"
-order: 6
+order: 3
 chapter: 10
 chapterTitle: "排序"
 updated: "2026-08-21"
@@ -9,7 +9,7 @@ contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 10.6 冒泡排序
+# 10.3 冒泡排序
 
 每一趟相邻比较，若前一个大于后一个就交换。这样每一轮都能把当前最大元素"冒泡"到末尾。
 
