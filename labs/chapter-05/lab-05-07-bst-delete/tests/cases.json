@@ -1,0 +1,62 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-delete-root",
+    "input": "tests/002-delete-root.in",
+    "expected": "tests/002-delete-root.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-delete-leaf",
+    "input": "tests/003-delete-leaf.in",
+    "expected": "tests/003-delete-leaf.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-delete-all",
+    "input": "tests/004-delete-all.in",
+    "expected": "tests/004-delete-all.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-no-delete",
+    "input": "tests/005-no-delete.in",
+    "expected": "tests/005-no-delete.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-single",
+    "input": "tests/002-single.in",
+    "expected": "tests/002-single.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-ll-rotation",
+    "input": "tests/003-ll-rotation.in",
+    "expected": "tests/003-ll-rotation.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-rr-rotation",
+    "input": "tests/004-rr-rotation.in",
+    "expected": "tests/004-rr-rotation.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-lr-rotation",
+    "input": "tests/005-lr-rotation.in",
+    "expected": "tests/005-lr-rotation.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]

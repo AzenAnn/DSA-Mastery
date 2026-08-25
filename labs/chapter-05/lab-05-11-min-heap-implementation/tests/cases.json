@@ -1,0 +1,62 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-empty-ops",
+    "input": "tests/002-empty-ops.in",
+    "expected": "tests/002-empty-ops.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-insert-only",
+    "input": "tests/003-insert-only.in",
+    "expected": "tests/003-insert-only.out",
+    "points": 20,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-delete-all",
+    "input": "tests/004-delete-all.in",
+    "expected": "tests/004-delete-all.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-alternate",
+    "input": "tests/005-alternate.in",
+    "expected": "tests/005-alternate.out",
+    "points": 20,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]
