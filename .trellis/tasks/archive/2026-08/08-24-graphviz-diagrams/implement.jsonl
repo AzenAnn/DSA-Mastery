@@ -1,0 +1,4 @@
+{"file":".trellis/spec/frontend/vitepress-development.md","reason":"VitePress config, dependency, rendering boundary, and validation rules."}
+{"file":".trellis/spec/frontend/vitepress-architecture.md","reason":"Config, public assets, Pages base, and build-time data-flow constraints."}
+{"file":".trellis/spec/content/frontmatter-and-routing.md","reason":"Content source and routing contract for migrated Markdown pages."}
+{"file":".trellis/spec/quality/validation-and-pages.md","reason":"Required frozen install, build, artifact, and browser validation gates."}

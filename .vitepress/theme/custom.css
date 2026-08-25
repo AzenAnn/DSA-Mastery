@@ -1518,6 +1518,27 @@ input:focus-visible {
   padding: 10px 0;
 }
 
+/* Graphviz/Kroki output stays readable without widening the document column. */
+.course-document-layout .vp-doc .vpd-diagram {
+  max-width: 100%;
+  margin: 20px auto;
+  overflow-x: auto;
+  text-align: center;
+}
+
+.course-document-layout .vp-doc .vpd-diagram-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+}
+
+.course-document-layout .vp-doc .vpd-diagram-caption {
+  margin-top: 8px;
+  color: var(--course-ink-faint);
+  font-size: 13px;
+}
+
 .course-document-note {
   display: flex;
   align-items: flex-start;

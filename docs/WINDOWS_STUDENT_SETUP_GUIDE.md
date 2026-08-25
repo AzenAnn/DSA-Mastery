@@ -279,7 +279,7 @@ make也可以在对应目录内执行：
 
 ```powershell
 PS C:\Proj\DSA-Mastery> cd labs/chapter-08/lab-08-03-avl-tree-rotations
-PS C:\Proj\DSA-Mastery\labs\chapter-04\lab-04-15-huffman-coding> make doctor
+PS C:\Proj\DSA-Mastery\labs\chapter-08\lab-08-03-avl-tree-rotations> make doctor
 PASS 环境检查
 平台：win32/x64 · Node v24.19.0
 

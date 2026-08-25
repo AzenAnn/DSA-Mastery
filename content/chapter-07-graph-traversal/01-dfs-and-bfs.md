@@ -92,7 +92,7 @@ status: "draft"
 
 ### 用什么存图：邻接表
 
-遍历的代价由"找邻居"的代价决定。第 6 章的[邻接矩阵](../chapter-06-graph-foundations/01-adjacency-matrix.md)能 $O(1)$ 判断两点是否相邻，但扫一遍某个顶点的全部邻居要 $O(n)$；大多数图算法也采用第 6 章介绍过的**邻接表**。下面的代码把它建出来，并让每个顶点的邻居按升序排列：
+遍历的代价由"找邻居"的代价决定。第 6 章的[图的表示](../chapter-06-graph-foundations/01-representation.md)介绍了邻接矩阵，它能 $O(1)$ 判断两点是否相邻，但扫一遍某个顶点的全部邻居要 $O(n)$；大多数图算法也采用第 6 章介绍过的**邻接表**。下面的代码把它建出来，并让每个顶点的邻居按升序排列：
 
 ```cpp:line-numbers [adjacency-list.cpp]
 #include <algorithm>
