@@ -118,7 +118,7 @@ $$\omega(g(n)) = \{f(n) \mid \forall\, c > 0,\ \exists\, n_0 > 0,\ \forall\, n \
 
 对于任意小 $ \epsilon > 0$：
 
-$$1 \prec \log\log n \prec \log n \prec (\log n)^2 \prec n^{\epsilon } \prec n \prec n\log n \prec n^{1+\epsilon} \prec 2^n \prec n! \prec n^n$$
+$$1 \prec \log\log n \prec \log n \prec (\log n)^2 \prec n^{\epsilon} \prec n \prec n\log n \\ \prec n^{1+\epsilon} \prec 2^n \prec n! \prec n^n$$
 
 其中 $f \prec g$ 表示 $f = o(g)$。
 
@@ -224,10 +224,11 @@ int factorial(int n) {
   
 | 常见操作 | 复杂度 | 注意 |
 |---------|--------|------|
-| `sort()` | $O(n \log n)$ | C++ `std::sort`、Java `Arrays.sort`（基本类型） |
+| `sort()` | $O(n \log n)$ | C++ `std::sort`（introsort） |
+| `Arrays.sort()` 基本类型 | $O(n^2)$ | Java Dual-Pivot Quicksort，最坏退化 |
 | `Arrays.sort()` 对象 | $O(n \log n)$ | TimSort，保证最坏 $O(n \log n)$ |
 | `HashMap.get()` | 平均 $O(1)$，最坏 $O(n)$ | 哈希冲突时退化 |
-| `Collections.sort()` | $O(n \log n)$ | 基于归并排序 |
+| `Collections.sort()` | $O(n \log n)$ | 基于归并排序（TimSort） |
 | `String.contains()` | $O(n)$ | 线性扫描 |
 
 ### 5. 内存分配/释放*
@@ -356,7 +357,7 @@ for (int i = 0; i < n; i++) {
 
 **总代价：**
 
-$$T(n) = \sum_{i=0}^{\log_4 n - 1} \left(\frac{3}{16}\right)^i cn^2 + \Theta(n^{\log_4 3})$$
+$$T(n) = \sum_{i=0}^{\log_4 n - 1} \left(\frac{3}{16}\right)^i cn^2 + \Theta\!\left(n^{\log_4 3}\right)$$
 
 几何级数 $\sum_{i=0}^{\infty} (3/16)^i = \frac{16}{13}$ 收敛，因此：
 
@@ -469,7 +470,9 @@ $$T(n) = \Theta(n^{\log_b a} \log^{k+1} n)$$
 
 $$T(n) = 2T(\lfloor n/2 \rfloor) + n \le 2c\lfloor n/2 \rfloor \log\lfloor n/2 \rfloor + n$$
 
-$$\le cn \log(n/2) + n = cn\log n - cn\log 2 + n = cn\log n - (c\log 2 - 1)n$$
+$$\le cn \log(n/2) + n = cn\log n - cn\log 2 + n$$
+
+$$= cn\log n - (c\log 2 - 1)n$$
 
 当 $c \ge 1/\log 2$ 时，$(c\log 2 - 1)n \ge 0$，因此 $T(n) \le cn\log n$ ✓
 
@@ -664,7 +667,7 @@ $$\hat{T}(x) = x^p \left(1 + \int_1^x \frac{g(u)}{u^{p+1}}\, du\right)$$
 
 $$\sum_{i=1}^{k} a_i \hat{T}(b_i x) = \sum_{i=1}^{k} a_i (b_i x)^p \left(1 + \int_1^{b_i x} \frac{g(u)}{u^{p+1}}\, du\right)$$
 
-$$= x^p \underbrace{\sum_{i=1}^{k} a_i b_i^p}_{=1} \left(1 + \int_1^{b_i x} \frac{g(u)}{u^{p+1}}\, du\right)$$
+$$= x^p \sum_{i=1}^{k} a_i b_i^p \left(1 + \int_1^{b_i x} \frac{g(u)}{u^{p+1}}\, du\right)$$
 
 利用 $\sum a_i b_i^p = 1$ 和积分区间的拆分：
 
@@ -672,7 +675,9 @@ $$\int_1^x \frac{g(u)}{u^{p+1}}\, du = \sum_{i=1}^{k} a_i b_i^p \int_1^x \frac{g
 
 通过变量替换 $u = b_i v$：
 
-$$a_i b_i^p \int_1^x \frac{g(u)}{u^{p+1}}\, du \supset a_i \int_{1/b_i}^{x/b_i} \frac{g(b_i v)}{v^{p+1}}\, dv \approx a_i \int_1^{b_i x} \frac{g(u)}{u^{p+1}}\, dv$$
+$$a_i b_i^p \int_1^x \frac{g(u)}{u^{p+1}}\, du = a_i \int_{1/b_i}^{x/b_i} \frac{g(b_i v)}{v^{p+1}}\, dv$$
+
+$$\approx a_i \int_1^{b_i x} \frac{g(u)}{u^{p+1}}\, du$$
 
 （此处利用了 $h_i(x) = O(x/\log^2 x)$ 的条件，保证取整偏差不影响积分值。）
 
@@ -787,7 +792,7 @@ f(10) 的其他子调用 f(3) 已经返回，栈帧已释放！
 
 > **核心公式：**
 > 
-> $$S(n) = \underbrace{\text{递归最大深度} \times \text{每层栈帧大小}}_{\text{栈空间}} + \underbrace{\text{堆上同时存在的最大数据量}}_{\text{堆空间}}$$
+> $$S(n) = \underbrace{\text{递归最大深度} \times \text{每层栈帧大小}}_{\text{栈空间}} \\ {}+ \underbrace{\text{堆上同时存在的最大数据量}}_{\text{堆空间}}$$
 
 ### 4.3.1 递归算法的空间分析——"看树的最长路径"
 
@@ -889,7 +894,7 @@ void quickSort(int* arr, int lo, int hi) {
   - 递归深度：$O(\log n)$ → **$S(n) = O(\log n)$**
 - 堆空间：`partition` 是原地操作，$O(1)$
 
->  **尾递归优化：** 始终先递归较小的半边，较大半边用尾递归（或循环），可以保证深度 $O(\log n)$：
+>  **递归深度优化：** 始终先递归较小的半边，较大半边用循环，可以保证深度 $O(\log n)$：
 > ```c
 > void quickSort(int* arr, int lo, int hi) {
 >     while (lo < hi) {
@@ -961,47 +966,51 @@ for (int i = 1; i <= n; i++)
 
 ### 4.5.1 为什么空间递推不乘 $a$？
 
-对于时间递推 $T(n) = aT(n/b) + f(n)$，子问题是**依次**执行的（不是同时）。空间可以**复用**——第一个子问题算完释放空间，第二个子问题可以复用同一片内存。
+对于时间递推 $T(n) = aT(n/b) + f(n)$，子问题是**依次**执行的（不是同时）。空间可以**复用**——第一个子问题算完释放空间，第二个子问题可以复用同一片内存。所以堆空间**不乘 $a$**，只看一条路径的深度。
 
-因此空间递推：
+但要注意，空间有**两种**，递推式不一样：
 
-$$S(n) = S(n/b) + \text{每层额外空间}$$
+- **栈空间**沿递归深度**累加**（每层一个栈帧，从根到叶子同时存在）：
+  $$S_{栈}(n) = S_{栈}(n/b) + O(1)$$
+- **堆空间**子问题复用，取**峰值**：
+  $$S_{堆}(n) = \max\bigl(S_{堆}(n/b),\ \text{当前层辅助空间}\bigr)$$
 
-**没有 $a$！** 只看一条路径的深度。
+一句话：**栈空间加法，堆空间取 max**。这正是 4.3 节「空间看树的最长路径」的递推形式。
 
 ### 4.5.2 递推求解示例
 
 **归并排序：**
 
-$$S(n) = S(n/2) + O(n)$$
-
-展开：$S(n) = n + n/2 + n/4 + \cdots + 1 \approx 2n = O(n)$
+- 栈空间：递归深度 $O(\log n)$，每层栈帧 $O(1)$ → $O(\log n)$
+- 堆空间：`merge` 的辅助数组 $O(n)$，子问题依次执行、空间复用，峰值就是 $O(n)$
+- 合计：$S(n) = O(\log n) + O(n) = O(n)$（堆空间主导）
 
 **二分查找：**
 
-$$S(n) = S(n/2) + O(1)$$
-
-展开：$S(n) = 1 + 1 + \cdots + 1 = O(\log n)$
+- 栈空间：递归深度 $O(\log n)$，每层栈帧 $O(1)$ → $O(\log n)$
+- 堆空间：无
+- 合计：$S(n) = O(\log n)$
 
 **快速排序（最坏）：**
 
-$$S(n) = S(n-1) + O(1)$$
-
-展开：$S(n) = O(n)$
+- 栈空间：已有序时退化成链，深度 $O(n)$，每层 $O(1)$ → $O(n)$
+- 堆空间：`partition` 原地，$O(1)$
+- 合计：$S(n) = O(n)$
 
 **Karatsuba 大整数乘法：**
 
 时间：$T(n) = 3T(n/2) + O(n) = O(n^{\log_2 3})$
 
-空间：$S(n) = S(n/2) + O(n) = O(n)$（虽然时间有 3 个子问题，空间只走 1 条路）
+空间：栈 $O(\log n)$ + 辅助数组 $O(n)$ = $O(n)$（虽然时间有 3 个子问题，空间只走 1 条路）
 
 ### 4.5.3 通用公式
 
-对于分治递推 $T(n) = aT(n/b) + f(n)$ 的空间复杂度：
+对于分治递推 $T(n) = aT(n/b) + f(n)$ 的空间复杂度，拆成两部分：
 
-$$S(n) = \sum_{i=0}^{d-1} \text{第 } i \text{ 层的额外空间}(n/b^i)$$
+- **栈空间**：$S_{栈}(n) = O(1) \times d$，其中 $d$ 是递归深度
+- **堆空间**：$S_{堆}(n) = \max_{i} \left\{ \text{第 } i \text{ 层同时存在的辅助空间} \right\}$
 
-其中 $d$ 是递归深度。
+合计 $S(n) = S_{栈}(n) + S_{堆}(n)$。多数时候二者其一占主导，取较大者即可。
 
 **常见情况速查：**
 
@@ -1027,7 +1036,7 @@ $$S(n) = \sum_{i=0}^{d-1} \text{第 } i \text{ 层的额外空间}(n/b^i)$$
 | 堆排序 | $O(1)$ | ✅ 严格原地 | 在原数组上建堆 |
 | 快速排序 | $O(\log n)$ | ❌ 非严格原地 | 递归栈空间 |
 | 归并排序 | $O(n)$ | ❌ 非原地 | 辅助数组 |
-| 计数排序 | $O(k)$ | ❌ 非原地 | $k$ 为值域大小 |
+| 计数排序 | $O(n+k)$ | ❌ 非原地 | 计数数组 + 输出数组 |
 | 基数排序 | $O(n+k)$ | ❌ 非原地 | 桶空间 |
 
 >  **关于快排：** 快排的 $O(\log n)$ 栈空间通常被认为"近似原地"，因为 $\log n$ 在实践中很小（$n = 10^6$ 时 $\log n \approx 20$）。但严格数学定义上，$O(\log n) \neq O(1)$，所以**快排不是原地算法**。
