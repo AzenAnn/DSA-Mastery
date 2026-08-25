@@ -35,14 +35,14 @@ status: "draft"
 | --- | --- | --- |
 | 最简单的排序怎么做？ | [10.1 插入排序](./01-insertion-sort.md)、[10.2 选择排序](./02-selection-sort.md)、[10.3 冒泡排序](./03-bubble-sort.md) | 能实现三种 $O(n^2)$ 排序并分析稳定性 |
 | 插入排序能再快一点吗？ | [10.4 希尔排序](./04-shell-sort.md) | 能实现希尔排序并解释复杂度对增量序列的依赖 |
-| 如何达到比较下界？ | [10.5 归并排序](./05-merge-sort.md)、[10.6 快速排序](./06-quick-sort.md)、[10.7 堆排序](./07-heap-sort.md) | 能实现 $O(n\log n)$ 排序并比较各自代价 |
-| 如何突破比较下界？ | [10.8 计数排序](./08-counting-sort.md)、[10.9 桶排序](./09-bucket-sort.md)、[10.10 基数排序](./10-radix-sort.md) | 能实现非比较排序并说出各自前提 |
+| 如何达到比较下界？ | [11.1 归并排序](../chapter-11-advanced-sort/01-merge-sort.md)、[11.2 快速排序](../chapter-11-advanced-sort/02-quick-sort.md)、[11.3 堆排序](../chapter-11-advanced-sort/03-heap-sort.md) | 能实现 $O(n\log n)$ 排序并比较各自代价 |
+| 如何突破比较下界？ | [11.4 计数排序](../chapter-11-advanced-sort/04-counting-sort.md)、[11.5 桶排序](../chapter-11-advanced-sort/05-bucket-sort.md)、[11.6 基数排序](../chapter-11-advanced-sort/06-radix-sort.md) | 能实现非比较排序并说出各自前提 |
 
 ## 推荐学习顺序
 
 1. 先学基础：从[10.1 插入排序](./01-insertion-sort.md)、[10.2 选择排序](./02-selection-sort.md)、[10.3 冒泡排序](./03-bubble-sort.md)开始，再到[10.4 希尔排序](./04-shell-sort.md)。
-2. 再学高效：从[10.5 归并排序](./05-merge-sort.md)、[10.6 快速排序](./06-quick-sort.md)、[10.7 堆排序](./07-heap-sort.md)开始。
-3. 然后学非比较：[10.8 计数排序](./08-counting-sort.md)、[10.9 桶排序](./09-bucket-sort.md)、[10.10 基数排序](./10-radix-sort.md)。
+2. 再学高效：从[11.1 归并排序](../chapter-11-advanced-sort/01-merge-sort.md)、[11.2 快速排序](../chapter-11-advanced-sort/02-quick-sort.md)、[11.3 堆排序](../chapter-11-advanced-sort/03-heap-sort.md)开始。
+3. 然后学非比较：[11.4 计数排序](../chapter-11-advanced-sort/04-counting-sort.md)、[11.5 桶排序](../chapter-11-advanced-sort/05-bucket-sort.md)、[11.6 基数排序](../chapter-11-advanced-sort/06-radix-sort.md)。
 4. 最后完成配套 Lab：稳定性对比实验与多算法性能基准。
 
 ## 配套 Labs

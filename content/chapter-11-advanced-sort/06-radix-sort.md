@@ -1,15 +1,15 @@
 ---
-title: "10.10 基数排序"
+title: "11.6 基数排序"
 description: "基数排序的 LSD 按位分配收集原理、稳定性关键、正确性证明与突破比较下界的本质。"
-order: 10
-chapter: 10
-chapterTitle: "排序"
+order: 6
+chapter: 11
+chapterTitle: "高效排序与外部排序"
 updated: "2026-08-21"
 contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 10.10 基数排序
+# 11.6 基数排序
 
 基数排序适用于"关键字可以表示为若干位"的数据，例如十进制整数、字符串或固定长度字串。它通常采用 LSD（Least Significant Digit，最低位优先）策略：
 
