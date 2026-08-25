@@ -1525,6 +1525,13 @@ input:focus-visible {
   max-width: 100%;
 }
 
+/* 超长公式的 SVG 有固定 ex 宽度（最宽 72ex≈544px），必须让 svg 本身能收缩，
+   否则会撑破 mjx-container 和整页。等比缩放，避免纵向变形。 */
+.course-document-layout .vp-doc mjx-container > svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Graphviz/Kroki output stays readable without widening the document column. */
 .course-document-layout .vp-doc .vpd-diagram {
   max-width: 100%;
