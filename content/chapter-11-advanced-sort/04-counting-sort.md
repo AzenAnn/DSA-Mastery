@@ -1,15 +1,15 @@
 ---
-title: "10.11 计数排序"
+title: "11.4 计数排序"
 description: "计数排序的值域计数原理、前缀和回填、正确性证明与适用条件。"
-order: 11
-chapter: 10
-chapterTitle: "排序"
+order: 4
+chapter: 11
+chapterTitle: "高效排序与外部排序"
 updated: "2026-08-21"
 contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 10.11 计数排序
+# 11.4 计数排序
 
 计数排序适用于整数序列，且关键字范围不大。它统计每个关键字出现次数，再按计数回填结果。
 

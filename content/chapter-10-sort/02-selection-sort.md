@@ -1,7 +1,7 @@
 ---
-title: "10.5 选择排序"
+title: "10.2 选择排序"
 description: "选择排序的原理、正确性证明、复杂度分析与不稳定性反例。"
-order: 5
+order: 2
 chapter: 10
 chapterTitle: "排序"
 updated: "2026-08-21"
@@ -9,7 +9,7 @@ contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 10.5 选择排序
+# 10.2 选择排序
 
 每一趟从未排序区间里选择最小值，并交换到当前起始位置。
 

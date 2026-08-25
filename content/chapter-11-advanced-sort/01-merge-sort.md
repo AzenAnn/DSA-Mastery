@@ -1,15 +1,15 @@
 ---
-title: "10.8 归并排序"
+title: "11.1 归并排序"
 description: "归并排序的分治原理、正确性证明、主定理复杂度分析与稳定性。"
-order: 8
-chapter: 10
-chapterTitle: "排序"
+order: 1
+chapter: 11
+chapterTitle: "高效排序与外部排序"
 updated: "2026-08-21"
 contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 10.8 归并排序
+# 11.1 归并排序
 
 归并排序把数组一分为二，递归排序左右两半，再把两个有序子数组归并成一个有序数组。
 

@@ -1,15 +1,15 @@
 ---
-title: "10.10 堆排序"
+title: "11.3 堆排序"
 description: "堆排序的堆结构原理、正确性证明、建堆 O(n) 分析与原地特性。"
-order: 10
-chapter: 10
-chapterTitle: "排序"
+order: 3
+chapter: 11
+chapterTitle: "高效排序与外部排序"
 updated: "2026-08-21"
 contributors: ["Ph1z"]
 status: "draft"
 ---
 
-# 10.10 堆排序
+# 11.3 堆排序
 
 堆排序借助最大堆或最小堆。建立堆后，每次把堆顶元素放到数组尾部，调整堆，再继续做。
 

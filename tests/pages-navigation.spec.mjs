@@ -140,7 +140,7 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await page.goto(`${baseUrl}/`);
   await expect(page).toHaveTitle(/数据结构与算法理论与实验教程 · DSA Mastery/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("学透、做实、用活");
-  await expect(page.locator(".course-hero-stats")).toContainText("18");
+  await expect(page.locator(".course-hero-stats")).toContainText("17");
   await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.lessons));
   await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.labs));
 
@@ -153,14 +153,9 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/01-data-structure-basics/`);
   await page.locator(".VPNavBarMenu").getByRole("link", { name: "教材" }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/`);
-  await page.locator(".VPSidebar").getByRole("link", { name: /Ch\.0\+ 算法思维体验/ }).click();
-  await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-00-plus-algorithm-thinking/`);
-  await expect(page.locator(".course-curriculum-detail")).toContainText("Peak Finding");
-  await expect(page.locator(".course-curriculum-detail")).toContainText("Union-Find");
-  await expect(page.locator(".course-curriculum-detail")).toContainText("数据结构的选择如何影响算法效率");
-  await page.locator(".course-curriculum-resource-list").getByRole("link", { name: /算法复杂度与算法分析/ }).click();
-  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.3 算法复杂度与算法分析");
+  await page.locator(".VPSidebar").getByRole("link", { name: /0\.2 时间与空间复杂度概论/ }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/02-time-and-space-complexity/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.2 时间与空间复杂度概论");
   await expect(page.locator(".course-document-meta")).toContainText("draft");
   await expect(page.locator(".VPSidebar")).toBeVisible();
   await expect(page.locator(".VPDocAsideOutline")).toBeVisible();
@@ -208,9 +203,9 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/labs/chapter-01/lab-01-05-static-linked-list-quiz/"]').first(),
   ).toBeVisible();
-  await input.fill("算法复杂度与算法分析");
+  await input.fill("时间与空间复杂度");
   await expect(
-    results.locator('a[href*="/learn/chapter-00-introduction/03-algorithm-complexity-analysis/"]').first(),
+    results.locator('a[href*="/learn/chapter-00-introduction/02-time-and-space-complexity/"]').first(),
   ).toBeVisible();
   await input.fill("理论环境展示");
   await expect(
@@ -436,11 +431,11 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   expect(failures).toEqual([]);
 });
 
-test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tables, and metadata remain functional", async ({ page }) => {
+test("chapter 0 code contrast, math, copy, tables, and metadata remain functional", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`);
+  await page.goto(`${baseUrl}/learn/chapter-00-introduction/02-time-and-space-complexity/`);
   const codeContrast = async () =>
-    page.locator('.vp-doc div[class*="language-"].line-numbers-mode').first().evaluate((block) => {
+    page.locator('.vp-doc div[class*="language-"]').first().evaluate((block) => {
       const parseColor = (value) => {
         const channels = value.match(/[\d.]+/g)?.map(Number) ?? [];
         return {
@@ -450,12 +445,6 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
           alpha: channels[3] ?? 1,
         };
       };
-      const composite = (foreground, background) => ({
-        red: foreground.red * foreground.alpha + background.red * (1 - foreground.alpha),
-        green: foreground.green * foreground.alpha + background.green * (1 - foreground.alpha),
-        blue: foreground.blue * foreground.alpha + background.blue * (1 - foreground.alpha),
-        alpha: 1,
-      });
       const luminance = (color) => {
         const linear = [color.red, color.green, color.blue].map((channel) => {
           const normalized = channel / 255;
@@ -476,19 +465,12 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
         .filter((token) => token.textContent?.trim())
         .map((token) => {
           const foreground = parseColor(globalThis.getComputedStyle(token).color);
-          const lineBackground = parseColor(
-            globalThis.getComputedStyle(token.closest(".highlighted") ?? block).backgroundColor,
-          );
-          return contrast(foreground, composite(lineBackground, blockBackground));
+          return contrast(foreground, blockBackground);
         });
-      const lineNumber = block.querySelector(".line-numbers-wrapper span");
       const pre = block.querySelector("pre");
 
       return {
         minimumTokenContrast: Math.min(...tokenContrasts),
-        lineNumberContrast: lineNumber
-          ? contrast(parseColor(globalThis.getComputedStyle(lineNumber).color), blockBackground)
-          : 0,
         codeFontSize: Number.parseFloat(globalThis.getComputedStyle(block.querySelector("code")).fontSize),
         overflowX: globalThis.getComputedStyle(pre).overflowX,
         overflowY: globalThis.getComputedStyle(pre).overflowY,
@@ -497,7 +479,6 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
 
   const lightCodeContrast = await codeContrast();
   expect(lightCodeContrast.minimumTokenContrast).toBeGreaterThanOrEqual(4.5);
-  expect(lightCodeContrast.lineNumberContrast).toBeGreaterThanOrEqual(4.5);
   expect(lightCodeContrast.codeFontSize).toBeGreaterThanOrEqual(13);
   expect(lightCodeContrast.overflowX).toBe("auto");
   expect(lightCodeContrast.overflowY).toBe("hidden");
@@ -508,7 +489,6 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
   await expect(page.locator("html")).toHaveClass(/dark/);
   const darkCodeContrast = await codeContrast();
   expect(darkCodeContrast.minimumTokenContrast).toBeGreaterThanOrEqual(4.5);
-  expect(darkCodeContrast.lineNumberContrast).toBeGreaterThanOrEqual(4.5);
 
   const codeBlock = page.locator('.vp-doc div[class*="language-"]').first();
   await expect(codeBlock).toBeVisible();
@@ -517,24 +497,10 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
   await expect(copyButton).toHaveClass(/copied/);
   await expect(page.getByRole("link", { name: "在 GitHub 上编辑此页" })).toHaveAttribute(
     "href",
-    /content\/chapter-00-introduction\/03-algorithm-complexity-analysis\.md$/,
+    /content\/chapter-00-introduction\/02-time-and-space-complexity\.md$/,
   );
-  await expect(page.locator(".vp-doc .custom-block.tip").first()).toBeVisible();
-  await expect(page.locator(".vp-doc .custom-block.warning").first()).toBeVisible();
-  for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
-    await expect(page.locator(`.vp-doc .dsa-theory-block--${kind}`).first()).toBeVisible();
-  }
-  await expect(page.locator(".vp-doc mark").filter({ hasText: "大 O 本身表示上界" })).toBeVisible();
-  await expect(page.locator(".vp-doc .dsa-code-title").first()).toContainText("first-score.cpp");
-  await expect(page.locator(".vp-doc code .highlighted").first()).toBeVisible();
   await expect(page.locator(".vp-doc mjx-container").first()).toBeVisible();
-  const details = page.locator(".vp-doc details").first();
-  await expect(details).not.toHaveAttribute("open", "");
-  await details.locator("summary").click();
-  await expect(details).toHaveAttribute("open", "");
-
-  await page.goto(`${baseUrl}/learn/chapter-00-introduction/00-overview/`);
-  await expect(page.locator(".vp-doc table")).toBeVisible();
+  await expect(page.locator(".vp-doc table").first()).toBeVisible();
   await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", `${pagesBasePath}/favicon.svg`);
   expect(failures).toEqual([]);
 });
@@ -679,7 +645,7 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
 test("home and lesson navbar share the same horizontal rail", async ({ page }) => {
   const failures = monitorPage(page);
   const widths = [1024, 1440, 2048];
-  const route = `${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`;
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-time-and-space-complexity/`;
 
   for (const width of widths) {
     await page.setViewportSize({ width, height: 700 });
@@ -776,7 +742,7 @@ test("navbar brand subtitle stays contained and appearance icon stays centered",
 
 test("lesson navigation keeps the pre-migration hierarchy at responsive widths", async ({ page }) => {
   const failures = monitorPage(page);
-  const route = `${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`;
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-time-and-space-complexity/`;
 
   for (const width of [1440, 1024, 980, 768, 375]) {
     await page.setViewportSize({ width, height: 900 });
