@@ -203,7 +203,11 @@ export default defineConfig({
       provider: "local",
       options: {
         _render(source, environment, markdown) {
-          return markdown.render(source, { ...environment, dsaSearchIndex: true });
+          const env = { ...environment, dsaSearchIndex: true };
+          const html = markdown.render(source, env);
+          // 自定义渲染器不会走 VitePress 内置的 frontmatter.search 排除逻辑，
+          // 这里手动尊重 `search: false`，把配图源等构建专用页排除出站内搜索。
+          return env.frontmatter?.search === false ? "" : html;
         },
         translations: {
           button: { buttonText: "搜索教材与实验", buttonAriaLabel: "搜索教材与实验" },

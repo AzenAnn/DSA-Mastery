@@ -17,7 +17,7 @@
 <g id="clust2" class="cluster">
 <title>cluster_dfs</title>
 <polygon fill="none" stroke="black" points="137,-8 137,-377 259,-377 259,-8 137,-8"/>
-<text xml:space="preserve" text-anchor="middle" x="198" y="-359.7" font-family="Times,serif" font-size="14.00">DFS 树（高 3）</text>
+<text xml:space="preserve" text-anchor="middle" x="198" y="-359.7" font-family="Times,serif" font-size="14.00">DFS 树（高 4）</text>
 </g>
 <!-- s1 -->
 <g id="node1" class="node">
