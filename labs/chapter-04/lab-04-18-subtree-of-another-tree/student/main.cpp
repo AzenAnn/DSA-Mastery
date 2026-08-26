@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <sstream>
 #include <queue>
 
 struct TreeNode {
@@ -14,60 +13,11 @@ struct TreeNode {
     TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
-TreeNode* buildTree(const std::vector<std::string>& tokens) {
-    if (tokens.empty() || tokens[0] == "null" || tokens[0] == "#") return nullptr;
-    TreeNode* root = new TreeNode(std::stoi(tokens[0]));
-    std::queue<TreeNode*> q;
-    q.push(root);
-    size_t i = 1;
-    while (!q.empty() && i < tokens.size()) {
-        TreeNode* curr = q.front();
-        q.pop();
-        if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
-                curr->left = new TreeNode(std::stoi(tokens[i]));
-                q.push(curr->left);
-            }
-            i++;
-        }
-        if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
-                curr->right = new TreeNode(std::stoi(tokens[i]));
-                q.push(curr->right);
-            }
-            i++;
-        }
-    }
-    return root;
-}
-
-void freeTree(TreeNode* root) {
-    if (!root) return;
-    freeTree(root->left);
-    freeTree(root->right);
-    delete root;
-}
-
-bool isSubtree(TreeNode* root, TreeNode* subRoot) {
-    // TODO: 判断 subRoot 是否为 root 的某个子树
-    return false;
-}
-
 int main() {
-    std::string line1, line2;
-    if (!std::getline(std::cin, line1) || !std::getline(std::cin, line2)) return 0;
-    std::vector<std::string> tokens1, tokens2;
-    std::string token;
-    std::stringstream ss1(line1), ss2(line2);
-    while (ss1 >> token) tokens1.push_back(token);
-    while (ss2 >> token) tokens2.push_back(token);
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
 
-    TreeNode* root = buildTree(tokens1);
-    TreeNode* subRoot = buildTree(tokens2);
-
-    std::cout << (isSubtree(root, subRoot) ? "true" : "false") << "\n";
-
-    freeTree(root);
-    freeTree(subRoot);
+    // TODO: 读入两棵二叉树 root 和 subRoot，判断 subRoot 是否是 root 的子树。
+    // 要求：递归匹配，时间复杂度 O(n * m)，空间复杂度 O(n + m)。
     return 0;
 }
