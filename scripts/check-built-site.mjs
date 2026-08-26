@@ -189,8 +189,8 @@ if (dataStructureBasicsHtml.includes("::: definition")) {
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 5) {
-  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, and Graphviz authoring guides, found ${prefacePages.length} pages`);
+if (prefacePages.length !== 6) {
+  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, Graphviz authoring, and macOS student guides, found ${prefacePages.length} pages`);
 }
 const prefaceHtml = await readFile(
   path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
@@ -317,6 +317,25 @@ for (const required of [
 }
 if (graphvizGuideHtml.includes("@include") || graphvizGuideHtml.includes("第 preface 章")) {
   throw new Error("Graphviz authoring guide was not expanded or leaked the internal preface id");
+}
+
+const macosStudentGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "05-macos-student-setup", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "macOS 学生实验环境安装指南",
+  "Xcode Command Line Tools",
+  "Homebrew",
+  "pnpm@11.1.1",
+  "Visual Studio Code",
+]) {
+  if (!macosStudentGuideHtml.includes(required)) {
+    throw new Error(`Rendered macOS student guide is missing: ${required}`);
+  }
+}
+if (macosStudentGuideHtml.includes("@include") || macosStudentGuideHtml.includes("第 preface 章")) {
+  throw new Error("macOS student guide was not expanded or leaked the internal preface id");
 }
 
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
