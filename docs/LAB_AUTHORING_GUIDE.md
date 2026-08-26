@@ -252,6 +252,24 @@ README 只能挂载一次：
 4. 人工逐题核对答案索引、干扰项、解析和来源；若来源按维护者决定不公开，则核对 task/PR 中的省略记录。
 5. 确认 README 没有第二份答案，个人导出痕迹已清除。
 
+### 5.4 Quiz 配图规范
+
+题干和解析是 `quiz.json` 里的 Markdown 字符串：构建期安全渲染、原始 HTML 关闭，且 `quiz.schema.json` 目前没有图片字段。因此**不要**在题目中使用 `<img>` 标签或图片附件字段；需要配图时按以下两种方式：
+
+1. **文字/ASCII 图（默认首选）**：在题干或解析中用 ```text``` 代码块画图，或给出邻接表/边表/网格等结构。例如迷宫网格、树形结构、图的邻接表。无外部依赖，任何环境渲染一致。
+2. **引用站点内 SVG（需要真图时）**：用 Markdown 图片语法 `![说明文字](相对路径)` 引用 `public/` 下的 SVG：
+   - 图文件放在 `public/quiz-images/`（手工维护的题库图），或复用 `public/diagrams/`（构建期由 `vitepress-plugin-diagrams` 从 graphviz 源生成）；
+   - 路径写成从 Lab 页面可解析的相对路径，如 `../../../diagrams/graphviz-dfs-bfs-q04-graph-xxxx.svg`；不要硬编码部署前缀（如 `/DSA-Mastery/`）；
+   - 用插件生成时，把 graphviz 源写在同 Lab 的图源页（如 `quiz-figures.md`），构建后按 `public/diagrams/` 中实际生成的文件名引用；文件名含内容哈希，图源一旦改动就会换名，需要同步更新引用；
+   - 最终 `pnpm run build` 与 `check:site` 必须通过，内部图片链接会逐一校验。
+
+约束：
+
+- 配图是锦上添花：能用文字或邻接表讲清的结构优先文字，不为每道题强行配图；
+- 题面配图不得泄露答案（例如边分类题只画图、不标注分类结果）；解析中的配图不受此限；
+- 不引用外链图片，不使用原始 HTML `<img>`；
+- 图源页（如 `quiz-figures.md`）是构建素材、不面向学习者：在 frontmatter 中添加 robots `noindex, nofollow`，并在站点 `sitemap.transformItems` 中过滤掉该页 URL，避免进入搜索引擎索引与站点地图；页面不会加入导航。
+
 ## 6. Program：单题 C++ 作业
 
 ### 6.1 标准内容包
