@@ -1,0 +1,192 @@
+[
+  {
+    "id": "ds-drill-selection-sort-001",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-001",
+    "stem": "选择排序每趟做什么？",
+    "options": [
+      "相邻元素两两比较交换",
+      "从未排序区间选出最小值交换到当前起始位置",
+      "递归划分左右区间",
+      "按位分配到桶中"
+    ],
+    "answer": 1,
+    "explanation": "选择排序每一趟从未排序区间挑最小值，交换到当前起始位置，对应「挑最矮的站到队首」。"
+  },
+  {
+    "id": "ds-drill-selection-sort-002",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-002",
+    "stem": "选择排序对 [5, 2, 8, 1] 第一趟（i=0）完成后数组是？",
+    "options": [
+      "[1, 2, 8, 5]",
+      "[1, 5, 2, 8]",
+      "[2, 5, 8, 1]",
+      "[1, 2, 5, 8]"
+    ],
+    "answer": 0,
+    "explanation": "选出最小值 1，与 a[0]=5 交换，得 [1, 2, 8, 5]。"
+  },
+  {
+    "id": "ds-drill-selection-sort-003",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-003",
+    "stem": "选择排序最好、平均、最坏时间复杂度分别是？",
+    "options": [
+      "O(n)、O(n²)、O(n²)",
+      "O(n²)、O(n²)、O(n²)",
+      "O(n log n) 三种情况",
+      "O(n)、O(n log n)、O(n²)"
+    ],
+    "answer": 1,
+    "explanation": "选择排序三种情况全是 O(n²)，因为它没有「最好 O(n)」福利，每趟都要扫完剩余部分。"
+  },
+  {
+    "id": "ds-drill-selection-sort-004",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-004",
+    "stem": "选择排序为什么不稳定？",
+    "options": [
+      "因为用了递归",
+      "交换最小值时可能把相等元素从后面换到前面，打乱相对顺序",
+      "因为需要额外数组",
+      "因为它相邻交换"
+    ],
+    "answer": 1,
+    "explanation": "反例 [5a,5b,3]：选出 3 与 5a 交换得 [3,5b,5a]，两个 5 相对顺序变了。"
+  },
+  {
+    "id": "ds-drill-selection-sort-005",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-005",
+    "stem": "关于选择排序的空间复杂度，下列说法正确的是？",
+    "options": [
+      "需要 O(n) 辅助数组",
+      "需要 O(log n) 递归栈",
+      "原地排序，O(1)",
+      "需要 O(n²) 额外空间"
+    ],
+    "answer": 2,
+    "explanation": "选择排序原地排序，只用常数变量记录最小下标，空间 O(1)。"
+  },
+  {
+    "id": "ds-drill-selection-sort-006",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-006",
+    "stem": "选择排序的交换次数是？",
+    "options": [
+      "O(n²)",
+      "O(n log n)",
+      "O(n)",
+      "O(1)"
+    ],
+    "answer": 2,
+    "explanation": "外层 n-1 趟，每趟最多交换 1 次，交换次数 O(n)；但比较次数是 O(n²)。"
+  },
+  {
+    "id": "ds-drill-selection-sort-007",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-007",
+    "stem": "选择排序 vs 插入排序，下列说法正确的是？",
+    "options": [
+      "两者都稳定",
+      "选择排序最好复杂度优于插入排序",
+      "插入排序最好可达 O(n)，选择排序任何情况都是 O(n²)",
+      "两者空间复杂度不同"
+    ],
+    "answer": 2,
+    "explanation": "插入排序最好 O(n)、稳定；选择排序任何情况 O(n²)、不稳定，这是最本质差异。"
+  },
+  {
+    "id": "ds-drill-selection-sort-008",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-008",
+    "stem": "选择排序的循环不变式是？",
+    "options": [
+      "第 i 轮开始前，前 i 个位置已放置最小的 i 个元素且有序",
+      "每轮结束后最大值在末尾",
+      "前缀始终是原数组前 i 个元素",
+      "堆顶是最大值"
+    ],
+    "answer": 0,
+    "explanation": "第 i 轮开始前，前 i 个位置已放置最小的 i 个元素，且按排序要求排列。"
+  },
+  {
+    "id": "ds-drill-selection-sort-009",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-009",
+    "stem": "下列哪个排序的交换次数最少（同为 O(n²) 比较时）？",
+    "options": [
+      "冒泡排序",
+      "选择排序",
+      "插入排序",
+      "三者一样"
+    ],
+    "answer": 1,
+    "explanation": "选择排序每趟最多交换一次，共 O(n) 次交换；冒泡/插入最坏情况移动次数接近 O(n²)。"
+  },
+  {
+    "id": "ds-drill-selection-sort-010",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "selection sort"
+    ],
+    "targetId": "ds-drill-selection-sort-010",
+    "stem": "选择排序总比较次数的精确表达式是？",
+    "options": [
+      "n(n-1)/2",
+      "n(n+1)/2",
+      "n log n",
+      "n²"
+    ],
+    "answer": 0,
+    "explanation": "T(n) = Σ(n-i-1) = n(n-1)/2，对应每次扫描剩余元素。"
+  }
+]
