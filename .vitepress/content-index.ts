@@ -114,6 +114,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-preface/02-windows-student-setup.md",
       "content/chapter-preface/03-lab-cli-command-guide.md",
       "content/chapter-preface/04-graphviz-authoring-guide.md",
+      "content/chapter-preface/05-macos-student-setup.md",
     ],
   },
   {

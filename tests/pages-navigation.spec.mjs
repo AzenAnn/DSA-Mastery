@@ -223,6 +223,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-preface/04-graphviz-authoring-guide/"]').first(),
   ).toBeVisible();
+  await input.fill("macOS 学生实验环境安装指南");
+  await expect(
+    results.locator('a[href*="/learn/chapter-preface/05-macos-student-setup/"]').first(),
+  ).toBeVisible();
   await input.fill("单链表选择题精练");
   const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-singly-linked-list-quiz/"]').first();
   await expect(labResult).toBeVisible();
@@ -295,6 +299,7 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   const windowsStudentGuideRoute = `${baseUrl}/learn/chapter-preface/02-windows-student-setup/`;
   const labCommandGuideRoute = `${baseUrl}/learn/chapter-preface/03-lab-cli-command-guide/`;
   const graphvizGuideRoute = `${baseUrl}/learn/chapter-preface/04-graphviz-authoring-guide/`;
+  const macosStudentGuideRoute = `${baseUrl}/learn/chapter-preface/05-macos-student-setup/`;
 
   await page.goto(`${baseUrl}/learn/`);
   const foundationChapters = page.locator(".course-curriculum-chapters > a");
@@ -314,6 +319,25 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Windows 学生实验环境安装指南");
   await expect(page.locator(".vp-doc")).toContainText("Visual Studio C++ Build Tools");
   await expect(page.locator(".VPSidebar").getByRole("link", { name: "Windows 学生实验环境安装指南", exact: true })).toBeVisible();
+
+  await page.goto(outlineRoute);
+  const macosStudentGuideEntry = page.locator(".course-curriculum-resource-list").getByRole("link", { name: /macOS 学生实验环境安装指南/ });
+  await expect(macosStudentGuideEntry).toBeVisible();
+  await macosStudentGuideEntry.click();
+  await expect(page).toHaveURL(macosStudentGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("macOS 学生实验环境安装指南");
+  await expect(page.locator(".vp-doc")).toContainText("Xcode Command Line Tools");
+  await expect(page.locator(".vp-doc")).toContainText("pnpm@11.1.1");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "macOS 学生实验环境安装指南", exact: true })).toBeVisible();
+  const macosGuideImages = page.locator(".vp-doc img");
+  await expect(macosGuideImages.first()).toBeVisible();
+  expect(await macosGuideImages.count()).toBeGreaterThan(0);
+  for (const image of await macosGuideImages.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0))
+      .toBe(true);
+  }
 
   await page.goto(outlineRoute);
   const outlineResources = page.locator(".course-curriculum-resource-list");
