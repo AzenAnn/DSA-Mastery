@@ -343,8 +343,8 @@ labs/index.md
 
 | 候选路径 | 旧职责 | 替代物 | 无引用与替代证据 | 决定 | 回滚方式 |
 | --- | --- | --- | --- | --- | --- |
-| `content/chapter-05-graph/00-overview.md` | 旧物理 Ch.5 图总览，被课程映射到 Ch.6 | `content/chapter-06-graph-foundations/00-overview.md` | 新页保留图基础导览并链接 Ch.7；内容、构建与 Pages 检查后旧产品引用必须为零 | 迁移 | 合并前放弃分支；合并后 revert 本任务提交 |
-| `content/chapter-05-graph/01-representation.md` | 图的表示正文，被课程映射到 Ch.6 | `content/chapter-06-graph-foundations/01-representation.md` | 新页保留邻接矩阵/表、复杂度与练习并改为 `chapter: 6` | 迁移 | 同上 |
+| `content/chapter-05-graph/00-overview.md` | 旧物理 Ch.5 图总览，被课程映射到 Ch.6 | `content/chapter-06-graph-foundations/01-graph-basics.md` | 基础概念已并入 6.1，不再保留独立章节介绍页 | 迁移 | 合并前放弃分支；合并后 revert 本任务提交 |
+| `content/chapter-05-graph/01-representation.md` | 图的表示正文，被课程映射到 Ch.6 | `content/chapter-06-graph-foundations/02-graph-storage.md` | 存储正文保留邻接矩阵/表、复杂度与练习，并改为 `chapter: 6` | 迁移 | 同上 |
 | `content/chapter-05-graph/02-traversal.md` | 图遍历正文，被课程映射到 Ch.7 | `content/chapter-07-graph-traversal/01-dfs-and-bfs.md` | 新页保留并扩展 DFS/BFS、非连通与复杂度内容，编号改为 `chapter: 7` | 迁移 | 同上 |
 | `content/chapter-05-graph/03-applications.md` | MST/最短路径正文，被课程映射到 Ch.7 | `content/chapter-07-graph-traversal/02-minimum-spanning-tree.md`、`content/chapter-07-graph-traversal/03-shortest-path.md` | 原正文拆分为最小生成树与最短路径两节，均改为 `chapter: 7` | 迁移 | 同上 |
 | `content/chapter-05-graph/04-astar-visualization.md` | A* 交互正文，被课程映射到 Ch.7 | `content/chapter-07-graph-applications/04-astar-visualization.md` | 新页保留原演示路由并改用现有主题令牌 | 迁移 | 同上 |
