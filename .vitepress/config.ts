@@ -13,6 +13,7 @@ import {
   sourceUrlMap,
 } from "./content-index";
 import { installTheoryMarkdown } from "./markdown/theory";
+import { emitRedirectPages } from "./page-redirects.mjs";
 
 const course = collectCourseIndex();
 const sidebarIconProps = { size: 16, strokeWidth: 2, "aria-hidden": true, focusable: "false" };
@@ -69,6 +70,10 @@ export default defineConfig({
   base,
   srcDir: ".",
   outDir: "dist/pages",
+  async buildEnd(siteConfig) {
+    // GitHub Pages 无服务端重定向，为被删除/改名的旧 URL 生成静态兼容页。
+    await emitRedirectPages(siteConfig.outDir, { base });
+  },
   cleanUrls: false,
   appearance: true,
   lastUpdated: false,

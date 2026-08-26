@@ -1,6 +1,7 @@
 import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { pageRedirects } from "../.vitepress/page-redirects.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const artifactRoot = path.join(projectRoot, "dist", "pages");
@@ -118,6 +119,20 @@ for (const relativePath of expectedPages) {
   if (!(await exists(path.join(artifactRoot, relativePath)))) missingPages.push(relativePath.replaceAll("\\", "/"));
 }
 if (missingPages.length) throw new Error(`Missing generated pages:\n${missingPages.join("\n")}`);
+for (const rule of pageRedirects) {
+  const redirectFile = path.join(artifactRoot, rule.from, "index.html");
+  if (!(await exists(redirectFile))) {
+    throw new Error(`Missing redirect page for retired route: ${rule.from}`);
+  }
+  const redirectHtml = await readFile(redirectFile, "utf8");
+  const withBase = (route) => `${base}${route.replace(/^\//, "")}`;
+  const targets = [withBase(rule.to), ...(rule.also ?? []).map(withBase)];
+  for (const target of targets) {
+    if (!redirectHtml.includes(target)) {
+      throw new Error(`Redirect page for ${rule.from} is missing target: ${target}`);
+    }
+  }
+}
 if (await exists(path.join(artifactRoot, "AGENTS.html"))) {
   throw new Error("Repository-only AGENTS.md leaked into the public course artifact");
 }
