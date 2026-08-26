@@ -5,7 +5,7 @@ order: 20
 chapter: 5
 chapterTitle: "树的应用"
 updated: "2026-08-25"
-contributors: ["Wanderer0"]
+contributors: ["czjLUCK"]
 status: "draft"
 lab: true
 difficulty: "挑战"
