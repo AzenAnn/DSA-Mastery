@@ -239,8 +239,8 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "学习图的基本概念，以及邻接矩阵和邻接表的表示取舍。",
     url: "/learn/outline/chapter-06-graph-foundations-storage/",
     lessonSources: [
-      "content/chapter-06-graph-foundations/00-overview.md",
-      "content/chapter-06-graph-foundations/01-representation.md",
+      "content/chapter-06-graph-foundations/01-graph-basics.md",
+      "content/chapter-06-graph-foundations/02-graph-storage.md",
     ],
     autoLabChapter: 6,
   },
@@ -252,8 +252,9 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-07-graph-traversal-applications/",
     lessonSources: [
       "content/chapter-07-graph-traversal/01-dfs-and-bfs.md",
-      "content/chapter-07-graph-traversal/02-minimum-spanning-tree-and-shortest-path.md",
-      "content/chapter-07-graph-applications/03-astar-visualization.md",
+      "content/chapter-07-graph-traversal/02-minimum-spanning-tree.md",
+      "content/chapter-07-graph-traversal/03-shortest-path.md",
+      "content/chapter-07-graph-applications/04-astar-visualization.md",
     ],
     autoLabChapter: 7,
   },

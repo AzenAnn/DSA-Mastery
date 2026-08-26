@@ -26,8 +26,8 @@
 - [ ] `lab-02-01-stack-simulator`
 - [ ] `lab-02-02-cycle-queue`
 - [ ] `lab-04-01-binary-tree-traversal`
-- [ ] `lab-07-02-bfs-maze`（由旧物理 Ch.5 路径迁入 Ch.7）
-- [ ] `lab-07-03-dijkstra-path`（由旧物理 Ch.5 路径迁入 Ch.7）
+- [ ] `lab-07-05-bfs-maze`（由旧物理 Ch.5 路径迁入 Ch.7）
+- [ ] `lab-07-06-dijkstra-path`（由旧物理 Ch.5 路径迁入 Ch.7）
 
 每项迁移必须补齐：stdin/stdout、可编译 starter、经审阅 solution、合计 100 的 normal/boundary/regression cases、薄 Makefile、`verify` 证据和学生包检查。
 

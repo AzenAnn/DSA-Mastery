@@ -22,7 +22,7 @@ duration: "45～60 分钟"
 
 ## 前置知识
 
-完成前建议先阅读[第 6.1 节 图的表示](../../../content/chapter-06-graph-foundations/01-representation.md)中的邻接矩阵部分。你需要准备支持 C++17 的编译器；可先运行 `make doctor` 检查环境。
+开始前先阅读 [6.2 图的存储结构](../../../content/chapter-06-graph-foundations/02-graph-storage.md)中的邻接矩阵部分，并准备支持 C++17 的编译器；可运行 `make doctor` 检查环境。
 
 ## 输入格式
 

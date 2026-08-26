@@ -1,17 +1,17 @@
 ---
-title: "7.2 最小生成树与最短路径"
-description: "最小生成树的定义、切分定理与环性质，Prim 与 Kruskal 的实现与选型；Dijkstra 与 Bellman-Ford 的最短路径求解。"
+title: "7.2 最小生成树"
+description: "最小生成树的定义、切分定理与环性质，Prim 与 Kruskal 的实现与选型。"
 order: 2
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-21"
+updated: "2026-08-25"
 contributors: ["Fishman"]
 status: "draft"
 ---
 
-# 7.2 最小生成树与最短路径
+# 7.2 最小生成树
 
-在带权图上，两个经典问题把"贪心"落到实处：**最小生成树**（Minimum Spanning Tree，MST）用最小的边权总和连通全部顶点；**单源最短路径**（Single-Source Shortest Path，SSSP）求从一个源点到其余每个顶点的最短路径。二者都是用"每一步做局部最优选择"的贪心方法，但背后的理论截然不同——MST依赖**切分定理**与**环性质**，最短路径依赖**非负权下的距离单调性**。理解"为什么贪心在这里是对的"，比单纯硬背代码更重要。
+在带权图上，有一个经典问题把"贪心"落到实处：**最小生成树**（Minimum Spanning Tree，MST）用最小的边权总和连通全部顶点。它依靠"每一步做局部最优选择"的贪心方法，背后的理论支撑是**切分定理**与**环性质**。理解"为什么贪心在这里是对的"，比单纯硬背代码更重要。
 
 ## 学习目标
 
@@ -19,7 +19,6 @@ status: "draft"
 - 陈述并论证切分定理与环性质；
 - 实现 Prim 与 Kruskal算法，分析各自复杂度；
 - 说明两种算法的适用与不适用场景，并据此选型；
-- 实现 Dijkstra算法并说明其非负权前提，了解 Bellman-Ford 处理负权与检测负环。
 
 ## 最小生成树的概念
 
@@ -168,104 +167,12 @@ Prim 与 Kruskal 都能正确求出 MST，选谁取决于图的**稠密程度**�
 先看稠密还是稀疏，再看有无排序/堆的现成条件。**稠密图选 Prim（矩阵），稀疏图选 Kruskal**，是竞赛与工程里最常用的两条默认规则；需要精确到常数时再考虑堆优化 Prim。
 :::
 
-## 最短路径
-
-**单源最短路径（SSSP）**：给定源点 $s$，求 $s$ 到每个顶点 $v$ 的最短路径长度 $dist[v]$。与 MST 不同，最短路径关心的是"路径长度"，结果是一棵以 $s$ 为根的**最短路径树**，而不是连通全图的最小边集。
-
-按"边权是否有约束"选择算法：
-
-| 图的类型 | 算法 | 复杂度 |
-| --- | --- | --- |
-| 无权图 | BFS | $O(n+m)$ |
-| 非负权 | Dijkstra | $O((n+m)\log n)$ 或 $O(n^2)$ |
-| 可有负权（无负环） | Bellman-Ford | $O(nm)$ |
-| 全源最短路径 | Floyd-Warshall | $O(n^3)$ |
-
-### Dijkstra 算法
-
-维护 `dist[]`，每轮从**尚未确定**的顶点中选 `dist` 最小的（堆顶）"确定"下来，再用它松弛邻居：
-
-$$
-dist[v] = \min(dist[v],\ dist[u] + w(u,v)).
-$$
-
-```cpp:line-numbers [dijkstra.cpp]
-// 邻接表 graph[u] = {(v, w), ...}；边权非负
-std::vector<int> dijkstra(int n, int s,
-        const std::vector<std::vector<std::pair<int,int>>>& graph) {
-    std::vector<int> dist(n, INF);
-    using P = std::pair<int,int>;                 // (dist, vertex)
-    std::priority_queue<P, std::vector<P>, std::greater<P>> pq;
-    dist[s] = 0;
-    pq.push({0, s});
-    while (!pq.empty()) {
-        auto [d, u] = pq.top(); pq.pop();
-        if (d > dist[u]) continue;                // 已确定，跳过旧记录
-        for (auto [v, w] : graph[u])
-            if (dist[u] + w < dist[v]) {
-                dist[v] = dist[u] + w;
-                pq.push({dist[v], v});
-            }
-    }
-    return dist;
-}
-```
-
-::: warning Dijkstra 不能处理负权边
-Dijkstra 的正确性依赖一条单调性：**顶点一旦被"确定"，其 `dist` 就是最终最短距离**。这只有在边权非负时才成立——若存在负权边，后发现的负权路径可能继续缩短一个"已确定"顶点的距离，贪心失效。判断"能否用 Dijkstra"，先检查权值是否非负；有负权请改用 Bellman-Ford。
-:::
-
-### Bellman-Ford 算法
-
-Bellman-Ford 不再依赖"先确定距离最小者"的贪心，而是反复松弛**所有边**：一条最短路径最多经过 $n-1$ 条边，因此松弛 $n-1$ 轮后 `dist` 必然收敛。若第 $n$ 轮仍能松弛，说明存在**负环**（可无限绕环缩短距离，最短路径无定义）。
-
-```cpp:line-numbers [bellman-ford.cpp]
-// 可处理负权边；返回 false 表示存在负环
-bool bellman_ford(int n, int s, const std::vector<Edge>& edges, std::vector<int>& dist) {
-    dist.assign(n, INF);
-    dist[s] = 0;
-    for (int i = 0; i < n - 1; ++i) {             // 最多松弛 n-1 轮
-        bool relaxed = false;
-        for (auto [u, v, w] : edges)
-            if (dist[u] != INF && dist[u] + w < dist[v]) {
-                dist[v] = dist[u] + w;
-                relaxed = true;
-            }
-        if (!relaxed) break;                      // 提前收敛
-    }
-    for (auto [u, v, w] : edges)                  // 第 n 轮检测负环
-        if (dist[u] != INF && dist[u] + w < dist[v]) return false;
-    return true;
-}
-```
-
-### 最短路径算法选型
-
-- **无权图**直接 BFS，$O(n+m)$ 且常数小；
-- **非负权**用 Dijkstra：稠密图用朴素版 $O(n^2)$，稀疏图用堆优化 $O((n+m)\log n)$；
-- **含负权但无负环**用 Bellman-Ford，$O(nm)$ 慢但稳妥；
-- **全源**（求所有点对）：非负权可跑 $n$ 次 Dijkstra，或直接 Floyd-Warshall $O(n^3)$。
-
-## 小结
-
-最小生成树与最短路径是带权图上两个看似相近、实则目标不同的贪心问题：MST 求"连通全图的最小边集"，最短路径求"源点到各点的最短距离"。MST 的正确性由**切分定理**（该选的边必在 MST）与**环性质**（不该选的边必不在 MST）共同保证；Prim 用切分定理步步扩展，Kruskal 用排序 + 并查集避开成环。最短路径里，Dijkstra 靠非负权的单调性做到 $O((n+m)\log n)$，Bellman-Ford 牺牲效率换取对负权（乃至负环检测）的兼容。选算法的第一步永远是**看清图的稠密程度与边权约束**。
-
-## 练习
-
-1. 为什么 Kruskal 需要并查集？如果不用并查集，改成每次选边后暴力判断是否成环，复杂度会变成多少？
-2. 对一张 4 个顶点的带权图，手算 Prim 与 Kruskal 各自选边的顺序，观察二者可能不同在哪一步、最终边权和是否相同。
-3. 举一个 Dijkstra 在含负权边的图上给出错误结果的具体例子，画出图并标出错误的 `dist`。
-4. 所有边权都相等的连通图：它有多少棵不同的生成树？MST 的边权和是多少？Prim 与 Kruskal 一定会选同一棵树吗？
-5. 为什么堆优化 Dijkstra 里，`if (d > dist[u]) continue;` 这行能正确跳过"已确定"顶点？去掉它会怎样？
-6. Bellman-Ford 为什么最多松弛 $n-1$ 轮就一定收敛？第 $n$ 轮还能松弛为什么意味着存在负环？
-7. 若图不连通，Prim 和 Kruskal 各会得到什么？要得到"最小生成森林"，两个算法分别该怎么改？
-8. 什么时候 Prim 堆优化比朴素版更快？什么时候反而更慢？用 $m$ 与 $n$ 的关系说明。
 
 ## 参考资料
 
-- 《洛谷深入浅出程序设计竞赛》图论部分（最小生成树与最短路径章节）
-- 王道《数据结构》考研复习指导：图的应用（最小生成树、最短路径）
-- 严蔚敏《数据结构》（C 语言版）：图的生成树与最短路径
+- 《洛谷深入浅出程序设计竞赛》图论部分（最小生成树）
+- 王道《数据结构》考研复习指导：图的应用（最小生成树）
+- 严蔚敏《数据结构》（C 语言版）：图的生成树
 
 ## 彩蛋
 - 希望大家能在看完这章后能有所体悟，如果真的有所体悟，可能就会有下图表情（狗头）
