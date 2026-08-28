@@ -1,0 +1,9 @@
+[
+  {"id":"001-sample-reachable","input":"tests/001-sample-reachable.in","expected":"tests/001-sample-reachable.out","points":20,"tags":["sample","reachable"]},
+  {"id":"002-sample-unreachable","input":"tests/002-sample-unreachable.in","expected":"tests/002-sample-unreachable.out","points":20,"tags":["sample","unreachable"]},
+  {"id":"003-single","input":"tests/003-single.in","expected":"tests/003-single.out","points":10,"tags":["boundary","single"]},
+  {"id":"004-zero-barrier","input":"tests/004-zero-barrier.in","expected":"tests/004-zero-barrier.out","points":15,"tags":["boundary","zero"]},
+  {"id":"005-early-finish","input":"tests/005-early-finish.in","expected":"tests/005-early-finish.out","points":10,"tags":["normal","early-finish"]},
+  {"id":"006-exact-reach","input":"tests/006-exact-reach.in","expected":"tests/006-exact-reach.out","points":10,"tags":["normal","exact"]},
+  {"id":"007-long-reachable","input":"tests/007-long-reachable.in","expected":"tests/007-long-reachable.out","points":15,"tags":["boundary","long"]}
+]
