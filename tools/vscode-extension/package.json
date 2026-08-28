@@ -146,5 +146,11 @@
     "onlyBuiltDependencies": [
       "esbuild"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AzenAnn/DSA-Mastery.git",
+    "directory": "tools/vscode-extension"
+  },
+  "homepage": "https://azenann.github.io/DSA-Mastery/learn/chapter-preface/06-vscode-extension-guide/"
 }

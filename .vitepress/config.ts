@@ -87,6 +87,7 @@ export default defineConfig({
     "CLAUDE.local.md",
     "content/README.md",
     "docs/**",
+    "tools/**",
     ".github/**",
     ".trellis/**",
     ".agents/**",
