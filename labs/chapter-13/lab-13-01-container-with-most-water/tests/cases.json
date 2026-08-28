@@ -1,0 +1,51 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-minimum",
+    "input": "tests/002-minimum.in",
+    "expected": "tests/002-minimum.out",
+    "points": 10,
+    "tags": ["boundary", "minimum"]
+  },
+  {
+    "id": "003-all-zero",
+    "input": "tests/003-all-zero.in",
+    "expected": "tests/003-all-zero.out",
+    "points": 10,
+    "tags": ["boundary", "zero"]
+  },
+  {
+    "id": "004-equal-ends",
+    "input": "tests/004-equal-ends.in",
+    "expected": "tests/004-equal-ends.out",
+    "points": 15,
+    "tags": ["normal", "equal-height"]
+  },
+  {
+    "id": "005-increasing",
+    "input": "tests/005-increasing.in",
+    "expected": "tests/005-increasing.out",
+    "points": 15,
+    "tags": ["normal", "monotonic"]
+  },
+  {
+    "id": "006-local-peak",
+    "input": "tests/006-local-peak.in",
+    "expected": "tests/006-local-peak.out",
+    "points": 15,
+    "tags": ["normal", "greedy-choice"]
+  },
+  {
+    "id": "007-large-values",
+    "input": "tests/007-large-values.in",
+    "expected": "tests/007-large-values.out",
+    "points": 15,
+    "tags": ["boundary", "numeric-range"]
+  }
+]

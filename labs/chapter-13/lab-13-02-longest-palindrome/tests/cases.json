@@ -1,0 +1,51 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-single",
+    "input": "tests/002-single.in",
+    "expected": "tests/002-single.out",
+    "points": 10,
+    "tags": ["boundary", "single"]
+  },
+  {
+    "id": "003-all-even",
+    "input": "tests/003-all-even.in",
+    "expected": "tests/003-all-even.out",
+    "points": 10,
+    "tags": ["normal", "all-even"]
+  },
+  {
+    "id": "004-multiple-odd",
+    "input": "tests/004-multiple-odd.in",
+    "expected": "tests/004-multiple-odd.out",
+    "points": 15,
+    "tags": ["normal", "odd-count"]
+  },
+  {
+    "id": "005-case-sensitive",
+    "input": "tests/005-case-sensitive.in",
+    "expected": "tests/005-case-sensitive.out",
+    "points": 15,
+    "tags": ["boundary", "case-sensitive"]
+  },
+  {
+    "id": "006-repeated",
+    "input": "tests/006-repeated.in",
+    "expected": "tests/006-repeated.out",
+    "points": 15,
+    "tags": ["normal", "repeated"]
+  },
+  {
+    "id": "007-count-boundary",
+    "input": "tests/007-count-boundary.in",
+    "expected": "tests/007-count-boundary.out",
+    "points": 15,
+    "tags": ["boundary", "count"]
+  }
+]

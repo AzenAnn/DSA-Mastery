@@ -336,6 +336,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-13-greedy/03-correctness-proof.md",
       "content/chapter-13-greedy/04-greedy-vs-dp.md",
     ],
+    autoLabChapter: 13,
   },
   {
     id: "chapter-14-dynamic-programming",

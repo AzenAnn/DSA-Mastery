@@ -42,6 +42,10 @@ README 至少说明：
 
 完整实现、`src/`、`tests/`、fixtures 和样例放在该 Lab 目录，不复制进多个教材页面。命令不得依赖作者机器的全局包、秘密文件或未说明服务。
 
+### Lab 静态资源
+
+题图、流程图等随 Lab 发布的静态资源放在同一 Lab 目录下的 `assets/` 中，README 使用相对路径引用，例如 `![题图](./assets/example.png)`。不得把 `Downloads`、临时目录或作者机器的绝对路径写入内容；提交前应确认资源进入构建产物对应的 `/labs/<chapter>/<lab>/assets/` 路径。
+
 ### 个人题库导入清洗
 
 从维护者个人 Obsidian、题库导出或其他非课程发布稿迁移练习时，只保留读者完成题目所需的题面、选项、题目来源名称、题目标识、正确答案、解析和选项辨析。课程 Lab 必须移除个人版本附带的发布痕迹：
@@ -95,6 +99,7 @@ README 至少说明：
 | README 没有客观完成标准 | Review blocking |
 | 声称运行成功但 PR 无命令和结果 | Review blocking |
 | 页面未进入 Labs 索引或搜索 | 构建/浏览器测试失败 |
+| README 的静态资源缺失或使用作者机器路径 | 构建产物检查/Review blocking |
 | 个人题库导入后仍有原始页、个人可视化或答案生成声明 | Review blocking；清洗后重新检查 |
 | 删除个人链接后留下空“相关学习资源”标题 | Review blocking；连同空区块删除 |
 | `quiz.json` 缺字段、选项不是四项、答案越界或 id 重复 | `validate:content` 与构建失败 |
