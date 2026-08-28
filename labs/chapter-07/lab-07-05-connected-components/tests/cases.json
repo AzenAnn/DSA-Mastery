@@ -1,0 +1,51 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-connected",
+    "input": "tests/002-connected.in",
+    "expected": "tests/002-connected.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "003-isolated",
+    "input": "tests/003-isolated.in",
+    "expected": "tests/003-isolated.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-mixed",
+    "input": "tests/004-mixed.in",
+    "expected": "tests/004-mixed.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "005-chain",
+    "input": "tests/005-chain.in",
+    "expected": "tests/005-chain.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "006-star",
+    "input": "tests/006-star.in",
+    "expected": "tests/006-star.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "007-stress",
+    "input": "tests/007-stress.in",
+    "expected": "tests/007-stress.out",
+    "points": 20,
+    "tags": ["stress"]
+  }
+]
