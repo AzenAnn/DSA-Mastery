@@ -83,3 +83,24 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 4: 新增 LeetCode 55 跳跃游戏 Lab
+
+**Date**: 2026-08-28
+**Task**: 新增 LeetCode 55 跳跃游戏 Lab
+**Branch**: `codex/chapter-13-container-with-most-water`
+
+### Summary
+
+在第 13 章新增 Lab 13-03 跳跃游戏，包含 C++17 Program Lab、正向贪心参考答案、学生模板和 7 组测试；补充章节概览入口。修正一组错误测试预期后，通过 Lab 验证、内容校验、类型检查、Lint、自动发现、站点构建和站点检查。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `a9c3962` | (see git log) |
+
+### Status
+
+[OK] **Completed**
