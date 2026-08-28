@@ -62,3 +62,24 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 3: 新增 LeetCode 409 最长回文串 Lab
+
+**Date**: 2026-08-28
+**Task**: 新增 LeetCode 409 最长回文串 Lab
+**Branch**: `codex/chapter-13-container-with-most-water`
+
+### Summary
+
+在第 13 章新增 Lab 13-02 最长回文串，包含 C++17 Program Lab、学生模板、参考答案和 7 组测试；补充章节概览入口，并通过内容校验、自动发现、站点构建、站点检查和 Lab verify。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `d6ae380` | (see git log) |
+
+### Status
+
+[OK] **Completed**

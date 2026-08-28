@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 2
-- **Last Active**: 2026-08-24
+- **Total Sessions**: 3
+- **Last Active**: 2026-08-28
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~64 | Active |
+| `journal-1.md` | ~85 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 3 | 2026-08-28 | 新增 LeetCode 409 最长回文串 Lab | `d6ae380` | `codex/chapter-13-container-with-most-water` |
 | 2 | 2026-08-24 | 新增第 13 章盛最多水的容器 Lab | `3a9f2f5` | `codex/chapter-13-container-with-most-water` |
 | 1 | 2026-08-21 | 清理贪心章节残留引用 | `2283638` | `chapter/13-greedy` |
 <!-- @@@/auto:session-history -->
