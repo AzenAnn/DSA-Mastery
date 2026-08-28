@@ -300,7 +300,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-10-sort/03-bubble-sort.md",
       "content/chapter-10-sort/04-shell-sort.md",
     ],
-    labSources: ["labs/chapter-10/lab-10-01-stability-compare/README.md"],
+    autoLabChapter: 10,
   },
   {
     id: "chapter-11-advanced-external-sorting",
@@ -316,7 +316,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-11-advanced-sort/05-bucket-sort.md",
       "content/chapter-11-advanced-sort/06-radix-sort.md",
     ],
-    labSources: ["labs/chapter-10/lab-10-02-performance-benchmark/README.md"],
+    autoLabChapter: 11,
   },
   {
     id: "chapter-12-divide-conquer-recursion",
