@@ -352,3 +352,15 @@ labs/index.md
 | `labs/chapter-05/lab-05-02-dijkstra-path` | 旧图 Dijkstra README-only Lab，被课程映射到 Ch.7 | `labs/chapter-07/lab-07-06-dijkstra-path` | 新 Lab 保留非负权、路径与复杂度目标并修正章节链接；理论型 Lab 加入后重编号为 07-06 | 迁移 | 同上 |
 
 迁移前目标目录经只读检查确认不存在受跟踪文件冲突。旧产品路径将在 source map、正文、脚本、测试和文档中清零；旧 Trellis 规划任务中的路径只作为历史证据保留。替代页必须通过 frontmatter/链接校验、自动发现、构建、静态产物检查与 Pages 浏览器测试，失败则回退整组迁移，不留下半套编号。
+
+## 13. 2026-08-28 Chapter 07 样例 Lab 精确清理
+
+维护者确认以下三个目录仅用于早期样例与模板展示，不属于当前 Chapter 07 的正式 Lab 路径。删除后由教材的图遍历/最短路径章节和 07-10 至 07-15 的正式最短路径 Lab 承担课程学习入口；不保留空目录或失效前置链接。
+
+| 候选路径 | 旧职责 | 替代物 | 无引用与替代证据 | 决定 | 回滚方式 |
+| --- | --- | --- | --- | --- | --- |
+| `labs/chapter-07/lab-07-04-bfs-traversal` | BFS Program 样例模板 | [7.1 图的遍历：DFS 与 BFS](../content/chapter-07-graph-traversal/01-dfs-and-bfs.md) | 删除前确认无课程导航、脚本或测试依赖；删除后全仓引用、内容、构建和站点产物检查通过 | 删除 | 合并前放弃分支；合并后 revert 本任务提交 |
+| `labs/chapter-07/lab-07-05-bfs-maze` | BFS 迷宫 README 样例模板 | [7.1 图的遍历：DFS 与 BFS](../content/chapter-07-graph-traversal/01-dfs-and-bfs.md) | 同上 | 删除 | 同上 |
+| `labs/chapter-07/lab-07-06-dijkstra-path` | 堆优化 Dijkstra README 样例模板 | [7.3 最短路径](../content/chapter-07-graph-traversal/03-shortest-path.md) 与 07-10 至 07-15 | 已移除 07-10、07-12 的前置链接与迁移清单条目；删除后全仓引用、内容、构建和站点产物检查通过 | 删除 | 同上 |
+
+删除目标均已逐项解析为 `D:\Github\DSA-Mastery\labs\chapter-07` 下的精确目录。第 12 节保留的是当时的迁移历史；本节记录后来对这些样例模板作出的删除决定。
