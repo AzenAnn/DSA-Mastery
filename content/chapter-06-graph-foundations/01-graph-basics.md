@@ -4,7 +4,7 @@ description: "从顶点与边出发，掌握图的分类、度、路径、环、
 order: 1
 chapter: 6
 chapterTitle: "图的基础与存储"
-updated: "2026-08-25"
+updated: "2026-08-28"
 contributors: ["Azen"]
 status: "draft"
 ---
@@ -258,7 +258,7 @@ $\deg(0)=3$：自环在顶点 $0$ 处贡献两次度，边 $\{0,1\}$ 再贡献�
 
 ## 下一步
 
-继续学习 [6.2 图的存储结构](./02-graph-storage.md)，把本节的顶点与边分别装进邻接矩阵、邻接表和边集数组。
+先完成 [Lab 06-01：图的基本概念选择题精练](../../labs/chapter-06/lab-06-01-graph-basics-quiz/README.md)，检查自己能否独立判断度、路径与连通性；再继续学习 [6.2 图的存储结构](./02-graph-storage.md)，把本节的顶点与边分别装进邻接矩阵、邻接表和边集数组。
 
 ## 参考资料
 
