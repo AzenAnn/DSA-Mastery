@@ -100,6 +100,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "能够选择 pnpm 或 Make 运行、定位和严格评分当前 Lab。",
       "能够用 Graphviz DOT 编写、预览和验证树与图示例。",
       "从站内完整指南直接复制经过自动验证的示例。",
+      "能够在 VSCode 中安装插件、浏览代码题并一键提交判题。",
     ],
     focusAreas: [
       "理论环境与 Markdown 语法展示",
@@ -115,6 +116,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-preface/03-lab-cli-command-guide.md",
       "content/chapter-preface/04-graphviz-authoring-guide.md",
       "content/chapter-preface/05-macos-student-setup.md",
+      "content/chapter-preface/06-vscode-extension-guide.md",
     ],
   },
   {
