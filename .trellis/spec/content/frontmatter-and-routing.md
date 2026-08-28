@@ -19,6 +19,10 @@ content/chapter-preface/02-windows-student-setup.md
   -> /learn/chapter-preface/02-windows-student-setup/
 content/chapter-preface/03-lab-cli-command-guide.md
   -> /learn/chapter-preface/03-lab-cli-command-guide/
+content/chapter-preface/04-graphviz-authoring-guide.md
+  -> /learn/chapter-preface/04-graphviz-authoring-guide/
+content/chapter-preface/05-macos-student-setup.md
+  -> /learn/chapter-preface/05-macos-student-setup/
 ```
 
 VitePress rewrite：
@@ -67,7 +71,7 @@ content/:chapter/:page.md -> learn/:chapter/:page/index.md
 - 链接校验先排除带 URL scheme 或根路径的目标，再检查相对 `.md` 文件；因此 `https://host/guide.md` 不能被当作仓库相对文件。
 - `content/README.md`、仓库 README、`docs/**`、`.trellis/**` 不得成为课程页面。
 
-前言 frontmatter 固定为 `chapter: "preface"`、与两位文件前缀一致的 `order`、`chapterTitle: "课程作者指南"`。长指南通过 VitePress include 复用 `docs` 单一事实来源：`01` 对应 `LAB_AUTHORING_GUIDE.md`，`02` 对应 `WINDOWS_STUDENT_SETUP_GUIDE.md`，`03` 对应 `LAB_CLI_COMMAND_GUIDE.md`；不得复制第二份正文。数据层向界面同时输出内部 `chapter` 和展示用 `chapterLabel: "前言"`，正文、面包屑与侧栏禁止拼出“第 preface 章”。
+前言 frontmatter 固定为 `chapter: "preface"`、与两位文件前缀一致的 `order`、`chapterTitle: "课程作者指南"`。长指南通过 VitePress include 复用 `docs` 单一事实来源：`01` 对应 `LAB_AUTHORING_GUIDE.md`，`02` 对应 `WINDOWS_STUDENT_SETUP_GUIDE.md`，`03` 对应 `LAB_CLI_COMMAND_GUIDE.md`，`04` 对应 `GRAPHVIZ_AUTHORING_GUIDE.md`，`05` 对应 `MACOS_STUDENT_SETUP_GUIDE.md`；不得复制第二份正文。数据层向界面同时输出内部 `chapter` 和展示用 `chapterLabel: "前言"`，正文、面包屑与侧栏禁止拼出“第 preface 章”。
 
 ## 4. Validation & Error Matrix
 
@@ -78,7 +82,7 @@ content/:chapter/:page.md -> learn/:chapter/:page/index.md
 | 日期格式错误 | 内容校验失败 |
 | 路径编号与 chapter/order 不一致 | 内容校验失败 |
 | `chapter: "preface"` 出现在固定目录之外，或前言字段漂移 | 内容校验失败 |
-| 前言缺少理论展示、Lab 作者指南、Windows 环境指南或 Lab 命令指南，排在 Ch.0 之后或泄露内部 id | artifact/Playwright 失败 |
+| 前言缺少理论展示、Lab 作者指南、Windows 环境指南、Lab 命令指南或 Graphviz 作者指南，排在 Ch.0 之后或泄露内部 id | artifact/Playwright 失败 |
 | 同章重复 order 或 chapterTitle 漂移 | 内容校验失败 |
 | 相对 `.md` 目标不存在、产物站内路由不存在 | validator 或 artifact check 失败 |
 | 手写 Pages base 或出现双 `/DSA-Mastery/` | 静态产物审计失败 |
@@ -87,7 +91,7 @@ content/:chapter/:page.md -> learn/:chapter/:page/index.md
 ## 5. Good / Base / Bad Cases
 
 - Good：`content/chapter-02-stack-queue/01-stack.md` 使用 `chapter: 2`、`order: 1`，并相对链接 `../../labs/chapter-02/lab-02-01-stack/README.md`。
-- Good：`content/chapter-preface/00`～`03` 四篇页面使用 `chapter: "preface"` 和连续 order，在“前言”章节目录中按理论展示、作者指南、Windows 环境、命令接口显示。
+- Good：`content/chapter-preface/00`～`05` 六篇页面使用 `chapter: "preface"` 和连续 order，在“前言”章节目录中展示理论环境、作者指南、Windows 环境、命令接口、Graphviz 图示和 macOS 环境指南。
 - Base：`draft` 页面仍进入导航并显示状态徽章。
 - Bad：普通页面使用 `chapter: "preface"`、使用 `chapter: -1` 模拟前言、`contributors: "A"`、不存在的相对 `.md` 目标或硬编码 `/DSA-Mastery/learn/...`。
 
@@ -96,8 +100,8 @@ content/:chapter/:page.md -> learn/:chapter/:page/index.md
 - `pnpm run validate:content`：字段、路径、排序和相对 `.md` 目标。
 - 内容发现 fixture：在 `try/finally` 中创建一篇合规临时教材，确认校验、侧栏、数据加载、搜索和 build 都发现它，最后删除。
 - 静态产物审计：期望 URL 存在，链接只含一次 base。
-- 静态产物审计还要断言前言恰好包含四篇完整指南、11 种理论块均已渲染、三个 include 已展开、前言位于 Ch.0 之前且不泄露 `preface` 内部标识。
-- Playwright：从首页实际点击进入教材页，并检查同源请求、控制台和页面错误；前言用桌面与 390px 视口覆盖章节顺序、四篇指南的搜索/入口、面包屑、侧栏、代码交互和横向溢出，命令指南还需覆盖浅色与暗色。
+- 静态产物审计还要断言前言恰好包含六篇完整指南、11 种理论块均已渲染、五个 include 已展开、前言位于 Ch.0 之前且不泄露 `preface` 内部标识。
+- Playwright：从首页实际点击进入教材页，并检查同源请求、控制台和页面错误；前言用桌面与 390px 视口覆盖章节顺序、六篇指南的搜索/入口、面包屑、侧栏、代码交互和横向溢出，命令指南还需覆盖浅色与暗色。
 
 ## 7. Wrong vs Correct
 

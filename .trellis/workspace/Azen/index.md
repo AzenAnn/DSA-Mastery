@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 10
-- **Last Active**: 2026-08-24
+- **Total Sessions**: 13
+- **Last Active**: 2026-08-26
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~264 | Active |
+| `journal-1.md` | ~343 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,9 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 13 | 2026-08-26 | README 信息架构与视觉改版 | `6456397` | `codex/readme-redesign` |
+| 12 | 2026-08-24 | 第 5 章树结构题库 Lab | `baa23fe` | `codex/chapter05-tree-labs` |
+| 11 | 2026-08-24 | 完成第 5 章树的应用并创建 PR | `a6d8c81` | `chapter05` |
 | 10 | 2026-08-24 | 第 4 章树与二叉树理论题 | `076cd97` | `codex/chapter4-theory-exercises` |
 | 9 | 2026-08-23 | 第 4 章树与二叉树两篇文章重写 | `720d7c8`, `13beb89` | `chapter4` |
 | 8 | 2026-08-21 | 第三章串匹配文本处理引擎工程题 | `6d7e8eb`, `70ecc6a`, `45241de`, `eb7e620`, `a5d370f`, `09b740c`, `c21635b`, `4983274`, `d96a6b6` | `chapter/03-string-array` |

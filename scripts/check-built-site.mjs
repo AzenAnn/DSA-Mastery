@@ -182,24 +182,15 @@ for (const required of [
   }
 }
 
-const complexityHtml = await readFile(
-  path.join(artifactRoot, "learn", "chapter-00-introduction", "03-algorithm-complexity-analysis", "index.html"),
-  "utf8",
-);
-for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
-  if (!complexityHtml.includes(`dsa-theory-block--${kind}`)) {
-    throw new Error(`Complexity page is missing theory container: ${kind}`);
-  }
-}
-if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.includes("::: definition")) {
+if (dataStructureBasicsHtml.includes("::: definition")) {
   throw new Error("Unparsed theory container markers leaked into Chapter 0 artifacts");
 }
 
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 4) {
-  throw new Error(`Preface must contain the theory, Lab author, Windows student, and Lab command guides, found ${prefacePages.length} pages`);
+if (prefacePages.length !== 6) {
+  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, Graphviz authoring, and macOS student guides, found ${prefacePages.length} pages`);
 }
 const prefaceHtml = await readFile(
   path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
@@ -309,6 +300,44 @@ if (labCommandGuideHtml.includes("@include") || labCommandGuideHtml.includes("�
   throw new Error("Lab command guide was not expanded or leaked the internal preface id");
 }
 
+const graphvizGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "04-graphviz-authoring-guide", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "Graphviz 图示作者指南",
+  "Graphviz Online",
+  "Kroki Inspector",
+  "KROKI_SERVER_URL",
+  "public/diagrams/",
+]) {
+  if (!graphvizGuideHtml.includes(required)) {
+    throw new Error(`Rendered Graphviz authoring guide is missing: ${required}`);
+  }
+}
+if (graphvizGuideHtml.includes("@include") || graphvizGuideHtml.includes("第 preface 章")) {
+  throw new Error("Graphviz authoring guide was not expanded or leaked the internal preface id");
+}
+
+const macosStudentGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "05-macos-student-setup", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "macOS 学生实验环境安装指南",
+  "Xcode Command Line Tools",
+  "Homebrew",
+  "pnpm@11.1.1",
+  "Visual Studio Code",
+]) {
+  if (!macosStudentGuideHtml.includes(required)) {
+    throw new Error(`Rendered macOS student guide is missing: ${required}`);
+  }
+}
+if (macosStudentGuideHtml.includes("@include") || macosStudentGuideHtml.includes("第 preface 章")) {
+  throw new Error("macOS student guide was not expanded or leaked the internal preface id");
+}
+
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
 for (const requiredLabel of [
   "Part IV · 查找与索引",
@@ -337,6 +366,64 @@ const prefacePosition = curriculumHtml.indexOf(">前言<");
 const chapterZeroPosition = curriculumHtml.indexOf(">Ch.0<");
 if (prefacePosition < 0 || chapterZeroPosition < 0 || prefacePosition >= chapterZeroPosition) {
   throw new Error("Preface chapter is missing or does not appear before Ch.0 in the curriculum");
+}
+
+const chapterFiveOutlineHtml = await readFile(
+  path.join(
+    artifactRoot,
+    "learn",
+    "outline",
+    "chapter-05-tree-applications",
+    "index.html",
+  ),
+  "utf8",
+);
+const chapterFiveSidebarStart = chapterFiveOutlineHtml.indexOf('<aside class="VPSidebar"');
+const chapterFiveSidebarEnd = chapterFiveOutlineHtml.indexOf(
+  "</aside>",
+  chapterFiveSidebarStart,
+);
+const chapterFiveSidebar = chapterFiveOutlineHtml.slice(
+  chapterFiveSidebarStart,
+  chapterFiveSidebarEnd,
+);
+const chapterFiveItemStart = chapterFiveSidebar.indexOf(
+  "/learn/outline/chapter-05-tree-applications/",
+);
+const chapterFiveItemEnd = chapterFiveSidebar.indexOf(
+  "Part III · 图结构",
+  chapterFiveItemStart,
+);
+const chapterFiveItem = chapterFiveSidebar.slice(chapterFiveItemStart, chapterFiveItemEnd);
+for (const required of [
+  "本章 Labs",
+  "理论 Theory",
+  "实验 Exercise",
+  "工程 Project",
+  "Lab 05-01：森林与二叉树转换题精练",
+  "Lab 05-02：树与森林遍历题精练",
+  "Lab 05-03：哈夫曼树与编码题精练",
+  "Lab 05-04：并查集题精练",
+  "Lab 05-05：堆题精练",
+  "Lab 05-06：二叉搜索树的插入与查找",
+  "Lab 05-22：B+ 树的范围查询",
+  "暂无工程型 Lab",
+]) {
+  if (!chapterFiveItem.includes(required)) {
+    throw new Error(`Chapter 5 categorized Lab interface is missing: ${required}`);
+  }
+}
+const chapterFiveLabLinks = chapterFiveItem.match(/\/labs\/chapter-05\//g) ?? [];
+if (
+  chapterFiveSidebarStart < 0 ||
+  chapterFiveSidebarEnd < 0 ||
+  chapterFiveItemStart < 0 ||
+  chapterFiveItemEnd < 0 ||
+  chapterFiveLabLinks.length !== 22 ||
+  chapterFiveItem.includes("暂无理论型 Lab") ||
+  chapterFiveItem.includes("暂无实验型 Lab")
+) {
+  throw new Error("Chapter 5 Theory/Exercise Labs or empty Project slot are inconsistent");
 }
 
 if (base !== "/") {

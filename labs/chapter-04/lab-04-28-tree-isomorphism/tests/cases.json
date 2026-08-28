@@ -1,0 +1,30 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 25,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-isomorphic",
+    "input": "tests/002-isomorphic.in",
+    "expected": "tests/002-isomorphic.out",
+    "points": 25,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-single",
+    "input": "tests/003-single.in",
+    "expected": "tests/003-single.out",
+    "points": 25,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-chain",
+    "input": "tests/004-chain.in",
+    "expected": "tests/004-chain.out",
+    "points": 25,
+    "tags": ["boundary"]
+  }
+]

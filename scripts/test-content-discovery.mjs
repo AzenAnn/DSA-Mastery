@@ -240,6 +240,18 @@ try {
     ),
     "utf8",
   );
+  const chapterFiveOutlineHtml = await readFile(
+    path.join(
+      projectRoot,
+      "dist",
+      "pages",
+      "learn",
+      "outline",
+      "chapter-05-tree-applications",
+      "index.html",
+    ),
+    "utf8",
+  );
   for (const required of ["第 99 章 自动发现验证", "mjx-container", "language-js", "<table", 'type="checkbox"']) {
     if (!lessonHtml.includes(required)) throw new Error(`Temporary lesson did not render expected feature: ${required}`);
   }
@@ -327,6 +339,53 @@ try {
   ) {
     throw new Error("Temporary chapter-01 Lab did not enter Ch.1 Exercise sidebar automatically");
   }
+  const chapterFiveSidebarStart = chapterFiveOutlineHtml.indexOf('<aside class="VPSidebar"');
+  const chapterFiveSidebarEnd = chapterFiveOutlineHtml.indexOf(
+    "</aside>",
+    chapterFiveSidebarStart,
+  );
+  const chapterFiveSidebar = chapterFiveOutlineHtml.slice(
+    chapterFiveSidebarStart,
+    chapterFiveSidebarEnd,
+  );
+  const chapterFiveItemStart = chapterFiveSidebar.indexOf(
+    "/learn/outline/chapter-05-tree-applications/",
+  );
+  const chapterFiveItemEnd = chapterFiveSidebar.indexOf(
+    "Part III · 图结构",
+    chapterFiveItemStart,
+  );
+  const chapterFiveItem = chapterFiveSidebar.slice(chapterFiveItemStart, chapterFiveItemEnd);
+  for (const required of [
+    "本章 Labs",
+    "理论 Theory",
+    "实验 Exercise",
+    "工程 Project",
+    "Lab 05-01：森林与二叉树转换题精练",
+    "Lab 05-02：树与森林遍历题精练",
+    "Lab 05-03：哈夫曼树与编码题精练",
+    "Lab 05-04：并查集题精练",
+    "Lab 05-05：堆题精练",
+    "Lab 05-06：二叉搜索树的插入与查找",
+    "Lab 05-22：B+ 树的范围查询",
+    "暂无工程型 Lab",
+  ]) {
+    if (!chapterFiveItem.includes(required)) {
+      throw new Error(`Chapter 5 categorized Lab interface is missing: ${required}`);
+    }
+  }
+  const chapterFiveLabLinks = chapterFiveItem.match(/\/labs\/chapter-05\//g) ?? [];
+  if (
+    chapterFiveSidebarStart < 0 ||
+    chapterFiveSidebarEnd < 0 ||
+    chapterFiveItemStart < 0 ||
+    chapterFiveItemEnd < 0 ||
+    chapterFiveLabLinks.length !== 22 ||
+    chapterFiveItem.includes("暂无理论型 Lab") ||
+    chapterFiveItem.includes("暂无实验型 Lab")
+  ) {
+    throw new Error("Chapter 5 Theory/Exercise Labs or empty Project slot are inconsistent");
+  }
 } catch (error) {
   primaryError = error;
 } finally {
@@ -349,4 +408,4 @@ try {
 }
 
 if (primaryError) throw primaryError;
-console.log("自动发现检查通过：临时教材与 Lab 已进入构建、导航、搜索及第 1 章分类 Labs，并被安全清理。");
+console.log("自动发现检查通过：临时内容与分类 Labs 已进入构建，Ch.5 Theory 5 个、Exercise 17 个入口及 Project 空槽位存在，fixture 已安全清理。");

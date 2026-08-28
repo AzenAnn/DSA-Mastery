@@ -380,7 +380,7 @@ int min_steps(int start, int target, int limit) {
 :::
 
 ::: warning 广度优先的完整图论部分在后续章节
-这里只展示“队列在逐层扩散中的作用”。图的存储、广度优先遍历和最短路径将在[图的遍历](../chapter-05-graph/02-traversal.md)中系统展开。本节的关键收获是：**队列的 FIFO 顺序恰好对应“按层处理”**。
+这里只展示“队列在逐层扩散中的作用”。图的存储、广度优先遍历和最短路径将在[图的遍历](../chapter-07-graph-traversal/01-dfs-and-bfs.md)中系统展开。本节的关键收获是：**队列的 FIFO 顺序恰好对应“按层处理”**。
 :::
 
 ## 场景应用：用数据结构构造真实系统
@@ -455,4 +455,4 @@ int min_steps(int start, int target, int limit) {
 
 - Edsger W. Dijkstra 在 1961 年的 [ALGOL 60 Translation（EWD 35）](https://www.cs.utexas.edu/~EWD/transcriptions/EWD00xx/EWD35.html)中描述了后来被称为 shunting-yard 的翻译方法。
 - 完成 [Lab 02-09：滑动窗口最大值](../../labs/chapter-02/lab-02-09-sliding-window-maximum/README.md)，把单调候选从栈扩展到支持队头过期的双端队列；还可继续练习 LeetCode 496 / 503（下一个更大元素）。
-- 广度优先遍历的完整图论内容见[图的遍历](../chapter-05-graph/02-traversal.md)。
+- 广度优先遍历的完整图论内容见[图的遍历](../chapter-07-graph-traversal/01-dfs-and-bfs.md)。

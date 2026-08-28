@@ -1,0 +1,192 @@
+[
+  {
+    "id": "ds-drill-merge-sort-001",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-001",
+    "stem": "归并排序的核心思想是？",
+    "options": [
+      "相邻交换冒泡",
+      "分治：递归排序左右两半，再线性归并",
+      "每次选最小放前面",
+      "按位分桶"
+    ],
+    "answer": 1,
+    "explanation": "归并排序分而治之，先拆两半递归排序，再合并两个有序子数组。"
+  },
+  {
+    "id": "ds-drill-merge-sort-002",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-002",
+    "stem": "归并排序最好、平均、最坏时间复杂度分别是？",
+    "options": [
+      "O(n)、O(n log n)、O(n²)",
+      "O(n log n)、O(n log n)、O(n log n)",
+      "O(n log n)、O(n²)、O(n²)",
+      "O(n²) 三种情况"
+    ],
+    "answer": 1,
+    "explanation": "归并排序三种情况全是 O(n log n)，不挑数据，稳定发挥，这是它最大的优点。"
+  },
+  {
+    "id": "ds-drill-merge-sort-003",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-003",
+    "stem": "归并排序的递推式是？",
+    "options": [
+      "T(n) = T(n-1) + O(n)",
+      "T(n) = 2T(n/2) + O(n)",
+      "T(n) = 2T(n/2) + O(1)",
+      "T(n) = T(n/2) + O(n)"
+    ],
+    "answer": 1,
+    "explanation": "T(n) = 2T(n/2) + O(n)，2T(n/2) 是两半递归，O(n) 是归并代价。"
+  },
+  {
+    "id": "ds-drill-merge-sort-004",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-004",
+    "stem": "归并排序为什么是稳定的？",
+    "options": [
+      "因为使用了辅助数组",
+      "归并时对相等元素优先取左侧段，保留相对顺序",
+      "因为分治",
+      "因为原地排序"
+    ],
+    "answer": 1,
+    "explanation": "归并时相等元素优先取左侧段，故原相对顺序保留，稳定。"
+  },
+  {
+    "id": "ds-drill-merge-sort-005",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-005",
+    "stem": "归并排序的额外空间复杂度是？",
+    "options": [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n log n)"
+    ],
+    "answer": 2,
+    "explanation": "归并需要辅助数组存放合并结果，额外空间 O(n)。"
+  },
+  {
+    "id": "ds-drill-merge-sort-006",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-006",
+    "stem": "归并排序 vs 快速排序，实战中快排更常用的主要原因是？",
+    "options": [
+      "快排最坏复杂度更低",
+      "快排是原地排序、缓存友好、常数因子小；归并需 O(n) 辅助空间",
+      "快排稳定",
+      "快排递归深度更浅"
+    ],
+    "answer": 1,
+    "explanation": "快排原地、缓存友好、常数因子小；归并需 O(n) 辅助数组，但稳定场景不可替代。"
+  },
+  {
+    "id": "ds-drill-merge-sort-007",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-007",
+    "stem": "归并排序最适用于下列哪种场景？",
+    "options": [
+      "要求原地排序",
+      "要求稳定且数据规模大（如外部排序、链表排序）",
+      "要求最坏 O(1) 空间",
+      "数据值域极小"
+    ],
+    "answer": 1,
+    "explanation": "归并在稳定排序场景（外部排序、链表排序）不可替代，虽需 O(n) 空间。"
+  },
+  {
+    "id": "ds-drill-merge-sort-008",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-008",
+    "stem": "关于归并排序的最坏情况，下列说法正确的是？",
+    "options": [
+      "最坏退化为 O(n²)",
+      "最坏是 O(n log n)，不会退化",
+      "最坏是 O(n)",
+      "最坏是 O(n log² n)"
+    ],
+    "answer": 1,
+    "explanation": "归并排序三种情况都是 O(n log n)，不挑数据、不退化，这是它与快排的关键区别。"
+  },
+  {
+    "id": "ds-drill-merge-sort-009",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-009",
+    "stem": "归并排序的正确性基于？",
+    "options": [
+      "循环不变式：前缀已排序",
+      "分治法 + 归并保持有序",
+      "决策树下界",
+      "堆的性质"
+    ],
+    "answer": 1,
+    "explanation": "归并证明用「分治 + 归并保持有序」：两半已有序，归并时每次取较小者，结果有序。"
+  },
+  {
+    "id": "ds-drill-merge-sort-010",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "merge sort"
+    ],
+    "targetId": "ds-drill-merge-sort-010",
+    "stem": "归并排序合并两个有序子数组时，使用的策略是？",
+    "options": [
+      "相邻交换",
+      "每次比较两段头部，取较小者放入辅助数组",
+      "选最小值",
+      "按值域计数"
+    ],
+    "answer": 1,
+    "explanation": "每次看两段排头谁更小，谁先出列，对应「合并两个已排队队伍」。"
+  }
+]

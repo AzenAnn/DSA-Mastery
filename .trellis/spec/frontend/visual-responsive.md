@@ -83,7 +83,7 @@ markdown: { theme: "github-dark-high-contrast" }
 - 章节标题保持 13px 左右的重量层级，页面条目使用至少 12px、约 24px 行高；可折叠 caret 的实际点击区域至少 44px。
 - `.VPDocAsideOutline .content` 使用独立的 `--course-line` 左边界和 18px 左内边距；标题至少 12px/800，链接至少 12px、1.8 行高、6px 以上纵向间距。长标题可换行，不使用过窄的省略号堆叠。
 - 这套规则来源于 `5c9e03b` 的 `.chapter-links` 与 `.table-of-contents` 视觉契约，复用 VitePress DOM，不恢复旧 React 组件。
-- 第 1 章“本章 Labs”使用独立边框、轻背景和圆角；Theory/Exercise/Project 分别复用 accent/success/signal 语义色与 Lucide BookOpen/FlaskConical/Blocks 图标。三类必须同时显示中英文名称，Project 无内容时仍以可折叠分组展示“暂无工程型 Lab”。
+- “本章 Labs”使用独立边框、轻背景和圆角；Theory/Exercise/Project 分别复用 accent/success/signal 语义色与 Lucide BookOpen/FlaskConical/Blocks 图标。三类必须同时显示中英文名称；任一类别无内容时仍以可折叠分组展示对应的“暂无理论型/实验型/工程型 Lab”。Ch.5 当前 Theory 与 Exercise 有内容、Project 为空，三类仍必须保留完整接口。
 
 ## 验收
 
