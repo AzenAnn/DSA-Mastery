@@ -1,0 +1,65 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 15,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-no-trio",
+    "input": "tests/002-no-trio.in",
+    "expected": "tests/002-no-trio.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "003-isolated-trio",
+    "input": "tests/003-isolated-trio.in",
+    "expected": "tests/003-isolated-trio.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-complete-k4",
+    "input": "tests/004-complete-k4.in",
+    "expected": "tests/004-complete-k4.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "005-multiple-trios",
+    "input": "tests/005-multiple-trios.in",
+    "expected": "tests/005-multiple-trios.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "006-overlapping-trios",
+    "input": "tests/006-overlapping-trios.in",
+    "expected": "tests/006-overlapping-trios.out",
+    "points": 10,
+    "tags": ["regression"]
+  },
+  {
+    "id": "007-unordered-labels",
+    "input": "tests/007-unordered-labels.in",
+    "expected": "tests/007-unordered-labels.out",
+    "points": 10,
+    "tags": ["regression"]
+  },
+  {
+    "id": "008-two-vertices",
+    "input": "tests/008-two-vertices.in",
+    "expected": "tests/008-two-vertices.out",
+    "points": 5,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "009-max-n-stress",
+    "input": "tests/009-max-n-stress.in",
+    "expected": "tests/009-max-n-stress.out",
+    "points": 15,
+    "tags": ["stress"]
+  }
+]
