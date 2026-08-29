@@ -1,0 +1,37 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-prefix",
+    "input": "tests/002-prefix.in",
+    "expected": "tests/002-prefix.out",
+    "points": 25,
+    "tags": ["normal", "tricky"]
+  },
+  {
+    "id": "003-mixed-prefix",
+    "input": "tests/003-mixed-prefix.in",
+    "expected": "tests/003-mixed-prefix.out",
+    "points": 20,
+    "tags": ["normal", "tricky"]
+  },
+  {
+    "id": "004-all-same",
+    "input": "tests/004-all-same.in",
+    "expected": "tests/004-all-same.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-single",
+    "input": "tests/005-single.in",
+    "expected": "tests/005-single.out",
+    "points": 20,
+    "tags": ["boundary"]
+  }
+]
