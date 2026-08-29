@@ -27,7 +27,7 @@
     },
     "limits": {
       "timeMs": 2000,
-      "outputKb": 1024
+      "outputKb": 10240
     }
   }
 }
