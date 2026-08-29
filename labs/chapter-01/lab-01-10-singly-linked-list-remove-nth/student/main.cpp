@@ -7,26 +7,10 @@ struct Node {
 };
 
 Node *deletekth(Node *head, int k) {
-  Node dummy = Node{0, head};
-  Node *fast = &dummy;
-  Node *slow = &dummy;
-
-  for (int i = 0; i < k; i++) {
-    fast = fast->next;
-  }
-
-  while (fast->next != nullptr) {
-    slow = slow->next;
-    fast = fast->next;
-  }
-  Node *temp = slow->next;
-  slow->next = slow->next->next;
-  delete temp;
-  /*if(cur->next!=nullptr){
-      nxt=cur->next;
-
-  }*/
-  return dummy.next;
+  // TODO: 删除单链表 head 的倒数第 k 个节点，返回新头节点。
+  // 要求：只遍历一次链表，O(1) 额外空间（dummy 头 + fast/slow 双指针）。
+  (void)k;
+  return head;
 }
 
 int main() {
