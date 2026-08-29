@@ -14,11 +14,11 @@
     "tags": ["boundary"]
   },
   {
-    "id": "003-path",
-    "input": "tests/003-path.in",
-    "expected": "tests/003-path.out",
+    "id": "003-reordered-path",
+    "input": "tests/003-reordered-path.in",
+    "expected": "tests/003-reordered-path.out",
     "points": 10,
-    "tags": ["normal"]
+    "tags": ["regression"]
   },
   {
     "id": "004-even-cycle",
