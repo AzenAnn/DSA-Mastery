@@ -16,6 +16,7 @@ struct Edge {
 //   2) 松弛 n-1 轮，维护 prevV；
 //   3) 第 n 轮再扫全部边：若仍能松弛，返回 true（存在从 s 可达的负环）；
 //   4) 调用方在 true 时输出 "NEGATIVE CYCLE"。
+// 注意：每次计算 dist[e.u] + e.w 前，必须先确认 dist[e.u] != INF。
 bool bellmanFord(int n, const std::vector<Edge>& edges, int s,
                  std::vector<long long>& dist, std::vector<int>& prevV) {
     const long long INF = std::numeric_limits<long long>::max() / 4;
