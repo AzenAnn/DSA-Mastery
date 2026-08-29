@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <sstream>
 #include <queue>
 #include <stack>
 
@@ -16,7 +15,7 @@ struct TreeNode {
 };
 
 TreeNode* buildTree(const std::vector<std::string>& tokens) {
-    if (tokens.empty() || tokens[0] == "null" || tokens[0] == "#") return nullptr;
+    if (tokens.empty() || tokens[0] == "null") return nullptr;
     TreeNode* root = new TreeNode(std::stoi(tokens[0]));
     std::queue<TreeNode*> q;
     q.push(root);
@@ -24,12 +23,12 @@ TreeNode* buildTree(const std::vector<std::string>& tokens) {
     while (!q.empty() && i < tokens.size()) {
         TreeNode* curr = q.front();
         q.pop();
-        if (i < tokens.size() && tokens[i] != "null" && tokens[i] != "#") {
+        if (i < tokens.size() && tokens[i] != "null") {
             curr->left = new TreeNode(std::stoi(tokens[i]));
             q.push(curr->left);
         }
         i++;
-        if (i < tokens.size() && tokens[i] != "null" && tokens[i] != "#") {
+        if (i < tokens.size() && tokens[i] != "null") {
             curr->right = new TreeNode(std::stoi(tokens[i]));
             q.push(curr->right);
         }
@@ -61,14 +60,12 @@ std::vector<int> preorderTraversal(TreeNode* root) {
 }
 
 int main() {
-    std::string line;
-    if (!std::getline(std::cin, line) || line.empty()) {
-        return 0;
-    }
-    std::stringstream ss(line);
-    std::string token;
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
     std::vector<std::string> tokens;
-    while (ss >> token) {
+    std::string token;
+    while (std::cin >> token) {
         tokens.push_back(token);
     }
     TreeNode* root = buildTree(tokens);

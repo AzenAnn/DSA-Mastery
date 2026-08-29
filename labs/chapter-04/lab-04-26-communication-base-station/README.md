@@ -200,7 +200,6 @@ int main() {
         return 0;
     }
 
-    // BFS/DFS 找最远点
     auto bfs = [&](int src, vector<ll>& dist, vector<int>& parent, vector<int>& pw) {
         dist.assign(n + 1, -1);
         parent.assign(n + 1, -1);
@@ -224,28 +223,19 @@ int main() {
     vector<ll> dist;
     vector<int> parent, pw;
 
-    // 第一次：找 A
     bfs(1, dist, parent, pw);
     int A = 1;
-    for (int i = 1; i <= n; ++i) {
-        if (dist[i] > dist[A]) A = i;
-    }
+    for (int i = 1; i <= n; ++i) if (dist[i] > dist[A]) A = i;
 
-    // 第二次：找 B，记录路径
     bfs(A, dist, parent, pw);
     int B = A;
-    for (int i = 1; i <= n; ++i) {
-        if (dist[i] > dist[B]) B = i;
-    }
+    for (int i = 1; i <= n; ++i) if (dist[i] > dist[B]) B = i;
 
     ll D = dist[B];
     double halfD = D / 2.0;
 
-    // 从 B 回溯到 A，找中心
     vector<int> path;
-    for (int u = B; u != -1; u = parent[u]) {
-        path.push_back(u);
-    }
+    for (int u = B; u != -1; u = parent[u]) path.push_back(u);
 
     ll sum = 0;
     for (int i = 0; i < (int)path.size() - 1; ++i) {
@@ -253,12 +243,10 @@ int main() {
         int u = path[i + 1];
         int w = pw[v];
         if (sum + w == D / 2 && D % 2 == 0) {
-            // 中心恰好是节点 u
             cout << fixed << setprecision(2) << halfD << "\nNODE " << u << "\n";
             return 0;
         }
         if (sum + w > halfD) {
-            // 中心在边 (u, v) 内部
             double d = halfD - sum;
             cout << fixed << setprecision(2) << halfD << "\nEDGE ";
             if (u < v) cout << u << " " << v << " " << fixed << setprecision(2) << d << "\n";
@@ -268,7 +256,6 @@ int main() {
         sum += w;
     }
 
-    // 如果 B 就是中心（D=0 情况已处理）
     cout << fixed << setprecision(2) << halfD << "\nNODE " << B << "\n";
     return 0;
 }

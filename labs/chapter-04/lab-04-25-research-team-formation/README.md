@@ -239,14 +239,12 @@ int main() {
     vector<int> val(n + 1);
     for (int i = 1; i <= n; ++i) cin >> val[i];
 
-    // dp[u][j]：u子树中选j个节点（u必选）的最大价值
     vector<vector<int>> dp(n + 1, vector<int>(k + 1, INF));
 
     function<void(int)> dfs = [&](int u) {
         dp[u][1] = val[u];
         for (int v : adj[u]) {
             dfs(v);
-            // 倒序枚举j，避免重复
             for (int j = k; j >= 1; --j) {
                 if (dp[u][j] == INF) continue;
                 for (int t = 1; t <= k - j; ++t) {

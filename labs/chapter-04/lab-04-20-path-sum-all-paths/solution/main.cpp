@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <sstream>
 #include <queue>
 
 struct TreeNode {
@@ -15,7 +14,7 @@ struct TreeNode {
 };
 
 TreeNode* buildTree(const std::vector<std::string>& tokens) {
-    if (tokens.empty() || tokens[0] == "null" || tokens[0] == "#") return nullptr;
+    if (tokens.empty() || tokens[0] == "null") return nullptr;
     TreeNode* root = new TreeNode(std::stoi(tokens[0]));
     std::queue<TreeNode*> q;
     q.push(root);
@@ -24,14 +23,14 @@ TreeNode* buildTree(const std::vector<std::string>& tokens) {
         TreeNode* curr = q.front();
         q.pop();
         if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
+            if (tokens[i] != "null") {
                 curr->left = new TreeNode(std::stoi(tokens[i]));
                 q.push(curr->left);
             }
             i++;
         }
         if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
+            if (tokens[i] != "null") {
                 curr->right = new TreeNode(std::stoi(tokens[i]));
                 q.push(curr->right);
             }
@@ -71,15 +70,17 @@ std::vector<std::vector<int>> pathSum(TreeNode* root, int targetSum) {
 }
 
 int main() {
-    std::string line;
-    if (!std::getline(std::cin, line)) return 0;
-    int targetSum;
-    if (!(std::cin >> targetSum)) return 0;
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
 
     std::vector<std::string> tokens;
     std::string token;
-    std::stringstream ss(line);
-    while (ss >> token) tokens.push_back(token);
+    while (std::cin >> token) {
+        tokens.push_back(token);
+        if (std::cin.peek() == '\n' || std::cin.peek() == '\r') break;
+    }
+    int targetSum = 0;
+    if (!(std::cin >> targetSum)) return 0;
 
     TreeNode* root = buildTree(tokens);
     auto paths = pathSum(root, targetSum);
