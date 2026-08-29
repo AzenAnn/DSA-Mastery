@@ -28,6 +28,16 @@ duration: "25～35 分钟"
 ## 输出格式
 - 输出一个整数，表示最近公共祖先节点的值。
 
+::: tip 💡 输入处理与建树指引
+1. **读入序列**：
+   直接使用 `std::string token; while (std::cin >> token)` 循环读取输入放入 `std::vector<std::string> tokens` 中即可，C++ 会自动按空格和换行分词。
+2. **字符串转数字与 null 拦截**：
+   - 遇到 `"null"` 时，表示空子树，直接将子节点置为 `nullptr`；**切勿对 `"null"` 调用 `std::stoi("null")`**（会抛出 `std::invalid_argument` 异常导致崩溃）；
+   - 仅在 `token != "null"` 时，才调用 `std::stoi(token)` 转为整数并创建有效节点 `new TreeNode(val)`。
+3. **基于队列的 BFS 建树**：
+   借助 `std::queue<TreeNode*>` 存放父节点，队头出队后依次连接左右孩子，并将非空孩子入队。
+:::
+
 ## 样例
 
 ### 样例输入 1
@@ -89,6 +99,11 @@ duration: "25～35 分钟"
 <summary>点击查看参考代码</summary>
 
 ```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+#include <queue>
+
 struct TreeNode {
     int val = 0;
     TreeNode* left = nullptr;
@@ -99,6 +114,40 @@ struct TreeNode {
     TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
+TreeNode* buildTree(const std::vector<std::string>& tokens) {
+    if (tokens.empty() || tokens[0] == "null") return nullptr;
+    TreeNode* root = new TreeNode(std::stoi(tokens[0]));
+    std::queue<TreeNode*> q;
+    q.push(root);
+    size_t i = 1;
+    while (!q.empty() && i < tokens.size()) {
+        TreeNode* curr = q.front();
+        q.pop();
+        if (i < tokens.size()) {
+            if (tokens[i] != "null") {
+                curr->left = new TreeNode(std::stoi(tokens[i]));
+                q.push(curr->left);
+            }
+            i++;
+        }
+        if (i < tokens.size()) {
+            if (tokens[i] != "null") {
+                curr->right = new TreeNode(std::stoi(tokens[i]));
+                q.push(curr->right);
+            }
+            i++;
+        }
+    }
+    return root;
+}
+
+void freeTree(TreeNode* root) {
+    if (!root) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    delete root;
+}
+
 TreeNode* lowestCommonAncestor(TreeNode* root, int p, int q) {
     if (!root || root->val == p || root->val == q) return root;
     TreeNode* left = lowestCommonAncestor(root->left, p, q);
@@ -106,11 +155,35 @@ TreeNode* lowestCommonAncestor(TreeNode* root, int p, int q) {
     if (left && right) return root;
     return left ? left : right;
 }
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    std::vector<std::string> tokens;
+    std::string token;
+    while (std::cin >> token) {
+        tokens.push_back(token);
+        if (std::cin.peek() == '\n' || std::cin.peek() == '\r') break;
+    }
+    int p = 0, q = 0;
+    if (!(std::cin >> p >> q)) return 0;
+
+    TreeNode* root = buildTree(tokens);
+    TreeNode* lca = lowestCommonAncestor(root, p, q);
+
+    if (lca) {
+        std::cout << lca->val << "\n";
+    }
+
+    freeTree(root);
+    return 0;
+}
 ```
 
 </details>
 
 ## 本地运行与提交
 ```powershell
-pnpm lab:run -- labs/chapter-04/lab-04-13-lowest-common-ancestor
+pnpm lab:run -- labs/chapter-04/lab-04-22-lowest-common-ancestor
 ```
