@@ -1,0 +1,55 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 10,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-chain-stress",
+    "input": "tests/002-chain-stress.in",
+    "expected": "tests/002-chain-stress.out",
+    "points": 20,
+    "tags": ["stress"],
+    "timeMs": 4000,
+    "outputKb": 2048
+  },
+  {
+    "id": "003-star-stress",
+    "input": "tests/003-star-stress.in",
+    "expected": "tests/003-star-stress.out",
+    "points": 20,
+    "tags": ["stress"],
+    "timeMs": 4000,
+    "outputKb": 2048
+  },
+  {
+    "id": "004-single-vertex",
+    "input": "tests/004-single-vertex.in",
+    "expected": "tests/004-single-vertex.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-disconnected",
+    "input": "tests/005-disconnected.in",
+    "expected": "tests/005-disconnected.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "006-cycle",
+    "input": "tests/006-cycle.in",
+    "expected": "tests/006-cycle.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "007-cross-edge",
+    "input": "tests/007-cross-edge.in",
+    "expected": "tests/007-cross-edge.out",
+    "points": 10,
+    "tags": ["regression"]
+  }
+]

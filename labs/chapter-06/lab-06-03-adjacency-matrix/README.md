@@ -1,10 +1,10 @@
 ---
-title: "Lab 06-01：构建无向图邻接矩阵"
+title: "Lab 06-03：构建无向图邻接矩阵"
 description: "根据无向图边集构建邻接矩阵，并计算每个顶点的度。"
-order: 1
+order: 3
 chapter: 6
 chapterTitle: "图的基础与存储"
-updated: "2026-08-24"
+updated: "2026-08-28"
 contributors: ["Azen"]
 status: "draft"
 lab: true
@@ -12,7 +12,7 @@ difficulty: "基础"
 duration: "45～60 分钟"
 ---
 
-# Lab 06-01：构建无向图邻接矩阵
+# Lab 06-03：构建无向图邻接矩阵
 
 ## 学习目标
 
@@ -87,9 +87,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-06/lab-06-01-adjacency-matrix
-pnpm lab:run -- labs/chapter-06/lab-06-01-adjacency-matrix
-pnpm lab:score -- labs/chapter-06/lab-06-01-adjacency-matrix
+pnpm lab:doctor -- labs/chapter-06/lab-06-03-adjacency-matrix
+pnpm lab:run -- labs/chapter-06/lab-06-03-adjacency-matrix
+pnpm lab:score -- labs/chapter-06/lab-06-03-adjacency-matrix
 ```
 
 ## 完成清单
