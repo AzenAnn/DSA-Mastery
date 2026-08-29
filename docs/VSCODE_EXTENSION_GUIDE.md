@@ -1,22 +1,24 @@
-# VSCode 插件：在编辑器里做代码题
+# VSCode 插件：在编辑器里做题
 
-DSA Mastery 的 71 道 Program Lab 原本要在终端里用 `pnpm lab:run -- <lab-path>` 判分。这个插件把同一套判题内核搬进 VSCode：左侧列出全部题目和完成状态，右侧显示题面与测试用例，点一下按钮就能提交。
+DSA Mastery 的 Program Lab 原本要在终端里判分。这个插件把代码题和选择题都带进 VSCode：左侧列出题目和完成状态，右侧显示题面，代码题可以提交判题，选择题可以直接作答并查看解析。
 
 ::: info 适用范围
-插件只覆盖 **Program**（代码题）。Quiz 在网页作答，Project 含人工评审环节，两者都不在插件里，详见[范围与边界](#范围与边界)。
+插件覆盖 **Program**（代码题）和 **Quiz**（四选一选择题）。Project 含人工评审环节，不在插件里，详见[范围与边界](#范围与边界)。
 :::
 
 ## 安装
 
 ### 前置条件
 
-| 需要什么 | 为什么 | 怎么确认 |
-| --- | --- | --- |
-| VSCode ≥ 1.90 | 插件用到的 API 下限 | 「关于 Visual Studio Code」看版本 |
-| Node.js ≥ 22.13 | 运行判题内核 | `node --version` |
-| C++ 编译器 | 编译你的答案 | GCC ≥ 11、Clang ≥ 14 或 MSVC ≥ 19.30 三选一 |
+| 需要什么 | 为什么 | 代码题 | 选择题 |
+| --- | --- | :---: | :---: |
+| VSCode ≥ 1.90 | 插件用到的 API 下限 | 必需 | 必需 |
+| Node.js ≥ 22.13 | 运行判题内核 | 必需 | — |
+| C++ 编译器 | 编译你的答案（GCC ≥ 11、Clang ≥ 14 或 MSVC ≥ 19.30 三选一） | 必需 | — |
 
-没装编译器也可以先装插件 —— 插件会在你第一次提交前检查，并按平台给出安装指引。
+**选择题只要 VSCode 就能做** —— 判定完全在插件内完成，不调用判题内核，也不需要编译器。
+
+代码题缺编译器也可以先装插件：插件会在你第一次提交前检查，并按平台给出安装指引。
 
 ::: tip 找不到 node 也能判题
 插件优先使用 PATH 里的 `node`；如果没有，会回退到 VSCode 自带的 Node 运行时。所以只装了 VSCode 的机器同样可以提交。
@@ -24,20 +26,31 @@ DSA Mastery 的 71 道 Program Lab 原本要在终端里用 `pnpm lab:run -- <la
 
 ### 安装步骤
 
-插件尚未发布到 Marketplace，需要从仓库构建并本地安装。
+插件尚未发布到 Marketplace，从 GitHub Releases 下载构建好的 `.vsix` 即可，**不需要在本地装依赖或跑构建**。
+
+1. 打开 [Releases 页面](https://github.com/AzenAnn/DSA-Mastery/releases)，找最新的 `ext-v*`（标着「测试版」）
+2. 下载 `dsa-mastery-labs-<版本>.vsix`
+3. VSCode → 扩展面板 → 右上角 `...` → **从 VSIX 安装**，选中刚下载的文件
+
+命令行安装也可以：
 
 ```bash
-git clone https://github.com/AzenAnn/DSA-Mastery.git
+code --install-extension ~/Downloads/dsa-mastery-labs-0.1.0.vsix
+```
+
+::: details 从源码构建（一般不需要）
+只有在要改插件、或者想装还没发版的改动时才需要这条路。前置：Node ≥ 22.13、pnpm。
+
+```bash
 cd DSA-Mastery/tools/vscode-extension
 pnpm install --ignore-workspace
-pnpm run package
-```
-
-`pnpm run package` 会先用 esbuild 打包源码，再生成 `dsa-mastery-labs-0.1.0.vsix`。然后安装它：
-
-```bash
+node build.mjs
+pnpm dlx @vscode/vsce package --no-dependencies --allow-missing-repository
 code --install-extension dsa-mastery-labs-0.1.0.vsix
 ```
+
+`pnpm install` 会因为没批准 esbuild 的 postinstall 而报一句 `ERR_PNPM_IGNORED_BUILDS`，可以忽略 —— esbuild 的可执行文件来自平台专属依赖，不跑那个脚本也能用。
+:::
 
 也可以在 VSCode 里操作：扩展面板 → 右上角 `...` → **从 VSIX 安装**。
 
@@ -47,7 +60,7 @@ VSCode 不会热加载新装的插件。装完请完全退出再打开。
 
 ### 确认装好了
 
-重启后打开 DSA Mastery 仓库根目录，活动栏（最左侧竖条）应出现 **DSA Mastery** 图标，点开显示「代码题」，里面按章节列出 71 道题。
+重启后打开 DSA Mastery 仓库根目录，活动栏（最左侧竖条）应出现 **DSA Mastery** 图标，点开后按章节列出全部题目（73 道代码题 + 38 道选择题）。
 
 如果图标没出现，在命令面板（<kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>）输入 `DSA`：
 
@@ -114,6 +127,10 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 
 ## 完成状态怎么算
 
+### 选择题
+
+选择题在题目面板中逐题选择并提交。提交后会显示对错、正确答案和解析，可以点击“重新作答”。插件会保存每题最近一次答案、答题次数和当前得分；全部题目至少答对一次后显示为“已完成”，之后再次答错也不会取消完成状态。
+
 ### 三种图标
 
 | 图标 | 含义 |
@@ -168,17 +185,18 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 
 ## 范围与边界
 
-### 只覆盖 Program
+### 支持的类型
 
 | 类型 | 数量 | 插件里 |
 | --- | --- | --- |
-| Program | 71 | 完整支持 |
-| Quiz | 38 | 不显示。作答与判分在网页组件中完成，没有命令行执行路径，请在[在线课程](https://azenann.github.io/DSA-Mastery/labs/)作答 |
+| Program | 73 | 完整支持 |
+| Quiz | 38 | 支持四选一单项选择、解析和本地进度 |
 | Project | 4 | 不显示。含人工评审 task，自动判分无法决定是否完成 |
 
 ### 插件不做的事
 
 - **交互式运行**（手工输入输出）需要真实终端，请继续用 `pnpm lab:interactive`。
+- **选择题不接入终端 CLI**。答案在插件内本地判定，网页端与 VSCode 的答题进度目前不互相同步。
 - **作者维护命令**（`lab:new`、`lab:verify`、`lab:refresh-expected`、`lab:pack`）不在插件里，它们面向出题者而非学习者。
 - **环境问题只能诊断，不能解决**。插件会告诉你缺什么、去哪装，但编译器仍需你自己安装。
 

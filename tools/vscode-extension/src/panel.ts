@@ -5,9 +5,9 @@ import * as vscode from "vscode";
 import { CliError, scoreLab, type ScoreResult } from "./cli";
 import type { EnvironmentGuard } from "./doctor";
 import { loadTestCases, studentSourcePath, type ProgramLab } from "./labIndex";
-import { renderReadme } from "./markdown";
+import { renderMarkdownFragment, renderReadme } from "./markdown";
 import type { ProgressTracker } from "./progress";
-import { renderPanelHtml, renderResultHtml } from "./panelHtml";
+import { renderPanelHtml, renderQuizFeedbackHtml, renderQuizPanelHtml, renderResultHtml, type QuizQuestionView } from "./panelHtml";
 
 type LoadedCase = Awaited<ReturnType<typeof loadTestCases>>[number];
 
@@ -27,6 +27,8 @@ export class LabPanel {
   private readonly disposables: vscode.Disposable[] = [];
   private lab!: ProgramLab;
   private cases: LoadedCase[] = [];
+  /** quiz 题目的渲染结果，提交后回填反馈区时复用。 */
+  private quizViews: QuizQuestionView[] = [];
   private submitting = false;
 
   private constructor(private readonly deps: PanelDeps) {
@@ -77,17 +79,36 @@ export class LabPanel {
     ]);
     this.cases = cases;
 
-    this.panel.webview.html = renderPanelHtml({
-      webview: this.panel.webview,
-      extensionPath: this.deps.context.extensionPath,
-      lab,
-      readmeHtml: readme.html,
-      cases,
-      progress: this.deps.progress.get(lab.name),
-    });
+    // 渲染结果存下来：提交某一题后要用同一份 HTML 回填反馈区，
+    // 否则题解会退化成纯文本（Markdown 和公式都不生效）。
+    this.quizViews = (lab.quizQuestions ?? []).map((question) => ({
+      ...question,
+      stemHtml: renderMarkdownFragment(question.stem, lab, this.panel.webview),
+      optionHtml: question.options.map((option) => renderMarkdownFragment(option, lab, this.panel.webview)),
+      hintHtml: question.hint ? renderMarkdownFragment(question.hint, lab, this.panel.webview) : undefined,
+      explanationHtml: renderMarkdownFragment(question.explanation, lab, this.panel.webview),
+    }));
+
+    this.panel.webview.html = lab.type === "quiz"
+      ? renderQuizPanelHtml({
+          webview: this.panel.webview,
+          extensionPath: this.deps.context.extensionPath,
+          lab,
+          readmeHtml: readme.html,
+          questions: this.quizViews,
+          quizProgress: this.deps.progress.getQuiz(lab.name),
+        })
+      : renderPanelHtml({
+          webview: this.panel.webview,
+          extensionPath: this.deps.context.extensionPath,
+          lab,
+          readmeHtml: readme.html,
+          cases,
+          progress: this.deps.progress.get(lab.name),
+        });
   }
 
-  private async handleMessage(message: { type: string }): Promise<void> {
+  private async handleMessage(message: { type: string; questionId?: string; selected?: number }): Promise<void> {
     switch (message.type) {
       case "submit":
         await this.submit();
@@ -98,9 +119,36 @@ export class LabPanel {
       case "showHistory":
         await vscode.commands.executeCommand("dsaMastery.showHistory", this.lab.name);
         return;
+      case "quizAnswer":
+        await this.answerQuiz(message.questionId, message.selected);
+        return;
       default:
         return;
     }
+  }
+
+  private async answerQuiz(questionId?: string, selected?: number): Promise<void> {
+    if (this.lab.type !== "quiz" || !questionId || selected === undefined || !Number.isInteger(selected)) return;
+    const progress = await this.deps.progress.recordQuizAnswer(
+      this.lab.name,
+      this.lab.quizQuestions ?? [],
+      questionId,
+      selected,
+    );
+    const state = progress.answers[questionId];
+    const question = this.quizViews.find((item) => item.id === questionId);
+    void this.panel.webview.postMessage({
+      type: "quizResult",
+      questionId,
+      // 带上 answer：前端要靠它给正确项标 is-answer。
+      state: {
+        ...state,
+        answer: question?.answer,
+        html: question ? renderQuizFeedbackHtml(question, selected) : "",
+      },
+      completed: progress.passed,
+    });
+    this.deps.onSubmitted();
   }
 
   private async openSource(): Promise<void> {

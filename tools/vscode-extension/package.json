@@ -126,6 +126,7 @@
   "scripts": {
     "build": "node build.mjs",
     "watch": "node build.mjs --watch",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "package": "node build.mjs && vsce package --no-dependencies --allow-missing-repository"
   },

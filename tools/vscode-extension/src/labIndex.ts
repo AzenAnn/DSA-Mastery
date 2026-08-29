@@ -1,11 +1,18 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
+import { parseQuizQuestions, type QuizQuestion } from "./quiz";
 
-/** 一道 program lab 的静态信息，全部来自 lab.json 与 README frontmatter。 */
+/**
+ * 一道可作答 lab 的静态信息，来自 lab.json 与 README frontmatter。
+ *
+ * 名字沿用 ProgramLab 是历史原因（最初只支持 program），现在同时承载 quiz。
+ * type 决定走哪条判定路径：program 调判题内核，quiz 在扩展内比对选项。
+ */
 export interface ProgramLab {
   /** lab 目录名，例如 lab-13-01-container-with-most-water。已验证全仓库唯一，用作状态主键。 */
   name: string;
+  type: "program" | "quiz";
   /** lab 目录绝对路径。 */
   labPath: string;
   /** 相对仓库根的路径，用于展示与传给 CLI。 */
@@ -22,6 +29,7 @@ export interface ProgramLab {
   studentSources: string[];
   /** judge.cases 声明的用例清单路径，通常是 tests/cases.json。 */
   casesFile: string;
+  quizQuestions?: QuizQuestion[];
 }
 
 export interface Chapter {
@@ -57,10 +65,12 @@ function parseChapterNumber(source: unknown, fallbackDir: string): number {
 }
 
 /**
- * 扫描 labs/ 下全部 lab，只返回 type === "program" 的题目。
+ * 扫描 labs/ 下全部 lab，返回 type 为 "program" 或 "quiz" 的题目。
  *
- * quiz 的作答与判分在网页组件中完成，没有 CLI 执行路径；project 含人工评审 task，
- * 永远处于 PENDING。两者都不属于本扩展 v1 的范围，因此在这里过滤掉。
+ * program 走判题内核（编译 + 跑用例），quiz 完全在扩展内判定（读 quiz.json、
+ * 比对选项），不需要编译器也不调用 CLI。
+ *
+ * project 含人工评审 task，自动判分无法决定是否完成，因此在这里过滤掉。
  * 只有 README 而没有 lab.json 的目录同样跳过 —— 它们不可运行。
  */
 export async function discoverProgramLabs(repoRoot: string): Promise<Chapter[]> {
@@ -101,6 +111,7 @@ async function loadProgramLab(
 ): Promise<ProgramLab | undefined> {
   let manifest: {
     type?: string;
+    quiz?: { questions?: string };
     targets?: { student?: { sources?: string[] } };
     judge?: { cases?: string };
   };
@@ -110,10 +121,7 @@ async function loadProgramLab(
     // 没有 lab.json（或无法解析）的目录不可运行，直接跳过。
     return undefined;
   }
-  if (manifest.type !== "program") return undefined;
-
-  const sources = manifest.targets?.student?.sources ?? [];
-  if (sources.length === 0) return undefined;
+  if (manifest.type !== "program" && manifest.type !== "quiz") return undefined;
 
   let front: Record<string, unknown> = {};
   try {
@@ -122,8 +130,42 @@ async function loadProgramLab(
     // README 缺失不致命，退化为使用目录名。
   }
 
+  if (manifest.type === "quiz") {
+    try {
+      const quizFile = manifest.quiz?.questions ?? "quiz.json";
+      const questions = parseQuizQuestions(await readJson<unknown>(path.join(labPath, quizFile)));
+      return buildLab(repoRoot, labPath, labDir, chapterDir, front, {
+        type: "quiz",
+        studentSources: [],
+        casesFile: "",
+        quizQuestions: questions,
+      });
+    } catch {
+      return undefined;
+    }
+  }
+
+  const sources = manifest.targets?.student?.sources ?? [];
+  if (sources.length === 0) return undefined;
+
+  return buildLab(repoRoot, labPath, labDir, chapterDir, front, {
+    type: "program",
+    studentSources: sources,
+    casesFile: manifest.judge?.cases ?? "tests/cases.json",
+  });
+}
+
+function buildLab(
+  repoRoot: string,
+  labPath: string,
+  labDir: string,
+  chapterDir: string,
+  front: Record<string, unknown>,
+  details: Pick<ProgramLab, "type" | "studentSources" | "casesFile" | "quizQuestions">,
+): ProgramLab {
   return {
     name: labDir,
+    type: details.type,
     labPath,
     relativePath: path.relative(repoRoot, labPath).split(path.sep).join("/"),
     title: typeof front.title === "string" ? front.title : labDir,
@@ -134,8 +176,9 @@ async function loadProgramLab(
     difficulty: typeof front.difficulty === "string" ? front.difficulty : undefined,
     duration: typeof front.duration === "string" ? front.duration : undefined,
     status: typeof front.status === "string" ? front.status : undefined,
-    studentSources: sources,
-    casesFile: manifest.judge?.cases ?? "tests/cases.json",
+    studentSources: details.studentSources,
+    casesFile: details.casesFile,
+    quizQuestions: details.quizQuestions,
   };
 }
 
@@ -161,7 +204,10 @@ export async function loadTestCases(
   return loaded;
 }
 
-/** 学生作答文件的绝对路径。当前所有 program lab 都是单文件 student/main.cpp。 */
+/**
+ * 学生作答文件的绝对路径。仅对 program 有意义 —— quiz 在面板里选选项，没有源文件。
+ * 当前所有 program lab 都是单文件 student/main.cpp。
+ */
 export function studentSourcePath(lab: ProgramLab): string {
   return path.join(lab.labPath, lab.studentSources[0]);
 }

@@ -95,6 +95,19 @@ export interface RenderedReadme {
   title: string;
 }
 
+/** 渲染 Quiz 的题干、选项和解析片段，沿用题面 Markdown、图片与 KaTeX 规则。 */
+export function renderMarkdownFragment(
+  source: string,
+  lab: ProgramLab,
+  webview: vscode.Webview,
+  allowHtml = false,
+): string {
+  const md = new MarkdownIt({ html: allowHtml, linkify: true, breaks: false });
+  renderMath(md);
+  rewriteImages(md, lab, webview);
+  return md.render(source);
+}
+
 /** 读取并渲染题面：去掉 frontmatter 与题解，处理图片与公式。 */
 export async function renderReadme(
   lab: ProgramLab,
@@ -108,9 +121,6 @@ export async function renderReadme(
   }
 
   const { content } = matter(raw);
-  const md = new MarkdownIt({ html: true, linkify: true, breaks: false });
-  renderMath(md);
-  rewriteImages(md, lab, webview);
-
-  return { html: md.render(stripSections(content)), title: lab.title };
+  const visibleContent = lab.type === "quiz" ? content.replace(/<QuizSet\s*\/>/g, "") : content;
+  return { html: renderMarkdownFragment(stripSections(visibleContent), lab, webview, true), title: lab.title };
 }

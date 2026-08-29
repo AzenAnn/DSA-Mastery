@@ -329,3 +329,399 @@ pre code {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== 选择题 =====
+ * 结构与类名对齐 .vitepress/theme/components/QuizSet.vue，
+ * 把网页版的 --course-* 设计变量换成 VSCode 主题变量，
+ * 这样两端视觉语言一致，同时自动跟随用户的编辑器主题。 */
+
+.course-quiz {
+  margin-top: 28px;
+}
+
+.course-quiz-summary {
+  position: sticky;
+  top: 52px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: var(--radius);
+  background: var(--vscode-editor-background);
+  font-size: 0.9em;
+}
+
+.course-quiz-summary strong {
+  color: var(--vscode-foreground);
+}
+
+.course-quiz-summary span {
+  color: var(--vscode-descriptionForeground);
+  font-variant-numeric: tabular-nums;
+}
+
+.course-quiz-question {
+  margin-bottom: 20px;
+  padding: 18px 20px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 8px;
+  background: var(--vscode-editor-background);
+}
+
+.course-quiz-heading {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.course-quiz-number {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--vscode-badge-background);
+  color: var(--vscode-badge-foreground);
+  font-size: 0.78em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.course-quiz-heading-content {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.course-quiz-meta {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--vscode-descriptionForeground);
+  font-size: 0.8em;
+}
+
+.course-quiz-stem {
+  font-size: 1em;
+  line-height: 1.7;
+}
+
+.course-quiz-stem > :first-child {
+  margin-top: 0;
+}
+
+.course-quiz-stem > :last-child {
+  margin-bottom: 0;
+}
+
+/* 代码块：顶部三个圆点模仿网页版的窗口条 */
+.course-quiz-code {
+  margin: 14px 0;
+  overflow: hidden;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: var(--radius);
+}
+
+.course-quiz-code-bar {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  background: var(--vscode-editorGroupHeader-tabsBackground, var(--vscode-editor-background));
+}
+
+.course-quiz-code-bar span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--vscode-panel-border);
+}
+
+.course-quiz-code-body pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.course-quiz-hint {
+  margin: 12px 0;
+  padding: 8px 12px;
+  border: 1px dashed var(--vscode-panel-border);
+  border-radius: var(--radius);
+  font-size: 0.92em;
+}
+
+.course-quiz-hint summary {
+  cursor: pointer;
+  color: var(--vscode-textLink-foreground);
+}
+
+.course-quiz-hint > div {
+  margin-top: 8px;
+  color: var(--vscode-descriptionForeground);
+}
+
+.course-quiz-options {
+  margin: 14px 0 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.course-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+  white-space: nowrap;
+}
+
+.course-quiz-option {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 11px 42px 11px 13px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: var(--radius);
+  background: var(--vscode-editor-background);
+  cursor: pointer;
+  transition: border-color 0.12s, background-color 0.12s;
+}
+
+.course-quiz-option:hover {
+  border-color: var(--vscode-focusBorder);
+}
+
+.course-quiz-option:has(input:checked) {
+  border-color: var(--vscode-focusBorder);
+  background: var(--vscode-list-activeSelectionBackground);
+}
+
+.course-quiz-option:has(input:focus-visible) {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: 2px;
+}
+
+/* radio 视觉隐藏，交互由 label 与字母标承担 */
+.course-quiz-option input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+.course-quiz-option-mark {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 50%;
+  background: var(--vscode-editor-background);
+  color: var(--vscode-descriptionForeground);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.78em;
+  font-weight: 700;
+  transition: border-color 0.12s, background-color 0.12s, color 0.12s;
+}
+
+.course-quiz-option:has(input:checked) .course-quiz-option-mark {
+  border-color: var(--vscode-button-background);
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+.course-quiz-option-text {
+  min-width: 0;
+  padding-top: 2px;
+  color: var(--vscode-foreground);
+  font-size: 0.94em;
+  line-height: 1.6;
+}
+
+.course-quiz-option-text > :first-child {
+  margin-top: 0;
+}
+
+.course-quiz-option-text > :last-child {
+  margin-bottom: 0;
+}
+
+/* ----- 已提交：正确项打勾，选错的那项打叉 ----- */
+
+.course-quiz-options.is-submitted .course-quiz-option {
+  cursor: default;
+}
+
+.course-quiz-options.is-submitted .course-quiz-option:hover {
+  border-color: var(--vscode-panel-border);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-answer {
+  border-color: var(--vscode-testing-iconPassed);
+  background: color-mix(in srgb, var(--vscode-testing-iconPassed) 12%, transparent);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-answer .course-quiz-option-mark {
+  border-color: var(--vscode-testing-iconPassed);
+  background: var(--vscode-testing-iconPassed);
+  color: var(--vscode-editor-background);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-answer .course-quiz-option-text {
+  color: var(--vscode-testing-iconPassed);
+  font-weight: 600;
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-answer::after {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--vscode-testing-iconPassed);
+  font-size: 1.05em;
+  font-weight: 800;
+  content: "✓";
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-wrong-pick {
+  border-color: var(--vscode-testing-iconFailed);
+  background: color-mix(in srgb, var(--vscode-testing-iconFailed) 12%, transparent);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-wrong-pick .course-quiz-option-mark {
+  border-color: var(--vscode-testing-iconFailed);
+  background: var(--vscode-testing-iconFailed);
+  color: var(--vscode-editor-background);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-wrong-pick .course-quiz-option-text {
+  color: var(--vscode-testing-iconFailed);
+  font-weight: 600;
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-wrong-pick::after {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--vscode-testing-iconFailed);
+  font-size: 1.05em;
+  font-weight: 800;
+  content: "✕";
+}
+
+.course-quiz-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* 复用页面上方工具栏按钮的观感 */
+.course-button {
+  padding: 6px 16px;
+  border: 1px solid var(--vscode-button-border, transparent);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.course-button-primary {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  font-weight: 600;
+}
+
+.course-button-primary:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+
+.course-button-secondary {
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+}
+
+.course-button-secondary:hover {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+.course-quiz-feedback {
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-left: 3px solid var(--vscode-panel-border);
+  border-radius: var(--radius);
+  background: var(--vscode-textBlockQuote-background);
+}
+
+.course-quiz-feedback.is-correct {
+  border-left-color: var(--vscode-testing-iconPassed);
+}
+
+.course-quiz-feedback.is-wrong {
+  border-left-color: var(--vscode-testing-iconFailed);
+}
+
+.course-quiz-feedback-heading {
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.course-quiz-feedback.is-correct .course-quiz-feedback-heading {
+  color: var(--vscode-testing-iconPassed);
+}
+
+.course-quiz-feedback.is-wrong .course-quiz-feedback-heading {
+  color: var(--vscode-testing-iconFailed);
+}
+
+.course-quiz-answer {
+  margin: 0 0 10px;
+  font-size: 0.94em;
+}
+
+.course-quiz-answer .course-quiz-rich {
+  display: inline;
+}
+
+.course-quiz-answer .course-quiz-rich > p {
+  display: inline;
+  margin: 0;
+}
+
+.course-quiz-explanation {
+  padding-top: 10px;
+  border-top: 1px solid var(--vscode-panel-border);
+  font-size: 0.92em;
+  line-height: 1.7;
+}
+
+.course-quiz-explanation-title {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--vscode-descriptionForeground);
+  font-size: 0.9em;
+}
+
+/* 富文本片段：题干、选项、题解共用。抹掉首尾外边距避免撑开容器。 */
+.course-quiz-rich > :first-child {
+  margin-top: 0;
+}
+
+.course-quiz-rich > :last-child {
+  margin-bottom: 0;
+}
+
+.course-quiz-rich code {
+  font-size: 0.92em;
+}

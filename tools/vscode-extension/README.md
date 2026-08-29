@@ -1,6 +1,6 @@
 # DSA Mastery Labs · VSCode 扩展
 
-在 VSCode 中浏览、作答与提交 DSA Mastery 的 71 道 Program Lab，替代终端里的 `pnpm lab:run -- <路径>`。
+在 VSCode 中浏览、作答与提交 DSA Mastery 的 Program Lab 和四选一 Quiz Lab。代码题继续调用仓库判题内核，选择题在插件内本地判定。
 
 > **使用说明请看站内文档**：[VSCode 插件安装与使用指南](../../docs/VSCODE_EXTENSION_GUIDE.md)。
 > 本文件只面向要改这个扩展的人。

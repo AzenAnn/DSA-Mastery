@@ -3,6 +3,15 @@ import * as vscode from "vscode";
 import type { ScoreResult } from "./cli";
 import type { ProgramLab, TestCase } from "./labIndex";
 import type { LabProgress } from "./progress";
+import type { QuizProgress } from "./progress";
+import type { QuizQuestion } from "./quiz";
+
+export type QuizQuestionView = QuizQuestion & {
+  stemHtml: string;
+  optionHtml: string[];
+  hintHtml?: string;
+  explanationHtml: string;
+};
 
 type LoadedCase = TestCase & { inputText: string; expectedText: string };
 
@@ -16,6 +25,185 @@ function escapeHtml(value: string): string {
 
 function nonce(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+export function renderQuizPanelHtml(
+  options: Omit<PanelOptions, "cases" | "progress"> & { questions: QuizQuestionView[]; quizProgress?: QuizProgress },
+): string {
+  const { webview, extensionPath, lab, readmeHtml, questions, quizProgress } = options;
+  const cspNonce = nonce();
+  const styleUri = webview.asWebviewUri(vscode.Uri.file(path.join(extensionPath, "media", "panel.css")));
+  const katexCssUri = webview.asWebviewUri(vscode.Uri.file(path.join(extensionPath, "media", "katex", "katex.min.css")));
+  // 注入 answer 与已渲染的反馈 HTML：恢复进度时前端要靠它们复原选项状态与题解，
+  // 否则重启 VSCode 后已答的题会丢掉标记和解析。
+  const restored: Record<string, unknown> = {};
+  for (const question of questions) {
+    const state = quizProgress?.answers[question.id];
+    if (!state) continue;
+    restored[question.id] = {
+      ...state,
+      answer: question.answer,
+      html: renderFeedbackBody(question, state.correct),
+    };
+  }
+  const answers = JSON.stringify(restored).replace(/</g, "\\u003c");
+  const questionHtml = questions.map((question, index) => renderQuizQuestion(question, index, quizProgress?.answers[question.id])).join("\n");
+  return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} data:; style-src ${webview.cspSource}; font-src ${webview.cspSource}; script-src 'nonce-${cspNonce}';" />
+<link rel="stylesheet" href="${katexCssUri}" /><link rel="stylesheet" href="${styleUri}" /></head><body>
+<header class="lab-header"><div class="title-row"><h1>${escapeHtml(lab.title)}</h1><span id="quiz-badge" class="badge ${quizProgress?.passed ? "passed" : "fresh"}">${quizProgress?.passed ? "已完成" : "选择题"}</span></div>
+<p class="meta">第 ${lab.chapter} 章 · ${escapeHtml(lab.chapterTitle)}</p></header>
+<article class="readme">${readmeHtml}</article>
+<section class="course-quiz">
+<div class="course-quiz-summary" aria-live="polite"><strong>答题进度</strong><span id="quiz-progress"></span><span id="quiz-score"></span></div>
+${questionHtml}
+</section>
+<script nonce="${cspNonce}">
+const api = acquireVsCodeApi(); const answers = ${answers};
+const questions = ${JSON.stringify(questions.map((q) => ({ id: q.id, points: q.points })))};
+function updateSummary() {
+  const answered = questions.filter(q => answers[q.id] !== undefined).length;
+  const correct = questions.filter(q => answers[q.id] && answers[q.id].correct).length;
+  document.getElementById('quiz-progress').textContent = '已答 ' + answered + '/' + questions.length;
+  document.getElementById('quiz-score').textContent = '正确 ' + correct;
+}
+// 已提交状态：正确项标 is-answer，选错的那项标 is-wrong-pick，锁定输入。
+function markSubmitted(box, state) {
+  box.querySelectorAll('.course-quiz-option').forEach(label => {
+    const input = label.querySelector('input');
+    const value = Number(input.value);
+    input.checked = value === state.selected;
+    input.disabled = true;
+    label.classList.toggle('is-answer', value === state.answer);
+    label.classList.toggle('is-wrong-pick', value === state.selected && value !== state.answer);
+  });
+  box.querySelector('.course-quiz-options').classList.add('is-submitted');
+  box.querySelector('.course-quiz-submit').hidden = true;
+  box.querySelector('.course-quiz-retry').hidden = false;
+  // 已经知道答案了，提示没必要再占位置。
+  const hintSlot = box.querySelector('.course-quiz-hint-slot');
+  if (hintSlot) hintSlot.hidden = true;
+  const feedback = box.querySelector('.course-quiz-feedback');
+  feedback.hidden = false;
+  feedback.className = 'course-quiz-feedback ' + (state.correct ? 'is-correct' : 'is-wrong');
+  if (state.html) feedback.innerHTML = state.html;
+}
+
+function refreshQuestion(id, state) {
+  const box = document.querySelector('[data-question="' + id + '"]');
+  if (box) markSubmitted(box, state);
+}
+
+document.querySelectorAll('.course-quiz-submit').forEach(button => button.addEventListener('click', () => {
+  const box = button.closest('[data-question]');
+  const input = box.querySelector('input:checked');
+  if (!input) return;
+  api.postMessage({ type: 'quizAnswer', questionId: box.dataset.question, selected: Number(input.value) });
+}));
+
+document.querySelectorAll('.course-quiz-retry').forEach(button => button.addEventListener('click', () => {
+  const box = button.closest('[data-question]');
+  box.querySelectorAll('.course-quiz-option').forEach(label => {
+    const input = label.querySelector('input');
+    input.disabled = false;
+    input.checked = false;
+    label.classList.remove('is-answer', 'is-wrong-pick');
+  });
+  box.querySelector('.course-quiz-options').classList.remove('is-submitted');
+  box.querySelector('.course-quiz-submit').hidden = false;
+  button.hidden = true;
+  const hintSlot = box.querySelector('.course-quiz-hint-slot');
+  if (hintSlot) hintSlot.hidden = false;
+  box.querySelector('.course-quiz-feedback').hidden = true;
+}));
+window.addEventListener('message', event => { if (event.data.type === 'quizResult') { answers[event.data.questionId] = event.data.state; refreshQuestion(event.data.questionId, event.data.state); updateSummary(); if (event.data.completed) { document.getElementById('quiz-badge').textContent = '已完成'; document.getElementById('quiz-badge').className = 'badge passed'; } } });
+Object.entries(answers).forEach(([id, state]) => refreshQuestion(id, state)); updateSummary();
+</script></body></html>`;
+}
+
+/** 选项字母：0 → A、1 → B…… 与网页版 optionLabel 一致。 */
+function optionLabel(index: number): string {
+  return String.fromCharCode(65 + index);
+}
+
+/**
+ * 渲染一道题。
+ *
+ * 类名与结构对齐 .vitepress/theme/components/QuizSet.vue，这样两端的视觉语言
+ * 一致：已提交后正确项标 is-answer，选错的那项标 is-wrong-pick。
+ */
+function renderQuizQuestion(
+  question: QuizQuestionView,
+  index: number,
+  state?: QuizProgress["answers"][string],
+): string {
+  const submitted = Boolean(state);
+
+  const options = question.options
+    .map((_, optionIndex) => {
+      const classes = ["course-quiz-option"];
+      if (submitted) {
+        if (optionIndex === question.answer) classes.push("is-answer");
+        else if (optionIndex === state?.selected) classes.push("is-wrong-pick");
+      }
+      const checked = state?.selected === optionIndex ? " checked" : "";
+      return `<div class="course-quiz-option-row"><label class="${classes.join(" ")}">
+<input type="radio" name="${escapeHtml(question.id)}" value="${optionIndex}"${checked}${submitted ? " disabled" : ""} />
+<span class="course-quiz-option-mark" aria-hidden="true">${optionLabel(optionIndex)}</span>
+<span class="course-quiz-option-text course-quiz-rich">${question.optionHtml[optionIndex]}</span>
+</label></div>`;
+    })
+    .join("\n");
+
+  const code = question.code
+    ? `<div class="course-quiz-code"><div class="course-quiz-code-bar" aria-hidden="true"><span></span><span></span><span></span></div><div class="course-quiz-code-body"><pre><code>${escapeHtml(question.code)}</code></pre></div></div>`
+    : "";
+
+  // 提示只在未提交时显示，和网页版一致 —— 已经知道答案了就没必要再给提示。
+  const hint = question.hintHtml && !submitted
+    ? `<details class="course-quiz-hint"><summary>查看提示</summary><div class="course-quiz-rich">${question.hintHtml}</div></details>`
+    : "";
+
+  const points = question.points ? `<span class="course-quiz-meta">${question.points} 分</span>` : "";
+
+  return `<article class="course-quiz-question" data-question="${escapeHtml(question.id)}">
+<header class="course-quiz-heading">
+<span class="course-quiz-number">第 ${index + 1} 题</span>
+<div class="course-quiz-heading-content">${points}
+<div class="course-quiz-stem course-quiz-rich">${question.stemHtml}</div>
+</div>
+</header>
+${code}
+<div class="course-quiz-hint-slot">${hint}</div>
+<fieldset class="course-quiz-options${submitted ? " is-submitted" : ""}">
+<legend class="course-sr-only">请选择一个答案</legend>
+${options}
+</fieldset>
+<div class="course-quiz-actions">
+<button class="course-button course-button-primary course-quiz-submit"${submitted ? " hidden" : ""}>提交本题</button>
+<button class="course-button course-button-secondary course-quiz-retry"${submitted ? "" : " hidden"}>重新作答</button>
+</div>
+<div class="course-quiz-feedback ${state?.correct ? "is-correct" : "is-wrong"}"${submitted ? "" : " hidden"}>${
+    state ? renderFeedbackBody(question, state.correct) : ""
+  }</div>
+</article>`;
+}
+
+/** 反馈区正文：判定 + 正确答案 + 题解。提交后由脚本替换，所以单独抽出来。 */
+function renderFeedbackBody(question: QuizQuestionView, correct: boolean): string {
+  return `<p class="course-quiz-feedback-heading">${correct ? "回答正确" : "回答错误"}</p>
+<p class="course-quiz-answer">正确答案：<strong>${optionLabel(question.answer)}</strong> <span class="course-quiz-rich">${question.optionHtml[question.answer]}</span></p>
+<div class="course-quiz-explanation"><strong class="course-quiz-explanation-title">题解</strong><div class="course-quiz-rich">${question.explanationHtml}</div></div>`;
+}
+
+/**
+ * 提交一题后回填反馈区的 HTML。
+ *
+ * 收的是已渲染的视图而不是原始 question —— 题解和选项里可能有 Markdown 与公式，
+ * 用原始文本会退化成纯文本。
+ */
+export function renderQuizFeedbackHtml(question: QuizQuestionView, selected: number): string {
+  return renderFeedbackBody(question, selected === question.answer);
 }
 
 interface PanelOptions {

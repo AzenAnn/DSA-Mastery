@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { discoverProgramLabs, type Chapter, type ProgramLab } from "./labIndex";
-import type { LabProgress, ProgressTracker } from "./progress";
+import type { LabProgress, ProgressTracker, QuizProgress } from "./progress";
 
 export class ChapterNode {
   readonly kind = "chapter" as const;
@@ -63,7 +63,9 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
       `第 ${chapter.chapter} 章 · ${chapter.chapterTitle}`,
       vscode.TreeItemCollapsibleState.Collapsed,
     );
-    const passed = this.progress.countPassed(chapter.labs.map((lab) => lab.name));
+    const passed = chapter.labs.filter((lab) => lab.type === "quiz"
+      ? this.progress.getQuiz(lab.name)?.passed
+      : this.progress.get(lab.name)?.passed).length;
     item.description = `${passed}/${chapter.labs.length}`;
     item.iconPath = new vscode.ThemeIcon("folder");
     item.contextValue = "dsaMasteryChapter";
@@ -72,12 +74,15 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   private labItem(node: LabNode): vscode.TreeItem {
     const { lab } = node;
-    const state = this.progress.get(lab.name);
+    const quizState = lab.type === "quiz" ? this.progress.getQuiz(lab.name) : undefined;
+    const programState = lab.type === "program" ? this.progress.get(lab.name) : undefined;
     const item = new vscode.TreeItem(lab.title, vscode.TreeItemCollapsibleState.None);
 
-    item.description = describeState(state);
-    item.iconPath = stateIcon(state);
-    item.tooltip = buildTooltip(lab, state);
+    item.description = lab.type === "quiz" ? describeQuizState(quizState) : describeState(programState);
+    item.iconPath = lab.type === "quiz" ? quizStateIcon(quizState) : stateIcon(programState);
+    item.tooltip = lab.type === "quiz"
+      ? buildQuizTooltip(lab, quizState)
+      : buildTooltip(lab, programState);
     item.contextValue = "dsaMasteryLab";
     item.command = {
       command: "dsaMastery.openLab",
@@ -86,6 +91,25 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     };
     return item;
   }
+}
+
+function quizStateIcon(state: QuizProgress | undefined): vscode.ThemeIcon {
+  if (state?.passed) return new vscode.ThemeIcon("pass-filled", new vscode.ThemeColor("testing.iconPassed"));
+  if (state && Object.keys(state.answers).length > 0) return new vscode.ThemeIcon("circle-large-outline", new vscode.ThemeColor("testing.iconQueued"));
+  return new vscode.ThemeIcon("question");
+}
+
+function describeQuizState(state: QuizProgress | undefined): string {
+  if (!state) return "";
+  const answered = Object.keys(state.answers).length;
+  const correct = Object.values(state.answers).filter((answer) => answer.correct).length;
+  return state.passed ? `${correct}/${correct} · 已完成` : `${correct} 正确 · 已答 ${answered}`;
+}
+
+function buildQuizTooltip(lab: ProgramLab, state: QuizProgress | undefined): vscode.MarkdownString {
+  const tooltip = new vscode.MarkdownString(`**${lab.title}**\n\n${state?.passed ? "✅ 已完成" : "选择题"}\n\n已答：${state ? Object.keys(state.answers).length : 0}/${lab.quizQuestions?.length ?? 0}`);
+  tooltip.supportThemeIcons = true;
+  return tooltip;
 }
 
 /**

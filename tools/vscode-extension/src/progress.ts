@@ -3,6 +3,7 @@ import path from "node:path";
 import * as vscode from "vscode";
 import type { CaseResult, ScoreResult, Verdict } from "./cli";
 import { studentSourcePath, type ProgramLab } from "./labIndex";
+import type { QuizQuestion } from "./quiz";
 
 const STATE_KEY = "dsaMastery.progress.v1";
 const SCHEMA_VERSION = 1;
@@ -44,13 +45,28 @@ export interface LabProgress {
   history: HistoryEntry[];
 }
 
+export interface QuizAnswerState {
+  selected: number;
+  correct: boolean;
+  attempts: number;
+  answeredAt: string;
+}
+
+export interface QuizProgress {
+  passed: boolean;
+  bestScore: number;
+  maxScore: number;
+  answers: Record<string, QuizAnswerState>;
+}
+
 interface ProgressStore {
   schemaVersion: number;
   labs: Record<string, LabProgress>;
+  quizzes: Record<string, QuizProgress>;
 }
 
 function emptyStore(): ProgressStore {
-  return { schemaVersion: SCHEMA_VERSION, labs: {} };
+  return { schemaVersion: SCHEMA_VERSION, labs: {}, quizzes: {} };
 }
 
 function snapshotId(when: Date): string {
@@ -85,7 +101,7 @@ export class ProgressTracker {
       void this.context.globalState.update(`${STATE_KEY}.backup.${Date.now()}`, raw);
       return emptyStore();
     }
-    return { schemaVersion: raw.schemaVersion, labs: raw.labs ?? {} };
+    return { schemaVersion: raw.schemaVersion, labs: raw.labs ?? {}, quizzes: raw.quizzes ?? {} };
   }
 
   private async persist(): Promise<void> {
@@ -98,6 +114,44 @@ export class ProgressTracker {
 
   get(labName: string): LabProgress | undefined {
     return this.store.labs[labName];
+  }
+
+  getQuiz(labName: string): QuizProgress | undefined {
+    return this.store.quizzes[labName];
+  }
+
+  async recordQuizAnswer(
+    labName: string,
+    questions: QuizQuestion[],
+    questionId: string,
+    selected: number,
+  ): Promise<QuizProgress> {
+    const question = questions.find((item) => item.id === questionId);
+    if (!question) throw new Error(`找不到选择题：${questionId}`);
+    const existing = this.store.quizzes[labName] ?? {
+      passed: false,
+      bestScore: 0,
+      maxScore: questions.reduce((total, item) => total + item.points, 0),
+      answers: {},
+    };
+    const previous = existing.answers[questionId];
+    existing.answers[questionId] = {
+      selected,
+      correct: selected === question.answer,
+      attempts: (previous?.attempts ?? 0) + 1,
+      answeredAt: new Date().toISOString(),
+    };
+    existing.maxScore = questions.reduce((total, item) => total + item.points, 0);
+    existing.bestScore = questions.reduce(
+      (total, item) => total + (existing.answers[item.id]?.correct ? item.points : 0),
+      0,
+    );
+    if (questions.length > 0 && questions.every((item) => existing.answers[item.id]?.correct)) {
+      existing.passed = true;
+    }
+    this.store.quizzes[labName] = existing;
+    await this.persist();
+    return existing;
   }
 
   /** 章节头部显示的「已通过/总数」。 */
