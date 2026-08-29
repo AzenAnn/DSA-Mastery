@@ -45,7 +45,14 @@
     "id": "007-stress",
     "input": "tests/007-stress.in",
     "expected": "tests/007-stress.out",
-    "points": 20,
+    "points": 10,
     "tags": ["stress"]
+  },
+  {
+    "id": "008-forward-edge-dag",
+    "input": "tests/008-forward-edge-dag.in",
+    "expected": "tests/008-forward-edge-dag.out",
+    "points": 10,
+    "tags": ["regression"]
   }
 ]

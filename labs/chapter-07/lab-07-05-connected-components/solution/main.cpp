@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -26,8 +25,6 @@ int main() {
         graph[u].push_back(v);
         graph[v].push_back(u);
     }
-    for (auto& neighbors : graph) std::sort(neighbors.begin(), neighbors.end());
-
     std::vector<int> comp(n, -1);
     int k = 0;
     for (int v = 0; v < n; ++v) {

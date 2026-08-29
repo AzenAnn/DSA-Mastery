@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -6,7 +5,7 @@ bool dfs(int u, const std::vector<std::vector<int>>& graph,
          std::vector<int>& state) {
     state[u] = 1;  // 已发现，仍在当前递归栈中
     for (int v : graph[u]) {
-        if (state[v] == 1) return true;   // 后向边：v 是当前栈中的祖先
+        if (state[v] == 1) return true;   // 指向当前栈中顶点，形成有向环
         if (state[v] == 0 && dfs(v, graph, state)) return true;
     }
     state[u] = 2;  // 已完成
@@ -28,8 +27,6 @@ int main() {
         std::cin >> u >> v;
         graph[u].push_back(v);
     }
-    for (auto& edges : graph) std::sort(edges.begin(), edges.end());
-
     std::vector<int> state(n, 0);
     bool hasCycle = false;
     for (int v = 0; v < n && !hasCycle; ++v) {

@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -17,8 +16,6 @@ int main() {
         std::cin >> u >> v;
         graph[u].push_back(v);
     }
-    for (auto& edges : graph) std::sort(edges.begin(), edges.end());
-
     // TODO: 三色标记（0 未访问 / 1 在栈中 / 2 已完成）DFS 判环：
     // 发现指向状态 1 的边即有环，输出 YES 并结束；全部完成则输出 NO。
     std::cout << "NO\n";
