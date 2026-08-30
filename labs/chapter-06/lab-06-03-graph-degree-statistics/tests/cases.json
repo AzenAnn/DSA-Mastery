@@ -1,0 +1,58 @@
+[
+  {
+    "id": "001-undirected-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 15,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-directed-sample",
+    "input": "tests/002-directed-sample.in",
+    "expected": "tests/002-directed-sample.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "003-undirected-loops-parallel",
+    "input": "tests/003-undirected-loops-parallel.in",
+    "expected": "tests/003-undirected-loops-parallel.out",
+    "points": 15,
+    "tags": ["boundary", "regression"]
+  },
+  {
+    "id": "004-directed-loops-parallel",
+    "input": "tests/004-directed-loops-parallel.in",
+    "expected": "tests/004-directed-loops-parallel.out",
+    "points": 15,
+    "tags": ["boundary", "regression"]
+  },
+  {
+    "id": "005-empty-graph",
+    "input": "tests/005-empty-graph.in",
+    "expected": "tests/005-empty-graph.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "006-directed-disconnected",
+    "input": "tests/006-directed-disconnected.in",
+    "expected": "tests/006-directed-disconnected.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "007-all-even-with-loops",
+    "input": "tests/007-all-even-with-loops.in",
+    "expected": "tests/007-all-even-with-loops.out",
+    "points": 10,
+    "tags": ["regression"]
+  },
+  {
+    "id": "008-stress",
+    "input": "tests/008-stress.in",
+    "expected": "tests/008-stress.out",
+    "points": 10,
+    "tags": ["stress"]
+  }
+]

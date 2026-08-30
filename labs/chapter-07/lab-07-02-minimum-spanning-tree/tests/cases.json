@@ -52,7 +52,14 @@
     "id": "008-stress",
     "input": "tests/008-stress.in",
     "expected": "tests/008-stress.out",
-    "points": 30,
+    "points": 20,
     "tags": ["stress"]
+  },
+  {
+    "id": "009-multiedge-reversed",
+    "input": "tests/009-multiedge-reversed.in",
+    "expected": "tests/009-multiedge-reversed.out",
+    "points": 10,
+    "tags": ["regression"]
   }
 ]
