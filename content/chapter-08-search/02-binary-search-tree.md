@@ -105,10 +105,10 @@ Node* insert(Node* root, int key) {
 digraph BalancedBST {
   rankdir=TB;
   node [shape=circle];
-  3 -> 1;
-  3 -> 5;
-  1 -> 2 [style=dashed];
-  5 -> 4 [style=dashed];
+  3 -> 1 [label="左"];
+  3 -> 5 [label="右"];
+  1 -> 2 [label="右"];
+  5 -> 4 [label="左"];
 }
 ```
 <!-- diagram id="bst-balanced-insert" caption: "按 3,1,2,5,4 插入得到较平衡的 BST，高度约 3" -->
@@ -119,10 +119,10 @@ digraph BalancedBST {
 digraph DegenerateBST {
   rankdir=TB;
   node [shape=circle];
-  1 -> 2;
-  2 -> 3;
-  3 -> 4;
-  4 -> 5;
+  1 -> 2 [label="右"];
+  2 -> 3 [label="右"];
+  3 -> 4 [label="右"];
+  4 -> 5 [label="右"];
 }
 ```
 <!-- diagram id="bst-degenerate-chain" caption: "按 1,2,3,4,5 插入退化成一条右链，高度为 5" -->

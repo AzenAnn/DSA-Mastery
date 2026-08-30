@@ -31,17 +31,19 @@ digraph RightRotate {
   node [shape=circle];
   subgraph cluster_before {
     label="旋转前";
-    y -> x;
-    y -> C;
-    x -> A;
-    x -> T2;
+    y1 [label="y"]; x1 [label="x"]; c1 [label="C"]; a1 [label="A"]; t1 [label="T2"];
+    y1 -> x1 [label="左"];
+    y1 -> c1 [label="右"];
+    x1 -> a1 [label="左"];
+    x1 -> t1 [label="右"];
   }
   subgraph cluster_after {
     label="旋转后";
-    x -> A;
-    x -> y;
-    y -> T2;
-    y -> C;
+    x2 [label="x"]; a2 [label="A"]; y2 [label="y"]; t2 [label="T2"]; c2 [label="C"];
+    x2 -> a2 [label="左"];
+    x2 -> y2 [label="右"];
+    y2 -> t2 [label="左"];
+    y2 -> c2 [label="右"];
   }
 }
 ```
@@ -93,14 +95,16 @@ digraph LlRotate {
   rankdir=TB;
   node [shape=circle];
   subgraph cluster_before {
-    label="LL（对 30 右旋）";
-    30 -> 20;
-    20 -> 10;
+    label="旋转前";
+    p1 [label="30"]; l1 [label="20"]; ll1 [label="10"];
+    p1 -> l1 [label="左"];
+    l1 -> ll1 [label="左"];
   }
   subgraph cluster_after {
     label="旋转后";
-    20 -> 10;
-    20 -> 30;
+    p2 [label="20"]; l2 [label="10"]; r2 [label="30"];
+    p2 -> l2 [label="左"];
+    p2 -> r2 [label="右"];
   }
 }
 ```
@@ -116,22 +120,25 @@ digraph LlRotate {
 
 ```graphviz
 digraph LrRotate {
-  rankdir=LR;
+  rankdir=TB;
   node [shape=circle];
   subgraph cluster_s1 {
-    label="插入 30,10,20";
-    30 -> 10;
-    10 -> 20;
+    label="第 1 步：插入 30,10,20";
+    a1 [label="30"]; b1 [label="10"]; c1 [label="20"];
+    a1 -> b1 [label="左"];
+    b1 -> c1 [label="右"];
   }
   subgraph cluster_s2 {
-    label="对 10 左旋";
-    30 -> 20;
-    20 -> 10;
+    label="第 2 步：对 10 左旋（变 LL）";
+    a2 [label="30"]; b2 [label="20"]; c2 [label="10"];
+    a2 -> b2 [label="左"];
+    b2 -> c2 [label="左"];
   }
   subgraph cluster_s3 {
-    label="对 30 右旋";
-    20 -> 10;
-    20 -> 30;
+    label="第 3 步：对 30 右旋";
+    a3 [label="20"]; b3 [label="10"]; c3 [label="30"];
+    a3 -> b3 [label="左"];
+    a3 -> c3 [label="右"];
   }
 }
 ```
