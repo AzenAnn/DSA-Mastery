@@ -1,0 +1,150 @@
+name: Release VSCode extension
+
+# 打 ext-v* tag 时构建 .vsix 并挂成**草稿** release。
+# 学习者最终下载即可「从 VSIX 安装」，不需要本地装依赖或跑构建。
+#
+# 发布分两步，推 tag 不会让任何东西对外可见：
+#   1. git tag ext-v0.1.1 && git push origin ext-v0.1.1
+#      → CI 构建 .vsix，建成草稿（仅仓库写权限可见）
+#   2. 人工下载草稿里的 .vsix 验证，确认无误后在 Releases 页点 Publish
+#      → 这一步才对外公开
+#
+# 也可以在 Actions 页手动触发（workflow_dispatch），只上传 artifact、不建 Release，
+# 用于验证流程本身。
+
+on:
+  push:
+    tags:
+      - "ext-v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: extension-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      # 创建 Release 需要写权限，仅这个 job 提升。
+      contents: write
+    defaults:
+      run:
+        working-directory: tools/vscode-extension
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      # 扩展是独立 package，不在仓库的 pnpm workspace 里。
+      #
+      # `|| true`：pnpm 11 会因为没批准 esbuild 的 postinstall 而以退出码 1 结束
+      # （ERR_PNPM_IGNORED_BUILDS）。这个脚本我们并不需要 —— esbuild 的可执行文件
+      # 来自平台专属的 optional dependency，不跑 postinstall 也能用。下一步会显式
+      # 验证 esbuild 可执行，所以这里容忍退出码是安全的，不会掩盖真正的安装失败。
+      - name: Install extension dependencies
+        run: pnpm install --ignore-workspace --frozen-lockfile || true
+
+      # 上一步容忍了退出码，这里确认依赖真的装好了。
+      - name: Verify toolchain is usable
+        run: |
+          ./node_modules/.bin/esbuild --version
+          ./node_modules/.bin/tsc --version
+
+      # 不走 pnpm run —— 它会重新做依赖检查，又被上面那个警告绊住。
+      - name: Typecheck
+        run: ./node_modules/.bin/tsc -p tsconfig.json --noEmit
+
+      - name: Run tests
+        run: node --experimental-strip-types --test test/*.test.ts
+
+      - name: Bundle with esbuild
+        run: node build.mjs
+
+      # tag 名里的版本必须和 package.json 一致，否则下载的文件名会对不上。
+      - name: Verify tag matches manifest version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          manifest_version="$(node -p "require('./package.json').version")"
+          tag_version="${GITHUB_REF_NAME#ext-v}"
+          if [ "$manifest_version" != "$tag_version" ]; then
+            echo "::error::tag ($tag_version) 与 package.json ($manifest_version) 版本不一致"
+            exit 1
+          fi
+          echo "版本一致：$manifest_version"
+
+      - name: Package .vsix
+        run: pnpm dlx @vscode/vsce@3 package --no-dependencies --allow-missing-repository
+
+      - name: Show package contents
+        run: pnpm dlx @vscode/vsce@3 ls --no-dependencies
+
+      # draft: true 是审核门 —— 推 tag 只把 .vsix 构建好并挂成草稿,
+      # 草稿只有仓库写权限的人能看到。下载验证过再手动点 Publish 才对外可见。
+      # 不要改成 false:那样推 tag 的瞬间就公开了,没有回头的机会。
+      - name: Create draft prerelease
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: tools/vscode-extension/*.vsix
+          draft: true
+          prerelease: true
+          name: "VSCode 插件 ${{ github.ref_name }}（测试版）"
+          body: |
+            > [!WARNING]
+            > **这是测试版，还没有经过充分的真实使用检验。** 判题链路、题解切除、进度状态机跑过验证，但界面部分测得不充分，预期会有 bug。遇到问题请提 Issue。
+
+            在 VSCode 中浏览、作答与提交 DSA Mastery 的 Lab：**73 道 Program（代码题）+ 38 道 Quiz（选择题）**。
+
+            ## 安装
+
+            1. 下载下面的 `.vsix` 文件
+            2. VSCode → 扩展面板 → 右上角 `...` → **从 VSIX 安装**
+            3. **完全退出 VSCode 再打开**（不会热加载）
+            4. 打开 DSA Mastery 仓库根目录，活动栏出现 **DSA Mastery** 图标
+
+            命令行安装也可以：
+
+            ```bash
+            code --install-extension dsa-mastery-labs-*.vsix
+            ```
+
+            ## 需要什么
+
+            | | 用途 |
+            | --- | --- |
+            | VSCode ≥ 1.90 | 插件 API 下限 |
+            | Node.js ≥ 22.13 | 运行判题内核（代码题需要） |
+            | C++ 编译器 | 编译答案（代码题需要）—— GCC ≥ 11、Clang ≥ 14 或 MSVC ≥ 19.30 |
+
+            选择题不需要 Node 和编译器。缺编译器时插件会提示并链到对应平台的安装指南。
+
+            ## 完整说明
+
+            [VSCode 插件安装与使用指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/06-vscode-extension-guide/)
+
+            ---
+
+            🤖 由 CI 自动构建
+          generate_release_notes: false
+
+      - name: Upload artifact for manual runs
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: actions/upload-artifact@v4
+        with:
+          name: dsa-mastery-labs-vsix
+          path: tools/vscode-extension/*.vsix
+          retention-days: 14
