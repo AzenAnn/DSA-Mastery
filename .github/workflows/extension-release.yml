@@ -1,12 +1,16 @@
 name: Release VSCode extension
 
-# 打 ext-v* tag 时构建 .vsix 并作为 prerelease 发到 Releases，
-# 学习者下载即可「从 VSIX 安装」，不需要本地装依赖或跑构建。
+# 打 ext-v* tag 时构建 .vsix 并挂成**草稿** release。
+# 学习者最终下载即可「从 VSIX 安装」，不需要本地装依赖或跑构建。
 #
-# 发布流程：
-#   git tag ext-v0.1.0 && git push origin ext-v0.1.0
+# 发布分两步，推 tag 不会让任何东西对外可见：
+#   1. git tag ext-v0.1.1 && git push origin ext-v0.1.1
+#      → CI 构建 .vsix，建成草稿（仅仓库写权限可见）
+#   2. 人工下载草稿里的 .vsix 验证，确认无误后在 Releases 页点 Publish
+#      → 这一步才对外公开
 #
-# 也可以在 Actions 页手动触发（workflow_dispatch），用于验证流程本身。
+# 也可以在 Actions 页手动触发（workflow_dispatch），只上传 artifact、不建 Release，
+# 用于验证流程本身。
 
 on:
   push:
@@ -88,11 +92,15 @@ jobs:
       - name: Show package contents
         run: pnpm dlx @vscode/vsce@3 ls --no-dependencies
 
-      - name: Create prerelease
+      # draft: true 是审核门 —— 推 tag 只把 .vsix 构建好并挂成草稿,
+      # 草稿只有仓库写权限的人能看到。下载验证过再手动点 Publish 才对外可见。
+      # 不要改成 false:那样推 tag 的瞬间就公开了,没有回头的机会。
+      - name: Create draft prerelease
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: tools/vscode-extension/*.vsix
+          draft: true
           prerelease: true
           name: "VSCode 插件 ${{ github.ref_name }}（测试版）"
           body: |

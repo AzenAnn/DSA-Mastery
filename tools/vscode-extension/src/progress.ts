@@ -154,9 +154,16 @@ export class ProgressTracker {
     return existing;
   }
 
-  /** 章节头部显示的「已通过/总数」。 */
-  countPassed(labNames: string[]): number {
-    return labNames.filter((name) => this.store.labs[name]?.passed).length;
+  /**
+   * 章节头部显示的「已通过/总数」。
+   *
+   * 必须收 lab 对象而不是名字 —— 代码题和选择题的进度存在两张表里,
+   * 只有 `type` 能决定去哪张表查。收名字的版本会把选择题全算成未通过。
+   */
+  countPassed(labs: ProgramLab[]): number {
+    return labs.filter((lab) =>
+      lab.type === "quiz" ? this.store.quizzes[lab.name]?.passed : this.store.labs[lab.name]?.passed,
+    ).length;
   }
 
   /**

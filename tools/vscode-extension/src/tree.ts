@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { discoverProgramLabs, type Chapter, type ProgramLab } from "./labIndex";
+import { quizIconState } from "./quiz";
 import type { LabProgress, ProgressTracker, QuizProgress } from "./progress";
 
 export class ChapterNode {
@@ -63,10 +64,7 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
       `第 ${chapter.chapter} 章 · ${chapter.chapterTitle}`,
       vscode.TreeItemCollapsibleState.Collapsed,
     );
-    const passed = chapter.labs.filter((lab) => lab.type === "quiz"
-      ? this.progress.getQuiz(lab.name)?.passed
-      : this.progress.get(lab.name)?.passed).length;
-    item.description = `${passed}/${chapter.labs.length}`;
+    item.description = `${this.progress.countPassed(chapter.labs)}/${chapter.labs.length}`;
     item.iconPath = new vscode.ThemeIcon("folder");
     item.contextValue = "dsaMasteryChapter";
     return item;
@@ -93,10 +91,21 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 }
 
+/**
+ * 选择题状态图标。问号形状贯穿未完成的两个状态 —— 只用颜色区分「没动过」和
+ * 「答过但没全对」,这样图标始终标明这是选择题,不会跟代码题的中间态撞脸。
+ * 全对后换绿勾,与代码题共用同一套「完成」视觉语言。
+ */
 function quizStateIcon(state: QuizProgress | undefined): vscode.ThemeIcon {
-  if (state?.passed) return new vscode.ThemeIcon("pass-filled", new vscode.ThemeColor("testing.iconPassed"));
-  if (state && Object.keys(state.answers).length > 0) return new vscode.ThemeIcon("circle-large-outline", new vscode.ThemeColor("testing.iconQueued"));
-  return new vscode.ThemeIcon("question");
+  const answered = state ? Object.keys(state.answers).length : 0;
+  switch (quizIconState(state?.passed ?? false, answered)) {
+    case "passed":
+      return new vscode.ThemeIcon("pass-filled", new vscode.ThemeColor("testing.iconPassed"));
+    case "in-progress":
+      return new vscode.ThemeIcon("question", new vscode.ThemeColor("testing.iconQueued"));
+    default:
+      return new vscode.ThemeIcon("question");
+  }
 }
 
 function describeQuizState(state: QuizProgress | undefined): string {

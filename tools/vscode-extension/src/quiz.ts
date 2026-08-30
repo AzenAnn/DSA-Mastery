@@ -102,6 +102,18 @@ export function scoreQuiz(
   };
 }
 
+/**
+ * 树视图要展示的三种状态。`passed` 一旦拿到就不再回退,与代码题一致。
+ * 「答过但没全对」独立成一档,是因为它需要跟「没动过」在视觉上分开,
+ * 但两者都还不是完成态 —— 调用方应保持同一种形状、只换颜色。
+ */
+export type QuizIconState = "untouched" | "in-progress" | "passed";
+
+export function quizIconState(passed: boolean, answeredCount: number): QuizIconState {
+  if (passed) return "passed";
+  return answeredCount > 0 ? "in-progress" : "untouched";
+}
+
 function requiredString(value: unknown, label: string): string {
   if (typeof value !== "string" || !value.trim()) throw new Error(`${label} 必须是非空字符串`);
   return value;
