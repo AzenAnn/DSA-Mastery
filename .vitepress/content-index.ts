@@ -287,8 +287,8 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "理解多路索引、散列函数、冲突处理和外存查找结构。",
     url: "/learn/outline/chapter-09-hashing-indexes/",
     lessonSources: [
-      "content/chapter-08-search/04-b-tree-and-b-plus-tree.md",
-      "content/chapter-08-search/05-hash-table.md",
+      "content/chapter-09-hashing-indexes/01-b-tree-and-b-plus-tree.md",
+      "content/chapter-09-hashing-indexes/02-hash-table.md",
     ],
     autoLabChapter: 9,
   },

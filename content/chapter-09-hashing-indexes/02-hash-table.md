@@ -1,15 +1,15 @@
 ---
-title: "8.5 散列表"
+title: "9.2 散列表"
 description: "散列函数、冲突处理、删除标记、装填因子与成功和失败 ASL。"
-order: 5
-chapter: 8
-chapterTitle: "查找"
-updated: "2026-08-21"
+order: 2
+chapter: 9
+chapterTitle: "散列与索引结构"
+updated: "2026-08-31"
 contributors: ["Azen", "RichardYi-SYSU-Mac"]
 status: "draft"
 ---
 
-# 8.5 散列表
+# 9.2 散列表
 
 前面的查找方法都靠比较缩小范围。散列表换了一条路线：用散列函数从关键字直接计算存储地址。它不维护全局有序性，却能在分布良好、装填适度时提供平均 $O(1)$ 的精确查找。
 

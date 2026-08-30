@@ -29,8 +29,8 @@ duration: "50～80 分钟"
 
 建议依次阅读：
 
-- [8.4 B 树与 B+ 树](../../../content/chapter-08-search/04-b-tree-and-b-plus-tree.md)
-- [8.5 散列表](../../../content/chapter-08-search/05-hash-table.md)
+- [9.1 B 树与 B+ 树](../../../content/chapter-09-hashing-indexes/01-b-tree-and-b-plus-tree.md)
+- [9.2 散列表](../../../content/chapter-09-hashing-indexes/02-hash-table.md)
 
 ## 环境、输入与预期输出
 

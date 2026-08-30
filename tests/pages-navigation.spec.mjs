@@ -285,8 +285,8 @@ test("curriculum exposes every Part and the required search, sorting, and algori
 
   await page.goto(`${baseUrl}/learn/chapter-08-search/02-binary-search-tree/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.2 二叉排序树");
-  await page.goto(`${baseUrl}/learn/chapter-08-search/04-b-tree-and-b-plus-tree/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.4 B 树与 B+ 树");
+  await page.goto(`${baseUrl}/learn/chapter-09-hashing-indexes/01-b-tree-and-b-plus-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("9.1 B 树与 B+ 树");
   await page.goto(`${baseUrl}/labs/chapter-09/lab-09-02-hash-table/`);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("散列表");
   expect(failures).toEqual([]);
