@@ -13,60 +13,11 @@ struct TreeNode {
     TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
-TreeNode* buildTree(const std::vector<int>& inorder, const std::vector<int>& postorder) {
-    // TODO: 根据中序和后序序列恢复二叉树
-    return nullptr;
-}
-
-void preorder(TreeNode* root, std::vector<int>& res) {
-    if (!root) return;
-    res.push_back(root->val);
-    preorder(root->left, res);
-    preorder(root->right, res);
-}
-
-std::vector<int> levelorder(TreeNode* root) {
-    std::vector<int> res;
-    if (!root) return res;
-    std::queue<TreeNode*> q;
-    q.push(root);
-    while (!q.empty()) {
-        TreeNode* cur = q.front();
-        q.pop();
-        res.push_back(cur->val);
-        if (cur->left) q.push(cur->left);
-        if (cur->right) q.push(cur->right);
-    }
-    return res;
-}
-
-void freeTree(TreeNode* root) {
-    if (!root) return;
-    freeTree(root->left);
-    freeTree(root->right);
-    delete root;
-}
-
 int main() {
-    int n;
-    if (!(std::cin >> n) || n <= 0) return 0;
-    std::vector<int> inorder(n), postorder(n);
-    for (int i = 0; i < n; i++) std::cin >> inorder[i];
-    for (int i = 0; i < n; i++) std::cin >> postorder[i];
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
 
-    TreeNode* root = buildTree(inorder, postorder);
-
-    std::vector<int> pre;
-    preorder(root, pre);
-    std::cout << "PREORDER:";
-    for (int v : pre) std::cout << " " << v;
-    std::cout << "\n";
-
-    std::vector<int> lvl = levelorder(root);
-    std::cout << "LEVELORDER:";
-    for (int v : lvl) std::cout << " " << v;
-    std::cout << "\n";
-
-    freeTree(root);
+    // TODO: 读入中序与后序遍历序列，重构二叉树并输出其前序遍历序列与层序遍历序列。
+    // 要求：递归分治或哈希加速定位根节点，时间复杂度 O(n)，空间复杂度 O(n)。
     return 0;
 }

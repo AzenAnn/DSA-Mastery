@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <sstream>
 #include <queue>
 
 struct TreeNode {
@@ -15,7 +14,7 @@ struct TreeNode {
 };
 
 TreeNode* buildTree(const std::vector<std::string>& tokens) {
-    if (tokens.empty() || tokens[0] == "null" || tokens[0] == "#") return nullptr;
+    if (tokens.empty() || tokens[0] == "null") return nullptr;
     TreeNode* root = new TreeNode(std::stoi(tokens[0]));
     std::queue<TreeNode*> q;
     q.push(root);
@@ -24,14 +23,14 @@ TreeNode* buildTree(const std::vector<std::string>& tokens) {
         TreeNode* curr = q.front();
         q.pop();
         if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
+            if (tokens[i] != "null") {
                 curr->left = new TreeNode(std::stoi(tokens[i]));
                 q.push(curr->left);
             }
             i++;
         }
         if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
+            if (tokens[i] != "null") {
                 curr->right = new TreeNode(std::stoi(tokens[i]));
                 q.push(curr->right);
             }
@@ -61,13 +60,18 @@ bool isSubtree(TreeNode* root, TreeNode* subRoot) {
 }
 
 int main() {
-    std::string line1, line2;
-    if (!std::getline(std::cin, line1) || !std::getline(std::cin, line2)) return 0;
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
     std::vector<std::string> tokens1, tokens2;
     std::string token;
-    std::stringstream ss1(line1), ss2(line2);
-    while (ss1 >> token) tokens1.push_back(token);
-    while (ss2 >> token) tokens2.push_back(token);
+    while (std::cin >> token) {
+        tokens1.push_back(token);
+        if (std::cin.peek() == '\n' || std::cin.peek() == '\r') break;
+    }
+    while (std::cin >> token) {
+        tokens2.push_back(token);
+    }
 
     TreeNode* root = buildTree(tokens1);
     TreeNode* subRoot = buildTree(tokens2);

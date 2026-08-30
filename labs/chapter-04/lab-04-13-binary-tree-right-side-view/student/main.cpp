@@ -13,57 +13,11 @@ struct TreeNode {
     TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
-TreeNode* buildTree(const std::vector<std::string>& tokens) {
-    if (tokens.empty() || tokens[0] == "null" || tokens[0] == "#") return nullptr;
-    TreeNode* root = new TreeNode(std::stoi(tokens[0]));
-    std::queue<TreeNode*> q;
-    q.push(root);
-    size_t i = 1;
-    while (!q.empty() && i < tokens.size()) {
-        TreeNode* curr = q.front();
-        q.pop();
-        if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
-                curr->left = new TreeNode(std::stoi(tokens[i]));
-                q.push(curr->left);
-            }
-            i++;
-        }
-        if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
-                curr->right = new TreeNode(std::stoi(tokens[i]));
-                q.push(curr->right);
-            }
-            i++;
-        }
-    }
-    return root;
-}
-
-void freeTree(TreeNode* root) {
-    if (!root) return;
-    freeTree(root->left);
-    freeTree(root->right);
-    delete root;
-}
-
-std::vector<int> rightSideView(TreeNode* root) {
-    // TODO: 获取右视图节点值
-    return {};
-}
-
 int main() {
-    std::vector<std::string> tokens;
-    std::string token;
-    while (std::cin >> token) {
-        tokens.push_back(token);
-    }
-    TreeNode* root = buildTree(tokens);
-    auto res = rightSideView(root);
-    for (size_t i = 0; i < res.size(); i++) {
-        std::cout << (i == 0 ? "" : " ") << res[i];
-    }
-    std::cout << "\n";
-    freeTree(root);
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    // TODO: 读入层序序列构建二叉树，输出从右侧所能看到的节点值序列。
+    // 要求：基于 BFS 每层最右节点或 DFS 根右左，时间复杂度 O(n)，空间复杂度 O(n)。
     return 0;
 }

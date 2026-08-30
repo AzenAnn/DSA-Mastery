@@ -14,53 +14,11 @@ struct TreeNode {
     TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
-TreeNode* buildTree(const std::vector<std::string>& tokens) {
-    if (tokens.empty() || tokens[0] == "null" || tokens[0] == "#") return nullptr;
-    TreeNode* root = new TreeNode(std::stoi(tokens[0]));
-    std::queue<TreeNode*> q;
-    q.push(root);
-    size_t i = 1;
-    while (!q.empty() && i < tokens.size()) {
-        TreeNode* curr = q.front();
-        q.pop();
-        if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
-                curr->left = new TreeNode(std::stoi(tokens[i]));
-                q.push(curr->left);
-            }
-            i++;
-        }
-        if (i < tokens.size()) {
-            if (tokens[i] != "null" && tokens[i] != "#") {
-                curr->right = new TreeNode(std::stoi(tokens[i]));
-                q.push(curr->right);
-            }
-            i++;
-        }
-    }
-    return root;
-}
-
-void freeTree(TreeNode* root) {
-    if (!root) return;
-    freeTree(root->left);
-    freeTree(root->right);
-    delete root;
-}
-
-int diameterOfBinaryTree(TreeNode* root) {
-    // TODO: 计算二叉树的直径（任意两节点间最长路径所经过的边数）
-    return 0;
-}
-
 int main() {
-    std::vector<std::string> tokens;
-    std::string token;
-    while (std::cin >> token) {
-        tokens.push_back(token);
-    }
-    TreeNode* root = buildTree(tokens);
-    std::cout << diameterOfBinaryTree(root) << "\n";
-    freeTree(root);
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    // TODO: 读入层序序列构建二叉树，计算二叉树中任意两节点间最长路径的长度（直径）。
+    // 要求：后序遍历自底向上计算左右子树最大深度并更新最大直径，时间复杂度 O(n)，空间复杂度 O(n)。
     return 0;
 }

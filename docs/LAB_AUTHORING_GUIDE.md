@@ -176,7 +176,7 @@ pnpm lab:new -- --type project --chapter 4 --order 3 --slug tree-index
 | `program` | `exercise` | 实验 Exercise |
 | `project` | `project` | 工程 Project |
 
-空分类的固定文案依次为“暂无理论型 Lab”“暂无实验型 Lab”“暂无工程型 Lab”。Ch.5“树的应用”现有 5 个正式 `quiz`，由统一索引自动进入 Theory；Exercise 与 Project 仍显示各自空状态。新增题目仍应先按学习目标确定 `quiz`、`program` 或 `project`，不能为了填满槽位创建占位 README、manifest 或虚假题目。
+空分类的固定文案依次为“暂无理论型 Lab”“暂无实验型 Lab”“暂无工程型 Lab”。Ch.5“树的应用”现有 5 个正式 `quiz` 和 17 个 `program`，由统一索引分别自动进入 Theory 与 Exercise；Project 仍显示空状态。新增题目仍应先按学习目标确定 `quiz`、`program` 或 `project`，不能为了填满槽位创建占位 README、manifest 或虚假题目。
 
 有 `lab.json` 时，内容索引直接从 `type` 派生分类。没有 manifest 的 README-only Lab 若需要进入分类目录，必须在 frontmatter 显式声明：
 

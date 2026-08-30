@@ -320,3 +320,24 @@ Implemented and verified Lab 01-21 with dual list implementations, deterministic
 ### Status
 
 [OK] **Completed**
+
+
+## Session 13: README 信息架构与视觉改版
+
+**Date**: 2026-08-26
+**Task**: README 信息架构与视觉改版
+**Branch**: `codex/readme-redesign`
+
+### Summary
+
+重写根 README，新增课程全景与 Lab 模式插图，完成全量测试和本地 GitHub 风格预览。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `6456397` | (see git log) |
+
+### Status
+
+[OK] **Completed**

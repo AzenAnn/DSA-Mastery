@@ -30,7 +30,7 @@ Lab 继承教材八个字段，并额外要求：
 | `duration` | 非空、可理解的预计时长，如“45～60 分钟” |
 | `labCategory` | README-only Lab 接入分类侧栏时可选；只能是 `theory`、`exercise`、`project`，不得按标题推断 |
 
-网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。声明 `autoLabChapter` 的课程章节启用“本章 Labs”三分类并要求所有 Lab 可分类；即使集合为空，也显示 Theory/Exercise/Project 与各自空状态。当前 Ch.5 有 5 个正式 Quiz，Theory 显示五个自动收录入口，Exercise/Project 继续显示空状态；不得为填满空分类创建占位 Lab。未启用分类的章节继续使用“相关 Labs”。
+网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。声明 `autoLabChapter` 的课程章节启用“本章 Labs”三分类并要求所有 Lab 可分类；即使集合为空，也显示 Theory/Exercise/Project 与各自空状态。当前 Ch.5 有 5 个正式 Quiz 和 17 个 Program，Theory 与 Exercise 分别显示对应的自动收录入口，Project 继续显示空状态；不得为填满空分类创建占位 Lab。未启用分类的章节继续使用“相关 Labs”。
 
 README 至少说明：
 
@@ -41,6 +41,10 @@ README 至少说明：
 - 如果有代码，给出从干净检出开始的精确命令。
 
 完整实现、`src/`、`tests/`、fixtures 和样例放在该 Lab 目录，不复制进多个教材页面。命令不得依赖作者机器的全局包、秘密文件或未说明服务。
+
+### Lab 静态资源
+
+题图、流程图等随 Lab 发布的静态资源放在同一 Lab 目录下的 `assets/` 中，README 使用相对路径引用，例如 `![题图](./assets/example.png)`。不得把 `Downloads`、临时目录或作者机器的绝对路径写入内容；提交前应确认资源进入构建产物对应的 `/labs/<chapter>/<lab>/assets/` 路径。
 
 ### 个人题库导入清洗
 
@@ -95,6 +99,7 @@ README 至少说明：
 | README 没有客观完成标准 | Review blocking |
 | 声称运行成功但 PR 无命令和结果 | Review blocking |
 | 页面未进入 Labs 索引或搜索 | 构建/浏览器测试失败 |
+| README 的静态资源缺失或使用作者机器路径 | 构建产物检查/Review blocking |
 | 个人题库导入后仍有原始页、个人可视化或答案生成声明 | Review blocking；清洗后重新检查 |
 | 删除个人链接后留下空“相关学习资源”标题 | Review blocking；连同空区块删除 |
 | `quiz.json` 缺字段、选项不是四项、答案越界或 id 重复 | `validate:content` 与构建失败 |

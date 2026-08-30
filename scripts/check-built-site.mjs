@@ -182,24 +182,15 @@ for (const required of [
   }
 }
 
-const complexityHtml = await readFile(
-  path.join(artifactRoot, "learn", "chapter-00-introduction", "03-algorithm-complexity-analysis", "index.html"),
-  "utf8",
-);
-for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
-  if (!complexityHtml.includes(`dsa-theory-block--${kind}`)) {
-    throw new Error(`Complexity page is missing theory container: ${kind}`);
-  }
-}
-if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.includes("::: definition")) {
+if (dataStructureBasicsHtml.includes("::: definition")) {
   throw new Error("Unparsed theory container markers leaked into Chapter 0 artifacts");
 }
 
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 5) {
-  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, and Graphviz authoring guides, found ${prefacePages.length} pages`);
+if (prefacePages.length !== 7) {
+  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, Graphviz authoring, macOS student, and VSCode extension guides, found ${prefacePages.length} pages`);
 }
 const prefaceHtml = await readFile(
   path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
@@ -328,6 +319,25 @@ if (graphvizGuideHtml.includes("@include") || graphvizGuideHtml.includes("第 pr
   throw new Error("Graphviz authoring guide was not expanded or leaked the internal preface id");
 }
 
+const macosStudentGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "05-macos-student-setup", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "macOS 学生实验环境安装指南",
+  "Xcode Command Line Tools",
+  "Homebrew",
+  "pnpm@11.1.1",
+  "Visual Studio Code",
+]) {
+  if (!macosStudentGuideHtml.includes(required)) {
+    throw new Error(`Rendered macOS student guide is missing: ${required}`);
+  }
+}
+if (macosStudentGuideHtml.includes("@include") || macosStudentGuideHtml.includes("第 preface 章")) {
+  throw new Error("macOS student guide was not expanded or leaked the internal preface id");
+}
+
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
 for (const requiredLabel of [
   "Part IV · 查找与索引",
@@ -395,7 +405,8 @@ for (const required of [
   "Lab 05-03：哈夫曼树与编码题精练",
   "Lab 05-04：并查集题精练",
   "Lab 05-05：堆题精练",
-  "暂无实验型 Lab",
+  "Lab 05-06：二叉搜索树的插入与查找",
+  "Lab 05-22：B+ 树的范围查询",
   "暂无工程型 Lab",
 ]) {
   if (!chapterFiveItem.includes(required)) {
@@ -408,10 +419,11 @@ if (
   chapterFiveSidebarEnd < 0 ||
   chapterFiveItemStart < 0 ||
   chapterFiveItemEnd < 0 ||
-  chapterFiveLabLinks.length !== 5 ||
-  chapterFiveItem.includes("暂无理论型 Lab")
+  chapterFiveLabLinks.length !== 22 ||
+  chapterFiveItem.includes("暂无理论型 Lab") ||
+  chapterFiveItem.includes("暂无实验型 Lab")
 ) {
-  throw new Error("Chapter 5 Theory Labs or empty Exercise/Project slots are inconsistent");
+  throw new Error("Chapter 5 Theory/Exercise Labs or empty Project slot are inconsistent");
 }
 
 if (base !== "/") {

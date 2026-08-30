@@ -6,17 +6,9 @@ struct Node {
 };
 
 Node *reverselink(Node *head) {
-  Node *prv = nullptr;
-  Node *cur = head;
-  Node *nxt = nullptr;
-
-  while (cur != nullptr) {
-    nxt = cur->next;
-    cur->next = prv;
-    prv = cur;
-    cur = nxt;
-  }
-  return prv;
+  // TODO: 逆置单链表 head，返回新头节点。
+  // 要求：O(n) 时间，O(1) 额外空间，迭代实现（prev/curr/next 三指针）。
+  return head;
 }
 
 int main() {

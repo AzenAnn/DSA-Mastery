@@ -100,6 +100,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "能够选择 pnpm 或 Make 运行、定位和严格评分当前 Lab。",
       "能够用 Graphviz DOT 编写、预览和验证树与图示例。",
       "从站内完整指南直接复制经过自动验证的示例。",
+      "能够在 VSCode 中安装插件、浏览代码题并一键提交判题。",
     ],
     focusAreas: [
       "理论环境与 Markdown 语法展示",
@@ -114,6 +115,8 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-preface/02-windows-student-setup.md",
       "content/chapter-preface/03-lab-cli-command-guide.md",
       "content/chapter-preface/04-graphviz-authoring-guide.md",
+      "content/chapter-preface/05-macos-student-setup.md",
+      "content/chapter-preface/06-vscode-extension-guide.md",
     ],
   },
   {
@@ -124,19 +127,12 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-00-memory-foundations/",
     lessonSources: [
       "content/chapter-00-introduction/01-data-structure-basics.md",
-      "content/chapter-00-introduction/02-memory-perspective.md",
+      "content/chapter-00-introduction/02-time-and-space-complexity.md",
+      "content/chapter-00-introduction/03-memory-perspective.md",
     ],
-    labSources: ["labs/chapter-00/lab-00-02-operation-counter/README.md"],
-  },
-  {
-    id: "chapter-00-plus-algorithm-thinking",
-    number: "0+",
-    title: "算法思维体验",
-    description: "通过 Peak Finding 与 Union-Find 体验数据结构选择如何改变算法效率。",
-    url: "/learn/outline/chapter-00-plus-algorithm-thinking/",
-    lessonSources: ["content/chapter-00-introduction/03-algorithm-complexity-analysis.md"],
     labSources: [
       "labs/chapter-00/lab-00-01-learning-map/README.md",
+      "labs/chapter-00/lab-00-02-operation-counter/README.md",
       "labs/chapter-00/lab-00-03-complexity-quiz/README.md",
     ],
   },
@@ -299,9 +295,12 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-10-basic-sorting/",
     lessonSources: [
       "content/chapter-10-sort/00-overview.md",
-      "content/chapter-10-sort/01-compare-sort.md",
+      "content/chapter-10-sort/01-insertion-sort.md",
+      "content/chapter-10-sort/02-selection-sort.md",
+      "content/chapter-10-sort/03-bubble-sort.md",
+      "content/chapter-10-sort/04-shell-sort.md",
     ],
-    labSources: ["labs/chapter-10/lab-10-01-stability-compare/README.md"],
+    autoLabChapter: 10,
   },
   {
     id: "chapter-11-advanced-external-sorting",
@@ -310,10 +309,14 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "组织快速、归并、堆、基数与外部排序的进阶学习框架。",
     url: "/learn/outline/chapter-11-advanced-external-sorting/",
     lessonSources: [
-      "content/chapter-10-sort/01-compare-sort.md",
-      "content/chapter-10-sort/02-heap-and-radix-sort.md",
+      "content/chapter-11-advanced-sort/01-merge-sort.md",
+      "content/chapter-11-advanced-sort/02-quick-sort.md",
+      "content/chapter-11-advanced-sort/03-heap-sort.md",
+      "content/chapter-11-advanced-sort/04-counting-sort.md",
+      "content/chapter-11-advanced-sort/05-bucket-sort.md",
+      "content/chapter-11-advanced-sort/06-radix-sort.md",
     ],
-    labSources: ["labs/chapter-10/lab-10-02-performance-benchmark/README.md"],
+    autoLabChapter: 11,
   },
   {
     id: "chapter-12-divide-conquer-recursion",
@@ -335,6 +338,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-13-greedy/03-correctness-proof.md",
       "content/chapter-13-greedy/04-greedy-vs-dp.md",
     ],
+    autoLabChapter: 13,
   },
   {
     id: "chapter-14-dynamic-programming",
@@ -573,7 +577,7 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
     curriculum: {
       url: "/learn/",
       foundations: outlineChapters.filter((chapter) =>
-        chapter.number === "preface" || chapter.number === "0" || chapter.number === "0+"
+        chapter.number === "preface" || chapter.number === "0"
       ),
       parts,
     },
