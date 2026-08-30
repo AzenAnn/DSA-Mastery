@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>散列表 · 冲突与 ASL 实验室</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#171a1f; --panel:#282c34; --panel2:#21252b; --line:#3e4451;
+      --text:#d7dae0; --muted:#8b929f; --cyan:#56b6c2; --yellow:#e5c07b;
+      --green:#98c379; --red:#e06c75; --purple:#c678dd; --blue:#61afef;
+      --empty:#262d37; --occup:#2f4a3f; --del:#4a3a33;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0,#263239 0,transparent 35%),linear-gradient(145deg,#171a1f,#20252d);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,select,input{font:inherit}
+    .app{width:min(1180px,calc(100% - 28px));margin:22px auto 38px}
+    .hero,.card{border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 95%,transparent);box-shadow:0 18px 50px #090b1066}
+    .hero{position:relative;overflow:hidden;border-radius:22px;padding:25px 27px}
+    .hero::after{content:"#";position:absolute;right:26px;top:-20px;font:900 120px/1 ui-monospace;color:#61afef0c;pointer-events:none}
+    .eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}
+    h1{margin:2px 0 5px;color:#f5f7fa;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15}
+    .hero p{max-width:800px;margin:0;color:var(--muted)}
+    .layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.8fr);gap:16px;margin-top:16px}
+    .card{border-radius:18px;padding:17px}
+    .toolbar,.controls,.legend,.stats{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+    .toolbar{justify-content:space-between;margin-bottom:13px}
+    .toolbar strong{color:#f4f6f9;font-size:1.05rem}
+    button,select,input{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:8px 13px;background:#2c313c;color:#edf1f7;cursor:pointer;touch-action:manipulation}
+    button:hover,select:hover{border-color:var(--cyan)}
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+    button.primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#14202b;border:0;font-weight:850}
+    input[type=text],input[type=number]{min-height:42px;text-align:center;width:150px}
+    input[type=range]{flex:1 1 160px;min-height:42px;accent-color:var(--purple);cursor:pointer}
+    .board{background:#1d2128;border:1px solid var(--line);border-radius:16px;padding:clamp(10px,2vw,18px)}
+    .slots{display:grid;gap:clamp(4px,.6vw,7px)}
+    .slot{display:flex;align-items:center;gap:8px;min-height:44px;border:1px solid #3a414d;border-radius:9px;background:var(--empty);padding:4px 10px}
+    .slot.empty{color:var(--muted);font-size:.8rem}
+    .slot.occupied{background:var(--occup);border-color:#3f6a56}
+    .slot.deleted{background:var(--del);border-color:#6a5748}
+    .slot .addr{font:800 .78rem ui-monospace;color:var(--muted);min-width:26px}
+    .slot .keys{display:flex;flex-wrap:wrap;gap:5px;flex:1}
+    .keychip{padding:2px 8px;border-radius:6px;background:#2c313c;border:1px solid #424a58;font:700 12px ui-monospace;color:#fff}
+    .keychip.step{background:#1e4752;border-color:#8fe5ee}
+    .keychip.new{background:#25502f;border-color:var(--green)}
+    .slot.chained .keys{flex-direction:column;align-items:flex-start}
+    .legend{margin:12px 2px 3px;color:var(--muted);font-size:.85rem}
+    .key{display:inline-flex;align-items:center;gap:5px}.swatch{width:11px;height:11px;border-radius:3px;background:var(--c)}
+    .controls{border-top:1px solid var(--line);margin-top:13px;padding-top:13px}
+    .side{display:flex;flex-direction:column;gap:16px}
+    .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem;margin-bottom:8px}
+    .badge{border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--yellow);background:#e5c07b12}
+    .narration{min-height:76px;border-left:4px solid var(--cyan);border-radius:9px;background:#20242b;padding:12px 13px;color:#eef1f5}
+    .stats{margin-top:12px}.stat{flex:1;min-width:80px;background:#20242b;border-radius:10px;padding:7px 9px}.stat small{display:block;color:var(--muted)}.stat strong{color:#fff}
+    .asm{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .asm .box{background:#20242b;border:1px solid var(--line);border-radius:10px;padding:10px}
+    .asm .box h4{margin:0 0 6px;font-size:.9rem;color:var(--muted);font-weight:650}
+    .asm .box .val{font:800 1.35rem ui-monospace;color:#fff}
+    .tip{margin:10px 2px 0;color:var(--muted);font-size:.84rem}
+    .modeselect{display:flex;gap:5px;padding:4px;background:var(--panel2);border:1px solid var(--line);border-radius:11px}
+    .modeselect button{min-height:34px;border-color:transparent;background:transparent;color:var(--muted)}
+    .modeselect button.active{background:#3a4351;color:#fff}
+    .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:860px){.app{width:min(100% - 16px,680px);margin:8px auto 24px}.layout{grid-template-columns:1fr}.hero,.card{border-radius:14px}.hero{padding:20px}.side{display:grid;grid-template-columns:1fr}.asm{grid-template-columns:1fr}}
+    @media(max-width:430px){.hero::after{display:none}.legend{gap:8px}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="hero">
+    <div class="eyebrow">Interactive Algorithm Lab</div>
+    <h1>散列表 · 冲突与 ASL 实验室</h1>
+    <p>散列函数把关键字映射到地址，冲突时按探测序列找空位。本演示支持线性探测、平方探测、双散列与链地址法；逐键插入动画展示探测过程，并实时统计成功 / 失败 ASL 与装填因子。</p>
+  </header>
+  <section class="layout">
+    <div class="card">
+      <div class="toolbar">
+        <strong>散列表</strong>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;align-items:center">
+          <label style="color:var(--muted);font-size:.88rem">表长 m
+            <input data-role="tableSize" type="number" min="3" max="17" value="7" aria-label="表长">
+          </label>
+          <label style="color:var(--muted);font-size:.88rem">H(k)=k mod
+            <input data-role="modulus" type="number" min="2" max="17" value="7" aria-label="散列模数">
+          </label>
+        </div>
+      </div>
+      <div class="modeselect" role="tablist" aria-label="冲突处理策略">
+        <button data-strat="linear" class="active">线性探测</button>
+        <button data-strat="quadratic">平方探测</button>
+        <button data-strat="double">双散列</button>
+        <button data-strat="chained">链地址</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:10px">
+        <input data-role="keys" type="text" aria-label="关键字序列" placeholder="如 22,43,15">
+        <button data-action="insert">插入</button>
+        <button data-action="clear">清空</button>
+        <label style="color:var(--muted);font-size:.88rem;display:flex;align-items:center;gap:6px">
+          <span>装填因子 α</span><input data-role="alpha" type="range" min="0" max="1" step="0.05" value="0.6" aria-label="装填因子">
+        </label>
+      </div>
+      <div class="board">
+        <div id="slots" class="slots" aria-label="散列表槽位"></div>
+      </div>
+      <div class="legend" aria-label="图例">
+        <span class="key"><i class="swatch" style="--c:var(--green)"></i>新插入</span>
+        <span class="key"><i class="swatch" style="--c:var(--cyan)"></i>本轮探测</span>
+        <span class="key"><i class="swatch" style="--c:var(--yellow)"></i>冲突/墓碑</span>
+      </div>
+      <p class="tip" style="margin-top:30px">提示：用“22,43,15”能看到三个关键字都映射到地址 1 造成的聚集；切到“链地址”则同义词进同一桶。删除开放定址的一个关键字会看到墓碑。</p>
+      <div class="controls" aria-label="播放控制">
+        <button data-action="reset">↺ 重置</button>
+        <button data-action="prev">← 上一步</button>
+        <button class="primary" data-action="play">▶ 播放插入</button>
+        <button data-action="next">下一步 →</button>
+        <input data-role="timeline" type="range" min="0" value="0" aria-label="时间线进度">
+        <select data-role="speed" aria-label="播放速度">
+          <option value="900">0.5× 慢速</option><option value="520" selected>1× 正常</option><option value="240">2× 快速</option>
+        </select>
+      </div>
+    </div>
+    <aside class="side">
+      <section class="card">
+        <div class="meta"><span id="counter">步骤 0/0</span><span id="status" class="badge">空表</span></div>
+        <div id="narration" class="narration" aria-live="polite">空表。输入关键字，选择冲突策略，点击“插入”观察探测过程与 ASL 变化。</div>
+      </section>
+      <section class="card">
+        <div class="meta"><span>实时指标</span><span>装填因子 α = n/m</span></div>
+        <div class="stats">
+          <div class="stat"><small>已存关键字 n</small><strong id="count">0</strong></div>
+          <div class="stat"><small>装填因子 α</small><strong id="alpha">0</strong></div>
+          <div class="stat"><small>冲突次数</small><strong id="collisions">0</strong></div>
+        </div>
+        <div class="asm">
+          <div class="box"><h4>成功 ASL</h4><div class="val" id="aslS">—</div></div>
+          <div class="box"><h4>失败 ASL</h4><div class="val" id="aslF">—</div></div>
+        </div>
+        <p class="tip" style="margin:10px 0 0">成功 ASL = 各关键字插入探测次数之和 ÷ n；失败 ASL 按可能的初始地址逐个数到第一个空槽后取平均。</p>
+      </section>
+      <section class="card">
+        <div class="meta"><span>探测序列</span><span>按 H 值域</span></div>
+        <div id="probeLog" class="inorder" style="font:700 12px ui-monospace;color:var(--cyan);max-height:150px;overflow:auto;background:#1d2128;border:1px solid var(--line);border-radius:12px;padding:10px 12px"></div>
+      </section>
+    </aside>
+  </section>
+  <div id="live" class="sr" aria-live="assertive"></div>
+</main>
+<script>
+(() => {
+  "use strict";
+  let strat="linear", frames=[], index=0, timer=null, tableSize=7, modulus=7;
+  const $=s=>document.querySelector(s);
+  const ui={slots:$("#slots"),timeline:$("[data-role=timeline]"),speed:$("[data-role=speed]"),keys:$("[data-role=keys]"),count:$("#count"),alpha:$("#alpha"),coll:$("#collisions"),aslS:$("#aslS"),aslF:$("#aslF"),probe:$("#probeLog"),counter:$("#counter"),status:$("#status"),narration:$("#narration"),live:$("#live"),play:$("[data-action=play]")};
+
+  // 散列与探测
+  function h(k){ return ((k%modulus)+modulus)%modulus; }
+  function probeSeq(key,m){
+    const seq=[];
+    const base=h(key);
+    if(strat==="linear"){ for(let i=0;i<m;i++) seq.push((base+i)%m); }
+    else if(strat==="quadratic"){ for(let i=0;i<m;i++){ const d=(i%2===0)?(i/2)*(i/2):-((Math.ceil(i/2))*(Math.ceil(i/2))); seq.push(((base+d)%m+m)%m); } }
+    else if(strat==="double"){ const step=(h2(key)%(m-1))+1; for(let i=0;i<m;i++) seq.push((base+i*step)%m); }
+    else { seq.push(base); } // chained 只初始地址
+    return seq;
+  }
+  function h2(key){ return 1+(key% (modulus-1)); }
+
+  // 构建读取序列，返回帧。tableState: 开放定址 array of {state,key} 或链地址 array of array
+  // 实际生成帧由 makeFrames 完成（见下）。
+  function makeFrames(keys){
+    const f=[]; const m=tableSize;
+    let table;
+    if(strat==="chained") table=Array.from({length:m},()=>[]); else table=Array.from({length:m},()=>({state:"EMPTY",key:null}));
+    let n=0,coll=0;
+    f.push({table:snapTable(),n,coll,msg:"空表。准备插入关键字。",target:null,step:null});
+    for(const k of keys){
+      const seq=probeSeq(k,m); const rawProbe=[]; const msgs=[]; let placed=null,used=0;
+      if(strat==="chained"){
+        const addr=h(k); const bucket=table[addr]; rawProbe.push(addr);
+        if(bucket.includes(k)){ msgs.push(`关键字 ${k} 已在地址 ${addr}，跳过重复。`); placed=addr; }
+        else { if(bucket.length)coll++; bucket.push(k); n++; msgs.push(`插入 ${k}：初始地址 ${addr}。${bucket.length>1?`与该桶 ${bucket.length-1} 个同义词冲突，挂链尾。`:"桶空直接放入。"}`); used=bucket.length; placed=addr; }
+      } else {
+        for(let i=0;i<seq.length;i++){
+          const addr=seq[i]; rawProbe.push(addr);
+          const c=table[addr];
+          if(c.state==="EMPTY"){ c.state="OCCUPIED";c.key=k;n++;placed=addr;used=i;msgs.push(`插入 ${k}：探测 ${i} 次到达空槽地址 ${addr}，放入。`);break; }
+          if(c.state==="OCCUPIED"&&c.key===k){ placed=addr; used=i; msgs.push(`关键字 ${k} 已在地址 ${addr}（重复），停止。`);break; }
+          msgs.push(`地址 ${addr} ${c.state==="DELETED"?"墓碑":`被 ${c.key} 占用`}，冲突，继续探测。`); coll++;
+        }
+      }
+      f.push({table:snapTable(),n,coll,msg:`【${k}】${msgs.join(" ")}`,target:k,step:rawProbe.slice(0,placed!==null?rawProbe.indexOf(placed)+1:rawProbe.length),probe:rawProbe});
+    }
+    function snapTable(){
+      if(strat==="chained") return table.map(b=>b.slice());
+      return table.map(c=>({state:c.state,key:c.key}));
+    }
+    return f;
+  }
+
+  function currentTable(){ return frames[index]?frames[index].table:null; }
+
+  function render(){
+    const f=frames[index]; if(!f) return;
+    const table=f.table,m=tableSize;
+    const slotEls=[];
+    for(let addr=0;addr<m;addr++){
+      const div=document.createElement("div");
+      const isStep=f.step&&f.step.includes(addr);
+      if(strat==="chained"){
+        const bucket=table[addr];
+        div.className="slot "+(bucket.length?"occupied":"empty")+(isStep?" step":"");
+        div.classList.add("chained");
+        const addrEl=document.createElement("span");addrEl.className="addr";addrEl.textContent=String(addr).padStart(2,"0");
+        const keysEl=document.createElement("div");keysEl.className="keys";
+        bucket.forEach((key,i)=>{ const chip=document.createElement("span");chip.className="keychip"+(key===f.target&&f.step&&i===bucket.length-1?" new":"")+(f.step&&f.step.includes(addr)?" step":""); chip.textContent=key; keysEl.appendChild(chip); });
+        div.appendChild(addrEl);div.appendChild(keysEl);
+      } else {
+        const c=table[addr];
+        div.className="slot";
+        if(c.state==="EMPTY")div.classList.add("empty");
+        if(c.state==="OCCUPIED")div.classList.add("occupied");
+        if(c.state==="DELETED")div.classList.add("deleted");
+        if(isStep)div.classList.add("step");
+        const addrEl=document.createElement("span");addrEl.className="addr";addrEl.textContent=String(addr).padStart(2,"0");
+        const keysEl=document.createElement("div");keysEl.className="keys";
+        if(c.state==="OCCUPIED"){ const chip=document.createElement("span");chip.className="keychip"+(c.key===f.target?" new":"");chip.textContent=c.key;keysEl.appendChild(chip); }
+        else if(c.state==="DELETED"){ const chip=document.createElement("span");chip.className="keychip";chip.textContent="✝";keysEl.appendChild(chip); }
+        else { keysEl.textContent="空"; keysEl.style.color="var(--muted)"; }
+        div.appendChild(addrEl);div.appendChild(keysEl);
+      }
+      // 标记此地址为探测链首
+      if(f.probe&&f.probe[0]===addr) div.style.boxShadow="inset 0 0 0 2px var(--yellow)";
+      slotEls.push(div);
+    }
+    ui.slots.style.gridTemplateColumns=`repeat(${m},minmax(0,1fr))`;
+    // 链地址用纵向铺开
+    if(strat==="chained"){ ui.slots.style.gridTemplateColumns="1fr"; }
+    else { ui.slots.style.gridTemplateColumns=`repeat(${m},minmax(0,1fr))`; }
+    ui.slots.replaceChildren(...slotEls);
+    // 指标
+    ui.count.textContent=f.n;
+    const alpha=(f.n/modulus).toFixed(2);
+    ui.alpha.textContent=alpha;
+    ui.coll.textContent=f.coll;
+    // ASL 计算
+    if(f.n>0){
+      // 成功 ASL：为每个关键字重放探测定长
+      let sumS=0; const keysIn=[];
+      (function collect(){ if(strat==="chained"){ table.forEach(b=>b.forEach(kk=>keysIn.push(kk))); } else table.forEach(c=>{ if(c.state==="OCCUPIED")keysIn.push(c.key); }); })();
+      // 需要原插入顺序的信息；近似：用 table 里当前关键字，重放探测。为精确，我们基于 frames 里每帧 n 增量。简化用表格里的键重放。
+      for(const kk of keysIn){ sumS+=replayProbe(kk); }
+      ui.aslS.textContent=(sumS/keysIn.length).toFixed(2);
+      // 失败 ASL：对每个可能的初始地址 0..modulus-1，数到第一个 EMPTY
+      let sumF=0,fcnt=0;
+      for(let a=0;a<modulus;a++){ const c=failProbe(a); sumF+=c; fcnt++; }
+      ui.aslF.textContent=(sumF/Math.max(1,fcnt)).toFixed(2);
+    } else { ui.aslS.textContent="—"; ui.aslF.textContent="—"; }
+    // 探测日志
+    ui.probe.innerHTML=f.probe?`探测：${f.probe.join(" → ")}`:"—";
+    // 播放条
+    ui.timeline.max=frames.length-1; ui.timeline.value=index;
+    ui.counter.textContent=`步骤 ${index}/${frames.length-1}`;
+    ui.status.textContent=f.n?"插表":"空表";
+    ui.status.style.color="var(--yellow)";
+    ui.narration.textContent=f.msg;
+    ui.play.textContent=timer?"❚❚ 暂停":"▶ 播放插入";
+  }
+
+  // 重放某关键字找成功比较次数（开放定址按当前表，遇 DELETED/占用继续，遇 EMPTY 出错），链地址返回桶内位置
+  function replayProbe(k){
+    const m=tableSize;
+    if(strat==="chained"){ const b=currentTable()[h(k)]; return b.indexOf(k)+1; }
+    const seq=probeSeq(k,m);
+    for(let i=0;i<seq.length;i++){ const c=currentTable()[seq[i]]; if(c.state==="OCCUPIED"&&c.key===k) return i+1; if(c.state==="EMPTY") return i+1; }
+    return seq.length;
+  }
+  function failProbe(a){
+    const m=tableSize;
+    if(strat==="chained"){ return currentTable()[a].length+1; }
+    // 开放定址：从初始地址 a 数到第一个 EMPTY
+    const seq=[];
+    if(strat==="linear"){ for(let i=0;i<m;i++)seq.push((a+i)%m); }
+    else if(strat==="quadratic"){ for(let i=0;i<m;i++){ const d=(i%2===0)?(i/2)*(i/2):-((Math.ceil(i/2))*(Math.ceil(i/2))); seq.push(((a+d)%m+m)%m); } }
+    else { const step=1; for(let i=0;i<m;i++)seq.push((a+i*step)%m); }
+    let cnt=0;
+    for(let i=0;i<seq.length;i++){ const c=currentTable()[seq[i]]; cnt++; if(c.state==="EMPTY") break; }
+    return cnt;
+  }
+
+  function loadKeys(){
+    const keys=ui.keys.value.split(/[,\s]+/).map(s=>s.trim()).filter(Boolean).map(Number).filter(x=>!Number.isNaN(x));
+    if(!keys.length){ ui.narration.textContent="请输入关键字序列。"; return; }
+    frames=makeFrames(keys); index=frames.length-1; ui.timeline.max=frames.length-1; render();
+    ui.live.textContent="已载入关键字，可播放插入过程。";
+  }
+  function clearTable(){ frames=[makeEmptyFrame()]; index=0; ui.timeline.max=frames.length-1; render(); ui.live.textContent="表已清空。"; }
+  function makeEmptyFrame(){ const m=tableSize; let table; if(strat==="chained")table=Array.from({length:m},()=>[]); else table=Array.from({length:m},()=>({state:"EMPTY",key:null})); return {table,n:0,coll:0,msg:"空表。准备插入关键字。",target:null,step:null,probe:null}; }
+
+  function setStrategy(s){ strat=s; document.querySelectorAll("[data-strat]").forEach(b=>b.classList.toggle("active",b.dataset.strat===s)); clearTable(); }
+
+  function pause(redraw){ if(timer){clearInterval(timer);timer=null;} if(redraw!==false)render(); }
+  function play(){ if(timer){pause();return;} if(index>=frames.length-1)index=0; timer=setInterval(()=>{if(index>=frames.length-1){pause();return;}index++;render();},Number(ui.speed.value));render(); }
+
+  document.querySelectorAll("[data-strat]").forEach(b=>b.addEventListener("click",()=>setStrategy(b.dataset.strat)));
+  $("[data-action=insert]").addEventListener("click",loadKeys);
+  $("[data-action=clear]").addEventListener("click",clearTable);
+  $("[data-role=tableSize]").addEventListener("change",e=>{tableSize=Math.max(3,Math.min(17,Number(e.target.value)||7)); ui.keys.value=""; clearTable();});
+  $("[data-role=modulus]").addEventListener("change",e=>{modulus=Math.max(2,Math.min(17,Number(e.target.value)||7)); ui.keys.value=""; clearTable();});
+  $("[data-action=reset]").addEventListener("click",clearTable);
+  $("[data-action=play]").addEventListener("click",play);
+  $("[data-action=prev]").addEventListener("click",()=>{pause(false);index=Math.max(0,index-1);render();});
+  $("[data-action=next]").addEventListener("click",()=>{pause(false);index=Math.min(frames.length-1,index+1);render();});
+  ui.timeline.addEventListener("input",()=>{pause(false);index=Number(ui.timeline.value);render();});
+  ui.speed.addEventListener("change",()=>{if(timer){pause(false);play();}});
+  document.addEventListener("keydown",e=>{if(e.target.matches("input,select,button"))return;if(e.key==="ArrowRight")$("[data-action=next]").click();if(e.key==="ArrowLeft")$("[data-action=prev]").click();if(e.key===" "){e.preventDefault();play();}});
+  clearTable();
+})();
+</script>
+</body>
+</html>

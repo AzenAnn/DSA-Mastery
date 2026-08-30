@@ -184,6 +184,27 @@ int binarySearch(const vector<int>& values, int key) {
 每轮至少把候选规模减半，因此时间复杂度为 $O(\log n)$，辅助空间为 $O(1)$。这里只比较了 3 次就命中。$\lfloor\log_2 9\rfloor+1=4$ 是理论最坏深度，实际命中在第 3 层。
 :::
 
+## 交互式演示
+
+用演示亲手走一遍上面的查找过程：选择目标后逐步前进，观察 `low`/`mid`/`high` 三根指针如何每次把候选区间砍掉一半，右侧会同步生成对应的**判定树**——命中在第几层、失败停在哪儿，一眼看清。也可以切换到 `1..16` 那组，验证 16 个元素为什么最多比较 5 次。
+
+<script setup>
+import { withBase } from "vitepress";
+
+const demoUrl = withBase("/demos/binary-search.html");
+</script>
+
+<iframe
+  :src="demoUrl"
+  title="折半查找 · 判定树可视化"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 三个对照
+先用“示例”组观察 3 次命中；再用 `1..16` 看 16 个元素的最坏情况；最后用“11 个有序数”组选一个不存在的目标，观察失败查找落在判定树的哪条空指针。
+:::
+
 ## 判定树与比较次数
 
 把每次选中的中间关键字画成结点，把"小于"和"大于"分支画成左右孩子，就得到折半查找的**判定树**。成功查找的比较次数等于目标结点所在层数；失败查找对应树中空指针所代表的失败位置。
@@ -269,3 +290,21 @@ $2^4=16$，所以 $\lfloor\log_2 16\rfloor+1=5$。最多比较 **5** 次，而�
 3. 给出一个"有序但不适合直接折半查找"的结构，并说明瓶颈发生在哪里。
 4. 把示例代码改成半开区间 $[low, high)$，写出对应循环条件和边界更新。
 5. 若查询很多而更新很少，排序后折半查找何时能抵消预处理成本？请用查询次数 $q$ 表示总复杂度。
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1100px;
+  }
+}
+</style>

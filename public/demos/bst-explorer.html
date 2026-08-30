@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>二叉排序树 · 退化与删除可视化</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#171a1f; --panel:#282c34; --panel2:#21252b; --line:#3e4451;
+      --text:#d7dae0; --muted:#8b929f; --cyan:#56b6c2; --yellow:#e5c07b;
+      --green:#98c379; --red:#e06c75; --purple:#c678dd; --blue:#61afef;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0,#2b2436 0,transparent 35%),linear-gradient(145deg,#171a1f,#20252d);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,select,input{font:inherit}
+    .app{width:min(1180px,calc(100% - 28px));margin:22px auto 38px}
+    .hero,.card{border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 95%,transparent);box-shadow:0 18px 50px #090b1066}
+    .hero{position:relative;overflow:hidden;border-radius:22px;padding:25px 27px}
+    .hero::after{content:"∿";position:absolute;right:26px;top:-22px;font:900 120px/1 ui-monospace;color:#61afef0c;pointer-events:none}
+    .eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}
+    h1{margin:2px 0 5px;color:#f5f7fa;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15}
+    .hero p{max-width:780px;margin:0;color:var(--muted)}
+    .layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.82fr);gap:16px;margin-top:16px}
+    .card{border-radius:18px;padding:17px}
+    .toolbar,.controls,.legend,.stats{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+    .toolbar{justify-content:space-between;margin-bottom:13px}
+    .toolbar strong{color:#f4f6f9;font-size:1.05rem}
+    button,select,input{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:8px 13px;background:#2c313c;color:#edf1f7;cursor:pointer;touch-action:manipulation}
+    button:hover,select:hover{border-color:var(--cyan)}
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+    button.primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#14202b;border:0;font-weight:850}
+    input[type=text]{min-height:42px;width:190px;text-align:center}
+    .board{background:#1d2128;border:1px solid var(--line);border-radius:16px;padding:clamp(10px,2vw,18px);min-height:280px;position:relative}
+    .board svg{display:block;width:100%;height:auto}
+    .b-node{cursor:pointer}
+    .b-node text{font:800 12px ui-monospace;fill:#fff}
+    .b-node circle{fill:#262b34;stroke:#4b5260;stroke-width:1.5;transition:fill .2s,stroke .2s,filter .2s}
+    .b-node:hover circle{fill:#303a47;stroke:#8390a3}
+    .b-node.new circle{fill:#25502f;stroke:var(--green);stroke-width:2.5;filter:drop-shadow(0 0 8px #98c379aa)}
+    .b-node.succ circle{fill:#6d5c37;stroke:var(--yellow);stroke-width:2.4;filter:drop-shadow(0 0 7px #e5c07baa)}
+    .b-node.del circle{fill:#4a2730;stroke:var(--red);stroke-width:2.5;filter:drop-shadow(0 0 8px #e06c75aa)}
+    .b-edge{stroke:#4b5260;stroke-width:1.6}
+    .b-edge.hot{stroke:var(--yellow);stroke-width:2.2;filter:drop-shadow(0 0 4px #e5c07b66)}
+    .legend{margin:12px 2px 3px;color:var(--muted);font-size:.85rem}
+    .key{display:inline-flex;align-items:center;gap:5px}.swatch{width:11px;height:11px;border-radius:3px;background:var(--c)}
+    .controls{border-top:1px solid var(--line);margin-top:13px;padding-top:13px}
+    input[type=range]{flex:1 1 180px;min-height:42px;accent-color:var(--purple);cursor:pointer}
+    .side{display:flex;flex-direction:column;gap:16px}
+    .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem;margin-bottom:8px}
+    .badge{border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--yellow);background:#e5c07b12}
+    .narration{min-height:76px;border-left:4px solid var(--cyan);border-radius:9px;background:#20242b;padding:12px 13px;color:#eef1f5}
+    .inorder{background:#1d2128;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:700 13px ui-monospace;color:var(--green);overflow-wrap:anywhere;max-height:120px;overflow:auto}
+    .stats{margin-top:12px}.stat{flex:1;min-width:78px;background:#20242b;border-radius:10px;padding:7px 9px}.stat small{display:block;color:var(--muted)}.stat strong{color:#fff}
+    .tip{margin:10px 2px 0;color:var(--muted);font-size:.84rem}
+    .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+    .prstab{border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:#2c313c;color:var(--muted);font-size:12px;cursor:pointer}
+    .prstab:hover{border-color:var(--cyan);color:#fff}
+    .seqview{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;font:800 13px ui-monospace;color:var(--text)}
+    .seqview .tok{padding:2px 7px;border-radius:6px;background:#333a46}
+    .seqview .tok.pending{opacity:.4}
+    .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:860px){.app{width:min(100% - 16px,680px);margin:8px auto 24px}.layout{grid-template-columns:1fr}.hero,.card{border-radius:14px}.hero{padding:20px}.side{display:grid;grid-template-columns:1fr}}
+    @media(max-width:430px){.hero::after{display:none}.legend{gap:8px}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="hero">
+    <div class="eyebrow">Interactive Algorithm Lab</div>
+    <h1>二叉排序树 · 退化与删除</h1>
+    <p>同一组关键字，按不同顺序插入会得到完全不同的树形。本演示用几组预设序列直观对比高度与成功 ASL——即使中序序列完全相同；并演示删除的三种情况（叶、单孩、双孩）。</p>
+  </header>
+  <section class="layout">
+    <div class="card">
+      <div class="toolbar">
+        <strong>BST 编辑区</strong>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;align-items:center">
+          <input data-role="key" type="text" aria-label="关键字序列" placeholder="如 3,1,2,5,4">
+          <button data-action="insert-seq">插入序列</button>
+        </div>
+      </div>
+      <div class="presets" aria-label="预设序列">
+        预设：
+        <button class="prstab" data-seq="3,1,2,5,4">3,1,2,5,4</button>
+        <button class="prstab" data-seq="1,2,3,4,5">1,2,3,4,5 退化链</button>
+        <button class="prstab" data-seq="5,3,7,1,4,6,8">5,3,7,1,4,6,8</button>
+        <button class="prstab" data-seq="40,20,60,10,30,50,70">40,20,60,10,30,50,70</button>
+      </div>
+      <div class="board">
+        <div id="tree" aria-label="BST 可视化"></div>
+        <div id="seqview" class="seqview" aria-label="插入序列进度"></div>
+      </div>
+      <div class="legend" aria-label="图例">
+        <span class="key"><i class="swatch" style="--c:var(--green)"></i>新插入</span>
+        <span class="key"><i class="swatch" style="--c:var(--yellow)"></i>中序后继/替换</span>
+        <span class="key"><i class="swatch" style="--c:var(--red)"></i>被删除</span>
+      </div>
+      <p class="tip" style="margin-top:30px">提示：点击树上任意结点即删除它，演示会判断属于叶 / 单孩 / 双孩哪种情况。先用“退化链”感受高度 5，再换平衡序列对比 ASL。</p>
+      <div class="controls" aria-label="播放控制">
+        <button data-action="reset">↺ 清空</button>
+        <button data-action="prev">← 上一步</button>
+        <button class="primary" data-action="play">▶ 播放插入</button>
+        <button data-action="next">下一步 →</button>
+        <input data-role="timeline" type="range" min="0" value="0" aria-label="时间线进度">
+        <select data-role="speed" aria-label="播放速度">
+          <option value="900">0.5× 慢速</option><option value="520" selected>1× 正常</option><option value="240">2× 快速</option>
+        </select>
+      </div>
+    </div>
+    <aside class="side">
+      <section class="card">
+        <div class="meta"><span id="counter">步骤 0/0</span><span id="status" class="badge">空树</span></div>
+        <div id="narration" class="narration" aria-live="polite">空树。选择一组预设序列，或输入关键字后点击“插入序列”，观察树形如何随插入顺序改变。</div>
+      </section>
+      <section class="card">
+        <div class="meta"><span>中序遍历</span><span>应为严格升序</span></div>
+        <div id="inorder" class="inorder">（空）</div>
+      </section>
+      <section class="card">
+        <div class="meta"><span>树形指标</span><span>结点数 n</span></div>
+        <div class="stats">
+          <div class="stat"><small>结点数 n</small><strong id="nval">0</strong></div>
+          <div class="stat"><small>树高 h（根=0层）</small><strong id="hval">—</strong></div>
+          <div class="stat"><small>成功 ASL</small><strong id="asl">—</strong></div>
+        </div>
+        <p class="tip" style="margin:10px 0 0">成功 ASL = 全体结点层数之和 ÷ n。退化链（1,2,3,4,5）的 ASL 明显更差，即使它的中序序列和平衡树完全相同。</p>
+      </section>
+    </aside>
+  </section>
+  <div id="live" class="sr" aria-live="assertive"></div>
+</main>
+<script>
+(() => {
+  "use strict";
+  // 节点直接用对象表示：{key,left,right,parent}，left/right 为节点对象或 null
+  let root=null, seq=[], frames=[], index=0, timer=null;
+  const $=s=>document.querySelector(s);
+  const ui={tree:$("#tree"),seq:$("#seqview"),timeline:$("[data-role=timeline]"),speed:$("[data-role=speed]"),key:$("[data-role=key]"),counter:$("#counter"),status:$("#status"),narration:$("#narration"),inorder:$("#inorder"),nval:$("#nval"),hval:$("#hval"),asl:$("#asl"),live:$("#live"),play:$("[data-action=play]")};
+
+  function clone(root){ if(root==null)return null; return {key:root.key,left:clone(root.left),right:clone(root.right),parent:null}; }
+
+  // 中序
+  function inorderArray(r){ const a=[]; (function w(n){ if(!n)return; w(n.left); a.push(n.key); w(n.right); })(r); return a; }
+  function heightOf(r){ if(!r)return -1; return 1+Math.max(heightOf(r.left),heightOf(r.right)); }
+
+  // 插入（返回新根）
+  function bstInsert(r,key,path){
+    if(!r){ return {key,left:null,right:null,parent:null}; }
+    if(key<r.key){ r.left=bstInsert(r.left,key,path); r.left.parent=r; }
+    else if(key>r.key){ r.right=bstInsert(r.right,key,path); r.right.parent=r; }
+    return r;
+  }
+  // 找插入路径（用于说明）
+  function findPath(r,key){
+    const path=[]; let cur=r;
+    while(cur){
+      path.push(cur.key);
+      if(key<cur.key) cur=cur.left;
+      else if(key>cur.key) cur=cur.right;
+      else break;
+    }
+    return path;
+  }
+
+  // 生成“插入序列”的帧（从空树起，逐步加入）
+  function buildInsertFrames(keys){
+    const f=[]; let r=null;
+    const path=[];
+    for(let i=0;i<keys.length;i++){
+      const k=keys[i];
+      const p=findPath(r,k); // 插入前查找路径
+      r=bstInsert(r,k);
+      const isRoot=(p.length===0);
+      f.push({root:clone(r),type:"insert",msg:`插入 ${k}。${isRoot?"它成为根。":`先在 ${p.join(" → ")} 中下降查找，落到空位，挂到 ${p[p.length-1]} 的${k<p[p.length-1]?"左":"右"}侧。`}`,marks:{new:k},seq:keys.slice(0,i+1),pending:keys.slice(i+1)});
+    }
+    return f;
+  }
+
+  // 在（当前树的克隆）上删除一个 key，生成带说明的帧。返回 {frames, newRoot}
+  function deleteFrames(keys){
+    const frames=[];
+    let r=clone(root);
+    const findNode=(rd,k)=>{ let cur=rd; while(cur){ if(k===cur.key)return cur; cur=k<cur.key?cur.left:cur.right; } return null; };
+    for(const k of keys){
+      const ns={marks:{del:k}};
+      r=deleteOne(r,k,ns,findNode);
+      frames.push({root:clone(r),type:"delete",msg:ns.msg,marks:ns.marks,seq:[...seq],pending:[]});
+    }
+    return {frames,newRoot:r};
+  }
+
+  // 单次删除，返回新树根；过程说明写入 ns.msg。每次删除都基于“当前克隆树”独立进行。
+  function deleteOne(r,k,ns,findNode){
+    const node=findNode(r,k);
+    if(!node){ ns.msg=`树上没有 ${k}。`; ns.marks={}; return r; }
+    // 从父指针摘除 node（node 可能是根）
+    const parent=node.parent;
+    const child=node.left||node.right;
+    if(!node.left&&!node.right){
+      // 叶
+      if(!parent){ ns.msg=`删除叶结点 ${k}：它是根且无孩子，树变空。`; return null; }
+      if(parent.left===node) parent.left=null; else parent.right=null;
+      ns.msg=`删除叶结点 ${k}：它没有孩子，直接断开父结点 ${parent.key} 的链接。`;
+      return r;
+    }
+    if(!node.left||!node.right){
+      // 单孩
+      child.parent=parent;
+      if(!parent){ ns.msg=`删除单孩子结点 ${k}：它只有孩子 ${child.key}，该孩子直接成为根。`; return child; }
+      if(parent.left===node) parent.left=child; else parent.right=child;
+      ns.msg=`删除单孩子结点 ${k}：它只有孩子 ${child.key}，让父结点 ${parent.key} 直接指向 ${child.key}，整体上移不破坏有序性。`;
+      return r;
+    }
+    // 双孩：找右子树最小（中序后继）
+    let succ=node.right; while(succ.left) succ=succ.left; // succ 无左孩子
+    const succVal=succ.key;
+    ns.marks={succ:succVal};
+    ns.msg=`删除双孩子结点 ${k}：不能整体顶替。先找右子树最小结点 ${succVal}（中序后继）。`;
+    // 用 succVal 替换 node 的值
+    node.key=succVal;
+    // 处理节点结构：node 现在值是 succVal，但它的右子树里还挂着原来的 succ 节点对象（值也是 succVal）。
+    // 因此要把原 succ 从树上摘除。succ 无左孩子，直接让它的父接上它的右孩子。
+    const succParent=succ.parent;
+    if(!succParent){
+      r=succ.right; if(r)r.parent=null;
+    }else{
+      if(succParent.left===succ) succParent.left=succ.right; else succParent.right=succ.right;
+      if(succ.right) succ.right.parent=succParent;
+    }
+    ns.msg+=` 现在用 ${succVal} 占据了 ${k} 的位置（树形不变、中序仍升序），并把原来的后继结点从右子树摘下（它无左孩子，删除退化为简单情形）。`;
+    return r;
+  }
+
+  function draw(frame){
+    const tree=frame.root;
+    const inOrder=inorderArray(tree);
+    const pos={}; inOrder.forEach((k,i)=>pos[k]=i);
+    const depth={};
+    (function rec(n,d){ if(!n)return; depth[n.key]=d; rec(n.left,d+1); rec(n.right,d+1); })(tree,0);
+    let maxD=0; Object.keys(depth).forEach(k=>maxD=Math.max(maxD,depth[k]));
+    const n=inOrder.length;
+    const W=Math.max(520,n*48+80),pad=42,stepY=64;
+    const H=Math.max(120,(maxD+1)*stepY+50);
+    const px=k=>pad+pos[k]*((W-2*pad)/Math.max(1,n-1));
+    const py=d=>30+d*stepY;
+    const NS="http://www.w3.org/2000/svg";
+    const svg=document.createElementNS(NS,"svg");
+    svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+    svg.setAttribute("role","img"); svg.setAttribute("aria-label","二叉排序树可视化");
+    const marks=frame.marks||{};
+    let frag="";
+    // 边
+    (function rec(n){ if(!n)return; for(const c of [n.left,n.right]){ if(c){ const hot=(marks.new===n.key||marks.new===c.key||marks.del===n.key||marks.del===c.key); frag+=`<line class="b-edge${hot?" hot":""}" x1="${px(n.key)}" y1="${py(depth[n.key])}" x2="${px(c.key)}" y2="${py(depth[c.key])}"/>`; } } rec(n.left); rec(n.right); })(tree);
+    // 节点（中序位置决定 x，深度决定 y）
+    (function rec(n){ if(!n)return; const cls=["b-node"]; if(marks.new===n.key)cls.push("new"); else if(marks.del===n.key)cls.push("del"); frag+=`<g class="${cls.join(" ")}" data-key="${n.key}" transform="translate(${px(n.key)},${py(depth[n.key])})"><title>结点 ${n.key}</title><circle r="16"/><text y="5" text-anchor="middle">${n.key}</text></g>`; rec(n.left); rec(n.right); })(tree);
+    svg.innerHTML=frag;
+    ui.tree.replaceChildren(svg);
+    // 中序 + 指标
+    ui.inorder.textContent=n?inOrder.join("  "):"（空）";
+    ui.nval.textContent=n;
+    ui.hval.textContent=n?maxD:"—";
+    if(n){ let layers=0; inOrder.forEach(k=>layers+=depth[k]+1); ui.asl.textContent=(layers/n).toFixed(2); } else ui.asl.textContent="—";
+  }
+
+  function render(){
+    const frame=frames[index];
+    if(!frame){ return; }
+    draw(frame);
+    ui.timeline.max=frames.length-1;
+    ui.timeline.value=index;
+    ui.counter.textContent=`步骤 ${index}/${frames.length-1}`;
+    ui.narration.textContent=frame.msg;
+    ui.status.textContent=frame.type==="insert"?"插入":frame.type==="delete"?"删除":"空树";
+    ui.status.style.color=frame.type==="insert"?"var(--green)":frame.type==="delete"?"var(--red)":"var(--yellow)";
+    ui.play.textContent=timer?"❚❚ 暂停":"▶ 播放插入";
+    // 序列进度
+    const sF=frame.seq||[],pF=frame.pending||[];
+    const toks=[...sF.map(v=>`<span class="tok">${v}</span>`),...pF.map(v=>`<span class="tok pending">${v}</span>`)];
+    ui.seq.innerHTML=toks.join("");
+  }
+
+  function loadSeq(text,keys){
+    keys=(keys||text.split(/[,\s]+/).map(s=>s.trim()).filter(Boolean).map(Number).filter(x=>!Number.isNaN(x)));
+    seq=[...keys];
+    root=null;
+    frames=buildInsertFrames(keys);
+    index=0;ui.timeline.max=frames.length-1;
+    render();
+    ui.live.textContent=`已载入 ${keys.length} 个关键字的插入序列。`;
+  }
+
+  function resetTree(){
+    root=null;seq=[];
+    frames=[{root:null,type:"empty",msg:"空树。选择预设序列或输入关键字开始。",marks:{},seq:[],pending:[]}];
+    index=0;ui.timeline.max=frames.length-1;render();
+  }
+
+  function deleteKey(k){
+    if(!root){ ui.narration.textContent="空树，无法删除。"; return; }
+    if(!findNode(root,k)){ ui.narration.textContent=`树上没有 ${k}。`; return; }
+    const {frames:df,newRoot}=deleteFrames([k]);
+    root=newRoot;
+    frames=frames.slice(0,index+1).concat(df);
+    index=frames.length-1;ui.timeline.max=frames.length-1;
+    render();
+  }
+  function findNode(r,k){ let cur=r; while(cur){ if(k===cur.key)return cur; cur=k<cur.key?cur.left:cur.right; } return null; }
+
+  // 事件
+  $("[data-action=reset]").addEventListener("click",resetTree);
+  $("[data-action=insert-seq]").addEventListener("click",()=>{loadSeq(ui.key.value);});
+  ui.key.addEventListener("keydown",e=>{if(e.key==="Enter")loadSeq(ui.key.value);});
+  document.querySelectorAll(".prstab").forEach(b=>b.addEventListener("click",()=>{loadSeq(b.dataset.seq);}));
+  $("[data-action=play]").addEventListener("click",()=>{if(timer){pause();return;}if(index>=frames.length-1)index=0;timer=setInterval(()=>{if(index>=frames.length-1){pause();return;}index++;render();},Number(ui.speed.value));render();});
+  $("[data-action=prev]").addEventListener("click",()=>{pause(false);index=Math.max(0,index-1);render();});
+  $("[data-action=next]").addEventListener("click",()=>{pause(false);index=Math.min(frames.length-1,index+1);render();});
+  ui.timeline.addEventListener("input",()=>{pause(false);index=Number(ui.timeline.value);render();});
+  ui.speed.addEventListener("change",()=>{if(timer){pause(false);$("[data-action=play]").click();}});
+  ui.tree.addEventListener("click",e=>{const g=e.target.closest(".b-node");if(g){const k=Number(g.dataset.key);deleteKey(k);}});
+  function pause(redraw){ if(timer){clearInterval(timer);timer=null;} if(redraw!==false)render(); }
+  document.addEventListener("keydown",e=>{if(e.target.matches("input,select,button"))return;if(e.key==="ArrowRight")$("[data-action=next]").click();if(e.key==="ArrowLeft")$("[data-action=prev]").click();if(e.key===" "){e.preventDefault();$("[data-action=play]").click();}});
+  // 初始化
+  resetTree();
+})();
+</script>
+</body>
+</html>

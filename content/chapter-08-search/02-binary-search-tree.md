@@ -101,29 +101,54 @@ Node* insert(Node* root, int key) {
 
 - 按 **`3, 1, 2, 5, 4`** 插入，得到较平衡的树，高度约 3：
 
-```text
-      3
-     / \
-    1   5
-     \ /
-      2 4
+```graphviz
+digraph BalancedBST {
+  rankdir=TB;
+  node [shape=circle];
+  3 -> 1 [label="左"];
+  3 -> 5 [label="右"];
+  1 -> 2 [label="右"];
+  5 -> 4 [label="左"];
+}
 ```
+<!-- diagram id="bst-balanced-insert" caption: "按 3,1,2,5,4 插入得到较平衡的 BST，高度约 3" -->
 
 - 按 **`1, 2, 3, 4, 5`** 插入，每个结点都挂在右孩子上，树退化成一条链，高度 5：
 
-```text
-1
- \
-  2
-   \
-    3
-     \
-      4
-       \
-        5
+```graphviz
+digraph DegenerateBST {
+  rankdir=TB;
+  node [shape=circle];
+  1 -> 2 [label="右"];
+  2 -> 3 [label="右"];
+  3 -> 4 [label="右"];
+  4 -> 5 [label="右"];
+}
 ```
+<!-- diagram id="bst-degenerate-chain" caption: "按 1,2,3,4,5 插入退化成一条右链，高度为 5" -->
 
 两组关键字的**中序序列完全相同**（都是 `1 2 3 4 5`），但查找复杂度从 $O(\log n)$ 退化为 $O(n)$。这就是"中序序列不能唯一确定 BST"的含义。
+:::
+
+## 交互式演示
+
+这个演示把"同一组关键字、不同插入顺序"画成一张可操作的树。先点"退化链"感受高度 5 的细长树，再换平衡序列对比树高与成功 ASL——两边中序序列完全一样，但查找成本天差地别；也可以点击任意结点，亲手体验删除的叶、单孩、双孩三种情况。
+
+<script setup>
+import { withBase } from "vitepress";
+
+const demoUrl = withBase("/demos/bst-explorer.html");
+</script>
+
+<iframe
+  :src="demoUrl"
+  title="二叉排序树 · 退化与删除可视化"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 观察什么
+分别用 `1,2,3,4,5` 和 `3,1,2,5,4` 插入，比较树高与成功 ASL。再用 `40,20,60,10,30,50,70` 建树后依次删除叶、单孩、双孩结点，每一步核对中序遍历是否仍严格升序。
 :::
 
 例如依次插入 `5, 3, 7, 1, 4, 6, 8`，得到的树接近平衡；依次插入 `1, 2, 3, 4, 5`，每个结点都只有右孩子，树退化成链。
@@ -178,43 +203,61 @@ Node* remove(Node* root, int key) {
 ::: example 示例 · 三种删除的完整走一遍
 对下面这棵 BST：
 
-```text
-        40
-       /  \
-      20   60
-     / \   / \
-    10 30 50 70
+```graphviz
+digraph BstRemovalStart {
+  rankdir=TB;
+  node [shape=circle];
+  40 -> 20;
+  40 -> 60;
+  20 -> 10;
+  20 -> 30;
+  60 -> 50;
+  60 -> 70;
+}
 ```
+<!-- diagram id="bst-removal-start" caption: "删除演示用的初始 BST：40 为根，左右子树均平衡" -->
 
 **删除叶结点 10**：10 没有孩子，直接让 20 的左孩子指向空，树变为：
 
-```text
-        40
-       /  \
-      20   60
-       \   / \
-       30 50 70
+```graphviz
+digraph BstRemovalLeaf {
+  rankdir=TB;
+  node [shape=circle];
+  40 -> 20;
+  40 -> 60;
+  20 -> 30;
+  60 -> 50;
+  60 -> 70;
+}
 ```
+<!-- diagram id="bst-removal-leaf" caption: "删除叶结点 10 后：20 的左孩子置空" -->
 
 **删除单孩子结点 60**：60 有右孩子 70（没有左孩子），让 40 的右孩子直接指向 70：
 
-```text
-        40
-       /  \
-      20   70
-       \
-       30
+```graphviz
+digraph BstRemovalSingle {
+  rankdir=TB;
+  node [shape=circle];
+  40 -> 20;
+  40 -> 70;
+  20 -> 30;
+}
 ```
+<!-- diagram id="bst-removal-single-child" caption: "删除单孩子结点 60 后：40 的右孩子直接指向 70" -->
 
 **删除双孩子结点 40（根）**：找右子树 70 的最小结点，即 70 本身（无左孩子）。用 70 替换根的关键字，再删除原来的 70：
 
-```text
-        70
-       /  \
-      20   空
-       \
-       30
+```graphviz
+digraph BstRemovalDouble {
+  rankdir=TB;
+  node [shape=circle];
+  70 -> 20;
+  empty [label="空", shape=plaintext, style=dashed, color=grey, fontcolor=grey];
+  70 -> empty [style=dashed];
+  20 -> 30;
+}
 ```
+<!-- diagram id="bst-removal-double" caption: "删除双孩子结点 40 后：用中序后继 70 替换根，原 40 的右孩子位置为空" -->
 
 每一步之后中序遍历都严格升序，BST 性质保持。
 :::
@@ -297,3 +340,21 @@ BST 把"有序数组里的折半方向"变成了可动态修改的左右链接�
 3. 给出两种插入顺序，使关键字 `{1,2,3,4,5,6,7}` 分别形成高度 3 和高度 7 的 BST。
 4. 一棵 BST 的先序序列是 `8, 3, 1, 6, 4, 7, 10, 14, 13`。不用建树，写出其中序序列；再判断树高。
 5. 若要支持"第 $k$ 小"查询，应在每个结点额外维护什么信息？插入和删除时如何更新？
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1100px;
+  }
+}
+</style>
