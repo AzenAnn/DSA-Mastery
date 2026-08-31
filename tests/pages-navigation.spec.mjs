@@ -36,6 +36,10 @@ test.use({
 const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
 const labDirectoryPattern = /^lab-\d{2}-(?:\d{2}|[TEP]-\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+function labSidebarTitle(title) {
+  return title.replace(/^Lab\s+\d{2}-(?:\d{2}|[TEP]-\d{2,})[：:]\s*/, "");
+}
+
 async function computeCourseStats() {
   const contentRoot = path.join(projectRoot, "content");
   const labsRoot = path.join(projectRoot, "labs");
@@ -989,11 +993,13 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
   );
   await expect(theorySidebarGroup).not.toHaveClass(/collapsed/);
   for (const quiz of quizLabs) {
-    await expect(theorySidebarGroup.getByRole("link", { name: quiz.title })).toHaveCount(
+    await expect(theorySidebarGroup.getByRole("link", { name: labSidebarTitle(quiz.title) })).toHaveCount(
       1,
     );
   }
-  await expect(theorySidebarGroup.locator(":scope > .items a").first()).toContainText("01T01");
+  await expect(theorySidebarGroup.locator(":scope > .items a").first()).toHaveText(
+    "01T01 · 顺序表选择题精练",
+  );
   await expect(page.locator(".course-quiz-stem mjx-container").first()).toBeVisible();
 
   await page.goto(`${baseUrl}/labs/chapter-01/lab-01-02-singly-linked-list-quiz/`);
@@ -1032,10 +1038,10 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   await expect(projectGroup).not.toHaveClass(/collapsed/);
   await expect(projectGroup.locator(".course-lab-category__empty")).toHaveCount(0);
   const projectLink = projectGroup.getByRole("link", {
-    name: "Lab 01-21：线性表双实现与工作负载评测器",
+    name: "01P01 · 线性表双实现与工作负载评测器",
+    exact: true,
   });
   await expect(projectLink).toHaveCount(1);
-  await expect(projectLink).toContainText("01P01");
   await expect(projectLink).toHaveAttribute(
     "href",
     /\/labs\/chapter-01\/lab-01-21-list-workload-analyzer\/$/,
@@ -1162,12 +1168,11 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
   await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(2);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 02-01：栈选择题精练" }),
+    theoryGroup.getByRole("link", { name: "02T01 · 栈选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 02-02：队列选择题精练" }),
+    theoryGroup.getByRole("link", { name: "02T02 · 队列选择题精练", exact: true }),
   ).toHaveCount(1);
-  await expect(theoryGroup.locator(":scope > .items a").first()).toContainText("02T01");
 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
@@ -1188,7 +1193,7 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
     },
   ];
   for (const { title, slug } of exerciseLabs) {
-    const link = exerciseGroup.getByRole("link", { name: title });
+    const link = exerciseGroup.getByRole("link", { name: labSidebarTitle(title) });
     await expect(link).toHaveCount(1);
     await expect(link).toHaveAttribute("href", new RegExp(`/labs/chapter-02/${slug}/$`));
   }
@@ -1199,7 +1204,7 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
     "Lab 02-12：超市收银模拟——队列的大综合",
     "Lab 02-13：停车场管理——栈与队列的大综合",
   ]) {
-    await expect(projectGroup.getByRole("link", { name: title })).toHaveCount(1);
+    await expect(projectGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
   await expect(exerciseGroup.locator(":scope > .items a").first()).toContainText("02E01");
   await expect(projectGroup.locator(":scope > .items a").first()).toContainText("02P01");
@@ -1255,18 +1260,17 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
   await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(4);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 03-01：串的基础选择题精练" }),
+    theoryGroup.getByRole("link", { name: "03T01 · 串的基础选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 03-02：模式匹配选择题精练" }),
+    theoryGroup.getByRole("link", { name: "03T02 · 模式匹配选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 03-03：数组与矩阵选择题精练" }),
+    theoryGroup.getByRole("link", { name: "03T03 · 数组与矩阵选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 03-04：广义表选择题精练" }),
+    theoryGroup.getByRole("link", { name: "03T04 · 广义表选择题精练", exact: true }),
   ).toHaveCount(1);
-  await expect(theoryGroup.locator(":scope > .items a").first()).toContainText("03T01");
 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
@@ -1283,14 +1287,14 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
     "Lab 03-12：三对角矩阵压缩与取值",
     "Lab 03-13：多维数组行优先寻址",
   ]) {
-    await expect(exerciseGroup.getByRole("link", { name: title })).toHaveCount(1);
+    await expect(exerciseGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
   await expect(projectGroup.locator(":scope > .items a")).toHaveCount(2);
   for (const title of [
     "Lab 03-14：串匹配与文本处理引擎",
     "Lab 03-15：稀疏矩阵运算库",
   ]) {
-    await expect(projectGroup.getByRole("link", { name: title })).toHaveCount(1);
+    await expect(projectGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
   await expect(exerciseGroup.locator(":scope > .items a").first()).toContainText("03E01");
   await expect(projectGroup.locator(":scope > .items a").first()).toContainText("03P01");
@@ -1330,9 +1334,11 @@ test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty 
     "Lab 05-04：并查集题精练",
     "Lab 05-05：堆题精练",
   ]) {
-    await expect(theoryGroup.getByRole("link", { name: title })).toHaveCount(1);
+    await expect(theoryGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
-  await expect(theoryGroup.locator(":scope > .items a").first()).toContainText("05T01");
+  await expect(theoryGroup.locator(":scope > .items a").first()).toHaveText(
+    "05T01 · 森林与二叉树转换题精练",
+  );
   await expect(theoryGroup.locator(".course-lab-category__empty")).toHaveCount(0);
 
   const exerciseGroup = chapterGroup.locator(
@@ -1350,7 +1356,7 @@ test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty 
     "Lab 05-06：二叉搜索树的插入与查找",
     "Lab 05-22：B+ 树的范围查询",
   ]) {
-    await expect(exerciseGroup.getByRole("link", { name: title })).toHaveCount(1);
+    await expect(exerciseGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
   await expect(exerciseGroup.locator(":scope > .items a").first()).toContainText("05E01");
   await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);

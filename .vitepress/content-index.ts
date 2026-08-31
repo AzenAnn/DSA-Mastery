@@ -616,6 +616,16 @@ function sidebarCategoryLabel(
   return `<span class="course-lab-category course-lab-category--${category}">${icon}<span>${label}</span></span>`;
 }
 
+function labSidebarLabel(lab: CourseDocument): string {
+  if (!lab.labId) return lab.title;
+
+  const title = lab.title.replace(
+    /^Lab\s+\d{2}-(?:\d{2}|[TEP]-\d{2,})[：:]\s*/,
+    "",
+  );
+  return `${lab.labId} · ${title}`;
+}
+
 function chapterLabGroup(
   labs: CourseDocument[],
   icons: LabSidebarIcons,
@@ -635,7 +645,7 @@ function chapterLabGroup(
         text: sidebarCategoryLabel(category, label, icons[category]),
         collapsed: category !== "project",
         items: categoryLabs.length
-          ? categoryLabs.map((lab) => ({ text: lab.labId ? `${lab.labId} · ${lab.title}` : lab.title, link: lab.url }))
+          ? categoryLabs.map((lab) => ({ text: labSidebarLabel(lab), link: lab.url }))
           : [{ text: `<span class="course-lab-category__empty">${empty}</span>` }],
       };
     }),
