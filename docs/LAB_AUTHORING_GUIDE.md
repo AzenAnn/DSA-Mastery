@@ -1,6 +1,6 @@
 # DSA Mastery Lab 更新与测试指南
 
-> 适用版本：Lab Schema v1 · 更新日期：2026-08-31
+> 适用版本：Lab Schema v1 · 更新日期：2026-09-01
 
 这份手册是 Quiz、Program 和 Project 三类 Lab 的统一作者 API。面向网页的说明仍写在 Lab 的 `README.md`，机器行为只由 `lab.json`、`quiz.json`、`cases.json`、`task.json` 和共享工具决定。后续开发者应从本文提供的脚手架开始，而不是复制旧 Lab 后自行发明目录、Make 规则或评分脚本。
 
@@ -149,6 +149,31 @@ labId: "02E07"
 
 `labId` 是题目的永久身份，`order` 只是网站展示顺序。发布后可以调整 `order`，不能修改或复用 `labId`。映射固定为 `quiz -> T`、`program -> E`、`project -> P`；README-only Lab 通过显式 `labCategory` 得到标签。现有旧目录保留以维持 URL，新建 Lab 才使用带标签的新目录格式。
 
+### 4.1 README 标题必须跟随稳定编号
+
+`labId` 使用便于交流和定位的紧凑形式，README 标题则使用带连字符的可读形式：
+
+| 位置 | 规范格式 | 示例 |
+| --- | --- | --- |
+| frontmatter `labId` | `CCXSS` | `01E01` |
+| frontmatter `title` | `Lab CC-X-SS：题目名称` | `Lab 01-E-01：有序顺序表去重` |
+| README H1 | 与 `title` 完全一致 | `# Lab 01-E-01：有序顺序表去重` |
+| 网站侧栏 | `CCXSS · 题目名称` | `01E01 · 有序顺序表去重` |
+
+作者或 Agent 新建 Lab、整理旧 Lab、重写题面时，只从 `labId` 构造标题。不要使用 `order`，也不要沿用旧目录中的顺序号：
+
+```yaml
+# Wrong：01-06 是旧展示顺序，不是题目身份
+labId: "01E01"
+title: "Lab 01-06：有序顺序表去重"
+
+# Correct
+labId: "01E01"
+title: "Lab 01-E-01：有序顺序表去重"
+```
+
+旧目录 `lab-01-06-sequential-list-deduplication` 可以继续保留，避免 URL 失效；只要同步修改 frontmatter `title` 和 H1，就能单独完成标题迁移。尚未整理的旧文档允许暂时保留旧标题，但不能复制成新模板。脚手架已经自动生成稳定标题，作者只替换冒号后的题目名称。
+
 最小公共 manifest：
 
 ```json
@@ -183,7 +208,7 @@ pnpm lab:new -- --type project --chapter 4 --slug tree-index
 pnpm lab:locate -- 02T2
 ```
 
-### 4.1 网站侧栏的分类接口
+### 4.2 网站侧栏的分类接口
 
 网站的 Lab 分类属于统一 `CourseIndex`，不是另一份手写导航。课程定义只要声明 `autoLabChapter`，侧栏就统一显示“本章 Labs”的三个分类；即使当前没有任何 Lab，也必须保留三类空槽位，不要在侧栏组件里复制 Lab 名单：
 

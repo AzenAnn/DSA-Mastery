@@ -47,6 +47,7 @@ JSON 报告顶层：
 
 - `lab.json` 是机器入口，`schemaVersion` 当前只接受整数 `1`，`type` 只接受 `quiz|program|project`。
 - README frontmatter 的 `labId` 是题目稳定身份：每章 `T/E/P` 分别从 01 追加，`lab:new` 使用同类最大序号加一且不复用缺号。新目录使用 `lab-NN-X-SS-slug`；存量旧目录保持可发现和可运行。
+- README 标题和 H1 由 `labId` 格式化为 `Lab CC-X-SS：题目名称`。脚手架、迁移工具和 Agent 不得用 `order` 或旧目录序号拼标题；存量旧目录允许保留 URL，并可只迁移标题。
 - `order` 与稳定 ID 分离：省略 `--order` 时脚手架追加到本章末尾，显式值只改变展示顺序。`lab:locate` 接受 `02T3` 等简写并返回规范 ID 与唯一路径。
 - 存量迁移只在 `chapter` 后插入 `labId`，必须复用该行实际的 `LF` 或 `CRLF`；不能根据文件任意位置出现的换行推断整份 README，否则混合换行历史文件会产生行尾空白 diff。
 - Windows 原生、Linux、macOS、WSL 使用同一 Node CLI；GNU Make 推荐但可选，`pnpm lab:run` 是 Windows 免 Make 官方兜底。
@@ -74,6 +75,7 @@ JSON 报告顶层：
 | --- | --- |
 | 向上找不到 `lab.json` | `LAB_NOT_FOUND`, exit 2 |
 | 稳定 ID 非法、不存在或重复 | `LAB_ID_INVALID` / `LAB_ID_NOT_FOUND` / `LAB_ID_DUPLICATE`, exit 2 |
+| 新式目录的标题不以其 `labId` 对应的 `Lab CC-X-SS：` 开头 | 内容校验失败；脚手架不得生成该状态 |
 | 迁移 README 缺少 `chapter`，或插入行引入异质换行 | `FRONTMATTER_INVALID` / `git diff --check` 失败，不得写入或提交 |
 | 未知 schema 主版本或坏 JSON | `SCHEMA_VERSION` / `JSON_INVALID`, exit 2 |
 | 路径越界或符号链接逃逸 | `PATH_ESCAPE`, exit 2 |

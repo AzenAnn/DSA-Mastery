@@ -7,7 +7,14 @@ import { compareOutput } from "../tools/lab/compare.mjs";
 import { selectCompiler } from "../tools/lab/compiler.mjs";
 import { findLabRoot, loadLab, resolveLabPath, validateQuizQuestions, validateQuizReadme } from "../tools/lab/core.mjs";
 import { classifyExecution, judgeProgram } from "../tools/lab/judge.mjs";
-import { allocateLabIdentity, insertLabIdFrontmatter, locateLabById, normalizeLabId, parseLabId } from "../tools/lab/identity.mjs";
+import {
+  allocateLabIdentity,
+  formatLabDocumentTitlePrefix,
+  insertLabIdFrontmatter,
+  locateLabById,
+  normalizeLabId,
+  parseLabId,
+} from "../tools/lab/identity.mjs";
 import { runProcess } from "../tools/lab/process.mjs";
 import { createLab, THIN_MAKEFILE } from "../tools/lab/scaffold.mjs";
 import { cleanLab, packStudent, previewDiff, refreshExpected } from "../tools/lab/operations.mjs";
@@ -319,6 +326,7 @@ test("stable Lab IDs normalize common shorthand", () => {
   assert.equal(normalizeLabId("02-T-03"), "02T03");
   assert.equal(normalizeLabId("lab02-T-03"), "02T03");
   assert.deepEqual(parseLabId("02P12"), { id: "02P12", chapter: 2, tag: "P", sequence: 12 });
+  assert.equal(formatLabDocumentTitlePrefix("2e3"), "Lab 02-E-03：");
   assert.throws(() => normalizeLabId("02X03"), (error) => error.code === "LAB_ID_INVALID");
   assert.throws(() => normalizeLabId("02T0"), (error) => error.code === "LAB_ID_INVALID");
 });

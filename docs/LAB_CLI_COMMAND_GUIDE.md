@@ -177,7 +177,7 @@ node tools/lab/cli.mjs help
 pnpm lab:new -- --type program --chapter 2 --slug stack-merge
 ```
 
-假设第 2 章已有 `02E01`～`02E08`，这条命令会生成 `02E09`，目录为 `lab-02-E-09-stack-merge`。编号按“最大值加一”计算，删除 `02E04` 后也不会复用旧号。省略 `--order` 时，新 Lab 排在本章现有 Lab 之后；显式填写只改变展示位置，不改变稳定 ID。
+假设第 2 章已有 `02E01`～`02E08`，这条命令会生成 `02E09`，目录为 `lab-02-E-09-stack-merge`，README 标题以 `Lab 02-E-09：` 开头。编号按“最大值加一”计算，删除 `02E04` 后也不会复用旧号。省略 `--order` 时，新 Lab 排在本章现有 Lab 之后；显式填写只改变展示位置，不改变稳定 ID 或标题编号。
 
 三类编号互不占用：`quiz`、`program`、`project` 分别得到 `T`、`E`、`P` 标签，并在每章各自从 `01` 开始。并行分支可能同时拿到同一个下一个编号，CI 会拒绝重复 ID；后合并的分支同步 `main` 后重新创建即可。
 

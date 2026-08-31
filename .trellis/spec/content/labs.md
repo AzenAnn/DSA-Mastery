@@ -33,6 +33,24 @@ Lab 继承教材八个字段，并额外要求：
 
 网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。稳定 ID 标签使用同一映射：`quiz -> T`、`program -> E`、`project -> P`。README-only Lab 由显式 `labCategory` 映射。有 manifest 的 Lab 不在 frontmatter 重复声明类型；分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。发布后的 `labId` 不因删除、插入或调整 `order` 而复用或改号。声明 `autoLabChapter` 的课程章节启用“本章 Labs”三分类并要求所有 Lab 可分类；即使集合为空，也显示 Theory/Exercise/Project 与各自空状态。当前 Ch.5 有 5 个正式 Quiz 和 17 个 Program，Theory 与 Exercise 分别显示对应的自动收录入口，Project 继续显示空状态；不得为填满空分类创建占位 Lab。未启用分类的章节继续使用“相关 Labs”。
 
+### 标题与稳定编号
+
+README 的源标题必须由 `labId` 生成，格式固定为 `Lab CC-X-SS：题目名称`。例如 `labId: "01E01"` 对应：
+
+```yaml
+title: "Lab 01-E-01：有序顺序表去重"
+```
+
+```md
+# Lab 01-E-01：有序顺序表去重
+```
+
+- frontmatter `title` 与正文 H1 必须完全一致；`CC`、`X`、`SS` 分别来自 `labId` 的章节、类型标签和类型内序号。
+- 新建 Lab，以及 Agent 或作者整理既有 Lab README 时，必须同步使用稳定标题；禁止从 `order`、旧目录中的 `lab-NN-OO` 或原来的 `Lab NN-OO` 标题推导编号。
+- 存量旧目录暂时不改名以保持 URL。未整理的旧标题可在过渡期继续通过校验；一旦迁移为稳定标题，不需要同时改目录。
+- 网站侧栏使用紧凑形式 `CCXSS · 题目名称`，例如 `01E01 · 有序顺序表去重`。这是展示格式，不得反向写进 README 标题。
+- 发布后修改题目名称时只改冒号后的文本；`labId` 和冒号前的稳定编号保持不变。
+
 README 至少说明：
 
 - 可检查的学习目标和前置知识；
@@ -96,6 +114,7 @@ README 至少说明：
 | 目录编号、chapter、order 不一致 | 内容校验失败 |
 | `labId` 缺失、重复、非规范形式、章节或类型标签不一致 | 内容校验失败 |
 | 新目录中的稳定编号与 `labId` 或标题不一致 | 内容校验失败 |
+| 新建或整理 Lab 时标题使用 `order`、旧目录序号，或 H1 与 frontmatter title 不一致 | 内容校验/Review blocking；改为 `Lab CC-X-SS：题目名称` |
 | 分类侧栏章节的 README-only Lab 缺 `labCategory`，或值非法 | 内容校验/构建失败 |
 | `lab` 不是布尔值 true | 内容校验失败 |
 | 缺 difficulty/duration | 内容校验失败 |

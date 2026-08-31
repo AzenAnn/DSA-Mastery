@@ -45,3 +45,8 @@ export function parseLabId(value) {
 export function normalizeLabId(value) {
   return parseLabId(value).id;
 }
+
+export function formatLabDocumentTitlePrefix(value) {
+  const { chapter, tag, sequence } = parseLabId(value);
+  return `Lab ${padMinimum(chapter)}-${tag}-${padMinimum(sequence)}：`;
+}
