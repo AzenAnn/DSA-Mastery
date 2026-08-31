@@ -335,7 +335,8 @@ try {
     !sidebarHtml.includes("本章 Labs") ||
     !sidebarHtml.includes("实验 Exercise") ||
     !sidebarHtml.includes("course-lab-category--exercise") ||
-    !sidebarHtml.includes("Lab 01-E-99：章节侧栏自动收录验证") ||
+    !sidebarHtml.includes("01E99 · 章节侧栏自动收录验证") ||
+    sidebarHtml.includes("01E99 · Lab 01-E-99") ||
     !sidebarHtml.includes(
       'href="/DSA-Mastery/labs/chapter-01/lab-01-E-99-sidebar-discovery-fixture/"',
     )
@@ -364,13 +365,13 @@ try {
     "理论 Theory",
     "实验 Exercise",
     "工程 Project",
-    "Lab 05-01：森林与二叉树转换题精练",
-    "Lab 05-02：树与森林遍历题精练",
-    "Lab 05-03：哈夫曼树与编码题精练",
-    "Lab 05-04：并查集题精练",
-    "Lab 05-05：堆题精练",
-    "Lab 05-06：二叉搜索树的插入与查找",
-    "Lab 05-22：B+ 树的范围查询",
+    "05T01 · 森林与二叉树转换题精练",
+    "05T02 · 树与森林遍历题精练",
+    "05T03 · 哈夫曼树与编码题精练",
+    "05T04 · 并查集题精练",
+    "05T05 · 堆题精练",
+    "05E01 · 二叉搜索树的插入与查找",
+    "05E17 · B+ 树的范围查询",
     "暂无工程型 Lab",
   ]) {
     if (!chapterFiveItem.includes(required)) {

@@ -135,7 +135,7 @@ chapter.autoLabChapter !== undefined
     ? [{
         text: '相关 Labs',
         collapsed: true,
-        items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })),
+        items: chapter.labs.map((lab) => ({ text: labSidebarLabel(lab), link: lab.url })),
       }]
     : []
 ```

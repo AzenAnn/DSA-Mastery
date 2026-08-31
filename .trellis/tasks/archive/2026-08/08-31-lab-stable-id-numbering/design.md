@@ -67,7 +67,7 @@ README.labId
 
 列表和详情页显示稳定 ID，标题正文保持不变。目录发现、Quiz loader、临时发现测试和产物检查都接受新旧两种目录。
 
-章节侧栏在构建 ContentIndex 时把旧标题前缀裁掉，只输出 `labId · 题目名称`。这是纯展示变换，不写回 README，也不改变详情页标题、目录或公开 URL。
+章节侧栏的“本章 Labs”和“相关 Labs”均在构建 ContentIndex 时通过同一 helper 裁掉旧标题前缀，只输出 `labId · 题目名称`。这是纯展示变换，不写回 README，也不改变详情页标题、目录或公开 URL。
 
 ## 7. VS Code 兼容
 

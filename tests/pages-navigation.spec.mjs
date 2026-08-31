@@ -153,6 +153,13 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("课程总目录");
   await page.locator(".course-curriculum-chapters").getByRole("link", { name: /Ch\.0 内存基础/ }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-00-memory-foundations/`);
+  await expect(
+    page.locator('.VPSidebar a[href*="/labs/chapter-00/lab-00-01-learning-map/"]'),
+  ).toHaveText("00T01 · 制作个人 DSA 学习地图");
+  await expect(
+    page.locator('.VPSidebar a[href*="/labs/chapter-00/lab-00-02-operation-counter/"]'),
+  ).toHaveText("00E01 · 用操作计数观察增长趋势");
+  await expect(page.locator(".VPSidebar")).not.toContainText("Lab 00-01");
   await page.locator(".course-curriculum-resource-list").getByRole("link", { name: /0\.1 数据结构基础概念/ }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/01-data-structure-basics/`);
   await page.locator(".VPNavBarMenu").getByRole("link", { name: "教材" }).click();
@@ -645,7 +652,10 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
   await expect(page.locator(".VPSidebar.open")).toContainText("理论 Theory");
   await expect(page.locator(".VPSidebar.open")).toContainText("实验 Exercise");
   await expect(page.locator(".VPSidebar.open")).toContainText("工程 Project");
-  await expect(page.locator(".VPSidebar.open")).toContainText("Lab 01-21：线性表双实现与工作负载评测器");
+  await expect(page.locator(".VPSidebar.open")).toContainText(
+    "01P01 · 线性表双实现与工作负载评测器",
+  );
+  await expect(page.locator(".VPSidebar.open")).not.toContainText("Lab 01-21");
   const mobileLayout = await page.evaluate(() => ({
     clientWidth: globalThis.document.documentElement.clientWidth,
     scrollWidth: globalThis.document.documentElement.scrollWidth,
