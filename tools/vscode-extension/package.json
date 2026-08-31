@@ -2,7 +2,7 @@
   "name": "dsa-mastery-labs",
   "displayName": "DSA Mastery Labs",
   "description": "在 VSCode 中浏览、作答与提交 DSA Mastery 的 C++ 代码题",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "publisher": "dsa-mastery",
   "license": "SEE LICENSE IN ../../README.md",

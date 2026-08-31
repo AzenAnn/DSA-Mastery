@@ -214,13 +214,13 @@ export function mockEvents(days: number, endDate: Date): ActivityEvent[] {
  * 代码题和选择题的进度存在两张表里。
  */
 export function buildChapterBars(
-  chapters: readonly { chapter: number; chapterTitle: string; labs: readonly { name: string; type: "program" | "quiz" }[] }[],
+  chapters: readonly { chapter: number; chapterTitle: string; labs: readonly { id?: string; name: string; type: "program" | "quiz" }[] }[],
   isPassed: (name: string, type: "program" | "quiz") => boolean,
 ): ChapterBar[] {
   return chapters.map((chapter) => ({
     chapter: chapter.chapter,
     chapterTitle: chapter.chapterTitle,
-    passed: chapter.labs.filter((lab) => isPassed(lab.name, lab.type)).length,
+    passed: chapter.labs.filter((lab) => isPassed(lab.id ?? lab.name, lab.type)).length,
     total: chapter.labs.length,
   }));
 }
