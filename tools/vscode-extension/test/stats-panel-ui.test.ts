@@ -55,3 +55,14 @@ test("stats styles are scoped and keep narrow charts inside their own containers
   assert.match(css, /@media\s*\(max-width:\s*460px\)[\s\S]*?\.stats-page/);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.stats-page/);
 });
+
+test("stats heatmaps strengthen their palette in dark and high-contrast themes", async () => {
+  const css = await readPackageFile("media/panel.css");
+
+  assert.match(css, /body\.vscode-dark\s+\.stats-page,\s*body\.vscode-high-contrast\s+\.stats-page\s*\{/);
+  assert.match(css, /body\.vscode-dark\s+\.stats-page[\s\S]*?--stats-chart-empty:/);
+  assert.match(css, /body\.vscode-dark\s+\.stats-page[\s\S]*?--stats-submit-4:/);
+  assert.match(css, /body\.vscode-dark\s+\.stats-page[\s\S]*?--stats-pass-4:/);
+  assert.match(css, /--stats-cell-outline:/);
+  assert.match(css, /\.stats-page\s+\.heatmap-scroll\s+rect,\s*\.stats-page\s+\.heatmap-legend\s+rect[\s\S]*?stroke:\s*var\(--stats-cell-outline/);
+});
