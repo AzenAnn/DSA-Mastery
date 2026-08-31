@@ -1377,6 +1377,61 @@ test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty 
   expect(failures).toEqual([]);
 });
 
+test("chapter 14 exposes five DP lessons and three empty Lab categories", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${baseUrl}/learn/outline/chapter-14-dynamic-programming/`);
+
+  const chapterGroup = page.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-14-dynamic-programming/"])',
+  );
+  await expect(chapterGroup).toHaveCount(1);
+  await expect(chapterGroup).not.toContainText("相关 Labs");
+
+  for (const title of [
+    "第 14 章 动态规划：把重复搜索折叠成状态",
+    "14.1 动态规划思维与状态设计",
+    "14.2 从记忆化搜索到递推",
+    "14.3 线性与网格动态规划",
+    "14.4 背包动态规划：选择次数、目标语义与循环顺序",
+  ]) {
+    await expect(chapterGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+  }
+
+  const labGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
+  );
+  await expect(labGroup).toHaveCount(1);
+  await expect(labGroup).not.toHaveClass(/collapsed/);
+
+  const categories = [
+    ["theory", "理论 Theory", "暂无理论型 Lab"],
+    ["exercise", "实验 Exercise", "暂无实验型 Lab"],
+    ["project", "工程 Project", "暂无工程型 Lab"],
+  ];
+  for (const [category, label, empty] of categories) {
+    const group = labGroup.locator(
+      `.VPSidebarItem:has(> .item > .text > .course-lab-category--${category})`,
+    );
+    await expect(group).toHaveCount(1);
+    await expect(group.locator(`.course-lab-category--${category}`)).toContainText(label);
+    if (category !== "project") {
+      await group.locator(":scope > .item > .caret").click();
+      await expect(group).not.toHaveClass(/collapsed/);
+    }
+    await expect(group.locator(":scope > .items a")).toHaveCount(0);
+    await expect(group.locator(".course-lab-category__empty")).toHaveText(empty);
+  }
+
+  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(3);
+  const layout = await page.evaluate(() => ({
+    clientWidth: globalThis.document.documentElement.clientWidth,
+    scrollWidth: globalThis.document.documentElement.scrollWidth,
+  }));
+  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
+  expect(failures).toEqual([]);
+});
+
 test("chapter 9 hash index theory quiz exposes all 18 questions and reconstructed tree prompts", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/labs/chapter-09/lab-09-01-hash-index-theory-quiz/`);

@@ -1,0 +1,36 @@
+{
+  "id": "chapter-14-dynamic-programming-outline",
+  "name": "chapter-14-dynamic-programming-outline",
+  "title": "第 14 章动态规划首批教材",
+  "description": "创建 Chapter 14 目录，深入完成 00～04 五篇动态规划教材，并接入 Chapter 14 课程与 Lab 分类侧边栏。",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": "content",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-08-31",
+  "completedAt": null,
+  "branch": "Azen-ch14",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "content/chapter-14-dynamic-programming/00-overview.md",
+    "content/chapter-14-dynamic-programming/01-dp-thinking-and-state-design.md",
+    "content/chapter-14-dynamic-programming/02-memoization-to-tabulation.md",
+    "content/chapter-14-dynamic-programming/03-linear-and-grid-dp.md",
+    "content/chapter-14-dynamic-programming/04-knapsack-dp.md",
+    ".vitepress/content-index.ts",
+    "tests/pages-navigation.spec.mjs"
+  ],
+  "notes": "五篇正文、课程索引、Chapter 14 三类 Lab 空槽位与浏览器测试已完成；用户已完成本地检阅并明确授权提交、推送和创建 PR。",
+  "meta": {
+    "source_primary": "Lingcha DP list + OI Wiki DP"
+  }
+}
