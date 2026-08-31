@@ -360,11 +360,11 @@ lab-NN-LL-slug/
 
 ### 6.4 输出比较与判定
 
-所有模式先统一 CRLF/LF；`refresh-expected --write` 也固定把 `.out` 写为 LF，避免 Windows 与 Unix 作者反复制造换行 diff：
+所有模式先统一 CRLF/LF；`exact` 还允许两侧最多相差一个末尾 LF，但不忽略内部换行或其他空白。`refresh-expected --write` 固定把 `.out` 写为 LF，避免 Windows 与 Unix 作者反复制造换行 diff：
 
 | 模式 | 语义 | 适用场景 |
 | --- | --- | --- |
-| `exact` | 除平台换行外逐字符相等 | 输出格式本身是考点 |
+| `exact` | 除平台换行和一个可选末尾 LF 外逐字符相等；不忽略内部换行、额外空行或其他空白 | 输出格式本身是考点 |
 | `tokens` | Unicode 空白切 token 后逐项比较 | 普通算法题默认 |
 | `float` | 数值 token 按绝对/相对误差，其他 token 精确 | 数值计算 |
 
