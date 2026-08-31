@@ -1,6 +1,6 @@
 ---
 title: "4.6 二叉树的经典问题"
-description: "建立二叉树统一分治与递归框架，系统突破统计、判断、镜像变换、路径回溯、LCA 与树形动态规划等殿堂级问题。"
+description: "建立二叉树统一分治与递归框架，系统突破统计、判断、镜像变换、路径回溯、LCA 与树形动态规划等问题。"
 order: 5
 chapter: 4
 chapterTitle: "树与二叉树"
@@ -11,11 +11,11 @@ status: "draft"
 
 # 4.6 二叉树的经典问题
 
-在掌握了二叉树的形态定义、存储结构与遍历机制之后，我们便拥有了探索二叉树庞大算法世界的完整武器库。
+在掌握了二叉树的形态定义、存储结构与遍历机制之后，接下来我们来研究二叉树里面的经典问题。
 
 二叉树的问题虽然千变万化，涵盖节点统计、结构判断、形态变换、路径搜索、祖先定位乃至树形动态规划，但它们的底层逻辑高度收敛于一个共同的数学基石：**分治（Divide and Conquer）与递归状态转移**。
 
-本节我们将二叉树的经典问题归纳为五大核心模型，提炼**“自顶向下（Top-Down）”**与**“自底向上（Bottom-Up）”**的统一递归思维框架，彻底攻克二叉树的算法高地。
+本节我们将二叉树的经典问题归纳为五大核心模型，提炼**“自顶向下（Top-Down）”**与**“自底向上（Bottom-Up）”**的统一递归思维框架，攻克二叉树的算法高地。
 
 ---
 
@@ -75,6 +75,42 @@ int maxDepth(TreeNode* root) {
 ::: tip 技巧 · 编号归一化防止整数溢出
 在非常深的不平衡树中，编号可能发生指数级增长导致 64 位整数溢出。解决方法是在每层开始时，**将该层所有节点的编号减去该层首个节点的编号（以 $0$ 为基准对齐）**。
 :::
+
+```cpp:line-numbers [width-of-binary-tree.cpp]
+#include <queue>
+#include <cstdint>
+#include <algorithm>
+
+int widthOfBinaryTree(TreeNode* root) {
+    if (root == nullptr) return 0;
+
+    // 队列中存储：{节点指针, 满二叉树节点编号}
+    std::queue<std::pair<TreeNode*, uint64_t>> q;
+    q.push({root, 0});
+    uint64_t maxWidth = 0;
+
+    while (!q.empty()) {
+        size_t size = q.size();
+        uint64_t minIndex = q.front().second; // 当前层最左侧节点的编号基准
+        uint64_t first = 0, last = 0;
+
+        for (size_t i = 0; i < size; ++i) {
+            auto [node, index] = q.front();
+            q.pop();
+
+            // 核心：减去 minIndex 归一化防止指数溢出
+            uint64_t curIndex = index - minIndex;
+            if (i == 0) first = curIndex;
+            if (i == size - 1) last = curIndex;
+
+            if (node->left != nullptr)  q.push({node->left, 2 * curIndex + 1});
+            if (node->right != nullptr) q.push({node->right, 2 * curIndex + 2});
+        }
+        maxWidth = std::max(maxWidth, last - first + 1);
+    }
+    return static_cast<int>(maxWidth);
+}
+```
 
 ---
 
@@ -170,8 +206,22 @@ bool isCompleteTree(TreeNode* root) {
 
 平衡二叉树（AVL 性质）要求：树中任意节点的左右子树高度差绝对值不超过 $1$（$|\text{leftHeight} - \text{rightHeight}| \le 1$）。
 
-- **朴素自顶向下法（$O(n^2)$）**：先求当前节点高度，再递归检查左右子树。存在大量重复深度计算。
-- **最优自底向上剪枝法（$O(n)$）**：采用后序遍历，若子树平衡，返回实际高度；**一旦发现某子树不平衡，立即返回 $-1$ 进行全局剪枝**！
+#### 两种解法原理与剪枝机制对比
+
+1. **朴素自顶向下法（$O(n^2)$，重复计算痛点）**：
+   - 算法流程：先写一个 `maxDepth` 函数求当前节点的左右子树高度并做差判断；然后再递归检查 `root->left` 和 `root->right` 是否平衡。
+   - **致命缺陷**：从根到叶的每个节点都会被反复计算高度。在退化单链树中，总比较次数为 $n + (n-1) + \dots + 1 = \Theta(n^2)$。
+
+2. **最优自底向上剪枝法（$\Theta(n)$，后序短路剪枝）**：
+   - **返回值复用（哨兵标记机制）**：函数 `checkHeight(node)` 承担双重职责：
+     - 若子树**平衡**：返回该子树的真实高度（非负整数 $\ge 0$）；
+     - 若子树**失衡**：返回特殊哨兵值 **`-1`**。
+   - **短路剪枝执行过程（Short-Circuit）**：
+     - 递归后序遍历左子树得到 `leftH`：若 `leftH == -1`（左子树已失衡），**立即短路 `return -1`，完全无需再去遍历的右子树**。
+     - 递归遍历右子树得到 `rightH`：若 `rightH == -1`，同理立即 `return -1`；
+     - 若左右子树均平衡，但当前高度差 $|\text{leftH} - \text{rightH}| > 1$：说明当前节点失衡，返回 `-1`；
+     - 否则两子树平衡，返回当前树高 `1 + std::max(leftH, rightH)`。
+   - **复杂度收益**：失衡信号一旦产生便自底向上直接熔断回溯，每个节点至多被访问一次，时间复杂度优化为 $\Theta(n)$。
 
 ```cpp:line-numbers [is-balanced.cpp]
 class Solution {
@@ -316,7 +366,7 @@ private:
 
 **显式回溯（Backtracking）与现场保护**：
 - 进入节点时：`path.push_back(node->val)`；
-- 离开节点时：必须执行 `path.pop_back()` 恢复现场，保证状态干净！
+- 离开节点时：执行 `path.pop_back()` 恢复现场，保证状态干净。
 
 ```cpp:line-numbers [path-sum-ii.cpp]
 #include <vector>
@@ -355,7 +405,7 @@ private:
 
 ## 4.6.5 二叉树问题的统一递归框架
 
-二叉树的高级算法题往往看似毫无头绪，但只要将其拆解为两种基本递归形态，问题迎刃而解：
+二叉树的高级算法题往往看似毫无头绪，但只要将其拆解为两种基本递归形态，问题便迎刃而解：
 
 ```graphviz
 digraph RecursiveFramework {
@@ -375,7 +425,7 @@ digraph RecursiveFramework {
 **后序状态汇聚逻辑**：
 - 若当前节点为 `nullptr` 或等于 $p$ 或 $q$，直接返回当前节点；
 - 递归询问左子树和右子树：
-  - 若左、右子树各返回了一个非空节点 $\Longrightarrow$ 当前节点正是唯一的分割根节点（LCA）！
+  - 若左、右子树各返回了一个非空节点 $\Longrightarrow$ 当前节点正是唯一的分割根节点（LCA）；
   - 若只有一边返回非空 $\Longrightarrow$ 说明 $p$ 和 $q$ 均位于该侧子树中，返回该非空结果。
 
 ```cpp:line-numbers [lowest-common-ancestor.cpp]
@@ -386,7 +436,7 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
     TreeNode* rightLCA = lowestCommonAncestor(root->right, p, q);
 
     if (leftLCA != nullptr && rightLCA != nullptr) {
-        return root; // 左右各抓到一个，当前节点就是最近公共祖先！
+        return root; // 左右各抓到一个，当前节点就是最近公共祖先
     }
     return (leftLCA != nullptr) ? leftLCA : rightLCA;
 }
@@ -443,7 +493,11 @@ public:
 
 ## 小结与自测
 
-解决二叉树复杂问题的钥匙是==将大问题分解为子树的递归不变量==。自顶向下用于下发路径约束，自底向上用于汇聚状态与树形动态规划。无论形态如何变化，递归树上的后序返回始终是信息整合的最强中枢。
+解决二叉树复杂问题的核心思维是**“分治汇报”**：
+- **前序位置（下潜）**：向子节点下发上下文与路径约束；
+- **后序位置（回溯）**：收集左右子树算好的结果并进行汇总决策。
+
+无论是求高度、判断平衡、寻找公共祖先还是树形 DP，本质都是**先让左右子树各自算出答案，当前节点在后序位置把两份数据合并上报**。
 
 请尝试回答以下自测问题：
 
@@ -455,4 +509,4 @@ public:
 
 ---
 
-至此，第 4 章《树与二叉树》的理论与经典问题已全部建立。在下一章《树的应用》中，我们将探索二叉搜索树（BST）、AVL 平衡树、堆与优先队列、赫夫曼编码以及 B/B+ 树在现代工业系统中的宏伟应用！
+至此，第 4 章《树与二叉树》的理论与经典问题已全部建立。在下一章《树的应用》中，我们将探索二叉搜索树（BST）、AVL 平衡树、堆与优先队列、赫夫曼编码以及 B/B+ 树在现代工业系统中的应用。

@@ -82,6 +82,30 @@ LEVELORDER: 1
 左子树节点个数 Lsize = inRoot - inL
 ```
 
+## 如何验证
+
+先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。
+
+```powershell
+# 已进入本 Lab 目录
+make doctor
+make run
+make run CASE=001-sample
+make interactive
+make score
+```
+
+Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
+
+```powershell
+pnpm lab:doctor -- labs/chapter-04/lab-04-14-construct-binary-tree-pre-in
+pnpm lab:run -- labs/chapter-04/lab-04-14-construct-binary-tree-pre-in
+pnpm lab:run -- labs/chapter-04/lab-04-14-construct-binary-tree-pre-in --case 001-sample
+pnpm lab:score -- labs/chapter-04/lab-04-14-construct-binary-tree-pre-in
+```
+
+`make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。
+
 ## 题解
 
 <details>
@@ -197,8 +221,3 @@ int main() {
 ```
 
 </details>
-
-## 本地运行与提交
-```powershell
-pnpm lab:run -- labs/chapter-04/lab-04-14-construct-binary-tree-pre-in
-```

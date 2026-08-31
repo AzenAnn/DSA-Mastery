@@ -297,23 +297,173 @@ void traverseInorderThreaded(ThreadNode* root) {
 
 ## 4.4.4 前序 / 后序线索【进阶】与 Morris 遍历
 
-除了中序线索二叉树，我们也可以对二叉树进行**前序线索化**或**后序线索化**。但受限于单向二叉链表的指针方向性，它们表现出了有趣的结构不对称性：
+除了中序线索二叉树，我们也可以对二叉树进行**前序线索化**或**后序线索化**。但受限于单向二叉链表的指针向下性，它们表现出了极其鲜明的**结构单向不对称性**。
 
-### 1. 前序线索与后序线索的单向局限
+### 1. 结构不对称性原理与拓扑图解
 
-| 线索类型 | 寻找直接后继（Successor） | 寻找直接前驱（Predecessor） |
-| :--- | :--- | :--- |
-| **中序线索** | 极易（`rtag=1` 取 `right`，否则进右子树找最左节点） | 极易（`ltag=1` 取 `left`，否则进左子树找最右节点） |
-| **前序线索** | 极易（若有左孩子取左；若无左有右取右；若无孩子取 `right` 线索） | **极难**（若 `ltag=1` 可直接取；但 `ltag=0` 时，无法在单向树中向上找到父节点） |
-| **后序线索** | **极难**（若 `rtag=1` 可直接取；但 `rtag=0` 时，若为右孩子后继为父节点，无父指针无法向上回溯） | 极易（若有右孩子取右；若无右有左取左；若无孩子取 `left` 线索） |
+#### (1) 前序线索（根 $\to$ 左 $\to$ 右）：为什么“找前驱极难”？
 
-::: pitfall 易错点 · 后序线索遍历为什么必须用三叉链表？
-在后序线索树中，当一个节点拥有真正的右子树（`rtag == Link`）时，它的后继节点是其**父节点**。但二叉链表是指向孩子的，无法向上寻父！因此，**若要顺利进行后序线索树的遍历，节点结构必须升级为包含 `parent` 指针的三叉链表**。
+在前序遍历中，根节点早于孩子节点被访问。若节点 $P$ 拥有左孩子（`ltag == 0`，没有前驱线索），要寻找它紧邻的前驱（**线索应从 $P$ 出发指向其前驱**）：
+- **情况 1（$P$ 是左孩子）**：前序序列为 $F \to P \dots$，$P$ 的前驱即为父节点 $F$（**线索应由 $P$ 向上指向 $F$**）；
+- **情况 2（$P$ 是右孩子且有左兄弟 $L$）**：前序序列为 $F \to \dots \to \text{Leaf} \to P \dots$，$P$ 的前驱为左兄弟子树在前序遍历下的最末叶子（**线索应由 $P$ 指向该最末叶子**）。
+
+```graphviz
+digraph PreorderLimitation {
+  rankdir=TB;
+  nodesep=0.9;
+  ranksep=0.8;
+  splines=curved;
+  node [shape=circle, width=0.8];
+
+  subgraph cluster_left {
+    label="情况 1：P 为左孩子 (前序: F -> P)";
+    style=dashed;
+    color="#888888";
+    margin=16;
+
+    F1 [label="F\n(根)"];
+    P1 [label="P\n(左)"];
+
+    F1 -> P1 [label=" 左孩子"];
+    F1:e -> P1:e [dir=back, constraint=false, style=dashed, color=red, fontcolor=red, label=" 前驱 (P 向上指父节点) "];
+  }
+
+  subgraph cluster_right {
+    label="情况 2：P 为右孩子 (前序: F -> ... -> Leaf -> P)";
+    style=dashed;
+    color="#888888";
+    margin=16;
+
+    F2 [label="F\n(根)"];
+    L2 [label="L\n(左)"];
+    P2 [label="P\n(右)"];
+    Leaf [label="Leaf\n(左末)"];
+
+    F2 -> L2 [label="左孩子 "];
+    F2 -> P2 [label=" 右孩子"];
+    L2 -> Leaf [style=dotted, label="左深入 "];
+    P2 -> Leaf [constraint=false, style=dashed, color=red, fontcolor=red, label=" 前驱 (P 指向左末叶子) "];
+  }
+}
+```
+<!-- diagram id="preorder-thread-limitation" caption: "前序线索找前驱的两种场景：均需回溯父节点，单向二叉链表无法到达" -->
+
+> 💥 **单向链表局限**：当前节点 $P$ 只有向下的孩子指针，无法向上回溯找到父节点 $F$，因而也无法借道 $F$ 拐入左子树。
+
+---
+
+#### (2) 后序线索（左 $\to$ 右 $\to$ 根）：为什么“找后继极难”？
+
+在后序遍历中，孩子节点全部访问完毕后才访问父节点。若节点 $P$ 拥有右孩子（`rtag == 0`，没有后继线索），要寻找它紧邻的后继（**线索应从 $P$ 出发指向其后继**）：
+- **情况 1（$P$ 是右孩子）**：后序序列为 $\dots \to P \to F$，$P$ 的后继即为父节点 $F$（**线索应由 $P$ 向上指向 $F$**）；
+- **情况 2（$P$ 是左孩子且有右兄弟 $R$）**：后序序列为 $\dots \to P \to \text{Leaf} \to \dots \to F$，$P$ 的后继为右兄弟子树在后序遍历下的第一个叶子（**线索应由 $P$ 指向右首叶子**）。
+
+```graphviz
+digraph PostorderLimitation {
+  rankdir=TB;
+  nodesep=0.9;
+  ranksep=0.8;
+  splines=curved;
+  node [shape=circle, width=0.8];
+
+  subgraph cluster_post_right {
+    label="情况 1：P 为右孩子 (后序: P -> F)";
+    style=dashed;
+    color="#888888";
+    margin=16;
+
+    F1 [label="F\n(根)"];
+    P1 [label="P\n(右)"];
+
+    F1 -> P1 [label=" 右孩子"];
+    F1:w -> P1:w [dir=back, constraint=false, style=dashed, color=red, fontcolor=red, label="后继 (P 向上指父节点) "];
+  }
+
+  subgraph cluster_post_left {
+    label="情况 2：P 为左孩子 (后序: P -> Leaf -> ... -> F)";
+    style=dashed;
+    color="#888888";
+    margin=16;
+
+    F2 [label="F\n(根)"];
+    P2 [label="P\n(左)"];
+    R2 [label="R\n(右)"];
+    Leaf2 [label="Leaf\n(右首)"];
+
+    F2 -> P2 [label="左孩子 "];
+    F2 -> R2 [label=" 右孩子"];
+    R2 -> Leaf2 [style=dotted, label="右深入 "];
+    P2 -> Leaf2 [constraint=false, style=dashed, color=red, fontcolor=red, label="后继 (P 指向右首叶子) "];
+  }
+}
+```
+<!-- diagram id="postorder-thread-limitation" caption: "后序线索找后继的两种场景：均需回溯父节点，单向二叉链表无法到达" -->
+
+> 💥 **单向链表局限**：当前节点 $P$ 同样无法向上回溯到父节点 $F$，因而无法从左孩子跨入右兄弟子树 $R$。
+
+---
+
+#### (3) 中序线索（左 $\to$ 根 $	o$ 右）：为什么双向都“极易”？
+
+```graphviz
+digraph InorderBidirectional {
+  rankdir=TB;
+  nodesep=0.9;
+  ranksep=0.8;
+  splines=curved;
+  node [shape=circle, width=0.8];
+
+  subgraph cluster_inorder_succ {
+    label="找后继：进入右子树一路向左 (全是下行指针)";
+    style=dashed;
+    color="#888888";
+    margin=16;
+
+    P1 [label="P\n(当前)"];
+    R1 [label="R\n(右)"];
+    Succ [label="Succ\n(最左下)"];
+
+    P1 -> R1 [label=" 右孩子"];
+    R1 -> Succ [style=dashed, color="#2563eb", fontcolor="#2563eb", label=" 沿 left 下潜"];
+  }
+
+  subgraph cluster_inorder_pred {
+    label="找前驱：进入左子树一路向右 (全是下行指针)";
+    style=dashed;
+    color="#888888";
+    margin=16;
+
+    P2 [label="P\n(当前)"];
+    L2 [label="L\n(左)"];
+    Pred [label="Pred\n(最右下)"];
+
+    P2 -> L2 [label="左孩子 "];
+    L2 -> Pred [style=dashed, color="#2563eb", fontcolor="#2563eb", label="沿 right 下潜 "];
+  }
+}
+```
+<!-- diagram id="inorder-thread-bidirectional" caption: "中序线索双向搜索路径全部顺行向下，无需向上回溯父节点" -->
+
+> ✨ **天然优势**：找后继一路“向下向左”，找前驱一路“向下向右”。所有路径均严格单向下行，完全无需向上回溯父节点！
+
+
+### 2. 前序、后序与中序线索的遍历能力对比
+
+| 线索类型 | 寻找直接后继（Successor） | 寻找直接前驱（Predecessor） | 遍历全树能力 |
+| :--- | :--- | :--- | :--- |
+| **中序线索** | **极易**（`rtag=1` 取 `right` 线索；否则进入右子树沿 `left` 找最左下节点） | **极易**（`ltag=1` 取 `left` 线索；否则进入左子树沿 `right` 找最右下节点） | **天然支持无栈双向全遍历** |
+| **前序线索** | **极易**（若有左孩子取左；若无左有右取右；若为叶子取 `right` 线索） | **极难**（`ltag=1` 直接取；`ltag=0` 时，若为左孩子前驱为父节点，若为右孩子前驱为左子树前序末节点。**均依赖父指针，无法直接向上回溯**） | **仅支持无栈顺向遍历**（逆向遍历必须升级为三叉链表） |
+| **后序线索** | **极难**（`rtag=1` 直接取；`rtag=0` 时，若为右孩子后继为父节点，若为左孩子后继为右子树后序首节点。**均依赖父指针，无法直接向上回溯**） | **极易**（若有右孩子取右；若无右有左取左；若为叶子取 `left` 线索） | **仅支持无栈逆向遍历**（顺向遍历必须升级为三叉链表） |
+
+::: pitfall 易错点 · 为什么前序逆向遍历与后序顺向遍历必须引入三叉链表？
+- 普通二叉链表是指针单向由父指向子的；
+- 前序找前驱、后序找后继在非叶分支节点处，**必然要求先回溯到父节点**；
+- 因此，若要在 $O(1)$ 空间下实现前序逆向遍历或后序顺向遍历，**节点结构必须升级为包含 `parent` 指针的三叉链表**。
 :::
 
 ---
 
-### 2. 拓展：Morris 遍历（无需标志位的 $O(1)$ 空间遍历）
+### 3. 拓展：Morris 遍历（无需标志位的 $O(1)$ 空间遍历）
 
 线索二叉树虽然实现了 $O(1)$ 空间的非递归遍历，但它为每个节点额外增加了 `ltag` 与 `rtag` 两个字段，侵入了数据结构本身。
 
@@ -327,10 +477,10 @@ digraph MorrisConcept {
   node [shape=circle];
   A -> B;
   B -> C;
-  C -> A [style=dashed, label="临时线索"];
+  C -> A [style=dashed, color="#2563eb", fontcolor="#2563eb", label=" 临时回边线索"];
 }
 ```
-<!-- diagram id="morris-concept" caption: "Morris 遍历利用前驱节点的右指针建立临时线索，再恢复现场" -->
+<!-- diagram id="morris-concept" caption: "Morris 遍历利用前驱节点的空闲右指针建立临时线索，访问完毕后再恢复现场" -->
 
 ---
 
