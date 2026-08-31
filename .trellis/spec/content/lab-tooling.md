@@ -7,7 +7,8 @@
 ## 2. Signatures
 
 ```text
-pnpm lab:new -- --type <quiz|program|project> --chapter N --order N --slug kebab-slug
+pnpm lab:new -- --type <quiz|program|project> --chapter N --slug kebab-slug [--order N]
+pnpm lab:locate -- <lab-id> [--json]
 pnpm lab:doctor -- [lab-path] [--json]
 pnpm lab:validate -- [lab-path] [--json]
 pnpm lab:build -- [lab-path] [--target student|solution]
@@ -32,6 +33,7 @@ JSON 报告顶层：
   "command": "score",
   "ok": true,
   "lab": {
+    "id": "02E01",
     "path": "absolute-path",
     "type": "program",
     "schemaVersion": 1
@@ -44,6 +46,9 @@ JSON 报告顶层：
 ## 3. Contracts
 
 - `lab.json` 是机器入口，`schemaVersion` 当前只接受整数 `1`，`type` 只接受 `quiz|program|project`。
+- README frontmatter 的 `labId` 是题目稳定身份：每章 `T/E/P` 分别从 01 追加，`lab:new` 使用同类最大序号加一且不复用缺号。新目录使用 `lab-NN-X-SS-slug`；存量旧目录保持可发现和可运行。
+- `order` 与稳定 ID 分离：省略 `--order` 时脚手架追加到本章末尾，显式值只改变展示顺序。`lab:locate` 接受 `02T3` 等简写并返回规范 ID 与唯一路径。
+- 存量迁移只在 `chapter` 后插入 `labId`，必须复用该行实际的 `LF` 或 `CRLF`；不能根据文件任意位置出现的换行推断整份 README，否则混合换行历史文件会产生行尾空白 diff。
 - Windows 原生、Linux、macOS、WSL 使用同一 Node CLI；GNU Make 推荐但可选，`pnpm lab:run` 是 Windows 免 Make 官方兜底。
 - 默认 C++17；只有题目明确需要且 README/CI 证明时可用 C++20。`toolchain.standard` 是直接编译和 Project CMake configure 的权威输入，CMakeLists 不得硬编码覆盖它。最低 GCC 11、Clang 14、MSVC 19.30；Project 另需 CMake 3.25。Dev Container/Codespaces 可选。
 - 所有 manifest 路径均为当前 Lab 内相对路径；拒绝绝对路径、`..`、缺失目标和符号链接逃逸。
@@ -56,7 +61,7 @@ JSON 报告顶层：
 - Project task kind 为 `stdio|ctest|manual`；顶层权重合计 100，ID 唯一，依赖存在且无环；自动分和人工待评分分开。
 - Program/Project 源仓库 Makefile 必须与三行薄模板逐字一致，真实逻辑只在 `tools/lab/lab.mk` 和 CLI。
 - 所有生成物只写 `.lab-cache/`。`refresh-expected` 默认只预览，只有 `--write` 覆盖 `.out`；Project 通过 `--task`/`TASK=` 选择 stdio task，并在 `verify` 中检查其 oracle 漂移。
-- student pack 排除全部 solution、cache、object/binary，内置 runner 与独立 Makefile，不依赖源仓库相对路径。
+- student pack 排除全部 solution、cache、object/binary，内置 runner 与独立 Makefile，不依赖源仓库相对路径或根 `node_modules`。嵌入式 CLI 的运行命令不得静态加载仅供仓库作者使用的脚手架、扫描器或其他第三方依赖；CI 必须把学生包复制到仓库外后至少执行 validate/run。
 - 评分器以 `spawn(command, args, { shell: false })` 执行；本地评分不是恶意代码沙箱，PR job 不注入秘密或写 token。
 
 > **Warning**: 新增 Program/Project 用例时，`tests/*.out` 必须先存在，`refresh-expected` 才能写入。
@@ -68,6 +73,8 @@ JSON 报告顶层：
 | 条件 | code / 行为 |
 | --- | --- |
 | 向上找不到 `lab.json` | `LAB_NOT_FOUND`, exit 2 |
+| 稳定 ID 非法、不存在或重复 | `LAB_ID_INVALID` / `LAB_ID_NOT_FOUND` / `LAB_ID_DUPLICATE`, exit 2 |
+| 迁移 README 缺少 `chapter`，或插入行引入异质换行 | `FRONTMATTER_INVALID` / `git diff --check` 失败，不得写入或提交 |
 | 未知 schema 主版本或坏 JSON | `SCHEMA_VERSION` / `JSON_INVALID`, exit 2 |
 | 路径越界或符号链接逃逸 | `PATH_ESCAPE`, exit 2 |
 | Quiz 非四选一、ID/答案/points/选项错误 | `QUIZ_INVALID`, exit 2 |
@@ -90,10 +97,13 @@ JSON 报告顶层：
 - Bad：Project 用 `dependsOn` 暗中实现得分门禁，或把 manual 未审内容算作自动满分。
 - Good：Windows 作者执行 `refresh-expected --write` 后，提交的 `.out` 仍固定为 LF。
 - Bad：直接把子进程原始 stdout 写入 `.out`，导致 Windows/Unix 之间反复出现整文件换行 diff。
+- Good：迁移混合换行 README 时，新增 `labId` 与相邻 `chapter` 使用同一种行尾。
+- Bad：因文件后半段含 CRLF 就把新增 frontmatter 行统一写成 CRLF，造成隐藏的 `trailing whitespace`。
 
 ## 6. Tests Required
 
 - Node 单测：坏 JSON、未知版本、绝对/`..`/符号链接路径、空格路径、case/task ID、权重、依赖环和薄 Makefile 漂移。
+- 编号单测：简写规范化、三类独立递增、max+1 不补洞、可选 order、新旧目录发现、唯一定位、重复冲突，以及混合换行 README 的相邻行尾保持。
 - 比较/进程单测：exact/tokens/float、CRLF、首差异、AC/WA/TLE/RE/CE/OLE/IE、真实 timeout/output cap、shell false。
 - 终端格式单测：TTY 自动色、`--no-color`、`NO_COLOR`、`TERM=dumb`、非 TTY、全部 verdict、满分/未满分、WA/CE、Project manual pending、全部人类 reporter、strip-ANSI 后列宽以及 JSON 无 ANSI。
 - Golden Quiz：四选一、hint、points、进度、正确数、总分、答案总览、重试、移动端和安全 Markdown。

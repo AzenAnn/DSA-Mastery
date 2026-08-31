@@ -3,6 +3,7 @@ title: "Lab 05-09：BST 中第 k 小的元素"
 description: "在二叉搜索树中高效查找第 k 小的元素，支持多次查询。"
 order: 9
 chapter: 5
+labId: "05E04"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

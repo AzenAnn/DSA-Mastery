@@ -3,6 +3,7 @@ title: "Lab 08-03：自平衡查找树——AVL 旋转维护与退化对比"
 description: "实现 AVL 树的四种旋转与删除再平衡，用不变量检查与普通 BST 基线对比退化。"
 order: 3
 chapter: 8
+labId: "08P01"
 chapterTitle: "基础查找与树形查找"
 updated: "2026-08-21"
 contributors: ["RichardYi-SYSU-Mac"]

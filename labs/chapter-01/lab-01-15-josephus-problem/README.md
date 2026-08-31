@@ -3,6 +3,7 @@ title: "Lab 01-15：约瑟夫环"
 description: "用循环链表模拟经典约瑟夫环问题，理解循环结构的遍历与节点删除。"
 order: 15
 chapter: 1
+labId: "01E10"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

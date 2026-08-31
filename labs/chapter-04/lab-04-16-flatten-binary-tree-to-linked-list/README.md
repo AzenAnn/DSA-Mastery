@@ -3,6 +3,7 @@ title: "Lab 04-16：二叉树展开为链表"
 description: "通过原地指针变换将二叉树按先序遍历顺序展开为单向右链表。"
 order: 16
 chapter: 4
+labId: "04E08"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

@@ -3,6 +3,7 @@ title: "Lab 03-09：UTF-8 串长与字符数"
 description: "按 UTF-8 首字节规则统计字节数与字符数，验证'串长不等于字节数'。"
 order: 9
 chapter: 3
+labId: "03E05"
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
 contributors: ["Qing"]

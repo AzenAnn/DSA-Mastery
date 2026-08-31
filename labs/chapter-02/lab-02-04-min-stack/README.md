@@ -3,6 +3,7 @@ title: "Lab 02-04：最小栈"
 description: "实现支持常数时间最小值查询的栈，正确维护重复最小值和空栈失败语义。"
 order: 4
 chapter: 2
+labId: "02E02"
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
 contributors: ["DSA Mastery Team"]

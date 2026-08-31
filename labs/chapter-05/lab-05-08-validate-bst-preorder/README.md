@@ -3,6 +3,7 @@ title: "Lab 05-08：验证 BST 先序遍历序列"
 description: "给定一个整数序列，判断它是否可以作为某棵 BST 的先序遍历序列。"
 order: 8
 chapter: 5
+labId: "05E03"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

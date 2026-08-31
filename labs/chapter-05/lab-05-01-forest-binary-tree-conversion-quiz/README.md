@@ -3,6 +3,7 @@ title: "Lab 05-01：森林与二叉树转换题精练"
 description: "通过 16 道选择题和 1 道综合题，巩固森林与二叉树的转换的概念、性质与解题方法。"
 order: 1
 chapter: 5
+labId: "05T01"
 chapterTitle: "树的应用"
 updated: "2026-08-24"
 contributors: ["Azen"]

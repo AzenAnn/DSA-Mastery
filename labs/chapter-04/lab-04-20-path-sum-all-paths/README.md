@@ -3,6 +3,7 @@ title: "Lab 04-20：路径总和 II（收集所有路径）"
 description: "通过显式回溯收集所有满足目标和的根到叶完整路径。"
 order: 20
 chapter: 4
+labId: "04E12"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

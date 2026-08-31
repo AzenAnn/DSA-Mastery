@@ -3,6 +3,7 @@ title: "Lab 05-04：并查集题精练"
 description: "通过 9 道选择题（本组素材无综合题），巩固并查集的概念、性质与解题方法。"
 order: 4
 chapter: 5
+labId: "05T04"
 chapterTitle: "树的应用"
 updated: "2026-08-24"
 contributors: ["Azen"]

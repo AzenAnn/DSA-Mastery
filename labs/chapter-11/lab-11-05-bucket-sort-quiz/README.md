@@ -3,6 +3,7 @@ title: "Lab 11-05：桶排序选择题精练"
 description: "用 10 道选择题巩固桶排序的复杂度、稳定性与正确性要点。"
 order: 5
 chapter: 11
+labId: "11T05"
 chapterTitle: "排序"
 updated: "2026-08-25"
 contributors: ["Azen"]

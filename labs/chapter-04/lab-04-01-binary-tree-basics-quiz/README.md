@@ -3,6 +3,7 @@ title: "Lab 04-01：二叉树基础（性质与存储）理论题精练"
 description: "通过 20 道选择题和 5 道综合题，巩固二叉树基础（性质与存储）的概念、性质与解题方法。"
 order: 1
 chapter: 4
+labId: "04T01"
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"
 contributors: ["Azen"]

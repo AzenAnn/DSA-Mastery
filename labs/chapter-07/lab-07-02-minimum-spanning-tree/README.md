@@ -3,6 +3,7 @@ title: "Lab 07-02：最小生成树选择题精练"
 description: "用 20 道选择题巩固最小生成树的定义与性质、切分定理与环性质、Prim/Kruskal 算法与复杂度，以及选型与边界辨析。"
 order: 2
 chapter: 7
+labId: "07T02"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-27"
 contributors: ["Fishman"]

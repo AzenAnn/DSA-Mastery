@@ -3,6 +3,7 @@ title: "Lab 11-21：初级桶排序"
 description: "把桶排序退化成最朴素的形式：桶就是计数数组，值域小时一遍扫描完成排序。"
 order: 21
 chapter: 11
+labId: "11E15"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

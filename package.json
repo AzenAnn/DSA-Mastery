@@ -16,6 +16,7 @@
     "validate": "pnpm run validate:content && pnpm run typecheck && pnpm run lint",
     "validate:content": "node scripts/validate-content.mjs",
     "lab:new": "node tools/lab/cli.mjs new",
+    "lab:locate": "node tools/lab/cli.mjs locate",
     "lab:doctor": "node tools/lab/cli.mjs doctor",
     "lab:validate": "node tools/lab/cli.mjs validate",
     "lab:build": "node tools/lab/cli.mjs build",

@@ -3,6 +3,7 @@ title: "Lab 01-14：双链表相邻节点交换"
 description: "交换双向链表中每对相邻节点，重点练习双向链接的四条指针同步修改。"
 order: 14
 chapter: 1
+labId: "01E09"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

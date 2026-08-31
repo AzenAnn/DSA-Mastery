@@ -3,6 +3,7 @@ title: "Lab 04-03：中序遍历理论题精练"
 description: "通过 11 道选择题和 3 道综合题，巩固中序遍历的概念、性质与解题方法。"
 order: 3
 chapter: 4
+labId: "04T03"
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"
 contributors: ["Azen"]

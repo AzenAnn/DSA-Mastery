@@ -3,6 +3,7 @@ title: "Lab 03-10：广义表的表头与表尾"
 description: "解析广义表的括号表示，实现 Head 与 Tail 操作并序列化结果，体会表尾比直觉多一层括号。"
 order: 10
 chapter: 3
+labId: "03E06"
 chapterTitle: "字符串与数组"
 updated: "2026-08-27"
 contributors: ["Fishman"]

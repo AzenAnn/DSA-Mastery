@@ -5,9 +5,11 @@ import type { CaseResult, ScoreResult, Verdict } from "./cli";
 import { studentSourcePath, type ProgramLab } from "./labIndex";
 import type { QuizQuestion } from "./quiz";
 import { backfillEvents } from "./stats";
+import { remapEventKeys, remapRecordKeys } from "./progressKeys";
 
 const STATE_KEY = "dsaMastery.progress.v1";
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
+const EVENT_SCHEMA_VERSION = 2;
 
 /**
  * 活动日志上限。每条约 100 字节,20000 条约 2MB —— globalState 启动时整份读入内存,
@@ -108,7 +110,7 @@ function migrateV1ToV2(raw: ProgressStore): ProgressStore {
   const events = backfillEvents(labs);
 
   return {
-    schemaVersion: SCHEMA_VERSION,
+    schemaVersion: EVENT_SCHEMA_VERSION,
     labs,
     quizzes: raw.quizzes ?? {},
     events: events.slice(-EVENT_LIMIT),
@@ -142,7 +144,7 @@ export class ProgressTracker {
     const raw = this.context.globalState.get<ProgressStore>(STATE_KEY);
     if (!raw || typeof raw !== "object") return emptyStore();
 
-    if (raw.schemaVersion === SCHEMA_VERSION) {
+    if (raw.schemaVersion === SCHEMA_VERSION || raw.schemaVersion === EVENT_SCHEMA_VERSION) {
       return {
         schemaVersion: raw.schemaVersion,
         labs: raw.labs ?? {},
@@ -166,6 +168,30 @@ export class ProgressTracker {
 
   private async persist(): Promise<void> {
     await this.context.globalState.update(STATE_KEY, this.store);
+  }
+
+  /**
+   * v2 → v3：把目录名主键迁移为稳定 labId。
+   *
+   * 这一步必须等题目扫描完成后才能做，因为只有 README 同时提供新 id 和旧目录名。
+   * 迁移前保留完整备份；旧快照不搬目录，HistoryEntry.snapshot 会继续指向原文件。
+   */
+  async migrateLabKeys(labs: readonly ProgramLab[]): Promise<void> {
+    const aliases = labs.map((lab) => ({ id: lab.id, name: lab.name }));
+    const program = remapRecordKeys(this.store.labs, aliases, mergeLabProgress);
+    const quiz = remapRecordKeys(this.store.quizzes, aliases, mergeQuizProgress);
+    const activity = remapEventKeys(this.store.events, aliases);
+    const changed = program.changed || quiz.changed || activity.changed || this.store.schemaVersion !== SCHEMA_VERSION;
+    if (!changed) return;
+
+    await this.context.globalState.update(`${STATE_KEY}.backup.v${this.store.schemaVersion}.${Date.now()}`, this.store);
+    this.store = {
+      schemaVersion: SCHEMA_VERSION,
+      labs: program.records,
+      quizzes: quiz.records,
+      events: activity.events,
+    };
+    await this.persist();
   }
 
   /**
@@ -251,7 +277,7 @@ export class ProgressTracker {
    */
   countPassed(labs: ProgramLab[]): number {
     return labs.filter((lab) =>
-      lab.type === "quiz" ? this.store.quizzes[lab.name]?.passed : this.store.labs[lab.name]?.passed,
+      lab.type === "quiz" ? this.store.quizzes[lab.id]?.passed : this.store.labs[lab.id]?.passed,
     ).length;
   }
 
@@ -266,7 +292,7 @@ export class ProgressTracker {
     const id = snapshotId(now);
     const at = now.toISOString();
 
-    const existing = this.store.labs[lab.name];
+    const existing = this.store.labs[lab.id];
     const progress: LabProgress = existing ?? {
       passed: false,
       bestScore: 0,
@@ -299,9 +325,9 @@ export class ProgressTracker {
     // 两条共用同一个 at,所以在 heatmap 上必然落进同一格。
     // 这里记的是「本次通过」而非「首次通过」—— 重复通过也该在 heatmap 上留痕,
     // 否则复习性质的重做会显示成没做。
-    this.appendEvent({ at, kind: "submit", labName: lab.name, labType: "program" });
+    this.appendEvent({ at, kind: "submit", labName: lab.id, labType: "program" });
     if (fullScore) {
-      this.appendEvent({ at, kind: "pass", labName: lab.name, labType: "program" });
+      this.appendEvent({ at, kind: "pass", labName: lab.id, labType: "program" });
     }
 
     progress.history.unshift({
@@ -313,15 +339,15 @@ export class ProgressTracker {
       snapshot: snapshotRelative,
     });
 
-    this.store.labs[lab.name] = progress;
-    await this.pruneHistory(lab.name, progress);
+    this.store.labs[lab.id] = progress;
+    await this.pruneHistory(progress);
     await this.persist();
     return progress;
   }
 
   /** 把当前 student 源码复制到快照目录，返回相对 globalStorage 的路径。 */
   private async saveSnapshot(lab: ProgramLab, id: string): Promise<string> {
-    const relativeDir = path.join("submissions", lab.name, id);
+    const relativeDir = path.join("submissions", lab.id, id);
     const absoluteDir = path.join(this.context.globalStorageUri.fsPath, relativeDir);
     await mkdir(absoluteDir, { recursive: true });
 
@@ -332,15 +358,13 @@ export class ProgressTracker {
   }
 
   /** 超出 historyLimit 的旧快照连同其目录一起删除。 */
-  private async pruneHistory(labName: string, progress: LabProgress): Promise<void> {
+  private async pruneHistory(progress: LabProgress): Promise<void> {
     const limit = vscode.workspace.getConfiguration("dsaMastery").get<number>("historyLimit") ?? 50;
     if (progress.history.length <= limit) return;
 
     const dropped = progress.history.splice(limit);
     await Promise.all(
-      dropped.map((entry) =>
-        rm(path.join(this.submissionsRoot(), labName, entry.id), { recursive: true, force: true }),
-      ),
+      dropped.map((entry) => rm(path.dirname(path.join(this.context.globalStorageUri.fsPath, entry.snapshot)), { recursive: true, force: true })),
     );
   }
 
@@ -354,6 +378,39 @@ export class ProgressTracker {
     await this.persist();
     await rm(this.submissionsRoot(), { recursive: true, force: true });
   }
+}
+
+function mergeLabProgress(stable: LabProgress, legacy: LabProgress): LabProgress {
+  const history = [...stable.history, ...legacy.history]
+    .filter((entry, index, entries) => entries.findIndex((candidate) => candidate.id === entry.id && candidate.snapshot === entry.snapshot) === index)
+    .sort((left, right) => right.at.localeCompare(left.at));
+  const latest = [stable.lastSubmission, legacy.lastSubmission]
+    .filter((entry): entry is NonNullable<LabProgress["lastSubmission"]> => Boolean(entry))
+    .sort((left, right) => right.at.localeCompare(left.at))[0];
+  const firstPassedAt = [stable.firstPassedAt, legacy.firstPassedAt].filter((value): value is string => Boolean(value)).sort()[0];
+  return {
+    passed: stable.passed || legacy.passed,
+    firstPassedAt,
+    bestScore: Math.max(stable.bestScore, legacy.bestScore),
+    maxScore: Math.max(stable.maxScore, legacy.maxScore),
+    submissionCount: Math.max(stable.submissionCount, legacy.submissionCount, history.length),
+    lastSubmission: latest,
+    history,
+  };
+}
+
+function mergeQuizProgress(stable: QuizProgress, legacy: QuizProgress): QuizProgress {
+  const answers = { ...legacy.answers, ...stable.answers };
+  for (const [id, answer] of Object.entries(legacy.answers)) {
+    const current = answers[id];
+    if (!current || answer.answeredAt > current.answeredAt || answer.attempts > current.attempts) answers[id] = answer;
+  }
+  return {
+    passed: stable.passed || legacy.passed,
+    bestScore: Math.max(stable.bestScore, legacy.bestScore),
+    maxScore: Math.max(stable.maxScore, legacy.maxScore),
+    answers,
+  };
 }
 
 function toSubmissionCase(item: CaseResult): SubmissionCase {

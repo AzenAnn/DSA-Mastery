@@ -3,6 +3,7 @@ title: "Lab 10-08：大整数比较（宇宙总统）"
 description: "对超长整数（票数）做大小比较，练习用字符串代替内置整型处理高精度数值。"
 order: 8
 chapter: 10
+labId: "10E02"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

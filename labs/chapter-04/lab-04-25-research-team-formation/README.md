@@ -3,6 +3,7 @@ title: "Lab 04-25：科研团队组建"
 description: "在树形依赖结构上做背包动态规划，求满足依赖约束的最大价值选择方案。"
 order: 25
 chapter: 4
+labId: "04E17"
 chapterTitle: "树与二叉树"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

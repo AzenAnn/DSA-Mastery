@@ -98,7 +98,7 @@ export class LabPanel {
           lab,
           readmeHtml: readme.html,
           questions: this.quizViews,
-          quizProgress: this.deps.progress.getQuiz(lab.name),
+          quizProgress: this.deps.progress.getQuiz(lab.id),
         })
       : renderPanelHtml({
           webview: this.panel.webview,
@@ -106,7 +106,7 @@ export class LabPanel {
           lab,
           readmeHtml: readme.html,
           cases,
-          progress: this.deps.progress.get(lab.name),
+          progress: this.deps.progress.get(lab.id),
           nav: this.navFor(lab),
         });
   }
@@ -120,12 +120,12 @@ export class LabPanel {
   private navFor(lab: ProgramLab): PanelNav {
     if (lab.type !== "program") return {};
     const programs = this.deps.siblings().filter((item) => item.type === "program");
-    const index = programs.findIndex((item) => item.name === lab.name);
+    const index = programs.findIndex((item) => item.id === lab.id);
     if (index < 0) return {};
 
     const at = (offset: number) => {
       const target = programs[index + offset];
-      return target ? { name: target.name, title: target.title } : undefined;
+      return target ? { name: target.id, title: target.title } : undefined;
     };
     return { prev: at(-1), next: at(1) };
   }
@@ -142,7 +142,7 @@ export class LabPanel {
         await this.openSource();
         return;
       case "showHistory":
-        await vscode.commands.executeCommand("dsaMastery.showHistory", this.lab.name);
+        await vscode.commands.executeCommand("dsaMastery.showHistory", this.lab.id);
         return;
       case "quizAnswer":
         await this.answerQuiz(message.questionId, message.selected);
@@ -155,7 +155,7 @@ export class LabPanel {
   private async answerQuiz(questionId?: string, selected?: number): Promise<void> {
     if (this.lab.type !== "quiz" || !questionId || selected === undefined || !Number.isInteger(selected)) return;
     const progress = await this.deps.progress.recordQuizAnswer(
-      this.lab.name,
+      this.lab.id,
       this.lab.quizQuestions ?? [],
       questionId,
       selected,
@@ -179,7 +179,7 @@ export class LabPanel {
   /** 切到相邻题目。复用同一个面板,不新开 webview。 */
   private async navigate(labName?: string): Promise<void> {
     if (!labName || this.submitting) return;
-    const target = this.deps.siblings().find((item) => item.name === labName);
+    const target = this.deps.siblings().find((item) => item.id === labName || item.name === labName);
     if (!target) return;
     await this.load(target);
   }

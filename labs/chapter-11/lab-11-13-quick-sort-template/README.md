@@ -3,6 +3,7 @@ title: "Lab 11-13：快速排序模板"
 description: "手写快速排序，掌握划分（partition）与分治递归的完整模板。"
 order: 13
 chapter: 11
+labId: "11E07"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

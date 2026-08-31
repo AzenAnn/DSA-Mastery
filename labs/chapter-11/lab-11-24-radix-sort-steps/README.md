@@ -3,6 +3,7 @@ title: "Lab 11-24：基数排序的过程"
 description: "逐位观察 LSD 基数排序每轮的结果，理解稳定计数排序如何一步步逼近有序。"
 order: 24
 chapter: 11
+labId: "11E18"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

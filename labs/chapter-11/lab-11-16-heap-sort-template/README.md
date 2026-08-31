@@ -3,6 +3,7 @@ title: "Lab 11-16：堆排序模板"
 description: "利用堆维护未排序元素的最小值，把堆排序写成模板：每次取堆顶即得到当前最小元素。"
 order: 16
 chapter: 11
+labId: "11E10"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

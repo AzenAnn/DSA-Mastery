@@ -3,6 +3,7 @@ title: "Lab 01-19：静态链表逆置"
 description: "在不借助辅助数组的前提下，通过修改游标完成静态链表的逆置。"
 order: 19
 chapter: 1
+labId: "01E14"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

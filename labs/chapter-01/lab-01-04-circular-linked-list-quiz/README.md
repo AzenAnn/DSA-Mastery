@@ -3,6 +3,7 @@ title: "Lab 01-04：循环链表选择题精练"
 description: "用现有 2 道选择题练习循环链表的摘链操作和单节点边界。"
 order: 4
 chapter: 1
+labId: "01T04"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["Azen"]

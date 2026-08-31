@@ -3,6 +3,7 @@ title: "Lab 10-13：选择排序与交换次数"
 description: "在选择排序中统计交换次数，输出排序结果和交换次数。"
 order: 13
 chapter: 10
+labId: "10E07"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

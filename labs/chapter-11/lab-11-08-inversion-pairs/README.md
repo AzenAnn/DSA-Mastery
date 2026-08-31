@@ -3,6 +3,7 @@ title: "Lab 11-08：归并求逆序对"
 description: "在归并排序的合并阶段统计逆序对，把暴力 O(n²) 压到 O(n log n)。"
 order: 8
 chapter: 11
+labId: "11E02"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

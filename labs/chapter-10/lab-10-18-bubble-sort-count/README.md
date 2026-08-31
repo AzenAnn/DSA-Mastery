@@ -3,6 +3,7 @@ title: "Lab 10-18：冒泡排序（含交换计数）"
 description: "AOJ 经典冒泡排序题：先输出排序后的数组，再输出交换次数。"
 order: 18
 chapter: 10
+labId: "10E12"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

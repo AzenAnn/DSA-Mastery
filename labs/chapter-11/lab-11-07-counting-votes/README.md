@@ -3,6 +3,7 @@ title: "Lab 11-07：计数排序（选举学生会）"
 description: "利用小值域用编号当下标实现计数排序，体验非比较排序绕过 O(n log n) 下界。"
 order: 7
 chapter: 11
+labId: "11E01"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

@@ -3,6 +3,7 @@ title: "Lab 02-01：栈选择题精练"
 description: "用 10 道选择题巩固栈的 LIFO 语义、空栈判定、括号匹配与复杂度分析。"
 order: 1
 chapter: 2
+labId: "02T01"
 chapterTitle: "栈与队列"
 updated: "2026-08-19"
 contributors: ["qzmqzm123"]

@@ -20,7 +20,7 @@ node tools/lab/cli.mjs score <lab-path> --json
 | 文件 | 职责 |
 | --- | --- |
 | `extension.ts` | 激活入口、命令注册、依赖装配 |
-| `labIndex.ts` | 扫描 `labs/`，读 `lab.json` 与 README frontmatter，只收 `type: "program"` |
+| `labIndex.ts` | 扫描 `labs/`，读 `lab.json` 与 README frontmatter，收录 `program` 与 `quiz` |
 | `cli.ts` | 判题内核适配层：spawn、解析 JSON、校验 `reportVersion`、Node 回退 |
 | `progress.ts` | 做题进度：`globalState` 索引 + `globalStorage` 源码快照 |
 | `tree.ts` | 侧边栏 TreeDataProvider（章节 → 题目） |
@@ -36,6 +36,8 @@ node tools/lab/cli.mjs score <lab-path> --json
 **通知不能 await。** `vscode.window.showXxxMessage()` 要等用户点击或通知自动消失才 resolve。如果在提交流程里 `await` 它，`submitting` 锁会迟迟不释放，第二次点提交就没反应。只有真正需要用户答复的对话框（比如环境检测的「打开指南 / 忽略」）才该 await。
 
 **状态只在提交时写。** 编辑器改动不触发任何进度更新。`passed` 一旦置位永不回退。
+
+**进度主键只能用 `labId`。** `name` 是目录名，只用于路径和旧版本迁移。首次读取新版题库时，`progress.ts` 会先备份 `globalState`，再把旧目录键、Quiz 键和活动记录迁移到稳定 ID；历史快照继续按记录中的 `snapshot` 路径读取，不要批量搬动用户文件。
 
 **webview 资源必须走 `media/`。** KaTeX 的 CSS 与字体已复制到 `media/katex/`，因为打包后 `node_modules` 不存在。`localResourceRoots` 也只声明 `labs/` 和 `media/`。
 
@@ -72,7 +74,7 @@ code tools/vscode-extension
 
 ```bash
 pnpm run package
-code --install-extension dsa-mastery-labs-0.1.0.vsix
+code --install-extension dsa-mastery-labs-0.1.11.vsix
 ```
 
 装完需要**完全退出 VSCode 再打开** —— 它不会热加载新装的插件。

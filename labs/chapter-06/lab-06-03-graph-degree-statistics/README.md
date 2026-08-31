@@ -3,6 +3,7 @@ title: "Lab 06-03：图的度数与奇偶性统计"
 description: "统计无向图的度或有向图的入度与出度，正确处理自环和平行边，并用握手定理检查结果。"
 order: 3
 chapter: 6
+labId: "06E01"
 chapterTitle: "图的基础与存储"
 updated: "2026-08-29"
 contributors: ["Azen"]

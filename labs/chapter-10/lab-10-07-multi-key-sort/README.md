@@ -3,6 +3,7 @@ title: "Lab 10-07：多关键字排序（奖学金）"
 description: "用结构体多关键字排序解决奖学金排名，练习自定义比较器的优先级链写法。"
 order: 7
 chapter: 10
+labId: "10E01"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

@@ -3,6 +3,7 @@ title: "Lab 04-23：二叉树中的最大路径和"
 description: "通过后序遍历与树形动态规划，计算任意两节点间非空路径的最大权值和。"
 order: 23
 chapter: 4
+labId: "04E15"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

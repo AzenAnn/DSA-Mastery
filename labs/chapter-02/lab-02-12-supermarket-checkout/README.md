@@ -3,6 +3,7 @@ title: "Lab 02-12：超市收银模拟——队列的大综合"
 description: "用多队列模拟收银台排队，实现选队策略、时间步推进与统计，验证先进先出语义。"
 order: 12
 chapter: 2
+labId: "02P02"
 chapterTitle: "栈与队列"
 updated: "2026-08-19"
 contributors: ["Azen", "Jeff"]

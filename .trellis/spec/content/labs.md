@@ -7,15 +7,15 @@
 ## 2. Signatures
 
 ```text
-labs/chapter-NN/lab-NN-LL-slug/README.md
-  -> /labs/chapter-NN/lab-NN-LL-slug/
+labs/chapter-NN/lab-NN-X-SS-slug/README.md
+  -> /labs/chapter-NN/lab-NN-X-SS-slug/
 
-labs/chapter-NN/lab-NN-LL-slug/quiz.json
+labs/chapter-NN/lab-NN-X-SS-slug/quiz.json
   -> .vitepress/quiz.data.ts
   -> <QuizSet />
 ```
 
-Lab 由同一个内容索引收集，`kind` 固定为 `lab`；其 `chapter + order` 只在 Lab 集合内唯一。
+Lab 由同一个内容索引收集，`kind` 固定为 `lab`；其 `chapter + order` 只在 Lab 集合内唯一。`labId` 是跨网站、CLI、VS Code 和交流场景的永久身份，`order` 只控制展示顺序。
 
 新式 Lab 的机器接口另见 [Lab v1 机器接口、评分与分发合同](lab-tooling.md)。README-only 旧 Lab 继续兼容；有维护需求时按作者指南渐进迁移，不一次性重写全部历史内容。
 
@@ -26,11 +26,12 @@ Lab 继承教材八个字段，并额外要求：
 | 字段 | 约束 |
 | --- | --- |
 | `lab` | YAML 布尔值 `true`，不能写字符串 `"true"` |
+| `labId` | 规范形式 `CC + T/E/P + SS`，例如 `02T03`；章节和序号至少两位，全仓唯一 |
 | `difficulty` | 非空、面向读者的级别，如“入门”“基础” |
 | `duration` | 非空、可理解的预计时长，如“45～60 分钟” |
 | `labCategory` | README-only Lab 接入分类侧栏时可选；只能是 `theory`、`exercise`、`project`，不得按标题推断 |
 
-网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。声明 `autoLabChapter` 的课程章节启用“本章 Labs”三分类并要求所有 Lab 可分类；即使集合为空，也显示 Theory/Exercise/Project 与各自空状态。当前 Ch.5 有 5 个正式 Quiz 和 17 个 Program，Theory 与 Exercise 分别显示对应的自动收录入口，Project 继续显示空状态；不得为填满空分类创建占位 Lab。未启用分类的章节继续使用“相关 Labs”。
+网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。稳定 ID 标签使用同一映射：`quiz -> T`、`program -> E`、`project -> P`。README-only Lab 由显式 `labCategory` 映射。有 manifest 的 Lab 不在 frontmatter 重复声明类型；分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。发布后的 `labId` 不因删除、插入或调整 `order` 而复用或改号。声明 `autoLabChapter` 的课程章节启用“本章 Labs”三分类并要求所有 Lab 可分类；即使集合为空，也显示 Theory/Exercise/Project 与各自空状态。当前 Ch.5 有 5 个正式 Quiz 和 17 个 Program，Theory 与 Exercise 分别显示对应的自动收录入口，Project 继续显示空状态；不得为填满空分类创建占位 Lab。未启用分类的章节继续使用“相关 Labs”。
 
 README 至少说明：
 
@@ -93,6 +94,8 @@ README 至少说明：
 | 条件 | 结果 |
 | --- | --- |
 | 目录编号、chapter、order 不一致 | 内容校验失败 |
+| `labId` 缺失、重复、非规范形式、章节或类型标签不一致 | 内容校验失败 |
+| 新目录中的稳定编号与 `labId` 或标题不一致 | 内容校验失败 |
 | 分类侧栏章节的 README-only Lab 缺 `labCategory`，或值非法 | 内容校验/构建失败 |
 | `lab` 不是布尔值 true | 内容校验失败 |
 | 缺 difficulty/duration | 内容校验失败 |

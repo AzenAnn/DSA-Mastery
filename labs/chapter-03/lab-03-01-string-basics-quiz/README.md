@@ -3,6 +3,7 @@ title: "Lab 03-01：串的基础选择题精练"
 description: "用 15 道选择题巩固串的定义与术语、ADT 与基本操作、三种存储表示，题目标注出处或标记为巩固题。"
 order: 1
 chapter: 3
+labId: "03T01"
 chapterTitle: "字符串与数组"
 updated: "2026-08-19"
 contributors: ["Qing"]

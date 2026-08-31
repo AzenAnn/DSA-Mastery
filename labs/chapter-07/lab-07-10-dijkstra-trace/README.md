@@ -3,6 +3,7 @@ title: "Lab 07-10：Dijkstra 逐轮手推推演"
 description: "用朴素 O(n²) Dijkstra 复现考研手推表：每轮选出距离最小的未确定顶点，输出最终距离、前驱与确定顺序。"
 order: 10
 chapter: 7
+labId: "07E07"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-28"
 contributors: ["Jeff"]

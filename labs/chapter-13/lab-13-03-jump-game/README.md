@@ -3,6 +3,7 @@ title: "Lab 13-03：跳跃游戏"
 description: "维护数组中的最远可达位置，使用正向贪心判断是否能够到达最后一个下标。"
 order: 3
 chapter: 13
+labId: "13E03"
 chapterTitle: "贪心算法"
 updated: "2026-08-28"
 contributors: ["Shuoyuchen"]

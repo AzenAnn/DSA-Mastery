@@ -3,6 +3,7 @@ title: "Lab 05-16：k 叉哈夫曼树"
 description: "拓展哈夫曼编码到 k 叉树，每次合并 k 个节点，求最小带权路径长度。"
 order: 16
 chapter: 5
+labId: "05E11"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

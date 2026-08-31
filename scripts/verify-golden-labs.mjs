@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { access, readFile, readdir } from "node:fs/promises";
+import { access, cp, mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { loadLab } from "../tools/lab/core.mjs";
 import { judgeProgram } from "../tools/lab/judge.mjs";
@@ -75,6 +76,20 @@ assert.ok(packedProgramResult.score < packedProgramResult.maxScore, "packed Prog
 await runPackedCli(programPackage.packageRoot, "validate");
 const packedProgramReport = await runPackedCli(programPackage.packageRoot, "run");
 assert.ok(packedProgramReport.result.score < packedProgramReport.result.maxScore, "embedded Program runner must execute the starter independently");
+
+const detachedParent = await mkdtemp(path.join(os.tmpdir(), "dsa-mastery-student-pack-"));
+const detachedProgramRoot = path.join(detachedParent, "program");
+try {
+  await cp(programPackage.packageRoot, detachedProgramRoot, { recursive: true });
+  await runPackedCli(detachedProgramRoot, "validate");
+  const detachedProgramReport = await runPackedCli(detachedProgramRoot, "run");
+  assert.ok(
+    detachedProgramReport.result.score < detachedProgramReport.result.maxScore,
+    "student package copied outside the repository must not depend on root node_modules",
+  );
+} finally {
+  await rm(detachedParent, { recursive: true, force: true });
+}
 
 const projectPackage = await packStudent(project);
 await assertNoForbiddenPackageFiles(projectPackage.packageRoot);

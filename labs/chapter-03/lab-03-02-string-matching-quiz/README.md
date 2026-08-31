@@ -3,6 +3,7 @@ title: "Lab 03-02：模式匹配选择题精练"
 description: "用 15 道选择题巩固朴素匹配与 KMP 的指针行为、复杂度、next/nextval、比较次数与考研真题应用。"
 order: 2
 chapter: 3
+labId: "03T02"
 chapterTitle: "字符串与数组"
 updated: "2026-08-19"
 contributors: ["Qing"]

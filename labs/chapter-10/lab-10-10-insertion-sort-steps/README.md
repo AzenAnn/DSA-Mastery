@@ -3,6 +3,7 @@ title: "Lab 10-10：插入排序的过程"
 description: "按 AOJ 格式输出插入排序每一步的中间数组，观察元素如何逐步就位。"
 order: 10
 chapter: 10
+labId: "10E04"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

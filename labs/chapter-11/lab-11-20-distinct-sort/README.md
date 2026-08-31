@@ -3,6 +3,7 @@ title: "Lab 11-20：明明的随机数（计数排序去重）"
 description: "值域很小时用计数数组一次完成去重和排序，体会「桶下标 = 数值」的计数排序思想。"
 order: 20
 chapter: 11
+labId: "11E14"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

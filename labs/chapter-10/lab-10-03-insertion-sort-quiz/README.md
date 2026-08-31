@@ -3,6 +3,7 @@ title: "Lab 10-03：插入排序选择题精练"
 description: "用 10 道选择题巩固插入排序的复杂度、稳定性与正确性要点。"
 order: 3
 chapter: 10
+labId: "10T01"
 chapterTitle: "排序"
 updated: "2026-08-25"
 contributors: ["Azen"]

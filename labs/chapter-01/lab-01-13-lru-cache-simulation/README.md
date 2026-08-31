@@ -3,6 +3,7 @@ title: "Lab 01-13：LRU 缓存模拟"
 description: "实现一个简化版 LRU 缓存，理解哈希表与双向链表的组合结构设计。"
 order: 13
 chapter: 1
+labId: "01E08"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

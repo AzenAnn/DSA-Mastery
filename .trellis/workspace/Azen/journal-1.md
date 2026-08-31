@@ -383,3 +383,71 @@ Completed five Chapter 14 dynamic programming lessons, integrated the chapter in
 ### Status
 
 [OK] **Completed**
+
+
+## Session 16: Lab stable IDs and automatic numbering
+
+**Date**: 2026-08-31
+**Task**: Lab stable IDs and automatic numbering
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+Added permanent chapter/type Lab IDs, automatic allocation and lookup, migrated existing content without renaming paths, updated site and VS Code consumers, documented the workflow, and simplified sidebar labels to show only the stable ID plus problem name.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `0bbec8e` | (see git log) |
+| `e11f1f9` | (see git log) |
+| `966557a` | (see git log) |
+| `3a8c01e` | (see git log) |
+| `5f0c328` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 17: Normalize all Lab navigation labels
+
+**Date**: 2026-08-31
+**Task**: Normalize all Lab navigation labels
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+Unified both categorized 本章 Labs and legacy 相关 Labs sidebar paths so every chapter displays only the stable Lab ID plus problem name, and updated discovery, desktop, mobile, task, and architecture contracts.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `90a26ca` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 18: Resolve PR 119 CI failures
+
+**Date**: 2026-08-31
+**Task**: Resolve PR 119 CI failures
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+Investigated GitHub Actions logs, updated stale stable-ID artifact assertions, separated dependency-free Lab ID parsing from repository authoring dependencies, lazy-loaded new/locate commands, added detached student-package regression coverage, and verified Make, Pages, discovery, and browser gates.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `ead8db8` | (see git log) |
+| `388cfe0` | (see git log) |
+
+### Status
+
+[OK] **Completed**

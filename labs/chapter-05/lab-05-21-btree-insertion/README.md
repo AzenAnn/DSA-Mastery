@@ -3,6 +3,7 @@ title: "Lab 05-21：B 树的插入"
 description: "实现 B 树的插入操作，包括节点分裂，输出插入完成后 B 树的层序遍历。"
 order: 21
 chapter: 5
+labId: "05E16"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

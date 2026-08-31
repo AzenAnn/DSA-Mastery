@@ -3,6 +3,7 @@ title: "Lab 05-03：哈夫曼树与编码题精练"
 description: "通过 20 道选择题和 5 道综合题，巩固哈夫曼树与编码的概念、性质与解题方法。"
 order: 3
 chapter: 5
+labId: "05T03"
 chapterTitle: "树的应用"
 updated: "2026-08-24"
 contributors: ["Azen"]

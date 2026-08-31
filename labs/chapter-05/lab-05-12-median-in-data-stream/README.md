@@ -3,6 +3,7 @@ title: "Lab 05-12：数据流中的中位数"
 description: "使用双堆技巧（最大堆 + 最小堆）动态维护数据流的中位数。"
 order: 12
 chapter: 5
+labId: "05E07"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

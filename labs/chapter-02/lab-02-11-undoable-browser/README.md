@@ -3,6 +3,7 @@ title: "Lab 02-11：可撤销浏览器——栈的超级大综合"
 description: "用双栈导航与命令栈撤销重做，实现一个支持前进/后退与 Undo/Redo 的可撤销浏览器内核。"
 order: 11
 chapter: 2
+labId: "02P01"
 chapterTitle: "栈与队列"
 updated: "2026-08-19"
 contributors: ["Azen", "Jeff"]

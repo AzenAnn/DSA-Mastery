@@ -3,6 +3,7 @@ title: "Lab 06-05：不邻接植花"
 description: "用邻接表保存花园之间的双向路径，利用最大度数为 3 的条件证明四种花足够，并构造确定的合法方案。"
 order: 5
 chapter: 6
+labId: "06E03"
 chapterTitle: "图的基础与存储"
 updated: "2026-08-29"
 contributors: ["Azen"]

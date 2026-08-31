@@ -3,6 +3,7 @@ title: "Lab 04-14：从前序与中序遍历构造二叉树"
 description: "通过前序确定根节点与中序划分区间的区间分治思想恢复二叉树。"
 order: 14
 chapter: 4
+labId: "04E06"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

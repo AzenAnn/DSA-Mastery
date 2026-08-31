@@ -3,6 +3,7 @@ title: "Lab 05-15：最优合并问题"
 description: "将多个有序表合并为一个有序表，每次只能合并两个表，求最小合并代价。"
 order: 15
 chapter: 5
+labId: "05E10"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

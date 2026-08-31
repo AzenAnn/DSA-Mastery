@@ -3,6 +3,7 @@ title: "Lab 07-13：紧急救援"
 description: "PAT 1003 经典变形：Dijkstra 上同时维护最短路径条数与最大救援队数，一条路径两个判据。"
 order: 13
 chapter: 7
+labId: "07E10"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-28"
 contributors: ["Jeff"]

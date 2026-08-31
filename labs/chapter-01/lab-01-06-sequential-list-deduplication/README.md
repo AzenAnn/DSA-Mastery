@@ -3,6 +3,7 @@ title: "Lab 01-06：有序顺序表去重"
 description: "在有序顺序表中原地删除重复元素，练习双指针与元素搬移的边界控制。"
 order: 6
 chapter: 1
+labId: "01E01"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

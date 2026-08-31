@@ -3,6 +3,7 @@ title: "Lab 02-03：验证栈序列"
 description: "按给定入栈顺序模拟栈，判断目标出栈序列是否合法，并定位第一个未匹配位置。"
 order: 3
 chapter: 2
+labId: "02E01"
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
 contributors: ["DSA Mastery Team"]

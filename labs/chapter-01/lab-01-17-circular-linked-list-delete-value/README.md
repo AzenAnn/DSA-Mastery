@@ -3,6 +3,7 @@ title: "Lab 01-17：循环链表删除指定值"
 description: "在循环链表中删除所有值为给定目标的节点，练习循环结构的遍历与删除边界。"
 order: 17
 chapter: 1
+labId: "01E12"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

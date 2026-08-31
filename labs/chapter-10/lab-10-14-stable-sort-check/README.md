@@ -3,6 +3,7 @@ title: "Lab 10-14：稳定排序判定"
 description: "对比冒泡排序与选择排序的稳定性，输出排序结果与是否稳定。"
 order: 14
 chapter: 10
+labId: "10E08"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

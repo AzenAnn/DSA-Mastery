@@ -3,6 +3,7 @@ title: "Lab 05-05：堆题精练"
 description: "通过 13 道选择题和 3 道综合题，巩固堆的概念、性质与解题方法。"
 order: 5
 chapter: 5
+labId: "05T05"
 chapterTitle: "树的应用"
 updated: "2026-08-24"
 contributors: ["Azen"]

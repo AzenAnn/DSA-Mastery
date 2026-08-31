@@ -3,6 +3,7 @@ title: "Lab 04-07：线索二叉树理论题精练"
 description: "通过 14 道选择题（源文档无综合题），巩固线索二叉树的概念、性质与解题方法。"
 order: 7
 chapter: 4
+labId: "04T07"
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"
 contributors: ["Azen"]

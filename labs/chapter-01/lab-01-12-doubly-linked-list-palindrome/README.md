@@ -3,6 +3,7 @@ title: "Lab 01-12：双链表回文判断"
 description: "利用双向链表可从两端同时遍历的特性，判断链表是否为回文序列。"
 order: 12
 chapter: 1
+labId: "01E07"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

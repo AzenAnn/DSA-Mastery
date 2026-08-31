@@ -3,6 +3,7 @@ title: "Lab 07-01：DFS 与 BFS 选择题精练"
 description: "通过 15 道选择题巩固 DFS 与 BFS 的辅助结构、访问顺序、树高、边分类、复杂度与典型应用。"
 order: 1
 chapter: 7
+labId: "07T01"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-25"
 contributors: ["Qing"]

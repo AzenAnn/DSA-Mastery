@@ -3,6 +3,7 @@ title: "Lab 04-17：对称二叉树判定"
 description: "通过双树镜像下潜递归比较判定一棵二叉树是否镜像对称。"
 order: 17
 chapter: 4
+labId: "04E09"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

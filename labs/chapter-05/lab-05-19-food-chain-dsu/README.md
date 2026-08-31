@@ -3,6 +3,7 @@ title: "Lab 05-19：食物链"
 description: "使用带权并查集维护节点间的相对关系，判断陈述的真伪。经典扩展域并查集问题。"
 order: 19
 chapter: 5
+labId: "05E14"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

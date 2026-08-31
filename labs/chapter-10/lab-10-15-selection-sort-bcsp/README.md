@@ -3,6 +3,7 @@ title: "Lab 10-15：选择排序的交换次数"
 description: "统计选择排序的总交换次数，n 可达 8000，体会交换 O(n) 与比较 O(n²) 的区别。"
 order: 15
 chapter: 10
+labId: "10E09"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

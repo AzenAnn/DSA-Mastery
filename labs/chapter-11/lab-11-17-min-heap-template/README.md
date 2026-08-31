@@ -3,6 +3,7 @@ title: "Lab 11-17：最小堆模板"
 description: "用小根堆维护动态集合的最小值，支持插入与「删除并输出堆顶」两类操作。"
 order: 17
 chapter: 11
+labId: "11E11"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

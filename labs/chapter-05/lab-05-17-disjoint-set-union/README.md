@@ -3,6 +3,7 @@ title: "Lab 05-17：并查集的实现"
 description: "实现带路径压缩和按秩合并的并查集，支持合并集合与查询归属。"
 order: 17
 chapter: 5
+labId: "05E12"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

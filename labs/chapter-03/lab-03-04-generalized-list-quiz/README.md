@@ -3,6 +3,7 @@ title: "Lab 03-04：广义表选择题精练"
 description: "用 10 道选择题巩固广义表的递归定义、表头表尾、长度深度与存储结构。"
 order: 4
 chapter: 3
+labId: "03T04"
 chapterTitle: "字符串与数组"
 updated: "2026-08-21"
 contributors: ["Fishman"]

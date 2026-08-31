@@ -3,6 +3,7 @@ title: "Lab 04-10：二叉树的最大宽度"
 description: "利用完全二叉树的父子编号性质计算二叉树的最大宽度。"
 order: 10
 chapter: 4
+labId: "04E02"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

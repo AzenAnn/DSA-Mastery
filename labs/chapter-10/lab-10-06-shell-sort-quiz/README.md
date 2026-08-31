@@ -3,6 +3,7 @@ title: "Lab 10-06：希尔排序选择题精练"
 description: "用 10 道选择题巩固希尔排序的复杂度、稳定性与正确性要点。"
 order: 6
 chapter: 10
+labId: "10T04"
 chapterTitle: "排序"
 updated: "2026-08-25"
 contributors: ["Azen"]

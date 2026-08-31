@@ -3,6 +3,7 @@ title: "Lab 03-12：三对角矩阵压缩与取值"
 description: "把三对角矩阵按 k=2i+j 压缩到一维数组，练习特殊矩阵的下标换算与随机取值。"
 order: 12
 chapter: 3
+labId: "03E08"
 chapterTitle: "字符串与数组"
 updated: "2026-08-27"
 contributors: ["Fishman"]

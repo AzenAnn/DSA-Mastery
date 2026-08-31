@@ -3,6 +3,7 @@ title: "Lab 04-28：树的同构判定"
 description: "通过求重心与规范编码，判定两棵无根树是否同构。"
 order: 28
 chapter: 4
+labId: "04E20"
 chapterTitle: "树与二叉树"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

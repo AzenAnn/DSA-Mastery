@@ -3,6 +3,7 @@ title: "Lab 09-02：散列表实现与冲突统计"
 description: "实现链地址法与线性探测两种散列表，用探测次数观察堆积并计算成功与失败 ASL。"
 order: 2
 chapter: 9
+labId: "09E01"
 chapterTitle: "散列与索引结构"
 updated: "2026-08-21"
 contributors: ["Azen", "RichardYi-SYSU-Mac"]

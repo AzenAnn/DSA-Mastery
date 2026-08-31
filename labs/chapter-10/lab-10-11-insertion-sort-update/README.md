@@ -3,6 +3,7 @@ title: "Lab 10-11：插入排序的在线更新"
 description: "维护每个元素的稳定排名 rank[]，单点修改 O(n) 更新、查询 O(1) 回答。"
 order: 11
 chapter: 10
+labId: "10E05"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

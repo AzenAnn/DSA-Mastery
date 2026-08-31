@@ -3,6 +3,7 @@ title: "Lab 01-07：顺序表循环右移"
 description: "在不借助与输入规模成正比的辅助空间前提下，将顺序表循环右移 k 位。"
 order: 7
 chapter: 1
+labId: "01E02"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

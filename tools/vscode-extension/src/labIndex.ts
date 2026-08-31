@@ -2,6 +2,7 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 import { parseQuizQuestions, type QuizQuestion } from "./quiz";
+import { readStableLabId } from "./labIdentity";
 
 /**
  * 一道可作答 lab 的静态信息，来自 lab.json 与 README frontmatter。
@@ -10,7 +11,9 @@ import { parseQuizQuestions, type QuizQuestion } from "./quiz";
  * type 决定走哪条判定路径：program 调判题内核，quiz 在扩展内比对选项。
  */
 export interface ProgramLab {
-  /** lab 目录名，例如 lab-13-01-container-with-most-water。已验证全仓库唯一，用作状态主键。 */
+  /** 稳定题号，例如 13E01。发布后不随目录或展示顺序改变，用作状态主键。 */
+  id: string;
+  /** lab 目录名，例如 lab-13-01-container-with-most-water；保留为旧进度迁移别名。 */
   name: string;
   type: "program" | "quiz";
   /** lab 目录绝对路径。 */
@@ -164,6 +167,7 @@ function buildLab(
   details: Pick<ProgramLab, "type" | "studentSources" | "casesFile" | "quizQuestions">,
 ): ProgramLab {
   return {
+    id: readStableLabId(front.labId, labDir),
     name: labDir,
     type: details.type,
     labPath,

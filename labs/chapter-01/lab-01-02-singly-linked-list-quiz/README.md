@@ -3,6 +3,7 @@ title: "Lab 01-02：单链表选择题精练"
 description: "用 10 道选择题练习单链表的头结点、插删顺序、遍历与复杂度。"
 order: 2
 chapter: 1
+labId: "01T02"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["Azen"]

@@ -3,6 +3,7 @@ title: "Lab 03-06：next 与 nextval 数组推导"
 description: "输入模式串，输出 next 与 nextval 数组，掌握 KMP 失配回退的两种约定。"
 order: 6
 chapter: 3
+labId: "03E02"
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
 contributors: ["Qing"]

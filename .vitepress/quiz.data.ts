@@ -135,7 +135,7 @@ export default defineLoader({
       if (!chapter.isDirectory() || !/^chapter-\d{2}$/.test(chapter.name)) continue;
       const chapterRoot = path.join(labsRoot, chapter.name);
       for (const lab of readdirSync(chapterRoot, { withFileTypes: true })) {
-        if (!lab.isDirectory() || !/^lab-\d{2}-\d{2}-[a-z0-9-]+$/.test(lab.name)) continue;
+        if (!lab.isDirectory() || !/^lab-\d{2}-(?:\d{2}|[TEP]-\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(lab.name)) continue;
         const quizPath = path.join(chapterRoot, lab.name, "quiz.json");
         // 没有 quiz.json 的 Lab 不是自测型，跳过；存在但损坏则立即让构建失败。
         if (!existsSync(quizPath)) continue;

@@ -3,6 +3,7 @@ title: "Lab 10-19：希尔排序与交换次数"
 description: "用 3g+1 增量序列实现希尔排序，统计插入过程中的移动次数并输出排序结果。"
 order: 19
 chapter: 10
+labId: "10E13"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

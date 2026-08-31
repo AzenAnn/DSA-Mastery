@@ -3,6 +3,7 @@ title: "Lab 01-21：线性表双实现与工作负载评测器"
 description: "在统一 List ADT 下实现动态顺序表和双向循环链表，用可复现工作负载完成正确性校验、成本测量与工程选型。"
 order: 21
 chapter: 1
+labId: "01P01"
 chapterTitle: "线性表"
 updated: "2026-08-20"
 contributors: ["Azen", "DSA Mastery Team"]

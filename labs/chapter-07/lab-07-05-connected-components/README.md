@@ -3,6 +3,7 @@ title: "Lab 07-05：连通分量计数"
 description: "用 DFS 统计无向图的连通分量个数，并输出每个顶点所属分量的编号。"
 order: 5
 chapter: 7
+labId: "07E02"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-29"
 contributors: ["Qing"]

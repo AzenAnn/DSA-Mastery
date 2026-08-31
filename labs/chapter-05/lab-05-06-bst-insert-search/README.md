@@ -3,6 +3,7 @@ title: "Lab 05-06：二叉搜索树的插入与查找"
 description: "实现二叉搜索树（BST）的基本操作：插入新节点与查找指定值。"
 order: 6
 chapter: 5
+labId: "05E01"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

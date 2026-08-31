@@ -3,6 +3,7 @@ title: "Lab 02-05：最近请求计数器"
 description: "使用队列维护递增时间流中的滑动窗口，计算最近 3000 时间单位内的请求数量。"
 order: 5
 chapter: 2
+labId: "02E03"
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
 contributors: ["DSA Mastery Team"]

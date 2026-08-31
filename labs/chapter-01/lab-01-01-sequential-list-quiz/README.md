@@ -3,6 +3,7 @@ title: "Lab 01-01：顺序表选择题精练"
 description: "用 10 道选择题巩固顺序表的随机访问、元素移动、容量与复杂度分析。"
 order: 1
 chapter: 1
+labId: "01T01"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["Azen"]

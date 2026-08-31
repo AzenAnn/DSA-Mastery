@@ -3,6 +3,7 @@ title: "Lab 01-09：单链表逆置"
 description: "反转单链表中所有节点的链接方向，练习迭代或递归方式修改 next 指针。"
 order: 9
 chapter: 1
+labId: "01E04"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

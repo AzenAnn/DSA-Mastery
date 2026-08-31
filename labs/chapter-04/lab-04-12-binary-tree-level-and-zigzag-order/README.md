@@ -3,6 +3,7 @@ title: "Lab 04-12：二叉树的层序与锯齿形遍历"
 description: "使用队列与双端队列完成二叉树的标准分层输出与锯齿形反转输出。"
 order: 12
 chapter: 4
+labId: "04E04"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

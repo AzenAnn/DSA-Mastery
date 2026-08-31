@@ -409,7 +409,7 @@ Elapsed time is observational only; it is not used for automatic scoring.
 2. 使用脚手架生成安全起点：
 
    ```powershell
-   pnpm lab:new -- --type project --chapter 1 --order 21 --slug list-workload-analyzer
+   pnpm lab:new -- --type project --chapter 1 --slug list-workload-analyzer --order 21
    ```
 
 3. 先完成 `contracts/`、reference 实现和能抓住已知错误的 CTest，再写可编译但自动部分不满分的 starter；
