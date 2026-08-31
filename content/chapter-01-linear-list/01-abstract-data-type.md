@@ -56,7 +56,7 @@ digraph LinearAbstractModel {
         <td border="1" bgcolor="#f8fafc" width="85">歌曲 C</td>
       </tr>
       <tr>
-        <td align="right" width="140"><font color="#334155"><b>浏览器历史:   </b></font></td>
+        <td align="right" width="140"><font color="#334155"><b>浏览器历史:    </b></font></td>
         <td border="1" bgcolor="#f8fafc" width="85">网页 1</td>
         <td width="35">&lt;---&gt;</td>
         <td border="1" bgcolor="#f8fafc" width="85">网页 2</td>
@@ -64,7 +64,7 @@ digraph LinearAbstractModel {
         <td border="1" bgcolor="#f8fafc" width="85">网页 3</td>
       </tr>
       <tr>
-        <td align="right" width="140"><font color="#334155"><b>任务清单:  </b></font></td>
+        <td align="right" width="140"><font color="#334155"><b>任务清单:    </b></font></td>
         <td border="1" bgcolor="#f8fafc" width="85">任务甲</td>
         <td width="35">&lt;---&gt;</td>
         <td border="1" bgcolor="#f8fafc" width="85">任务乙</td>

@@ -24,7 +24,7 @@
 <polygon fill="#f8fafc" stroke="none" points="502,-180 502,-215 587,-215 587,-180 502,-180"/>
 <polygon fill="none" stroke="black" points="502,-180 502,-215 587,-215 587,-180 502,-180"/>
 <text xml:space="preserve" text-anchor="start" x="523.88" y="-191.5" font-family="sans-serif" font-size="14.00">歌曲 C</text>
-<text xml:space="preserve" text-anchor="start" x="52" y="-152.7" font-family="sans-serif" font-weight="bold" font-size="14.00" fill="#334155">浏览器历史: &#160;&#160;</text>
+<text xml:space="preserve" text-anchor="start" x="47.5" y="-152.7" font-family="sans-serif" font-weight="bold" font-size="14.00" fill="#334155">浏览器历史: &#160;&#160;&#160;</text>
 <polygon fill="#f8fafc" stroke="none" points="156,-137 156,-172 241,-172 241,-137 156,-137"/>
 <polygon fill="none" stroke="black" points="156,-137 156,-172 241,-172 241,-137 156,-137"/>
 <text xml:space="preserve" text-anchor="start" x="177.5" y="-148.5" font-family="sans-serif" font-size="14.00">网页 1</text>
@@ -36,7 +36,7 @@
 <polygon fill="#f8fafc" stroke="none" points="502,-137 502,-172 587,-172 587,-137 502,-137"/>
 <polygon fill="none" stroke="black" points="502,-137 502,-172 587,-172 587,-137 502,-137"/>
 <text xml:space="preserve" text-anchor="start" x="523.5" y="-148.5" font-family="sans-serif" font-size="14.00">网页 3</text>
-<text xml:space="preserve" text-anchor="start" x="70.75" y="-109.7" font-family="sans-serif" font-weight="bold" font-size="14.00" fill="#334155">任务清单: &#160;</text>
+<text xml:space="preserve" text-anchor="start" x="61.75" y="-109.7" font-family="sans-serif" font-weight="bold" font-size="14.00" fill="#334155">任务清单: &#160;&#160;&#160;</text>
 <polygon fill="#f8fafc" stroke="none" points="156,-94 156,-129 241,-129 241,-94 156,-94"/>
 <polygon fill="none" stroke="black" points="156,-94 156,-129 241,-129 241,-94 156,-94"/>
 <text xml:space="preserve" text-anchor="start" x="177.12" y="-105.5" font-family="sans-serif" font-size="14.00">任务甲</text>
