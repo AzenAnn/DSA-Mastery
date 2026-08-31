@@ -712,6 +712,7 @@ $$T(x) = \sum a_i T(b_i x + h_i(x)) + g(x) \le \sum a_i U(b_i x + h_i(x)) + g(x)
 
 
  - **Akra-Bazzi 是主定理的严格推广**，会 Akra-Bazzi 就会主定理
+
 ---
 
 ## 第四部分：空间复杂度分析
