@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 13
-- **Last Active**: 2026-08-26
+- **Total Sessions**: 14
+- **Last Active**: 2026-08-31
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~343 | Active |
+| `journal-1.md` | ~364 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 14 | 2026-08-31 | Chapter 1 array-to-linked-list problem-solving article | `84dbb44` | `codex/ch01-array-to-linked-list-problem-solving` |
 | 13 | 2026-08-26 | README 信息架构与视觉改版 | `6456397` | `codex/readme-redesign` |
 | 12 | 2026-08-24 | 第 5 章树结构题库 Lab | `baa23fe` | `codex/chapter05-tree-labs` |
 | 11 | 2026-08-24 | 完成第 5 章树的应用并创建 PR | `a6d8c81` | `chapter05` |

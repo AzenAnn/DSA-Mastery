@@ -341,3 +341,24 @@ Implemented and verified Lab 01-21 with dual list implementations, deterministic
 ### Status
 
 [OK] **Completed**
+
+
+## Session 14: Chapter 1 array-to-linked-list problem-solving article
+
+**Date**: 2026-08-31
+**Task**: Chapter 1 array-to-linked-list problem-solving article
+**Branch**: `codex/ch01-array-to-linked-list-problem-solving`
+
+### Summary
+
+Added an in-depth Chapter 1 article that maps array problem-solving skills to linked-list invariants and pointer operations, integrated it into the website content index, completed full validation and browser preview, and opened PR #109.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `84dbb44` | (see git log) |
+
+### Status
+
+[OK] **Completed**
