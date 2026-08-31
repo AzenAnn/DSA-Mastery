@@ -137,6 +137,8 @@ pnpm lab:score -- labs/chapter-03/lab-03-12-tridiagonal-compress
 <summary>点击查看参考代码</summary>
 
 ```cpp
+#include <algorithm>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 
