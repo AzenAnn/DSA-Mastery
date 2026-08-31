@@ -99,3 +99,20 @@ markdown: { theme: "github-dark-high-contrast" }
 - 用大量绝对定位复刻截图，导致中文换行或移动端溢出。
 - 只测浅色桌面，忽略暗色、键盘和 320px～720px 宽度。
 - 为视觉一致性重写 VitePress 已可靠提供的搜索、outline 或移动抽屉。
+
+## VS Code Lab WebView 补充合同
+
+VS Code 扩展的 Lab WebView 与原生侧边栏是两个职责层：侧边栏唯一负责章节、题目列表和进度入口；WebView 只负责当前题面的阅读、作答和局部结果检查。代码题的结果检查器必须使用可收起的双栏结构，不能演变成第二套导航。
+
+~~~text
+renderPanelHtml
+  .lab-workspace: minmax(0, 2fr) + bounded inspector
+  .lab-inspector: Result | Test cases, one collapse control
+  .lab-actionbar: one primary Submit + quiet secondary actions
+~~~
+
+- inspector 展开宽度上限为题面主列宽度；使用 min-width: 0、受限 minmax 和自身滚动容器，禁止页面级横向溢出。
+- progress.lastSubmission 决定初始状态：无历史结果时收起，有历史结果时展开并显示结果；submitting、result 和 submitFailed 事件自动打开结果页签。
+- 折叠按钮必须提供 aria-expanded、aria-controls 和可读名称；结果/测试用例页签使用 role=tab、aria-selected 和键盘左右/Home/End 切换。
+- ≤720px 时题面与 inspector 堆叠，≤460px 时动作按钮全宽或双列换行；代码、公式、表格和长输出只能在自身容器内横向滚动。
+- 样式使用 VS Code 主题变量映射的语义 token；浅色低噪声表面是参考，深色只做对比度回归。提交是唯一主操作，其他动作不得各自形成突兀的凸起按钮。

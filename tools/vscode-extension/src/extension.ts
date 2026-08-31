@@ -46,6 +46,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     progress,
     guard,
     onSubmitted: () => tree.refreshDecorations(),
+    // 用树视图的同一份顺序,保证面板里的上/下一题和左侧树的上下顺序一致。
+    siblings: () => tree.allLabs(),
   };
 
   /** 解析命令参数：可能是树节点、lab 名，或什么都没有（用当前面板/当前文件）。 */
