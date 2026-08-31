@@ -4,9 +4,33 @@ import * as vscode from "vscode";
 import type { CaseResult, ScoreResult, Verdict } from "./cli";
 import { studentSourcePath, type ProgramLab } from "./labIndex";
 import type { QuizQuestion } from "./quiz";
+import { backfillEvents } from "./stats";
 
 const STATE_KEY = "dsaMastery.progress.v1";
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
+
+/**
+ * 活动日志上限。每条约 100 字节,20000 条约 2MB —— globalState 启动时整份读入内存,
+ * 所以要有上限;但这个数远大于 historyLimit,正常使用不会触及。
+ */
+const EVENT_LIMIT = 20000;
+
+/**
+ * 一次活动记录。heatmap 和历史趋势的唯一数据源。
+ *
+ * 为什么不复用 history:history 有 historyLimit(默认 50)上限,pruneHistory 会把
+ * 超出的旧记录连快照一起删,提交越多丢的日期越多 —— 拿它画 heatmap 会缺格子,
+ * 而且缺得看不出来。选择题更没有 history,只有一个会被覆盖的 answeredAt。
+ *
+ * submit 和 pass 分开记两条:两个 heatmap 面板要各自独立计数,不靠推断。
+ */
+export interface ActivityEvent {
+  /** ISO 时间戳。分桶到某一天时必须按本地时区算,不能截 ISO 字符串前 10 位。 */
+  at: string;
+  kind: "submit" | "pass";
+  labName: string;
+  labType: "program" | "quiz";
+}
 
 export interface SubmissionCase {
   id: string;
@@ -63,10 +87,32 @@ interface ProgressStore {
   schemaVersion: number;
   labs: Record<string, LabProgress>;
   quizzes: Record<string, QuizProgress>;
+  /** 追加型活动日志,按时间升序。只增不改,唯一的裁剪是超过 EVENT_LIMIT 时丢最老的。 */
+  events: ActivityEvent[];
 }
 
 function emptyStore(): ProgressStore {
-  return { schemaVersion: SCHEMA_VERSION, labs: {}, quizzes: {} };
+  return { schemaVersion: SCHEMA_VERSION, labs: {}, quizzes: {}, events: [] };
+}
+
+/**
+ * v1 → v2:保留 labs/quizzes,用现存的代码题 history 回填 events。
+ *
+ * 能回填多少取决于 history 还剩多少 —— pruneHistory 删掉的旧记录无法恢复,
+ * 所以 heatmap 早期可能偏少。选择题完全无法回填:只有一个会被覆盖的 answeredAt,
+ * 重答一次就丢了上一次的时间,回填出来的数只会误导人,不如从这次更新开始重新记。
+ */
+function migrateV1ToV2(raw: ProgressStore): ProgressStore {
+  const labs = raw.labs ?? {};
+  // 回填逻辑在 stats.ts 里 —— 那边没有 vscode 依赖,能跑单测。
+  const events = backfillEvents(labs);
+
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    labs,
+    quizzes: raw.quizzes ?? {},
+    events: events.slice(-EVENT_LIMIT),
+  };
 }
 
 function snapshotId(when: Date): string {
@@ -95,17 +141,49 @@ export class ProgressTracker {
   private load(): ProgressStore {
     const raw = this.context.globalState.get<ProgressStore>(STATE_KEY);
     if (!raw || typeof raw !== "object") return emptyStore();
-    if (raw.schemaVersion !== SCHEMA_VERSION) {
-      // 未来出现新版本时在此迁移。当前只有 v1，遇到未知版本保守重置，
-      // 但保留原始数据以免真的丢东西。
-      void this.context.globalState.update(`${STATE_KEY}.backup.${Date.now()}`, raw);
-      return emptyStore();
+
+    if (raw.schemaVersion === SCHEMA_VERSION) {
+      return {
+        schemaVersion: raw.schemaVersion,
+        labs: raw.labs ?? {},
+        quizzes: raw.quizzes ?? {},
+        events: raw.events ?? [],
+      };
     }
-    return { schemaVersion: raw.schemaVersion, labs: raw.labs ?? {}, quizzes: raw.quizzes ?? {} };
+
+    // v1 → v2:只是多了 events 字段,labs/quizzes 结构没变,所以必须保留式迁移。
+    // 这里如果走重置,用户积累的全部进度显示会瞬间清空 —— 迁移前先备份一份,
+    // 因为进度是唯一副本,迁移逻辑万一有 bug 就不可恢复。
+    if (raw.schemaVersion === 1) {
+      void this.context.globalState.update(`${STATE_KEY}.backup.v1.${Date.now()}`, raw);
+      return migrateV1ToV2(raw);
+    }
+
+    // 未知版本:结构不可知,保守重置,但留下原始数据。
+    void this.context.globalState.update(`${STATE_KEY}.backup.${Date.now()}`, raw);
+    return emptyStore();
   }
 
   private async persist(): Promise<void> {
     await this.context.globalState.update(STATE_KEY, this.store);
+  }
+
+  /**
+   * 追加一条活动记录。不落盘 —— 调用方随后一定会 persist()。
+   *
+   * 超上限时丢最老的:heatmap 只看最近一年,丢掉一年前的记录不影响显示,
+   * 而无上限增长会让 globalState 越来越大(启动时整份读入内存)。
+   */
+  private appendEvent(event: ActivityEvent): void {
+    this.store.events.push(event);
+    if (this.store.events.length > EVENT_LIMIT) {
+      this.store.events = this.store.events.slice(-EVENT_LIMIT);
+    }
+  }
+
+  /** 活动日志,按时间升序。统计面板的数据源。 */
+  events(): readonly ActivityEvent[] {
+    return this.store.events;
   }
 
   private submissionsRoot(): string {
@@ -146,9 +224,20 @@ export class ProgressTracker {
       (total, item) => total + (existing.answers[item.id]?.correct ? item.points : 0),
       0,
     );
+
+    const wasPassed = existing.passed;
     if (questions.length > 0 && questions.every((item) => existing.answers[item.id]?.correct)) {
       existing.passed = true;
     }
+
+    // 每答一小题记一条 submit —— 选择题没有「整题提交」动作,作答就是提交。
+    // pass 只在 false → true 那一刻记一条,否则之后每答一题都会重复记 pass。
+    const at = new Date().toISOString();
+    this.appendEvent({ at, kind: "submit", labName, labType: "quiz" });
+    if (!wasPassed && existing.passed) {
+      this.appendEvent({ at, kind: "pass", labName, labType: "quiz" });
+    }
+
     this.store.quizzes[labName] = existing;
     await this.persist();
     return existing;
@@ -204,6 +293,15 @@ export class ProgressTracker {
     if (fullScore && !progress.passed) {
       progress.passed = true;
       progress.firstPassedAt = at;
+    }
+
+    // 活动日志:每次提交都记 submit;本次满分就再记一条 pass。
+    // 两条共用同一个 at,所以在 heatmap 上必然落进同一格。
+    // 这里记的是「本次通过」而非「首次通过」—— 重复通过也该在 heatmap 上留痕,
+    // 否则复习性质的重做会显示成没做。
+    this.appendEvent({ at, kind: "submit", labName: lab.name, labType: "program" });
+    if (fullScore) {
+      this.appendEvent({ at, kind: "pass", labName: lab.name, labType: "program" });
     }
 
     progress.history.unshift({

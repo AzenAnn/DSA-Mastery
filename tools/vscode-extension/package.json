@@ -2,7 +2,7 @@
   "name": "dsa-mastery-labs",
   "displayName": "DSA Mastery Labs",
   "description": "在 VSCode 中浏览、作答与提交 DSA Mastery 的 C++ 代码题",
-  "version": "0.1.0",
+  "version": "0.1.10",
   "private": true,
   "publisher": "dsa-mastery",
   "license": "SEE LICENSE IN ../../README.md",
@@ -68,6 +68,12 @@
         "icon": "$(history)"
       },
       {
+        "command": "dsaMastery.showStats",
+        "title": "查看做题统计",
+        "category": "DSA Mastery",
+        "icon": "$(graph)"
+      },
+      {
         "command": "dsaMastery.runDoctor",
         "title": "检查实验环境",
         "category": "DSA Mastery"
@@ -81,9 +87,14 @@
     "menus": {
       "view/title": [
         {
+          "command": "dsaMastery.showStats",
+          "when": "view == dsaMastery.labs",
+          "group": "navigation@1"
+        },
+        {
           "command": "dsaMastery.refreshTree",
           "when": "view == dsaMastery.labs",
-          "group": "navigation"
+          "group": "navigation@2"
         }
       ],
       "view/item/context": [

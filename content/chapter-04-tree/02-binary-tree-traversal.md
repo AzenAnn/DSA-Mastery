@@ -248,44 +248,57 @@ std::vector<int> preorderTraversalB(TreeNode* root) {
 
 ### 3. 后序遍历的非递归实现
 
-后序遍历是非递归中最具挑战性的，因为父节点必须在**左子树和右子树都访问完毕后**才能访问。当从栈中取出一个节点时，我们必须知道：**我们是从它的左子树返回，还是从它的右子树返回？**
+后序遍历（$L \to R \to D$）是非递归遍历中最具挑战性的，因为父节点必须在**左子树和右子树都访问完毕后**才能访问。当在栈顶看到一个节点时，我们必须知道：**我们是从它的左子树返回，还是从它的右子树返回？**
 
 - 若刚从左子树返回：不能弹出该节点，需继续进入其右子树；
-- 若刚从右子树返回（或右子树为空）：两子树均已处理完毕，此时才能弹出并访问。
+- 若刚从右子树返回（或右子树为空）：左右子树均已处理完毕，此时才能弹出并访问。
 
-为了解决这一判断，我们需要引入一个辅助指针 `lastVisited`（记录上一个刚被访问的节点）：
+在实际实现中，主要有两种截然不同的经典解法：
 
-::: details 后序遍历单栈迭代实现（点击展开）
+#### 方法一：单栈 + `lastVisited` 标记法（经典严谨 · 考研 408 核心）
 
-```cpp:line-numbers [iterative-postorder.cpp]
+**核心思想**：
+使用单一辅助栈严格模拟函数调用栈。为了区分是从左子树返回还是从右子树返回，引入一个指针 `lastVisited` 记录**上一个被正式访问的节点**。
+
+**算法执行步骤**：
+1. **一路向左下潜**：从当前节点开始，只要非空就不断将自身压入栈中，并移向左孩子 `curr = curr->left`，直到左尽头；
+2. **探测栈顶**：查看栈顶节点 `topNode = st.top()`（注意：此时先不弹出）；
+3. **分流判定**：
+   - **若右子树存在且未被访问**（`topNode->right != nullptr && topNode->right != lastVisited`）：说明刚从左子树返回，需要转向右子树处理，令 `curr = topNode->right`；
+   - **若右子树为空，或右子树刚被访问完毕**（`topNode->right == lastVisited`）：说明左右子树均已完成遍历，此时安全弹出栈顶并访问：
+     - `result.push_back(topNode->val)`；
+     - `lastVisited = topNode`（更新最近访问标记）；
+     - `st.pop()`。
+
+::: details 方法一：单栈 + lastVisited 标记法代码实现（点击展开）
+
+```cpp:line-numbers [iterative-postorder-single-stack.cpp]
 #include <vector>
 #include <stack>
 
-std::vector<int> postorderTraversal(TreeNode* root) {
+std::vector<int> postorderTraversalSingleStack(TreeNode* root) {
     std::vector<int> result;
     std::stack<TreeNode*> st;
     TreeNode* curr = root;
-    TreeNode* lastVisited = nullptr; // 记录上一次访问的节点
+    TreeNode* lastVisited = nullptr; // 记录上一次被正式访问的节点
 
     while (curr != nullptr || !st.empty()) {
-        // 1. 一路向左下潜
+        // 1. 一路向左下潜到底，沿途所有祖先节点压栈
         while (curr != nullptr) {
             st.push(curr);
             curr = curr->left;
         }
         
-        // 2. 查看栈顶（先不弹出）
+        // 2. 查看栈顶节点（先不弹出）
         TreeNode* topNode = st.top();
         
-        // 3. 判断右子树是否存在且是否已访问过
+        // 3. 判断右子树是否存在且未被访问过
         if (topNode->right != nullptr && topNode->right != lastVisited) {
-            // 右子树尚未访问，转向右子树
-            curr = topNode->right;
+            curr = topNode->right; // 转向右子树
         } else {
-            // 右子树为空，或者右子树刚被访问完毕返回
             result.push_back(topNode->val); // 正式访问
-            lastVisited = topNode;          // 标记最近访问
-            st.pop();                       // 弹出当前节点
+            lastVisited = topNode;          // 标记当前节点
+            st.pop();                       // 弹出节点
         }
     }
     return result;
@@ -294,12 +307,57 @@ std::vector<int> postorderTraversal(TreeNode* root) {
 
 :::
 
-::: tip 技巧 · 前序巧变后序（双栈/反转法）
-后序遍历顺序为 $L \to R \to D$。观察其逆序：$(L \to R \to D)^{-1} = D \to R \to L$。
-因此，我们可以先写一个类似于前序遍历（根 $\to$ 右 $\to$ 左）的逻辑，最后将结果数组整体反转（`std::reverse`），即可极简得到后序遍历序列！
+#### 方法二：双栈法 / 前序镜像反转法（面试巧技 · 极速实现）
+
+**核心思想与代数观察**：
+后序遍历的访问顺序为：$\text{后序} = [\text{左} \to \text{右} \to \text{根}]$。  
+观察其逆序序列：
+$[\text{左} \to \text{右} \to \text{根}]^{-1} = [\text{根} \to \text{右} \to \text{左}]$
+
+这个逆序序列与前序遍历（$[\text{根} \to \text{左} \to \text{右}]$）极其相似，唯一的区别仅是**先访问右子树、后访问左子树**！
+
+**算法执行步骤**：
+1. 采用类似前序遍历的栈结构，将根节点压栈；
+2. 每次弹出栈顶节点并收集其值（顺序为：根）；
+3. **调整压栈顺序**：**先压入左孩子，后压入右孩子**（利用栈的 LIFO 特性，使得右孩子先弹出被收集）；
+4. 此时收集到的序列顺序为 $[\text{根} \to \text{右} \to \text{左}]$；
+5. 最后将整个结果数组反转（`std::reverse`），即直接得到标准后序遍历序列 $[\text{左} \to \text{右} \to \text{根}]$！
+
+::: details 方法二：双栈 / 前序镜像反转法代码实现（点击展开）
+
+```cpp:line-numbers [iterative-postorder-two-stack.cpp]
+#include <vector>
+#include <stack>
+#include <algorithm>
+
+std::vector<int> postorderTraversalTwoStack(TreeNode* root) {
+    std::vector<int> result;
+    if (root == nullptr) return result;
+
+    std::stack<TreeNode*> st;
+    st.push(root);
+
+    // 收集顺序为：根 -> 右 -> 左
+    while (!st.empty()) {
+        TreeNode* node = st.top();
+        st.pop();
+        result.push_back(node->val);
+
+        if (node->left != nullptr)  st.push(node->left);  // 先压左孩子（后弹出）
+        if (node->right != nullptr) st.push(node->right); // 后压右孩子（先弹出）
+    }
+
+    // 将 [根 -> 右 -> 左] 整体反转即得 [左 -> 右 -> 根]
+    std::reverse(result.begin(), result.end());
+    return result;
+}
+```
+
 :::
 
----
+::: tip 💡 两种后序遍历非递归写法的对比与取舍
+| 比较维度 | 写法一：单栈 + `lastVisited` 标记法 | 写法二：双栈 / 镜像反转法 |
+| :---
 
 ## 4.3.3 广度优先遍历：层序（队列）
 
@@ -444,6 +502,63 @@ private:
         return new TreeNode(rootVal, leftChild, rightChild);
     }
 };
+```
+
+:::
+
+
+
+### 2. 从层序遍历序列构造完全二叉树（CBT）
+
+对于完全二叉树，由于各层节点从左到右紧密排列，**层序遍历数组中的下标与树形结构存在直接的代数映射关系**（以 0-based 数组为例）：
+- 根节点位于 `levelOrder[0]`；
+- 下标为 $i$ 的节点：
+  - 其左孩子位于下标 $2i + 1$（若 $2i + 1 < n$）；
+  - 其右孩子位于下标 $2i + 2$（若 $2i + 2 < n$）；
+  - 其父节点位于下标 $\lfloor (i - 1) / 2 \rfloor$（若 $i > 0$）。
+
+```text [cbt-index-mapping.txt]
+层序数组下标与二叉树拓扑映射：
+          0 (val: 1)
+        /            \
+    1 (val: 2)     2 (val: 3)
+   /          \    /
+3 (val: 4) 4 (val: 5) 5 (val: 6)
+
+规律：节点 i 的左孩子 = 2i + 1，右孩子 = 2i + 2
+```
+
+::: details 层序序列构造完全二叉树实现（递归与迭代两种解法，点击展开）
+
+```cpp:line-numbers [build-complete-tree.cpp]
+#include <vector>
+
+// 解法一：简洁分治递归（时间复杂度 Θ(n)，空间复杂度 Θ(log n) 递归调用栈）
+TreeNode* buildCBTRecursive(const std::vector<int>& levelOrder, size_t i = 0) {
+    if (i >= levelOrder.size()) return nullptr;
+
+    TreeNode* root = new TreeNode(levelOrder[i]);
+    root->left = buildCBTRecursive(levelOrder, 2 * i + 1);  // 递归构造左子树
+    root->right = buildCBTRecursive(levelOrder, 2 * i + 2); // 递归构造右子树
+    return root;
+}
+
+// 解法二：线性数组指针连接（时间复杂度 Θ(n)，空间复杂度 Θ(n) 辅助节点数组）
+TreeNode* buildCBTIterative(const std::vector<int>& levelOrder) {
+    size_t n = levelOrder.size();
+    if (n == 0) return nullptr;
+
+    std::vector<TreeNode*> nodes(n);
+    for (size_t i = 0; i < n; ++i) {
+        nodes[i] = new TreeNode(levelOrder[i]);
+    }
+
+    for (size_t i = 0; i < n; ++i) {
+        if (2 * i + 1 < n) nodes[i]->left = nodes[2 * i + 1];
+        if (2 * i + 2 < n) nodes[i]->right = nodes[2 * i + 2];
+    }
+    return nodes[0];
+}
 ```
 
 :::
