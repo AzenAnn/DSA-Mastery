@@ -53,7 +53,7 @@ JSON 报告顶层：
 - 默认 C++17；只有题目明确需要且 README/CI 证明时可用 C++20。`toolchain.standard` 是直接编译和 Project CMake configure 的权威输入，CMakeLists 不得硬编码覆盖它。最低 GCC 11、Clang 14、MSVC 19.30；Project 另需 CMake 3.25。Dev Container/Codespaces 可选。
 - 所有 manifest 路径均为当前 Lab 内相对路径；拒绝绝对路径、`..`、缺失目标和符号链接逃逸。
 - Program 必须有可编译但不满分的 `student`、100 分 `solution`、合计 100 的 cases；stdout 判题、stderr 诊断。
-- 比较器与 oracle 写入都先统一 CRLF/LF；`.out` 固定写为 LF，`exact` 逐字符，`tokens` 按空白 token，`float` 对数值 token 使用 `absTol/relTol`。
+- 比较器与 oracle 写入都先统一 CRLF/LF；`.out` 固定写为 LF，`exact` 在此基础上逐字符比较但允许一侧缺少一个末尾 LF（不忽略内部换行、额外空行或其他空白），`tokens` 按空白 token，`float` 对数值 token 使用 `absTol/relTol`。
 - 判定固定为 `AC|WA|TLE|RE|CE|OLE|IE`；IE 不得伪装成学生 0 分。
 - 人类终端输出固定语义：AC/PASS/满分为 success，WA/CE/RE/IE/未满分实际分为 danger，TLE/OLE/PENDING 为 warning；未满分仍保留 `actual/maximum`，且 maximum 使用 success。颜色只增强文字，不得成为唯一状态信号。
 - Program 人类输出必须有逐 case 表格、PASS/NOT FULL 总结；失败时展示首差异和可复制单 case 重试。Project 必须分开 automated、manual pending、provisional total，并保持 task/case 层级。先 pad 原始单元格再加 ANSI，外部编译/CTest/stderr 正文不得被整块改色。
