@@ -429,3 +429,25 @@ Unified both categorized 本章 Labs and legacy 相关 Labs sidebar paths so eve
 ### Status
 
 [OK] **Completed**
+
+
+## Session 18: Resolve PR 119 CI failures
+
+**Date**: 2026-08-31
+**Task**: Resolve PR 119 CI failures
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+Investigated GitHub Actions logs, updated stale stable-ID artifact assertions, separated dependency-free Lab ID parsing from repository authoring dependencies, lazy-loaded new/locate commands, added detached student-package regression coverage, and verified Make, Pages, discovery, and browser gates.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `ead8db8` | (see git log) |
+| `388cfe0` | (see git log) |
+
+### Status
+
+[OK] **Completed**
