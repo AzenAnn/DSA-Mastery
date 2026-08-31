@@ -48,7 +48,7 @@ async function expectedCoursePages() {
     if (!chapter.isDirectory() || !/^chapter-\d{2}$/.test(chapter.name)) continue;
     const chapterRoot = path.join(labsRoot, chapter.name);
     for (const lab of await readdir(chapterRoot, { withFileTypes: true })) {
-      if (!lab.isDirectory() || !/^lab-\d{2}-\d{2}-[a-z0-9-]+$/.test(lab.name)) continue;
+      if (!lab.isDirectory() || !/^lab-\d{2}-(?:\d{2}|[TEP]-\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(lab.name)) continue;
       labPages.push(path.join("labs", chapter.name, lab.name, "index.html"));
     }
   }
@@ -82,29 +82,16 @@ const { lessonPages, labPages, curriculumPages } = await expectedCoursePages();
 const chapterOneLabPages = labPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("labs/chapter-01/"),
 );
-const chapterOneProductionPages = chapterOneLabPages.filter((relativePath) => {
+const chapterOneLegacyPages = chapterOneLabPages.filter((relativePath) => {
   const order = path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1];
   return order && Number(order) >= 1 && Number(order) <= 21;
 });
-const chapterOneDiscoveryFixture = path.join(
-  "labs",
-  "chapter-01",
-  "lab-01-99-sidebar-discovery-fixture",
-  "index.html",
-);
-const unexpectedChapterOnePages = chapterOneLabPages.filter(
-  (relativePath) =>
-    !chapterOneProductionPages.includes(relativePath) && relativePath !== chapterOneDiscoveryFixture,
-);
-if (chapterOneProductionPages.length !== 21 || unexpectedChapterOnePages.length) {
+if (chapterOneLegacyPages.length !== 21) {
   throw new Error(
-    `Chapter 1 must generate exactly 21 production Labs; found ${chapterOneProductionPages.length}` +
-      (unexpectedChapterOnePages.length
-        ? `, unexpected: ${unexpectedChapterOnePages.join(", ")}`
-        : ""),
+    `Chapter 1 must preserve its 21 legacy Lab pages; found ${chapterOneLegacyPages.length}`,
   );
 }
-const chapterOneOrders = chapterOneProductionPages
+const chapterOneOrders = chapterOneLegacyPages
   .map((relativePath) => path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1])
   .filter(Boolean)
   .sort();
@@ -248,6 +235,7 @@ for (const required of [
   "Golden Project",
   "网站侧栏的分类接口",
   "labCategory",
+  "labId",
   "最终 Definition of Done",
 ]) {
   if (!labAuthorGuideHtml.includes(required)) {
@@ -435,10 +423,18 @@ if (base !== "/") {
   }
 }
 
+const stableIdLabHtml = await readFile(
+  path.join(artifactRoot, "labs", "chapter-01", "lab-01-09-singly-linked-list-reverse", "index.html"),
+  "utf8",
+);
+if (!stableIdLabHtml.includes("01E04")) {
+  throw new Error("Lab detail page does not expose its stable ID");
+}
+
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "Lab 命令与接口使用指南", "第 0 章 绪论", "Lab 01-02：单链表选择题精练", "Lab 01-21：线性表双实现与工作负载评测器"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "Lab 命令与接口使用指南", "第 0 章 绪论", "Lab 01-02：单链表选择题精练", "Lab 01-21：线性表双实现与工作负载评测器", "01E04"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

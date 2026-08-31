@@ -26,6 +26,7 @@ export interface CourseDocument {
   difficulty?: string;
   duration?: string;
   labCategory?: LabCategory;
+  labId?: string;
   readingMinutes: number;
 }
 
@@ -76,7 +77,7 @@ export type LabSidebarIcons = Record<LabCategory, string>;
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
-const labDirectoryPattern = /^lab-\d{2}-\d{2}-[a-z0-9-]+$/;
+const labDirectoryPattern = /^lab-\d{2}-(?:\d{2}|[TEP]-\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 type CurriculumChapterDefinition = Omit<CurriculumChapter, "label" | "lessons" | "labs"> & {
   label?: string;
@@ -524,6 +525,7 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     difficulty: text(parsed.data.difficulty) || undefined,
     duration: text(parsed.data.duration) || undefined,
     labCategory: kind === "lab" ? resolveLabCategory(file, parsed.data) : undefined,
+    labId: kind === "lab" ? text(parsed.data.labId) || undefined : undefined,
     readingMinutes: estimateReadingMinutes(parsed.content),
   };
 }
@@ -633,7 +635,7 @@ function chapterLabGroup(
         text: sidebarCategoryLabel(category, label, icons[category]),
         collapsed: category !== "project",
         items: categoryLabs.length
-          ? categoryLabs.map((lab) => ({ text: lab.title, link: lab.url }))
+          ? categoryLabs.map((lab) => ({ text: lab.labId ? `${lab.labId} · ${lab.title}` : lab.title, link: lab.url }))
           : [{ text: `<span class="course-lab-category__empty">${empty}</span>` }],
       };
     }),

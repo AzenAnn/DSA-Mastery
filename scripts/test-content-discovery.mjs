@@ -5,12 +5,12 @@ import { fileURLToPath } from "node:url";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const lessonDirectory = path.join(projectRoot, "content", "chapter-99-discovery-fixture");
-const labDirectory = path.join(projectRoot, "labs", "chapter-99", "lab-99-01-discovery-fixture");
+const labDirectory = path.join(projectRoot, "labs", "chapter-99", "lab-99-E-01-discovery-fixture");
 const sidebarLabDirectory = path.join(
   projectRoot,
   "labs",
   "chapter-01",
-  "lab-01-99-sidebar-discovery-fixture",
+  "lab-01-E-99-sidebar-discovery-fixture",
 );
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const pagesEnvironment = {
@@ -123,24 +123,26 @@ const grouped: boolean = true
 
 - [ ] 自动发现任务列表
 
-[进入自动发现 Lab](../../labs/chapter-99/lab-99-01-discovery-fixture/README.md)
+[进入自动发现 Lab](../../labs/chapter-99/lab-99-E-01-discovery-fixture/README.md)
 `;
 
 const lab = `---
-title: "Lab 99-01：自动发现验证"
+title: "Lab 99-E-01：自动发现验证"
 description: "验证新增 Lab 会自动进入页面、导航、搜索和统计。"
 order: 1
 chapter: 99
+labId: "99E01"
 chapterTitle: "自动发现验证"
 updated: "2026-08-10"
 contributors: ["Discovery Test"]
 status: "draft"
 lab: true
+labCategory: exercise
 difficulty: "测试"
 duration: "1 分钟"
 ---
 
-# Lab 99-01：自动发现验证
+# Lab 99-E-01：自动发现验证
 
 ## 验收标准
 
@@ -148,10 +150,11 @@ duration: "1 分钟"
 `;
 
 const sidebarLab = `---
-title: "Lab 01-99：章节侧栏自动收录验证"
+title: "Lab 01-E-99：章节侧栏自动收录验证"
 description: "验证新增线性表 Lab 会自动进入本章 Labs 的实验分类。"
 order: 99
 chapter: 1
+labId: "01E99"
 chapterTitle: "线性表"
 updated: "2026-08-14"
 contributors: ["Discovery Test"]
@@ -162,7 +165,7 @@ duration: "1 分钟"
 labCategory: exercise
 ---
 
-# Lab 01-99：章节侧栏自动收录验证
+# Lab 01-E-99：章节侧栏自动收录验证
 
 ## 验收标准
 
@@ -225,7 +228,7 @@ try {
     "utf8",
   );
   const labHtml = await readFile(
-    path.join(projectRoot, "dist", "pages", "labs", "chapter-99", "lab-99-01-discovery-fixture", "index.html"),
+    path.join(projectRoot, "dist", "pages", "labs", "chapter-99", "lab-99-E-01-discovery-fixture", "index.html"),
     "utf8",
   );
   const sidebarLabHtml = await readFile(
@@ -235,7 +238,7 @@ try {
       "pages",
       "labs",
       "chapter-01",
-      "lab-01-99-sidebar-discovery-fixture",
+      "lab-01-E-99-sidebar-discovery-fixture",
       "index.html",
     ),
     "utf8",
@@ -313,10 +316,10 @@ try {
   if (lessonHtml.includes("::: definition") || lessonHtml.includes("::: theorem")) {
     throw new Error("Unparsed theory container marker leaked into the artifact");
   }
-  if (!lessonHtml.includes("/DSA-Mastery/labs/chapter-99/lab-99-01-discovery-fixture/")) {
+  if (!lessonHtml.includes("/DSA-Mastery/labs/chapter-99/lab-99-E-01-discovery-fixture/")) {
     throw new Error("Relative Markdown link was not rewritten to the Pages-aware Lab route");
   }
-  if (!labHtml.includes("Lab 99-01：自动发现验证")) throw new Error("Temporary Lab page was not generated");
+  if (!labHtml.includes("Lab 99-E-01：自动发现验证") || !labHtml.includes("99E01")) throw new Error("Temporary Lab page or stable ID was not generated");
   const searchFiles = (await filesRecursively(path.join(projectRoot, "dist", "pages")))
     .filter((file) => file.endsWith(".js"));
   const searchableJavaScript = (await Promise.all(searchFiles.map((file) => readFile(file, "utf8")))).join("\n");
@@ -332,9 +335,9 @@ try {
     !sidebarHtml.includes("本章 Labs") ||
     !sidebarHtml.includes("实验 Exercise") ||
     !sidebarHtml.includes("course-lab-category--exercise") ||
-    !sidebarHtml.includes("Lab 01-99：章节侧栏自动收录验证") ||
+    !sidebarHtml.includes("Lab 01-E-99：章节侧栏自动收录验证") ||
     !sidebarHtml.includes(
-      'href="/DSA-Mastery/labs/chapter-01/lab-01-99-sidebar-discovery-fixture/"',
+      'href="/DSA-Mastery/labs/chapter-01/lab-01-E-99-sidebar-discovery-fixture/"',
     )
   ) {
     throw new Error("Temporary chapter-01 Lab did not enter Ch.1 Exercise sidebar automatically");
@@ -390,11 +393,11 @@ try {
   primaryError = error;
 } finally {
   assertFixtureTarget(lessonDirectory, path.join(projectRoot, "content"), "chapter-99-discovery-fixture");
-  assertFixtureTarget(labDirectory, path.join(projectRoot, "labs", "chapter-99"), "lab-99-01-discovery-fixture");
+  assertFixtureTarget(labDirectory, path.join(projectRoot, "labs", "chapter-99"), "lab-99-E-01-discovery-fixture");
   assertFixtureTarget(
     sidebarLabDirectory,
     path.join(projectRoot, "labs", "chapter-01"),
-    "lab-01-99-sidebar-discovery-fixture",
+    "lab-01-E-99-sidebar-discovery-fixture",
   );
   await rm(lessonDirectory, { recursive: true, force: true });
   await rm(labDirectory, { recursive: true, force: true });
