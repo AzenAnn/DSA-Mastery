@@ -9,9 +9,7 @@ import { formatJudge, judgeProgram, runInteractive } from "./judge.mjs";
 import { cleanLab, packStudent, refreshExpected, verifyProgram } from "./operations.mjs";
 import { buildProject, formatProject, interactiveProjectTask, refreshProjectExpected, scoreProject, verifyProject } from "./project.mjs";
 import { formatBuild, formatClean, formatDoctor, formatError, formatHelp, formatLocate, formatNew, formatPack, formatRefresh, formatValidate, formatVerify } from "./reporter.mjs";
-import { createLab } from "./scaffold.mjs";
 import { createTheme } from "./terminal.mjs";
-import { locateLabById } from "./identity.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "../..");
 
@@ -98,6 +96,7 @@ async function main() {
     }
     validateOptions(parsed);
     if (parsed.command === "new") {
+      const { createLab } = await import("./scaffold.mjs");
       const created = await createLab(parsed.options);
       const report = { reportVersion: 1, command: "new", ok: true, lab: { id: created.labId, path: created.labRoot, relativePath: created.relativeRoot, type: created.type, order: created.order } };
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
@@ -105,6 +104,7 @@ async function main() {
       return EXIT.OK;
     }
     if (parsed.command === "locate") {
+      const { locateLabById } = await import("./identity.mjs");
       const located = await locateLabById(projectRoot, parsed.positional[0]);
       const report = { reportVersion: 1, command: "locate", ok: true, lab: { id: located.id, path: located.labPath, relativePath: located.relativePath, type: located.type, category: located.category } };
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));

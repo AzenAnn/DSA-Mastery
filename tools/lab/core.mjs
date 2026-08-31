@@ -1,7 +1,7 @@
 import { access, lstat, readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { LabError } from "./errors.mjs";
-import { parseLabId } from "./identity.mjs";
+import { parseLabId } from "./lab-id.mjs";
 
 export const LAB_SCHEMA_VERSION = 1;
 export const JSON_REPORT_VERSION = 1;

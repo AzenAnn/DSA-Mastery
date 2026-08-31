@@ -61,7 +61,7 @@ JSON 报告顶层：
 - Project task kind 为 `stdio|ctest|manual`；顶层权重合计 100，ID 唯一，依赖存在且无环；自动分和人工待评分分开。
 - Program/Project 源仓库 Makefile 必须与三行薄模板逐字一致，真实逻辑只在 `tools/lab/lab.mk` 和 CLI。
 - 所有生成物只写 `.lab-cache/`。`refresh-expected` 默认只预览，只有 `--write` 覆盖 `.out`；Project 通过 `--task`/`TASK=` 选择 stdio task，并在 `verify` 中检查其 oracle 漂移。
-- student pack 排除全部 solution、cache、object/binary，内置 runner 与独立 Makefile，不依赖源仓库相对路径。
+- student pack 排除全部 solution、cache、object/binary，内置 runner 与独立 Makefile，不依赖源仓库相对路径或根 `node_modules`。嵌入式 CLI 的运行命令不得静态加载仅供仓库作者使用的脚手架、扫描器或其他第三方依赖；CI 必须把学生包复制到仓库外后至少执行 validate/run。
 - 评分器以 `spawn(command, args, { shell: false })` 执行；本地评分不是恶意代码沙箱，PR job 不注入秘密或写 token。
 
 > **Warning**: 新增 Program/Project 用例时，`tests/*.out` 必须先存在，`refresh-expected` 才能写入。

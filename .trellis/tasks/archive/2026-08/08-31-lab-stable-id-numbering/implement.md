@@ -43,6 +43,7 @@
 - [x] 检查 git diff、存量目录未发生 rename、所有 Lab ID 唯一。
 - [x] 启动本地 preview，提供地址和重点检阅路径；等待用户确认。
 - [x] 用户确认后精简侧栏文案；按用户要求不重跑完整预览，仅通过 `pnpm run typecheck` 与定向 ESLint 检查。
+- [x] 根据 PR CI 反馈同步最终产物旧断言，并让学生包在仓库外无需根依赖即可 validate/run。
 
 ## Commit / Push Gate
 
