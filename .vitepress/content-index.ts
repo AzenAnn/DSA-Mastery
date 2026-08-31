@@ -149,6 +149,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-01-linear-list/03-linked-list.md",
       "content/chapter-01-linear-list/04-comparison-and-selection.md",
       "content/chapter-01-linear-list/05-real-world-practices.md",
+      "content/chapter-01-linear-list/06-array-to-linked-list-problem-solving.md",
     ],
     autoLabChapter: 1,
   },
