@@ -177,7 +177,7 @@ export class ProgressTracker {
    * 迁移前保留完整备份；旧快照不搬目录，HistoryEntry.snapshot 会继续指向原文件。
    */
   async migrateLabKeys(labs: readonly ProgramLab[]): Promise<void> {
-    const aliases = labs.map((lab) => ({ id: lab.id, name: lab.name }));
+    const aliases = labs.flatMap((lab) => [lab.name, ...lab.legacyNames].map((name) => ({ id: lab.id, name })));
     const program = remapRecordKeys(this.store.labs, aliases, mergeLabProgress);
     const quiz = remapRecordKeys(this.store.quizzes, aliases, mergeQuizProgress);
     const activity = remapEventKeys(this.store.events, aliases);

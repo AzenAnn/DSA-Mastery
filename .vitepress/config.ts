@@ -74,7 +74,7 @@ export default defineConfig({
   lastUpdated: false,
   rewrites: {
     "content/:chapter/:page.md": "learn/:chapter/:page/index.md",
-    "labs/:chapter/:lab/README.md": "labs/:chapter/:lab/index.md",
+    "labs/:chapter/:category/:lab/README.md": "labs/:chapter/:category/:lab/index.md",
     "curriculum/index.md": "learn/index.md",
     "curriculum/parts/:part.md": "learn/parts/:part/index.md",
     "curriculum/outline/:chapter.md": "learn/outline/:chapter/index.md",

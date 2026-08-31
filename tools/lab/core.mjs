@@ -8,7 +8,7 @@ export const JSON_REPORT_VERSION = 1;
 export const LAB_TYPES = new Set(["quiz", "program", "project"]);
 export const COMPARE_MODES = new Set(["exact", "tokens", "float"]);
 export const TASK_KINDS = new Set(["stdio", "ctest", "manual"]);
-const THIN_MAKEFILE = "LAB_DIR := $(CURDIR)\nREPO_ROOT := $(LAB_DIR)/../../..\ninclude ../../../tools/lab/lab.mk\n";
+const THIN_MAKEFILE = "LAB_DIR := $(CURDIR)\nREPO_ROOT := $(LAB_DIR)/../../../..\ninclude ../../../../tools/lab/lab.mk\n";
 
 export function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);

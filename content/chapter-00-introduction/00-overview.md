@@ -44,8 +44,8 @@ status: "draft"
 
 ## 配套 Labs
 
-- [Lab 00-01：制作个人 DSA 学习地图](../../labs/chapter-00/lab-00-01-learning-map/README.md)
-- [Lab 00-02：用操作计数观察增长趋势](../../labs/chapter-00/lab-00-02-operation-counter/README.md)
+- [Lab 00-T-01：制作个人 DSA 学习地图](../../labs/chapter-00/theory/T-00-01-learning-map/README.md)
+- [Lab 00-E-01：用操作计数观察增长趋势](../../labs/chapter-00/exercise/E-00-01-operation-counter/README.md)
 
 ## 学习建议
 

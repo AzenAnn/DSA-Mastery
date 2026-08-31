@@ -13,8 +13,10 @@ import { readStableLabId } from "./labIdentity";
 export interface ProgramLab {
   /** 稳定题号，例如 13E01。发布后不随目录或展示顺序改变，用作状态主键。 */
   id: string;
-  /** lab 目录名，例如 lab-13-01-container-with-most-water；保留为旧进度迁移别名。 */
+  /** 当前 lab 目录名，例如 E-13-01-container-with-most-water。 */
   name: string;
+  /** 迁移前的目录名，仅用于把本机旧进度键转换为稳定 labId。 */
+  legacyNames: string[];
   type: "program" | "quiz";
   /** lab 目录绝对路径。 */
   labPath: string;
@@ -79,13 +81,23 @@ function parseChapterNumber(source: unknown, fallbackDir: string): number {
 export async function discoverProgramLabs(repoRoot: string): Promise<Chapter[]> {
   const labsRoot = path.join(repoRoot, "labs");
   const labs: ProgramLab[] = [];
+  const categories = ["theory", "exercise", "project"] as const;
 
   for (const chapterDir of await listDirectories(labsRoot)) {
     const chapterPath = path.join(labsRoot, chapterDir);
-    for (const labDir of await listDirectories(chapterPath)) {
-      const labPath = path.join(chapterPath, labDir);
-      const lab = await loadProgramLab(repoRoot, labPath, labDir, chapterDir);
-      if (lab) labs.push(lab);
+    for (const category of categories) {
+      const categoryPath = path.join(chapterPath, category);
+      let labDirectories: string[];
+      try {
+        labDirectories = await listDirectories(categoryPath);
+      } catch {
+        continue;
+      }
+      for (const labDir of labDirectories) {
+        const labPath = path.join(categoryPath, labDir);
+        const lab = await loadProgramLab(repoRoot, labPath, labDir, chapterDir);
+        if (lab) labs.push(lab);
+      }
     }
   }
 
@@ -166,17 +178,24 @@ function buildLab(
   front: Record<string, unknown>,
   details: Pick<ProgramLab, "type" | "studentSources" | "casesFile" | "quizQuestions">,
 ): ProgramLab {
+  const order = typeof front.order === "number" ? front.order : Number.MAX_SAFE_INTEGER;
+  const chapter = parseChapterNumber(front.chapter, chapterDir);
+  const slug = labDir.match(/^[TEP]-\d{2}-\d{2,}-(.+)$/)?.[1];
+  const legacyNames = slug && Number.isSafeInteger(order) && order !== Number.MAX_SAFE_INTEGER
+    ? [`lab-${String(chapter).padStart(2, "0")}-${String(order).padStart(2, "0")}-${slug}`]
+    : [];
   return {
     id: readStableLabId(front.labId, labDir),
     name: labDir,
+    legacyNames,
     type: details.type,
     labPath,
     relativePath: path.relative(repoRoot, labPath).split(path.sep).join("/"),
     title: typeof front.title === "string" ? front.title : labDir,
     description: typeof front.description === "string" ? front.description : "",
-    chapter: parseChapterNumber(front.chapter, chapterDir),
+    chapter,
     chapterTitle: typeof front.chapterTitle === "string" ? front.chapterTitle : chapterDir,
-    order: typeof front.order === "number" ? front.order : Number.MAX_SAFE_INTEGER,
+    order,
     difficulty: typeof front.difficulty === "string" ? front.difficulty : undefined,
     duration: typeof front.duration === "string" ? front.duration : undefined,
     status: typeof front.status === "string" ? front.status : undefined,

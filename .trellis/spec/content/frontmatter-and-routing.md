@@ -90,7 +90,7 @@ content/:chapter/:page.md -> learn/:chapter/:page/index.md
 
 ## 5. Good / Base / Bad Cases
 
-- Good：`content/chapter-02-stack-queue/01-stack.md` 使用 `chapter: 2`、`order: 1`，并相对链接 `../../labs/chapter-02/lab-02-01-stack/README.md`。
+- Good：`content/chapter-02-stack-queue/01-stack.md` 使用 `chapter: 2`、`order: 1`，并相对链接 `../../labs/chapter-02/exercise/E-02-01-validate-stack-sequences/README.md`。
 - Good：`content/chapter-preface/00`～`05` 六篇页面使用 `chapter: "preface"` 和连续 order，在“前言”章节目录中展示理论环境、作者指南、Windows 环境、命令接口、Graphviz 图示和 macOS 环境指南。
 - Base：`draft` 页面仍进入导航并显示状态徽章。
 - Bad：普通页面使用 `chapter: "preface"`、使用 `chapter: -1` 模拟前言、`contributors: "A"`、不存在的相对 `.md` 目标或硬编码 `/DSA-Mastery/learn/...`。

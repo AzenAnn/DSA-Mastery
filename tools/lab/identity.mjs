@@ -9,10 +9,10 @@ export { formatLabDocumentTitlePrefix, formatLabId, normalizeLabId, parseLabId }
 export const LAB_TYPE_TO_TAG = Object.freeze({ quiz: "T", program: "E", project: "P" });
 export const LAB_TYPE_TO_CATEGORY = Object.freeze({ quiz: "theory", program: "exercise", project: "project" });
 export const LAB_CATEGORY_TO_TAG = Object.freeze({ theory: "T", exercise: "E", project: "P" });
+export const LAB_CATEGORIES = Object.freeze(["theory", "exercise", "project"]);
 
-export const LAB_DIRECTORY_PATTERN = /^lab-\d{2}-(?:\d{2}|[TEP]-\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+export const LAB_DIRECTORY_PATTERN = /^([TEP])-(\d{2})-(\d{2,})-([a-z0-9]+(?:-[a-z0-9]+)*)$/;
 export const LEGACY_LAB_DIRECTORY_PATTERN = /^lab-(\d{2})-(\d{2})-([a-z0-9]+(?:-[a-z0-9]+)*)$/;
-export const STABLE_LAB_DIRECTORY_PATTERN = /^lab-(\d{2})-([TEP])-(\d{2,})-([a-z0-9]+(?:-[a-z0-9]+)*)$/;
 
 function integer(value, label, minimum = 0) {
   const parsed = Number(value);
@@ -34,6 +34,30 @@ export function categoryForType(type) {
 
 export function tagForCategory(category) {
   return LAB_CATEGORY_TO_TAG[category];
+}
+
+export function categoryForTag(tag) {
+  const normalized = String(tag ?? "").toUpperCase();
+  return LAB_CATEGORIES.find((category) => LAB_CATEGORY_TO_TAG[category] === normalized);
+}
+
+export function formatLabDirectoryName(value, slug) {
+  const identity = parseLabId(value);
+  const normalizedSlug = String(slug ?? "").trim();
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalizedSlug)) {
+    throw new LabError("ARGUMENT_INVALID", "Lab slug 必须是小写 kebab-case");
+  }
+  return `${identity.tag}-${String(identity.chapter).padStart(2, "0")}-${String(identity.sequence).padStart(2, "0")}-${normalizedSlug}`;
+}
+
+export function parseLabDirectoryName(value) {
+  const source = String(value ?? "").trim();
+  const match = source.match(LAB_DIRECTORY_PATTERN);
+  if (!match) {
+    throw new LabError("LAB_PATH_INVALID", `Lab 目录格式无效：${source || "(empty)"}；应为 X-CC-SS-kebab-slug`);
+  }
+  const id = formatLabId(Number(match[2]), match[1], Number(match[3]));
+  return { ...parseLabId(id), slug: match[4], directoryName: source };
 }
 
 export function insertLabIdFrontmatter(source, value) {
@@ -84,32 +108,61 @@ export async function scanLabRecords(root, options = {}) {
     if (options.chapter !== undefined && pathChapter !== Number(options.chapter)) continue;
 
     const chapterPath = path.join(labsRoot, chapterEntry.name);
-    for (const labEntry of await readdir(chapterPath, { withFileTypes: true })) {
-      if (!labEntry.isDirectory() || !LAB_DIRECTORY_PATTERN.test(labEntry.name)) continue;
-      const labPath = path.join(chapterPath, labEntry.name);
-      const readmePath = path.join(labPath, "README.md");
-      let source;
+    const chapterChildren = await readdir(chapterPath, { withFileTypes: true });
+    for (const child of chapterChildren) {
+      if (child.isDirectory() && !LAB_CATEGORIES.includes(child.name)) {
+        const relative = path.relative(root, path.join(chapterPath, child.name)).split(path.sep).join("/");
+        throw new LabError(
+          "LAB_PATH_INVALID",
+          `${relative}: Lab 必须放在 theory、exercise 或 project 分类目录中`,
+        );
+      }
+    }
+    for (const category of LAB_CATEGORIES) {
+      const categoryPath = path.join(chapterPath, category);
+      let labEntries;
       try {
-        source = await readFile(readmePath, "utf8");
+        labEntries = await readdir(categoryPath, { withFileTypes: true });
       } catch (error) {
         if (error?.code === "ENOENT") continue;
         throw error;
       }
-      const parsed = matter(source);
-      const type = await readManifestType(labPath);
-      const category = type ? categoryForType(type) : String(parsed.data.labCategory ?? "").trim();
-      records.push({
-        labPath,
-        readmePath,
-        relativePath: path.relative(root, labPath).split(path.sep).join("/"),
-        directoryName: labEntry.name,
-        pathChapter,
-        frontmatter: parsed.data,
-        type,
-        category: category || undefined,
-        labId: typeof parsed.data.labId === "string" ? parsed.data.labId.trim() : "",
-        order: Number(parsed.data.order),
-      });
+      for (const labEntry of labEntries) {
+        if (!labEntry.isDirectory()) continue;
+        if (!LAB_DIRECTORY_PATTERN.test(labEntry.name)) {
+          const relative = path.relative(root, path.join(categoryPath, labEntry.name)).split(path.sep).join("/");
+          throw new LabError(
+            "LAB_PATH_INVALID",
+            `${relative}: Lab 目录应为 X-CC-SS-kebab-slug`,
+          );
+        }
+        const labPath = path.join(categoryPath, labEntry.name);
+        const readmePath = path.join(labPath, "README.md");
+        let source;
+        try {
+          source = await readFile(readmePath, "utf8");
+        } catch (error) {
+          if (error?.code === "ENOENT") continue;
+          throw error;
+        }
+        const parsed = matter(source);
+        const type = await readManifestType(labPath);
+        const declaredCategory = type ? categoryForType(type) : String(parsed.data.labCategory ?? "").trim();
+        records.push({
+          labPath,
+          readmePath,
+          relativePath: path.relative(root, labPath).split(path.sep).join("/"),
+          directoryName: labEntry.name,
+          directoryIdentity: parseLabDirectoryName(labEntry.name),
+          pathChapter,
+          categoryDirectory: category,
+          frontmatter: parsed.data,
+          type,
+          category: declaredCategory || undefined,
+          labId: typeof parsed.data.labId === "string" ? parsed.data.labId.trim() : "",
+          order: Number(parsed.data.order),
+        });
+      }
     }
   }
   return records;
@@ -126,6 +179,9 @@ function validateRecordIdentity(record) {
   if (parsed.chapter !== record.pathChapter) {
     throw new LabError("LAB_ID_CHAPTER_MISMATCH", `${record.relativePath}/README.md: labId 章节与目录不一致`);
   }
+  if (record.directoryIdentity.id !== parsed.id) {
+    throw new LabError("LAB_ID_PATH_MISMATCH", `${record.relativePath}/README.md: 目录编号必须与 labId ${parsed.id} 一致`);
+  }
   const expectedTag = tagForCategory(record.category);
   if (!expectedTag) {
     throw new LabError("LAB_CATEGORY_MISSING", `${record.relativePath}/README.md: 无法确定 Theory、Exercise 或 Project 分类`);
@@ -134,6 +190,12 @@ function validateRecordIdentity(record) {
     throw new LabError(
       "LAB_ID_TYPE_MISMATCH",
       `${record.relativePath}/README.md: ${record.labId} 与 ${record.category} 分类不一致，应使用 ${expectedTag}`,
+    );
+  }
+  if (record.categoryDirectory !== record.category) {
+    throw new LabError(
+      "LAB_CATEGORY_PATH_MISMATCH",
+      `${record.relativePath}/README.md: ${record.categoryDirectory} 目录与 ${record.category} 分类不一致`,
     );
   }
   return parsed;

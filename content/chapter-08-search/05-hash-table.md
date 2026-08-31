@@ -301,7 +301,7 @@ const demoUrl = withBase("/demos/hash-lab.html");
 
 ## 配套 Lab
 
-完成 [Lab 09-02：散列表实现与冲突统计](../../labs/chapter-09/lab-09-02-hash-table/README.md)，比较链地址与线性探测，并用不同装填因子测量成功、失败 ASL；进阶做 [Lab 09-03：散列索引引擎——冲突策略与再散列大综合](../../labs/chapter-09/lab-09-03-hash-index-engine/README.md)。
+完成 [Lab 09-E-01：散列表实现与冲突统计](../../labs/chapter-09/exercise/E-09-01-hash-table/README.md)，比较链地址与线性探测，并用不同装填因子测量成功、失败 ASL；进阶做 [Lab 09-P-01：散列索引引擎——冲突策略与再散列大综合](../../labs/chapter-09/project/P-09-01-hash-index-engine/README.md)。
 
 ## 小结
 

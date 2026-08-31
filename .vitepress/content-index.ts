@@ -77,7 +77,8 @@ export type LabSidebarIcons = Record<LabCategory, string>;
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
-const labDirectoryPattern = /^lab-\d{2}-(?:\d{2}|[TEP]-\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const labDirectoryPattern = /^[TEP]-\d{2}-\d{2,}-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const labCategories = ["theory", "exercise", "project"] as const;
 
 type CurriculumChapterDefinition = Omit<CurriculumChapter, "label" | "lessons" | "labs"> & {
   label?: string;
@@ -132,9 +133,9 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-00-introduction/03-memory-perspective.md",
     ],
     labSources: [
-      "labs/chapter-00/lab-00-01-learning-map/README.md",
-      "labs/chapter-00/lab-00-02-operation-counter/README.md",
-      "labs/chapter-00/lab-00-03-complexity-quiz/README.md",
+      "labs/chapter-00/theory/T-00-01-learning-map/README.md",
+      "labs/chapter-00/exercise/E-00-01-operation-counter/README.md",
+      "labs/chapter-00/theory/T-00-02-complexity-quiz/README.md",
     ],
   },
   {
@@ -408,9 +409,13 @@ function listLabFiles(root: string): string[] {
     .filter((entry) => entry.isDirectory() && /^chapter-\d{2}$/.test(entry.name))
     .flatMap((chapterEntry) => {
       const chapterPath = path.join(labsRoot, chapterEntry.name);
-      return readdirSync(chapterPath, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory() && labDirectoryPattern.test(entry.name))
-        .map((entry) => path.join(chapterPath, entry.name, "README.md"));
+      return labCategories.flatMap((category) => {
+        const categoryPath = path.join(chapterPath, category);
+        if (!existsSync(categoryPath)) return [];
+        return readdirSync(categoryPath, { withFileTypes: true })
+          .filter((entry) => entry.isDirectory() && labDirectoryPattern.test(entry.name))
+          .map((entry) => path.join(categoryPath, entry.name, "README.md"));
+      });
     });
 }
 
@@ -620,7 +625,7 @@ function labSidebarLabel(lab: CourseDocument): string {
   if (!lab.labId) return lab.title;
 
   const title = lab.title.replace(
-    /^Lab\s+\d{2}-(?:\d{2}|[TEP]-\d{2,})[：:]\s*/,
+    /^Lab\s+\d{2}-[TEP]-\d{2,}[：:]\s*/,
     "",
   );
   return `${lab.labId} · ${title}`;

@@ -372,7 +372,7 @@ cd ~/Projects/DSA-Mastery
 先检查运行环境：
 
 ```bash
-pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 看到 `PASS 环境检查`，并且 Clang 显示 `AVAILABLE`，即可继续。
@@ -382,7 +382,7 @@ pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 为了确认编译和测试流程正常，可以运行仓库中的参考实现：
 
 ```bash
-pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --target solution
+pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target solution
 ```
 
 看到 `PASS`、`4/4 cases` 和 `100/100`，表示测试全部通过。
@@ -392,7 +392,7 @@ pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --target
 也可以只运行示例测试：
 
 ```bash
-pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --target solution --case 001-sample
+pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target solution --case 001-sample
 ```
 
 ![Program Lab 示例测试通过](../../docs/image/MACOS_STUDENT_SETUP_GUIDE/4550e0bf28331a52b348a1c3d793d831.png)
@@ -400,7 +400,7 @@ pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --target
 `--target solution` 用于验证仓库提供的参考实现。学生完成自己的代码后，应去掉该参数：
 
 ```bash
-pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 ## 9. 运行 Project Lab
@@ -408,7 +408,7 @@ pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 Project Lab 需要 Apple Clang 和 CMake。先执行环境检查：
 
 ```bash
-pnpm lab:doctor -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:doctor -- labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 看到 `PASS 环境检查`，并且 Clang 和 CMake 显示 `AVAILABLE`，即可继续。MSVC 仅供 Windows 使用，显示 `NOT FOUND` 属于正常情况；GNU Make 版本较旧也不影响使用 `pnpm`。
@@ -418,7 +418,7 @@ pnpm lab:doctor -- labs/chapter-08/lab-08-03-avl-tree-rotations
 运行 Project Lab 的参考实现：
 
 ```bash
-pnpm lab:run -- labs/chapter-08/lab-08-03-avl-tree-rotations --target solution
+pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations --target solution
 ```
 
 自动测试通过后会显示：
@@ -434,7 +434,7 @@ AUTOMATED PASS · MANUAL REVIEW PENDING
 也可以只运行指定任务和测试用例：
 
 ```bash
-pnpm lab:run -- labs/chapter-08/lab-08-03-avl-tree-rotations --target solution --task bst --case 001-basic
+pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations --target solution --task bst --case 001-basic
 ```
 
 看到 `AUTOMATED PASS` 即表示该测试通过。因为这里只运行了一个任务，所以 `Provisional total` 不会显示为 100 分。

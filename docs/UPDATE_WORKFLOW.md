@@ -82,7 +82,7 @@ Owner 创建分支并编写正文和 Lab。正文解释关键逻辑，完整可�
 
 每个关键算法至少记录：输入、输出、前置条件、边界行为、复杂度及其分析前提。还没有实现或测试的内容不能写成“已验证”。
 
-正文与 Lab 之间优先使用相对 `.md` 链接，例如 `./01-stack.md` 或 `../../labs/chapter-02/lab-02-01-stack/README.md`。`validate:content` 会检查源目标存在，VitePress 构建会把链接改写为课程路由；不要手写 `/DSA-Mastery/`。
+正文与 Lab 之间优先使用相对 `.md` 链接，例如 `./01-stack.md` 或 `../../labs/chapter-02/exercise/E-02-01-validate-stack-sequences/README.md`。`validate:content` 会检查源目标存在，VitePress 构建会把链接改写为课程路由；不要手写 `/DSA-Mastery/`。
 
 本地阅读使用：
 

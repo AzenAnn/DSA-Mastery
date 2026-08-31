@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "stdio",
+  "targets": {
+    "student": { "sources": ["student/main.cpp"] },
+    "solution": { "sources": ["solution/main.cpp"] }
+  },
+  "judge": {
+    "kind": "stdio",
+    "cases": "tests/cases.json",
+    "compare": { "mode": "tokens" },
+    "limits": { "timeMs": 2000, "outputKb": 256 }
+  }
+}
