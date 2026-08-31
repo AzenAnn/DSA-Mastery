@@ -34,8 +34,8 @@
 
 - [x] 用户授权提交 PR，未提出正文修订；已复核网站目录接入与既有验证结果。
 - [x] 仅暂存本任务文件与必要 Trellis 记录，确认无无关改动。
-- [ ] 使用 `docs(ch01): explain array-to-linked-list problem solving` 提交。
-- [ ] 推送 `codex/ch01-array-to-linked-list-problem-solving`，不直接合并 `main`。
+- [x] 使用 `docs(ch01): explain array-to-linked-list problem solving` 提交（`84dbb44`）。
+- [x] 推送 `codex/ch01-array-to-linked-list-problem-solving` 并创建 PR #109，不直接合并 `main`。
 
 ## Rollback Points
 

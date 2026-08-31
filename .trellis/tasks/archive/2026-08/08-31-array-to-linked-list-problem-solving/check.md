@@ -39,4 +39,4 @@ Checked on 2026-08-31 for branch `codex/ch01-array-to-linked-list-problem-solvin
 ## Remaining Gate
 
 - [x] User authorized PR submission after the local preview; no content revisions were requested.
-- [ ] Only after approval: stage, commit, and push the branch. Do not merge `main` from this task.
+- [x] After approval, commit `84dbb44` was pushed and PR #109 was opened against `main`; this task did not merge the PR.
