@@ -362,3 +362,24 @@ Added an in-depth Chapter 1 article that maps array problem-solving skills to li
 ### Status
 
 [OK] **Completed**
+
+
+## Session 15: Chapter 14 dynamic programming foundations
+
+**Date**: 2026-08-31
+**Task**: Chapter 14 dynamic programming foundations
+**Branch**: `Azen-ch14`
+
+### Summary
+
+Completed five Chapter 14 dynamic programming lessons, integrated the chapter into the curriculum and empty Lab categories, added navigation coverage, compiled all 22 C++17 examples, and verified the site across desktop/mobile and light/dark themes.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b0e0552` | (see git log) |
+
+### Status
+
+[OK] **Completed**

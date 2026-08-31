@@ -347,6 +347,27 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "动态规划",
     description: "围绕状态、转移、边界和计算顺序建立动态规划方法。",
     url: "/learn/outline/chapter-14-dynamic-programming/",
+    learningObjectives: [
+      "从暴力搜索中识别重叠子问题，并写出精确的状态语义",
+      "在记忆化搜索、自底向上递推和空间压缩之间双向翻译",
+      "根据依赖方向完成线性、网格与背包动态规划建模",
+      "用正确性证明、复杂度分析和最小反例验证状态设计",
+    ],
+    focusTitle: "从状态合同到可验证的转移",
+    focusAreas: [
+      "14.1 状态、决策、无后效性与答案位置",
+      "14.2 递归参数、缓存维度、拓扑顺序与方案还原",
+      "14.3 线性/网格依赖、滚动数组与附加状态",
+      "14.4 0-1/完全背包、组合/排列与循环方向",
+    ],
+    lessonSources: [
+      "content/chapter-14-dynamic-programming/00-overview.md",
+      "content/chapter-14-dynamic-programming/01-dp-thinking-and-state-design.md",
+      "content/chapter-14-dynamic-programming/02-memoization-to-tabulation.md",
+      "content/chapter-14-dynamic-programming/03-linear-and-grid-dp.md",
+      "content/chapter-14-dynamic-programming/04-knapsack-dp.md",
+    ],
+    autoLabChapter: 14,
   },
   {
     id: "chapter-15-backtracking-search",
