@@ -4,7 +4,7 @@ description: "学习串的定义、存储、编码与匹配算法（朴素、KMP
 order: 0
 chapter: 3
 chapterTitle: "字符串与数组"
-updated: "2026-08-14"
+updated: "2026-08-27"
 contributors: ["DSA Mastery Team"]
 status: "draft"
 ---
@@ -57,7 +57,12 @@ status: "draft"
 - [Lab 03-07：朴素匹配与 KMP 比较次数](../../labs/chapter-03/lab-03-07-match-comparison/README.md)
 - [Lab 03-08：串的非重叠替换 Replace](../../labs/chapter-03/lab-03-08-string-replace/README.md)
 - [Lab 03-09：UTF-8 串长与字符数](../../labs/chapter-03/lab-03-09-utf8-char-count/README.md)
+- [Lab 03-10：广义表的表头与表尾](../../labs/chapter-03/lab-03-10-generalized-list-head-tail/README.md)
+- [Lab 03-11：广义表的深度](../../labs/chapter-03/lab-03-11-generalized-list-depth/README.md)
+- [Lab 03-12：三对角矩阵压缩与取值](../../labs/chapter-03/lab-03-12-tridiagonal-compress/README.md)
+- [Lab 03-13：多维数组行优先寻址](../../labs/chapter-03/lab-03-13-ndarray-offset/README.md)
 - [Lab 03-14：串匹配与文本处理引擎（工程题）](../../labs/chapter-03/lab-03-14-string-match-engine/README.md)
+- [Lab 03-15：稀疏矩阵运算库（工程题）](../../labs/chapter-03/lab-03-15-sparse-matrix-library/README.md)
 
 ## 学习建议
 
