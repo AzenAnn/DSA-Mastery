@@ -28,6 +28,7 @@ type ContentEntry = {
   difficulty?: string
   duration?: string
   labCategory?: 'theory' | 'exercise' | 'project'
+  labId?: string
 }
 ```
 
@@ -50,7 +51,7 @@ type ContentEntry = {
 - 保留 VitePress 默认主题的顶栏、路由、local search、appearance、sidebar/mobile drawer、outline、prev/next、edit link、代码复制、语法高亮和 404，并用 `custom.css` 统一改色。
 - 只有课程元信息、教材/Lab 混合目录、品牌首页或默认主题无法表达的交互才写自定义组件。
 - 所有章节卡、Lab 卡、统计、sidebar、搜索和 prev/next 都从 ContentIndex 派生；不得在组件中手写七篇教材或四个 Lab。
-- Lab 分类同样由 ContentIndex 从 `lab.json.type` 或 README-only 的显式 `labCategory` 派生。声明 `autoLabChapter` 的章节侧栏按该字段分组，但不得硬编码任何章节题目数组；零 Lab 时仍由同一数据流生成三类空状态。
+- Lab 分类同样由 ContentIndex 从 `lab.json.type` 或 README-only 的显式 `labCategory` 派生。稳定 ID 从 README `labId` 读取，并在 Lab 目录、详情元信息和侧栏中一致展示；组件不得从旧目录名或标题重新计算。声明 `autoLabChapter` 的章节侧栏按分类字段分组，但不得硬编码任何章节题目数组；零 Lab 时仍由同一数据流生成三类空状态。
 - `chapter` 是排序与映射用的内部标识；所有用户可见章节名称读取 `chapterLabel` 或 curriculum `label`。特殊 `preface` 的标签必须是“前言”，数字章标签保持“第 N 章”或 curriculum 的 `Ch.N`。
 - 浏览器 API 只在挂载后访问；SSR 阶段不能直接读取 `window`、`document`、`localStorage`。
 - 普通内部导航使用 `withBase` 或 VitePress 生成链接。VitePress 1.6.4 的 Lab 跨页面 outline 兼容路径是例外：顶栏 Labs 与 Labs 目录卡片使用 `target="_self"` 触发同标签整页导航。

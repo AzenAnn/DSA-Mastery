@@ -35,7 +35,7 @@ DSA Mastery 的 Program Lab 原本要在终端里判分。这个插件把代码�
 命令行安装也可以：
 
 ```bash
-code --install-extension ~/Downloads/dsa-mastery-labs-0.1.0.vsix
+code --install-extension ~/Downloads/dsa-mastery-labs-0.1.11.vsix
 ```
 
 ::: details 从源码构建（一般不需要）
@@ -46,7 +46,7 @@ cd DSA-Mastery/tools/vscode-extension
 pnpm install --ignore-workspace
 node build.mjs
 pnpm dlx @vscode/vsce package --no-dependencies --allow-missing-repository
-code --install-extension dsa-mastery-labs-0.1.0.vsix
+code --install-extension dsa-mastery-labs-0.1.11.vsix
 ```
 
 `pnpm install` 会因为没批准 esbuild 的 postinstall 而报一句 `ERR_PNPM_IGNORED_BUILDS`，可以忽略 —— esbuild 的可执行文件来自平台专属依赖，不跑那个脚本也能用。
@@ -169,6 +169,8 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 | 每次提交的源码快照 | 插件的 `globalStorage` 目录 |
 
 两者都在 VSCode 的用户数据目录里，**不进仓库**，也不会被 `pnpm lab:clean` 删除（那条命令只清理各 Lab 的 `.lab-cache/`）。
+
+插件使用 `01E04` 这样的稳定 Lab ID 保存进度，而不是依赖目录名。升级到采用稳定 ID 的版本时，插件会先备份旧状态，再自动迁移代码题、选择题和做题统计；既有源码快照仍能从提交历史打开，不需要手工重做题目。
 
 ::: warning 进度不跨设备
 换电脑或重装 VSCode 后进度不会带过去。「重置全部做题进度」会清空状态和所有源码快照，无法撤销。

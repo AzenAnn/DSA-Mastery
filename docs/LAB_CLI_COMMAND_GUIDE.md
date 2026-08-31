@@ -106,11 +106,12 @@ Quiz 的答案提交、提示、解析和得分由网页组件完成，不需要
 
 ## pnpm 操作总表
 
-仓库目前公开 11 个 Lab scripts。下表区分学习者高频操作与作者维护操作。
+仓库目前公开 12 个 Lab scripts。下表区分学习者高频操作与作者维护操作。
 
 | pnpm script | 适用类型 | 作用 | 关键参数 |
 | --- | --- | --- | --- |
-| `lab:new` | 新建三类 Lab | 生成安全脚手架 | `--type --chapter --order --slug` |
+| `lab:new` | 新建三类 Lab | 自动分配稳定编号并生成安全脚手架 | `--type --chapter --slug [--order]` |
+| `lab:locate` | 全部 | 用 `02T3` 一类稳定编号定位目录 | `<lab-id> --json` |
 | `lab:doctor` | 全部 | 只读探测环境与最低版本 | `--json --no-color` |
 | `lab:validate` | 全部 | 校验 manifest、路径、用例、题库与 task 依赖 | `--json --no-color` |
 | `lab:build` | Program / Project | 编译 `student` 或 `solution` | `--target` |
@@ -134,7 +135,7 @@ node tools/lab/cli.mjs help
 
 | 参数 | 可用命令 | 默认行为 | 实际含义 |
 | --- | --- | --- | --- |
-| `<lab-path>` | 除 `new` 外 | 当前启动目录 | 指向 Lab 或其内部文件/目录，CLI 向上寻找 `lab.json` |
+| `<lab-path>` | 除 `new`、`locate` 外 | 当前启动目录 | 指向 Lab 或其内部文件/目录，CLI 向上寻找 `lab.json` |
 | `--target student\|solution` | `build`、`run`、`interactive`、`score` | `student` | 选择学生实现或参考实现 |
 | `--case <id>` | `run`、`score` | 全部公开用例 | Program 用例，或 Project `stdio` task 的用例 |
 | `--task <id>` | `run`、`interactive`、`score`、`refresh-expected` | 依命令而定 | 选择 Project task；Program 不需要它 |
@@ -163,20 +164,33 @@ node tools/lab/cli.mjs help
 
 ### 新建 Lab 的参数
 
-`lab:new` 不接受 Lab 路径，四个参数都必须明确填写：
+`lab:new` 不接受 Lab 路径。类型、章节和 slug 必填；稳定编号由工具扫描同章同类 Lab 后自动分配：
 
 | 参数 | 允许值 | 示例 |
 | --- | --- | --- |
 | `--type` | `quiz`、`program`、`project` | `--type program` |
 | `--chapter` | `0`～`99` 的整数 | `--chapter 2` |
-| `--order` | `0`～`99` 的整数 | `--order 4` |
+| `--order` | 可选的非负整数 | `--order 4`；只控制网站展示顺序 |
 | `--slug` | 小写 kebab-case | `--slug stack-merge` |
 
 ```powershell
-pnpm lab:new -- --type program --chapter 2 --order 4 --slug stack-merge
+pnpm lab:new -- --type program --chapter 2 --slug stack-merge
 ```
 
-未知参数、缺少参数值、多余位置参数或无效 ID 都会以工具错误结束，而不是被静默忽略。
+假设第 2 章已有 `02E01`～`02E08`，这条命令会生成 `02E09`，目录为 `lab-02-E-09-stack-merge`。编号按“最大值加一”计算，删除 `02E04` 后也不会复用旧号。省略 `--order` 时，新 Lab 排在本章现有 Lab 之后；显式填写只改变展示位置，不改变稳定 ID。
+
+三类编号互不占用：`quiz`、`program`、`project` 分别得到 `T`、`E`、`P` 标签，并在每章各自从 `01` 开始。并行分支可能同时拿到同一个下一个编号，CI 会拒绝重复 ID；后合并的分支同步 `main` 后重新创建即可。
+
+### 用稳定编号定位题目
+
+规范编号写作 `02T03`，交流时可以简写成 `02T3`。定位命令同时接受 `2t3`、`02-T-03` 和 `lab02-T-03`。下面使用仓库中实际存在的 `02T02` 演示：
+
+```powershell
+pnpm lab:locate -- 02T2
+pnpm lab:locate -- 02T2 --json
+```
+
+第一条输出规范 ID 和仓库相对路径；第二条适合编辑器、Issue Bot 或其他脚本消费。编号不存在、格式错误或全仓重复都会以工具错误结束，不会猜测最接近的题目。
 
 ## Program：从运行到定位单个错误
 

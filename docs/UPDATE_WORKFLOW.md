@@ -253,7 +253,7 @@ status: "draft"
 以第 2 章的栈实验为例：
 
 1. 创建 Lab Issue，说明学习目标、输入输出、验收方式与依赖。
-2. 判断类型后运行 `pnpm lab:new -- --type <quiz|program|project> --chapter 2 --order 1 --slug stack`，或说明为何继续使用 README-only。
+2. 判断类型后运行 `pnpm lab:new -- --type <quiz|program|project> --chapter 2 --slug stack`，由工具自动分配 `T/E/P` 稳定编号；只有需要调整展示位置时才传 `--order`。也可以说明为何继续使用 README-only。
 3. 先写目标、准备、步骤、验收清单、思考题和复盘，再决定是否需要代码目录。
 4. 如有实现，遵循统一 student/solution/tests/task 结构；README 必须给出 `make run` 与 pnpm 免 Make 兜底。
 5. 运行 `pnpm lab:validate -- <lab-path>`；Program/Project 再运行 `pnpm lab:verify -- <lab-path>`。

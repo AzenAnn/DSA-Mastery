@@ -1,6 +1,6 @@
 # DSA Mastery Lab 更新与测试指南
 
-> 适用版本：Lab Schema v1 · 更新日期：2026-08-21
+> 适用版本：Lab Schema v1 · 更新日期：2026-08-31
 
 这份手册是 Quiz、Program 和 Project 三类 Lab 的统一作者 API。面向网页的说明仍写在 Lab 的 `README.md`，机器行为只由 `lab.json`、`quiz.json`、`cases.json`、`task.json` 和共享工具决定。后续开发者应从本文提供的脚手架开始，而不是复制旧 Lab 后自行发明目录、Make 规则或评分脚本。
 
@@ -88,7 +88,8 @@ make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sa
 
 | 命令 | 目的 | 关键选项 |
 | --- | --- | --- |
-| `lab:new` | 生成三类 Lab 的安全起点 | `--type --chapter --order --slug` |
+| `lab:new` | 自动编号并生成三类 Lab 的安全起点 | `--type --chapter --slug [--order]` |
+| `lab:locate` | 用稳定 ID 定位 Lab | `<lab-id> --json` |
 | `lab:doctor` | 只读检查环境和最低版本 | `--json` |
 | `lab:validate` | 校验 Schema、路径、分值、依赖和模板 | `--json` |
 | `lab:build` | 编译 student/solution | `--target` |
@@ -129,14 +130,24 @@ pnpm lab:score -- labs/chapter-01/lab-01-06-sequential-list-deduplication --json
 ## 4. 公共目录、命名与路径安全
 
 ```text
-labs/chapter-NN/lab-NN-LL-kebab-slug/
+labs/chapter-NN/lab-NN-X-SS-kebab-slug/
 ├─ README.md
 ├─ lab.json
 ├─ Makefile          # 仅 program/project
 └─ 类型专属文件
 ```
 
-README 是学习者说明，继续满足当前 frontmatter、客观学习目标、正常/边界/错误情况、完成清单、思考题和复盘。`lab.json` 不重复 title、chapter、order 或 contributors。
+其中 `X` 是 `T/E/P` 类型标签，`SS` 是该章该类型内的稳定序号。README 是学习者说明，继续满足当前 frontmatter、客观学习目标、正常/边界/错误情况、完成清单、思考题和复盘。`lab.json` 不重复 title、chapter、order、`labId` 或 contributors。
+
+每个 README frontmatter 必须包含稳定 ID：
+
+```yaml
+order: 9
+chapter: 2
+labId: "02E07"
+```
+
+`labId` 是题目的永久身份，`order` 只是网站展示顺序。发布后可以调整 `order`，不能修改或复用 `labId`。映射固定为 `quiz -> T`、`program -> E`、`project -> P`；README-only Lab 通过显式 `labCategory` 得到标签。现有旧目录保留以维持 URL，新建 Lab 才使用带标签的新目录格式。
 
 最小公共 manifest：
 
@@ -159,12 +170,18 @@ Schema v1 只接受 `quiz`、`program`、`project`。未知主版本会立即失
 通过脚手架创建：
 
 ```powershell
-pnpm lab:new -- --type quiz --chapter 2 --order 3 --slug stack-quiz
-pnpm lab:new -- --type program --chapter 2 --order 4 --slug stack-merge
-pnpm lab:new -- --type project --chapter 4 --order 3 --slug tree-index
+pnpm lab:new -- --type quiz --chapter 2 --slug stack-quiz
+pnpm lab:new -- --type program --chapter 2 --slug stack-merge
+pnpm lab:new -- --type project --chapter 4 --slug tree-index
 ```
 
-脚手架拒绝覆盖已存在目录。生成后仍必须替换占位题面、参考实现、测试和章节标题；“能生成”不是“可发布”。
+脚手架分别扫描同章 `T/E/P` 的最大序号并加一；缺号不会复用。`--order` 仍可选填，但它只设置展示顺序。脚手架拒绝覆盖已存在目录。生成后仍必须替换占位题面、参考实现、测试和章节标题；“能生成”不是“可发布”。
+
+创建后用稳定编号定位，不需要记目录名：
+
+```powershell
+pnpm lab:locate -- 02T2
+```
 
 ### 4.1 网站侧栏的分类接口
 
@@ -191,7 +208,7 @@ labCategory: exercise # theory | exercise | project
 ### 5.1 目录与单一事实来源
 
 ```text
-lab-NN-LL-topic-quiz/
+lab-NN-T-SS-topic-quiz/
 ├─ README.md
 ├─ lab.json
 └─ quiz.json
@@ -275,7 +292,7 @@ README 只能挂载一次：
 ### 6.1 标准内容包
 
 ```text
-lab-NN-LL-slug/
+lab-NN-E-SS-slug/
 ├─ README.md
 ├─ lab.json
 ├─ Makefile
@@ -420,7 +437,7 @@ pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ### 7.2 目录
 
 ```text
-lab-NN-LL-project/
+lab-NN-P-SS-project/
 ├─ README.md
 ├─ lab.json
 ├─ Makefile
@@ -552,8 +569,8 @@ pnpm lab:pack -- labs/chapter-01/lab-01-06-sequential-list-deduplication --profi
 ### 9.1 Quiz
 
 1. 冻结学习目标、考点范围和题目来源。
-2. `lab:new` 生成骨架。
-3. 写稳定 ID、四个选项、答案、解析、提示和分值。
+2. `lab:new` 自动分配稳定 ID 并生成骨架。
+3. 写四个选项、答案、解析、提示和分值，不手改脚手架生成的 `labId`。
 4. 运行 validate 与网站交互检查。
 5. Reviewer 独立核对每道题的知识正确性和干扰项。
 
