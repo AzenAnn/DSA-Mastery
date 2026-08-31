@@ -16,7 +16,14 @@ duration: "25～35 分钟"
 
 在第 4.2.3 节中，我们推导了完全二叉树的**父子节点编号性质**：若当前节点编号为 $i$（从 0 开始计数），其左孩子编号为 $2i+1$，右孩子编号为 $2i+2$。
 
-## 题目
+## 题目描述
+
+给定一棵二叉树，求其所有层中最大的层宽度。每一层的宽度定义为：该层最左端非空节点和最右端非空节点之间的节点数（**包含两个端点节点**以及它们中间的所有空节点）。
+
+### 任务要求
+1. 读入二叉树的层序序列化数据并构建二叉树；
+2. 实现函数 `int widthOfBinaryTree(TreeNode* root)` 计算二叉树的最大宽度；
+3. 输出最大宽度的整数值。
 
 ## 输入格式
 - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列，空节点使用 `null` 表示。
@@ -89,9 +96,27 @@ duration: "25～35 分钟"
 
 ## 如何验证
 
+先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。
+
 ```powershell
-pnpm lab:run -- labs/chapter-04/lab-04-10-binary-tree-maximum-width
+# 已进入本 Lab 目录
+make doctor
+make run
+make run CASE=001-sample
+make interactive
+make score
 ```
+
+Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
+
+```powershell
+pnpm lab:doctor -- labs/chapter-04/lab-04-10-binary-tree-maximum-width
+pnpm lab:run -- labs/chapter-04/lab-04-10-binary-tree-maximum-width
+pnpm lab:run -- labs/chapter-04/lab-04-10-binary-tree-maximum-width --case 001-sample
+pnpm lab:score -- labs/chapter-04/lab-04-10-binary-tree-maximum-width
+```
+
+`make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。
 
 ## 题解
 
@@ -218,8 +243,3 @@ int main() {
 ```
 
 </details>
-
-## 本地运行与提交
-```powershell
-pnpm lab:run -- labs/chapter-04/lab-04-10-binary-tree-maximum-width
-```
