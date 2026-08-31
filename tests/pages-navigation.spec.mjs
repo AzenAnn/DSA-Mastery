@@ -1266,20 +1266,27 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
-  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(5);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(9);
   for (const title of [
     "Lab 03-05：KMP 模式匹配（首次出现位置）",
     "Lab 03-06：next 与 nextval 数组推导",
     "Lab 03-07：朴素匹配与 KMP 比较次数",
     "Lab 03-08：串的非重叠替换 Replace",
     "Lab 03-09：UTF-8 串长与字符数",
+    "Lab 03-10：广义表的表头与表尾",
+    "Lab 03-11：广义表的深度",
+    "Lab 03-12：三对角矩阵压缩与取值",
+    "Lab 03-13：多维数组行优先寻址",
   ]) {
     await expect(exerciseGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
   }
-  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(1);
-  await expect(
-    projectGroup.getByRole("link", { name: "Lab 03-14：串匹配与文本处理引擎", exact: true }),
-  ).toHaveCount(1);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(2);
+  for (const title of [
+    "Lab 03-14：串匹配与文本处理引擎",
+    "Lab 03-15：稀疏矩阵运算库",
+  ]) {
+    await expect(projectGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+  }
 
   expect(failures).toEqual([]);
 });
