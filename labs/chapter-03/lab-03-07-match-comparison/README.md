@@ -3,6 +3,7 @@ title: "Lab 03-07：朴素匹配与 KMP 比较次数"
 description: "统计朴素匹配与 KMP 匹配阶段的字符比较次数，用数据对比 O(n·m) 与 O(n+m)。"
 order: 7
 chapter: 3
+labId: "03E03"
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
 contributors: ["Qing"]

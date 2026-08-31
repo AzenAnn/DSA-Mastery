@@ -3,6 +3,7 @@ title: "Lab 02-07：用栈实现队列"
 description: "使用输入栈和输出栈实现先进先出队列，掌握延迟转移与摊还复杂度。"
 order: 7
 chapter: 2
+labId: "02E05"
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
 contributors: ["DSA Mastery Team"]

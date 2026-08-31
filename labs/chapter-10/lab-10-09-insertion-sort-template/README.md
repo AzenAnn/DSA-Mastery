@@ -3,6 +3,7 @@ title: "Lab 10-09：插入排序模板"
 description: "手写插入排序的标准模板，把 n 个整数从小到大排好并输出。"
 order: 9
 chapter: 10
+labId: "10E03"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

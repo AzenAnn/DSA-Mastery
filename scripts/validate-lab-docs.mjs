@@ -107,7 +107,7 @@ if (`${thinMatch[1].replace(/\r\n/g, "\n")}\n` !== THIN_MAKEFILE) {
 }
 
 const packageJson = JSON.parse(await readFile(path.join(projectRoot, "package.json"), "utf8"));
-const commands = ["lab:new", "lab:doctor", "lab:validate", "lab:build", "lab:run", "lab:interactive", "lab:score", "lab:verify", "lab:refresh-expected", "lab:pack", "lab:clean"];
+const commands = ["lab:new", "lab:locate", "lab:doctor", "lab:validate", "lab:build", "lab:run", "lab:interactive", "lab:score", "lab:verify", "lab:refresh-expected", "lab:pack", "lab:clean"];
 for (const command of commands) {
   if (!packageJson.scripts[command]) throw new Error(`package.json 缺少作者指南声明的命令：${command}`);
   if (!guide.includes(command)) throw new Error(`Lab 作者指南未解释命令：${command}`);

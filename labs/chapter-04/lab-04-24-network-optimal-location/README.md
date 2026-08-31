@@ -3,6 +3,7 @@ title: "Lab 04-24：网络最优选址"
 description: "利用换根动态规划，高效计算以每个节点为根时的全树距离和。"
 order: 24
 chapter: 4
+labId: "04E16"
 chapterTitle: "树与二叉树"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

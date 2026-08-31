@@ -3,6 +3,7 @@ title: "Lab 01-20：静态链表合并两个有序表"
 description: "用静态链表实现两个有序序列的合并，练习游标级别的链接拼接与边界处理。"
 order: 20
 chapter: 1
+labId: "01E15"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

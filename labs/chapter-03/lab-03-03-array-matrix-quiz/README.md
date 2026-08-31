@@ -3,6 +3,7 @@ title: "Lab 03-03：数组与矩阵选择题精练"
 description: "用 12 道选择题（含王道与 408 真题）巩固数组的定义与寻址、对称/三角/三对角矩阵的压缩存储，以及稀疏矩阵的三元组与十字链表表示。"
 order: 3
 chapter: 3
+labId: "03T03"
 chapterTitle: "字符串与数组"
 updated: "2026-08-21"
 contributors: ["Fishman"]

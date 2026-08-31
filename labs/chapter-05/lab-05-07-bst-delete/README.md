@@ -3,6 +3,7 @@ title: "Lab 05-07：二叉搜索树的删除"
 description: "实现二叉搜索树（BST）的节点删除操作，并输出删除后的中序遍历。"
 order: 7
 chapter: 5
+labId: "05E02"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

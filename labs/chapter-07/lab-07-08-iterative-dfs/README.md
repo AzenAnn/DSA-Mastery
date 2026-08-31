@@ -3,6 +3,7 @@ title: "Lab 07-08：显式栈 DFS"
 description: "用显式栈实现与递归升序一致的 DFS 访问顺序，在百万级深图上避免递归爆栈。"
 order: 8
 chapter: 7
+labId: "07E05"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-29"
 contributors: ["Qing"]

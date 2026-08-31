@@ -3,6 +3,7 @@ title: "Lab 07-14：Bellman-Ford 与负环"
 description: "用 n-1 轮全边松弛处理负权单源最短路，再用第 n 轮检测从源点可达的负环。"
 order: 14
 chapter: 7
+labId: "07E11"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-28"
 contributors: ["Jeff"]

@@ -3,6 +3,7 @@ title: "Lab 11-11：归并排序模板"
 description: "把归并排序写成可直接复用的模板：二分到单个元素再合并，稳定 O(n log n)。"
 order: 11
 chapter: 11
+labId: "11E05"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

@@ -3,6 +3,7 @@ title: "Lab 11-02：快速排序选择题精练"
 description: "用 10 道选择题巩固快速排序的复杂度、稳定性与正确性要点。"
 order: 2
 chapter: 11
+labId: "11T02"
 chapterTitle: "排序"
 updated: "2026-08-25"
 contributors: ["Azen"]

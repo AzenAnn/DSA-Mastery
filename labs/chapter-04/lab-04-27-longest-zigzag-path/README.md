@@ -3,6 +3,7 @@ title: "Lab 04-27：二叉树的最长之字形路径"
 description: "通过树形动态规划，计算二叉树中最长边方向交替的向下路径。"
 order: 27
 chapter: 4
+labId: "04E19"
 chapterTitle: "树与二叉树"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

@@ -3,6 +3,7 @@ title: "Lab 02-08：设计循环双端队列"
 description: "使用循环数组实现双端队列，在固定容量内完成两端插入、删除和双向环绕。"
 order: 8
 chapter: 2
+labId: "02E06"
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
 contributors: ["DSA Mastery Team"]

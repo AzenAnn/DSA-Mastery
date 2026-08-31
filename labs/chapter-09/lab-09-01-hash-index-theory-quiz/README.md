@@ -3,6 +3,7 @@ title: "Lab 09-01：散列与索引选择题精练"
 description: "用 18 道历年 408 选择题复习 B 树、B+ 树与散列表的结构性质、增删调整和平均查找长度。"
 order: 1
 chapter: 9
+labId: "09T01"
 chapterTitle: "散列与索引结构"
 updated: "2026-08-21"
 contributors: ["RichardYi-SYSU-Mac"]

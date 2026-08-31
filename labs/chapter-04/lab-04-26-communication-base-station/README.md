@@ -3,6 +3,7 @@ title: "Lab 04-26：通信基站选址"
 description: "利用树的直径性质，求允许中心落在边上时的最小覆盖半径与绝对中心位置。"
 order: 26
 chapter: 4
+labId: "04E18"
 chapterTitle: "树与二叉树"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

@@ -3,6 +3,7 @@ title: "Lab 10-20：希尔排序模板"
 description: "用 3g+1 增量序列写一个希尔排序模板，把整数序列从小到大排序输出。"
 order: 20
 chapter: 10
+labId: "10E14"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

@@ -3,6 +3,7 @@ title: "Lab 11-12：归并排序与比较次数"
 description: "在归并排序中统计比较次数，理解归并排序的中间过程与计数方式。"
 order: 12
 chapter: 11
+labId: "11E06"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

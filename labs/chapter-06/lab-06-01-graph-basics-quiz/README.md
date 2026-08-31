@@ -3,6 +3,7 @@ title: "Lab 06-01：图的基本概念选择题精练"
 description: "用 10 道选择题巩固图的分类、度、路径、连通性与稀疏性判断。"
 order: 1
 chapter: 6
+labId: "06T01"
 chapterTitle: "图的基础与存储"
 updated: "2026-08-28"
 contributors: ["Azen"]

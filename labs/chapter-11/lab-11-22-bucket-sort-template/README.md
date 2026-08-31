@@ -3,6 +3,7 @@ title: "Lab 11-22：桶排序模板"
 description: "值域上限提升到 10^6，按值域分桶一次展开，掌握桶排序的通用模板写法。"
 order: 22
 chapter: 11
+labId: "11E16"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

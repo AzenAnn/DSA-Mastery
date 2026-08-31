@@ -3,6 +3,7 @@ title: "Lab 01-18：静态链表有序插入"
 description: "用游标数组模拟单链表，练习静态空间中的节点分配、链接修改与有序维护。"
 order: 18
 chapter: 1
+labId: "01E13"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

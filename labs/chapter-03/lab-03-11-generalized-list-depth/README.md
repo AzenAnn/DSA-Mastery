@@ -3,6 +3,7 @@ title: "Lab 03-11：广义表的深度"
 description: "解析广义表的括号表示，用递归计算深度，体会递归定义如何直接对应递归算法。"
 order: 11
 chapter: 3
+labId: "03E07"
 chapterTitle: "字符串与数组"
 updated: "2026-08-27"
 contributors: ["Fishman"]

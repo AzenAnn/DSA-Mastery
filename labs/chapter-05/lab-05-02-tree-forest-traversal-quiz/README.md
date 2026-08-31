@@ -3,6 +3,7 @@ title: "Lab 05-02：树与森林遍历题精练"
 description: "通过 9 道选择题（本组素材无综合题），巩固树和森林的遍历的概念、性质与解题方法。"
 order: 2
 chapter: 5
+labId: "05T02"
 chapterTitle: "树的应用"
 updated: "2026-08-24"
 contributors: ["Azen"]

@@ -3,6 +3,7 @@ title: "Lab 07-04：DFS 遍历与时间戳"
 description: "实现递归 DFS 并输出完整 DFS 森林中每个顶点的发现时间与完成时间。"
 order: 4
 chapter: 7
+labId: "07E01"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-29"
 contributors: ["Qing"]

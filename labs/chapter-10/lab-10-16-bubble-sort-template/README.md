@@ -3,6 +3,7 @@ title: "Lab 10-16：冒泡排序模板"
 description: "手写冒泡排序的完整模板，理清相邻比较与交换的两层循环边界。"
 order: 16
 chapter: 10
+labId: "10E10"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

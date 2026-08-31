@@ -3,6 +3,7 @@ title: "Lab 04-08：树与森林理论题精练"
 description: "通过 20 道选择题和 5 道综合题，巩固树与森林的概念、性质与解题方法。"
 order: 8
 chapter: 4
+labId: "04T08"
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"
 contributors: ["Azen"]

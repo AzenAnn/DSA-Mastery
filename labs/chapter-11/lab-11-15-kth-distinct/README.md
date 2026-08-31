@@ -3,6 +3,7 @@ title: "Lab 11-15：第 k 小整数（去重）"
 description: "排序后去重，再取第 k 小的整数，练习 unique 与不足 k 个时的边界处理。"
 order: 15
 chapter: 11
+labId: "11E09"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

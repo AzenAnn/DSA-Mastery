@@ -3,6 +3,7 @@ title: "Lab 02-06：设计循环队列"
 description: "用空出一个物理槽位的循环数组实现固定容量队列，覆盖判空判满和下标环绕。"
 order: 6
 chapter: 2
+labId: "02E04"
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
 contributors: ["DSA Mastery Team"]

@@ -3,6 +3,7 @@ title: "Lab 04-06：由遍历序列构造二叉树理论题精练"
 description: "通过 18 道选择题和 2 道综合题，巩固由遍历序列构造二叉树的概念、性质与解题方法。"
 order: 6
 chapter: 4
+labId: "04T06"
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"
 contributors: ["Azen"]

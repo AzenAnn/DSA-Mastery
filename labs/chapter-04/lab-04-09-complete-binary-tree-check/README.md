@@ -3,6 +3,7 @@ title: "Lab 04-09：二叉树的完全性检验"
 description: "利用层序遍历与空节点连续性判定，检验一棵二叉树是否为完全二叉树。"
 order: 9
 chapter: 4
+labId: "04E01"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

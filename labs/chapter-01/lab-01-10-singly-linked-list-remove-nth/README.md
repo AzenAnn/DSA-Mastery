@@ -3,6 +3,7 @@ title: "Lab 01-10：删除单链表倒数第 k 个节点"
 description: "用快慢指针一次遍历找到并删除单链表的倒数第 k 个节点。"
 order: 10
 chapter: 1
+labId: "01E05"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

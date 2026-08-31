@@ -17,6 +17,7 @@ export function formatHelp(theme) {
   theme = plainTheme(theme);
   const rows = [
     ["new", "生成 quiz、program 或 project Lab"],
+    ["locate", "用稳定 ID 定位 Lab 目录"],
     ["doctor", "检查当前 Lab 所需环境（只读，不安装软件）"],
     ["validate", "校验 manifest、路径、题目、测试和任务依赖"],
     ["build", "编译 student 或 solution 目标"],
@@ -39,7 +40,8 @@ export function formatHelp(theme) {
     "",
     theme.heading("通用选项"),
     `  ${theme.command("--json  --no-color")} ${theme.muted("（interactive 直接接管终端，不支持这两项）")}`,
-    `  ${theme.command("new --type <type> --chapter <n> --order <n> --slug <slug>")}`,
+    `  ${theme.command("new --type <type> --chapter <n> --slug <slug> [--order <n>]")}`,
+    `  ${theme.command("locate <lab-id>")} ${theme.muted("（例如 02T3）")}`,
     `  ${theme.command("--case <id> --task <id> --target <student|solution>")}`,
   ];
   return lines.join("\n");
@@ -47,13 +49,18 @@ export function formatHelp(theme) {
 
 export function formatNew(created, theme) {
   theme = plainTheme(theme);
-  return `${theme.success("CREATED")} ${created.type} Lab\n${theme.heading("Path：")}${theme.path(created.relativeRoot)}`;
+  return `${theme.success("CREATED")} ${created.type} Lab · ${theme.info(created.labId)}\n${theme.heading("Order：")}${created.order}\n${theme.heading("Path：")}${theme.path(created.relativeRoot)}`;
+}
+
+export function formatLocate(lab, theme) {
+  theme = plainTheme(theme);
+  return `${theme.success("FOUND")} ${theme.info(lab.id)}\n${theme.heading("Type：")}${lab.type ?? lab.category ?? "README-only"}\n${theme.heading("Path：")}${theme.path(lab.relativePath)}`;
 }
 
 export function formatValidate(report, theme) {
   theme = plainTheme(theme);
   const lines = [
-    `${theme.success("VALIDATION PASS")} ${theme.path(report.lab.path)}`,
+    `${theme.success("VALIDATION PASS")} ${report.lab.id ? `${theme.info(report.lab.id)} · ` : ""}${theme.path(report.lab.path)}`,
     `${theme.heading("类型：")}${report.lab.type} · Schema v${report.lab.schemaVersion}`,
   ];
   if (report.quiz) lines.push(`${theme.heading("题目：")}${report.quiz.count} 道 · ${theme.score(report.quiz.totalPoints, report.quiz.totalPoints)}`);

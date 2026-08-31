@@ -3,6 +3,7 @@ title: "Lab 11-19：中位数（对顶堆）"
 description: "用对顶堆把较小的一半和较大的一半分开维护，每次插入后即可 O(1) 取出前缀中位数。"
 order: 19
 chapter: 11
+labId: "11E13"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

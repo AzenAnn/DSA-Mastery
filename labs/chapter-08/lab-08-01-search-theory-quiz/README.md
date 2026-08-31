@@ -3,6 +3,7 @@ title: "Lab 08-01：查找理论选择题精练"
 description: "用 6 道历年 408 选择题巩固顺序查找、分块查找与折半查找的比较次数和适用前提。"
 order: 1
 chapter: 8
+labId: "08T01"
 chapterTitle: "基础查找与树形查找"
 updated: "2026-08-21"
 contributors: ["RichardYi-SYSU-Mac"]

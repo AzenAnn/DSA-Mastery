@@ -3,6 +3,7 @@ title: "Lab 00-03：复杂度计算自测"
 description: "用 19 道交互式选择题练习时间与空间复杂度计算，覆盖常见循环形态、递归递推、主定理与渐近增长比较。"
 order: 3
 chapter: 0
+labId: "00T02"
 chapterTitle: "绪论"
 updated: "2026-08-17"
 contributors: ["DSA Mastery Team", "Azen"]

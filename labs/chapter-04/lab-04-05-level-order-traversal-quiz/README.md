@@ -3,6 +3,7 @@ title: "Lab 04-05：层序遍历理论题精练"
 description: "通过 8 道选择题（源文档无综合题），巩固层序遍历的概念、性质与解题方法。"
 order: 5
 chapter: 4
+labId: "04T05"
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"
 contributors: ["Azen"]

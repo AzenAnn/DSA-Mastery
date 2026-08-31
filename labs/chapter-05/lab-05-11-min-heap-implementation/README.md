@@ -3,6 +3,7 @@ title: "Lab 05-11：最小堆的实现"
 description: "从零实现基于数组的最小堆，支持插入、删除最小值、查询最小值操作。"
 order: 11
 chapter: 5
+labId: "05E06"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

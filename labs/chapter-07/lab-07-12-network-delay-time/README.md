@@ -3,6 +3,7 @@ title: "Lab 07-12：网络延迟时间"
 description: "LeetCode 743：求单源最短路径的最大值——信号传遍全网所需时间，不可达时输出 -1。"
 order: 12
 chapter: 7
+labId: "07E09"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-28"
 contributors: ["Jeff"]

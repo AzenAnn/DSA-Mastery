@@ -3,6 +3,7 @@ title: "Lab 03-13：多维数组行优先寻址"
 description: "由多维数组的各维长度与下标推导行优先的一维偏移量，理解多维下标到一维地址的映射。"
 order: 13
 chapter: 3
+labId: "03E09"
 chapterTitle: "字符串与数组"
 updated: "2026-08-27"
 contributors: ["Fishman"]

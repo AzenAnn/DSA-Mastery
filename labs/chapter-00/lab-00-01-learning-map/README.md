@@ -3,11 +3,13 @@ title: "Lab 00-01：制作个人 DSA 学习地图"
 description: "把「我要学数据结构」落成一份有依赖顺序、可检查、可迭代的全课程学习地图。"
 order: 1
 chapter: 0
+labId: "00T01"
 chapterTitle: "绪论"
 updated: "2026-08-21"
 contributors: ["fjll"]
 status: "draft"
 lab: true
+labCategory: "theory"
 difficulty: "入门"
 duration: "30～45 分钟"
 ---

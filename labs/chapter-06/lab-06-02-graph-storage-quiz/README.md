@@ -3,6 +3,7 @@ title: "Lab 06-02：图的存储结构选择题精练"
 description: "用 10 道选择题比较邻接矩阵、邻接表与边集数组的语义、复杂度和选型。"
 order: 2
 chapter: 6
+labId: "06T02"
 chapterTitle: "图的基础与存储"
 updated: "2026-08-28"
 contributors: ["Azen"]

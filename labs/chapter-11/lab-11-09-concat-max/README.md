@@ -3,6 +3,7 @@ title: "Lab 11-09：拼接最大数（拼数）"
 description: "用「拼接后比较」的自定义规则排序，练习非数值比较器与贪心正确性。"
 order: 9
 chapter: 11
+labId: "11E03"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

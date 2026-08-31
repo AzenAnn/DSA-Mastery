@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { LabError } from "./errors.mjs";
 import { pathExists } from "./core.mjs";
+import { allocateLabIdentity } from "./identity.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "../..");
 
@@ -13,14 +14,15 @@ function json(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
-function readme({ chapter, order, slug, type }) {
-  const code = `${pad(chapter)}-${pad(order)}`;
+function readme({ chapter, order, slug, type, identity }) {
+  const code = `${pad(chapter)}-${identity.tag}-${pad(identity.sequence)}`;
   const names = { quiz: "选择题自测", program: "编程练习", project: "综合项目" };
   return `---
 title: "Lab ${code}：${names[type]}"
 description: "请在发布前把这里替换为可检查的 Lab 学习成果。"
 order: ${order}
 chapter: ${chapter}
+labId: "${identity.id}"
 chapterTitle: "请填写章节标题"
 updated: "${new Date().toISOString().slice(0, 10)}"
 contributors: ["DSA Mastery Team"]
@@ -84,18 +86,18 @@ async function write(root, relative, content) {
 export async function createLab(options, root = projectRoot) {
   const type = options.type;
   const chapter = Number(options.chapter);
-  const order = Number(options.order);
   const slug = options.slug;
   if (!new Set(["quiz", "program", "project"]).has(type)) throw new LabError("ARGUMENT_INVALID", "--type 必须是 quiz、program 或 project");
   if (!Number.isInteger(chapter) || chapter < 0 || chapter > 99) throw new LabError("ARGUMENT_INVALID", "--chapter 必须是 0～99 的整数");
-  if (!Number.isInteger(order) || order < 0 || order > 99) throw new LabError("ARGUMENT_INVALID", "--order 必须是 0～99 的整数");
   if (typeof slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new LabError("ARGUMENT_INVALID", "--slug 必须是小写 kebab-case");
-  const relativeRoot = `labs/chapter-${pad(chapter)}/lab-${pad(chapter)}-${pad(order)}-${slug}`;
+  const identity = await allocateLabIdentity(root, { type, chapter, order: options.order });
+  const order = identity.order;
+  const relativeRoot = `labs/chapter-${pad(chapter)}/lab-${pad(chapter)}-${identity.tag}-${pad(identity.sequence)}-${slug}`;
   const labRoot = path.join(root, relativeRoot);
   if (await pathExists(labRoot)) throw new LabError("TARGET_EXISTS", `目标 Lab 已存在：${relativeRoot}`);
   await mkdir(path.dirname(labRoot), { recursive: true });
   await mkdir(labRoot, { recursive: false });
-  await write(root, `${relativeRoot}/README.md`, readme({ chapter, order, slug, type }));
+  await write(root, `${relativeRoot}/README.md`, readme({ chapter, order, slug, type, identity }));
   if (type === "quiz") {
     await write(root, `${relativeRoot}/lab.json`, json({ $schema: "../../../schemas/lab.schema.json", schemaVersion: 1, type, quiz: { questions: "quiz.json", questionType: "single-choice", reveal: "after-submit", scoring: "points" } }));
     await write(root, `${relativeRoot}/quiz.json`, json([{ id: "q1", stem: "请替换为题面。", options: ["选项一", "选项二", "选项三", "选项四"], answer: 0, explanation: "请补充解析。", hint: "可选提示。", points: 1 }]));
@@ -120,7 +122,7 @@ export async function createLab(options, root = projectRoot) {
     await write(root, `${relativeRoot}/report/task.json`, json({ $schema: "../../../../schemas/task.schema.json", schemaVersion: 1, kind: "manual", checklist: ["说明设计、测试证据与复盘"] }));
     await write(root, `${relativeRoot}/report/README.md`, "# 人工评分报告\n\n请补充复杂度、测试证据与复盘。\n");
   }
-  return { labRoot, relativeRoot, type };
+  return { labRoot, relativeRoot, type, labId: identity.id, order };
 }
 
 export const THIN_MAKEFILE = thinMakefile;

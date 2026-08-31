@@ -3,6 +3,7 @@ title: "Lab 04-19：求根节点到叶节点数字之和"
 description: "利用前序遍历与自顶向下数值累乘累加，计算所有根到叶数字的总和。"
 order: 19
 chapter: 4
+labId: "04E11"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

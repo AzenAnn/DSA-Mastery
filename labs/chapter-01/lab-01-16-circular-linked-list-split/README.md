@@ -3,6 +3,7 @@ title: "Lab 01-16：循环链表拆分"
 description: "将一个循环链表按长度均分为两个循环链表，练习循环结构的断开与重连。"
 order: 16
 chapter: 1
+labId: "01E11"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

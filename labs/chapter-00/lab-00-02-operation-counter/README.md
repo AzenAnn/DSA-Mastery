@@ -3,11 +3,13 @@ title: "Lab 00-02：用操作计数观察增长趋势"
 description: "用基本操作计数直观比较常数、线性与平方级增长，并区分理论分析与机器计时。"
 order: 2
 chapter: 0
+labId: "00E01"
 chapterTitle: "绪论"
 updated: "2026-08-21"
 contributors: ["fjll"]
 status: "draft"
 lab: true
+labCategory: "exercise"
 difficulty: "入门"
 duration: "45～60 分钟"
 ---

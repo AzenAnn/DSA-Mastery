@@ -3,6 +3,7 @@ title: "Lab 05-13：任务调度器"
 description: "使用贪心 + 优先队列安排任务，计算完成所有任务所需的最少时间单位。"
 order: 13
 chapter: 5
+labId: "05E08"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

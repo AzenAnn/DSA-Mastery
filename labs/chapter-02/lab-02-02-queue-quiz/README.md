@@ -3,6 +3,7 @@ title: "Lab 02-02：队列选择题精练"
 description: "用 10 道选择题巩固队列的 FIFO 语义、循环下标、链队列边界、复杂度与工程选型。"
 order: 2
 chapter: 2
+labId: "02T02"
 chapterTitle: "栈与队列"
 updated: "2026-08-19"
 contributors: ["Andy Liu"]

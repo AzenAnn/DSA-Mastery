@@ -3,6 +3,7 @@ title: "Lab 04-21：二叉树的直径"
 description: "理解单侧深度返回值与全局跨根最长路径的解耦，计算二叉树的直径。"
 order: 21
 chapter: 4
+labId: "04E13"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

@@ -3,6 +3,7 @@ title: "Lab 03-14：串匹配与文本处理引擎"
 description: "在统一 Matcher 契约下实现朴素匹配、KMP 与 nextval，用文本处理引擎和固定 seed 工作负载完成确定性比较与工程选型。"
 order: 14
 chapter: 3
+labId: "03P01"
 chapterTitle: "字符串与数组"
 updated: "2026-08-21"
 contributors: ["Qing"]

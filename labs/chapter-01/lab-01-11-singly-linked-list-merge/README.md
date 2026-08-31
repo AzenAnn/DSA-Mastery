@@ -3,6 +3,7 @@ title: "Lab 01-11：合并两个有序单链表"
 description: "将两个已按非递减排列的单链表合并为一个新的有序单链表，练习链式结构的拼接与边界处理。"
 order: 11
 chapter: 1
+labId: "01E06"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

@@ -3,6 +3,7 @@ title: "Lab 11-23：基数排序模板"
 description: "用 LSD 基数排序配合稳定计数排序，把十进制整数的比较排序换成逐位分配收集。"
 order: 23
 chapter: 11
+labId: "11E17"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

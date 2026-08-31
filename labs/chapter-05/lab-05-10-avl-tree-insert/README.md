@@ -3,6 +3,7 @@ title: "Lab 05-10：AVL 树的插入与平衡"
 description: "实现 AVL 树的插入操作，包括四种旋转（LL、RR、LR、RL），输出最终树的层序遍历。"
 order: 10
 chapter: 5
+labId: "05E05"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

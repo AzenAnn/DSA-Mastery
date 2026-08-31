@@ -3,6 +3,7 @@ title: "Lab 07-06：有向图环检测"
 description: "用三色标记的 DFS 判断有向图是否含环，区分指向当前递归栈与已完成顶点的边。"
 order: 6
 chapter: 7
+labId: "07E03"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-29"
 contributors: ["Qing"]

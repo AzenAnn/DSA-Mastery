@@ -3,6 +3,7 @@ title: "Lab 07-07：最小生成树"
 description: "实现 Kruskal 算法求无向图的最小生成树，输出边权之和，并正确处理多重边与自环。"
 order: 7
 chapter: 7
+labId: "07E04"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-29"
 contributors: ["Fishman"]

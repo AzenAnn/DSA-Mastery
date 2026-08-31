@@ -3,6 +3,7 @@ title: "Lab 06-04：连通三元组的最小度数"
 description: "用邻接矩阵识别无向图中的三角形，并计算三元组内部顶点与外部顶点之间的边数。"
 order: 4
 chapter: 6
+labId: "06E02"
 chapterTitle: "图的基础与存储"
 updated: "2026-08-29"
 contributors: ["Azen"]

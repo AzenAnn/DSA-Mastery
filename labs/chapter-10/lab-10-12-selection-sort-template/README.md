@@ -3,6 +3,7 @@ title: "Lab 10-12：选择排序模板"
 description: "手写选择排序模板，把 n 个整数从小到大排序输出。"
 order: 12
 chapter: 10
+labId: "10E06"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

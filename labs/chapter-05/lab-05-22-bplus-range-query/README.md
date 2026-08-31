@@ -3,6 +3,7 @@ title: "Lab 05-22：B+ 树的范围查询"
 description: "模拟 B+ 树的索引结构，支持按顺序插入关键字和区间查询，输出范围内关键字数量。"
 order: 22
 chapter: 5
+labId: "05E17"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

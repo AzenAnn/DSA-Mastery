@@ -3,6 +3,7 @@ title: "Lab 05-18：动态连通性查询"
 description: "在并查集上维护连通分量数量，支持动态加边与查询当前连通分量数。"
 order: 18
 chapter: 5
+labId: "05E13"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

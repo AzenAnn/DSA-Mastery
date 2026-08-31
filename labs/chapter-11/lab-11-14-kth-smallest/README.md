@@ -3,6 +3,7 @@ title: "Lab 11-14：求第 k 小的数"
 description: "用快速选择（quickselect）在 O(n) 内定位第 k 小元素，避免全排序。"
 order: 14
 chapter: 11
+labId: "11E08"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

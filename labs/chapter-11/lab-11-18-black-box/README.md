@@ -3,6 +3,7 @@ title: "Lab 11-18：黑匣子（第 k 小查询）"
 description: "用对顶堆（大根堆 + 小根堆）动态维护第 k 小元素，回答一系列递增 k 的查询。"
 order: 18
 chapter: 11
+labId: "11E12"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

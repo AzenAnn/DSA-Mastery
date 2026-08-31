@@ -3,6 +3,7 @@ title: "Lab 04-02：前序遍历理论题精练"
 description: "通过 12 道选择题和 1 道综合题，巩固前序遍历的概念、性质与解题方法。"
 order: 2
 chapter: 4
+labId: "04T02"
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"
 contributors: ["Azen"]

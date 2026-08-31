@@ -3,6 +3,7 @@ title: "Lab 03-15：稀疏矩阵运算库"
 description: "在统一契约下实现稀疏矩阵的三元组转置、加法与乘法，用固定 seed 工作负载比较稀疏与稠密场景，并给出带前提的存储选型。"
 order: 15
 chapter: 3
+labId: "03P02"
 chapterTitle: "字符串与数组"
 updated: "2026-08-27"
 contributors: ["Fishman"]

@@ -3,6 +3,7 @@ title: "Lab 13-01：盛最多水的容器"
 description: "使用相向双指针和贪心选择求解最大容水量，理解为什么应该移动短板。"
 order: 1
 chapter: 13
+labId: "13E01"
 chapterTitle: "贪心算法"
 updated: "2026-08-24"
 contributors: ["Shuoyuchen"]

@@ -3,6 +3,7 @@ title: "Lab 04-11：二叉树的前序遍历"
 description: "实现二叉树的前序遍历（根 -> 左 -> 右），掌握递归与显式栈迭代两种经典 DFS 解法。"
 order: 11
 chapter: 4
+labId: "04E03"
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"
 contributors: ["Wanderer0"]

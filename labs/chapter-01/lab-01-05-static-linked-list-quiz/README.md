@@ -3,6 +3,7 @@ title: "Lab 01-05：静态链表选择题精练"
 description: "用现有 4 道选择题辨析静态链表的游标、容量、访问和空间取舍。"
 order: 5
 chapter: 1
+labId: "01T05"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["Azen"]

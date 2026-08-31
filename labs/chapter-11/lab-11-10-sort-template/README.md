@@ -3,6 +3,7 @@ title: "Lab 11-10：排序模板（归并实现）"
 description: "用归并排序实现 O(n log n) 的稳定排序，掌握分治排序模板。"
 order: 10
 chapter: 11
+labId: "11E04"
 chapterTitle: "高效排序与外部排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

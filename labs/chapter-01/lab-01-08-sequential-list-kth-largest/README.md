@@ -3,6 +3,7 @@ title: "Lab 01-08：顺序表第 k 大元素"
 description: "在无序顺序表中查找第 k 大的元素，理解基于划分的选择算法与排序取值的取舍。"
 order: 8
 chapter: 1
+labId: "01E03"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["czjLUCK"]

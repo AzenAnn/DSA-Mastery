@@ -3,6 +3,7 @@ title: "Lab 04-15：从中序与后序遍历构造二叉树"
 description: "通过后序确定根节点与中序划分区间的镜像分治恢复二叉树。"
 order: 15
 chapter: 4
+labId: "04E07"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

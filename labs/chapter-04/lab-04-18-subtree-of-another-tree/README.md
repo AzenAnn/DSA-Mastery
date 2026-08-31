@@ -3,6 +3,7 @@ title: "Lab 04-18：另一棵树的子树"
 description: "通过双重递归或树结构哈希判定一棵树是否包含另一棵树的全部结构。"
 order: 18
 chapter: 4
+labId: "04E10"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

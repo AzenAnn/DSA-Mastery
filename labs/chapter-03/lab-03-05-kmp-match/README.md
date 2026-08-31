@@ -3,6 +3,7 @@ title: "Lab 03-05：KMP 模式匹配（首次出现位置）"
 description: "用 KMP 求模式串在主串中首次出现的位置，练习 next 数组构造与匹配指针不回退。"
 order: 5
 chapter: 3
+labId: "03E01"
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
 contributors: ["Qing"]

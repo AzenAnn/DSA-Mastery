@@ -3,6 +3,7 @@ title: "Lab 05-14：哈夫曼编码"
 description: "构建哈夫曼树，生成各字符的编码，并计算编码后的总长度。"
 order: 14
 chapter: 5
+labId: "05E09"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

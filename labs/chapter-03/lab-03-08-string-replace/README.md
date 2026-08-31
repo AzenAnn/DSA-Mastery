@@ -3,6 +3,7 @@ title: "Lab 03-08：串的非重叠替换 Replace"
 description: "实现 Replace(S, T, V)：把 S 中所有非重叠的 T 替换为 V，组合定位与拼接操作。"
 order: 8
 chapter: 3
+labId: "03E04"
 chapterTitle: "字符串与数组"
 updated: "2026-08-20"
 contributors: ["Qing"]

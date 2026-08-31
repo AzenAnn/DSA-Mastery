@@ -3,6 +3,7 @@ title: "Lab 10-17：冒泡排序与交换次数"
 description: "在冒泡排序过程中统计相邻交换的总次数，体会排序趟数与逆序的关系。"
 order: 17
 chapter: 10
+labId: "10E11"
 chapterTitle: "排序"
 updated: "2026-08-29"
 contributors: ["fjll-27"]

@@ -3,6 +3,7 @@ title: "Lab 09-03：散列索引引擎——冲突策略与再散列大综合"
 description: "实现链地址、线性探测与平方探测三种散列索引，用统一接口与探测次数理解冲突与堆积。"
 order: 3
 chapter: 9
+labId: "09P01"
 chapterTitle: "散列与索引结构"
 updated: "2026-08-21"
 contributors: ["RichardYi-SYSU-Mac"]

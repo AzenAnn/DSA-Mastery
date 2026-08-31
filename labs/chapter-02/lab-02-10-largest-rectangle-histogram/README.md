@@ -3,6 +3,7 @@ title: "Lab 02-10：柱状图中最大的矩形"
 description: "使用单调栈确定每根柱子的左右边界，并计算最大矩形面积。"
 order: 10
 chapter: 2
+labId: "02E08"
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
 contributors: ["DSA Mastery Team"]

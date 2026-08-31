@@ -3,6 +3,7 @@ title: "Lab 02-13：停车场管理——栈与队列的大综合"
 description: "用栈模拟内部车道、队列模拟门外便道，实现带倒车、补位与统计的停车场调度系统。"
 order: 13
 chapter: 2
+labId: "02P03"
 chapterTitle: "栈与队列"
 updated: "2026-08-19"
 contributors: ["Azen", "Jeff"]

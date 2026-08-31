@@ -3,6 +3,7 @@ title: "Lab 13-02：最长回文串"
 description: "统计字符频次并使用贪心策略构造最长回文串，理解成对字符与中心字符的选择。"
 order: 2
 chapter: 13
+labId: "13E02"
 chapterTitle: "贪心算法"
 updated: "2026-08-28"
 contributors: ["Shuoyuchen"]

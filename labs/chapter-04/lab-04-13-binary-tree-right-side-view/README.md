@@ -3,6 +3,7 @@ title: "Lab 04-13：二叉树的右视图"
 description: "利用广度优先搜索或右优先深度优先搜索获取二叉树的右视图。"
 order: 13
 chapter: 4
+labId: "04E05"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

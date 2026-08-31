@@ -3,6 +3,7 @@ title: "Lab 02-09：滑动窗口最大值"
 description: "使用单调队列在线性时间内求出每个固定长度窗口的最大值。"
 order: 9
 chapter: 2
+labId: "02E07"
 chapterTitle: "栈与队列"
 updated: "2026-08-21"
 contributors: ["DSA Mastery Team"]

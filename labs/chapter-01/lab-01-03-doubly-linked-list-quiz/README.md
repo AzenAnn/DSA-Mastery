@@ -3,6 +3,7 @@ title: "Lab 01-03：双链表选择题精练"
 description: "用 10 道选择题练习双链表的四条链接、循环哨兵与双向遍历。"
 order: 3
 chapter: 1
+labId: "01T03"
 chapterTitle: "线性表"
 updated: "2026-08-18"
 contributors: ["Azen"]

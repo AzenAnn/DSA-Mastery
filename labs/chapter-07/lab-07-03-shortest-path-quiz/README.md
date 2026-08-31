@@ -3,6 +3,7 @@ title: "Lab 07-03：最短路径选择题精练"
 description: "用 26 道选择题巩固最短路径的松弛主线、核心性质、算法选型与负权/负环辨析，并复用正文例图做步骤模拟。"
 order: 3
 chapter: 7
+labId: "07T03"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-25"
 contributors: ["Jeff"]

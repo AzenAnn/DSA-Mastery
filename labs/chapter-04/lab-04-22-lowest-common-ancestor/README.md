@@ -3,6 +3,7 @@ title: "Lab 04-22：二叉树的最近公共祖先"
 description: "利用后序遍历自底向上汇聚左右子树目标节点状态，求解最近公共祖先 LCA。"
 order: 22
 chapter: 4
+labId: "04E14"
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
 contributors: ["Wanderer0"]

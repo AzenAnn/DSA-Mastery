@@ -3,6 +3,7 @@ title: "Lab 07-09：BFS 二分图判定"
 description: "用 BFS 黑白染色判定无向图是否为二分图，冲突时输出首次发现的冲突边。"
 order: 9
 chapter: 7
+labId: "07E06"
 chapterTitle: "图的遍历与应用"
 updated: "2026-08-29"
 contributors: ["Qing"]

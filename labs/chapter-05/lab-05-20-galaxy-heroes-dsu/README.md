@@ -3,6 +3,7 @@ title: "Lab 05-20：银河英雄传说"
 description: "使用带权并查集维护队列中的相对距离，支持合并队列与查询两舰之间的距离。"
 order: 20
 chapter: 5
+labId: "05E15"
 chapterTitle: "树的应用"
 updated: "2026-08-25"
 contributors: ["czjLUCK"]

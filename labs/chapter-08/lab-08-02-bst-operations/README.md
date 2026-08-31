@@ -3,6 +3,7 @@ title: "Lab 08-02：BST 增删查与边界测试"
 description: "实现 BST 的查找、插入与三类删除，用指令序列验证中序有序性与树高不变量。"
 order: 2
 chapter: 8
+labId: "08E01"
 chapterTitle: "基础查找与树形查找"
 updated: "2026-08-21"
 contributors: ["Azen", "RichardYi-SYSU-Mac"]
