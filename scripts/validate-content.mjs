@@ -5,6 +5,7 @@ import {
   LAB_DIRECTORY_PATTERN,
   LEGACY_LAB_DIRECTORY_PATTERN,
   STABLE_LAB_DIRECTORY_PATTERN,
+  formatLabDocumentTitlePrefix,
   parseLabId,
   tagForCategory,
 } from "../tools/lab/identity.mjs";
@@ -113,7 +114,8 @@ function assertFileContract(file, kind, parsed, seenOrder, seenLabIds, labCatego
     if (!chapterMatch || Number(chapterMatch[1]) !== Number(parsed.data.chapter)) {
       throw new Error(`${relativePath}: chapter 目录必须与 frontmatter chapter 一致`);
     }
-    let expectedTitlePrefix;
+    const stableTitlePrefix = formatLabDocumentTitlePrefix(identity.id);
+    let allowedTitlePrefixes;
     if (legacyMatch) {
       if (
         Number(legacyMatch[1]) !== Number(parsed.data.chapter) ||
@@ -121,18 +123,23 @@ function assertFileContract(file, kind, parsed, seenOrder, seenLabIds, labCatego
       ) {
         throw new Error(`${relativePath}: 旧目录编号必须与 frontmatter chapter/order 一致`);
       }
-      expectedTitlePrefix = `Lab ${legacyMatch[1]}-${legacyMatch[2]}：`;
+      const legacyTitlePrefix = `Lab ${legacyMatch[1]}-${legacyMatch[2]}：`;
+      allowedTitlePrefixes = [stableTitlePrefix, legacyTitlePrefix];
     } else if (stableMatch) {
       const pathId = `${stableMatch[1]}${stableMatch[2]}${stableMatch[3]}`;
       if (pathId !== identity.id || Number(stableMatch[1]) !== Number(parsed.data.chapter)) {
         throw new Error(`${relativePath}: 新目录编号必须与 labId/chapter 一致`);
       }
-      expectedTitlePrefix = `Lab ${stableMatch[1]}-${stableMatch[2]}-${stableMatch[3]}：`;
+      allowedTitlePrefixes = [stableTitlePrefix];
     } else {
       throw new Error(`${relativePath}: Lab 目录名不符合旧路径或稳定 ID 路径约定`);
     }
-    if (!parsed.data.title.startsWith(expectedTitlePrefix)) {
-      throw new Error(`${relativePath}: title 必须以 ${expectedTitlePrefix} 开头`);
+    const matchedTitlePrefix = allowedTitlePrefixes.find((prefix) => parsed.data.title.startsWith(prefix));
+    if (!matchedTitlePrefix) {
+      throw new Error(`${relativePath}: title 必须以 ${allowedTitlePrefixes.join(" 或 ")} 开头`);
+    }
+    if (!parsed.data.title.slice(matchedTitlePrefix.length).trim()) {
+      throw new Error(`${relativePath}: title 的编号后必须包含题目名称`);
     }
     if (!parsed.body.includes(`# ${parsed.data.title}`)) {
       throw new Error(`${relativePath}: H1 必须与 frontmatter title 一致`);

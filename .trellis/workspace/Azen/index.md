@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 18
-- **Last Active**: 2026-08-31
+- **Total Sessions**: 19
+- **Last Active**: 2026-09-01
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~453 | Active |
+| `journal-1.md` | ~474 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 19 | 2026-09-01 | 稳定 Lab 文档标题约束 | `5f0a637` | `codex/lab-stable-id` |
 | 18 | 2026-08-31 | Resolve PR 119 CI failures | `ead8db8`, `388cfe0` | `codex/lab-stable-id` |
 | 17 | 2026-08-31 | Normalize all Lab navigation labels | `90a26ca` | `codex/lab-stable-id` |
 | 16 | 2026-08-31 | Lab stable IDs and automatic numbering | `0bbec8e`, `e11f1f9`, `966557a`, `3a8c01e`, `5f0c328` | `codex/lab-stable-id` |

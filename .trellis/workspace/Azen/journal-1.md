@@ -451,3 +451,24 @@ Investigated GitHub Actions logs, updated stale stable-ID artifact assertions, s
 ### Status
 
 [OK] **Completed**
+
+
+## Session 19: 稳定 Lab 文档标题约束
+
+**Date**: 2026-09-01
+**Task**: 稳定 Lab 文档标题约束
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+定义 README 标题从 labId 生成的统一格式，更新 Agent/作者约束、脚手架和渐进迁移校验，并新增旧目录稳定标题的自动发现回归。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5f0a637` | (see git log) |
+
+### Status
+
+[OK] **Completed**

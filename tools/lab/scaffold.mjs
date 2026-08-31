@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { LabError } from "./errors.mjs";
 import { pathExists } from "./core.mjs";
-import { allocateLabIdentity } from "./identity.mjs";
+import { allocateLabIdentity, formatLabDocumentTitlePrefix } from "./identity.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "../..");
 
@@ -17,8 +17,9 @@ function json(value) {
 function readme({ chapter, order, slug, type, identity }) {
   const code = `${pad(chapter)}-${identity.tag}-${pad(identity.sequence)}`;
   const names = { quiz: "选择题自测", program: "编程练习", project: "综合项目" };
+  const title = `${formatLabDocumentTitlePrefix(identity.id)}${names[type]}`;
   return `---
-title: "Lab ${code}：${names[type]}"
+title: "${title}"
 description: "请在发布前把这里替换为可检查的 Lab 学习成果。"
 order: ${order}
 chapter: ${chapter}
@@ -32,7 +33,7 @@ difficulty: "基础"
 duration: "45～60 分钟"
 ---
 
-# Lab ${code}：${names[type]}
+# ${title}
 
 ## 学习目标
 

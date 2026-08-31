@@ -6,6 +6,12 @@ import { fileURLToPath } from "node:url";
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const lessonDirectory = path.join(projectRoot, "content", "chapter-99-discovery-fixture");
 const labDirectory = path.join(projectRoot, "labs", "chapter-99", "lab-99-E-01-discovery-fixture");
+const legacyStableTitleLabDirectory = path.join(
+  projectRoot,
+  "labs",
+  "chapter-99",
+  "lab-99-02-legacy-stable-title-fixture",
+);
 const sidebarLabDirectory = path.join(
   projectRoot,
   "labs",
@@ -149,6 +155,29 @@ duration: "1 分钟"
 - [ ] 页面、导航和搜索均包含本 Lab。
 `;
 
+const legacyStableTitleLab = `---
+title: "Lab 99-T-01：旧目录稳定标题验证"
+description: "验证旧目录无需改 URL，也能把 README 标题渐进迁移到稳定编号。"
+order: 2
+chapter: 99
+labId: "99T01"
+chapterTitle: "自动发现验证"
+updated: "2026-09-01"
+contributors: ["Discovery Test"]
+status: "draft"
+lab: true
+labCategory: theory
+difficulty: "测试"
+duration: "1 分钟"
+---
+
+# Lab 99-T-01：旧目录稳定标题验证
+
+## 验收标准
+
+- [ ] 旧目录与稳定标题可以在迁移期共存。
+`;
+
 const sidebarLab = `---
 title: "Lab 01-E-99：章节侧栏自动收录验证"
 description: "验证新增线性表 Lab 会自动进入本章 Labs 的实验分类。"
@@ -214,9 +243,15 @@ let primaryError;
 try {
   await mkdir(lessonDirectory, { recursive: true });
   await mkdir(labDirectory, { recursive: true });
+  await mkdir(legacyStableTitleLabDirectory, { recursive: true });
   await mkdir(sidebarLabDirectory, { recursive: true });
   await writeFile(path.join(lessonDirectory, "00-autodiscovery.md"), lesson, "utf8");
   await writeFile(path.join(labDirectory, "README.md"), lab, "utf8");
+  await writeFile(
+    path.join(legacyStableTitleLabDirectory, "README.md"),
+    legacyStableTitleLab,
+    "utf8",
+  );
   await writeFile(path.join(sidebarLabDirectory, "README.md"), sidebarLab, "utf8");
 
   runNpm(["run", "validate:content"]);
@@ -229,6 +264,18 @@ try {
   );
   const labHtml = await readFile(
     path.join(projectRoot, "dist", "pages", "labs", "chapter-99", "lab-99-E-01-discovery-fixture", "index.html"),
+    "utf8",
+  );
+  const legacyStableTitleLabHtml = await readFile(
+    path.join(
+      projectRoot,
+      "dist",
+      "pages",
+      "labs",
+      "chapter-99",
+      "lab-99-02-legacy-stable-title-fixture",
+      "index.html",
+    ),
     "utf8",
   );
   const sidebarLabHtml = await readFile(
@@ -320,6 +367,12 @@ try {
     throw new Error("Relative Markdown link was not rewritten to the Pages-aware Lab route");
   }
   if (!labHtml.includes("Lab 99-E-01：自动发现验证") || !labHtml.includes("99E01")) throw new Error("Temporary Lab page or stable ID was not generated");
+  if (
+    !legacyStableTitleLabHtml.includes("Lab 99-T-01：旧目录稳定标题验证") ||
+    !legacyStableTitleLabHtml.includes("99T01")
+  ) {
+    throw new Error("Legacy Lab directory did not accept a migrated stable document title");
+  }
   const searchFiles = (await filesRecursively(path.join(projectRoot, "dist", "pages")))
     .filter((file) => file.endsWith(".js"));
   const searchableJavaScript = (await Promise.all(searchFiles.map((file) => readFile(file, "utf8")))).join("\n");
@@ -396,12 +449,18 @@ try {
   assertFixtureTarget(lessonDirectory, path.join(projectRoot, "content"), "chapter-99-discovery-fixture");
   assertFixtureTarget(labDirectory, path.join(projectRoot, "labs", "chapter-99"), "lab-99-E-01-discovery-fixture");
   assertFixtureTarget(
+    legacyStableTitleLabDirectory,
+    path.join(projectRoot, "labs", "chapter-99"),
+    "lab-99-02-legacy-stable-title-fixture",
+  );
+  assertFixtureTarget(
     sidebarLabDirectory,
     path.join(projectRoot, "labs", "chapter-01"),
     "lab-01-E-99-sidebar-discovery-fixture",
   );
   await rm(lessonDirectory, { recursive: true, force: true });
   await rm(labDirectory, { recursive: true, force: true });
+  await rm(legacyStableTitleLabDirectory, { recursive: true, force: true });
   await rm(sidebarLabDirectory, { recursive: true, force: true });
   await rmdir(path.join(projectRoot, "labs", "chapter-99")).catch(() => {});
   try {

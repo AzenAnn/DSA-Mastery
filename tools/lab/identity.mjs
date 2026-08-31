@@ -4,7 +4,7 @@ import matter from "gray-matter";
 import { LabError } from "./errors.mjs";
 import { formatLabId, normalizeLabId, parseLabId } from "./lab-id.mjs";
 
-export { formatLabId, normalizeLabId, parseLabId } from "./lab-id.mjs";
+export { formatLabDocumentTitlePrefix, formatLabId, normalizeLabId, parseLabId } from "./lab-id.mjs";
 
 export const LAB_TYPE_TO_TAG = Object.freeze({ quiz: "T", program: "E", project: "P" });
 export const LAB_TYPE_TO_CATEGORY = Object.freeze({ quiz: "theory", program: "exercise", project: "project" });
