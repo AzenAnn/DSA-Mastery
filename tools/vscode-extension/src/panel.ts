@@ -7,7 +7,7 @@ import type { EnvironmentGuard } from "./doctor";
 import { loadTestCases, studentSourcePath, type ProgramLab } from "./labIndex";
 import { renderMarkdownFragment, renderReadme } from "./markdown";
 import type { ProgressTracker } from "./progress";
-import { renderPanelHtml, renderQuizFeedbackHtml, renderQuizPanelHtml, renderResultHtml, type QuizQuestionView } from "./panelHtml";
+import { renderPanelHtml, renderQuizFeedbackHtml, renderQuizPanelHtml, renderResultHtml, type PanelNav, type QuizQuestionView } from "./panelHtml";
 
 type LoadedCase = Awaited<ReturnType<typeof loadTestCases>>[number];
 
@@ -17,6 +17,8 @@ interface PanelDeps {
   progress: ProgressTracker;
   guard: EnvironmentGuard;
   onSubmitted: () => void;
+  /** 全部题目,顺序与树视图一致(章号 → order → name)。上/下一题按它取邻居。 */
+  siblings: () => ProgramLab[];
 }
 
 /** 题目面板：单例 webview，切换题目时复用同一个面板。 */
@@ -105,13 +107,36 @@ export class LabPanel {
           readmeHtml: readme.html,
           cases,
           progress: this.deps.progress.get(lab.name),
+          nav: this.navFor(lab),
         });
   }
 
-  private async handleMessage(message: { type: string; questionId?: string; selected?: number }): Promise<void> {
+  /**
+   * 取代码题序列里的前后邻居。
+   *
+   * 只在 program 之间走 —— 跳到选择题的话那一页没有这两个按钮,用户就回不来了,
+   * 等于把人送进死路。所以这里先过滤掉 quiz 再找邻居。
+   */
+  private navFor(lab: ProgramLab): PanelNav {
+    if (lab.type !== "program") return {};
+    const programs = this.deps.siblings().filter((item) => item.type === "program");
+    const index = programs.findIndex((item) => item.name === lab.name);
+    if (index < 0) return {};
+
+    const at = (offset: number) => {
+      const target = programs[index + offset];
+      return target ? { name: target.name, title: target.title } : undefined;
+    };
+    return { prev: at(-1), next: at(1) };
+  }
+
+  private async handleMessage(message: { type: string; questionId?: string; selected?: number; labName?: string }): Promise<void> {
     switch (message.type) {
       case "submit":
         await this.submit();
+        return;
+      case "navigate":
+        await this.navigate(message.labName);
         return;
       case "openSource":
         await this.openSource();
@@ -149,6 +174,14 @@ export class LabPanel {
       completed: progress.passed,
     });
     this.deps.onSubmitted();
+  }
+
+  /** 切到相邻题目。复用同一个面板,不新开 webview。 */
+  private async navigate(labName?: string): Promise<void> {
+    if (!labName || this.submitting) return;
+    const target = this.deps.siblings().find((item) => item.name === labName);
+    if (!target) return;
+    await this.load(target);
   }
 
   private async openSource(): Promise<void> {

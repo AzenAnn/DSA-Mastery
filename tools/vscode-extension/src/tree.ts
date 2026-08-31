@@ -43,6 +43,11 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     return this.chapters.flatMap((chapter) => chapter.labs);
   }
 
+  /** 章节列表,供统计面板算章节分布。 */
+  chapterList(): readonly Chapter[] {
+    return this.chapters;
+  }
+
   findLab(name: string): ProgramLab | undefined {
     return this.allLabs().find((lab) => lab.name === name);
   }
