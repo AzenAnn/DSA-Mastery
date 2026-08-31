@@ -6,6 +6,7 @@ import { EnvironmentGuard } from "./doctor";
 import type { ProgramLab } from "./labIndex";
 import { LabPanel } from "./panel";
 import { ProgressTracker, type HistoryEntry } from "./progress";
+import { StatsPanel } from "./statsPanel";
 import { LabTreeProvider, type TreeNode } from "./tree";
 
 /** 找到包含 labs/ 的工作区目录。多根工作区时取第一个匹配的。 */
@@ -89,6 +90,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
     vscode.commands.registerCommand("dsaMastery.refreshTree", async () => {
       await tree.refresh();
+    }),
+
+    vscode.commands.registerCommand("dsaMastery.showStats", async () => {
+      // 章节分布要用树的数据;树可能还没扫过盘,先确保加载。
+      if (tree.allLabs().length === 0) await tree.refresh();
+      StatsPanel.show(context, progress, tree.chapterList());
     }),
 
     vscode.commands.registerCommand("dsaMastery.showHistory", async (argument?: unknown) => {

@@ -36,6 +36,28 @@ test("program panel keeps existing host-facing controls", async () => {
   assert.match(html, /id="nav-next"/);
 });
 
+test("program panel pins the action bar and reserves its viewport space", async () => {
+  const html = await readPackageFile("src/panelHtml.ts");
+  const css = await readPackageFile("media/panel.css");
+  const actionbarBlock = css.match(/\.lab-actionbar\s*\{[\s\S]*?\n\}/)?.[0] ?? "";
+
+  assert.match(actionbarBlock, /position:\s*fixed/);
+  assert.doesNotMatch(actionbarBlock, /position:\s*sticky/);
+  assert.match(actionbarBlock, /bottom:\s*16px/);
+  assert.match(actionbarBlock, /padding:\s*6px/);
+  assert.match(actionbarBlock, /border-radius:\s*10px/);
+  assert.match(css, /\.lab-actionbar \.lab-button\s*\{[\s\S]*?min-height:\s*32px/);
+  assert.match(css, /\.program-page\s*\{[\s\S]*?--lab-actionbar-reserve/);
+  assert.match(css, /padding-bottom:\s*var\(--lab-actionbar-reserve\)/);
+  assert.match(html, /class="program-scroll-region"/);
+  assert.match(css, /body\.program-body[\s\S]*?overflow:\s*hidden/);
+  assert.match(css, /\.program-scroll-region\s*\{[\s\S]*?overflow-y:\s*auto/);
+  assert.match(html, /const readingSurface = document\.querySelector\("\.lab-reading-surface"\)/);
+  assert.match(html, /actionbar\.style\.left/);
+  assert.match(html, /actionbar\.style\.width/);
+  assert.match(html, /new ResizeObserver/);
+});
+
 test("quiz panel uses the shared WebView shell without adding sidebar navigation", async () => {
   const html = await readPackageFile("src/panelHtml.ts");
 

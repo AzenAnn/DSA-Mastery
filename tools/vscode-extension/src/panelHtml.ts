@@ -252,14 +252,16 @@ export function renderPanelHtml(options: PanelOptions): string {
 <link rel="stylesheet" href="${styleUri}" />
 <title>${escapeHtml(lab.title)}</title>
 </head>
-<body>
+<body class="program-body">
 <div class="lab-page program-page">
+<div class="program-scroll-region">
 ${renderHeader(lab, progress)}
 <div class="lab-workspace${initialInspectorOpen ? "" : " is-inspector-collapsed"}">
   <main class="lab-reading-surface" aria-label="题面">
     <article class="readme">${readmeHtml}</article>
   </main>
   ${renderInspector(cases, progress, initialInspectorOpen, initialInspectorTab)}
+</div>
 </div>
 ${renderToolbar(nav)}
 </div>
@@ -274,10 +276,35 @@ const inspectorToggle = document.getElementById("inspector-toggle");
 const inspectorToggleText = document.querySelector(".inspector-toggle-text");
 const inspectorTabs = Array.from(document.querySelectorAll("[data-inspector-tab]"));
 const inspectorPanes = Array.from(document.querySelectorAll("[data-inspector-pane]"));
+const actionbar = document.querySelector(".lab-actionbar");
+const programPage = document.querySelector(".program-page");
+const readingSurface = document.querySelector(".lab-reading-surface");
 const initialInspectorOpen = ${initialInspectorOpen};
 const initialInspectorTab = "${initialInspectorTab}";
 
 function post(type) { vscodeApi.postMessage({ type }); }
+
+function syncActionbarLayout() {
+  if (!actionbar || !programPage || !readingSurface) return;
+  const surfaceRect = readingSurface.getBoundingClientRect();
+  const horizontalInset = Math.min(14, Math.max(10, surfaceRect.width * 0.025));
+  actionbar.style.left = \`\${surfaceRect.left + horizontalInset}px\`;
+  actionbar.style.right = "auto";
+  actionbar.style.width = \`\${Math.max(0, surfaceRect.width - horizontalInset * 2)}px\`;
+  const reserve = Math.ceil(actionbar.getBoundingClientRect().height + 32);
+  programPage.style.setProperty("--lab-actionbar-reserve", \`\${reserve}px\`);
+}
+
+if (actionbar && programPage && readingSurface) {
+  syncActionbarLayout();
+  if (typeof ResizeObserver !== "undefined") {
+    const actionbarObserver = new ResizeObserver(syncActionbarLayout);
+    actionbarObserver.observe(actionbar);
+    actionbarObserver.observe(readingSurface);
+  } else {
+    window.addEventListener("resize", syncActionbarLayout);
+  }
+}
 
 function setInspectorOpen(open) {
   if (!inspector || !inspectorContent || !inspectorToggle) return;
