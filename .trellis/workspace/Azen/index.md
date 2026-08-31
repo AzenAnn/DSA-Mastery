@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 16
+- **Total Sessions**: 17
 - **Last Active**: 2026-08-31
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~410 | Active |
+| `journal-1.md` | ~431 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 17 | 2026-08-31 | Normalize all Lab navigation labels | `90a26ca` | `codex/lab-stable-id` |
 | 16 | 2026-08-31 | Lab stable IDs and automatic numbering | `0bbec8e`, `e11f1f9`, `966557a`, `3a8c01e`, `5f0c328` | `codex/lab-stable-id` |
 | 15 | 2026-08-31 | Chapter 14 dynamic programming foundations | `b0e0552` | `Azen-ch14` |
 | 14 | 2026-08-31 | Chapter 1 array-to-linked-list problem-solving article | `84dbb44` | `codex/ch01-array-to-linked-list-problem-solving` |

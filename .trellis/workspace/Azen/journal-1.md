@@ -408,3 +408,24 @@ Added permanent chapter/type Lab IDs, automatic allocation and lookup, migrated 
 ### Status
 
 [OK] **Completed**
+
+
+## Session 17: Normalize all Lab navigation labels
+
+**Date**: 2026-08-31
+**Task**: Normalize all Lab navigation labels
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+Unified both categorized 本章 Labs and legacy 相关 Labs sidebar paths so every chapter displays only the stable Lab ID plus problem name, and updated discovery, desktop, mobile, task, and architecture contracts.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `90a26ca` | (see git log) |
+
+### Status
+
+[OK] **Completed**
