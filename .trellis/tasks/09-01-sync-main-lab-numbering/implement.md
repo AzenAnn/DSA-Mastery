@@ -22,8 +22,8 @@
 - [x] 根项目：`pnpm test`，通过；包含内容校验、typecheck、lint、Lab 工具 39/39、Lab 文档、自动发现、VitePress build 和 `check:site`。
 - [x] `git diff --check origin/main...HEAD` 通过；确认未跟踪 VSIX、生成目录、既有 Trellis 日志和旧归档不在本任务提交范围。
 - [x] 已形成 merge commit `dfe7c5d` 与实现修复 commit `3ffc443`，未 amend 既有共享提交。
-- [ ] 推送 `feat/vscode-lab-extension`，使用 GitHub CLI 创建 base 为 `main` 的 PR，包含范围、非目标、验证、风险、人工复核和 AI 辅助说明。
-- [ ] 记录 PR URL、最终测试结果和仍保留的工作区 dirty 文件，归档 Trellis 任务。
+- [x] 推送 `feat/vscode-lab-extension`，使用 GitHub CLI 创建 base 为 `main` 的 PR #126，包含范围、非目标、验证、风险、人工复核和 AI 辅助说明。
+- [x] 已记录 PR URL：<https://github.com/AzenAnn/DSA-Mastery/pull/126>；最终测试结果和仍保留的工作区 dirty 文件已核对，待归档 Trellis 任务。
 
 ## 风险与回滚点
 
