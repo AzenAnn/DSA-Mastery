@@ -23,7 +23,7 @@ duration: "90～120 分钟"
 
 ## 前置知识
 
-建议先阅读[第 4 章对应教材](../../../../content/chapter-04-tree/00-overview.md)，再开始本组练习。
+建议先阅读[第 4 章对应教材](../../../../content/chapter-04-tree/01-tree-basics.md)，再开始本组练习。
 
 ## 环境、输入与预期输出
 

@@ -1,7 +1,7 @@
 ---
 title: "4.6 二叉树的经典问题"
 description: "建立二叉树统一分治与递归框架，系统突破统计、判断、镜像变换、路径回溯、LCA 与树形动态规划等问题。"
-order: 5
+order: 6
 chapter: 4
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"

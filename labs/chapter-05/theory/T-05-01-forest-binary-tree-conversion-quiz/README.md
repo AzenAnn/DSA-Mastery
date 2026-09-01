@@ -23,7 +23,7 @@ duration: "50～70 分钟"
 
 ## 前置知识
 
-建议先阅读[4.5 树、森林与二叉树](../../../../content/chapter-04-tree/04-trees-and-forests.md)和[第 5 章概览](../../../../content/chapter-05-tree-applications/00-overview.md)，再开始本组练习。
+建议先阅读[4.5 树、森林与二叉树](../../../../content/chapter-04-tree/05-trees-and-forests.md)和[第 5 章概览](../../../../content/chapter-05-tree-applications/00-overview.md)，再开始本组练习。
 
 ## 环境、输入与预期输出
 
