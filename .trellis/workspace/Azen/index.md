@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 21
+- **Total Sessions**: 22
 - **Last Active**: 2026-09-01
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~516 | Active |
+| `journal-1.md` | ~537 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 22 | 2026-09-01 | 修复测评行末空格误判 | `269b7a3` | `codex/fix-trailing-space-judge` |
 | 21 | 2026-09-01 | Chapter 14 dynamic programming exercise labs | `1c3aadb` | `codex/chapter-14-dp-labs` |
 | 20 | 2026-09-01 | Labs 三分类目录迁移 | `917b482` | `codex/lab-category-directories` |
 | 19 | 2026-09-01 | 稳定 Lab 文档标题约束 | `5f0a637` | `codex/lab-stable-id` |

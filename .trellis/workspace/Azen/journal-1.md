@@ -514,3 +514,24 @@ Added 30 C++17 dynamic programming Program Labs (14E01-14E30), each with 20 publ
 ### Status
 
 [OK] **Completed**
+
+
+## Session 22: 修复测评行末空格误判
+
+**Date**: 2026-09-01
+**Task**: 修复测评行末空格误判
+**Branch**: `codex/fix-trailing-space-judge`
+
+### Summary
+
+调整 Lab exact 输出比较器，忽略每行末尾空格与制表符，同时保留行首、行内空白及额外行的严格校验；同步回归测试、作者指南和 Trellis 规范，完整 pnpm test 通过。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `269b7a3` | (see git log) |
+
+### Status
+
+[OK] **Completed**
