@@ -1,0 +1,28 @@
+{
+  "id": "sync-main-lab-numbering",
+  "name": "sync-main-lab-numbering",
+  "title": "同步 main 的 Lab 编号规范并提交 PR",
+  "description": "",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": "vscode-extension-content-sync",
+  "package": null,
+  "priority": "P2",
+  "creator": "Shuoyuchen",
+  "assignee": "Shuoyuchen",
+  "createdAt": "2026-09-01",
+  "completedAt": null,
+  "branch": "feat/vscode-lab-extension",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {
+    "related_pr": "PR#122 / PR#111"
+  }
+}
