@@ -57,7 +57,7 @@ JSON 报告顶层：
 - 所有 manifest 路径均为当前 Lab 内相对路径；拒绝绝对路径、`..`、缺失目标和符号链接逃逸。
 - 任何改变 Lab 目录深度的迁移都必须按“旧文件位置解析目标 → 映射被移动目标 → 从新文件位置重新计算相对路径”处理链接；扫描范围同时包含 `.md` 和 JSON 字符串中的 Markdown（例如 Quiz 题干配图），不能只替换 README。
 - Program 必须有可编译但不满分的 `student`、100 分 `solution`、合计 100 的 cases；stdout 判题、stderr 诊断。
-- 比较器与 oracle 写入都先统一 CRLF/LF；`.out` 固定写为 LF，`exact` 在此基础上逐字符比较但允许一侧缺少一个末尾 LF（不忽略内部换行、额外空行或其他空白），`tokens` 按空白 token，`float` 对数值 token 使用 `absTol/relTol`。
+- 比较器与 oracle 写入都先统一 CRLF/LF；`.out` 固定写为 LF。`exact` 还会忽略每行末尾的空格和制表符，并允许一侧缺少一个末尾 LF；除此之外仍逐字符比较，不忽略行首/行内空白、内部换行或额外空行。`tokens` 按空白 token，`float` 对数值 token 使用 `absTol/relTol`。
 - 判定固定为 `AC|WA|TLE|RE|CE|OLE|IE`；IE 不得伪装成学生 0 分。
 - 人类终端输出固定语义：AC/PASS/满分为 success，WA/CE/RE/IE/未满分实际分为 danger，TLE/OLE/PENDING 为 warning；未满分仍保留 `actual/maximum`，且 maximum 使用 success。颜色只增强文字，不得成为唯一状态信号。
 - Program 人类输出必须有逐 case 表格、PASS/NOT FULL 总结；失败时展示首差异和可复制单 case 重试。Project 必须分开 automated、manual pending、provisional total，并保持 task/case 层级。先 pad 原始单元格再加 ANSI，外部编译/CTest/stderr 正文不得被整块改色。
@@ -112,7 +112,7 @@ JSON 报告顶层：
 
 - Node 单测：坏 JSON、未知版本、绝对/`..`/符号链接路径、空格路径、case/task ID、权重、依赖环和薄 Makefile 漂移。
 - 编号单测：简写规范化、三类独立递增、max+1 不补洞、可选 order、三级目录发现、分类/目录/ID 一致性、唯一定位、重复冲突，以及混合换行 README 的相邻行尾保持。
-- 比较/进程单测：exact/tokens/float、CRLF、首差异、AC/WA/TLE/RE/CE/OLE/IE、真实 timeout/output cap、shell false。
+- 比较/进程单测：exact/tokens/float、CRLF、每行末尾水平空白、行首/行内空白反例、首差异、AC/WA/TLE/RE/CE/OLE/IE、真实 timeout/output cap、shell false。
 - 终端格式单测：TTY 自动色、`--no-color`、`NO_COLOR`、`TERM=dumb`、非 TTY、全部 verdict、满分/未满分、WA/CE、Project manual pending、全部人类 reporter、strip-ANSI 后列宽以及 JSON 无 ANSI。
 - Golden Quiz：四选一、hint、points、进度、正确数、总分、答案总览、重试、移动端和安全 Markdown。
 - Golden Program：reference 100、starter 编译且非满分、单 case、JSON、oracle drift、学生包脱离仓库运行。
