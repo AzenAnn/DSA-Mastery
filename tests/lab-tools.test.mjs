@@ -188,20 +188,32 @@ test("output comparators normalize CRLF and support exact, tokens, and float tol
   assert.deepEqual(mismatch.difference, { kind: "token", index: 2, expected: "two", actual: "three" });
 });
 
-test("exact comparison accepts one optional final line break without hiding other differences", () => {
+test("exact comparison ignores line-end horizontal whitespace without hiding other differences", () => {
   assert.equal(compareOutput("42\n", "42", { mode: "exact" }).equal, true);
   assert.equal(compareOutput("42", "42\n", { mode: "exact" }).equal, true);
+  assert.equal(compareOutput("1 2 3\n4 5\n", "1 2 3 \n4 5\n", { mode: "exact" }).equal, true);
+  assert.equal(compareOutput("1 2\n3", "1 2  \t\n3\t", { mode: "exact" }).equal, true);
   assert.equal(
     classifyExecution(
-      { code: 0, stdout: "42", stderr: "", timedOut: false, outputExceeded: false },
-      "42\n",
+      { code: 0, stdout: "1 2 3 \n4 5\n", stderr: "", timedOut: false, outputExceeded: false },
+      "1 2 3\n4 5\n",
       { mode: "exact" },
     ).verdict,
     "AC",
   );
   assert.equal(compareOutput("42\n\n", "42\n", { mode: "exact" }).equal, false);
+  assert.equal(compareOutput("42\n", "42\nextra\n", { mode: "exact" }).equal, false);
   assert.equal(compareOutput("42\n43", "4243", { mode: "exact" }).equal, false);
-  assert.equal(compareOutput("42 ", "42", { mode: "exact" }).equal, false);
+  assert.equal(compareOutput("1  2", "1 2", { mode: "exact" }).equal, false);
+  assert.equal(compareOutput(" 42", "42", { mode: "exact" }).equal, false);
+  assert.deepEqual(compareOutput("1 2\n3", "1 2 \n4", { mode: "exact" }).difference, {
+    kind: "character",
+    index: 4,
+    line: 2,
+    column: 1,
+    expected: "1 2\\n3",
+    actual: "1 2\\n4",
+  });
 });
 
 test("expected-output refresh renders a reviewable line diff", () => {
