@@ -1,7 +1,7 @@
 ---
 title: "4.3 二叉树的遍历"
 description: "掌握前序、中序、后序与层序遍历的递归与显式栈/队列实现，深入序列重构与时空复杂度分析。"
-order: 2
+order: 3
 chapter: 4
 chapterTitle: "树与二叉树"
 updated: "2026-08-24"
@@ -517,16 +517,24 @@ private:
   - 其右孩子位于下标 $2i + 2$（若 $2i + 2 < n$）；
   - 其父节点位于下标 $\lfloor (i - 1) / 2 \rfloor$（若 $i > 0$）。
 
-```text [cbt-index-mapping.txt]
-层序数组下标与二叉树拓扑映射：
-          0 (val: 1)
-        /            \
-    1 (val: 2)     2 (val: 3)
-   /          \    /
-3 (val: 4) 4 (val: 5) 5 (val: 6)
-
-规律：节点 i 的左孩子 = 2i + 1，右孩子 = 2i + 2
+```graphviz
+digraph CBTIndexMapping {
+  rankdir=TB;
+  node [shape=box];
+  0 [label="0\nval: 1"];
+  1 [label="1\nval: 2"];
+  2 [label="2\nval: 3"];
+  3 [label="3\nval: 4"];
+  4 [label="4\nval: 5"];
+  5 [label="5\nval: 6"];
+  0 -> 1;
+  0 -> 2;
+  1 -> 3;
+  1 -> 4;
+  2 -> 5;
+}
 ```
+<!-- diagram id="cbt-index-mapping" caption: "完全二叉树的层序数组下标到二叉树拓扑的映射" -->
 
 ::: details 层序序列构造完全二叉树实现（递归与迭代两种解法，点击展开）
 
@@ -597,4 +605,4 @@ TreeNode* buildCBTIterative(const std::vector<int>& levelOrder) {
 4. 若已知一棵二叉树的前序序列与后序序列，在什么特定条件下可以唯一确定该树？
 5. 比较一棵具有 $n$ 个节点的满二叉树在进行 DFS 与 BFS 遍历时的最大辅助内存消耗，并解释原因。
 
-下一节进入[4.4 线索二叉树](./03-threaded-binary-tree.md)：我们将探索如何充分复用二叉树中庞大的空指针域，在不增加额外空间的条件下实现 $O(1)$ 辅助空间的高速双向遍历。
+下一节进入[4.4 线索二叉树](./04-threaded-binary-tree.md)：我们将探索如何充分复用二叉树中庞大的空指针域，在不增加额外空间的条件下实现 $O(1)$ 辅助空间的高速双向遍历。

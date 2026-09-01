@@ -23,7 +23,7 @@ duration: "25～35 分钟"
 
 ## 前置知识
 
-建议先阅读[4.3 二叉树的遍历](../../../../content/chapter-04-tree/02-binary-tree-traversal.md)和[4.5 树、森林与二叉树](../../../../content/chapter-04-tree/04-trees-and-forests.md)，再开始本组练习。
+建议先阅读[4.3 二叉树的遍历](../../../../content/chapter-04-tree/03-binary-tree-traversal.md)和[4.5 树、森林与二叉树](../../../../content/chapter-04-tree/05-trees-and-forests.md)，再开始本组练习。
 
 ## 环境、输入与预期输出
 

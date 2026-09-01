@@ -1,7 +1,7 @@
 ---
 title: "4.2 二叉树"
 description: "掌握二叉树及其特殊形态、数量性质、顺序与链式存储，并安全完成创建和销毁。"
-order: 1
+order: 2
 chapter: 4
 chapterTitle: "树与二叉树"
 updated: "2026-08-23"
@@ -557,4 +557,4 @@ void destroy(std::unique_ptr<Node>& root) {
 6. 为什么普通二叉链表有 $n+1$ 个空指针域？线索化后销毁时为什么必须检查标记？
 7. 对先序串 `A # B # #`，画出构造结果，并说明 C 与 C++ 版本何时释放它。
 
-回顾一般树的表示与 ADT，可返回[4.1 树的基本概念与存储结构](./00-overview.md)。
+回顾一般树的表示与 ADT，可返回[4.1 树的基本概念与存储结构](./01-tree-basics.md)。

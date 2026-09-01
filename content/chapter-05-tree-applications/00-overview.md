@@ -44,9 +44,9 @@ status: "review"
 
 ## 前置知识
 
-- [4.1 树的基本概念与存储结构](../chapter-04-tree/00-overview.md)：节点、路径、深度、高度和双亲表示；
-- [4.2 二叉树](../chapter-04-tree/01-binary-tree.md)：左右子树、链式存储与完全二叉树编号；
-- [4.3 二叉树的遍历](../chapter-04-tree/02-binary-tree-traversal.md)：递归、显式栈和层序访问；
+- [4.1 树的基本概念与存储结构](../chapter-04-tree/01-tree-basics.md)：节点、路径、深度、高度和双亲表示；
+- [4.2 二叉树](../chapter-04-tree/02-binary-tree.md)：左右子树、链式存储与完全二叉树编号；
+- [4.3 二叉树的遍历](../chapter-04-tree/03-binary-tree-traversal.md)：递归、显式栈和层序访问；
 - 第 0 章的渐近复杂度、摊还分析与空间成本；
 - C/C++ 的结构体、指针或智能指针、动态数组与函数递归。
 
