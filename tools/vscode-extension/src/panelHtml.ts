@@ -55,7 +55,7 @@ export function renderQuizPanelHtml(
 <link rel="stylesheet" href="${katexCssUri}" /><link rel="stylesheet" href="${styleUri}" /></head><body>
 <div class="lab-page quiz-page">
 <header class="lab-header"><div class="title-row"><h1>${escapeHtml(lab.title)}</h1><span id="quiz-badge" class="badge ${quizProgress?.passed ? "passed" : "fresh"}">${quizProgress?.passed ? "已完成" : "选择题"}</span></div>
-<p class="meta">第 ${lab.chapter} 章 · ${escapeHtml(lab.chapterTitle)}</p></header>
+<p class="meta">题号 ${escapeHtml(lab.id)} · 第 ${lab.chapter} 章 · ${escapeHtml(lab.chapterTitle)}</p></header>
 <main class="lab-reading-surface quiz-reading-surface">
 <article class="readme">${readmeHtml}</article>
 <section class="course-quiz">
@@ -410,6 +410,7 @@ function renderHeader(lab: ProgramLab, progress: LabProgress | undefined): strin
   const meta = [
     lab.difficulty && `难度 ${escapeHtml(lab.difficulty)}`,
     lab.duration && `预计 ${escapeHtml(lab.duration)}`,
+    `题号 ${escapeHtml(lab.id)}`,
     `第 ${lab.chapter} 章 · ${escapeHtml(lab.chapterTitle)}`,
   ]
     .filter(Boolean)

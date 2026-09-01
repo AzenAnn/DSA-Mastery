@@ -119,8 +119,8 @@ export class StatsPanel {
     });
 
     const trend = buildTrend(events);
-    const bars = buildChapterBars(chapters, (name, type) =>
-      type === "quiz" ? !!progress.getQuiz(name)?.passed : !!progress.get(name)?.passed,
+    const bars = buildChapterBars(chapters, (id, type) =>
+      type === "quiz" ? !!progress.getQuiz(id)?.passed : !!progress.get(id)?.passed,
     );
 
     const cspNonce = nonce();

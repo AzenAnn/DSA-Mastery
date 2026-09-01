@@ -66,3 +66,9 @@ test("quiz panel uses the shared WebView shell without adding sidebar navigation
   assert.match(html, /class="course-quiz"/);
   assert.doesNotMatch(html, /class="chapter-sidebar"/);
 });
+
+test("program and quiz panels expose the stable Lab ID in their metadata", async () => {
+  const html = await readPackageFile("src/panelHtml.ts");
+
+  assert.match(html, /题号 \$\{escapeHtml\(lab\.id\)\}/);
+});

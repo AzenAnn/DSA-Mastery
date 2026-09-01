@@ -5,9 +5,12 @@ import type { CaseResult, ScoreResult, Verdict } from "./cli";
 import { studentSourcePath, type ProgramLab } from "./labIndex";
 import type { QuizQuestion } from "./quiz";
 import { backfillEvents } from "./stats";
+import { remapEventKeys, remapRecordKeys } from "./progressKeys";
+import { mergeLabProgress, mergeQuizProgress } from "./progressMerge";
 
 const STATE_KEY = "dsaMastery.progress.v1";
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
+const EVENT_SCHEMA_VERSION = 2;
 
 /**
  * 活动日志上限。每条约 100 字节,20000 条约 2MB —— globalState 启动时整份读入内存,
@@ -108,7 +111,7 @@ function migrateV1ToV2(raw: ProgressStore): ProgressStore {
   const events = backfillEvents(labs);
 
   return {
-    schemaVersion: SCHEMA_VERSION,
+    schemaVersion: EVENT_SCHEMA_VERSION,
     labs,
     quizzes: raw.quizzes ?? {},
     events: events.slice(-EVENT_LIMIT),
@@ -142,7 +145,7 @@ export class ProgressTracker {
     const raw = this.context.globalState.get<ProgressStore>(STATE_KEY);
     if (!raw || typeof raw !== "object") return emptyStore();
 
-    if (raw.schemaVersion === SCHEMA_VERSION) {
+    if (raw.schemaVersion === SCHEMA_VERSION || raw.schemaVersion === EVENT_SCHEMA_VERSION) {
       return {
         schemaVersion: raw.schemaVersion,
         labs: raw.labs ?? {},
@@ -169,6 +172,32 @@ export class ProgressTracker {
   }
 
   /**
+   * v2 → v3：把目录名主键迁移为稳定 labId。
+   *
+   * 只有题目扫描完成后才有足够的 README 元数据建立别名。迁移前保存完整备份；
+   * 旧源码快照不移动，HistoryEntry.snapshot 继续指向原来的文件。
+   */
+  async migrateLabKeys(labs: readonly ProgramLab[]): Promise<void> {
+    const aliases = labs.flatMap((lab) =>
+      [lab.name, ...lab.legacyNames].map((name) => ({ id: lab.id, name })),
+    );
+    const program = remapRecordKeys(this.store.labs, aliases, mergeLabProgress);
+    const quiz = remapRecordKeys(this.store.quizzes, aliases, mergeQuizProgress);
+    const activity = remapEventKeys(this.store.events, aliases);
+    const changed = program.changed || quiz.changed || activity.changed || this.store.schemaVersion !== SCHEMA_VERSION;
+    if (!changed) return;
+
+    await this.context.globalState.update(`${STATE_KEY}.backup.v${this.store.schemaVersion}.${Date.now()}`, this.store);
+    this.store = {
+      schemaVersion: SCHEMA_VERSION,
+      labs: program.records,
+      quizzes: quiz.records,
+      events: activity.events,
+    };
+    await this.persist();
+  }
+
+  /**
    * 追加一条活动记录。不落盘 —— 调用方随后一定会 persist()。
    *
    * 超上限时丢最老的:heatmap 只看最近一年,丢掉一年前的记录不影响显示,
@@ -190,23 +219,23 @@ export class ProgressTracker {
     return path.join(this.context.globalStorageUri.fsPath, "submissions");
   }
 
-  get(labName: string): LabProgress | undefined {
-    return this.store.labs[labName];
+  get(labId: string): LabProgress | undefined {
+    return this.store.labs[labId];
   }
 
-  getQuiz(labName: string): QuizProgress | undefined {
-    return this.store.quizzes[labName];
+  getQuiz(labId: string): QuizProgress | undefined {
+    return this.store.quizzes[labId];
   }
 
   async recordQuizAnswer(
-    labName: string,
+    labId: string,
     questions: QuizQuestion[],
     questionId: string,
     selected: number,
   ): Promise<QuizProgress> {
     const question = questions.find((item) => item.id === questionId);
     if (!question) throw new Error(`找不到选择题：${questionId}`);
-    const existing = this.store.quizzes[labName] ?? {
+    const existing = this.store.quizzes[labId] ?? {
       passed: false,
       bestScore: 0,
       maxScore: questions.reduce((total, item) => total + item.points, 0),
@@ -233,12 +262,12 @@ export class ProgressTracker {
     // 每答一小题记一条 submit —— 选择题没有「整题提交」动作,作答就是提交。
     // pass 只在 false → true 那一刻记一条,否则之后每答一题都会重复记 pass。
     const at = new Date().toISOString();
-    this.appendEvent({ at, kind: "submit", labName, labType: "quiz" });
+    this.appendEvent({ at, kind: "submit", labName: labId, labType: "quiz" });
     if (!wasPassed && existing.passed) {
-      this.appendEvent({ at, kind: "pass", labName, labType: "quiz" });
+      this.appendEvent({ at, kind: "pass", labName: labId, labType: "quiz" });
     }
 
-    this.store.quizzes[labName] = existing;
+    this.store.quizzes[labId] = existing;
     await this.persist();
     return existing;
   }
@@ -251,7 +280,7 @@ export class ProgressTracker {
    */
   countPassed(labs: ProgramLab[]): number {
     return labs.filter((lab) =>
-      lab.type === "quiz" ? this.store.quizzes[lab.name]?.passed : this.store.labs[lab.name]?.passed,
+      lab.type === "quiz" ? this.store.quizzes[lab.id]?.passed : this.store.labs[lab.id]?.passed,
     ).length;
   }
 
@@ -266,7 +295,7 @@ export class ProgressTracker {
     const id = snapshotId(now);
     const at = now.toISOString();
 
-    const existing = this.store.labs[lab.name];
+    const existing = this.store.labs[lab.id];
     const progress: LabProgress = existing ?? {
       passed: false,
       bestScore: 0,
@@ -299,9 +328,9 @@ export class ProgressTracker {
     // 两条共用同一个 at,所以在 heatmap 上必然落进同一格。
     // 这里记的是「本次通过」而非「首次通过」—— 重复通过也该在 heatmap 上留痕,
     // 否则复习性质的重做会显示成没做。
-    this.appendEvent({ at, kind: "submit", labName: lab.name, labType: "program" });
+    this.appendEvent({ at, kind: "submit", labName: lab.id, labType: "program" });
     if (fullScore) {
-      this.appendEvent({ at, kind: "pass", labName: lab.name, labType: "program" });
+      this.appendEvent({ at, kind: "pass", labName: lab.id, labType: "program" });
     }
 
     progress.history.unshift({
@@ -313,15 +342,15 @@ export class ProgressTracker {
       snapshot: snapshotRelative,
     });
 
-    this.store.labs[lab.name] = progress;
-    await this.pruneHistory(lab.name, progress);
+    this.store.labs[lab.id] = progress;
+    await this.pruneHistory(progress);
     await this.persist();
     return progress;
   }
 
   /** 把当前 student 源码复制到快照目录，返回相对 globalStorage 的路径。 */
   private async saveSnapshot(lab: ProgramLab, id: string): Promise<string> {
-    const relativeDir = path.join("submissions", lab.name, id);
+    const relativeDir = path.join("submissions", lab.id, id);
     const absoluteDir = path.join(this.context.globalStorageUri.fsPath, relativeDir);
     await mkdir(absoluteDir, { recursive: true });
 
@@ -332,14 +361,14 @@ export class ProgressTracker {
   }
 
   /** 超出 historyLimit 的旧快照连同其目录一起删除。 */
-  private async pruneHistory(labName: string, progress: LabProgress): Promise<void> {
+  private async pruneHistory(progress: LabProgress): Promise<void> {
     const limit = vscode.workspace.getConfiguration("dsaMastery").get<number>("historyLimit") ?? 50;
     if (progress.history.length <= limit) return;
 
     const dropped = progress.history.splice(limit);
     await Promise.all(
       dropped.map((entry) =>
-        rm(path.join(this.submissionsRoot(), labName, entry.id), { recursive: true, force: true }),
+        rm(path.dirname(path.join(this.context.globalStorageUri.fsPath, entry.snapshot)), { recursive: true, force: true }),
       ),
     );
   }

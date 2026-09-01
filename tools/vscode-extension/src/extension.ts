@@ -135,7 +135,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 /** 列出某题的提交历史，可打开任一次提交的源码快照，或与当前代码对比。 */
 async function showHistory(lab: ProgramLab, progress: ProgressTracker): Promise<void> {
-  const state = progress.get(lab.name);
+  const state = progress.get(lab.id);
   if (!state || state.history.length === 0) {
     await vscode.window.showInformationMessage(`${lab.title} 还没有提交记录。`);
     return;

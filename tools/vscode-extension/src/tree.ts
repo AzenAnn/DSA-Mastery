@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { shortLabTitle } from "./labIdentity";
 import { discoverProgramLabs, type Chapter, type ProgramLab } from "./labIndex";
 import { quizIconState } from "./quiz";
 import type { LabProgress, ProgressTracker, QuizProgress } from "./progress";
@@ -30,6 +31,7 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   /** 重新扫描 labs/ 并刷新整棵树。 */
   async refresh(): Promise<void> {
     this.chapters = await discoverProgramLabs(this.repoRoot);
+    await this.progress.migrateLabKeys(this.allLabs());
     this.loaded = true;
     this.emitter.fire(undefined);
   }
@@ -48,8 +50,10 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     return this.chapters;
   }
 
-  findLab(name: string): ProgramLab | undefined {
-    return this.allLabs().find((lab) => lab.name === name);
+  findLab(identifier: string): ProgramLab | undefined {
+    return this.allLabs().find(
+      (lab) => lab.id === identifier || lab.name === identifier || lab.legacyNames.includes(identifier),
+    );
   }
 
   async getChildren(element?: TreeNode): Promise<TreeNode[]> {
@@ -77,9 +81,9 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   private labItem(node: LabNode): vscode.TreeItem {
     const { lab } = node;
-    const quizState = lab.type === "quiz" ? this.progress.getQuiz(lab.name) : undefined;
-    const programState = lab.type === "program" ? this.progress.get(lab.name) : undefined;
-    const item = new vscode.TreeItem(lab.title, vscode.TreeItemCollapsibleState.None);
+    const quizState = lab.type === "quiz" ? this.progress.getQuiz(lab.id) : undefined;
+    const programState = lab.type === "program" ? this.progress.get(lab.id) : undefined;
+    const item = new vscode.TreeItem(`${lab.id} · ${shortLabTitle(lab.title)}`, vscode.TreeItemCollapsibleState.None);
 
     item.description = lab.type === "quiz" ? describeQuizState(quizState) : describeState(programState);
     item.iconPath = lab.type === "quiz" ? quizStateIcon(quizState) : stateIcon(programState);
@@ -90,7 +94,7 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     item.command = {
       command: "dsaMastery.openLab",
       title: "打开题目",
-      arguments: [lab.name],
+      arguments: [lab.id],
     };
     return item;
   }
@@ -121,7 +125,7 @@ function describeQuizState(state: QuizProgress | undefined): string {
 }
 
 function buildQuizTooltip(lab: ProgramLab, state: QuizProgress | undefined): vscode.MarkdownString {
-  const tooltip = new vscode.MarkdownString(`**${lab.title}**\n\n${state?.passed ? "✅ 已完成" : "选择题"}\n\n已答：${state ? Object.keys(state.answers).length : 0}/${lab.quizQuestions?.length ?? 0}`);
+  const tooltip = new vscode.MarkdownString(`**${lab.id} · ${lab.title}**\n\n${state?.passed ? "✅ 已完成" : "选择题"}\n\n已答：${state ? Object.keys(state.answers).length : 0}/${lab.quizQuestions?.length ?? 0}`);
   tooltip.supportThemeIcons = true;
   return tooltip;
 }
@@ -147,7 +151,7 @@ function describeState(state: LabProgress | undefined): string {
 }
 
 function buildTooltip(lab: ProgramLab, state: LabProgress | undefined): vscode.MarkdownString {
-  const lines = [`**${lab.title}**`, ""];
+  const lines = [`**${lab.id} · ${lab.title}**`, ""];
   if (lab.description) lines.push(lab.description, "");
 
   const meta = [lab.difficulty && `难度：${lab.difficulty}`, lab.duration && `预计：${lab.duration}`]
