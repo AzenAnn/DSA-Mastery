@@ -82,6 +82,7 @@ export async function discoverProgramLabs(repoRoot: string): Promise<Chapter[]> 
   const labsRoot = path.join(repoRoot, "labs");
   const labs: ProgramLab[] = [];
   const categories = ["theory", "exercise", "project"] as const;
+  const categoryNames = new Set<string>(categories);
 
   for (const chapterDir of await listDirectories(labsRoot)) {
     const chapterPath = path.join(labsRoot, chapterDir);
@@ -98,6 +99,19 @@ export async function discoverProgramLabs(repoRoot: string): Promise<Chapter[]> 
         const lab = await loadProgramLab(repoRoot, labPath, labDir, chapterDir);
         if (lab) labs.push(lab);
       }
+    }
+
+    // PR#122 迁移完成前，当前 feature 分支仍可能检出旧的平铺目录；读取它们
+    // 只用于兼容，不影响新分类目录的扫描，也不会把分类目录本身当作 Lab。
+    const categorizedLegacyNames = new Set(labs.flatMap((lab) => lab.legacyNames));
+    for (const labDir of await listDirectories(chapterPath)) {
+      if (categoryNames.has(labDir)) continue;
+      if (categorizedLegacyNames.has(labDir)) continue;
+      const labPath = path.join(chapterPath, labDir);
+      const lab = await loadProgramLab(repoRoot, labPath, labDir, chapterDir);
+      if (!lab) continue;
+      if (labs.some((existing) => existing.id === lab.id || existing.legacyNames.includes(lab.name))) continue;
+      labs.push(lab);
     }
   }
 
@@ -184,6 +198,7 @@ function buildLab(
   const legacyNames = slug && Number.isSafeInteger(order) && order !== Number.MAX_SAFE_INTEGER
     ? [`lab-${String(chapter).padStart(2, "0")}-${String(order).padStart(2, "0")}-${slug}`]
     : [];
+
   return {
     id: readStableLabId(front.labId, labDir),
     name: labDir,

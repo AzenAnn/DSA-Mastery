@@ -2,40 +2,43 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { remapEventKeys, remapRecordKeys } from "../src/progressKeys.ts";
 
-test("legacy directory progress keys migrate to stable Lab IDs", () => {
+test("merges legacy and current directory records under one stable ID", () => {
+  const source = {
+    "01E01": { attempts: 2 },
+    "E-01-01-sequential-list": { attempts: 3 },
+    "lab-01-06-sequential-list": { attempts: 4 },
+  };
   const aliases = [
-    { id: "01E04", name: "E-01-04-singly-linked-list-reverse" },
-    { id: "01E04", name: "lab-01-09-singly-linked-list-reverse" },
+    { id: "01E01", name: "E-01-01-sequential-list" },
+    { id: "01E01", name: "lab-01-06-sequential-list" },
   ];
-  const single = remapRecordKeys(
-    { "lab-01-09-singly-linked-list-reverse": { attempts: 3 } },
-    aliases,
-    (stable, legacy) => ({ attempts: stable.attempts + legacy.attempts }),
-  );
-  assert.equal(single.changed, true);
-  assert.deepEqual(single.records, { "01E04": { attempts: 3 } });
 
-  const collision = remapRecordKeys(
-    {
-      "01E04": { attempts: 2 },
-      "lab-01-09-singly-linked-list-reverse": { attempts: 3 },
-    },
-    aliases,
-    (stable, legacy) => ({ attempts: stable.attempts + legacy.attempts }),
-  );
-  assert.deepEqual(collision.records, { "01E04": { attempts: 5 } });
+  const migrated = remapRecordKeys(source, aliases, (stable, legacy) => ({
+    attempts: stable.attempts + legacy.attempts,
+  }));
+
+  assert.equal(migrated.changed, true);
+  assert.deepEqual(migrated.records, { "01E01": { attempts: 9 } });
+  assert.deepEqual(source, {
+    "01E01": { attempts: 2 },
+    "E-01-01-sequential-list": { attempts: 3 },
+    "lab-01-06-sequential-list": { attempts: 4 },
+  });
 });
 
-test("activity events keep their history while replacing legacy keys", () => {
-  const migrated = remapEventKeys(
-    [
-      { labName: "lab-01-09-singly-linked-list-reverse", kind: "submit" },
-      { labName: "01T01", kind: "pass" },
-    ],
-    [{ id: "01E04", name: "lab-01-09-singly-linked-list-reverse" }],
-  );
+test("rewrites legacy activity keys without changing event order or payload", () => {
+  const events = [
+    { labName: "lab-01-06-sequential-list", kind: "submit" },
+    { labName: "01E01", kind: "pass" },
+  ];
+
+  const migrated = remapEventKeys(events, [{ id: "01E01", name: "lab-01-06-sequential-list" }]);
+
   assert.equal(migrated.changed, true);
-  assert.deepEqual(migrated.events.map((event) => event.labName), ["01E04", "01T01"]);
+  assert.deepEqual(migrated.events, [
+    { labName: "01E01", kind: "submit" },
+    { labName: "01E01", kind: "pass" },
+  ]);
 });
 
 test("new category directory keys and old flat directory keys converge on one stable ID", () => {

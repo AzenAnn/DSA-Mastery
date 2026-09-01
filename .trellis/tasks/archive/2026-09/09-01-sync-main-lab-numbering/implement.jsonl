@@ -1,0 +1,5 @@
+{"file":".trellis/spec/content/lab-tooling.md","reason":"确认 main 的三级 Lab 目录、labId、标题、迁移和旧平铺目录清理合同。"}
+{"file":".trellis/spec/quality/vscode-extension.md","reason":"确认插件稳定身份、分类扫描、旧键迁移、树/WebView 展示和必跑测试合同。"}
+{"file":".trellis/spec/quality/validation-and-pages.md","reason":"确认根项目内容、自动发现、构建和站点产物门禁。"}
+{"file":".trellis/spec/quality/git-and-pr.md","reason":"确认 merge、提交范围、PR 验证证据和 AI/人工复核说明要求。"}
+{"file":".trellis/spec/quality/cleanup-safety.md","reason":"确认仅清理已验证的 ignored .lab-cache 旧父目录，不触碰课程源码和用户文件。"}

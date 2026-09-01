@@ -179,7 +179,9 @@ export class LabPanel {
   /** 切到相邻题目。复用同一个面板,不新开 webview。 */
   private async navigate(labName?: string): Promise<void> {
     if (!labName || this.submitting) return;
-    const target = this.deps.siblings().find((item) => item.id === labName || item.name === labName);
+    const target = this.deps.siblings().find(
+      (item) => item.id === labName || item.name === labName || item.legacyNames.includes(labName),
+    );
     if (!target) return;
     await this.load(target);
   }

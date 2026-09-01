@@ -6,6 +6,7 @@ import { studentSourcePath, type ProgramLab } from "./labIndex";
 import type { QuizQuestion } from "./quiz";
 import { backfillEvents } from "./stats";
 import { remapEventKeys, remapRecordKeys } from "./progressKeys";
+import { mergeLabProgress, mergeQuizProgress } from "./progressMerge";
 
 const STATE_KEY = "dsaMastery.progress.v1";
 const SCHEMA_VERSION = 3;
@@ -173,11 +174,13 @@ export class ProgressTracker {
   /**
    * v2 → v3：把目录名主键迁移为稳定 labId。
    *
-   * 这一步必须等题目扫描完成后才能做，因为只有 README 同时提供新 id 和旧目录名。
-   * 迁移前保留完整备份；旧快照不搬目录，HistoryEntry.snapshot 会继续指向原文件。
+   * 只有题目扫描完成后才有足够的 README 元数据建立别名。迁移前保存完整备份；
+   * 旧源码快照不移动，HistoryEntry.snapshot 继续指向原来的文件。
    */
   async migrateLabKeys(labs: readonly ProgramLab[]): Promise<void> {
-    const aliases = labs.flatMap((lab) => [lab.name, ...lab.legacyNames].map((name) => ({ id: lab.id, name })));
+    const aliases = labs.flatMap((lab) =>
+      [lab.name, ...lab.legacyNames].map((name) => ({ id: lab.id, name })),
+    );
     const program = remapRecordKeys(this.store.labs, aliases, mergeLabProgress);
     const quiz = remapRecordKeys(this.store.quizzes, aliases, mergeQuizProgress);
     const activity = remapEventKeys(this.store.events, aliases);
@@ -216,23 +219,23 @@ export class ProgressTracker {
     return path.join(this.context.globalStorageUri.fsPath, "submissions");
   }
 
-  get(labName: string): LabProgress | undefined {
-    return this.store.labs[labName];
+  get(labId: string): LabProgress | undefined {
+    return this.store.labs[labId];
   }
 
-  getQuiz(labName: string): QuizProgress | undefined {
-    return this.store.quizzes[labName];
+  getQuiz(labId: string): QuizProgress | undefined {
+    return this.store.quizzes[labId];
   }
 
   async recordQuizAnswer(
-    labName: string,
+    labId: string,
     questions: QuizQuestion[],
     questionId: string,
     selected: number,
   ): Promise<QuizProgress> {
     const question = questions.find((item) => item.id === questionId);
     if (!question) throw new Error(`找不到选择题：${questionId}`);
-    const existing = this.store.quizzes[labName] ?? {
+    const existing = this.store.quizzes[labId] ?? {
       passed: false,
       bestScore: 0,
       maxScore: questions.reduce((total, item) => total + item.points, 0),
@@ -259,12 +262,12 @@ export class ProgressTracker {
     // 每答一小题记一条 submit —— 选择题没有「整题提交」动作,作答就是提交。
     // pass 只在 false → true 那一刻记一条,否则之后每答一题都会重复记 pass。
     const at = new Date().toISOString();
-    this.appendEvent({ at, kind: "submit", labName, labType: "quiz" });
+    this.appendEvent({ at, kind: "submit", labName: labId, labType: "quiz" });
     if (!wasPassed && existing.passed) {
-      this.appendEvent({ at, kind: "pass", labName, labType: "quiz" });
+      this.appendEvent({ at, kind: "pass", labName: labId, labType: "quiz" });
     }
 
-    this.store.quizzes[labName] = existing;
+    this.store.quizzes[labId] = existing;
     await this.persist();
     return existing;
   }
@@ -364,7 +367,9 @@ export class ProgressTracker {
 
     const dropped = progress.history.splice(limit);
     await Promise.all(
-      dropped.map((entry) => rm(path.dirname(path.join(this.context.globalStorageUri.fsPath, entry.snapshot)), { recursive: true, force: true })),
+      dropped.map((entry) =>
+        rm(path.dirname(path.join(this.context.globalStorageUri.fsPath, entry.snapshot)), { recursive: true, force: true }),
+      ),
     );
   }
 
@@ -378,39 +383,6 @@ export class ProgressTracker {
     await this.persist();
     await rm(this.submissionsRoot(), { recursive: true, force: true });
   }
-}
-
-function mergeLabProgress(stable: LabProgress, legacy: LabProgress): LabProgress {
-  const history = [...stable.history, ...legacy.history]
-    .filter((entry, index, entries) => entries.findIndex((candidate) => candidate.id === entry.id && candidate.snapshot === entry.snapshot) === index)
-    .sort((left, right) => right.at.localeCompare(left.at));
-  const latest = [stable.lastSubmission, legacy.lastSubmission]
-    .filter((entry): entry is NonNullable<LabProgress["lastSubmission"]> => Boolean(entry))
-    .sort((left, right) => right.at.localeCompare(left.at))[0];
-  const firstPassedAt = [stable.firstPassedAt, legacy.firstPassedAt].filter((value): value is string => Boolean(value)).sort()[0];
-  return {
-    passed: stable.passed || legacy.passed,
-    firstPassedAt,
-    bestScore: Math.max(stable.bestScore, legacy.bestScore),
-    maxScore: Math.max(stable.maxScore, legacy.maxScore),
-    submissionCount: Math.max(stable.submissionCount, legacy.submissionCount, history.length),
-    lastSubmission: latest,
-    history,
-  };
-}
-
-function mergeQuizProgress(stable: QuizProgress, legacy: QuizProgress): QuizProgress {
-  const answers = { ...legacy.answers, ...stable.answers };
-  for (const [id, answer] of Object.entries(legacy.answers)) {
-    const current = answers[id];
-    if (!current || answer.answeredAt > current.answeredAt || answer.attempts > current.attempts) answers[id] = answer;
-  }
-  return {
-    passed: stable.passed || legacy.passed,
-    bestScore: Math.max(stable.bestScore, legacy.bestScore),
-    maxScore: Math.max(stable.maxScore, legacy.maxScore),
-    answers,
-  };
 }
 
 function toSubmissionCase(item: CaseResult): SubmissionCase {

@@ -114,7 +114,27 @@ button:disabled {
   --stats-pass-2: color-mix(in srgb, var(--dsa-accent, #5e6de6) 42%, var(--dsa-surface, var(--vscode-editor-background)));
   --stats-pass-3: color-mix(in srgb, var(--dsa-accent, #5e6de6) 64%, var(--dsa-surface, var(--vscode-editor-background)));
   --stats-pass-4: var(--dsa-accent, #5e6de6);
+  --stats-cell-outline: transparent;
   min-width: 0;
+}
+
+/* 深色 WebView 需要更强的热力图层级,避免低强度格子沉入背景。 */
+body.vscode-dark .stats-page,
+body.vscode-high-contrast .stats-page {
+  --stats-chart-empty: color-mix(in srgb, var(--vscode-foreground, #d4d4d4) 20%, var(--vscode-editor-background, #1e1e1e));
+  --stats-submit-1: color-mix(in srgb, var(--vscode-charts-orange, #ff9d5c) 38%, var(--vscode-editor-background, #1e1e1e));
+  --stats-submit-2: color-mix(in srgb, var(--vscode-charts-orange, #ff9d5c) 54%, var(--vscode-editor-background, #1e1e1e));
+  --stats-submit-3: color-mix(in srgb, var(--vscode-charts-orange, #ff9d5c) 72%, var(--vscode-editor-background, #1e1e1e));
+  --stats-submit-4: color-mix(in srgb, var(--vscode-charts-orange, #ffb37a) 92%, var(--vscode-editor-background, #1e1e1e));
+  --stats-pass-1: color-mix(in srgb, var(--vscode-textLink-foreground, #8290ff) 36%, var(--vscode-editor-background, #1e1e1e));
+  --stats-pass-2: color-mix(in srgb, var(--vscode-textLink-foreground, #8290ff) 52%, var(--vscode-editor-background, #1e1e1e));
+  --stats-pass-3: color-mix(in srgb, var(--vscode-textLink-foreground, #9da8ff) 70%, var(--vscode-editor-background, #1e1e1e));
+  --stats-pass-4: color-mix(in srgb, var(--vscode-textLink-foreground, #b8c0ff) 90%, var(--vscode-editor-background, #1e1e1e));
+  --stats-cell-outline: color-mix(in srgb, var(--vscode-foreground, #d4d4d4) 18%, transparent);
+}
+
+body.vscode-high-contrast .stats-page {
+  --stats-cell-outline: var(--vscode-contrastBorder, var(--vscode-focusBorder, #ffffff));
 }
 
 body.stats-body {
@@ -307,6 +327,13 @@ body.stats-body {
 
 .stats-page .heatmap-scroll svg {
   display: block;
+}
+
+.stats-page .heatmap-scroll rect,
+.stats-page .heatmap-legend rect {
+  stroke: var(--stats-cell-outline);
+  stroke-width: 0.35;
+  vector-effect: non-scaling-stroke;
 }
 
 .stats-page .heatmap-legend {

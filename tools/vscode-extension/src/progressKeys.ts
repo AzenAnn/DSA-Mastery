@@ -3,6 +3,7 @@ export interface LabKeyAlias {
   name: string;
 }
 
+/** 把一个或多个旧目录键迁移到稳定 ID，并在冲突时交给领域合并函数处理。 */
 export function remapRecordKeys<T>(
   source: Record<string, T>,
   aliases: readonly LabKeyAlias[],
@@ -21,6 +22,7 @@ export function remapRecordKeys<T>(
   return { records, changed };
 }
 
+/** 只替换事件里的 Lab 键，保留事件顺序与其它字段。 */
 export function remapEventKeys<T extends { labName: string }>(
   source: readonly T[],
   aliases: readonly LabKeyAlias[],

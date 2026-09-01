@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { shortLabTitle } from "./labIdentity";
 import { discoverProgramLabs, type Chapter, type ProgramLab } from "./labIndex";
 import { quizIconState } from "./quiz";
 import type { LabProgress, ProgressTracker, QuizProgress } from "./progress";
@@ -82,8 +83,7 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     const { lab } = node;
     const quizState = lab.type === "quiz" ? this.progress.getQuiz(lab.id) : undefined;
     const programState = lab.type === "program" ? this.progress.get(lab.id) : undefined;
-    const shortTitle = lab.title.replace(/^Lab\s+\d{2}-(?:\d{2}|[TEP]-\d{2,})[：:]\s*/, "");
-    const item = new vscode.TreeItem(`${lab.id} · ${shortTitle}`, vscode.TreeItemCollapsibleState.None);
+    const item = new vscode.TreeItem(`${lab.id} · ${shortLabTitle(lab.title)}`, vscode.TreeItemCollapsibleState.None);
 
     item.description = lab.type === "quiz" ? describeQuizState(quizState) : describeState(programState);
     item.iconPath = lab.type === "quiz" ? quizStateIcon(quizState) : stateIcon(programState);
