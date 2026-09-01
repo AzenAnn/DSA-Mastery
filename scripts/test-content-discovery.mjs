@@ -26,6 +26,8 @@ const sidebarLabDirectory = path.join(
   "exercise",
   "E-01-99-sidebar-discovery-fixture",
 );
+const projectCategoryDirectory = path.join(projectRoot, "labs", "chapter-99", "project");
+const projectCategoryMarker = path.join(projectCategoryDirectory, ".gitkeep");
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const pagesEnvironment = {
   ...process.env,
@@ -252,7 +254,7 @@ try {
   await mkdir(lessonDirectory, { recursive: true });
   await mkdir(labDirectory, { recursive: true });
   await mkdir(stableTitleLabDirectory, { recursive: true });
-  await mkdir(path.join(projectRoot, "labs", "chapter-99", "project"), { recursive: true });
+  await mkdir(projectCategoryDirectory, { recursive: true });
   await mkdir(sidebarLabDirectory, { recursive: true });
   await writeFile(path.join(lessonDirectory, "00-autodiscovery.md"), lesson, "utf8");
   await writeFile(path.join(labDirectory, "README.md"), lab, "utf8");
@@ -262,6 +264,7 @@ try {
     "utf8",
   );
   await writeFile(path.join(sidebarLabDirectory, "README.md"), sidebarLab, "utf8");
+  await writeFile(projectCategoryMarker, "", "utf8");
 
   runNpm(["run", "validate:content"]);
   runNpm(["run", "build:vitepress"]);
@@ -486,9 +489,10 @@ try {
   await rm(labDirectory, { recursive: true, force: true });
   await rm(stableTitleLabDirectory, { recursive: true, force: true });
   await rm(sidebarLabDirectory, { recursive: true, force: true });
+  await rm(projectCategoryMarker, { force: true });
   await rmdir(path.join(projectRoot, "labs", "chapter-99", "theory")).catch(() => {});
   await rmdir(path.join(projectRoot, "labs", "chapter-99", "exercise")).catch(() => {});
-  await rmdir(path.join(projectRoot, "labs", "chapter-99", "project")).catch(() => {});
+  await rmdir(projectCategoryDirectory).catch(() => {});
   await rmdir(path.join(projectRoot, "labs", "chapter-99")).catch(() => {});
   try {
     runNpm(["run", "build:vitepress"]);
