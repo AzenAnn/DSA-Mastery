@@ -59,7 +59,7 @@ VitePress `1.6.4` 的 Labs 跨页面 outline 兼容例外必须保留：顶栏 L
 
 ## 6. Routes, Links, and Pages Base
 
-- `content/:chapter/:page.md` 映射到 `/learn/:chapter/:page/`；`labs/:chapter/:lab/README.md` 映射到 `/labs/:chapter/:lab/`。公共 URL 由 config 的 rewrites 和统一 route map 维护。
+- `content/:chapter/:page.md` 映射到 `/learn/:chapter/:page/`；`labs/:chapter/:category/:lab/README.md` 映射到 `/labs/:chapter/:category/:lab/`。公共 URL 由 config 的 rewrites 和统一 route map 维护。
 - 源码 URL 不含 `/DSA-Mastery/`。正文优先使用相对 `.md` 链接；Vue 站内链接使用 `withBase` 或 VitePress 生成的 route。
 - `GITHUB_PAGES_BASE_PATH` 只在 config 中规范化一次，空值为 `/`，Pages 构建输出固定为 `dist/pages`。任何双 base、硬编码 base 或 source path 泄漏都是阻塞问题。
 - 修改 route、rewrite、base、Markdown link transform 或 Labs 导航时，同时验证本地 `/` 与 Pages `/DSA-Mastery/`；不要只打开开发服务判断成功。

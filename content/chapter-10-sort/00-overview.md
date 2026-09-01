@@ -43,12 +43,30 @@ status: "draft"
 1. 先学基础：从[10.1 插入排序](./01-insertion-sort.md)、[10.2 选择排序](./02-selection-sort.md)、[10.3 冒泡排序](./03-bubble-sort.md)开始，再到[10.4 希尔排序](./04-shell-sort.md)。
 2. 再学高效：从[11.1 归并排序](../chapter-11-advanced-sort/01-merge-sort.md)、[11.2 快速排序](../chapter-11-advanced-sort/02-quick-sort.md)、[11.3 堆排序](../chapter-11-advanced-sort/03-heap-sort.md)开始。
 3. 然后学非比较：[11.4 计数排序](../chapter-11-advanced-sort/04-counting-sort.md)、[11.5 桶排序](../chapter-11-advanced-sort/05-bucket-sort.md)、[11.6 基数排序](../chapter-11-advanced-sort/06-radix-sort.md)。
-4. 最后完成配套 Lab：稳定性对比实验与多算法性能基准。
+4. 最后完成配套 Lab：先做每类排序的理论自测，再动手实现算法代码。
 
 ## 配套 Labs
 
-- [Lab 10-01：排序稳定性对比](../../labs/chapter-10/lab-10-01-stability-compare/README.md)
-- [Lab 10-02：排序性能基准](../../labs/chapter-10/lab-10-02-performance-benchmark/README.md)
+第 10 章（基础排序）理论自测与算法实现：
+
+- [Lab 10-T-01：插入排序自测](../../labs/chapter-10/theory/T-10-01-insertion-sort-quiz/README.md)
+- [Lab 10-T-02：选择排序自测](../../labs/chapter-10/theory/T-10-02-selection-sort-quiz/README.md)
+- [Lab 10-T-03：冒泡排序自测](../../labs/chapter-10/theory/T-10-03-bubble-sort-quiz/README.md)
+- [Lab 10-T-04：希尔排序自测](../../labs/chapter-10/theory/T-10-04-shell-sort-quiz/README.md)
+- [Lab 10-E-01：多关键字排序（奖学金）](../../labs/chapter-10/exercise/E-10-01-multi-key-sort/README.md)
+- [Lab 10-E-02：大整数比较（宇宙总统）](../../labs/chapter-10/exercise/E-10-02-big-int-compare/README.md)
+
+第 11 章（高效排序）理论自测与算法实现：
+
+- [Lab 11-T-01：归并排序自测](../../labs/chapter-11/theory/T-11-01-merge-sort-quiz/README.md)
+- [Lab 11-T-02：快速排序自测](../../labs/chapter-11/theory/T-11-02-quick-sort-quiz/README.md)
+- [Lab 11-T-03：堆排序自测](../../labs/chapter-11/theory/T-11-03-heap-sort-quiz/README.md)
+- [Lab 11-T-04：计数排序自测](../../labs/chapter-11/theory/T-11-04-counting-sort-quiz/README.md)
+- [Lab 11-T-05：桶排序自测](../../labs/chapter-11/theory/T-11-05-bucket-sort-quiz/README.md)
+- [Lab 11-T-06：基数排序自测](../../labs/chapter-11/theory/T-11-06-radix-sort-quiz/README.md)
+- [Lab 11-E-01：计数排序（选举学生会）](../../labs/chapter-11/exercise/E-11-01-counting-votes/README.md)
+- [Lab 11-E-02：归并求逆序对](../../labs/chapter-11/exercise/E-11-02-inversion-pairs/README.md)
+- [Lab 11-E-03：拼接最大数（拼数）](../../labs/chapter-11/exercise/E-11-03-concat-max/README.md)
 
 ## 学习建议
 

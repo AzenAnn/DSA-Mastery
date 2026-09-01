@@ -1,0 +1,37 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-mixed",
+    "input": "tests/002-mixed.in",
+    "expected": "tests/002-mixed.out",
+    "points": 25,
+    "tags": ["normal"]
+  },
+  {
+    "id": "003-all-same",
+    "input": "tests/003-all-same.in",
+    "expected": "tests/003-all-same.out",
+    "points": 20,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-max-m",
+    "input": "tests/004-max-m.in",
+    "expected": "tests/004-max-m.out",
+    "points": 20,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-single",
+    "input": "tests/005-single.in",
+    "expected": "tests/005-single.out",
+    "points": 15,
+    "tags": ["boundary"]
+  }
+]

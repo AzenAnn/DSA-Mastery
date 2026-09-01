@@ -278,9 +278,30 @@ $$ASL_{fail}=\frac{1+4+3+2+1+1+1}{7}=\frac{13}{7}\approx1.86.$$
 - 失败 ASL 的分母取决于可能的初始地址，而不总等于表长。
 - 再散列必须重新计算每个关键字的位置。
 
+## 交互式演示
+
+用演示亲手比较四种冲突处理策略：输入 `22, 43, 15`（三个关键字都映射到地址 1），在**线性探测**下看到它们被逐个塞进 1、2、3 形成聚集；切到**链地址**则同义词进同一桶。演示会实时显示每个关键字的探测序列，并统计成功与失败 ASL、装填因子与冲突次数。
+
+<script setup>
+import { withBase } from "vitepress";
+
+const demoUrl = withBase("/demos/hash-lab.html");
+</script>
+
+<iframe
+  :src="demoUrl"
+  title="散列表 · 冲突与 ASL 实验室"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 观察三个对照
+先用线性探测插入 `22, 43, 15`，对比成功 ASL 与失败 ASL；再切到链地址看同义词聚集有哪些不同；最后尝试删除开放定址中的一个关键字，观察它留下的墓碑如何让查找继续走完探测链。
+:::
+
 ## 配套 Lab
 
-完成 [Lab 09-02：散列表实现与冲突统计](../../labs/chapter-09/lab-09-02-hash-table/README.md)，比较链地址与线性探测，并用不同装填因子测量成功、失败 ASL；进阶做 [Lab 09-03：散列索引引擎——冲突策略与再散列大综合](../../labs/chapter-09/lab-09-03-hash-index-engine/README.md)。
+完成 [Lab 09-E-01：散列表实现与冲突统计](../../labs/chapter-09/exercise/E-09-01-hash-table/README.md)，比较链地址与线性探测，并用不同装填因子测量成功、失败 ASL；进阶做 [Lab 09-P-01：散列索引引擎——冲突策略与再散列大综合](../../labs/chapter-09/project/P-09-01-hash-index-engine/README.md)。
 
 ## 小结
 
@@ -293,3 +314,22 @@ $$ASL_{fail}=\frac{1+4+3+2+1+1+1}{7}=\frac{13}{7}\approx1.86.$$
 3. 在线性探测表中删除一个位于聚集区中间的关键字，分别说明直接清空和使用墓碑的查找结果。
 4. 解释为什么表长为 12、第二散列步长恒为 4 时，双散列可能找不到仍然存在的空位。
 5. 某系统既需要按 ID 精确查询，也需要按时间范围扫描。应使用一张散列表、一个有序索引，还是同时维护两种结构？说明更新成本。
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 820px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1350px;
+  }
+}
+</style>
+

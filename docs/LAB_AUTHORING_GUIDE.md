@@ -1,6 +1,6 @@
 # DSA Mastery Lab 更新与测试指南
 
-> 适用版本：Lab Schema v1 · 更新日期：2026-08-21
+> 适用版本：Lab Schema v1 · 更新日期：2026-09-01
 
 这份手册是 Quiz、Program 和 Project 三类 Lab 的统一作者 API。面向网页的说明仍写在 Lab 的 `README.md`，机器行为只由 `lab.json`、`quiz.json`、`cases.json`、`task.json` 和共享工具决定。后续开发者应从本文提供的脚手架开始，而不是复制旧 Lab 后自行发明目录、Make 规则或评分脚本。
 
@@ -21,9 +21,9 @@
 
 三份可运行参照物：
 
-- Golden Quiz：`labs/chapter-00/lab-00-03-complexity-quiz`
-- Golden Program：`labs/chapter-01/lab-01-06-sequential-list-deduplication`
-- Golden Project：`labs/chapter-08/lab-08-03-avl-tree-rotations`
+- Golden Quiz：`labs/chapter-00/theory/T-00-02-complexity-quiz`
+- Golden Program：`labs/chapter-01/exercise/E-01-01-sequential-list-deduplication`
+- Golden Project：`labs/chapter-08/project/P-08-01-avl-tree-rotations`
 
 ## 2. 平台与工具链基线
 
@@ -59,7 +59,7 @@ GNU Make 是首选学习入口，但不是必装依赖。Makefile 只转发到 N
 安装后先检查，不要让 `doctor` 替你修改 PATH：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 ## 3. 统一命令与退出码
@@ -67,7 +67,7 @@ pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 在 Program/Project Lab 内，首选体验是：
 
 ```powershell
-cd labs/chapter-01/lab-01-06-sequential-list-deduplication
+cd labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 make doctor
 make run
 ```
@@ -75,20 +75,21 @@ make run
 没有 GNU Make 时，在仓库根使用官方兜底：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
-pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 CLI 不带路径时会从当前目录向上寻找最近的 `lab.json`。维护者也可从仓库根使用 Make：
 
 ```powershell
-make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
-make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sample
+make run LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+make run LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication CASE=001-sample
 ```
 
 | 命令 | 目的 | 关键选项 |
 | --- | --- | --- |
-| `lab:new` | 生成三类 Lab 的安全起点 | `--type --chapter --order --slug` |
+| `lab:new` | 自动编号并生成三类 Lab 的安全起点 | `--type --chapter --slug [--order]` |
+| `lab:locate` | 用稳定 ID 定位 Lab | `<lab-id> --json` |
 | `lab:doctor` | 只读检查环境和最低版本 | `--json` |
 | `lab:validate` | 校验 Schema、路径、分值、依赖和模板 | `--json` |
 | `lab:build` | 编译 student/solution | `--target` |
@@ -122,27 +123,64 @@ Lab CLI 在交互终端自动增强关键信息，但状态文字和 `x/y` 分�
 需要纯文本时在任一非 interactive 命令添加 `--no-color`。设置 `NO_COLOR`、使用 `TERM=dumb` 或把输出重定向到文件时也会自动关闭颜色。`--json` 永远不含 ANSI 控制码，脚本与 CI 必须消费 JSON 字段而非带样式的人类输出。
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --no-color
-pnpm lab:score -- labs/chapter-01/lab-01-06-sequential-list-deduplication --json
+pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --no-color
+pnpm lab:score -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --json
 ```
 
 ## 4. 公共目录、命名与路径安全
 
 ```text
-labs/chapter-NN/lab-NN-LL-kebab-slug/
+labs/chapter-CC/<theory|exercise|project>/X-CC-SS-kebab-slug/
 ├─ README.md
 ├─ lab.json
 ├─ Makefile          # 仅 program/project
 └─ 类型专属文件
 ```
 
-README 是学习者说明，继续满足当前 frontmatter、客观学习目标、正常/边界/错误情况、完成清单、思考题和复盘。`lab.json` 不重复 title、chapter、order 或 contributors。
+其中 `X` 是 `T/E/P` 类型标签，`SS` 是该章该类型内的稳定序号。README 是学习者说明，继续满足当前 frontmatter、客观学习目标、正常/边界/错误情况、完成清单、思考题和复盘。`lab.json` 不重复 title、chapter、order、`labId` 或 contributors。
+
+每章固定保留 `theory/`、`exercise/`、`project/` 三个分类目录。空分类只用 `.gitkeep` 保留目录；`lab:new` 在其中创建第一道题后会自动删除该占位文件，作者不需要手工维护。
+
+每个 README frontmatter 必须包含稳定 ID：
+
+```yaml
+order: 9
+chapter: 2
+labId: "02E07"
+```
+
+`labId` 是题目的永久身份，`order` 只是网站展示顺序。发布后可以调整 `order`，不能修改或复用 `labId`。映射固定为 `quiz -> T -> theory`、`program -> E -> exercise`、`project -> P -> project`；README-only Lab 通过显式 `labCategory` 得到标签。目录中的类型、章节和序号必须与 `labId` 完全一致。
+
+### 4.1 README 标题必须跟随稳定编号
+
+`labId` 使用便于交流和定位的紧凑形式，README 标题则使用带连字符的可读形式：
+
+| 位置 | 规范格式 | 示例 |
+| --- | --- | --- |
+| frontmatter `labId` | `CCXSS` | `01E01` |
+| frontmatter `title` | `Lab CC-X-SS：题目名称` | `Lab 01-E-01：有序顺序表去重` |
+| README H1 | 与 `title` 完全一致 | `# Lab 01-E-01：有序顺序表去重` |
+| 网站侧栏 | `CCXSS · 题目名称` | `01E01 · 有序顺序表去重` |
+
+作者或 Agent 新建 Lab、整理 Lab、重写题面时，只从 `labId` 构造标题。不要使用 `order`，也不要使用目录迁移前的展示顺序号：
+
+```yaml
+# Wrong：01-06 是旧展示顺序，不是题目身份
+labId: "01E01"
+title: "Lab 01-06：有序顺序表去重"
+
+# Correct
+labId: "01E01"
+title: "Lab 01-E-01：有序顺序表去重"
+```
+
+所有 Lab 都必须使用新的三层目录结构与稳定标题。2026-09-01 的结构迁移明确不保留旧 URL；禁止重新创建旧目录、复制兼容页面或添加重定向。脚手架会自动生成目录、frontmatter 标题和 H1，作者只替换冒号后的题目名称。
 
 最小公共 manifest：
 
 ```json
 {
-  "$schema": "../../../schemas/lab.schema.json",
+  "$schema": "../../../../schemas/lab.schema.json",
   "schemaVersion": 1,
   "type": "quiz",
   "quiz": {
@@ -159,14 +197,20 @@ Schema v1 只接受 `quiz`、`program`、`project`。未知主版本会立即失
 通过脚手架创建：
 
 ```powershell
-pnpm lab:new -- --type quiz --chapter 2 --order 3 --slug stack-quiz
-pnpm lab:new -- --type program --chapter 2 --order 4 --slug stack-merge
-pnpm lab:new -- --type project --chapter 4 --order 3 --slug tree-index
+pnpm lab:new -- --type quiz --chapter 2 --slug stack-quiz
+pnpm lab:new -- --type program --chapter 2 --slug stack-merge
+pnpm lab:new -- --type project --chapter 4 --slug tree-index
 ```
 
-脚手架拒绝覆盖已存在目录。生成后仍必须替换占位题面、参考实现、测试和章节标题；“能生成”不是“可发布”。
+脚手架分别扫描同章 `T/E/P` 的最大序号并加一；缺号不会复用。`--order` 仍可选填，但它只设置展示顺序。脚手架拒绝覆盖已存在目录。生成后仍必须替换占位题面、参考实现、测试和章节标题；“能生成”不是“可发布”。
 
-### 4.1 网站侧栏的分类接口
+创建后用稳定编号定位，不需要记目录名：
+
+```powershell
+pnpm lab:locate -- 02T2
+```
+
+### 4.2 网站侧栏的分类接口
 
 网站的 Lab 分类属于统一 `CourseIndex`，不是另一份手写导航。课程定义只要声明 `autoLabChapter`，侧栏就统一显示“本章 Labs”的三个分类；即使当前没有任何 Lab，也必须保留三类空槽位，不要在侧栏组件里复制 Lab 名单：
 
@@ -191,7 +235,7 @@ labCategory: exercise # theory | exercise | project
 ### 5.1 目录与单一事实来源
 
 ```text
-lab-NN-LL-topic-quiz/
+labs/chapter-NN/theory/T-NN-SS-topic-quiz/
 ├─ README.md
 ├─ lab.json
 └─ quiz.json
@@ -252,12 +296,30 @@ README 只能挂载一次：
 4. 人工逐题核对答案索引、干扰项、解析和来源；若来源按维护者决定不公开，则核对 task/PR 中的省略记录。
 5. 确认 README 没有第二份答案，个人导出痕迹已清除。
 
+### 5.4 Quiz 配图规范
+
+题干和解析是 `quiz.json` 里的 Markdown 字符串：构建期安全渲染、原始 HTML 关闭，且 `quiz.schema.json` 目前没有图片字段。因此**不要**在题目中使用 `<img>` 标签或图片附件字段；需要配图时按以下两种方式：
+
+1. **文字/ASCII 图（默认首选）**：在题干或解析中用 ```text``` 代码块画图，或给出邻接表/边表/网格等结构。例如迷宫网格、树形结构、图的邻接表。无外部依赖，任何环境渲染一致。
+2. **引用站点内 SVG（需要真图时）**：用 Markdown 图片语法 `![说明文字](相对路径)` 引用 `public/` 下的 SVG：
+   - 图文件放在 `public/quiz-images/`（手工维护的题库图），或复用 `public/diagrams/`（构建期由 `vitepress-plugin-diagrams` 从 graphviz 源生成）；
+   - 路径写成从 Lab 页面可解析的相对路径，如 `../../../../diagrams/graphviz-dfs-bfs-q04-graph-xxxx.svg`；不要硬编码部署前缀（如 `/DSA-Mastery/`）；
+   - 用插件生成时，把 graphviz 源写在同 Lab 的图源页（如 `quiz-figures.md`），构建后按 `public/diagrams/` 中实际生成的文件名引用；文件名含内容哈希，图源一旦改动就会换名，需要同步更新引用；
+   - 最终 `pnpm run build` 与 `check:site` 必须通过，内部图片链接会逐一校验。
+
+约束：
+
+- 配图是锦上添花：能用文字或邻接表讲清的结构优先文字，不为每道题强行配图；
+- 题面配图不得泄露答案（例如边分类题只画图、不标注分类结果）；解析中的配图不受此限；
+- 不引用外链图片，不使用原始 HTML `<img>`；
+- 图源页（如 `quiz-figures.md`）是构建素材、不面向学习者：在 frontmatter 中添加 robots `noindex, nofollow`，并在站点 `sitemap.transformItems` 中过滤掉该页 URL，避免进入搜索引擎索引与站点地图；页面不会加入导航。
+
 ## 6. Program：单题 C++ 作业
 
 ### 6.1 标准内容包
 
 ```text
-lab-NN-LL-slug/
+labs/chapter-NN/exercise/E-NN-SS-slug/
 ├─ README.md
 ├─ lab.json
 ├─ Makefile
@@ -342,11 +404,11 @@ lab-NN-LL-slug/
 
 ### 6.4 输出比较与判定
 
-所有模式先统一 CRLF/LF；`refresh-expected --write` 也固定把 `.out` 写为 LF，避免 Windows 与 Unix 作者反复制造换行 diff：
+所有模式先统一 CRLF/LF；`exact` 还会忽略每行末尾的空格和制表符，并允许两侧最多相差一个末尾 LF，但不忽略行首/行内空白、内部换行或额外空行。`refresh-expected --write` 固定把 `.out` 写为 LF，避免 Windows 与 Unix 作者反复制造换行 diff：
 
 | 模式 | 语义 | 适用场景 |
 | --- | --- | --- |
-| `exact` | 除平台换行外逐字符相等 | 输出格式本身是考点 |
+| `exact` | 忽略平台换行、每行末尾空格/制表符和一个可选末尾 LF；其他内容逐字符相等 | 需要保留行结构和行内格式 |
 | `tokens` | Unicode 空白切 token 后逐项比较 | 普通算法题默认 |
 | `float` | 数值 token 按绝对/相对误差，其他 token 精确 | 数值计算 |
 
@@ -371,8 +433,8 @@ lab-NN-LL-slug/
 <!-- LAB_THIN_MAKEFILE:START -->
 ```makefile
 LAB_DIR := $(CURDIR)
-REPO_ROOT := $(LAB_DIR)/../../..
-include ../../../tools/lab/lab.mk
+REPO_ROOT := $(LAB_DIR)/../../../..
+include ../../../../tools/lab/lab.mk
 ```
 <!-- LAB_THIN_MAKEFILE:END -->
 
@@ -382,13 +444,13 @@ include ../../../tools/lab/lab.mk
 
 ```powershell
 # 只预览差异，不写文件
-pnpm lab:refresh-expected -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:refresh-expected -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 
 # 人工确认 diff 后显式更新
-pnpm lab:refresh-expected -- labs/chapter-01/lab-01-06-sequential-list-deduplication --write
+pnpm lab:refresh-expected -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --write
 
 # 检查 solution=100、starter<100、.out 无漂移
-pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:verify -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 不要手工运行 solution 后用重定向悄悄覆盖 `.out`。标准输出是可 Review 的稳定 oracle；任何改变都应先看到 diff。
@@ -402,7 +464,7 @@ pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 ### 7.2 目录
 
 ```text
-lab-NN-LL-project/
+labs/chapter-NN/project/P-NN-SS-project/
 ├─ README.md
 ├─ lab.json
 ├─ Makefile
@@ -499,7 +561,7 @@ make run TASK=frequency
 make run TASK=codec
 make refresh-expected TASK=frequency
 make score
-pnpm lab:verify -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:verify -- labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 结果明确区分：
@@ -517,7 +579,7 @@ Provisional total: 80/100
 完整公开仓库保留 solution，适合自学与维护。需要只发作业时：
 
 ```powershell
-pnpm lab:pack -- labs/chapter-01/lab-01-06-sequential-list-deduplication --profile student
+pnpm lab:pack -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --profile student
 ```
 
 包生成到该 Lab 的 `.lab-cache/packages/`，不会回写源码。学生包：
@@ -534,8 +596,8 @@ pnpm lab:pack -- labs/chapter-01/lab-01-06-sequential-list-deduplication --profi
 ### 9.1 Quiz
 
 1. 冻结学习目标、考点范围和题目来源。
-2. `lab:new` 生成骨架。
-3. 写稳定 ID、四个选项、答案、解析、提示和分值。
+2. `lab:new` 自动分配稳定 ID 并生成骨架。
+3. 写四个选项、答案、解析、提示和分值，不手改脚手架生成的 `labId`。
 4. 运行 validate 与网站交互检查。
 5. Reviewer 独立核对每道题的知识正确性和干扰项。
 
@@ -561,8 +623,8 @@ pnpm lab:pack -- labs/chapter-01/lab-01-06-sequential-list-deduplication --profi
 
 ```powershell
 pnpm test
-pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
-pnpm lab:verify -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:verify -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab:verify -- labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 PR 记录：操作系统、Node/pnpm、编译器/CMake 版本、实际命令、关键分数、未执行项及原因。CI 在 Ubuntu 验证 GCC/Clang，在 Windows 验证 MSVC；网站 job 验证静态契约、构建、Pages 产物和浏览器交互。外部 PR 只获得只读 token，不向执行学生代码的 job 注入部署秘密。
@@ -571,18 +633,15 @@ Review Owner 不能只引用作者截图：从干净 clone 独立复现至少一
 
 工具通过只证明接口和样例一致，不证明题面、答案、复杂度、测试充分性或版权正确；这些仍由人负责。
 
-## 11. 旧 Lab 渐进迁移
+## 11. 既有 Lab 的维护
 
-README-only Lab 继续正常渲染，不要求一次重写全部历史内容。按真实维护需求逐个迁移：
+维护既有 Lab 时不得改变 `labId`，也不得脱离三层目录规范：
 
-1. 判定它是 Quiz、Program、Project，还是应继续保持 README-only。
-2. 保留现有 URL、frontmatter、学习目标与知识正文。
-3. 用脚手架在临时位置查看目标结构，不直接覆盖旧目录。
-4. 添加最小 manifest；再迁移源码、solution、tests 和薄 Makefile。
-5. 执行 validate/verify、网站 discovery/build 和 Review。
-6. 在 PR 中记录未迁移 Lab 清单，不把“尚未迁移”伪装成错误。
-
-现有交互 Quiz 均已使用 manifest；其他旧内容按 [旧 Lab 渐进迁移清单](https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/LAB_MIGRATION_TRACKER.md)与章节更新节奏处理。
+1. 根据 `labId` 的 `T/E/P` 标签确认分类目录和 manifest 类型。
+2. 保留 frontmatter、学习目标与知识正文，只修改本次任务涉及的内容。
+3. 同步维护题面、实现、测试、Schema 相对路径和薄 Makefile。
+4. 执行 validate/verify、网站 discovery/build 和 Review。
+5. 路径变更属于破坏性变更，必须在 PR 中显式说明；不得自行添加旧 URL 兼容页。
 
 ## 12. 常见错误与正确做法
 

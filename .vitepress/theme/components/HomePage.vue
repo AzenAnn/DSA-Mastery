@@ -36,7 +36,7 @@ function courseHref(path: string): string {
           </div>
           <h1>把数据结构与算法<br /><span>学透、做实、用活</span></h1>
           <p>
-            DSA Mastery 面向课程学习者，把定义、推导、实现、测试与典型问题训练连成一条完整路径，帮助读者建立能够应对课堂、考试、实验和综合应用的扎实能力。项目由两名学生共同维护，并通过交叉 Review 持续校正内容。
+            DSA Mastery 面向课程学习者，把定义、推导、实现、测试与典型问题训练连成一条完整路径，帮助读者建立能够应对课堂、考试、实验和综合应用的扎实能力。项目由一个近二十人的学生团队共同维护，并通过交叉 Review 持续校正内容。
           </p>
           <div class="course-hero-actions">
             <a class="course-button course-button-primary" :href="courseHref(firstLessonUrl)">

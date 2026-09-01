@@ -67,12 +67,12 @@ status: "draft"
 
 ## 配套 Labs
 
-- [Lab 08-01：查找理论选择题精练](../../labs/chapter-08/lab-08-01-search-theory-quiz/README.md)
-- [Lab 08-02：BST 增删查与边界测试](../../labs/chapter-08/lab-08-02-bst-operations/README.md)
-- [Lab 08-03：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/lab-08-03-avl-tree-rotations/README.md)
-- [Lab 09-01：散列与索引选择题精练](../../labs/chapter-09/lab-09-01-hash-index-theory-quiz/README.md)
-- [Lab 09-02：散列表实现与冲突统计](../../labs/chapter-09/lab-09-02-hash-table/README.md)
-- [Lab 09-03：散列索引引擎——冲突策略与再散列大综合](../../labs/chapter-09/lab-09-03-hash-index-engine/README.md)
+- [Lab 08-T-01：查找理论选择题精练](../../labs/chapter-08/theory/T-08-01-search-theory-quiz/README.md)
+- [Lab 08-E-01：BST 增删查与边界测试](../../labs/chapter-08/exercise/E-08-01-bst-operations/README.md)
+- [Lab 08-P-01：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/project/P-08-01-avl-tree-rotations/README.md)
+- [Lab 09-T-01：散列与索引选择题精练](../../labs/chapter-09/theory/T-09-01-hash-index-theory-quiz/README.md)
+- [Lab 09-E-01：散列表实现与冲突统计](../../labs/chapter-09/exercise/E-09-01-hash-table/README.md)
+- [Lab 09-P-01：散列索引引擎——冲突策略与再散列大综合](../../labs/chapter-09/project/P-09-01-hash-index-engine/README.md)
 
 ## 选型时先问什么
 
@@ -85,4 +85,13 @@ status: "draft"
 | 数据主要位于磁盘或页式存储 | B+ 树 |
 | 主要做精确匹配，不要求有序 | 散列表 |
 
-准备好后，从[8.1 基础查找与折半查找](./01-linear-and-binary-search.md)开始。
+## 交互式演示
+
+本章的部分页面嵌入了可交互演示，用来把抽象结构变成能一步步观察的过程：
+
+- **折半查找 · 判定树**（[8.1](./01-linear-and-binary-search.md)）：手动走查找，看 `low`/`mid`/`high` 如何每次砍掉一半，并同步生成判定树。
+- **二叉排序树 · 退化与删除**（[8.2](./02-binary-search-tree.md)）：用不同插入顺序对比树形与 ASL，点结点看三类删除。
+- **AVL 树 · 旋转实验室**（[8.3](./03-balanced-search-tree.md)）：观察平衡因子，逐键插入触发 LL/RR/LR/RL 旋转。
+- **散列表 · 冲突与 ASL**（[8.5](./05-hash-table.md)）：比较线性探测与链地址，实时统计成功/失败 ASL。
+
+准备好后，从[8.1 基础查找与折半查找](./01-linear-and-binary-search.md)开始。你想先动手，翻到对应页面点开演示即可。

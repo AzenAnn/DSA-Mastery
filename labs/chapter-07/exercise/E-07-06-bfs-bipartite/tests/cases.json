@@ -1,0 +1,65 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 15,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-odd-cycle",
+    "input": "tests/002-odd-cycle.in",
+    "expected": "tests/002-odd-cycle.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "003-disconnected-nonbip",
+    "input": "tests/003-disconnected-nonbip.in",
+    "expected": "tests/003-disconnected-nonbip.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-even-cycle",
+    "input": "tests/004-even-cycle.in",
+    "expected": "tests/004-even-cycle.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "005-star",
+    "input": "tests/005-star.in",
+    "expected": "tests/005-star.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "006-isolated",
+    "input": "tests/006-isolated.in",
+    "expected": "tests/006-isolated.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "007-stress",
+    "input": "tests/007-stress.in",
+    "expected": "tests/007-stress.out",
+    "points": 15,
+    "tags": ["stress"]
+  },
+  {
+    "id": "008-normalize-conflict",
+    "input": "tests/008-normalize-conflict.in",
+    "expected": "tests/008-normalize-conflict.out",
+    "points": 5,
+    "tags": ["regression"]
+  },
+  {
+    "id": "009-neighbor-order",
+    "input": "tests/009-neighbor-order.in",
+    "expected": "tests/009-neighbor-order.out",
+    "points": 5,
+    "tags": ["regression"]
+  }
+]

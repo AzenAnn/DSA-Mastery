@@ -25,13 +25,29 @@ status: "draft"
 
 旋转只改变少量父子链接，不改变关键字的中序次序。以右旋为例，设失衡结点为 `y`，它的左孩子为 `x`，`x` 的右子树为 `T2`：
 
-```text
-        y                 x
-       / \               / \
-      x   C    右旋      A   y
-     / \      ───→          / \
-    A  T2                  T2  C
+```graphviz
+digraph RightRotate {
+  rankdir=TB;
+  node [shape=circle];
+  subgraph cluster_before {
+    label="旋转前";
+    y1 [label="y"]; x1 [label="x"]; c1 [label="C"]; a1 [label="A"]; t1 [label="T2"];
+    y1 -> x1 [label="左"];
+    y1 -> c1 [label="右"];
+    x1 -> a1 [label="左"];
+    x1 -> t1 [label="右"];
+  }
+  subgraph cluster_after {
+    label="旋转后";
+    x2 [label="x"]; a2 [label="A"]; y2 [label="y"]; t2 [label="T2"]; c2 [label="C"];
+    x2 -> a2 [label="左"];
+    x2 -> y2 [label="右"];
+    y2 -> t2 [label="左"];
+    y2 -> c2 [label="右"];
+  }
+}
 ```
+<!-- diagram id="avl-right-rotate" caption: "右旋：把失衡结点 y 的左孩子 x 提升为子树根，y 成为 x 的右孩子，T2 移作 y 的左子树" -->
 
 旋转前后的中序序列都是 `A, x, T2, y, C`。因此，只要原子树满足 BST 次序，旋转后仍满足。
 
@@ -74,13 +90,25 @@ $$
 
 依次插入 `30, 20, 10`。结点 30 的左子树比右子树高 2，新值位于左孩子 20 的左侧，因此是 LL：
 
-```text
-    30              20
-   /      右旋     /  \
-  20      ───→   10  30
- /
-10
+```graphviz
+digraph LlRotate {
+  rankdir=TB;
+  node [shape=circle];
+  subgraph cluster_before {
+    label="旋转前";
+    p1 [label="30"]; l1 [label="20"]; ll1 [label="10"];
+    p1 -> l1 [label="左"];
+    l1 -> ll1 [label="左"];
+  }
+  subgraph cluster_after {
+    label="旋转后";
+    p2 [label="20"]; l2 [label="10"]; r2 [label="30"];
+    p2 -> l2 [label="左"];
+    p2 -> r2 [label="右"];
+  }
+}
 ```
+<!-- diagram id="avl-ll-rotate" caption: "LL 失衡：依次插入 30,20,10 后，对失衡结点 30 右旋，20 成为新根" -->
 
 ### RR：一次左旋
 
@@ -90,13 +118,31 @@ $$
 
 依次插入 `30, 10, 20` 时，路径是左后右。先对 10 左旋，把它变成 LL，再对 30 右旋：
 
-```text
-    30          30             20
-   /           /              /  \
-  10    →     20      →      10  30
-    \         /
-    20       10
+```graphviz
+digraph LrRotate {
+  rankdir=TB;
+  node [shape=circle];
+  subgraph cluster_s1 {
+    label="第 1 步：插入 30,10,20";
+    a1 [label="30"]; b1 [label="10"]; c1 [label="20"];
+    a1 -> b1 [label="左"];
+    b1 -> c1 [label="右"];
+  }
+  subgraph cluster_s2 {
+    label="第 2 步：对 10 左旋（变 LL）";
+    a2 [label="30"]; b2 [label="20"]; c2 [label="10"];
+    a2 -> b2 [label="左"];
+    b2 -> c2 [label="左"];
+  }
+  subgraph cluster_s3 {
+    label="第 3 步：对 30 右旋";
+    a3 [label="20"]; b3 [label="10"]; c3 [label="30"];
+    a3 -> b3 [label="左"];
+    a3 -> c3 [label="右"];
+  }
+}
 ```
+<!-- diagram id="avl-lr-rotate" caption: "LR 失衡：先对左孩子 10 左旋拉直成 LL，再对失衡结点 30 右旋，20 成为新根" -->
 
 RL 完全对称：先右旋右孩子，再左旋失衡结点。
 
@@ -109,6 +155,27 @@ RL 完全对称：先右旋右孩子，再左旋失衡结点。
 | `1, 3, 2` | RL | 先右旋 3，再左旋 1 | 根 2，`1,2,3` 平衡 |
 
 三键序列每一种都触发一种旋转，旋转后树高都从 3 降到 2。这组"三键万能例"适合快速判断一种输入属于哪种失衡形态。
+:::
+
+## 交互式演示
+
+用四个"三键"预设亲手跑一遍 LL / RR / LR / RL：插入后每个结点旁会标注平衡因子，失衡结点被高亮，播放时自动执行对应旋转恢复平衡。也可以观察 `30, 20, 10, 25, 28, 27` 这组，看连续的插入如何依次触发不同形态的旋转。
+
+<script setup>
+import { withBase } from "vitepress";
+
+const demoUrl = withBase("/demos/avl-lab.html");
+</script>
+
+<iframe
+  :src="demoUrl"
+  title="AVL 树 · 旋转实验室"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 对应到正文
+把演示里的四种预设对应到上方表格：`3,2,1`→LL、`1,2,3`→RR、`3,1,2`→LR、`1,3,2`→RL。注意"LL 用右旋、RR 用左旋"，名字与旋转方向相反。
 :::
 
 ## AVL 插入流程
@@ -264,3 +331,21 @@ AVL 用精确高度约束获得更矮的树，红黑树用颜色和黑高换取�
 3. 证明右旋不改变子树的中序序列。
 4. 一棵红黑树某条根到 NIL 路径的黑高为 4，它的内部结点路径最长可能有多少层？
 5. 为什么新插入的红黑树结点通常先染红而不是染黑？分别说明对性质 4、5 的影响。
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1100px;
+  }
+}
+</style>

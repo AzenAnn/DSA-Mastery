@@ -35,7 +35,7 @@ DSA Mastery 的 Program Lab 原本要在终端里判分。这个插件把代码�
 命令行安装也可以：
 
 ```bash
-code --install-extension ~/Downloads/dsa-mastery-labs-0.1.0.vsix
+code --install-extension ~/Downloads/dsa-mastery-labs-0.1.11.vsix
 ```
 
 ::: details 从源码构建（一般不需要）
@@ -46,7 +46,7 @@ cd DSA-Mastery/tools/vscode-extension
 pnpm install --ignore-workspace
 node build.mjs
 pnpm dlx @vscode/vsce package --no-dependencies --allow-missing-repository
-code --install-extension dsa-mastery-labs-0.1.0.vsix
+code --install-extension dsa-mastery-labs-0.1.11.vsix
 ```
 
 `pnpm install` 会因为没批准 esbuild 的 postinstall 而报一句 `ERR_PNPM_IGNORED_BUILDS`，可以忽略 —— esbuild 的可执行文件来自平台专属依赖，不跑那个脚本也能用。
@@ -60,7 +60,7 @@ VSCode 不会热加载新装的插件。装完请完全退出再打开。
 
 ### 确认装好了
 
-重启后打开 DSA Mastery 仓库根目录，活动栏（最左侧竖条）应出现 **DSA Mastery** 图标，点开后按章节列出全部题目（73 道代码题 + 38 道选择题）。
+重启后打开 DSA Mastery 仓库根目录，活动栏（最左侧竖条）应出现 **DSA Mastery** 图标，点开后会按章节列出仓库中的全部 Program 和 Quiz Lab。
 
 如果图标没出现，在命令面板（<kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>）输入 `DSA`：
 
@@ -170,6 +170,8 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 
 两者都在 VSCode 的用户数据目录里，**不进仓库**，也不会被 `pnpm lab:clean` 删除（那条命令只清理各 Lab 的 `.lab-cache/`）。
 
+插件使用 `01E04` 这样的稳定 Lab ID 保存进度，而不是依赖目录名。升级到采用稳定 ID 的版本时，插件会先备份旧状态，再自动迁移代码题、选择题和做题统计；既有源码快照仍能从提交历史打开，不需要手工重做题目。
+
 ::: warning 进度不跨设备
 换电脑或重装 VSCode 后进度不会带过去。「重置全部做题进度」会清空状态和所有源码快照，无法撤销。
 :::
@@ -199,11 +201,11 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 
 ### 支持的类型
 
-| 类型 | 数量 | 插件里 |
-| --- | --- | --- |
-| Program | 73 | 完整支持 |
-| Quiz | 38 | 支持四选一单项选择、解析和本地进度 |
-| Project | 4 | 不显示。含人工评审 task，自动判分无法决定是否完成 |
+| 类型 | 插件里 |
+| --- | --- |
+| Program | 完整支持 |
+| Quiz | 支持四选一单项选择、解析和本地进度 |
+| Project | 不显示。含人工评审 task，自动判分无法决定是否完成 |
 
 ### 插件不做的事
 
@@ -214,7 +216,7 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 
 ### 题解不会出现在题目面板里
 
-67 道题的 README 里带有 `## 题解` 小节（含完整参考代码）。插件渲染题面时会整段移除该小节，所以做题过程中不会看到答案。需要查看题解请前往网站对应页面。
+部分题目的 README 带有 `## 题解` 小节（含完整参考代码）。插件渲染题面时会整段移除该小节，所以做题过程中不会看到答案。需要查看题解请前往网站对应页面。
 
 ## 出问题时
 

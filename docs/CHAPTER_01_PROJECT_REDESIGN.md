@@ -2,7 +2,7 @@
 
 > 文档状态：Proposal
 > 对应章节：第 1 章「线性表」
-> 建议落点：`labs/chapter-01/lab-01-21-list-workload-analyzer/`
+> 建议落点：`labs/chapter-01/project/P-01-01-list-workload-analyzer/`
 > Lab 类型：Project（多任务综合 Lab）
 > 语言与工具链：C++17、CMake ≥ 3.25、CTest
 > 难度：综合
@@ -148,7 +148,7 @@ public:
 ## 7. 建议目录结构
 
 ```text
-lab-01-21-list-workload-analyzer/
+labs/chapter-01/project/P-01-01-list-workload-analyzer/
 ├─ README.md
 ├─ lab.json
 ├─ Makefile
@@ -409,7 +409,7 @@ Elapsed time is observational only; it is not used for automatic scoring.
 2. 使用脚手架生成安全起点：
 
    ```powershell
-   pnpm lab:new -- --type project --chapter 1 --order 21 --slug list-workload-analyzer
+   pnpm lab:new -- --type project --chapter 1 --slug list-workload-analyzer --order 21
    ```
 
 3. 先完成 `contracts/`、reference 实现和能抓住已知错误的 CTest，再写可编译但自动部分不满分的 starter；
@@ -418,11 +418,11 @@ Elapsed time is observational only; it is not used for automatic scoring.
 6. 运行并记录：
 
    ```powershell
-   pnpm lab:validate -- labs/chapter-01/lab-01-21-list-workload-analyzer
-   pnpm lab:run -- labs/chapter-01/lab-01-21-list-workload-analyzer
-   pnpm lab:score -- labs/chapter-01/lab-01-21-list-workload-analyzer
-   pnpm lab:verify -- labs/chapter-01/lab-01-21-list-workload-analyzer
-   pnpm lab:pack -- labs/chapter-01/lab-01-21-list-workload-analyzer --profile student
+   pnpm lab:validate -- labs/chapter-01/project/P-01-01-list-workload-analyzer
+   pnpm lab:run -- labs/chapter-01/project/P-01-01-list-workload-analyzer
+   pnpm lab:score -- labs/chapter-01/project/P-01-01-list-workload-analyzer
+   pnpm lab:verify -- labs/chapter-01/project/P-01-01-list-workload-analyzer
+   pnpm lab:pack -- labs/chapter-01/project/P-01-01-list-workload-analyzer --profile student
    pnpm test
    pnpm run validate
    pnpm run test:discovery

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 25,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-single",
+    "input": "tests/002-single.in",
+    "expected": "tests/002-single.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-diagonal",
+    "input": "tests/003-diagonal.in",
+    "expected": "tests/003-diagonal.out",
+    "points": 20,
+    "tags": ["normal"]
+  },
+  {
+    "id": "004-off-diagonal",
+    "input": "tests/004-off-diagonal.in",
+    "expected": "tests/004-off-diagonal.out",
+    "points": 25,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-boundary",
+    "input": "tests/005-boundary.in",
+    "expected": "tests/005-boundary.out",
+    "points": 20,
+    "tags": ["normal"]
+  }
+]

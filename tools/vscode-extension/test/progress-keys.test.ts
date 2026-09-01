@@ -40,3 +40,19 @@ test("rewrites legacy activity keys without changing event order or payload", ()
     { labName: "01E01", kind: "pass" },
   ]);
 });
+
+test("new category directory keys and old flat directory keys converge on one stable ID", () => {
+  const aliases = [
+    { id: "01E04", name: "E-01-04-singly-linked-list-reverse" },
+    { id: "01E04", name: "lab-01-09-singly-linked-list-reverse" },
+  ];
+  const migrated = remapRecordKeys(
+    {
+      "E-01-04-singly-linked-list-reverse": { attempts: 2 },
+      "lab-01-09-singly-linked-list-reverse": { attempts: 3 },
+    },
+    aliases,
+    (stable, legacy) => ({ attempts: stable.attempts + legacy.attempts }),
+  );
+  assert.deepEqual(migrated.records, { "01E04": { attempts: 5 } });
+});

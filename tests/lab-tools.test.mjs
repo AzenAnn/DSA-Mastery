@@ -7,6 +7,15 @@ import { compareOutput } from "../tools/lab/compare.mjs";
 import { selectCompiler } from "../tools/lab/compiler.mjs";
 import { findLabRoot, loadLab, resolveLabPath, validateQuizQuestions, validateQuizReadme } from "../tools/lab/core.mjs";
 import { classifyExecution, judgeProgram } from "../tools/lab/judge.mjs";
+import {
+  allocateLabIdentity,
+  formatLabDocumentTitlePrefix,
+  insertLabIdFrontmatter,
+  locateLabById,
+  normalizeLabId,
+  parseLabId,
+  scanLabRecords,
+} from "../tools/lab/identity.mjs";
 import { runProcess } from "../tools/lab/process.mjs";
 import { createLab, THIN_MAKEFILE } from "../tools/lab/scaffold.mjs";
 import { cleanLab, packStudent, previewDiff, refreshExpected } from "../tools/lab/operations.mjs";
@@ -179,6 +188,34 @@ test("output comparators normalize CRLF and support exact, tokens, and float tol
   assert.deepEqual(mismatch.difference, { kind: "token", index: 2, expected: "two", actual: "three" });
 });
 
+test("exact comparison ignores line-end horizontal whitespace without hiding other differences", () => {
+  assert.equal(compareOutput("42\n", "42", { mode: "exact" }).equal, true);
+  assert.equal(compareOutput("42", "42\n", { mode: "exact" }).equal, true);
+  assert.equal(compareOutput("1 2 3\n4 5\n", "1 2 3 \n4 5\n", { mode: "exact" }).equal, true);
+  assert.equal(compareOutput("1 2\n3", "1 2  \t\n3\t", { mode: "exact" }).equal, true);
+  assert.equal(
+    classifyExecution(
+      { code: 0, stdout: "1 2 3 \n4 5\n", stderr: "", timedOut: false, outputExceeded: false },
+      "1 2 3\n4 5\n",
+      { mode: "exact" },
+    ).verdict,
+    "AC",
+  );
+  assert.equal(compareOutput("42\n\n", "42\n", { mode: "exact" }).equal, false);
+  assert.equal(compareOutput("42\n", "42\nextra\n", { mode: "exact" }).equal, false);
+  assert.equal(compareOutput("42\n43", "4243", { mode: "exact" }).equal, false);
+  assert.equal(compareOutput("1  2", "1 2", { mode: "exact" }).equal, false);
+  assert.equal(compareOutput(" 42", "42", { mode: "exact" }).equal, false);
+  assert.deepEqual(compareOutput("1 2\n3", "1 2 \n4", { mode: "exact" }).difference, {
+    kind: "character",
+    index: 4,
+    line: 2,
+    column: 1,
+    expected: "1 2\\n3",
+    actual: "1 2\\n4",
+  });
+});
+
 test("expected-output refresh renders a reviewable line diff", () => {
   assert.equal(previewDiff("one\ntwo\n", "one\nthree\n"), "@@ line 2 @@\n- two\n+ three");
 });
@@ -296,23 +333,110 @@ test("process runner enforces real timeout and output limits", async () => {
   assert.equal(output.outputExceeded, true);
 });
 
-test("scaffolder creates valid quiz, program, and project contracts without overwriting", async (t) => {
+test("stable Lab IDs normalize common shorthand", () => {
+  assert.equal(normalizeLabId("02T3"), "02T03");
+  assert.equal(normalizeLabId("2t3"), "02T03");
+  assert.equal(normalizeLabId("02-T-03"), "02T03");
+  assert.equal(normalizeLabId("lab02-T-03"), "02T03");
+  assert.deepEqual(parseLabId("02P12"), { id: "02P12", chapter: 2, tag: "P", sequence: 12 });
+  assert.equal(formatLabDocumentTitlePrefix("2e3"), "Lab 02-E-03：");
+  assert.throws(() => normalizeLabId("02X03"), (error) => error.code === "LAB_ID_INVALID");
+  assert.throws(() => normalizeLabId("02T0"), (error) => error.code === "LAB_ID_INVALID");
+});
+
+test("Lab ID migration preserves the frontmatter line ending beside chapter", () => {
+  const mixed = "---\nchapter: 2\nchapterTitle: 测试\r\n---\r\n";
+  const migrated = insertLabIdFrontmatter(mixed, "2t3");
+  assert.equal(migrated, "---\nchapter: 2\nlabId: \"02T03\"\nchapterTitle: 测试\r\n---\r\n");
+});
+
+test("scaffolder allocates independent type sequences and optional display order", async (t) => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa scaffold "));
   t.after(() => rm(root, { recursive: true, force: true }));
+  const emptyCategoryMarker = path.join(root, "labs", "chapter-02", "theory", ".gitkeep");
+  await mkdir(path.dirname(emptyCategoryMarker), { recursive: true });
+  await writeFile(emptyCategoryMarker, "");
   const quiz = await createLab({ type: "quiz", chapter: "2", order: "3", slug: "stack-quiz" }, root);
-  const program = await createLab({ type: "program", chapter: "2", order: "4", slug: "stack-run" }, root);
+  await assert.rejects(access(emptyCategoryMarker), (error) => error.code === "ENOENT");
+  await access(path.join(root, "labs", "chapter-02", "exercise", ".gitkeep"));
+  await access(path.join(root, "labs", "chapter-02", "project", ".gitkeep"));
+  const program = await createLab({ type: "program", chapter: "2", slug: "stack-run" }, root);
+  await assert.rejects(
+    access(path.join(root, "labs", "chapter-02", "exercise", ".gitkeep")),
+    (error) => error.code === "ENOENT",
+  );
   const project = await createLab({ type: "project", chapter: "2", order: "5", slug: "stack-project" }, root);
+  await assert.rejects(
+    access(path.join(root, "labs", "chapter-02", "project", ".gitkeep")),
+    (error) => error.code === "ENOENT",
+  );
+  const nextProgram = await createLab({ type: "program", chapter: "2", slug: "stack-run" }, root);
+  assert.deepEqual(
+    [quiz.labId, program.labId, project.labId, nextProgram.labId],
+    ["02T01", "02E01", "02P01", "02E02"],
+  );
+  assert.deepEqual([quiz.order, program.order, project.order, nextProgram.order], [3, 4, 5, 6]);
+  assert.equal(quiz.relativeRoot, "labs/chapter-02/theory/T-02-01-stack-quiz");
+  assert.equal(program.relativeRoot, "labs/chapter-02/exercise/E-02-01-stack-run");
   assert.equal((await loadLab(quiz.labRoot)).manifest.type, "quiz");
   assert.equal((await loadLab(program.labRoot)).manifest.type, "program");
   assert.equal((await loadLab(project.labRoot)).manifest.type, "project");
   assert.equal(await readFile(path.join(program.labRoot, "Makefile"), "utf8"), THIN_MAKEFILE);
   const projectTask = JSON.parse(await readFile(path.join(project.labRoot, "tasks", "task-01-implementation", "task.json"), "utf8"));
   const projectReport = JSON.parse(await readFile(path.join(project.labRoot, "report", "task.json"), "utf8"));
-  assert.equal(projectTask.$schema, "../../../../../schemas/task.schema.json");
-  assert.equal(projectReport.$schema, "../../../../schemas/task.schema.json");
+  assert.equal(projectTask.$schema, "../../../../../../schemas/task.schema.json");
+  assert.equal(projectReport.$schema, "../../../../../schemas/task.schema.json");
   const projectPackage = await packStudent(await loadLab(project.labRoot));
   assert.equal((await loadLab(projectPackage.packageRoot)).manifest.distribution, "student");
-  await assert.rejects(createLab({ type: "program", chapter: "2", order: "4", slug: "stack-run" }, root), (error) => error.code === "TARGET_EXISTS");
+  const programReadme = await readFile(path.join(program.labRoot, "README.md"), "utf8");
+  assert.match(programReadme, /labId: "02E01"/);
+  assert.match(programReadme, /title: "Lab 02-E-01：编程练习"/);
+  await assert.rejects(
+    createLab({ type: "quiz", chapter: "2", order: "3", slug: "duplicate-order" }, root),
+    (error) => error.code === "ORDER_DUPLICATE",
+  );
+});
+
+test("Lab scanning rejects flat legacy directories and malformed categorized directories", async (t) => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "dsa lab layout "));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const chapterRoot = path.join(root, "labs", "chapter-02");
+  const flat = path.join(chapterRoot, "lab-02-01-flat");
+  await mkdir(flat, { recursive: true });
+  await assert.rejects(scanLabRecords(root), (error) => error.code === "LAB_PATH_INVALID");
+  await rm(flat, { recursive: true, force: true });
+
+  await mkdir(path.join(chapterRoot, "theory", "lab-02-T-01-malformed"), { recursive: true });
+  await assert.rejects(scanLabRecords(root), (error) => error.code === "LAB_PATH_INVALID");
+});
+
+test("allocator uses max plus one and never fills a deleted gap", async (t) => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "dsa lab identity "));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  for (const [directory, labId, order] of [
+    ["T-02-01-first", "02T01", 1],
+    ["T-02-03-third", "02T03", 3],
+  ]) {
+    const labRoot = path.join(root, "labs", "chapter-02", "theory", directory);
+    await mkdir(labRoot, { recursive: true });
+    await writeFile(path.join(labRoot, "README.md"), `---\ntitle: "Fixture"\ndescription: "Fixture"\norder: ${order}\nchapter: 2\nlabId: "${labId}"\nchapterTitle: "栈与队列"\nupdated: "2026-08-31"\ncontributors: ["Test"]\nstatus: "draft"\nlab: true\nlabCategory: "theory"\ndifficulty: "测试"\nduration: "1 分钟"\n---\n`);
+  }
+  const allocated = await allocateLabIdentity(root, { type: "quiz", chapter: 2 });
+  assert.deepEqual(allocated, { id: "02T04", chapter: 2, tag: "T", sequence: 4, order: 4 });
+
+  const duplicateRoot = path.join(root, "labs", "chapter-02", "theory", "T-02-03-duplicate");
+  await mkdir(duplicateRoot, { recursive: true });
+  await writeFile(path.join(duplicateRoot, "README.md"), `---\ntitle: "Duplicate"\ndescription: "Duplicate"\norder: 4\nchapter: 2\nlabId: "02T03"\nchapterTitle: "栈与队列"\nupdated: "2026-08-31"\ncontributors: ["Test"]\nstatus: "draft"\nlab: true\nlabCategory: "theory"\ndifficulty: "测试"\nduration: "1 分钟"\n---\n`);
+  await assert.rejects(
+    allocateLabIdentity(root, { type: "quiz", chapter: 2 }),
+    (error) => error.code === "LAB_ID_DUPLICATE",
+  );
+});
+
+test("Lab IDs locate a unique repository path", async () => {
+  const located = await locateLabById(projectRoot, "1e4");
+  assert.equal(located.id, "01E04");
+  assert.equal(located.relativePath, "labs/chapter-01/exercise/E-01-04-singly-linked-list-reverse");
 });
 
 test("student pack follows multi-source manifests and excludes binaries", async (t) => {
@@ -372,4 +496,7 @@ test("CLI JSON mode is versioned, color-free, and uses exit 2 for unknown comman
   const unsupportedInteractiveJson = await runProcess(process.execPath, ["tools/lab/cli.mjs", "interactive", root, "--json"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
   assert.equal(unsupportedInteractiveJson.code, 2);
   assert.equal(JSON.parse(unsupportedInteractiveJson.stdout).error.code, "ARGUMENT_INVALID");
+  const located = await runProcess(process.execPath, ["tools/lab/cli.mjs", "locate", "01E4", "--json"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
+  assert.equal(located.code, 0);
+  assert.equal(JSON.parse(located.stdout).lab.id, "01E04");
 });

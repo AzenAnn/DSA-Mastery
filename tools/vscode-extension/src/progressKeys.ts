@@ -11,7 +11,6 @@ export function remapRecordKeys<T>(
 ): { records: Record<string, T>; changed: boolean } {
   const records = { ...source };
   let changed = false;
-
   for (const alias of aliases) {
     if (alias.id === alias.name || records[alias.name] === undefined) continue;
     records[alias.id] = records[alias.id] === undefined
@@ -20,7 +19,6 @@ export function remapRecordKeys<T>(
     delete records[alias.name];
     changed = true;
   }
-
   return { records, changed };
 }
 
@@ -37,6 +35,5 @@ export function remapEventKeys<T extends { labName: string }>(
     changed = true;
     return { ...event, labName: id };
   });
-
   return { events, changed };
 }

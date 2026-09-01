@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/.pnpm-store/
 /.pnp
 .pnp.*
 .yarn/*
@@ -33,6 +34,7 @@ yarn-error.log*
 
 /dist/
 **/.lab-cache/
+**/solution/*.exe
 /.vitepress/cache/
 /.vitepress/.temp/
 /outputs/
