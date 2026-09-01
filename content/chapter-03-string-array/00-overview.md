@@ -48,21 +48,21 @@ status: "draft"
 
 ## 配套 Labs
 
-- [Lab 03-01：串的基础选择题精练（3.1）](../../labs/chapter-03/lab-03-01-string-basics-quiz/README.md)
-- [Lab 03-02：模式匹配选择题精练（3.2）](../../labs/chapter-03/lab-03-02-string-matching-quiz/README.md)
-- [Lab 03-03：数组与矩阵选择题精练（3.3）](../../labs/chapter-03/lab-03-03-array-matrix-quiz/README.md)
-- [Lab 03-04：广义表选择题精练（3.4）](../../labs/chapter-03/lab-03-04-generalized-list-quiz/README.md)
-- [Lab 03-05：KMP 模式匹配（首次出现位置）](../../labs/chapter-03/lab-03-05-kmp-match/README.md)
-- [Lab 03-06：next 与 nextval 数组推导](../../labs/chapter-03/lab-03-06-next-array/README.md)
-- [Lab 03-07：朴素匹配与 KMP 比较次数](../../labs/chapter-03/lab-03-07-match-comparison/README.md)
-- [Lab 03-08：串的非重叠替换 Replace](../../labs/chapter-03/lab-03-08-string-replace/README.md)
-- [Lab 03-09：UTF-8 串长与字符数](../../labs/chapter-03/lab-03-09-utf8-char-count/README.md)
-- [Lab 03-10：广义表的表头与表尾](../../labs/chapter-03/lab-03-10-generalized-list-head-tail/README.md)
-- [Lab 03-11：广义表的深度](../../labs/chapter-03/lab-03-11-generalized-list-depth/README.md)
-- [Lab 03-12：三对角矩阵压缩与取值](../../labs/chapter-03/lab-03-12-tridiagonal-compress/README.md)
-- [Lab 03-13：多维数组行优先寻址](../../labs/chapter-03/lab-03-13-ndarray-offset/README.md)
-- [Lab 03-14：串匹配与文本处理引擎（工程题）](../../labs/chapter-03/lab-03-14-string-match-engine/README.md)
-- [Lab 03-15：稀疏矩阵运算库（工程题）](../../labs/chapter-03/lab-03-15-sparse-matrix-library/README.md)
+- [Lab 03-T-01：串的基础选择题精练（3.1）](../../labs/chapter-03/theory/T-03-01-string-basics-quiz/README.md)
+- [Lab 03-T-02：模式匹配选择题精练（3.2）](../../labs/chapter-03/theory/T-03-02-string-matching-quiz/README.md)
+- [Lab 03-T-03：数组与矩阵选择题精练（3.3）](../../labs/chapter-03/theory/T-03-03-array-matrix-quiz/README.md)
+- [Lab 03-T-04：广义表选择题精练（3.4）](../../labs/chapter-03/theory/T-03-04-generalized-list-quiz/README.md)
+- [Lab 03-E-01：KMP 模式匹配（首次出现位置）](../../labs/chapter-03/exercise/E-03-01-kmp-match/README.md)
+- [Lab 03-E-02：next 与 nextval 数组推导](../../labs/chapter-03/exercise/E-03-02-next-array/README.md)
+- [Lab 03-E-03：朴素匹配与 KMP 比较次数](../../labs/chapter-03/exercise/E-03-03-match-comparison/README.md)
+- [Lab 03-E-04：串的非重叠替换 Replace](../../labs/chapter-03/exercise/E-03-04-string-replace/README.md)
+- [Lab 03-E-05：UTF-8 串长与字符数](../../labs/chapter-03/exercise/E-03-05-utf8-char-count/README.md)
+- [Lab 03-E-06：广义表的表头与表尾](../../labs/chapter-03/exercise/E-03-06-generalized-list-head-tail/README.md)
+- [Lab 03-E-07：广义表的深度](../../labs/chapter-03/exercise/E-03-07-generalized-list-depth/README.md)
+- [Lab 03-E-08：三对角矩阵压缩与取值](../../labs/chapter-03/exercise/E-03-08-tridiagonal-compress/README.md)
+- [Lab 03-E-09：多维数组行优先寻址](../../labs/chapter-03/exercise/E-03-09-ndarray-offset/README.md)
+- [Lab 03-P-01：串匹配与文本处理引擎（工程题）](../../labs/chapter-03/project/P-03-01-string-match-engine/README.md)
+- [Lab 03-P-02：稀疏矩阵运算库（工程题）](../../labs/chapter-03/project/P-03-02-sparse-matrix-library/README.md)
 
 ## 学习建议
 

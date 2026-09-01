@@ -472,3 +472,24 @@ Investigated GitHub Actions logs, updated stale stable-ID artifact assertions, s
 ### Status
 
 [OK] **Completed**
+
+
+## Session 20: Labs 三分类目录迁移
+
+**Date**: 2026-09-01
+**Task**: Labs 三分类目录迁移
+**Branch**: `codex/lab-category-directories`
+
+### Summary
+
+将 173 个 Lab 迁移到 theory、exercise、project 分类目录，更新网站、CLI、校验器和 VS Code 插件，并完成全量本地与 Pages 测试。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `917b482` | (see git log) |
+
+### Status
+
+[OK] **Completed**

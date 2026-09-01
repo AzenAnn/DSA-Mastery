@@ -14,6 +14,7 @@ import {
   locateLabById,
   normalizeLabId,
   parseLabId,
+  scanLabRecords,
 } from "../tools/lab/identity.mjs";
 import { runProcess } from "../tools/lab/process.mjs";
 import { createLab, THIN_MAKEFILE } from "../tools/lab/scaffold.mjs";
@@ -340,25 +341,39 @@ test("Lab ID migration preserves the frontmatter line ending beside chapter", ()
 test("scaffolder allocates independent type sequences and optional display order", async (t) => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa scaffold "));
   t.after(() => rm(root, { recursive: true, force: true }));
+  const emptyCategoryMarker = path.join(root, "labs", "chapter-02", "theory", ".gitkeep");
+  await mkdir(path.dirname(emptyCategoryMarker), { recursive: true });
+  await writeFile(emptyCategoryMarker, "");
   const quiz = await createLab({ type: "quiz", chapter: "2", order: "3", slug: "stack-quiz" }, root);
+  await assert.rejects(access(emptyCategoryMarker), (error) => error.code === "ENOENT");
+  await access(path.join(root, "labs", "chapter-02", "exercise", ".gitkeep"));
+  await access(path.join(root, "labs", "chapter-02", "project", ".gitkeep"));
   const program = await createLab({ type: "program", chapter: "2", slug: "stack-run" }, root);
+  await assert.rejects(
+    access(path.join(root, "labs", "chapter-02", "exercise", ".gitkeep")),
+    (error) => error.code === "ENOENT",
+  );
   const project = await createLab({ type: "project", chapter: "2", order: "5", slug: "stack-project" }, root);
+  await assert.rejects(
+    access(path.join(root, "labs", "chapter-02", "project", ".gitkeep")),
+    (error) => error.code === "ENOENT",
+  );
   const nextProgram = await createLab({ type: "program", chapter: "2", slug: "stack-run" }, root);
   assert.deepEqual(
     [quiz.labId, program.labId, project.labId, nextProgram.labId],
     ["02T01", "02E01", "02P01", "02E02"],
   );
   assert.deepEqual([quiz.order, program.order, project.order, nextProgram.order], [3, 4, 5, 6]);
-  assert.match(quiz.relativeRoot, /lab-02-T-01-stack-quiz$/);
-  assert.match(program.relativeRoot, /lab-02-E-01-stack-run$/);
+  assert.equal(quiz.relativeRoot, "labs/chapter-02/theory/T-02-01-stack-quiz");
+  assert.equal(program.relativeRoot, "labs/chapter-02/exercise/E-02-01-stack-run");
   assert.equal((await loadLab(quiz.labRoot)).manifest.type, "quiz");
   assert.equal((await loadLab(program.labRoot)).manifest.type, "program");
   assert.equal((await loadLab(project.labRoot)).manifest.type, "project");
   assert.equal(await readFile(path.join(program.labRoot, "Makefile"), "utf8"), THIN_MAKEFILE);
   const projectTask = JSON.parse(await readFile(path.join(project.labRoot, "tasks", "task-01-implementation", "task.json"), "utf8"));
   const projectReport = JSON.parse(await readFile(path.join(project.labRoot, "report", "task.json"), "utf8"));
-  assert.equal(projectTask.$schema, "../../../../../schemas/task.schema.json");
-  assert.equal(projectReport.$schema, "../../../../schemas/task.schema.json");
+  assert.equal(projectTask.$schema, "../../../../../../schemas/task.schema.json");
+  assert.equal(projectReport.$schema, "../../../../../schemas/task.schema.json");
   const projectPackage = await packStudent(await loadLab(project.labRoot));
   assert.equal((await loadLab(projectPackage.packageRoot)).manifest.distribution, "student");
   const programReadme = await readFile(path.join(program.labRoot, "README.md"), "utf8");
@@ -370,21 +385,34 @@ test("scaffolder allocates independent type sequences and optional display order
   );
 });
 
+test("Lab scanning rejects flat legacy directories and malformed categorized directories", async (t) => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "dsa lab layout "));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const chapterRoot = path.join(root, "labs", "chapter-02");
+  const flat = path.join(chapterRoot, "lab-02-01-flat");
+  await mkdir(flat, { recursive: true });
+  await assert.rejects(scanLabRecords(root), (error) => error.code === "LAB_PATH_INVALID");
+  await rm(flat, { recursive: true, force: true });
+
+  await mkdir(path.join(chapterRoot, "theory", "lab-02-T-01-malformed"), { recursive: true });
+  await assert.rejects(scanLabRecords(root), (error) => error.code === "LAB_PATH_INVALID");
+});
+
 test("allocator uses max plus one and never fills a deleted gap", async (t) => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa lab identity "));
   t.after(() => rm(root, { recursive: true, force: true }));
   for (const [directory, labId, order] of [
-    ["lab-02-01-first", "02T01", 1],
-    ["lab-02-03-third", "02T03", 3],
+    ["T-02-01-first", "02T01", 1],
+    ["T-02-03-third", "02T03", 3],
   ]) {
-    const labRoot = path.join(root, "labs", "chapter-02", directory);
+    const labRoot = path.join(root, "labs", "chapter-02", "theory", directory);
     await mkdir(labRoot, { recursive: true });
     await writeFile(path.join(labRoot, "README.md"), `---\ntitle: "Fixture"\ndescription: "Fixture"\norder: ${order}\nchapter: 2\nlabId: "${labId}"\nchapterTitle: "栈与队列"\nupdated: "2026-08-31"\ncontributors: ["Test"]\nstatus: "draft"\nlab: true\nlabCategory: "theory"\ndifficulty: "测试"\nduration: "1 分钟"\n---\n`);
   }
   const allocated = await allocateLabIdentity(root, { type: "quiz", chapter: 2 });
   assert.deepEqual(allocated, { id: "02T04", chapter: 2, tag: "T", sequence: 4, order: 4 });
 
-  const duplicateRoot = path.join(root, "labs", "chapter-02", "lab-02-04-duplicate");
+  const duplicateRoot = path.join(root, "labs", "chapter-02", "theory", "T-02-03-duplicate");
   await mkdir(duplicateRoot, { recursive: true });
   await writeFile(path.join(duplicateRoot, "README.md"), `---\ntitle: "Duplicate"\ndescription: "Duplicate"\norder: 4\nchapter: 2\nlabId: "02T03"\nchapterTitle: "栈与队列"\nupdated: "2026-08-31"\ncontributors: ["Test"]\nstatus: "draft"\nlab: true\nlabCategory: "theory"\ndifficulty: "测试"\nduration: "1 分钟"\n---\n`);
   await assert.rejects(
@@ -396,7 +424,7 @@ test("allocator uses max plus one and never fills a deleted gap", async (t) => {
 test("Lab IDs locate a unique repository path", async () => {
   const located = await locateLabById(projectRoot, "1e4");
   assert.equal(located.id, "01E04");
-  assert.equal(located.relativePath, "labs/chapter-01/lab-01-09-singly-linked-list-reverse");
+  assert.equal(located.relativePath, "labs/chapter-01/exercise/E-01-04-singly-linked-list-reverse");
 });
 
 test("student pack follows multi-source manifests and excludes binaries", async (t) => {

@@ -1,8 +1,14 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { LabError } from "./errors.mjs";
 import { pathExists } from "./core.mjs";
-import { allocateLabIdentity, formatLabDocumentTitlePrefix } from "./identity.mjs";
+import {
+  allocateLabIdentity,
+  categoryForType,
+  formatLabDirectoryName,
+  formatLabDocumentTitlePrefix,
+  LAB_CATEGORIES,
+} from "./identity.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "../..");
 
@@ -14,8 +20,7 @@ function json(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
-function readme({ chapter, order, slug, type, identity }) {
-  const code = `${pad(chapter)}-${identity.tag}-${pad(identity.sequence)}`;
+function readme({ chapter, order, type, identity, relativeRoot }) {
   const names = { quiz: "选择题自测", program: "编程练习", project: "综合项目" };
   const title = `${formatLabDocumentTitlePrefix(identity.id)}${names[type]}`;
   return `---
@@ -43,7 +48,7 @@ duration: "45～60 分钟"
 
 请说明所需知识与环境。可执行 Lab 先运行 \`make doctor\`；未安装 Make 时使用 pnpm 兜底命令。
 
-${type === "quiz" ? "## 选择题\n\n<QuizSet />" : "## 任务\n\n请补充输入、输出、约束、正常/边界/错误情况。\n\n## 运行\n\n```powershell\nmake run\n# 免 Make 兜底：在仓库根执行\npnpm lab:run -- labs/chapter-" + pad(chapter) + "/lab-" + code + "-" + slug + "\n```"}
+${type === "quiz" ? "## 选择题\n\n<QuizSet />" : "## 任务\n\n请补充输入、输出、约束、正常/边界/错误情况。\n\n## 运行\n\n```powershell\nmake run\n# 免 Make 兜底：在仓库根执行\npnpm lab:run -- " + relativeRoot + "\n```"}
 
 ## 完成清单
 
@@ -74,14 +79,29 @@ int main() {
 `;
 
 const thinMakefile = `LAB_DIR := $(CURDIR)
-REPO_ROOT := $(LAB_DIR)/../../..
-include ../../../tools/lab/lab.mk
+REPO_ROOT := $(LAB_DIR)/../../../..
+include ../../../../tools/lab/lab.mk
 `;
 
 async function write(root, relative, content) {
   const file = path.join(root, relative);
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, content, { encoding: "utf8", flag: "wx" });
+}
+
+async function syncChapterCategoryDirectories(root, chapter) {
+  const chapterRoot = path.join(root, "labs", `chapter-${pad(chapter)}`);
+  for (const category of LAB_CATEGORIES) {
+    const categoryRoot = path.join(chapterRoot, category);
+    await mkdir(categoryRoot, { recursive: true });
+    const entries = await readdir(categoryRoot, { withFileTypes: true });
+    const marker = path.join(categoryRoot, ".gitkeep");
+    if (entries.some((entry) => entry.isDirectory())) {
+      await rm(marker, { force: true });
+    } else if (!(await pathExists(marker))) {
+      await writeFile(marker, "", { encoding: "utf8", flag: "wx" });
+    }
+  }
 }
 
 export async function createLab(options, root = projectRoot) {
@@ -93,17 +113,19 @@ export async function createLab(options, root = projectRoot) {
   if (typeof slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new LabError("ARGUMENT_INVALID", "--slug 必须是小写 kebab-case");
   const identity = await allocateLabIdentity(root, { type, chapter, order: options.order });
   const order = identity.order;
-  const relativeRoot = `labs/chapter-${pad(chapter)}/lab-${pad(chapter)}-${identity.tag}-${pad(identity.sequence)}-${slug}`;
+  const category = categoryForType(type);
+  const directoryName = formatLabDirectoryName(identity.id, slug);
+  const relativeRoot = `labs/chapter-${pad(chapter)}/${category}/${directoryName}`;
   const labRoot = path.join(root, relativeRoot);
   if (await pathExists(labRoot)) throw new LabError("TARGET_EXISTS", `目标 Lab 已存在：${relativeRoot}`);
   await mkdir(path.dirname(labRoot), { recursive: true });
   await mkdir(labRoot, { recursive: false });
-  await write(root, `${relativeRoot}/README.md`, readme({ chapter, order, slug, type, identity }));
+  await write(root, `${relativeRoot}/README.md`, readme({ chapter, order, type, identity, relativeRoot }));
   if (type === "quiz") {
-    await write(root, `${relativeRoot}/lab.json`, json({ $schema: "../../../schemas/lab.schema.json", schemaVersion: 1, type, quiz: { questions: "quiz.json", questionType: "single-choice", reveal: "after-submit", scoring: "points" } }));
+    await write(root, `${relativeRoot}/lab.json`, json({ $schema: "../../../../schemas/lab.schema.json", schemaVersion: 1, type, quiz: { questions: "quiz.json", questionType: "single-choice", reveal: "after-submit", scoring: "points" } }));
     await write(root, `${relativeRoot}/quiz.json`, json([{ id: "q1", stem: "请替换为题面。", options: ["选项一", "选项二", "选项三", "选项四"], answer: 0, explanation: "请补充解析。", hint: "可选提示。", points: 1 }]));
   } else if (type === "program") {
-    await write(root, `${relativeRoot}/lab.json`, json({ $schema: "../../../schemas/lab.schema.json", schemaVersion: 1, type, language: "cpp", toolchain: { standard: "c++17", profile: "course-default" }, targets: { student: { sources: ["student/main.cpp"] }, solution: { sources: ["solution/main.cpp"] } }, judge: { kind: "stdio", cases: "tests/cases.json", compare: { mode: "tokens" }, limits: { timeMs: 2000, outputKb: 1024 } } }));
+    await write(root, `${relativeRoot}/lab.json`, json({ $schema: "../../../../schemas/lab.schema.json", schemaVersion: 1, type, language: "cpp", toolchain: { standard: "c++17", profile: "course-default" }, targets: { student: { sources: ["student/main.cpp"] }, solution: { sources: ["solution/main.cpp"] } }, judge: { kind: "stdio", cases: "tests/cases.json", compare: { mode: "tokens" }, limits: { timeMs: 2000, outputKb: 1024 } } }));
     await write(root, `${relativeRoot}/Makefile`, thinMakefile);
     await write(root, `${relativeRoot}/student/main.cpp`, starter);
     await write(root, `${relativeRoot}/solution/main.cpp`, solution);
@@ -111,18 +133,19 @@ export async function createLab(options, root = projectRoot) {
     await write(root, `${relativeRoot}/tests/001-sample.in`, "\n");
     await write(root, `${relativeRoot}/tests/001-sample.out`, "0\n");
   } else {
-    await write(root, `${relativeRoot}/lab.json`, json({ $schema: "../../../schemas/lab.schema.json", schemaVersion: 1, type, language: "cpp", toolchain: { standard: "c++17", profile: "course-default" }, buildSystem: "cmake", tasks: [{ id: "implementation", path: "tasks/task-01-implementation", weight: 80, kind: "ctest", dependsOn: [] }, { id: "report", path: "report", weight: 20, kind: "manual", dependsOn: ["implementation"] }] }));
+    await write(root, `${relativeRoot}/lab.json`, json({ $schema: "../../../../schemas/lab.schema.json", schemaVersion: 1, type, language: "cpp", toolchain: { standard: "c++17", profile: "course-default" }, buildSystem: "cmake", tasks: [{ id: "implementation", path: "tasks/task-01-implementation", weight: 80, kind: "ctest", dependsOn: [] }, { id: "report", path: "report", weight: 20, kind: "manual", dependsOn: ["implementation"] }] }));
     await write(root, `${relativeRoot}/Makefile`, thinMakefile);
     await write(root, `${relativeRoot}/CMakeLists.txt`, "cmake_minimum_required(VERSION 3.25)\nproject(dsa_lab LANGUAGES CXX)\nif(NOT DEFINED CMAKE_CXX_STANDARD)\n  set(CMAKE_CXX_STANDARD 17)\nendif()\nset(CMAKE_CXX_STANDARD_REQUIRED ON)\nset(CMAKE_CXX_EXTENSIONS OFF)\noption(LAB_USE_SOLUTION \"Build reference implementation\" OFF)\nif(MSVC)\n  add_compile_options(/W4 /permissive-)\nelse()\n  add_compile_options(-Wall -Wextra -Wpedantic)\nendif()\nenable_testing()\nadd_subdirectory(tasks/task-01-implementation)\n");
     await write(root, `${relativeRoot}/CMakePresets.json`, json({ version: 6, configurePresets: [{ name: "student", binaryDir: "${sourceDir}/.lab-cache/cmake/student", cacheVariables: { CMAKE_CXX_STANDARD: "17", CMAKE_CXX_STANDARD_REQUIRED: "ON", LAB_USE_SOLUTION: "OFF" } }, { name: "solution", binaryDir: "${sourceDir}/.lab-cache/cmake/solution", cacheVariables: { CMAKE_CXX_STANDARD: "17", CMAKE_CXX_STANDARD_REQUIRED: "ON", LAB_USE_SOLUTION: "ON" } }], buildPresets: [{ name: "student", configurePreset: "student" }, { name: "solution", configurePreset: "solution" }], testPresets: [{ name: "student", configurePreset: "student", output: { outputOnFailure: true } }, { name: "solution", configurePreset: "solution", output: { outputOnFailure: true } }] }));
-    await write(root, `${relativeRoot}/tasks/task-01-implementation/task.json`, json({ $schema: "../../../../../schemas/task.schema.json", schemaVersion: 1, kind: "ctest", ctest: { tests: [{ name: "implementation-smoke", points: 100 }] } }));
+    await write(root, `${relativeRoot}/tasks/task-01-implementation/task.json`, json({ $schema: "../../../../../../schemas/task.schema.json", schemaVersion: 1, kind: "ctest", ctest: { tests: [{ name: "implementation-smoke", points: 100 }] } }));
     await write(root, `${relativeRoot}/tasks/task-01-implementation/CMakeLists.txt`, "set(IMPLEMENTATION_SOURCE student/main.cpp)\nif(LAB_USE_SOLUTION)\n  set(IMPLEMENTATION_SOURCE solution/main.cpp)\nendif()\nadd_executable(implementation ${IMPLEMENTATION_SOURCE})\nadd_test(NAME implementation-smoke COMMAND implementation)\n");
     await write(root, `${relativeRoot}/tasks/task-01-implementation/student/main.cpp`, "int main() { return 1; }\n");
     await write(root, `${relativeRoot}/tasks/task-01-implementation/solution/main.cpp`, "int main() { return 0; }\n");
     await write(root, `${relativeRoot}/tasks/task-01-implementation/README.md`, "# Task 01：Implementation\n\n请补充接口、验收标准和边界情况。\n");
-    await write(root, `${relativeRoot}/report/task.json`, json({ $schema: "../../../../schemas/task.schema.json", schemaVersion: 1, kind: "manual", checklist: ["说明设计、测试证据与复盘"] }));
+    await write(root, `${relativeRoot}/report/task.json`, json({ $schema: "../../../../../schemas/task.schema.json", schemaVersion: 1, kind: "manual", checklist: ["说明设计、测试证据与复盘"] }));
     await write(root, `${relativeRoot}/report/README.md`, "# 人工评分报告\n\n请补充复杂度、测试证据与复盘。\n");
   }
+  await syncChapterCategoryDirectories(root, chapter);
   return { labRoot, relativeRoot, type, labId: identity.id, order };
 }
 

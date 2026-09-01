@@ -50,7 +50,9 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   findLab(identifier: string): ProgramLab | undefined {
-    return this.allLabs().find((lab) => lab.id === identifier || lab.name === identifier);
+    return this.allLabs().find(
+      (lab) => lab.id === identifier || lab.name === identifier || lab.legacyNames.includes(identifier),
+    );
   }
 
   async getChildren(element?: TreeNode): Promise<TreeNode[]> {

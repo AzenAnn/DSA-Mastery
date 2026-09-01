@@ -3,7 +3,10 @@ import test from "node:test";
 import { remapEventKeys, remapRecordKeys } from "../src/progressKeys.ts";
 
 test("legacy directory progress keys migrate to stable Lab IDs", () => {
-  const aliases = [{ id: "01E04", name: "lab-01-09-singly-linked-list-reverse" }];
+  const aliases = [
+    { id: "01E04", name: "E-01-04-singly-linked-list-reverse" },
+    { id: "01E04", name: "lab-01-09-singly-linked-list-reverse" },
+  ];
   const single = remapRecordKeys(
     { "lab-01-09-singly-linked-list-reverse": { attempts: 3 } },
     aliases,
@@ -33,4 +36,20 @@ test("activity events keep their history while replacing legacy keys", () => {
   );
   assert.equal(migrated.changed, true);
   assert.deepEqual(migrated.events.map((event) => event.labName), ["01E04", "01T01"]);
+});
+
+test("new category directory keys and old flat directory keys converge on one stable ID", () => {
+  const aliases = [
+    { id: "01E04", name: "E-01-04-singly-linked-list-reverse" },
+    { id: "01E04", name: "lab-01-09-singly-linked-list-reverse" },
+  ];
+  const migrated = remapRecordKeys(
+    {
+      "E-01-04-singly-linked-list-reverse": { attempts: 2 },
+      "lab-01-09-singly-linked-list-reverse": { attempts: 3 },
+    },
+    aliases,
+    (stable, legacy) => ({ attempts: stable.attempts + legacy.attempts }),
+  );
+  assert.deepEqual(migrated.records, { "01E04": { attempts: 5 } });
 });

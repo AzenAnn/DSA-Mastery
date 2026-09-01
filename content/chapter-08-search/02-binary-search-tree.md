@@ -327,7 +327,7 @@ $$
 
 ## 配套 Lab
 
-完成 [Lab 08-02：BST 增删查与边界测试](../../labs/chapter-08/lab-08-02-bst-operations/README.md)，用中序遍历验证每次修改后的不变量，并比较随机插入与有序插入的树高；进阶做 [Lab 08-03：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/lab-08-03-avl-tree-rotations/README.md)。
+完成 [Lab 08-E-01：BST 增删查与边界测试](../../labs/chapter-08/exercise/E-08-01-bst-operations/README.md)，用中序遍历验证每次修改后的不变量，并比较随机插入与有序插入的树高；进阶做 [Lab 08-P-01：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/project/P-08-01-avl-tree-rotations/README.md)。
 
 ## 小结
 

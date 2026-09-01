@@ -323,7 +323,7 @@ std::vector<std::optional<int>> next_greater(const std::vector<int>& nums) {
 每个下标恰好入栈一次、最多出栈一次。内层 `while` 虽然在某一步可能连续弹出多个下标，但整次扫描的弹栈总数不超过 $n$，因此时间复杂度为 $\Theta(n)$。结果数组占用 $\Theta(n)$ 空间，辅助栈的最坏空间复杂度为 $O(n)$。
 :::
 
-完成 [Lab 02-10：柱状图中最大的矩形](../../labs/chapter-02/lab-02-10-largest-rectangle-histogram/README.md)，进一步练习用单调栈确定左右边界与矩形宽度。
+完成 [Lab 02-E-08：柱状图中最大的矩形](../../labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram/README.md)，进一步练习用单调栈确定左右边界与矩形宽度。
 
 ### 队列与逐层扩散
 
@@ -392,18 +392,18 @@ int min_steps(int start, int target, int limit) {
 - **浏览器前进 / 后退**：维护后退栈 `back` 与前进栈 `forward`。访问新页面时把当前页压入 `back`，并**清空 `forward`**（前进历史作废）。这就是“最近优先”语义：后退永远是回到最近访问过的页。
 - **文本编辑器 Undo / Redo**：把每次操作封装成命令对象压入撤销栈，撤销时弹栈反向执行，再压入重做栈。撤销的永远是“最近一次操作”。
 
-两者都可以用栈建模。任务说明见 [Lab 02-11：可撤销浏览器——栈的超级大综合](../../labs/chapter-02/lab-02-11-undoable-browser/README.md)。
+两者都可以用栈建模。任务说明见 [Lab 02-P-01：可撤销浏览器——栈的超级大综合](../../labs/chapter-02/project/P-02-01-undoable-browser/README.md)。
 
 ### 队列的场景：收银与调度
 
 - **超市收银 / 银行排队**：多个窗口各有一条顾客队列，顾客选最短队入队，收银员先到先服务。这正是“先到先处理”的公平性，复用 2.2 节的循环队列。
 - **Round Robin（时间片轮转）**：进程按到达顺序排成一队，用完一个时间片就回到队尾。队头永远是“下一个被调度”的进程。
 
-任务说明见 [Lab 02-12：超市收银模拟——队列的大综合](../../labs/chapter-02/lab-02-12-supermarket-checkout/README.md)。
+任务说明见 [Lab 02-P-02：超市收银模拟——队列的大综合](../../labs/chapter-02/project/P-02-02-supermarket-checkout/README.md)。
 
 ### 栈 + 队列联动：停车场管理
 
-停车场内部车道用**栈**（后进的车堵住先进的车，取车要倒出来），门外便道用**队列**（先到先进场）。这是“最近优先”与“先到优先”在同一业务流程里协作的典型例子。任务说明见 [Lab 02-13：停车场管理——栈与队列的大综合](../../labs/chapter-02/lab-02-13-parking-lot-management/README.md)。
+停车场内部车道用**栈**（后进的车堵住先进的车，取车要倒出来），门外便道用**队列**（先到先进场）。这是“最近优先”与“先到优先”在同一业务流程里协作的典型例子。任务说明见 [Lab 02-P-03：停车场管理——栈与队列的大综合](../../labs/chapter-02/project/P-02-03-parking-lot-management/README.md)。
 
 ::: complexity 复杂度 · 容器操作不等于业务操作
 一次栈顶转移或队列首尾操作通常为 $O(1)$，但完整业务可能包含多次基础操作：浏览器 `back(k)`、`forward(k)` 需要 $O(k)$ 次转移；从 $m$ 个收银窗口中线性寻找最短队列需要 $O(m)$；让停车场栈中深度为 $k$ 的车辆离开，需要临时移出并恢复其上方车辆，时间复杂度为 $O(k)$。
@@ -438,7 +438,7 @@ int min_steps(int start, int target, int limit) {
 ## 练习
 
 1. 把 `(2 + 3) * (7 - 4)` 转换为后缀表达式，并用栈给出完整求值过程；再修改本节逆波兰例题，使它分别验证操作数不足、除零、未知 token 和最终值残留。
-2. 单调栈能求出“左边第一个比它小”的元素吗？需要维护什么性质的栈？完成 [Lab 02-10：柱状图中最大的矩形](../../labs/chapter-02/lab-02-10-largest-rectangle-histogram/README.md)后，再比较“寻找相邻边界”和“结算矩形宽度”的弹栈条件。
+2. 单调栈能求出“左边第一个比它小”的元素吗？需要维护什么性质的栈？完成 [Lab 02-E-08：柱状图中最大的矩形](../../labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram/README.md)后，再比较“寻找相邻边界”和“结算矩形宽度”的弹栈条件。
 3. 在“农夫抓牛”中，为什么入队时写入 `dist`，而不是等到出队时才标记？
 4. 浏览器访问新页面时为什么要清空前进栈？不清空会发生什么？（可对照 Lab 02-11）
 5. 一个系统需要“后到的请求先处理”（如撤销栈），它该用栈还是队列？如果改成“等待最久的请求先处理”呢？
@@ -454,5 +454,5 @@ int min_steps(int start, int target, int limit) {
 ## 延伸阅读
 
 - Edsger W. Dijkstra 在 1961 年的 [ALGOL 60 Translation（EWD 35）](https://www.cs.utexas.edu/~EWD/transcriptions/EWD00xx/EWD35.html)中描述了后来被称为 shunting-yard 的翻译方法。
-- 完成 [Lab 02-09：滑动窗口最大值](../../labs/chapter-02/lab-02-09-sliding-window-maximum/README.md)，把单调候选从栈扩展到支持队头过期的双端队列；还可继续练习 LeetCode 496 / 503（下一个更大元素）。
+- 完成 [Lab 02-E-07：滑动窗口最大值](../../labs/chapter-02/exercise/E-02-07-sliding-window-maximum/README.md)，把单调候选从栈扩展到支持队头过期的双端队列；还可继续练习 LeetCode 496 / 503（下一个更大元素）。
 - 广度优先遍历的完整图论内容见[图的遍历](../chapter-07-graph-traversal/01-dfs-and-bfs.md)。

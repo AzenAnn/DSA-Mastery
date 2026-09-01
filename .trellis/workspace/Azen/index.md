@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 19
+- **Total Sessions**: 20
 - **Last Active**: 2026-09-01
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~474 | Active |
+| `journal-1.md` | ~495 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 20 | 2026-09-01 | Labs 三分类目录迁移 | `917b482` | `codex/lab-category-directories` |
 | 19 | 2026-09-01 | 稳定 Lab 文档标题约束 | `5f0a637` | `codex/lab-stable-id` |
 | 18 | 2026-08-31 | Resolve PR 119 CI failures | `ead8db8`, `388cfe0` | `codex/lab-stable-id` |
 | 17 | 2026-08-31 | Normalize all Lab navigation labels | `90a26ca` | `codex/lab-stable-id` |

@@ -127,31 +127,39 @@ async function highlightCode(code: string): Promise<string> {
 }
 
 export default defineLoader({
-  watch: ["labs/chapter-*/lab-*/quiz.json"],
+  watch: [
+    "labs/chapter-*/theory/*/quiz.json",
+    "labs/chapter-*/exercise/*/quiz.json",
+    "labs/chapter-*/project/*/quiz.json",
+  ],
   async load() {
     const byLab: Record<string, QuizQuestion[]> = {};
     const labsRoot = path.join(projectRoot, "labs");
     for (const chapter of readdirSync(labsRoot, { withFileTypes: true })) {
       if (!chapter.isDirectory() || !/^chapter-\d{2}$/.test(chapter.name)) continue;
       const chapterRoot = path.join(labsRoot, chapter.name);
-      for (const lab of readdirSync(chapterRoot, { withFileTypes: true })) {
-        if (!lab.isDirectory() || !/^lab-\d{2}-(?:\d{2}|[TEP]-\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(lab.name)) continue;
-        const quizPath = path.join(chapterRoot, lab.name, "quiz.json");
-        // 没有 quiz.json 的 Lab 不是自测型，跳过；存在但损坏则立即让构建失败。
-        if (!existsSync(quizPath)) continue;
-        const parsed = JSON.parse(readFileSync(quizPath, "utf8")) as unknown;
-        const raw = parseQuiz(parsed, quizPath);
-        const questions = await Promise.all(
-          raw.map(async (question) => ({
-            ...question,
-            stemHtml: markdown.render(question.stem),
-            codeHtml: question.code ? await highlightCode(question.code) : undefined,
-            hintHtml: question.hint ? markdown.render(question.hint) : undefined,
-            optionHtml: question.options.map((option) => markdown.renderInline(option)),
-            explanationHtml: markdown.render(question.explanation),
-          })),
-        );
-        byLab[`labs/${chapter.name}/${lab.name}`] = questions;
+      for (const category of ["theory", "exercise", "project"]) {
+        const categoryRoot = path.join(chapterRoot, category);
+        if (!existsSync(categoryRoot)) continue;
+        for (const lab of readdirSync(categoryRoot, { withFileTypes: true })) {
+          if (!lab.isDirectory() || !/^[TEP]-\d{2}-\d{2,}-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(lab.name)) continue;
+          const quizPath = path.join(categoryRoot, lab.name, "quiz.json");
+          // 没有 quiz.json 的 Lab 不是自测型，跳过；存在但损坏则立即让构建失败。
+          if (!existsSync(quizPath)) continue;
+          const parsed = JSON.parse(readFileSync(quizPath, "utf8")) as unknown;
+          const raw = parseQuiz(parsed, quizPath);
+          const questions = await Promise.all(
+            raw.map(async (question) => ({
+              ...question,
+              stemHtml: markdown.render(question.stem),
+              codeHtml: question.code ? await highlightCode(question.code) : undefined,
+              hintHtml: question.hint ? markdown.render(question.hint) : undefined,
+              optionHtml: question.options.map((option) => markdown.renderInline(option)),
+              explanationHtml: markdown.render(question.explanation),
+            })),
+          );
+          byLab[`labs/${chapter.name}/${category}/${lab.name}`] = questions;
+        }
       }
     }
     return byLab;

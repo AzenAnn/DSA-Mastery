@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "ctest",
+  "ctest": {
+    "tests": [
+      { "name": "linked-contract", "points": 25 },
+      { "name": "linked-boundaries", "points": 25 },
+      { "name": "linked-bidirectional-links", "points": 35 },
+      { "name": "linked-clear-and-reuse", "points": 15 }
+    ]
+  }
+}

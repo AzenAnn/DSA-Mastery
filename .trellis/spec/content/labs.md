@@ -2,22 +2,22 @@
 
 ## 1. Scope / Trigger
 
-新增或修改 `labs/chapter-*/lab-*/README.md`、交互题库 `quiz.json`、Lab 内实现/测试、Lab 索引或实验验收方式时适用。
+新增或修改 `labs/chapter-*/*/*/README.md`、交互题库 `quiz.json`、Lab 内实现/测试、Lab 索引或实验验收方式时适用。
 
 ## 2. Signatures
 
 ```text
-labs/chapter-NN/lab-NN-X-SS-slug/README.md
-  -> /labs/chapter-NN/lab-NN-X-SS-slug/
+labs/chapter-NN/<theory|exercise|project>/X-NN-SS-slug/README.md
+  -> /labs/chapter-NN/<theory|exercise|project>/X-NN-SS-slug/
 
-labs/chapter-NN/lab-NN-X-SS-slug/quiz.json
+labs/chapter-NN/<theory|exercise|project>/X-NN-SS-slug/quiz.json
   -> .vitepress/quiz.data.ts
   -> <QuizSet />
 ```
 
 Lab 由同一个内容索引收集，`kind` 固定为 `lab`；其 `chapter + order` 只在 Lab 集合内唯一。`labId` 是跨网站、CLI、VS Code 和交流场景的永久身份，`order` 只控制展示顺序。
 
-新式 Lab 的机器接口另见 [Lab v1 机器接口、评分与分发合同](lab-tooling.md)。README-only 旧 Lab 继续兼容；有维护需求时按作者指南渐进迁移，不一次性重写全部历史内容。
+Lab 的机器接口另见 [Lab v1 机器接口、评分与分发合同](lab-tooling.md)。README-only Lab 仍可使用，但必须遵守相同的三级目录、稳定 ID、标题和分类合同。
 
 ## 3. Contracts
 
@@ -46,8 +46,8 @@ title: "Lab 01-E-01：有序顺序表去重"
 ```
 
 - frontmatter `title` 与正文 H1 必须完全一致；`CC`、`X`、`SS` 分别来自 `labId` 的章节、类型标签和类型内序号。
-- 新建 Lab，以及 Agent 或作者整理既有 Lab README 时，必须同步使用稳定标题；禁止从 `order`、旧目录中的 `lab-NN-OO` 或原来的 `Lab NN-OO` 标题推导编号。
-- 存量旧目录暂时不改名以保持 URL。未整理的旧标题可在过渡期继续通过校验；一旦迁移为稳定标题，不需要同时改目录。
+- 新建 Lab，以及 Agent 或作者整理既有 Lab README 时，必须同步使用稳定标题；禁止从 `order`、迁移前的目录序号或原来的 `Lab NN-OO` 标题推导编号。
+- 所有 Lab 必须位于规范分类目录，旧 Lab URL 不再属于产物合同；禁止创建旧地址兼容页或重定向。
 - 网站侧栏使用紧凑形式 `CCXSS · 题目名称`，例如 `01E01 · 有序顺序表去重`。这是展示格式，不得反向写进 README 标题。
 - 发布后修改题目名称时只改冒号后的文本；`labId` 和冒号前的稳定编号保持不变。
 
@@ -63,7 +63,7 @@ README 至少说明：
 
 ### Lab 静态资源
 
-题图、流程图等随 Lab 发布的静态资源放在同一 Lab 目录下的 `assets/` 中，README 使用相对路径引用，例如 `![题图](./assets/example.png)`。不得把 `Downloads`、临时目录或作者机器的绝对路径写入内容；提交前应确认资源进入构建产物对应的 `/labs/<chapter>/<lab>/assets/` 路径。
+题图、流程图等随 Lab 发布的静态资源放在同一 Lab 目录下的 `assets/` 中，README 使用相对路径引用，例如 `![题图](./assets/example.png)`。不得把 `Downloads`、临时目录或作者机器的绝对路径写入内容；提交前应确认资源进入构建产物对应的 `/labs/<chapter>/<category>/<lab>/assets/` 路径。
 
 ### 个人题库导入清洗
 
@@ -80,7 +80,7 @@ README 至少说明：
 
 ### 交互选择题 Lab
 
-以选择题自测为主体的 Lab 必须复用 `Lab 00-03：复杂度计算自测` 的通用 `<QuizSet />`，不能把 A～D 写成不可选择的静态列表，也不能新建第二套 Quiz 组件。README 只挂载一次 `<QuizSet />`；同目录 `quiz.json` 是题目内容的唯一事实来源。
+以选择题自测为主体的 Lab 必须复用 `00T02`（复杂度计算自测）的通用 `<QuizSet />`，不能把 A～D 写成不可选择的静态列表，也不能新建第二套 Quiz 组件。README 只挂载一次 `<QuizSet />`；同目录 `quiz.json` 是题目内容的唯一事实来源。
 
 每道题的数据契约为：
 
@@ -111,7 +111,7 @@ README 至少说明：
 
 | 条件 | 结果 |
 | --- | --- |
-| 目录编号、chapter、order 不一致 | 内容校验失败 |
+| 分类目录、目录编号、chapter、labId 或 manifest 类型不一致 | 内容校验失败 |
 | `labId` 缺失、重复、非规范形式、章节或类型标签不一致 | 内容校验失败 |
 | 新目录中的稳定编号与 `labId` 或标题不一致 | 内容校验失败 |
 | 新建或整理 Lab 时标题使用 `order`、旧目录序号，或 H1 与 frontmatter title 不一致 | 内容校验/Review blocking；改为 `Lab CC-X-SS：题目名称` |

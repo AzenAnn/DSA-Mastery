@@ -44,12 +44,16 @@ async function expectedCoursePages() {
 
   const labPages = [];
   const labsRoot = path.join(projectRoot, "labs");
+  const labCategories = ["theory", "exercise", "project"];
   for (const chapter of await readdir(labsRoot, { withFileTypes: true })) {
     if (!chapter.isDirectory() || !/^chapter-\d{2}$/.test(chapter.name)) continue;
     const chapterRoot = path.join(labsRoot, chapter.name);
-    for (const lab of await readdir(chapterRoot, { withFileTypes: true })) {
-      if (!lab.isDirectory() || !/^lab-\d{2}-(?:\d{2}|[TEP]-\d{2,})-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(lab.name)) continue;
-      labPages.push(path.join("labs", chapter.name, lab.name, "index.html"));
+    for (const category of labCategories) {
+      const categoryRoot = path.join(chapterRoot, category);
+      for (const lab of await readdir(categoryRoot, { withFileTypes: true })) {
+        if (!lab.isDirectory() || !/^[TEP]-\d{2}-\d{2,}-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(lab.name)) continue;
+        labPages.push(path.join("labs", chapter.name, category, lab.name, "index.html"));
+      }
     }
   }
   const curriculumPages = [path.join("learn", "index.html")];
@@ -82,22 +86,18 @@ const { lessonPages, labPages, curriculumPages } = await expectedCoursePages();
 const chapterOneLabPages = labPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("labs/chapter-01/"),
 );
-const chapterOneLegacyPages = chapterOneLabPages.filter((relativePath) => {
-  const order = path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1];
-  return order && Number(order) >= 1 && Number(order) <= 21;
-});
-if (chapterOneLegacyPages.length !== 21) {
-  throw new Error(
-    `Chapter 1 must preserve its 21 legacy Lab pages; found ${chapterOneLegacyPages.length}`,
-  );
-}
-const chapterOneOrders = chapterOneLegacyPages
-  .map((relativePath) => path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1])
-  .filter(Boolean)
-  .sort();
-const expectedChapterOneOrders = Array.from({ length: 21 }, (_, index) => String(index + 1).padStart(2, "0"));
-if (JSON.stringify(chapterOneOrders) !== JSON.stringify(expectedChapterOneOrders)) {
-  throw new Error(`Chapter 1 Lab numbering is not continuous: ${chapterOneOrders.join(", ")}`);
+const chapterOneCategoryCounts = Object.fromEntries(
+  ["theory", "exercise", "project"].map((category) => [
+    category,
+    chapterOneLabPages.filter((relativePath) => relativePath.replaceAll("\\", "/").includes(`/chapter-01/${category}/`)).length,
+  ]),
+);
+if (
+  chapterOneCategoryCounts.theory < 5 ||
+  chapterOneCategoryCounts.exercise < 15 ||
+  chapterOneCategoryCounts.project < 1
+) {
+  throw new Error(`Chapter 1 Lab category counts drifted: ${JSON.stringify(chapterOneCategoryCounts)}`);
 }
 const expectedPages = ["index.html", "labs/index.html", "404.html", ...curriculumPages, ...lessonPages, ...labPages];
 const missingPages = [];
@@ -108,13 +108,13 @@ if (missingPages.length) throw new Error(`Missing generated pages:\n${missingPag
 if (await exists(path.join(artifactRoot, "AGENTS.html"))) {
   throw new Error("Repository-only AGENTS.md leaked into the public course artifact");
 }
-for (const retiredRoute of [
-  ["labs", "chapter-01", "lab-01-01-sequence-list", "index.html"],
-  ["labs", "chapter-01", "lab-01-02-linked-list", "index.html"],
-  ["labs", "chapter-01", "lab-01-03-problem-template", "index.html"],
-]) {
-  if (await exists(path.join(artifactRoot, ...retiredRoute))) {
-    throw new Error(`Retired Chapter 1 Demo route still exists: ${retiredRoute.join("/")}`);
+const builtLabsRoot = path.join(artifactRoot, "labs");
+for (const chapter of await readdir(builtLabsRoot, { withFileTypes: true })) {
+  if (!chapter.isDirectory() || !/^chapter-\d{2}$/.test(chapter.name)) continue;
+  for (const entry of await readdir(path.join(builtLabsRoot, chapter.name), { withFileTypes: true })) {
+    if (entry.isDirectory() && /^lab-\d{2}-/.test(entry.name)) {
+      throw new Error(`Legacy Lab route must not be generated: labs/${chapter.name}/${entry.name}/`);
+    }
   }
 }
 
@@ -424,7 +424,14 @@ if (base !== "/") {
 }
 
 const stableIdLabHtml = await readFile(
-  path.join(artifactRoot, "labs", "chapter-01", "lab-01-09-singly-linked-list-reverse", "index.html"),
+  path.join(
+    artifactRoot,
+    "labs",
+    "chapter-01",
+    "exercise",
+    "E-01-04-singly-linked-list-reverse",
+    "index.html",
+  ),
   "utf8",
 );
 if (!stableIdLabHtml.includes("01E04")) {
@@ -434,7 +441,7 @@ if (!stableIdLabHtml.includes("01E04")) {
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "Lab 命令与接口使用指南", "第 0 章 绪论", "Lab 01-02：单链表选择题精练", "Lab 01-21：线性表双实现与工作负载评测器", "01E04"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "Lab 命令与接口使用指南", "第 0 章 绪论", "Lab 01-T-02：单链表选择题精练", "Lab 01-P-01：线性表双实现与工作负载评测器", "01E04"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

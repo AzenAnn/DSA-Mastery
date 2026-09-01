@@ -12,7 +12,7 @@
 内容源边界：
 
 - 教材：`content/chapter-*/*.md`，明确排除 `content/README.md`。
-- Lab：`labs/chapter-*/lab-*/README.md`。
+- Lab：`labs/chapter-*/<theory|exercise|project>/<T|E|P>-CC-SS-*/README.md`。
 - 新建 Lab，或由 Agent/作者整理既有 Lab README 时，必须从 `labId` 生成 `Lab CC-X-SS：题目名称`；不得使用 `order` 或旧目录序号重新编号。
 - 完整程序和测试放在对应 Lab 目录；正文只保留解释所需的关键片段。
 - 理论语义必须按[理论文档 Markdown 合同](../frontend/theory-markdown.md)选择；只做小范围人工迁移，不机械改写知识正文。

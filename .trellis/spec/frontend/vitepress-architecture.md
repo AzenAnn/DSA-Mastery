@@ -41,7 +41,8 @@ content/chapter-preface/05-macos-student-setup.md
                                 -> learn/chapter-preface/05-macos-student-setup/index.md
 curriculum/outline/chapter-preface.md
                                 -> learn/outline/chapter-preface/index.md
-labs/:chapter/:lab/README.md    -> labs/:chapter/:lab/index.md
+labs/:chapter/:category/:lab/README.md
+                                -> labs/:chapter/:category/:lab/index.md
 outDir                         -> dist/pages
 ```
 
@@ -57,7 +58,7 @@ outDir                         -> dist/pages
 - `base` 从 `GITHUB_PAGES_BASE_PATH` 规范化：空值为 `/`；非空值首尾各一个斜杠。
 - 源码 URL 不含 base；Vue 链接使用 `withBase`。相对 `.md` 内容链接先由 validator 检查，再由 config 的 Markdown transform 按 `sourceUrlMap` 改写成 route。
 - 首页 `index.md`、Labs `labs/index.md` 和 404 是站点页面；课程页仍由 rewrites 生成。
-- 课程总目录使用 `/learn/`，Part 与章节框架使用 `/learn/parts/:part/`、`/learn/outline/:chapter/`；一般情况下旧 `/learn/chapter-*/.../` 和 `/labs/chapter-*/.../` URL 必须继续可访问。2026-08-18 经维护者明确批准的第 1 章 Demo 删除与 `01-04～01-23 -> 01-01～01-20` 重编号是例外，不提供旧 Lab URL 重定向。
+- 课程总目录使用 `/learn/`，Part 与章节框架使用 `/learn/parts/:part/`、`/learn/outline/:chapter/`。旧教材 URL 的兼容策略由既有 route map 维护；Lab 自 2026-09-01 起只发布 `/labs/:chapter/:category/:lab/` 新地址，旧平铺地址明确失效，不生成重定向或兼容副本。
 - 静态产物只写 `dist/pages`，不提交 Git。
 - 顶栏 Labs 与 Labs 目录卡片保留 `target="_self"`，规避 VitePress 1.6.4 跨 Lab 客户端导航沿用旧 outline 的兼容问题。
 
@@ -68,7 +69,7 @@ outDir                         -> dist/pages
 | 一个消费者维护手写内容列表 | 架构检查失败；改用 ContentIndex |
 | client bundle 含 `node:fs`/`node:path` | build 或 bundle 审计失败 |
 | base 缺首尾斜杠或出现双前缀 | artifact/Playwright 失败 |
-| rewrite 后旧课程 URL 不存在 | 兼容性测试失败 |
+| 仍生成 `/labs/chapter-CC/lab-*` 旧地址，或新三级 Lab 地址缺失 | 产物检查失败 |
 | 前言通过负数/大数模拟、遗漏六篇指南中的任一篇、复制长指南正文或改变数字章节 | 内容/架构检查失败 |
 | repository-only Markdown 被构建 | 路由清单测试失败 |
 | 相对 `.md` 没有改写到课程 route | discovery/artifact check 失败 |
@@ -84,7 +85,7 @@ outDir                         -> dist/pages
 - Good：前言定义使用 `/learn/outline/chapter-preface/`，并在 `lessonSources` 中显式列出 `00`～`05` 六篇站内指南。
 - Base：本地开发没有环境变量，base 为 `/`。
 - Bad：组件调用 `import.meta.glob` 再建一份索引，或把 `/DSA-Mastery/` 拼进每个 URL。
-- Good：Ch.1 声明 `autoLabChapter: 1`，新增 `labs/chapter-01/lab-*` 后自动进入侧栏。
+- Good：Ch.1 声明 `autoLabChapter: 1`，新增 `labs/chapter-01/exercise/E-01-SS-*` 后自动进入侧栏。
 - Base：Ch.5 声明 `autoLabChapter: 5` 且没有任何 Lab 文件，侧栏仍显示三个空分类，Labs 首页与统计均不增加条目。
 - Bad：Ch.1 的 `labSources` 只列出 01-01～01-03，导致实际存在的 01-04～01-08 消失。
 - Bad：为了让空分类可见而创建空 README、虚假题目或只判断 `chapter.labs.length`。
@@ -98,7 +99,7 @@ outDir                         -> dist/pages
 - `pnpm run build && pnpm run check:site` 核对 ContentIndex 返回的全部教材/Lab、首页、Labs 索引、404、链接与恰好一个 base。
 - 前言产物检查使用 POSIX 化后的相对路径筛选；断言恰好六篇文章、章节 outline、站内搜索和侧栏入口全部存在。Windows 的 `path.join()` 会产生反斜杠，不能直接与 `learn/chapter-preface/` 比较。
 - 在 `/DSA-Mastery/` 下运行 `pnpm run test:pages`，真实点击五组场景并监控网络/控制台错误。
-- 编排变更必须断言每个 Part 的子章节、框架页面、至少一个映射后的旧文章 URL 和旧 Lab URL；同时用 `git diff -- content labs` 证明受保护内容未改动。
+- 编排变更必须断言每个 Part 的子章节、框架页面、至少一个映射后的旧文章 URL 和代表性新三级 Lab URL；同时断言旧平铺 Lab URL 不存在。
 
 ## 7. Wrong vs Correct
 

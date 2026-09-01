@@ -5,19 +5,29 @@ import { fileURLToPath } from "node:url";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const lessonDirectory = path.join(projectRoot, "content", "chapter-99-discovery-fixture");
-const labDirectory = path.join(projectRoot, "labs", "chapter-99", "lab-99-E-01-discovery-fixture");
-const legacyStableTitleLabDirectory = path.join(
+const labDirectory = path.join(
   projectRoot,
   "labs",
   "chapter-99",
-  "lab-99-02-legacy-stable-title-fixture",
+  "exercise",
+  "E-99-01-discovery-fixture",
+);
+const stableTitleLabDirectory = path.join(
+  projectRoot,
+  "labs",
+  "chapter-99",
+  "theory",
+  "T-99-01-stable-title-fixture",
 );
 const sidebarLabDirectory = path.join(
   projectRoot,
   "labs",
   "chapter-01",
-  "lab-01-E-99-sidebar-discovery-fixture",
+  "exercise",
+  "E-01-99-sidebar-discovery-fixture",
 );
+const projectCategoryDirectory = path.join(projectRoot, "labs", "chapter-99", "project");
+const projectCategoryMarker = path.join(projectCategoryDirectory, ".gitkeep");
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const pagesEnvironment = {
   ...process.env,
@@ -129,7 +139,7 @@ const grouped: boolean = true
 
 - [ ] 自动发现任务列表
 
-[进入自动发现 Lab](../../labs/chapter-99/lab-99-E-01-discovery-fixture/README.md)
+[进入自动发现 Lab](../../labs/chapter-99/exercise/E-99-01-discovery-fixture/README.md)
 `;
 
 const lab = `---
@@ -155,9 +165,9 @@ duration: "1 分钟"
 - [ ] 页面、导航和搜索均包含本 Lab。
 `;
 
-const legacyStableTitleLab = `---
-title: "Lab 99-T-01：旧目录稳定标题验证"
-description: "验证旧目录无需改 URL，也能把 README 标题渐进迁移到稳定编号。"
+const stableTitleLab = `---
+title: "Lab 99-T-01：稳定标题验证"
+description: "验证目录、labId、frontmatter 标题和 H1 使用同一稳定编号。"
 order: 2
 chapter: 99
 labId: "99T01"
@@ -171,11 +181,11 @@ difficulty: "测试"
 duration: "1 分钟"
 ---
 
-# Lab 99-T-01：旧目录稳定标题验证
+# Lab 99-T-01：稳定标题验证
 
 ## 验收标准
 
-- [ ] 旧目录与稳定标题可以在迁移期共存。
+- [ ] 目录、题号和标题保持一致。
 `;
 
 const sidebarLab = `---
@@ -243,16 +253,18 @@ let primaryError;
 try {
   await mkdir(lessonDirectory, { recursive: true });
   await mkdir(labDirectory, { recursive: true });
-  await mkdir(legacyStableTitleLabDirectory, { recursive: true });
+  await mkdir(stableTitleLabDirectory, { recursive: true });
+  await mkdir(projectCategoryDirectory, { recursive: true });
   await mkdir(sidebarLabDirectory, { recursive: true });
   await writeFile(path.join(lessonDirectory, "00-autodiscovery.md"), lesson, "utf8");
   await writeFile(path.join(labDirectory, "README.md"), lab, "utf8");
   await writeFile(
-    path.join(legacyStableTitleLabDirectory, "README.md"),
-    legacyStableTitleLab,
+    path.join(stableTitleLabDirectory, "README.md"),
+    stableTitleLab,
     "utf8",
   );
   await writeFile(path.join(sidebarLabDirectory, "README.md"), sidebarLab, "utf8");
+  await writeFile(projectCategoryMarker, "", "utf8");
 
   runNpm(["run", "validate:content"]);
   runNpm(["run", "build:vitepress"]);
@@ -263,17 +275,27 @@ try {
     "utf8",
   );
   const labHtml = await readFile(
-    path.join(projectRoot, "dist", "pages", "labs", "chapter-99", "lab-99-E-01-discovery-fixture", "index.html"),
-    "utf8",
-  );
-  const legacyStableTitleLabHtml = await readFile(
     path.join(
       projectRoot,
       "dist",
       "pages",
       "labs",
       "chapter-99",
-      "lab-99-02-legacy-stable-title-fixture",
+      "exercise",
+      "E-99-01-discovery-fixture",
+      "index.html",
+    ),
+    "utf8",
+  );
+  const stableTitleLabHtml = await readFile(
+    path.join(
+      projectRoot,
+      "dist",
+      "pages",
+      "labs",
+      "chapter-99",
+      "theory",
+      "T-99-01-stable-title-fixture",
       "index.html",
     ),
     "utf8",
@@ -285,7 +307,8 @@ try {
       "pages",
       "labs",
       "chapter-01",
-      "lab-01-E-99-sidebar-discovery-fixture",
+      "exercise",
+      "E-01-99-sidebar-discovery-fixture",
       "index.html",
     ),
     "utf8",
@@ -363,15 +386,15 @@ try {
   if (lessonHtml.includes("::: definition") || lessonHtml.includes("::: theorem")) {
     throw new Error("Unparsed theory container marker leaked into the artifact");
   }
-  if (!lessonHtml.includes("/DSA-Mastery/labs/chapter-99/lab-99-E-01-discovery-fixture/")) {
+  if (!lessonHtml.includes("/DSA-Mastery/labs/chapter-99/exercise/E-99-01-discovery-fixture/")) {
     throw new Error("Relative Markdown link was not rewritten to the Pages-aware Lab route");
   }
   if (!labHtml.includes("Lab 99-E-01：自动发现验证") || !labHtml.includes("99E01")) throw new Error("Temporary Lab page or stable ID was not generated");
   if (
-    !legacyStableTitleLabHtml.includes("Lab 99-T-01：旧目录稳定标题验证") ||
-    !legacyStableTitleLabHtml.includes("99T01")
+    !stableTitleLabHtml.includes("Lab 99-T-01：稳定标题验证") ||
+    !stableTitleLabHtml.includes("99T01")
   ) {
-    throw new Error("Legacy Lab directory did not accept a migrated stable document title");
+    throw new Error("Stable Lab directory and document title did not stay aligned");
   }
   const searchFiles = (await filesRecursively(path.join(projectRoot, "dist", "pages")))
     .filter((file) => file.endsWith(".js"));
@@ -391,7 +414,7 @@ try {
     !sidebarHtml.includes("01E99 · 章节侧栏自动收录验证") ||
     sidebarHtml.includes("01E99 · Lab 01-E-99") ||
     !sidebarHtml.includes(
-      'href="/DSA-Mastery/labs/chapter-01/lab-01-E-99-sidebar-discovery-fixture/"',
+      'href="/DSA-Mastery/labs/chapter-01/exercise/E-01-99-sidebar-discovery-fixture/"',
     )
   ) {
     throw new Error("Temporary chapter-01 Lab did not enter Ch.1 Exercise sidebar automatically");
@@ -447,21 +470,29 @@ try {
   primaryError = error;
 } finally {
   assertFixtureTarget(lessonDirectory, path.join(projectRoot, "content"), "chapter-99-discovery-fixture");
-  assertFixtureTarget(labDirectory, path.join(projectRoot, "labs", "chapter-99"), "lab-99-E-01-discovery-fixture");
   assertFixtureTarget(
-    legacyStableTitleLabDirectory,
-    path.join(projectRoot, "labs", "chapter-99"),
-    "lab-99-02-legacy-stable-title-fixture",
+    labDirectory,
+    path.join(projectRoot, "labs", "chapter-99", "exercise"),
+    "E-99-01-discovery-fixture",
+  );
+  assertFixtureTarget(
+    stableTitleLabDirectory,
+    path.join(projectRoot, "labs", "chapter-99", "theory"),
+    "T-99-01-stable-title-fixture",
   );
   assertFixtureTarget(
     sidebarLabDirectory,
-    path.join(projectRoot, "labs", "chapter-01"),
-    "lab-01-E-99-sidebar-discovery-fixture",
+    path.join(projectRoot, "labs", "chapter-01", "exercise"),
+    "E-01-99-sidebar-discovery-fixture",
   );
   await rm(lessonDirectory, { recursive: true, force: true });
   await rm(labDirectory, { recursive: true, force: true });
-  await rm(legacyStableTitleLabDirectory, { recursive: true, force: true });
+  await rm(stableTitleLabDirectory, { recursive: true, force: true });
   await rm(sidebarLabDirectory, { recursive: true, force: true });
+  await rm(projectCategoryMarker, { force: true });
+  await rmdir(path.join(projectRoot, "labs", "chapter-99", "theory")).catch(() => {});
+  await rmdir(path.join(projectRoot, "labs", "chapter-99", "exercise")).catch(() => {});
+  await rmdir(projectCategoryDirectory).catch(() => {});
   await rmdir(path.join(projectRoot, "labs", "chapter-99")).catch(() => {});
   try {
     runNpm(["run", "build:vitepress"]);

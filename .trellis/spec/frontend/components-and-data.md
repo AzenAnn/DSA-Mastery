@@ -51,7 +51,7 @@ type ContentEntry = {
 - 保留 VitePress 默认主题的顶栏、路由、local search、appearance、sidebar/mobile drawer、outline、prev/next、edit link、代码复制、语法高亮和 404，并用 `custom.css` 统一改色。
 - 只有课程元信息、教材/Lab 混合目录、品牌首页或默认主题无法表达的交互才写自定义组件。
 - 所有章节卡、Lab 卡、统计、sidebar、搜索和 prev/next 都从 ContentIndex 派生；不得在组件中手写七篇教材或四个 Lab。
-- Lab 分类同样由 ContentIndex 从 `lab.json.type` 或 README-only 的显式 `labCategory` 派生。稳定 ID 从 README `labId` 读取，并在 Lab 目录、详情元信息和侧栏中一致展示；组件不得从旧目录名或标题重新计算。README 的规范源标题为 `Lab CC-X-SS：题目名称`，侧栏条目统一显示为 `labId · 题目名称`。展示层在过渡期同时移除旧 `Lab CC-NN：` 与稳定 `Lab CC-X-SS：` 前缀，不重复展示两套编号，也不改动源标题、目录或 URL；旧前缀兼容只服务于尚未整理的存量文档，不能作为新内容模板。声明 `autoLabChapter` 的章节侧栏按分类字段分组，但不得硬编码任何章节题目数组；零 Lab 时仍由同一数据流生成三类空状态。
+- Lab 分类由三级目录和 ContentIndex 中的 `lab.json.type`（或 README-only 的显式 `labCategory`）共同约束。稳定 ID 从 README `labId` 读取，并在目录、详情元信息和侧栏中一致展示；组件不得从标题重新计算。README 的规范源标题为 `Lab CC-X-SS：题目名称`，侧栏条目统一显示为 `labId · 题目名称`，展示层只移除这一种稳定前缀。声明 `autoLabChapter` 的章节侧栏按分类字段分组，但不得硬编码任何章节题目数组；零 Lab 时仍由同一数据流生成三类空状态。
 - `chapter` 是排序与映射用的内部标识；所有用户可见章节名称读取 `chapterLabel` 或 curriculum `label`。特殊 `preface` 的标签必须是“前言”，数字章标签保持“第 N 章”或 curriculum 的 `Ch.N`。
 - 浏览器 API 只在挂载后访问；SSR 阶段不能直接读取 `window`、`document`、`localStorage`。
 - 普通内部导航使用 `withBase` 或 VitePress 生成链接。VitePress 1.6.4 的 Lab 跨页面 outline 兼容路径是例外：顶栏 Labs 与 Labs 目录卡片使用 `target="_self"` 触发同标签整页导航。
@@ -88,7 +88,7 @@ type ContentEntry = {
 - 最终产物 Playwright 覆盖 draft 徽章、中文搜索、教材/Lab 跳转、默认 prev/next 与移动侧栏。
 - 键盘覆盖搜索打开/关闭、焦点、主题切换、移动目录和可见焦点。
 - 生产构建验证 SSR，无 hydration 或控制台错误。
-- Quiz 回归覆盖四选一、禁用未选择提交、正确/错误状态、题解、重试、进度导航和富文本无溢出；至少在 390px 视口断言 `documentElement.scrollWidth <= clientWidth`。原 Lab 00-03 继续通过，证明通用增强向后兼容。
+- Quiz 回归覆盖四选一、禁用未选择提交、正确/错误状态、题解、重试、进度导航和富文本无溢出；至少在 390px 视口断言 `documentElement.scrollWidth <= clientWidth`。Golden Quiz `00T02` 必须继续通过，证明通用增强没有破坏既有题库。
 
 ## 7. Wrong vs Correct
 

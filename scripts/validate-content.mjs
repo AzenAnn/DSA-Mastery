@@ -2,10 +2,10 @@ import { access, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { loadLab, validateQuizReadme } from "../tools/lab/core.mjs";
 import {
+  LAB_CATEGORIES,
   LAB_DIRECTORY_PATTERN,
-  LEGACY_LAB_DIRECTORY_PATTERN,
-  STABLE_LAB_DIRECTORY_PATTERN,
   formatLabDocumentTitlePrefix,
+  parseLabDirectoryName,
   parseLabId,
   tagForCategory,
 } from "../tools/lab/identity.mjs";
@@ -33,6 +33,47 @@ async function findFiles(root, predicate) {
     else if (predicate(fullPath)) results.push(fullPath);
   }
   return results;
+}
+
+async function validateLabDirectoryLayout(root) {
+  for (const chapter of await readdir(root, { withFileTypes: true })) {
+    if (!chapter.isDirectory()) continue;
+    if (!/^chapter-\d{2}$/.test(chapter.name)) {
+      throw new Error(`labs/${chapter.name}: 章节目录应为 chapter-CC`);
+    }
+    const chapterRoot = path.join(root, chapter.name);
+    const chapterEntries = await readdir(chapterRoot, { withFileTypes: true });
+    for (const entry of chapterEntries) {
+      if (entry.isDirectory() && !LAB_CATEGORIES.includes(entry.name)) {
+        throw new Error(`labs/${chapter.name}/${entry.name}: Lab 必须放在 theory、exercise 或 project 中`);
+      }
+    }
+    for (const category of LAB_CATEGORIES) {
+      const categoryRoot = path.join(chapterRoot, category);
+      let entries;
+      try {
+        entries = await readdir(categoryRoot, { withFileTypes: true });
+      } catch (error) {
+        if (error?.code === "ENOENT") {
+          throw new Error(`labs/${chapter.name}/${category}: 每章必须保留三个分类目录`);
+        }
+        throw error;
+      }
+      const labDirectories = entries.filter((entry) => entry.isDirectory());
+      for (const entry of labDirectories) {
+        if (!LAB_DIRECTORY_PATTERN.test(entry.name)) {
+          throw new Error(`labs/${chapter.name}/${category}/${entry.name}: Lab 目录应为 X-CC-SS-kebab-slug`);
+        }
+      }
+      const marker = entries.some((entry) => entry.isFile() && entry.name === ".gitkeep");
+      if (labDirectories.length === 0 && !marker) {
+        throw new Error(`labs/${chapter.name}/${category}: 空分类必须使用 .gitkeep 保留目录`);
+      }
+      if (labDirectories.length > 0 && marker) {
+        throw new Error(`labs/${chapter.name}/${category}: 已有 Lab 时必须移除 .gitkeep`);
+      }
+    }
+  }
 }
 
 function parseFrontmatter(source, relativePath) {
@@ -107,38 +148,29 @@ function assertFileContract(file, kind, parsed, seenOrder, seenLabIds, labCatego
     seenLabIds.set(identity.id, relativePath);
 
     const directoryName = path.basename(path.dirname(file));
-    const chapterDirectory = path.basename(path.dirname(path.dirname(file)));
+    const categoryDirectory = path.basename(path.dirname(path.dirname(file)));
+    const chapterDirectory = path.basename(path.dirname(path.dirname(path.dirname(file))));
     const chapterMatch = chapterDirectory.match(/^chapter-(\d{2})$/);
-    const legacyMatch = directoryName.match(LEGACY_LAB_DIRECTORY_PATTERN);
-    const stableMatch = directoryName.match(STABLE_LAB_DIRECTORY_PATTERN);
     if (!chapterMatch || Number(chapterMatch[1]) !== Number(parsed.data.chapter)) {
       throw new Error(`${relativePath}: chapter 目录必须与 frontmatter chapter 一致`);
     }
+    if (!LAB_CATEGORIES.includes(categoryDirectory) || categoryDirectory !== labCategory) {
+      throw new Error(`${relativePath}: 分类目录必须与 ${labCategory ?? "未分类"} 类型一致`);
+    }
+    let directoryIdentity;
+    try {
+      directoryIdentity = parseLabDirectoryName(directoryName);
+    } catch (error) {
+      throw new Error(`${relativePath}: ${error.message}`);
+    }
+    if (directoryIdentity.id !== identity.id) {
+      throw new Error(`${relativePath}: 目录编号必须与 labId ${identity.id} 一致`);
+    }
     const stableTitlePrefix = formatLabDocumentTitlePrefix(identity.id);
-    let allowedTitlePrefixes;
-    if (legacyMatch) {
-      if (
-        Number(legacyMatch[1]) !== Number(parsed.data.chapter) ||
-        Number(legacyMatch[2]) !== Number(parsed.data.order)
-      ) {
-        throw new Error(`${relativePath}: 旧目录编号必须与 frontmatter chapter/order 一致`);
-      }
-      const legacyTitlePrefix = `Lab ${legacyMatch[1]}-${legacyMatch[2]}：`;
-      allowedTitlePrefixes = [stableTitlePrefix, legacyTitlePrefix];
-    } else if (stableMatch) {
-      const pathId = `${stableMatch[1]}${stableMatch[2]}${stableMatch[3]}`;
-      if (pathId !== identity.id || Number(stableMatch[1]) !== Number(parsed.data.chapter)) {
-        throw new Error(`${relativePath}: 新目录编号必须与 labId/chapter 一致`);
-      }
-      allowedTitlePrefixes = [stableTitlePrefix];
-    } else {
-      throw new Error(`${relativePath}: Lab 目录名不符合旧路径或稳定 ID 路径约定`);
+    if (!parsed.data.title.startsWith(stableTitlePrefix)) {
+      throw new Error(`${relativePath}: title 必须以 ${stableTitlePrefix} 开头`);
     }
-    const matchedTitlePrefix = allowedTitlePrefixes.find((prefix) => parsed.data.title.startsWith(prefix));
-    if (!matchedTitlePrefix) {
-      throw new Error(`${relativePath}: title 必须以 ${allowedTitlePrefixes.join(" 或 ")} 开头`);
-    }
-    if (!parsed.data.title.slice(matchedTitlePrefix.length).trim()) {
+    if (!parsed.data.title.slice(stableTitlePrefix.length).trim()) {
       throw new Error(`${relativePath}: title 的编号后必须包含题目名称`);
     }
     if (!parsed.body.includes(`# ${parsed.data.title}`)) {
@@ -274,6 +306,7 @@ async function validateQuizLab(file, readme) {
 
 const lessonRoot = path.join(projectRoot, "content");
 const labRoot = path.join(projectRoot, "labs");
+await validateLabDirectoryLayout(labRoot);
 const lessonFiles = (await findFiles(lessonRoot, (file) => file.endsWith(".md")))
   .filter((file) => path.basename(file).toLowerCase() !== "readme.md");
 const labFiles = (await findFiles(labRoot, (file) => path.basename(file).toLowerCase() === "readme.md"))
