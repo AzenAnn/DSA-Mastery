@@ -1,0 +1,32 @@
+{
+  "id": "chapter-14-dp-exercise-labs",
+  "name": "chapter-14-dp-exercise-labs",
+  "title": "第 14 章动态规划代码题 Labs",
+  "description": "在 Ch.14 Exercise 分类新增 30 个动态规划 C++17 Program Lab，每题至少 20 个独立测试，并交付本地网站预览。",
+  "status": "in_progress",
+  "dev_type": "content",
+  "scope": "labs/chapter-14",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-09-01",
+  "completedAt": null,
+  "branch": "codex/chapter-14-dp-labs",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "content/chapter-14-dynamic-programming/",
+    "labs/chapter-14/",
+    "docs/LAB_AUTHORING_GUIDE.md",
+    ".trellis/spec/content/labs.md",
+    ".trellis/spec/content/lab-tooling.md"
+  ],
+  "notes": "",
+  "meta": {}
+}
