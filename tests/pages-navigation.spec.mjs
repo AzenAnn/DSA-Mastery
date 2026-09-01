@@ -1437,7 +1437,7 @@ test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty 
   expect(failures).toEqual([]);
 });
 
-test("chapter 14 exposes five DP lessons and three empty Lab categories", async ({ page }) => {
+test("chapter 14 exposes five DP lessons, thirty Exercise Labs, and empty Theory and Project slots", async ({ page }) => {
   const failures = monitorPage(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`${baseUrl}/learn/outline/chapter-14-dynamic-programming/`);
@@ -1464,26 +1464,58 @@ test("chapter 14 exposes five DP lessons and three empty Lab categories", async 
   await expect(labGroup).toHaveCount(1);
   await expect(labGroup).not.toHaveClass(/collapsed/);
 
-  const categories = [
-    ["theory", "理论 Theory", "暂无理论型 Lab"],
-    ["exercise", "实验 Exercise", "暂无实验型 Lab"],
-    ["project", "工程 Project", "暂无工程型 Lab"],
-  ];
-  for (const [category, label, empty] of categories) {
-    const group = labGroup.locator(
-      `.VPSidebarItem:has(> .item > .text > .course-lab-category--${category})`,
-    );
-    await expect(group).toHaveCount(1);
-    await expect(group.locator(`.course-lab-category--${category}`)).toContainText(label);
-    if (category !== "project") {
-      await group.locator(":scope > .item > .caret").click();
-      await expect(group).not.toHaveClass(/collapsed/);
-    }
-    await expect(group.locator(":scope > .items a")).toHaveCount(0);
-    await expect(group.locator(".course-lab-category__empty")).toHaveText(empty);
-  }
+  const theoryGroup = labGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
+  );
+  await expect(theoryGroup).toHaveCount(1);
+  await expect(theoryGroup.locator(".course-lab-category--theory")).toContainText(
+    "理论 Theory",
+  );
+  await theoryGroup.locator(":scope > .item > .caret").click();
+  await expect(theoryGroup).not.toHaveClass(/collapsed/);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(0);
+  await expect(theoryGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无理论型 Lab",
+  );
 
-  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(3);
+  const exerciseGroup = labGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)",
+  );
+  await expect(exerciseGroup).toHaveCount(1);
+  await expect(exerciseGroup.locator(".course-lab-category--exercise")).toContainText(
+    "实验 Exercise",
+  );
+  await exerciseGroup.locator(":scope > .item > .caret").click();
+  await expect(exerciseGroup).not.toHaveClass(/collapsed/);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(30);
+  await expect(
+    exerciseGroup.getByRole("link", { name: "14E01 · 爬楼梯", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    exerciseGroup.getByRole("link", { name: "14E30 · Buying Hay", exact: true }),
+  ).toHaveCount(1);
+  await expect(exerciseGroup.locator(":scope > .items a").first()).toHaveText(
+    "14E01 · 爬楼梯",
+  );
+  await expect(exerciseGroup.locator(":scope > .items a").last()).toHaveText(
+    "14E30 · Buying Hay",
+  );
+  await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
+
+  const projectGroup = labGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--project)",
+  );
+  await expect(projectGroup).toHaveCount(1);
+  await expect(projectGroup.locator(".course-lab-category--project")).toContainText(
+    "工程 Project",
+  );
+  await expect(projectGroup).not.toHaveClass(/collapsed/);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(0);
+  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无工程型 Lab",
+  );
+
+  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(2);
   const layout = await page.evaluate(() => ({
     clientWidth: globalThis.document.documentElement.clientWidth,
     scrollWidth: globalThis.document.documentElement.scrollWidth,

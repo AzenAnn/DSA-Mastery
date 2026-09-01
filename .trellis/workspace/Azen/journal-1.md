@@ -493,3 +493,24 @@ Investigated GitHub Actions logs, updated stale stable-ID artifact assertions, s
 ### Status
 
 [OK] **Completed**
+
+
+## Session 21: Chapter 14 dynamic programming exercise labs
+
+**Date**: 2026-09-01
+**Task**: Chapter 14 dynamic programming exercise labs
+**Branch**: `codex/chapter-14-dp-labs`
+
+### Summary
+
+Added 30 C++17 dynamic programming Program Labs (14E01-14E30), each with 20 public cases, independent generator/oracles, chapter overview synchronization, and complete repository/site verification.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `1c3aadb` | (see git log) |
+
+### Status
+
+[OK] **Completed**

@@ -9,7 +9,7 @@ import type { ProgramLab } from "./labIndex";
 /**
  * 需要从题面中移除的小节标题。
  *
- * 67/71 个 program lab 的 README 里有 `## 题解`，内含完整 C++ 参考代码（用原生
+ * 部分 program lab 的 README 里有 `## 题解`，内含完整 C++ 参考代码（用原生
  * <details> 折叠）。做题面板不应该带着答案，因此整段切掉；想看题解回网站看。
  */
 const HIDDEN_SECTIONS = ["题解", "参考答案", "参考实现"];
