@@ -4,6 +4,7 @@ import { judgeProgram, runInteractive } from "./judge.mjs";
 import { refreshExpected } from "./operations.mjs";
 import { runProcess } from "./process.mjs";
 import { cleanTerminalText, createTheme, quoteCommandArg } from "./terminal.mjs";
+import { createMsvcEnvironment } from "./toolchain.mjs";
 
 function programView(lab, task) {
   return {
@@ -27,22 +28,28 @@ function selectedTasks(lab, taskId) {
   return selected;
 }
 
-export async function buildProject(lab, target = "student") {
+export async function buildProject(lab, target = "student", options = {}) {
   if (lab.manifest.type !== "project") throw new LabError("TYPE_UNSUPPORTED", "CMake build 仅支持 project Lab");
   if (!new Set(["student", "solution"]).has(target)) throw new LabError("TARGET_INVALID", "Project target 必须是 student 或 solution");
+  const environment = options.environment ?? (process.platform === "win32"
+    ? await createMsvcEnvironment().catch((error) => {
+      throw new LabError("MSVC_ENV_NOT_FOUND", error.message, error.details);
+    })
+    : undefined);
+  const env = environment?.env;
   const configure = await runProcess("cmake", [
     "--preset",
     target,
     `-DCMAKE_CXX_STANDARD=${cmakeStandardNumber(lab.manifest.toolchain.standard)}`,
     "-DCMAKE_CXX_STANDARD_REQUIRED=ON",
     "-DCMAKE_CXX_EXTENSIONS=OFF",
-  ], { cwd: lab.labRoot, timeMs: 60_000, outputKb: 4096 });
+  ], { cwd: lab.labRoot, env, timeMs: 60_000, outputKb: 4096 });
   if (configure.spawnError) throw new LabError("CMAKE_NOT_FOUND", "无法启动 CMake；Project Lab 需要 CMake >= 3.25");
   if (configure.code !== 0 || configure.timedOut || configure.outputExceeded) {
-    return { ok: false, phase: "configure", target, configure };
+    return { ok: false, phase: "configure", target, configure, environment };
   }
-  const build = await runProcess("cmake", ["--build", "--preset", target, "--config", "Release"], { cwd: lab.labRoot, timeMs: 120_000, outputKb: 8192 });
-  return { ok: build.code === 0 && !build.timedOut && !build.outputExceeded, phase: "build", target, configure, build };
+  const build = await runProcess("cmake", ["--build", "--preset", target, "--config", "Release"], { cwd: lab.labRoot, env, timeMs: 120_000, outputKb: 8192 });
+  return { ok: build.code === 0 && !build.timedOut && !build.outputExceeded, phase: "build", target, configure, build, environment };
 }
 
 export function cmakeStandardNumber(standard) {
@@ -71,6 +78,7 @@ async function scoreCtest(lab, task, target, build) {
     const expression = `^${test.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`;
     const result = await runProcess("ctest", ["--test-dir", binaryDir, "-C", "Release", "-R", expression, "--no-tests=error", "--output-on-failure"], {
       cwd: lab.labRoot,
+      env: build.environment?.env,
       timeMs: 60_000,
       outputKb: 4096,
     });

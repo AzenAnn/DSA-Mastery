@@ -4,7 +4,7 @@ description: "指导 Windows 学生安装 Git、Node.js、pnpm、MSVC、CMake �
 order: 2
 chapter: "preface"
 chapterTitle: "课程作者指南"
-updated: "2026-08-17"
+updated: "2026-09-02"
 contributors: ["xy3"]
 status: "draft"
 ---

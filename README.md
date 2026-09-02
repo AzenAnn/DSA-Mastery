@@ -90,7 +90,12 @@ Lab 不是教材末尾的附属材料，而是用于检查理解、练习实现�
 git clone https://github.com/AzenAnn/DSA-Mastery.git
 ```
 
-需要在 Windows 上配置 Git、Node.js、pnpm、C++ 编译器或 VS Code 时，请按照站内的 [Windows 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/02-windows-student-setup/)完成准备。
+如果需要本地运行 C++ Labs，推荐使用平台自举脚本：它会显示安装进度，支持 `basic`（Program）和 `full`（Program + CMake/Project）两种方案，并在重跑时复用已有工具和仓库。
+
+- macOS：[macOS 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/05-macos-student-setup/)
+- Windows：[Windows 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/02-windows-student-setup/)
+
+脚本也可以只做检查：`--check-only` 不安装工具、不 clone/pull 仓库、不安装依赖；学校设备、公司代理或包管理器不可用时，教程仍保留逐项手工安装路径。
 
 ## 参与贡献
 

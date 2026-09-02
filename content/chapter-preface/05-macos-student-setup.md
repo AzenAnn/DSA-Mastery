@@ -4,7 +4,7 @@ description: "指导 macOS 学生安装 Git、Apple Clang、Node.js、pnpm 和 V
 order: 5
 chapter: "preface"
 chapterTitle: "课程作者指南"
-updated: "2026-08-26"
+updated: "2026-09-02"
 contributors: ["Zhangyf0325"]
 status: "draft"
 ---
