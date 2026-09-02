@@ -2,14 +2,14 @@
  * 统计聚合。全是纯函数,不 import vscode —— 这样能直接用 node:test 跑单测。
  *
  * countPassed 和 navFor 都因为宿主文件 import 了 vscode 而测不了,heatmap 的
- * 日期分桶和色阶分档是最容易出 off-by-one 的地方,必须能测。
+ * 日期分桶和色阶分档是最容易出 off-by-one 的地方,必须能测；章节统计也覆盖 Project。
  */
 
 export interface ActivityEvent {
   at: string;
   kind: "submit" | "pass";
   labName: string;
-  labType: "program" | "quiz";
+  labType: "program" | "quiz" | "project";
 }
 
 export interface Counters {
@@ -211,11 +211,11 @@ export function mockEvents(days: number, endDate: Date): ActivityEvent[] {
 
 /**
  * 章节分布。按 lab 的 type 去对应的进度表查 —— 和 countPassed 同一个道理,
- * 代码题和选择题的进度存在两张表里。
+ * 三种题型的进度存在不同的状态路径里。
  */
 export function buildChapterBars(
-  chapters: readonly { chapter: number; chapterTitle: string; labs: readonly { id?: string; name: string; type: "program" | "quiz" }[] }[],
-  isPassed: (name: string, type: "program" | "quiz") => boolean,
+  chapters: readonly { chapter: number; chapterTitle: string; labs: readonly { id?: string; name: string; type: "program" | "quiz" | "project" }[] }[],
+  isPassed: (name: string, type: "program" | "quiz" | "project") => boolean,
 ): ChapterBar[] {
   return chapters.map((chapter) => ({
     chapter: chapter.chapter,

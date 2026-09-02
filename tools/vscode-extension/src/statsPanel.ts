@@ -1,6 +1,7 @@
 import path from "node:path";
 import * as vscode from "vscode";
 import type { Chapter } from "./labIndex";
+import { projectProgressPassed } from "./projectProgress";
 import type { ProgressTracker } from "./progress";
 import {
   buildChapterBars,
@@ -120,7 +121,11 @@ export class StatsPanel {
 
     const trend = buildTrend(events);
     const bars = buildChapterBars(chapters, (id, type) =>
-      type === "quiz" ? !!progress.getQuiz(id)?.passed : !!progress.get(id)?.passed,
+      type === "quiz"
+        ? !!progress.getQuiz(id)?.passed
+        : type === "project"
+          ? projectProgressPassed(progress.getProject(id) ?? { automatedFull: false, manualPending: 0, internalError: false })
+          : !!progress.get(id)?.passed,
     );
 
     const cspNonce = nonce();

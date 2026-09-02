@@ -1,14 +1,20 @@
 import { copyFile, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import * as vscode from "vscode";
-import type { CaseResult, ScoreResult, Verdict } from "./cli";
-import { studentSourcePath, type ProgramLab } from "./labIndex";
+import type { CaseResult, ProjectScoreResult, ScoreResult, Verdict } from "./cli";
+import { studentSourcePath, type LabEntry, type ProjectLab, type ProgramLab } from "./labIndex";
 import type { QuizQuestion } from "./quiz";
 import { backfillEvents } from "./stats";
 import { remapEventKeys, remapRecordKeys } from "./progressKeys";
 import { mergeLabProgress, mergeQuizProgress } from "./progressMerge";
+import {
+  projectProgressPassed,
+  summarizeProjectSubmission,
+  type ProjectProgress,
+} from "./projectProgress";
 
 const STATE_KEY = "dsaMastery.progress.v1";
+const PROJECT_STATE_KEY = "dsaMastery.projectProgress.v1";
 const SCHEMA_VERSION = 3;
 const EVENT_SCHEMA_VERSION = 2;
 
@@ -32,7 +38,7 @@ export interface ActivityEvent {
   at: string;
   kind: "submit" | "pass";
   labName: string;
-  labType: "program" | "quiz";
+  labType: "program" | "quiz" | "project";
 }
 
 export interface SubmissionCase {
@@ -94,8 +100,17 @@ interface ProgressStore {
   events: ActivityEvent[];
 }
 
+interface ProjectStore {
+  schemaVersion: 1;
+  projects: Record<string, ProjectProgress>;
+}
+
 function emptyStore(): ProgressStore {
   return { schemaVersion: SCHEMA_VERSION, labs: {}, quizzes: {}, events: [] };
+}
+
+function emptyProjectStore(): ProjectStore {
+  return { schemaVersion: 1, projects: {} };
 }
 
 /**
@@ -131,14 +146,16 @@ function snapshotId(when: Date): string {
  * 做题进度。
  *
  * 轻量索引存 globalState，源码快照存 globalStorageUri 下的文件 —— globalState 在
- * VSCode 启动时会整份读入内存，不适合堆放源码。两者都位于用户数据目录，不进仓库，
+ * VSCode 启动时会整份读入内存，不适合堆放源码。这些状态都位于用户数据目录，不进仓库，
  * 也不会被 lab:clean 删除（后者只清理各 lab 的 .lab-cache/）。
  */
 export class ProgressTracker {
   private store: ProgressStore;
+  private projectStore: ProjectStore;
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this.store = this.load();
+    this.projectStore = this.loadProjects();
   }
 
   private load(): ProgressStore {
@@ -171,20 +188,33 @@ export class ProgressTracker {
     await this.context.globalState.update(STATE_KEY, this.store);
   }
 
+  private loadProjects(): ProjectStore {
+    const raw = this.context.globalState.get<ProjectStore>(PROJECT_STATE_KEY);
+    if (!raw || typeof raw !== "object" || raw.schemaVersion !== 1 || !raw.projects || typeof raw.projects !== "object") {
+      return emptyProjectStore();
+    }
+    return { schemaVersion: 1, projects: raw.projects };
+  }
+
+  private async persistProjects(): Promise<void> {
+    await this.context.globalState.update(PROJECT_STATE_KEY, this.projectStore);
+  }
+
   /**
    * v2 → v3：把目录名主键迁移为稳定 labId。
    *
    * 只有题目扫描完成后才有足够的 README 元数据建立别名。迁移前保存完整备份；
    * 旧源码快照不移动，HistoryEntry.snapshot 继续指向原来的文件。
    */
-  async migrateLabKeys(labs: readonly ProgramLab[]): Promise<void> {
+  async migrateLabKeys(labs: readonly LabEntry[]): Promise<void> {
     const aliases = labs.flatMap((lab) =>
       [lab.name, ...lab.legacyNames].map((name) => ({ id: lab.id, name })),
     );
     const program = remapRecordKeys(this.store.labs, aliases, mergeLabProgress);
     const quiz = remapRecordKeys(this.store.quizzes, aliases, mergeQuizProgress);
+    const project = remapRecordKeys(this.projectStore.projects, aliases, mergeProjectProgress);
     const activity = remapEventKeys(this.store.events, aliases);
-    const changed = program.changed || quiz.changed || activity.changed || this.store.schemaVersion !== SCHEMA_VERSION;
+    const changed = program.changed || quiz.changed || project.changed || activity.changed || this.store.schemaVersion !== SCHEMA_VERSION;
     if (!changed) return;
 
     await this.context.globalState.update(`${STATE_KEY}.backup.v${this.store.schemaVersion}.${Date.now()}`, this.store);
@@ -194,7 +224,8 @@ export class ProgressTracker {
       quizzes: quiz.records,
       events: activity.events,
     };
-    await this.persist();
+    this.projectStore = { schemaVersion: 1, projects: project.records };
+    await Promise.all([this.persist(), this.persistProjects()]);
   }
 
   /**
@@ -225,6 +256,10 @@ export class ProgressTracker {
 
   getQuiz(labId: string): QuizProgress | undefined {
     return this.store.quizzes[labId];
+  }
+
+  getProject(labId: string): ProjectProgress | undefined {
+    return this.projectStore.projects[labId];
   }
 
   async recordQuizAnswer(
@@ -275,13 +310,18 @@ export class ProgressTracker {
   /**
    * 章节头部显示的「已通过/总数」。
    *
-   * 必须收 lab 对象而不是名字 —— 代码题和选择题的进度存在两张表里,
-   * 只有 `type` 能决定去哪张表查。收名字的版本会把选择题全算成未通过。
+   * 必须收 lab 对象而不是名字 —— Program、Quiz、Project 的进度存在不同状态表里,
+   * 只有 `type` 能决定去哪张表查。收名字的版本会把非 Program 题型算错。
    */
-  countPassed(labs: ProgramLab[]): number {
-    return labs.filter((lab) =>
-      lab.type === "quiz" ? this.store.quizzes[lab.id]?.passed : this.store.labs[lab.id]?.passed,
-    ).length;
+  countPassed(labs: readonly LabEntry[]): number {
+    return labs.filter((lab) => {
+      if (lab.type === "quiz") return this.store.quizzes[lab.id]?.passed;
+      if (lab.type === "project") {
+        const project = this.projectStore.projects[lab.id];
+        return project ? projectProgressPassed(project) : false;
+      }
+      return this.store.labs[lab.id]?.passed;
+    }).length;
   }
 
   /**
@@ -348,6 +388,46 @@ export class ProgressTracker {
     return progress;
   }
 
+  /**
+   * 记录 Project 的最近一次自动判题摘要。
+   *
+   * Project 不生成单文件历史快照：一个 Project 可能同时包含多个 task 和多种文件，
+   * 本 MVP 只保存可恢复 UI 状态的轻量摘要，避免把完整 CTest 输出和多文件副本塞进 globalState。
+   */
+  async recordProjectSubmission(lab: ProjectLab, result: ProjectScoreResult): Promise<ProjectProgress> {
+    const at = new Date().toISOString();
+    const existing = this.projectStore.projects[lab.id];
+    const progress: ProjectProgress = existing ?? {
+      submissionCount: 0,
+      automatedScore: 0,
+      automatedMax: result.automatedMax,
+      manualPending: result.manualPending,
+      provisionalTotal: result.provisionalTotal,
+      total: result.total,
+      automatedFull: result.automatedFull,
+      internalError: result.internalError,
+    };
+
+    progress.submissionCount += 1;
+    progress.automatedScore = result.automatedScore;
+    progress.automatedMax = result.automatedMax;
+    progress.manualPending = result.manualPending;
+    progress.provisionalTotal = result.provisionalTotal;
+    progress.total = result.total;
+    progress.automatedFull = result.automatedFull;
+    progress.internalError = result.internalError;
+    progress.lastSubmission = summarizeProjectSubmission(result, at);
+
+    this.projectStore.projects[lab.id] = progress;
+    this.appendEvent({ at, kind: "submit", labName: lab.id, labType: "project" });
+    if (projectProgressPassed(progress)) {
+      this.appendEvent({ at, kind: "pass", labName: lab.id, labType: "project" });
+    }
+
+    await Promise.all([this.persist(), this.persistProjects()]);
+    return progress;
+  }
+
   /** 把当前 student 源码复制到快照目录，返回相对 globalStorage 的路径。 */
   private async saveSnapshot(lab: ProgramLab, id: string): Promise<string> {
     const relativeDir = path.join("submissions", lab.id, id);
@@ -380,9 +460,30 @@ export class ProgressTracker {
 
   async resetAll(): Promise<void> {
     this.store = emptyStore();
-    await this.persist();
+    this.projectStore = emptyProjectStore();
+    await Promise.all([this.persist(), this.persistProjects()]);
     await rm(this.submissionsRoot(), { recursive: true, force: true });
   }
+}
+
+function mergeProjectProgress(stable: ProjectProgress, legacy: ProjectProgress): ProjectProgress {
+  const latest = [stable.lastSubmission, legacy.lastSubmission]
+    .filter((entry): entry is NonNullable<ProjectProgress["lastSubmission"]> => Boolean(entry))
+    .sort((left, right) => right.at.localeCompare(left.at))[0];
+  return {
+    ...(latest ? {
+      submissionCount: Math.max(stable.submissionCount, legacy.submissionCount),
+      automatedScore: latest.automatedScore,
+      automatedMax: latest.automatedMax,
+      manualPending: latest.manualPending,
+      provisionalTotal: latest.provisionalTotal,
+      total: latest.total,
+      automatedFull: latest.automatedFull,
+      internalError: latest.internalError,
+      lastSubmission: latest,
+    } : stable),
+    submissionCount: Math.max(stable.submissionCount, legacy.submissionCount),
+  };
 }
 
 function toSubmissionCase(item: CaseResult): SubmissionCase {

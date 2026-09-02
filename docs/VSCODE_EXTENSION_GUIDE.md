@@ -1,20 +1,21 @@
 # VSCode 插件：在编辑器里做题
 
-DSA Mastery 的 Program Lab 原本要在终端里判分。这个插件把代码题和选择题都带进 VSCode：左侧列出题目和完成状态，右侧显示题面，代码题可以提交判题，选择题可以直接作答并查看解析。
+DSA Mastery 的 Program/Project Lab 原本要在终端里判分。这个插件把代码题、项目题和选择题都带进 VSCode：左侧列出题目和完成状态，右侧显示题面，代码题和项目题可以提交判题，选择题可以直接作答并查看解析。
 
 ::: info 适用范围
-插件覆盖 **Program**（代码题）和 **Quiz**（四选一选择题）。Project 含人工评审环节，不在插件里，详见[范围与边界](#范围与边界)。
+插件覆盖 **Program**（代码题）、**Project**（多 task 项目题）和 **Quiz**（四选一选择题）。Project 的人工评审只保留 `PENDING` 占位，不在插件内录入人工分，详见[范围与边界](#范围与边界)。
 :::
 
 ## 安装
 
 ### 前置条件
 
-| 需要什么 | 为什么 | 代码题 | 选择题 |
-| --- | --- | :---: | :---: |
-| VSCode ≥ 1.90 | 插件用到的 API 下限 | 必需 | 必需 |
-| Node.js ≥ 22.13 | 运行判题内核 | 必需 | — |
-| C++ 编译器 | 编译你的答案（GCC ≥ 11、Clang ≥ 14 或 MSVC ≥ 19.30 三选一） | 必需 | — |
+| 需要什么 | 为什么 | Program | Project | Quiz |
+| --- | --- | :---: | :---: | :---: |
+| VSCode ≥ 1.90 | 插件用到的 API 下限 | 必需 | 必需 | 必需 |
+| Node.js ≥ 22.13 | 运行判题内核 | 必需 | 必需 | — |
+| C++ 编译器 | 编译你的答案（GCC ≥ 11、Clang ≥ 14 或 MSVC ≥ 19.30 三选一） | 必需 | 必需 | — |
+| CMake ≥ 3.25 | 构建 Project 的 CTest task | — | 必需 | — |
 
 **选择题只要 VSCode 就能做** —— 判定完全在插件内完成，不调用判题内核，也不需要编译器。
 
@@ -35,7 +36,7 @@ DSA Mastery 的 Program Lab 原本要在终端里判分。这个插件把代码�
 命令行安装也可以：
 
 ```bash
-code --install-extension ~/Downloads/dsa-mastery-labs-0.1.11.vsix
+code --install-extension ~/Downloads/dsa-mastery-labs-0.1.12.vsix
 ```
 
 ::: details 从源码构建（一般不需要）
@@ -46,7 +47,7 @@ cd DSA-Mastery/tools/vscode-extension
 pnpm install --ignore-workspace
 node build.mjs
 pnpm dlx @vscode/vsce package --no-dependencies --allow-missing-repository
-code --install-extension dsa-mastery-labs-0.1.11.vsix
+code --install-extension dsa-mastery-labs-0.1.12.vsix
 ```
 
 `pnpm install` 会因为没批准 esbuild 的 postinstall 而报一句 `ERR_PNPM_IGNORED_BUILDS`，可以忽略 —— esbuild 的可执行文件来自平台专属依赖，不跑那个脚本也能用。
@@ -60,7 +61,7 @@ VSCode 不会热加载新装的插件。装完请完全退出再打开。
 
 ### 确认装好了
 
-重启后打开 DSA Mastery 仓库根目录，活动栏（最左侧竖条）应出现 **DSA Mastery** 图标，点开后会按章节列出仓库中的全部 Program 和 Quiz Lab。
+重启后打开 DSA Mastery 仓库根目录，活动栏（最左侧竖条）应出现 **DSA Mastery** 图标，点开后会按章节列出仓库中的全部 Program、Project 和 Quiz Lab。
 
 如果图标没出现，在命令面板（<kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>）输入 `DSA`：
 
@@ -77,11 +78,11 @@ VSCode 不会热加载新装的插件。装完请完全退出再打开。
 
 打开侧边栏的 DSA Mastery，展开任一章节，点一道题：
 
-1. **题目面板打开**，显示题面、约束和全部测试用例（输入与期望输出都可见）。
-2. 点 **打开答题文件**，在旁边打开 `student/main.cpp`。
+1. **题目面板打开**，显示题面；Program 还会显示公开测试用例，Project 会显示 task 图、依赖、权重和学生文件。
+2. 点 **打开答题文件**（Project 中也可以在 task 卡片里选择文件），在旁边打开学生文件。
 3. 写你的实现。
-4. 点 **提交**。插件会先保存文件、检查环境，然后编译并跑全部用例。
-5. 结果表出现在题面上方：每个用例的判定、得分、耗时；失败的用例展开显示首处差异。
+4. 点 **提交**。插件会先保存文件、检查环境，然后编译并跑自动任务。
+5. 结果区按题型展示：Program 是用例表；Project 是 task → case/CTest 的嵌套结果，以及 Automated、Manual pending、Provisional total 汇总。
 
 ### 输入输出约定
 
@@ -151,7 +152,9 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 
 选择题在未完成时始终是问号，只用颜色区分有没有动过 —— 这样一眼就能和代码题分开。
 
-章节行右侧显示 `已通过/总数`，代码题和选择题一起计入。
+Project 的状态图标使用工具箱形状：自动判题未满时显示带色中间态；自动部分满分但存在 manual task 时显示“自动通过 · 待人工”，不会提前显示最终绿勾。
+
+章节行右侧显示 `已通过/总数`，Program、Project（只有自动部分完成且无待人工时）和 Quiz 一起计入。
 
 ### 三条关键行为
 
@@ -166,9 +169,10 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 | 内容 | 位置 |
 | --- | --- |
 | 通过状态、最好成绩、提交元数据 | VSCode `globalState` |
+| Project 最近一次自动判题摘要 | 独立的 `dsaMastery.projectProgress.v1` |
 | 每次提交的源码快照 | 插件的 `globalStorage` 目录 |
 
-两者都在 VSCode 的用户数据目录里，**不进仓库**，也不会被 `pnpm lab:clean` 删除（那条命令只清理各 Lab 的 `.lab-cache/`）。
+这些状态都在 VSCode 的用户数据目录里，**不进仓库**，也不会被 `pnpm lab:clean` 删除（那条命令只清理各 Lab 的 `.lab-cache/`）。
 
 插件使用 `01E04` 这样的稳定 Lab ID 保存进度，而不是依赖目录名。升级到采用稳定 ID 的版本时，插件会先备份旧状态，再自动迁移代码题、选择题和做题统计；既有源码快照仍能从提交历史打开，不需要手工重做题目。
 
@@ -186,7 +190,7 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 | --- | --- |
 | 提交当前题目 | 编译并评分，等同于面板上的提交按钮 |
 | 刷新题目列表 | 重新扫描 `labs/`，新增题目后用 |
-| 查看提交历史 | 列出某题的全部提交，可打开或对比 |
+| 查看提交历史 | Program 列出某题的全部提交，可打开或对比；Project 暂不支持多文件历史 |
 | 检查实验环境 | 手动运行环境检测，显示可用编译器 |
 | 重置全部做题进度 | 清空状态与快照，需二次确认 |
 
@@ -205,11 +209,13 @@ WA 时通知栏会给一个**并排查看完整输出**按钮 —— 点它会�
 | --- | --- |
 | Program | 完整支持 |
 | Quiz | 支持四选一单项选择、解析和本地进度 |
-| Project | 不显示。含人工评审 task，自动判分无法决定是否完成 |
+| Project | 支持展示、stdio/CTest 自动判题和 manual `PENDING`；不录入人工分、不提供多文件历史 |
 
 ### 插件不做的事
 
 - **交互式运行**（手工输入输出）需要真实终端，请继续用 `pnpm lab:interactive`。
+- **Project 的 manual task** 只展示 checklist 和 `PENDING`，人工评审仍由课程流程完成。
+- **Project 多文件历史** 暂未实现；插件只保存最近一次自动结果摘要，不复制多文件源码快照。
 - **选择题不接入终端 CLI**。答案在插件内本地判定，网页端与 VSCode 的答题进度目前不互相同步。
 - **作者维护命令**（`lab:new`、`lab:verify`、`lab:refresh-expected`、`lab:pack`）不在插件里，它们面向出题者而非学习者。
 - **环境问题只能诊断，不能解决**。插件会告诉你缺什么、去哪装，但编译器仍需你自己安装。

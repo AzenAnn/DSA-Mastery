@@ -17,7 +17,7 @@ function at(year: number, month: number, day: number, hour = 12): string {
   return new Date(year, month - 1, day, hour).toISOString();
 }
 
-function event(kind: "submit" | "pass", labName: string, iso: string, labType: "program" | "quiz" = "program"): ActivityEvent {
+function event(kind: "submit" | "pass", labName: string, iso: string, labType: "program" | "quiz" | "project" = "program"): ActivityEvent {
   return { at: iso, kind, labName, labType };
 }
 
@@ -172,4 +172,14 @@ test("chapter bars dispatch by lab type when checking passed", () => {
   const bars = buildChapterBars(chapters, (name, type) => type === "program" && name === "prog-1");
   assert.equal(bars[0].passed, 1);
   assert.equal(bars[0].total, 2);
+});
+
+test("chapter bars keep Project in the same type-aware completion flow", () => {
+  const chapters = [{
+    chapter: 3,
+    chapterTitle: "字符串",
+    labs: [{ name: "project-1", type: "project" as const }],
+  }];
+  const bars = buildChapterBars(chapters, (name, type) => type === "project" && name === "project-1");
+  assert.deepEqual(bars[0], { chapter: 3, chapterTitle: "字符串", passed: 1, total: 1 });
 });
