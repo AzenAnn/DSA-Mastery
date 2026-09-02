@@ -43,16 +43,51 @@ status: "draft"
 **顺序表 (Sequential List)** 是指用一段==物理地址连续==的存储单元依次存放线性表数据元素的数据结构。
 :::
 
-```text
-逻辑序列:      a₀         a₁         a₂        ...        aₙ₋₁
-               │          │          │                     │
-               ▼          ▼          ▼                     ▼
-物理内存: ┌──────────┬──────────┬──────────┬──────────┬──────────┐
-          │  元素 a₀ │  元素 a₁ │  元素 a₂ │   ...    │ 元素 aₙ₋₁│
-          └──────────┴──────────┴──────────┴──────────┴──────────┘
-物理地址:   Loc(a₀)    Loc(a₁)    Loc(a₂)               Loc(aₙ₋₁)
-           ←  L 字节 → ←  L 字节 →
+```graphviz
+digraph SequentialMemoryLayout {
+  rankdir=TB;
+  graph [nodesep=0.28, ranksep=0.55, bgcolor="#ffffff"];
+  node [shape=plain, fontname="sans-serif"];
+  edge [color="#4655e8", arrowsize=0.7];
+
+  logical [label=<
+    <table border="0" cellborder="0" cellspacing="0" cellpadding="8">
+      <tr>
+        <td align="right"><b>逻辑序列</b></td>
+        <td port="a0">a₀</td><td port="a1">a₁</td><td port="a2">a₂</td><td>…</td><td port="an">aₙ₋₁</td>
+      </tr>
+    </table>
+  >];
+
+  memory [label=<
+    <table border="0" cellborder="1" color="#64748b" cellspacing="0" cellpadding="10">
+      <tr>
+        <td border="0" align="right"><b>物理内存</b></td>
+        <td port="m0" bgcolor="#eef2ff">元素 a₀</td>
+        <td port="m1" bgcolor="#eef2ff">元素 a₁</td>
+        <td port="m2" bgcolor="#eef2ff">元素 a₂</td>
+        <td bgcolor="#f8fafc">…</td>
+        <td port="mn" bgcolor="#eef2ff">元素 aₙ₋₁</td>
+      </tr>
+      <tr>
+        <td border="0" align="right"><b>物理地址</b></td>
+        <td>Loc(a₀)</td><td>Loc(a₁)</td><td>Loc(a₂)</td><td>…</td><td>Loc(aₙ₋₁)</td>
+      </tr>
+      <tr>
+        <td border="0"></td>
+        <td colspan="2" border="0">相邻地址间隔 L 字节</td>
+        <td colspan="3" border="0" align="left">每个元素占用相同空间</td>
+      </tr>
+    </table>
+  >];
+
+  logical:a0:s -> memory:m0:n;
+  logical:a1:s -> memory:m1:n;
+  logical:a2:s -> memory:m2:n;
+  logical:an:s -> memory:mn:n;
+}
 ```
+<!-- diagram id="sequential-memory-layout" caption="逻辑序列中的元素按相同次序映射到地址连续、间隔为 L 字节的物理存储单元" -->
 
 为了在程序中管理这段物理连续内存并实现 [1.1 节定义的 List ADT 接口契约](./01-abstract-data-type.md)，顺序表类（通常称为 `Vector`）需要维护三个核心成员变量：
 * **`_data`**：指向堆内存连续存储块的首地址指针；
@@ -286,14 +321,26 @@ $$
 * **扩容规则**：当 $\text{\_size} == \text{\_capacity}$（满载 100%）时，容量扩大为 2 倍（$200\%$）；
 * **缩容规则**：当 $\text{\_size} == \text{\_capacity} / 2$（半满 50%）时，容量立即减半（$50\%$）。
 
-```text
-[边界振荡场景] 假设当前 capacity = 8, size = 8 (满载):
-1. push_back()  --> 触发扩容！申请容量 16，全量拷贝 8 个元素 (耗时 O(n))  --> size=9, cap=16
-2. pop_back()   --> size 变为 8 (恰好等于 16/2 = 50%)！
-                    触发缩容！申请容量 8，全量拷贝 8 个元素 (耗时 O(n))   --> size=8, cap=8
-3. push_back()  --> 又满了！再次触发扩容，拷贝 8 个元素 (耗时 O(n))       --> size=9, cap=16
-4. pop_back()   --> 又半满了！再次触发缩容，拷贝 8 个元素 (耗时 O(n))     --> size=8, cap=8
+```graphviz
+digraph ResizeThrashingCycle {
+  rankdir=TB;
+  graph [ranksep=0.55, bgcolor="#ffffff"];
+  node [shape=box, style="rounded,filled", color="#64748b", fillcolor="#f8fafc", fontcolor="#0f172a", fontname="sans-serif", margin="0.2,0.12"];
+  edge [color="#475569", fontcolor="#334155", fontname="sans-serif", arrowsize=0.75];
+
+  start [label="初始满载\nsize = 8，capacity = 8", color="#4655e8", fillcolor="#eef2ff"];
+  expanded_1 [label="步骤 1 后\nsize = 9，capacity = 16"];
+  shrunk_1 [label="步骤 2 后\nsize = 8，capacity = 8", color="#c2410c", fillcolor="#fff7ed"];
+  expanded_2 [label="步骤 3 后\nsize = 9，capacity = 16"];
+  shrunk_2 [label="步骤 4 后\nsize = 8，capacity = 8", color="#c2410c", fillcolor="#fff7ed"];
+
+  start -> expanded_1 [label="push_back()\n扩容 8 → 16，拷贝 8 个元素 O(n)"];
+  expanded_1 -> shrunk_1 [label="pop_back()\n降至 50%，缩容 16 → 8，拷贝 8 个元素 O(n)"];
+  shrunk_1 -> expanded_2 [label="push_back()\n再次满载，扩容 8 → 16，拷贝 8 个元素 O(n)"];
+  expanded_2 -> shrunk_2 [label="pop_back()\n再次半满，缩容 16 → 8，拷贝 8 个元素 O(n)"];
+}
 ```
+<!-- diagram id="resize-thrashing-cycle" caption="在 50% 边界对称缩容会使 push_back 与 pop_back 反复触发 O(n) 的扩容、缩容和全量搬移" -->
 
 ::: pitfall 性能抖动 (Thrashing / 颠簸)
 在容量临界点附近交替执行插入与删除时，每一次操作都会触发内存重新分配与全量数据搬移，导致单次操作时间复杂度退化为 $O(n)$，形成高频的反复重分配。
@@ -301,15 +348,33 @@ $$
 
 #### 改进方案：25% 滞后阻尼机制 (Hysteresis)
 
-```text
-装载因子 α = _size / _capacity:
+```graphviz
+digraph ResizeHysteresisRange {
+  graph [bgcolor="#ffffff"];
+  node [shape=plain, fontname="sans-serif"];
 
-  0%                      25%                 50%                     100%
-  +-----------------------+-------------------+-----------------------+---------------->
-  |     触发 50% 缩容     |   安全阻尼缓冲区  |     正常工作区间      | 触发 200% 扩容
-  | (缩容后装载变为 50%)  |   (可自由增删)    |   (无需扩容或缩容)    | (向系统申请新内存)
-  +-----------------------+-------------------+-----------------------+
+  range [label=<
+    <table border="0" cellborder="1" color="#64748b" cellspacing="0" cellpadding="10">
+      <tr>
+        <td colspan="4" border="0" align="left"><b>装载因子 α = _size / _capacity</b></td>
+      </tr>
+      <tr>
+        <td bgcolor="#fff7ed"><b>0% — 25%</b></td>
+        <td bgcolor="#ecfdf5"><b>25% — 50%</b></td>
+        <td bgcolor="#eef2ff"><b>50% — 100%</b></td>
+        <td bgcolor="#fff7ed"><b>100%</b></td>
+      </tr>
+      <tr>
+        <td><b>触发 50% 缩容</b><br/>缩容后装载变为 50%</td>
+        <td><b>安全阻尼缓冲区</b><br/>可自由增删</td>
+        <td><b>正常工作区间</b><br/>无需扩容或缩容</td>
+        <td><b>触发 200% 扩容</b><br/>向系统申请新内存</td>
+      </tr>
+    </table>
+  >];
+}
 ```
+<!-- diagram id="resize-hysteresis-range" caption="25% 缩容阈值与 100% 扩容阈值之间保留阻尼区，避免容量在临界点来回振荡" -->
 
 ::: property 滞后阻尼机制 (Hysteresis)
 * **规则**：当装载因子 $\alpha = \text{\_size} / \text{\_capacity} \le 25\%$（四分之一满）时，才将容量减半到原来的 $50\%$。

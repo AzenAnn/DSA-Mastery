@@ -184,24 +184,25 @@ $$
 
 这就是软件设计中至关重要的 **面向接口编程与信息隐藏 (Information Hiding)** 原则：
 
-```text
-┌──────────────────────────────────────────────────────────┐
-│                   上层业务调用方 (Client Code)              │
-│       (音乐播放器 UI、浏览器标签页管理器、待办清单逻辑)        │
-└────────────────────────────┬─────────────────────────────┘
-                             │ 只依赖标准的 List 接口 (What)
-                             ▼
-┌──────────────────────────────────────────────────────────┐
-│                   List ADT 抽象接口规范                   │
-│      size() / isEmpty() / get() / set() / insert()       │
-└──────────────┬────────────────────────────┬──────────────┘
-               │ 实现方式 1                  │ 实现方式 2
-               ▼                            ▼
-┌─────────────────────────────┐ ┌──────────────────────────┐
-│  物理连续存储：动态顺序表    │ │  物理离散存储：双向链表   │
-│ (Dynamic Array / std::vector)│ │ (Doubly Linked List)     │
-└─────────────────────────────┘ └──────────────────────────┘
+```graphviz
+digraph ListInterfaceDecoupling {
+  rankdir=TB;
+  graph [nodesep=0.45, ranksep=0.7, bgcolor="#ffffff"];
+  node [shape=box, style="rounded,filled", color="#64748b", fillcolor="#f8fafc", fontcolor="#0f172a", fontname="sans-serif", margin="0.22,0.14"];
+  edge [color="#475569", fontcolor="#334155", fontname="sans-serif", arrowsize=0.8];
+
+  client [label="上层业务调用方（Client Code）\n音乐播放器 UI、浏览器标签页管理器、待办清单逻辑"];
+  list_adt [label="List ADT 抽象接口规范\nsize() / isEmpty() / get() / set() / insert()", color="#4655e8", fillcolor="#eef2ff"];
+  dynamic_array [label="物理连续存储：动态顺序表\nDynamic Array / std::vector"];
+  doubly_linked [label="物理离散存储：双向链表\nDoubly Linked List"];
+
+  client -> list_adt [label="只依赖标准的 List 接口（What）"];
+  list_adt -> dynamic_array [label="实现方式 1"];
+  list_adt -> doubly_linked [label="实现方式 2"];
+  { rank=same; dynamic_array; doubly_linked; }
+}
 ```
+<!-- diagram id="list-interface-decoupling" caption="上层业务只依赖 List ADT，连续存储与离散存储都可以作为可替换实现" -->
 
 1. **使用者与提供者解耦**：写播放器界面的工程师只需要知道调用 `list.insert(0, song)` 就能在开头插歌，不需要关心底层到底是搬移数组还是修改指针；
 2. **底层实现的可替换性**：今天数据量小，底层可以使用顺序表；明天发现需要频繁在头部插入数据，底层就可以无缝替换成双向链表，而**上层业务调用代码无需修改**。
