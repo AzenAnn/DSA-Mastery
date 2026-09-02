@@ -3,7 +3,7 @@ title: "0.3 从内存视角理解复杂度"
 description: "从缓存行与内存布局出发，理解大 O 记不住的那一项——单次操作的代价。"
 order: 3
 chapter: 0
-chapterTitle: "绪论"
+chapterTitle: "基础"
 updated: "2026-08-14"
 contributors: ["fjll"]
 status: "draft"
