@@ -19,11 +19,11 @@ GNU Make 是可选快捷入口。==没有安装 Make 不会影响 pnpm 的检查
 如果只想运行一道题，不必先查找完整的 Lab 目录。在仓库根目录向 `lab.mjs` 依次传入章节号、题目类型和题号即可，`lab.mjs` 是现有 Lab CLI 的轻量封装：
 
 ::: code-group
-Windows Powershell
+
 ```powershell [Windows PowerShell]
 node .\lab.mjs 1 E 2
 ```
-macOS / Linux
+
 ```bash [macOS / Linux]
 node ./lab.mjs 1 E 2
 ```
