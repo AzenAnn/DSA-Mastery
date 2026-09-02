@@ -535,3 +535,25 @@ Added 30 C++17 dynamic programming Program Labs (14E01-14E30), each with 20 publ
 ### Status
 
 [OK] **Completed**
+
+
+## Session 23: Ch.1 Graphviz 图示迁移
+
+**Date**: 2026-09-02
+**Task**: Ch.1 Graphviz 图示迁移
+**Branch**: `codex/ch1-graphviz-rendering`
+
+### Summary
+
+将 Chapter 1 截图圈定的 12 个 text 结构图迁移为 Graphviz SVG，补充暗色画布规范，并完成本地、Pages 和双视口验证。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `ae0a4c9` | (see git log) |
+| `25c63dc` | (see git log) |
+
+### Status
+
+[OK] **Completed**
