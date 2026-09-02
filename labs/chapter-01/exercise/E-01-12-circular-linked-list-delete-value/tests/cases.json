@@ -3,29 +3,195 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 25,
-    "tags": ["sample"],
-    "compare": { "mode": "exact" }
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
   },
   {
     "id": "002-delete-all",
     "input": "tests/002-delete-all.in",
     "expected": "tests/002-delete-all.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "003-delete-head",
     "input": "tests/003-delete-head.in",
     "expected": "tests/003-delete-head.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "004-delete-none",
     "input": "tests/004-delete-none.in",
     "expected": "tests/004-delete-none.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-delete-tail",
+    "input": "tests/005-delete-tail.in",
+    "expected": "tests/005-delete-tail.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "regression"
+    ]
+  },
+  {
+    "id": "006-delete-middle",
+    "input": "tests/006-delete-middle.in",
+    "expected": "tests/006-delete-middle.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "regression"
+    ]
+  },
+  {
+    "id": "007-single-delete",
+    "input": "tests/007-single-delete.in",
+    "expected": "tests/007-single-delete.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "regression"
+    ]
+  },
+  {
+    "id": "008-single-keep",
+    "input": "tests/008-single-keep.in",
+    "expected": "tests/008-single-keep.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "regression"
+    ]
+  },
+  {
+    "id": "009-consecutive-prefix",
+    "input": "tests/009-consecutive-prefix.in",
+    "expected": "tests/009-consecutive-prefix.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "010-consecutive-suffix",
+    "input": "tests/010-consecutive-suffix.in",
+    "expected": "tests/010-consecutive-suffix.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "011-alternating",
+    "input": "tests/011-alternating.in",
+    "expected": "tests/011-alternating.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-multiple-runs",
+    "input": "tests/012-multiple-runs.in",
+    "expected": "tests/012-multiple-runs.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "013-negative-target",
+    "input": "tests/013-negative-target.in",
+    "expected": "tests/013-negative-target.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "014-zero-target",
+    "input": "tests/014-zero-target.in",
+    "expected": "tests/014-zero-target.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "015-min-max-values",
+    "input": "tests/015-min-max-values.in",
+    "expected": "tests/015-min-max-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "016-only-one-remains",
+    "input": "tests/016-only-one-remains.in",
+    "expected": "tests/016-only-one-remains.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "017-medium-none",
+    "input": "tests/017-medium-none.in",
+    "expected": "tests/017-medium-none.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-medium-all",
+    "input": "tests/018-medium-all.in",
+    "expected": "tests/018-medium-all.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "019-stress-alternating",
+    "input": "tests/019-stress-alternating.in",
+    "expected": "tests/019-stress-alternating.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  },
+  {
+    "id": "020-stress-sparse",
+    "input": "tests/020-stress-sparse.in",
+    "expected": "tests/020-stress-sparse.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
   }
 ]

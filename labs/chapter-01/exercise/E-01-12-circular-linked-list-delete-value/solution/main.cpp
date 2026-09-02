@@ -12,8 +12,6 @@ int main() {
 
     std::size_t n = 0;
     std::cin >> n;
-    long long x = 0;
-    std::cin >> x;
 
     if (n == 0) {
         std::cout << "\n";
@@ -30,6 +28,8 @@ int main() {
         if (!head) head = tail = node;
         else { tail->next = node; tail = node; }
     }
+    long long x = 0;
+    std::cin >> x;
     tail->next = head;
 
     // Count how many nodes will remain

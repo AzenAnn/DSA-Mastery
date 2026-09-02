@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-duplicates",
     "input": "tests/002-duplicates.in",
     "expected": "tests/002-duplicates.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "normal",
       "duplicates"
@@ -25,7 +25,7 @@
     "id": "003-empty",
     "input": "tests/003-empty.in",
     "expected": "tests/003-empty.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
     ]
@@ -34,9 +34,160 @@
     "id": "004-single",
     "input": "tests/004-single.in",
     "expected": "tests/004-single.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
+    ]
+  },
+  {
+    "id": "005-two-ascending",
+    "input": "tests/005-two-ascending.in",
+    "expected": "tests/005-two-ascending.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-two-descending",
+    "input": "tests/006-two-descending.in",
+    "expected": "tests/006-two-descending.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-ascending",
+    "input": "tests/007-ascending.in",
+    "expected": "tests/007-ascending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-descending",
+    "input": "tests/008-descending.in",
+    "expected": "tests/008-descending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-deterministic-mix",
+    "input": "tests/009-deterministic-mix.in",
+    "expected": "tests/009-deterministic-mix.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-negative-values",
+    "input": "tests/010-negative-values.in",
+    "expected": "tests/010-negative-values.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-zero-crossing",
+    "input": "tests/011-zero-crossing.in",
+    "expected": "tests/011-zero-crossing.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-min-max-values",
+    "input": "tests/012-min-max-values.in",
+    "expected": "tests/012-min-max-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "013-all-equal",
+    "input": "tests/013-all-equal.in",
+    "expected": "tests/013-all-equal.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "014-duplicate-clusters",
+    "input": "tests/014-duplicate-clusters.in",
+    "expected": "tests/014-duplicate-clusters.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "015-nearly-sorted",
+    "input": "tests/015-nearly-sorted.in",
+    "expected": "tests/015-nearly-sorted.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-reverse-with-duplicates",
+    "input": "tests/016-reverse-with-duplicates.in",
+    "expected": "tests/016-reverse-with-duplicates.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "017-medium-ascending",
+    "input": "tests/017-medium-ascending.in",
+    "expected": "tests/017-medium-ascending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-medium-descending",
+    "input": "tests/018-medium-descending.in",
+    "expected": "tests/018-medium-descending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-stress-deterministic-mix",
+    "input": "tests/019-stress-deterministic-mix.in",
+    "expected": "tests/019-stress-deterministic-mix.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  },
+  {
+    "id": "020-stress-ascending",
+    "input": "tests/020-stress-ascending.in",
+    "expected": "tests/020-stress-ascending.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "worst-case"
     ]
   }
 ]

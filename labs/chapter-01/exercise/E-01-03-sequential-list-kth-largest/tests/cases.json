@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ]
@@ -24,7 +24,7 @@
     "id": "003-all-negative",
     "input": "tests/003-all-negative.in",
     "expected": "tests/003-all-negative.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary",
       "negative"
@@ -34,7 +34,7 @@
     "id": "004-max-element",
     "input": "tests/004-max-element.in",
     "expected": "tests/004-max-element.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ]
@@ -43,9 +43,155 @@
     "id": "005-min-element",
     "input": "tests/005-min-element.in",
     "expected": "tests/005-min-element.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
+    ]
+  },
+  {
+    "id": "006-two-k-first",
+    "input": "tests/006-two-k-first.in",
+    "expected": "tests/006-two-k-first.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-two-k-second",
+    "input": "tests/007-two-k-second.in",
+    "expected": "tests/007-two-k-second.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-all-equal-small",
+    "input": "tests/008-all-equal-small.in",
+    "expected": "tests/008-all-equal-small.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates",
+      "regression"
+    ]
+  },
+  {
+    "id": "009-duplicate-answer-band",
+    "input": "tests/009-duplicate-answer-band.in",
+    "expected": "tests/009-duplicate-answer-band.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "010-negative-zero-positive",
+    "input": "tests/010-negative-zero-positive.in",
+    "expected": "tests/010-negative-zero-positive.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-min-max-values",
+    "input": "tests/011-min-max-values.in",
+    "expected": "tests/011-min-max-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "012-ascending-middle",
+    "input": "tests/012-ascending-middle.in",
+    "expected": "tests/012-ascending-middle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-descending-middle",
+    "input": "tests/013-descending-middle.in",
+    "expected": "tests/013-descending-middle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-odd-median",
+    "input": "tests/014-odd-median.in",
+    "expected": "tests/014-odd-median.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-even-middle",
+    "input": "tests/015-even-middle.in",
+    "expected": "tests/015-even-middle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-duplicate-clusters",
+    "input": "tests/016-duplicate-clusters.in",
+    "expected": "tests/016-duplicate-clusters.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "017-k-near-n",
+    "input": "tests/017-k-near-n.in",
+    "expected": "tests/017-k-near-n.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "018-medium-all-equal",
+    "input": "tests/018-medium-all-equal.in",
+    "expected": "tests/018-medium-all-equal.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates",
+      "regression"
+    ]
+  },
+  {
+    "id": "019-stress-deterministic-mix",
+    "input": "tests/019-stress-deterministic-mix.in",
+    "expected": "tests/019-stress-deterministic-mix.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  },
+  {
+    "id": "020-stress-all-equal",
+    "input": "tests/020-stress-all-equal.in",
+    "expected": "tests/020-stress-all-equal.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "duplicates",
+      "regression"
     ]
   }
 ]

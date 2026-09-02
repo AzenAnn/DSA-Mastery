@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-capacity-one",
     "input": "tests/002-capacity-one.in",
     "expected": "tests/002-capacity-one.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
     ]
@@ -24,7 +24,7 @@
     "id": "003-update-existing",
     "input": "tests/003-update-existing.in",
     "expected": "tests/003-update-existing.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -33,9 +33,157 @@
     "id": "004-miss-all",
     "input": "tests/004-miss-all.in",
     "expected": "tests/004-miss-all.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
+    ]
+  },
+  {
+    "id": "005-put-only",
+    "input": "tests/005-put-only.in",
+    "expected": "tests/005-put-only.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-get-only",
+    "input": "tests/006-get-only.in",
+    "expected": "tests/006-get-only.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-hit-refreshes-recency",
+    "input": "tests/007-hit-refreshes-recency.in",
+    "expected": "tests/007-hit-refreshes-recency.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "regression"
+    ]
+  },
+  {
+    "id": "008-update-refreshes-recency",
+    "input": "tests/008-update-refreshes-recency.in",
+    "expected": "tests/008-update-refreshes-recency.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "regression"
+    ]
+  },
+  {
+    "id": "009-multi-eviction-order",
+    "input": "tests/009-multi-eviction-order.in",
+    "expected": "tests/009-multi-eviction-order.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-repeated-hit",
+    "input": "tests/010-repeated-hit.in",
+    "expected": "tests/010-repeated-hit.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "011-repeated-update",
+    "input": "tests/011-repeated-update.in",
+    "expected": "tests/011-repeated-update.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "012-key-zero",
+    "input": "tests/012-key-zero.in",
+    "expected": "tests/012-key-zero.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "013-key-max",
+    "input": "tests/013-key-max.in",
+    "expected": "tests/013-key-max.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "014-extreme-values",
+    "input": "tests/014-extreme-values.in",
+    "expected": "tests/014-extreme-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "015-update-while-full",
+    "input": "tests/015-update-while-full.in",
+    "expected": "tests/015-update-while-full.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-hot-cold-alternation",
+    "input": "tests/016-hot-cold-alternation.in",
+    "expected": "tests/016-hot-cold-alternation.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-medium-hit-heavy",
+    "input": "tests/017-medium-hit-heavy.in",
+    "expected": "tests/017-medium-hit-heavy.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-medium-miss-heavy",
+    "input": "tests/018-medium-miss-heavy.in",
+    "expected": "tests/018-medium-miss-heavy.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-medium-eviction-chain",
+    "input": "tests/019-medium-eviction-chain.in",
+    "expected": "tests/019-medium-eviction-chain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "020-stress-capacity-and-operations",
+    "input": "tests/020-stress-capacity-and-operations.in",
+    "expected": "tests/020-stress-capacity-and-operations.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
     ]
   }
 ]
