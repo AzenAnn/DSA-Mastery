@@ -1,0 +1,92 @@
+[
+  {
+    "id": "001-boundary",
+    "input": "tests/001-boundary.in",
+    "expected": "tests/001-boundary.out",
+    "points": 10,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "002-normal",
+    "input": "tests/002-normal.in",
+    "expected": "tests/002-normal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-normal",
+    "input": "tests/003-normal.in",
+    "expected": "tests/003-normal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-normal",
+    "input": "tests/004-normal.in",
+    "expected": "tests/004-normal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-normal",
+    "input": "tests/005-normal.in",
+    "expected": "tests/005-normal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-normal",
+    "input": "tests/006-normal.in",
+    "expected": "tests/006-normal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-normal",
+    "input": "tests/007-normal.in",
+    "expected": "tests/007-normal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-normal",
+    "input": "tests/008-normal.in",
+    "expected": "tests/008-normal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-normal",
+    "input": "tests/009-normal.in",
+    "expected": "tests/009-normal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-normal",
+    "input": "tests/010-normal.in",
+    "expected": "tests/010-normal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  }
+]
