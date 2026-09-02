@@ -328,6 +328,14 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "分治与递归",
     description: "建立递归定义、问题分解、合并结果与复杂度分析框架。",
     url: "/learn/outline/chapter-12-divide-conquer-recursion/",
+    lessonSources: [
+      "content/chapter-12-divide-conquer-recursion/00-overview.md",
+      "content/chapter-12-divide-conquer-recursion/01-recursion-foundations.md",
+      "content/chapter-12-divide-conquer-recursion/02-divide-and-conquer-patterns.md",
+      "content/chapter-12-divide-conquer-recursion/03-correctness-complexity.md",
+      "content/chapter-12-divide-conquer-recursion/04-boundaries-with-other-strategies.md",
+    ],
+    autoLabChapter: 12,
   },
   {
     id: "chapter-13-greedy",
