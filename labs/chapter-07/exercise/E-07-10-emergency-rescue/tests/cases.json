@@ -1,0 +1,83 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-two-equal-paths",
+    "input": "tests/002-two-equal-paths.in",
+    "expected": "tests/002-two-equal-paths.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-longer-detour-better",
+    "input": "tests/003-longer-detour-better.in",
+    "expected": "tests/003-longer-detour-better.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-multi-edges",
+    "input": "tests/004-multi-edges.in",
+    "expected": "tests/004-multi-edges.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-line",
+    "input": "tests/005-line.in",
+    "expected": "tests/005-line.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-equal-sum-tie",
+    "input": "tests/006-equal-sum-tie.in",
+    "expected": "tests/006-equal-sum-tie.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-star",
+    "input": "tests/007-star.in",
+    "expected": "tests/007-star.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-random",
+    "input": "tests/008-random.in",
+    "expected": "tests/008-random.out",
+    "points": 10,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "009-equal-parallel-edges",
+    "input": "tests/009-equal-parallel-edges.in",
+    "expected": "tests/009-equal-parallel-edges.out",
+    "points": 10,
+    "tags": [
+      "edge-case"
+    ]
+  }
+]

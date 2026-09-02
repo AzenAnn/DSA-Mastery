@@ -40,13 +40,58 @@ status: "draft"
 
 这些应用场景看似千差万别，但如果在数学与计算机视角下剥离具体业务属性，会发现它们共享了**完全相同的一维逻辑特征**：数据元素之间存在着**严格的先后次序**。
 
-```text
-音乐播放列表: [歌曲 A]  <--->  [歌曲 B]  <--->  [歌曲 C]
-浏览器历史:   [网页 1]  <--->  [网页 2]  <--->  [网页 3]
-任务清单:     [任务甲]  <--->  [任务乙]  <--->  [任务丙]
-                   ↓               ↓               ↓
-统一抽象模型: [元素 a₀] <--->  [元素 a₁] <--->  [元素 a₂] (线性表)
+```graphviz
+digraph LinearAbstractModel {
+  rankdir=TB;
+  node [shape=plain, fontname="sans-serif"];
+
+  grid [label=<
+    <table border="0" cellborder="0" cellspacing="8" cellpadding="6">
+      <tr>
+        <td align="right" width="140"><font color="#334155"><b>音乐播放列表:    </b></font></td>
+        <td border="1" bgcolor="#f8fafc" width="85">歌曲 A</td>
+        <td width="35">&lt;---&gt;</td>
+        <td border="1" bgcolor="#f8fafc" width="85">歌曲 B</td>
+        <td width="35">&lt;---&gt;</td>
+        <td border="1" bgcolor="#f8fafc" width="85">歌曲 C</td>
+      </tr>
+      <tr>
+        <td align="right" width="140"><font color="#334155"><b>浏览器历史:    </b></font></td>
+        <td border="1" bgcolor="#f8fafc" width="85">网页 1</td>
+        <td width="35">&lt;---&gt;</td>
+        <td border="1" bgcolor="#f8fafc" width="85">网页 2</td>
+        <td width="35">&lt;---&gt;</td>
+        <td border="1" bgcolor="#f8fafc" width="85">网页 3</td>
+      </tr>
+      <tr>
+        <td align="right" width="140"><font color="#334155"><b>任务清单:    </b></font></td>
+        <td border="1" bgcolor="#f8fafc" width="85">任务甲</td>
+        <td width="35">&lt;---&gt;</td>
+        <td border="1" bgcolor="#f8fafc" width="85">任务乙</td>
+        <td width="35">&lt;---&gt;</td>
+        <td border="1" bgcolor="#f8fafc" width="85">任务丙</td>
+      </tr>
+      <tr>
+        <td width="140"></td>
+        <td align="center" width="85"><font color="#2563eb"><b>↓</b></font></td>
+        <td width="35"></td>
+        <td align="center" width="85"><font color="#2563eb"><b>↓ 抽象为</b></font></td>
+        <td width="35"></td>
+        <td align="center" width="85"><font color="#2563eb"><b>↓</b></font></td>
+      </tr>
+      <tr>
+        <td align="right" width="140"><font color="#1d4ed8"><b>统一抽象模型:    </b></font></td>
+        <td border="2" color="#2563eb" bgcolor="#dbeafe" width="85"><font color="#1e40af"><b>元素 a₀</b></font></td>
+        <td width="35"><font color="#2563eb"><b>&lt;===&gt;</b></font></td>
+        <td border="2" color="#2563eb" bgcolor="#dbeafe" width="85"><font color="#1e40af"><b>元素 a₁</b></font></td>
+        <td width="35"><font color="#2563eb"><b>&lt;===&gt;</b></font></td>
+        <td border="2" color="#2563eb" bgcolor="#dbeafe" width="85"><font color="#1e40af"><b>元素 a₂</b></font></td>
+      </tr>
+    </table>
+  >];
+}
 ```
+<!-- diagram id="linear-list-abstraction" caption: "从具体业务序列提炼出线性表的前驱后继抽象模型" -->
 
 ---
 
@@ -54,13 +99,38 @@ status: "draft"
 
 在计算机底层，物理内存（RAM）本质上是一维线性排列、按字节严格编号的**字节网格（Byte Grid）**：
 
-```text
-物理内存 (RAM):
-内存地址: 0x1000  0x1001  0x1002  0x1003  0x1004  0x1005  ...
-         ┌───────┬───────┬───────┬───────┬───────┬───────┐
-存储单元: │ 1字节 │ 1字节 │ 1字节 │ 1字节 │ 1字节 │ 1字节 │ ...
-         └───────┴───────┴───────┴───────┴───────┴───────┘
+```graphviz
+digraph MemoryByteGrid {
+  rankdir=TB;
+  node [shape=plain, fontname="sans-serif"];
+
+  mem [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="8" bgcolor="#ffffff">
+      <tr>
+        <td bgcolor="#f1f5f9" align="left"><b>内存物理地址</b></td>
+        <td bgcolor="#f8fafc">0x1000</td>
+        <td bgcolor="#f8fafc">0x1001</td>
+        <td bgcolor="#f8fafc">0x1002</td>
+        <td bgcolor="#f8fafc">0x1003</td>
+        <td bgcolor="#f8fafc">0x1004</td>
+        <td bgcolor="#f8fafc">0x1005</td>
+        <td bgcolor="#f8fafc">...</td>
+      </tr>
+      <tr>
+        <td bgcolor="#f1f5f9" align="left"><b>连续存储单元 (RAM)    </b></td>
+        <td bgcolor="#e2e8f0">1 字节<br/><font color="#64748b" point-size="10">8 bits</font></td>
+        <td bgcolor="#e2e8f0">1 字节<br/><font color="#64748b" point-size="10">8 bits</font></td>
+        <td bgcolor="#e2e8f0">1 字节<br/><font color="#64748b" point-size="10">8 bits</font></td>
+        <td bgcolor="#e2e8f0">1 字节<br/><font color="#64748b" point-size="10">8 bits</font></td>
+        <td bgcolor="#e2e8f0">1 字节<br/><font color="#64748b" point-size="10">8 bits</font></td>
+        <td bgcolor="#e2e8f0">1 字节<br/><font color="#64748b" point-size="10">8 bits</font></td>
+        <td bgcolor="#f8fafc">...</td>
+      </tr>
+    </table>
+  >];
+}
 ```
+<!-- diagram id="memory-byte-grid" caption: "物理内存由按字节严格编号的一维连续存储单元构成" -->
 
 在硬件眼中，只有二进制比特（Bit）、以 8 位为单位的字节（Byte）以及按数值递增的**内存地址（Address）**。计算机硬件只认识地址寻址，并不理解什么是“播放列表”、“任务先后”或“前驱后继”。
 
@@ -94,7 +164,7 @@ $$
 2. **唯一尾节点 (Tail)**：$a_{n-1}$ 是序列的终点，**无直接后继**，有且仅有一个直接前驱 $a_{n-2}$（当 $n > 1$ 时）；
 3. **内部节点**：对于任意中间元素 $a_i$（$0 < i < n-1$），有且仅有一个直接前驱 $a_{i-1}$ 和一个直接后继 $a_{i+1}$。
 
-::: property 核心性质 · 逻辑相邻 $\neq$ 物理相邻
+::: property 核心性质 · 逻辑相邻  ≠  物理相邻
 线性表定义的是**逻辑上的相邻**（$a_i$ 在逻辑上紧跟 $a_{i-1}$）。==逻辑结构不等于存储结构==：至于数据元素在物理内存中是“紧挨着存放在连续地址上”（顺序表），还是“分散存放在各处并通过指针链接”（链表），在线性表这一数学抽象层面上完全不做限制。
 :::
 
@@ -223,7 +293,7 @@ public:
 ---
 
 ### 1.2.4 边界契约与异常处理
-在工程实践中，一个优秀的接口规范不仅要说明“正常情况下做什么”，更要明确**“异常与非法输入时的契约保证”**：
+在工程实践中，一个优秀的接口规范不仅要说明“正常情况下做什么”，更要明确“异常与非法输入时的契约保证”：
 
 | 操作接口 | 合法输入范围 (Pre-condition) | 边界越界与未命中行为 (Out of Bounds) |
 | :--- | :--- | :--- |

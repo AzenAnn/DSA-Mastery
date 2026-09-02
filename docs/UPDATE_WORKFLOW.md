@@ -82,7 +82,7 @@ Owner 创建分支并编写正文和 Lab。正文解释关键逻辑，完整可�
 
 每个关键算法至少记录：输入、输出、前置条件、边界行为、复杂度及其分析前提。还没有实现或测试的内容不能写成“已验证”。
 
-正文与 Lab 之间优先使用相对 `.md` 链接，例如 `./01-stack.md` 或 `../../labs/chapter-02/lab-02-01-stack/README.md`。`validate:content` 会检查源目标存在，VitePress 构建会把链接改写为课程路由；不要手写 `/DSA-Mastery/`。
+正文与 Lab 之间优先使用相对 `.md` 链接，例如 `./01-stack.md` 或 `../../labs/chapter-02/exercise/E-02-01-validate-stack-sequences/README.md`。`validate:content` 会检查源目标存在，VitePress 构建会把链接改写为课程路由；不要手写 `/DSA-Mastery/`。
 
 本地阅读使用：
 
@@ -253,7 +253,7 @@ status: "draft"
 以第 2 章的栈实验为例：
 
 1. 创建 Lab Issue，说明学习目标、输入输出、验收方式与依赖。
-2. 判断类型后运行 `pnpm lab:new -- --type <quiz|program|project> --chapter 2 --order 1 --slug stack`，或说明为何继续使用 README-only。
+2. 判断类型后运行 `pnpm lab:new -- --type <quiz|program|project> --chapter 2 --slug stack`，由工具自动分配 `T/E/P` 稳定编号；只有需要调整展示位置时才传 `--order`。也可以说明为何继续使用 README-only。
 3. 先写目标、准备、步骤、验收清单、思考题和复盘，再决定是否需要代码目录。
 4. 如有实现，遵循统一 student/solution/tests/task 结构；README 必须给出 `make run` 与 pnpm 免 Make 兜底。
 5. 运行 `pnpm lab:validate -- <lab-path>`；Program/Project 再运行 `pnpm lab:verify -- <lab-path>`。

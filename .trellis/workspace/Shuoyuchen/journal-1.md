@@ -41,3 +41,66 @@
 ### Next Steps
 
 - 无
+
+
+## Session 2: 新增第 13 章盛最多水的容器 Lab
+
+**Date**: 2026-08-24
+**Task**: 新增第 13 章盛最多水的容器 Lab
+**Branch**: `codex/chapter-13-container-with-most-water`
+
+### Summary
+
+在 codex/chapter-13-container-with-most-water 上新增可自动发现的 C++17 Program Lab，加入 LeetCode 11 题面、题图、学生模板、双指针参考实现和 7 个测试夹具；完成 lab verify、pnpm test、VitePress 构建、站点检查及使用本机 Tabbit Chromium 的 19/19 页面测试。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `3a9f2f5` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 3: 新增 LeetCode 409 最长回文串 Lab
+
+**Date**: 2026-08-28
+**Task**: 新增 LeetCode 409 最长回文串 Lab
+**Branch**: `codex/chapter-13-container-with-most-water`
+
+### Summary
+
+在第 13 章新增 Lab 13-02 最长回文串，包含 C++17 Program Lab、学生模板、参考答案和 7 组测试；补充章节概览入口，并通过内容校验、自动发现、站点构建、站点检查和 Lab verify。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `d6ae380` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 4: 新增 LeetCode 55 跳跃游戏 Lab
+
+**Date**: 2026-08-28
+**Task**: 新增 LeetCode 55 跳跃游戏 Lab
+**Branch**: `codex/chapter-13-container-with-most-water`
+
+### Summary
+
+在第 13 章新增 Lab 13-03 跳跃游戏，包含 C++17 Program Lab、正向贪心参考答案、学生模板和 7 组测试；补充章节概览入口。修正一组错误测试预期后，通过 Lab 验证、内容校验、类型检查、Lint、自动发现、站点构建和站点检查。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `a9c3962` | (see git log) |
+
+### Status
+
+[OK] **Completed**

@@ -1,0 +1,51 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 15,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-flat",
+    "input": "tests/002-flat.in",
+    "expected": "tests/002-flat.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "003-nested",
+    "input": "tests/003-nested.in",
+    "expected": "tests/003-nested.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "004-empty",
+    "input": "tests/004-empty.in",
+    "expected": "tests/004-empty.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-atom",
+    "input": "tests/005-atom.in",
+    "expected": "tests/005-atom.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "006-two-branches",
+    "input": "tests/006-two-branches.in",
+    "expected": "tests/006-two-branches.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "007-deep",
+    "input": "tests/007-deep.in",
+    "expected": "tests/007-deep.out",
+    "points": 20,
+    "tags": ["stress"]
+  }
+]

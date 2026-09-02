@@ -1,0 +1,11 @@
+.vscode/**
+node_modules/**
+out/**
+src/**
+test/**
+build.mjs
+tsconfig.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+*.vsix
+.gitignore

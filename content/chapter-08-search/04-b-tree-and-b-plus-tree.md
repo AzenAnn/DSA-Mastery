@@ -147,11 +147,18 @@ B 树插入总是先落到**叶结点**，新增关键字只会让结点"变满"
 
 4 阶 B 树每个结点最多 3 个关键字。向叶结点 `[5, 6, 9]` 插入 13 后得到 `[5, 6, 9, 13]`，发生溢出。取第 2 个关键字 6 上移，可分成：
 
-```text
-        [6]
-       /   \
-     [5]  [9, 13]
+```graphviz
+digraph BTreeSplit {
+  rankdir=TB;
+  node [shape=box, style=rounded];
+  root [label="[6]"];
+  left [label="[5]"];
+  right [label="[9, 13]"];
+  root -> left;
+  root -> right;
+}
 ```
+<!-- diagram id="btree-split" caption: "4 阶 B 树插入 13 后结点溢出：取中间关键字 6 上移，分裂为左 [5] 和右 [9, 13]" -->
 
 这里右侧比左侧多一个关键字仍然合法：非根结点最少只需 $\lceil4/2\rceil-1=1$ 个关键字。
 
@@ -164,11 +171,18 @@ B 树插入总是先落到**叶结点**，新增关键字只会让结点"变满"
 
 结果：
 
-```text
-        [6]
-       /   \
-     [5]  [9, 13]
+```graphviz
+digraph BTreeSplitExample {
+  rankdir=TB;
+  node [shape=box, style=rounded];
+  root [label="[6]"];
+  left [label="[5]"];
+  right [label="[9, 13]"];
+  root -> left;
+  root -> right;
+}
 ```
+<!-- diagram id="btree-split-example" caption: "空树依次插入 5,6,9,13 后：结点 [5,6,9,13] 溢出，中间关键字 6 上移，树高由 1 变为 2" -->
 
 树高从 1 变为 2，所有叶仍同层。若父结点再溢出（例如连续插入多个），就继续向上分裂，可能直到根被分裂、树高再加 1。
 :::
@@ -212,19 +226,37 @@ B 树插入总是先落到**叶结点**，新增关键字只会让结点"变满"
 
 考虑最右侧局部结构：
 
-```text
-       [55, 65]
-      /    |    \
-   [47] [60,62] [78]
+```graphviz
+digraph BTreeBorrowBefore {
+  rankdir=TB;
+  node [shape=box, style=rounded];
+  root [label="[55, 65]"];
+  a [label="[47]"];
+  b [label="[60, 62]"];
+  c [label="[78]"];
+  root -> a;
+  root -> b;
+  root -> c;
+}
 ```
+<!-- diagram id="btree-borrow-before" caption: "3 阶 B 树借键前的局部：父 [55,65] 下挂三个孩子 [47]、[60,62]、[78]" -->
 
 3 阶 B 树的非根结点至少有 1 个关键字。删除 78 后最右叶变空，而左兄弟 `[60,62]` 有多余关键字：将父中的 65 下移到最右叶，再把兄弟最大的 62 上移到父结点，得到：
 
-```text
-       [55, 62]
-      /    |    \
-   [47]  [60]  [65]
+```graphviz
+digraph BTreeBorrowAfter {
+  rankdir=TB;
+  node [shape=box, style=rounded];
+  root [label="[55, 62]"];
+  a [label="[47]"];
+  b [label="[60]"];
+  c [label="[65]"];
+  root -> a;
+  root -> b;
+  root -> c;
+}
 ```
+<!-- diagram id="btree-borrow-after" caption: "借键后：父分隔键 65 下移、兄弟最大键 62 上移，三个孩子变为 [47]、[60]、[65]" -->
 
 新的最右叶关键字是 65。这个过程同时保持结点下限和区间次序。
 

@@ -341,3 +341,197 @@ Implemented and verified Lab 01-21 with dual list implementations, deterministic
 ### Status
 
 [OK] **Completed**
+
+
+## Session 14: Chapter 1 array-to-linked-list problem-solving article
+
+**Date**: 2026-08-31
+**Task**: Chapter 1 array-to-linked-list problem-solving article
+**Branch**: `codex/ch01-array-to-linked-list-problem-solving`
+
+### Summary
+
+Added an in-depth Chapter 1 article that maps array problem-solving skills to linked-list invariants and pointer operations, integrated it into the website content index, completed full validation and browser preview, and opened PR #109.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `84dbb44` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 15: Chapter 14 dynamic programming foundations
+
+**Date**: 2026-08-31
+**Task**: Chapter 14 dynamic programming foundations
+**Branch**: `Azen-ch14`
+
+### Summary
+
+Completed five Chapter 14 dynamic programming lessons, integrated the chapter into the curriculum and empty Lab categories, added navigation coverage, compiled all 22 C++17 examples, and verified the site across desktop/mobile and light/dark themes.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b0e0552` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 16: Lab stable IDs and automatic numbering
+
+**Date**: 2026-08-31
+**Task**: Lab stable IDs and automatic numbering
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+Added permanent chapter/type Lab IDs, automatic allocation and lookup, migrated existing content without renaming paths, updated site and VS Code consumers, documented the workflow, and simplified sidebar labels to show only the stable ID plus problem name.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `0bbec8e` | (see git log) |
+| `e11f1f9` | (see git log) |
+| `966557a` | (see git log) |
+| `3a8c01e` | (see git log) |
+| `5f0c328` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 17: Normalize all Lab navigation labels
+
+**Date**: 2026-08-31
+**Task**: Normalize all Lab navigation labels
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+Unified both categorized 本章 Labs and legacy 相关 Labs sidebar paths so every chapter displays only the stable Lab ID plus problem name, and updated discovery, desktop, mobile, task, and architecture contracts.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `90a26ca` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 18: Resolve PR 119 CI failures
+
+**Date**: 2026-08-31
+**Task**: Resolve PR 119 CI failures
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+Investigated GitHub Actions logs, updated stale stable-ID artifact assertions, separated dependency-free Lab ID parsing from repository authoring dependencies, lazy-loaded new/locate commands, added detached student-package regression coverage, and verified Make, Pages, discovery, and browser gates.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `ead8db8` | (see git log) |
+| `388cfe0` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 19: 稳定 Lab 文档标题约束
+
+**Date**: 2026-09-01
+**Task**: 稳定 Lab 文档标题约束
+**Branch**: `codex/lab-stable-id`
+
+### Summary
+
+定义 README 标题从 labId 生成的统一格式，更新 Agent/作者约束、脚手架和渐进迁移校验，并新增旧目录稳定标题的自动发现回归。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5f0a637` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 20: Labs 三分类目录迁移
+
+**Date**: 2026-09-01
+**Task**: Labs 三分类目录迁移
+**Branch**: `codex/lab-category-directories`
+
+### Summary
+
+将 173 个 Lab 迁移到 theory、exercise、project 分类目录，更新网站、CLI、校验器和 VS Code 插件，并完成全量本地与 Pages 测试。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `917b482` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 21: Chapter 14 dynamic programming exercise labs
+
+**Date**: 2026-09-01
+**Task**: Chapter 14 dynamic programming exercise labs
+**Branch**: `codex/chapter-14-dp-labs`
+
+### Summary
+
+Added 30 C++17 dynamic programming Program Labs (14E01-14E30), each with 20 public cases, independent generator/oracles, chapter overview synchronization, and complete repository/site verification.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `1c3aadb` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 22: 修复测评行末空格误判
+
+**Date**: 2026-09-01
+**Task**: 修复测评行末空格误判
+**Branch**: `codex/fix-trailing-space-judge`
+
+### Summary
+
+调整 Lab exact 输出比较器，忽略每行末尾空格与制表符，同时保留行首、行内空白及额外行的严格校验；同步回归测试、作者指南和 Trellis 规范，完整 pnpm test 通过。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `269b7a3` | (see git log) |
+
+### Status
+
+[OK] **Completed**

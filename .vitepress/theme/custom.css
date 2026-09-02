@@ -1903,14 +1903,21 @@ input:focus-visible {
   cursor: pointer;
 }
 
-.course-quiz-hint > .course-quiz-rich,
-.course-quiz-answer-overview > ol { padding: 0 16px 14px; }
+.course-quiz-hint > .course-quiz-rich { padding: 0 16px 14px; }
 
 .course-quiz-answer-overview > ol {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 6px 18px;
   margin: 0;
+  padding: 0 16px 14px;
+  list-style: none;
+}
+
+.course-quiz-answer-overview > ol > li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35em;
 }
 
 .course-quiz-heading-content {

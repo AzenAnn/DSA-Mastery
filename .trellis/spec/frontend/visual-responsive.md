@@ -99,3 +99,30 @@ markdown: { theme: "github-dark-high-contrast" }
 - 用大量绝对定位复刻截图，导致中文换行或移动端溢出。
 - 只测浅色桌面，忽略暗色、键盘和 320px～720px 宽度。
 - 为视觉一致性重写 VitePress 已可靠提供的搜索、outline 或移动抽屉。
+
+## VS Code Lab WebView 补充合同
+
+VS Code 扩展的 Lab WebView 与原生侧边栏是两个职责层：侧边栏唯一负责章节、题目列表和进度入口；WebView 只负责当前题面的阅读、作答和局部结果检查。代码题的结果检查器必须使用可收起的双栏结构，不能演变成第二套导航。
+
+~~~text
+renderPanelHtml
+  .lab-workspace: minmax(0, 2fr) + bounded inspector
+  .lab-inspector: Result | Test cases, one collapse control
+  .lab-actionbar: one primary Submit + quiet secondary actions
+~~~
+
+- inspector 展开宽度上限为题面主列宽度；使用 min-width: 0、受限 minmax 和自身滚动容器，禁止页面级横向溢出。
+- progress.lastSubmission 决定初始状态：无历史结果时收起，有历史结果时展开并显示结果；submitting、result 和 submitFailed 事件自动打开结果页签。
+- 折叠按钮必须提供 aria-expanded、aria-controls 和可读名称；结果/测试用例页签使用 role=tab、aria-selected 和键盘左右/Home/End 切换。
+- ≤720px 时题面与 inspector 堆叠，≤460px 时动作按钮全宽或双列换行；代码、公式、表格和长输出只能在自身容器内横向滚动。
+- 样式使用 VS Code 主题变量映射的语义 token；浅色低噪声表面是参考，深色只做对比度回归。提交是唯一主操作，其他动作不得各自形成突兀的凸起按钮。
+
+### 统计看板 WebView 补充合同
+
+统计页与做题页共享 `.lab-page` 的语义令牌，但职责和结构独立：
+
+- 根结构固定为 `body.stats-body > main.lab-page.stats-page`；信息顺序为总览指标、活动热图、累计通过趋势、章节分布。不得加入章节导航、题目列表、结果 inspector 或底部动作栏。
+- 活动热图的提交/通过分段按钮与年份选择由 WebView 本地显隐驱动；所有年份和指标可预渲染，切换时同步 `hidden`、`.active` 和 `aria-pressed`，不因切换回扩展取数。
+- 热图的固定宽度只能在 `.heatmap-scroll` 内横向滚动；趋势图和章节行使用 `min-width: 0`/流式宽度，统计页根节点不得横向滚动。统计 HTML 必须声明 `viewport`。
+- 统计事件日志是追加型数据源：`submit` 与 `pass` 明确分开记录，代码题每次提交可产生两类事件，选择题每次答题记录提交且仅在首次完成时记录通过；版本迁移须保留原有题目进度并为可回填的代码题历史生成事件。
+- 图表颜色、空状态和控件状态使用 VS Code 主题变量及显式 fallback；浅色主题为主，暗色主题至少保持文字、图例、网格线、控件焦点和图表可读。热力图在 `body.vscode-dark` 与 `body.vscode-high-contrast` 下应覆盖独立的 `--stats-*` 色阶，低强度格子不能与背景混淆，并可用 `--stats-cell-outline` 为小尺寸图形提供边界。

@@ -1,0 +1,5 @@
+{"file":".trellis/spec/content/lab-tooling.md","reason":"按内容路径、分类/目录/labId 一致性及旧平铺目录规则复核。"}
+{"file":".trellis/spec/quality/vscode-extension.md","reason":"按插件稳定 ID、兼容导航、进度迁移和全量测试要求复核。"}
+{"file":".trellis/spec/quality/validation-and-pages.md","reason":"按根项目完整门禁、构建产物和自动发现要求复核。"}
+{"file":".trellis/spec/quality/git-and-pr.md","reason":"按分支、提交隔离和 PR 文案合同复核交付范围。"}
+{"file":".trellis/spec/quality/cleanup-safety.md","reason":"按精确目标、可回滚缓存清理和删除后验证证据复核。"}

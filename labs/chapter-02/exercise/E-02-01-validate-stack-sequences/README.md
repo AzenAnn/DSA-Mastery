@@ -1,0 +1,208 @@
+---
+title: "Lab 02-E-01：验证栈序列"
+description: "按给定入栈顺序模拟栈，判断目标出栈序列是否合法，并定位第一个未匹配位置。"
+order: 3
+chapter: 2
+labId: "02E01"
+chapterTitle: "栈与队列"
+updated: "2026-08-21"
+contributors: ["DSA Mastery Team"]
+status: "draft"
+lab: true
+difficulty: "基础"
+duration: "35～50 分钟"
+---
+
+# Lab 02-E-01：验证栈序列
+
+> 题目来源：改编自 [LeetCode 946：验证栈序列](https://leetcode.cn/problems/validate-stack-sequences/)。本 Lab 使用课程自定义输入输出协议和独立测试，不复制来源站点的代码或测试。
+
+## 学习目标
+
+- 用栈模拟固定入栈顺序下的出栈过程。
+- 证明每个元素至多入栈、出栈一次，因此总时间为 O(n)。
+- 在非法序列中报告第一个未匹配的 popped 下标。
+
+## 前置知识
+
+建议先学习[第 2.1 节栈](../../../../content/chapter-02-stack-queue/01-stack.md)。实现使用 ISO C++17；开始前可运行 `make doctor` 检查环境。
+
+## 题目
+
+给定两个整数序列 `pushed` 和 `popped`。两个序列长度相同、元素互不重复，并且包含完全相同的元素。
+
+最开始栈为空。你必须按照 `pushed` 从左到右的顺序压入元素，但可以在任意时刻弹出当前栈顶。请判断能否通过一系列合法的入栈、出栈操作，使元素恰好按照 `popped` 的顺序全部出栈。
+
+例如，`pushed = [1, 2, 3, 4, 5]` 时，可以先压入 `1、2、3、4`，弹出 `4`，再压入并弹出 `5`，最后依次弹出 `3、2、1`，得到合法出栈序列 `[4, 5, 3, 2, 1]`。
+
+本课程在原题“判断是否合法”的基础上增加了错误定位：如果无法匹配完整序列，还要报告 `popped` 中第一个没有成功匹配的位置。
+
+## 输入格式
+
+- 第一行：整数 `n`，表示两个序列的长度；
+- 第二行：`n` 个整数 `pushed[0] ... pushed[n-1]`；
+- 第三行：`n` 个整数 `popped[0] ... popped[n-1]`。
+
+当 `n = 0` 时，后两行为空序列。
+
+## 输出格式
+
+- 如果 `popped` 是合法的完整出栈序列，输出 `YES`；
+- 否则输出 `NO k`，其中 `k` 是 `popped` 中第一个未能匹配的元素下标，下标从 `0` 开始。
+
+## 数据范围与限制
+
+| 项目 | 范围或要求 |
+| --- | --- |
+| 序列长度 `n` | `0 ≤ n ≤ 200000` |
+| 元素值 | 64 位有符号整数 |
+| 输入保证 | 两个序列内部均无重复元素，且互为排列 |
+| 时间复杂度要求 | `O(n)` |
+| 额外空间限制 | `O(n)` |
+
+## 样例 1：合法序列
+
+```input
+5
+1 2 3 4 5
+4 5 3 2 1
+```
+
+```output
+YES
+```
+
+依次压入 `1、2、3、4` 后弹出 `4`；再压入并弹出 `5`；最后连续弹出 `3、2、1`。全部元素都按照 `popped` 给出的顺序出栈，因此输出 `YES`。
+
+## 样例 2：非法序列
+
+```input
+5
+1 2 3 4 5
+4 3 5 1 2
+```
+
+```output
+NO 3
+```
+
+前三个目标元素 `4、3、5` 可以依次匹配。此时栈中从底到顶为 `[1, 2]`，下一个目标元素是 `popped[3] = 1`，但栈顶是 `2`，并且已经没有新元素可以入栈，所以位置 `3` 无法匹配。
+
+## 边界与验收重点
+
+- 空序列与单元素序列。
+- 全部元素入栈后再逆序出栈。
+- 只匹配若干前缀后失败，并正确报告下标。
+
+标准输入保证两个序列长度正确、元素互不重复且互为排列，无需处理缺失元素、额外元素或重复值。调试日志必须写入标准错误，标准输出只保留判题结果。
+
+## 如何验证
+
+```powershell
+# 已进入本 Lab 目录
+make doctor
+make run
+make run CASE=001-valid-sample
+make interactive
+make score
+```
+
+Windows 没有安装 Make 时，在仓库根目录运行：
+
+```powershell
+pnpm lab:doctor -- labs/chapter-02/exercise/E-02-01-validate-stack-sequences
+pnpm lab:run -- labs/chapter-02/exercise/E-02-01-validate-stack-sequences
+pnpm lab:run -- labs/chapter-02/exercise/E-02-01-validate-stack-sequences --case 001-valid-sample
+pnpm lab:score -- labs/chapter-02/exercise/E-02-01-validate-stack-sequences
+```
+
+`make run` 在答案尚未全对时仍正常返回，便于查看各用例结果；`make score` 是严格入口，只有得到 100 分才返回成功。样例采用精确输出比较；`007-scale` 使用两千个元素回归较长的合法序列，复杂度要求仍应结合算法分析判断，而不依赖易受机器性能影响的极限超时。
+
+- [ ] 参考样例与全部公开测试通过
+- [ ] 空序列、单元素、立即出栈和延迟出栈均有自测
+- [ ] 非法序列输出第一个未匹配的 0-based 下标
+- [ ] 能用“每个元素至多入栈、出栈一次”说明 `O(n)` 时间
+
+## 思考与复盘
+
+1. 为什么栈顶不等于下一个待输出元素时不能立即判错？
+2. 为什么算法中的内部 `while` 循环不会令总时间退化为 `O(n²)`？
+
+<details>
+<summary>查看参考答案</summary>
+
+1. **因为后续元素还可以继续入栈。** 当前栈顶暂时不等于 `popped[next]`，只说明现在不能弹出，并不说明以后也不能。例如 `pushed = [1, 2]`、`popped = [2, 1]`：压入 `1` 后栈顶不是目标 `2`，但继续压入 `2` 就能依次弹出 `2、1`。只有所有元素都已入栈，而栈顶仍无法匹配下一个目标时，才能确定失败。
+2. **分析循环总次数，而不是只看嵌套层数。** 每个元素只会被外层循环压栈一次，也只会被内部 `while` 弹栈一次。所有 `while` 执行次数加起来最多为 `n`，因此压栈和弹栈总工作量都是 `O(n)`，整体不会变成 `O(n²)`。
+
+</details>
+
+## 题解
+
+<details>
+<summary>点击查看题解</summary>
+
+### 思路与不变量
+
+使用一个辅助栈模拟入栈过程，并用 `next` 指向 `popped` 中第一个尚未匹配的位置。每压入一个元素，就在“栈顶等于 `popped[next]`”时持续弹栈。
+
+循环过程中始终满足：辅助栈按原顺序保存所有已经入栈但尚未匹配的元素，`popped[0..next)` 已经合法完成。全部入栈结束后，`next == n` 当且仅当目标序列合法。
+
+### 算法步骤
+
+1. 初始化空栈和 `next = 0`；
+2. 按顺序遍历 `pushed`，将当前元素压栈；
+3. 当栈非空且栈顶等于 `popped[next]` 时，弹栈并递增 `next`；
+4. 若最终 `next == n`，输出 `YES`，否则输出 `NO next`。
+
+### 复杂度分析
+
+- 时间复杂度：`O(n)`，每个元素最多入栈和出栈各一次；
+- 额外空间：`O(n)`，最坏情况下所有元素都暂存在栈中。
+
+### 边界注意
+
+- `n = 0` 时两个空序列合法；
+- 不要在暂时无法匹配栈顶时提前判错，后续元素仍可能先入栈再出栈；
+- 输出的是第一个未匹配的 `popped` 下标，不是对应元素值。
+
+</details>
+<details>
+<summary>点击查看参考代码</summary>
+
+```cpp
+#include <cstddef>
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    std::size_t n = 0;
+    if (!(std::cin >> n)) return 0;
+
+    std::vector<long long> pushed(n);
+    std::vector<long long> popped(n);
+    for (auto& value : pushed) std::cin >> value;
+    for (auto& value : popped) std::cin >> value;
+
+    std::vector<long long> stack;
+    stack.reserve(n);
+    std::size_t next = 0;
+    for (const long long value : pushed) {
+        stack.push_back(value);
+        while (!stack.empty() && next < n && stack.back() == popped[next]) {
+            stack.pop_back();
+            ++next;
+        }
+    }
+
+    if (next == n) {
+        std::cout << "YES\n";
+    } else {
+        std::cout << "NO " << next << '\n';
+    }
+}
+```
+
+</details>
