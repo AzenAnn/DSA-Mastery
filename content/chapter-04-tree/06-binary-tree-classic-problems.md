@@ -168,6 +168,40 @@ private:
 };
 ```
 
+#### 延伸：另一棵树的子树与子结构匹配（Subtree Matching）
+
+如果问题升级为：**给定主树 `root` 与模式树 `subRoot`，判断 `root` 中是否包含与 `subRoot` 结构与数值完全相同的子树**。
+
+解决这个问题的思路其实非常朴素——**双重递归**：
+1. **外层递归（遍历主树找起点）**：遍历主树中的每一个节点，把每个节点都当成潜在的子树根；
+2. **内层递归（直接调用 `isSameTree`）**：对选中的节点，直接复用上面写好的 `isSameTree` 函数，逐个比对它和 `subRoot` 是否完全一致。
+
+```cpp:line-numbers [is-subtree.cpp]
+class Solution {
+public:
+    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+        // 主树为空，不可能包含任何非空子树
+        if (root == nullptr) return false;
+        // 1. 如果当前节点与 subRoot 相同，说明找到了，直接返回 true
+        // 2. 否则分别去左子树、右子树里继续寻找
+        return isSameTree(root, subRoot) ||
+               isSubtree(root->left, subRoot) ||
+               isSubtree(root->right, subRoot);
+    }
+private:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (p == nullptr && q == nullptr) return true;
+        if (p == nullptr || q == nullptr) return false;
+        return (p->val == q->val) &&
+               isSameTree(p->left, q->left) &&
+               isSameTree(p->right, q->right);
+    }
+};
+```
+
+* **时间复杂度**：设主树节点数为 $M$，子树节点数为 $N$。最坏情况下（如节点值全部相同的退化单链树），主树每个节点都会触发一次 $O(N)$ 的匹配，时间复杂度为 $O(M \times N)$；
+* **优化方向**：若需进一步优化至 $O(M + N)$ 线性复杂度，可通过带空指针占位符的前序序列化转化为字符串 KMP 匹配，或使用树哈希（Merkle Tree）。
+
 ---
 
 ### 2. 完全二叉树判定（Complete Binary Tree Check）
