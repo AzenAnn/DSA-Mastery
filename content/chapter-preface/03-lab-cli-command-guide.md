@@ -4,7 +4,7 @@ description: "系统说明 Quiz、Program、Project 的 pnpm 命令、参数、�
 order: 3
 chapter: "preface"
 chapterTitle: "课程作者指南"
-updated: "2026-08-21"
+updated: "2026-09-02"
 contributors: ["Azen"]
 status: "draft"
 ---

@@ -14,6 +14,34 @@ GNU Make 是可选快捷入口。==没有安装 Make 不会影响 pnpm 的检查
 
 只想马上开始时，先认清当前 Lab 的类型，再使用对应入口。
 
+### 按章节编号快速评测
+
+如果只想运行一道题，不必先查找完整的 Lab 目录。在仓库根目录向 `lab.mjs` 依次传入章节号、题目类型和题号即可，`lab.mjs` 是现有 Lab CLI 的轻量封装：
+
+::: code-group
+Windows Powershell
+```powershell [Windows PowerShell]
+node .\lab.mjs 1 E 2
+```
+macOS / Linux
+```bash [macOS / Linux]
+node ./lab.mjs 1 E 2
+```
+
+:::
+
+通用格式为 `node ./lab.mjs <chapter> <T|E|P> <number>`。例如，`1 E 2` 表示第 1 章 Exercise类型 第 2 道 。
+
+| 类型 | 脚本行为 |
+| --- | --- |
+| `T` | 定位 Theory Quiz，并提示前往课程网站或 VS Code 插件作答 |
+| `E` | 定位 Exercise，随后运行全部公开测试 |
+| `P` | 定位 Project，随后运行全部自动评测并显示人工待评分项 |
+
+::: tip 需要更精细的控制时
+这个快捷入口只接受上述三个位置参数。需要选择单个 case、Project task、交互运行或严格评分时，请继续使用本页后面的 pnpm 或 Make 完整命令。
+:::
+
 ::: code-group
 
 ```text [Quiz · 网页作答]
