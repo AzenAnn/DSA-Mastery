@@ -1,0 +1,8 @@
+7
+disk 1: A->C
+disk 2: A->B
+disk 1: C->B
+disk 3: A->C
+disk 1: B->A
+disk 2: B->C
+disk 1: A->C

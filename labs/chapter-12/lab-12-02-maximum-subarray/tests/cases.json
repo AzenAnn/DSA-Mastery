@@ -1,0 +1,42 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 35,
+    "tags": ["sample"],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-all-negative",
+    "input": "tests/002-all-negative.in",
+    "expected": "tests/002-all-negative.out",
+    "points": 20,
+    "tags": ["boundary", "negative"],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "003-empty",
+    "input": "tests/003-empty.in",
+    "expected": "tests/003-empty.out",
+    "points": 15,
+    "tags": ["edge"],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "004-all-positive",
+    "input": "tests/004-all-positive.in",
+    "expected": "tests/004-all-positive.out",
+    "points": 30,
+    "tags": ["normal"],
+    "compare": {
+      "mode": "exact"
+    }
+  }
+]
