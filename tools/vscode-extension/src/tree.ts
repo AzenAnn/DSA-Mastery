@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
 import { shortLabTitle } from "./labIdentity";
-import { discoverProgramLabs, type Chapter, type ProgramLab } from "./labIndex";
+import { discoverProgramLabs, type Chapter, type LabEntry, type ProjectLab } from "./labIndex";
 import { quizIconState } from "./quiz";
+import { projectProgressPassed, type ProjectProgress } from "./projectProgress";
 import type { LabProgress, ProgressTracker, QuizProgress } from "./progress";
 
 export class ChapterNode {
@@ -11,7 +12,7 @@ export class ChapterNode {
 
 export class LabNode {
   readonly kind = "lab" as const;
-  constructor(readonly lab: ProgramLab) {}
+  constructor(readonly lab: LabEntry) {}
 }
 
 export type TreeNode = ChapterNode | LabNode;
@@ -41,7 +42,7 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     this.emitter.fire(undefined);
   }
 
-  allLabs(): ProgramLab[] {
+  allLabs(): LabEntry[] {
     return this.chapters.flatMap((chapter) => chapter.labs);
   }
 
@@ -50,7 +51,7 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     return this.chapters;
   }
 
-  findLab(identifier: string): ProgramLab | undefined {
+  findLab(identifier: string): LabEntry | undefined {
     return this.allLabs().find(
       (lab) => lab.id === identifier || lab.name === identifier || lab.legacyNames.includes(identifier),
     );
@@ -83,14 +84,25 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     const { lab } = node;
     const quizState = lab.type === "quiz" ? this.progress.getQuiz(lab.id) : undefined;
     const programState = lab.type === "program" ? this.progress.get(lab.id) : undefined;
+    const projectState = lab.type === "project" ? this.progress.getProject(lab.id) : undefined;
     const item = new vscode.TreeItem(`${lab.id} · ${shortLabTitle(lab.title)}`, vscode.TreeItemCollapsibleState.None);
 
-    item.description = lab.type === "quiz" ? describeQuizState(quizState) : describeState(programState);
-    item.iconPath = lab.type === "quiz" ? quizStateIcon(quizState) : stateIcon(programState);
-    item.tooltip = lab.type === "quiz"
-      ? buildQuizTooltip(lab, quizState)
-      : buildTooltip(lab, programState);
-    item.contextValue = "dsaMasteryLab";
+    if (lab.type === "quiz") {
+      item.description = describeQuizState(quizState);
+      item.iconPath = quizStateIcon(quizState);
+      item.tooltip = buildQuizTooltip(lab, quizState);
+      item.contextValue = "dsaMasteryLab";
+    } else if (lab.type === "project") {
+      item.description = describeProjectState(projectState);
+      item.iconPath = projectStateIcon(projectState);
+      item.tooltip = buildProjectTooltip(lab, projectState);
+      item.contextValue = "dsaMasteryProject";
+    } else {
+      item.description = describeState(programState);
+      item.iconPath = stateIcon(programState);
+      item.tooltip = buildTooltip(lab, programState);
+      item.contextValue = "dsaMasteryLab";
+    }
     item.command = {
       command: "dsaMastery.openLab",
       title: "打开题目",
@@ -124,7 +136,7 @@ function describeQuizState(state: QuizProgress | undefined): string {
   return state.passed ? `${correct}/${correct} · 已完成` : `${correct} 正确 · 已答 ${answered}`;
 }
 
-function buildQuizTooltip(lab: ProgramLab, state: QuizProgress | undefined): vscode.MarkdownString {
+function buildQuizTooltip(lab: Extract<LabEntry, { type: "quiz" }>, state: QuizProgress | undefined): vscode.MarkdownString {
   const tooltip = new vscode.MarkdownString(`**${lab.id} · ${lab.title}**\n\n${state?.passed ? "✅ 已完成" : "选择题"}\n\n已答：${state ? Object.keys(state.answers).length : 0}/${lab.quizQuestions?.length ?? 0}`);
   tooltip.supportThemeIcons = true;
   return tooltip;
@@ -150,7 +162,7 @@ function describeState(state: LabProgress | undefined): string {
   return `${state.bestScore}/${state.maxScore} · ${state.lastSubmission?.verdict ?? ""}`.trim();
 }
 
-function buildTooltip(lab: ProgramLab, state: LabProgress | undefined): vscode.MarkdownString {
+function buildTooltip(lab: Extract<LabEntry, { type: "program" }>, state: LabProgress | undefined): vscode.MarkdownString {
   const lines = [`**${lab.id} · ${lab.title}**`, ""];
   if (lab.description) lines.push(lab.description, "");
 
@@ -177,6 +189,52 @@ function buildTooltip(lab: ProgramLab, state: LabProgress | undefined): vscode.M
   const tooltip = new vscode.MarkdownString(lines.join("\n\n"));
   tooltip.supportThemeIcons = true;
   return tooltip;
+}
+
+function projectStateIcon(state: ProjectProgress | undefined): vscode.ThemeIcon {
+  if (state && projectProgressPassed(state)) {
+    return new vscode.ThemeIcon("pass-filled", new vscode.ThemeColor("testing.iconPassed"));
+  }
+  if (state && state.submissionCount > 0) {
+    return new vscode.ThemeIcon("symbol-misc", new vscode.ThemeColor("testing.iconQueued"));
+  }
+  return new vscode.ThemeIcon("symbol-misc");
+}
+
+function describeProjectState(state: ProjectProgress | undefined): string {
+  if (!state || state.submissionCount === 0) return "";
+  if (state.internalError) return "评测内部错误";
+  if (projectProgressPassed(state)) return `${formatScore(state.automatedScore)}/${formatScore(state.automatedMax)}`;
+  if (state.automatedFull && state.manualPending > 0) return "自动通过 · 待人工";
+  return `${formatScore(state.automatedScore)}/${formatScore(state.automatedMax)} · 待人工 ${formatScore(state.manualPending)}`;
+}
+
+function buildProjectTooltip(lab: ProjectLab, state: ProjectProgress | undefined): vscode.MarkdownString {
+  const lines = [`**${lab.id} · ${lab.title}**`, ""];
+  if (lab.description) lines.push(lab.description, "");
+  lines.push(`任务：${lab.tasks.length} 个`, `学生文件：${lab.studentFiles.length} 个`);
+
+  if (!state || state.submissionCount === 0) {
+    lines.push("尚未提交");
+  } else {
+    const status = state.internalError
+      ? "评测内部错误"
+      : projectProgressPassed(state)
+      ? "✅ 已完成"
+      : state.automatedFull && state.manualPending > 0
+        ? "自动通过 · 待人工"
+        : "自动部分未满";
+    lines.push(status, `自动得分：${formatScore(state.automatedScore)}/${formatScore(state.automatedMax)}`, `待人工：${formatScore(state.manualPending)}`, `提交次数：${state.submissionCount}`);
+    if (state.lastSubmission) lines.push(`最近一次：${new Date(state.lastSubmission.at).toLocaleString()}`);
+  }
+
+  const tooltip = new vscode.MarkdownString(lines.join("\n\n"));
+  tooltip.supportThemeIcons = true;
+  return tooltip;
+}
+
+function formatScore(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
 }
 
 function formatTime(iso: string): string {

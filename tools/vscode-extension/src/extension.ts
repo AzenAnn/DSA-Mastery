@@ -3,7 +3,7 @@ import path from "node:path";
 import * as vscode from "vscode";
 import { CliError } from "./cli";
 import { EnvironmentGuard } from "./doctor";
-import type { ProgramLab } from "./labIndex";
+import type { LabEntry } from "./labIndex";
 import { LabPanel } from "./panel";
 import { ProgressTracker, type HistoryEntry } from "./progress";
 import { StatsPanel } from "./statsPanel";
@@ -52,7 +52,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   };
 
   /** 解析命令参数：可能是树节点、lab 名，或什么都没有（用当前面板/当前文件）。 */
-  const resolveLab = async (argument?: unknown): Promise<ProgramLab | undefined> => {
+  const resolveLab = async (argument?: unknown): Promise<LabEntry | undefined> => {
     if (typeof argument === "string") return tree.findLab(argument);
 
     const node = argument as TreeNode | undefined;
@@ -64,14 +64,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     // 退化到当前编辑器所在的 lab。
     const file = vscode.window.activeTextEditor?.document.fileName;
     if (!file) return undefined;
-    return tree.allLabs().find((lab) => file.startsWith(lab.labPath + path.sep));
+    return tree.allLabs().find((lab) => isWithinDirectory(lab.labPath, file));
   };
 
   context.subscriptions.push(
     vscode.commands.registerCommand("dsaMastery.openLab", async (argument?: unknown) => {
       const lab = await resolveLab(argument);
       if (!lab) {
-        await vscode.window.showWarningMessage("没有找到对应的代码题。请在题目列表中选择一道题。");
+        await vscode.window.showWarningMessage("没有找到对应的题目。请在题目列表中选择一道题。");
         return;
       }
       await LabPanel.show(lab, panelDeps);
@@ -80,7 +80,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.commands.registerCommand("dsaMastery.submit", async (argument?: unknown) => {
       const lab = await resolveLab(argument);
       if (!lab) {
-        await vscode.window.showWarningMessage("没有可提交的题目。请先打开一道代码题。");
+        await vscode.window.showWarningMessage("没有可提交的题目。请先打开一道题。");
         return;
       }
       // 统一走面板提交，保证结果有地方显示。
@@ -106,7 +106,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.commands.registerCommand("dsaMastery.runDoctor", async (argument?: unknown) => {
       const lab = (await resolveLab(argument)) ?? tree.allLabs()[0];
       if (!lab) {
-        await vscode.window.showWarningMessage("没有找到可用于环境检测的代码题。");
+        await vscode.window.showWarningMessage("没有找到可用于环境检测的题目。");
         return;
       }
       try {
@@ -134,7 +134,15 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 }
 
 /** 列出某题的提交历史，可打开任一次提交的源码快照，或与当前代码对比。 */
-async function showHistory(lab: ProgramLab, progress: ProgressTracker): Promise<void> {
+async function showHistory(lab: LabEntry, progress: ProgressTracker): Promise<void> {
+  if (lab.type !== "program") {
+    await vscode.window.showInformationMessage(
+      lab.type === "project"
+        ? "Project 暂不支持多文件提交历史；当前仅保留最近一次自动判题摘要。"
+        : "选择题没有代码提交历史。",
+    );
+    return;
+  }
   const state = progress.get(lab.id);
   if (!state || state.history.length === 0) {
     await vscode.window.showInformationMessage(`${lab.title} 还没有提交记录。`);
@@ -182,4 +190,9 @@ async function showHistory(lab: ProgramLab, progress: ProgressTracker): Promise<
 
 export function deactivate(): void {
   // 状态在每次提交时已落盘，无需在此处理。
+}
+
+function isWithinDirectory(root: string, target: string): boolean {
+  const relative = path.relative(path.resolve(root), path.resolve(target));
+  return relative !== "" && relative !== ".." && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
 }

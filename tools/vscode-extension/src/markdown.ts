@@ -4,7 +4,7 @@ import matter from "gray-matter";
 import MarkdownIt from "markdown-it";
 import katex from "katex";
 import * as vscode from "vscode";
-import type { ProgramLab } from "./labIndex";
+import type { LabEntry } from "./labIndex";
 
 /**
  * 需要从题面中移除的小节标题。
@@ -75,7 +75,7 @@ function renderMath(md: MarkdownIt): void {
 }
 
 /** 把 README 里的相对图片路径改写为 webview 可加载的 URI。 */
-function rewriteImages(md: MarkdownIt, lab: ProgramLab, webview: vscode.Webview): void {
+function rewriteImages(md: MarkdownIt, lab: LabEntry, webview: vscode.Webview): void {
   const original = md.renderer.rules.image;
   md.renderer.rules.image = (tokens, index, options, env, self) => {
     const token = tokens[index];
@@ -98,7 +98,7 @@ export interface RenderedReadme {
 /** 渲染 Quiz 的题干、选项和解析片段，沿用题面 Markdown、图片与 KaTeX 规则。 */
 export function renderMarkdownFragment(
   source: string,
-  lab: ProgramLab,
+  lab: LabEntry,
   webview: vscode.Webview,
   allowHtml = false,
 ): string {
@@ -110,7 +110,7 @@ export function renderMarkdownFragment(
 
 /** 读取并渲染题面：去掉 frontmatter 与题解，处理图片与公式。 */
 export async function renderReadme(
-  lab: ProgramLab,
+  lab: LabEntry,
   webview: vscode.Webview,
 ): Promise<RenderedReadme> {
   let raw = "";

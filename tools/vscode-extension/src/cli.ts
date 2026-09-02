@@ -10,6 +10,7 @@ const SUPPORTED_REPORT_VERSION = 1;
 export const EXIT = { OK: 0, SCORE_NOT_FULL: 1, TOOL_ERROR: 2 } as const;
 
 export type Verdict = "AC" | "WA" | "TLE" | "RE" | "CE" | "OLE" | "IE";
+export type ProjectStatus = Verdict | "PENDING";
 
 export interface CaseResult {
   id: string;
@@ -45,6 +46,69 @@ export interface ScoreResult {
     stdout: string;
     stderr: string;
   };
+}
+
+export interface ProjectCtestResult {
+  name: string;
+  verdict: Verdict;
+  points: number;
+  maxPoints: number;
+  durationMs: number;
+  output: string;
+}
+
+export interface ProjectBuildResult {
+  ok: boolean;
+  phase: "configure" | "build";
+  target: "student" | "solution";
+  configure?: unknown;
+  build?: unknown;
+}
+
+interface ProjectTaskResultBase {
+  id: string;
+  kind: "stdio" | "ctest" | "manual";
+  status: ProjectStatus;
+  weight: number;
+  weightedScore: number;
+}
+
+export interface ProjectStdioTaskResult extends ProjectTaskResultBase {
+  kind: "stdio";
+  status: Verdict;
+  score: number;
+  maxScore: number;
+  judge: ScoreResult;
+}
+
+export interface ProjectCtestTaskResult extends ProjectTaskResultBase {
+  kind: "ctest";
+  status: Verdict;
+  score: number;
+  maxScore: number;
+  tests: ProjectCtestResult[];
+  build?: ProjectBuildResult;
+}
+
+export interface ProjectManualTaskResult extends ProjectTaskResultBase {
+  kind: "manual";
+  status: "PENDING";
+  weightedScore: 0;
+  checklist: string[];
+}
+
+export type ProjectTaskResult = ProjectStdioTaskResult | ProjectCtestTaskResult | ProjectManualTaskResult;
+
+export interface ProjectScoreResult {
+  target: "student" | "solution";
+  tasks: ProjectTaskResult[];
+  automatedScore: number;
+  automatedMax: number;
+  manualPending: number;
+  provisionalTotal: number;
+  total: number;
+  automatedFull: boolean;
+  internalError: boolean;
 }
 
 export interface DoctorTool {
@@ -197,6 +261,20 @@ export async function scoreLab(repoRoot: string, labRelativePath: string): Promi
   const { report, exitCode } = await runCli<ScoreResult>(repoRoot, ["score", labRelativePath]);
   if (!report.result) {
     throw new CliError(`判题报告缺少 result 字段（退出码 ${exitCode}）。`, "REPORT_INCOMPLETE");
+  }
+  return report.result;
+}
+
+/**
+ * 对 Project Lab 评分。
+ *
+ * Project 的权重、CMake/CTest 结果和 stdio 嵌套用例都由 lab CLI 计算；扩展只接收并展示
+ * 原始聚合结果，不在这里重新实现一套评分规则。
+ */
+export async function scoreProject(repoRoot: string, labRelativePath: string): Promise<ProjectScoreResult> {
+  const { report, exitCode } = await runCli<ProjectScoreResult>(repoRoot, ["score", labRelativePath]);
+  if (!report.result) {
+    throw new CliError(`Project 判题报告缺少 result 字段（退出码 ${exitCode}）。`, "REPORT_INCOMPLETE");
   }
   return report.result;
 }

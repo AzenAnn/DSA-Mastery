@@ -1839,3 +1839,374 @@ body.program-body {
     transition: none;
   }
 }
+
+/* ===== Project 工作台 ===== */
+
+body.project-body {
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 24px;
+  overflow: hidden;
+}
+
+.project-page {
+  --lab-actionbar-reserve: 128px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding-bottom: var(--lab-actionbar-reserve);
+}
+
+.project-scroll-region {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 16px;
+  scrollbar-gutter: stable;
+}
+
+.project-page .lab-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, min(38%, 420px));
+  gap: 20px;
+  align-items: start;
+  min-width: 0;
+}
+
+.project-page .lab-workspace.is-inspector-collapsed {
+  grid-template-columns: minmax(0, 1fr) 44px;
+}
+
+.project-page .lab-reading-surface,
+.project-page .lab-inspector {
+  min-width: 0;
+  border: 1px solid var(--dsa-border);
+  border-radius: var(--dsa-radius);
+  background: var(--dsa-surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+.project-page .lab-reading-surface {
+  padding: clamp(20px, 3vw, 32px);
+}
+
+.project-page .readme {
+  max-width: 76ch;
+  margin: 0;
+}
+
+.project-task-overview {
+  margin-top: 34px;
+  padding-top: 24px;
+  border-top: 1px solid var(--dsa-border);
+}
+
+.project-section-heading {
+  margin-bottom: 14px;
+}
+
+.project-eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--dsa-muted);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.7em;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.project-section-heading h2 {
+  margin: 0;
+  font-size: 1.1em;
+  line-height: 1.35;
+}
+
+.project-task-card {
+  min-width: 0;
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid var(--dsa-border);
+  border-radius: 9px;
+  background: var(--dsa-surface-raised);
+}
+
+.project-task-header,
+.project-task-result-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.project-task-header strong {
+  flex: none;
+  color: var(--dsa-accent);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.86em;
+  font-weight: 650;
+}
+
+.project-task-id {
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.92em;
+  font-weight: 650;
+}
+
+.project-task-kind {
+  margin-left: 9px;
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+}
+
+.project-task-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 8px 14px;
+  margin: 12px 0 14px;
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+}
+
+.project-task-meta div {
+  min-width: 0;
+}
+
+.project-task-meta dt {
+  margin-bottom: 2px;
+  font-size: 0.84em;
+}
+
+.project-task-meta dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.project-task-files,
+.project-task-cases,
+.project-task-tests,
+.project-manual {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--dsa-border);
+}
+
+.project-task-card h4 {
+  margin: 0 0 8px;
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+  font-weight: 650;
+}
+
+.project-file-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 0;
+  margin-top: 6px;
+  padding: 7px 9px;
+  border-color: var(--dsa-border);
+  background: var(--dsa-surface);
+  color: var(--dsa-text);
+  text-align: left;
+}
+
+.project-file-button code {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--dsa-accent);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-file-button span {
+  flex: none;
+  margin-left: 10px;
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+.project-file-button:hover {
+  border-color: var(--dsa-border-strong);
+  background: var(--dsa-accent-soft);
+}
+
+.project-case {
+  margin-top: 7px;
+}
+
+.project-case summary {
+  padding: 8px 0;
+}
+
+.project-case .io {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.project-case h5 {
+  margin: 0 0 5px;
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+  font-weight: 650;
+}
+
+.project-test-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.project-test-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--dsa-border);
+  border-radius: 6px;
+  background: var(--dsa-surface);
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+}
+
+.project-test-chip code {
+  overflow: hidden;
+  color: var(--dsa-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-manual {
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+.project-manual ul,
+.project-result-checklist {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.project-pending {
+  color: var(--dsa-warning);
+  font-weight: 650;
+}
+
+.project-empty {
+  margin: 0;
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+.project-page .summary.pending {
+  border-left: 3px solid var(--dsa-warning);
+  background: color-mix(in srgb, var(--dsa-warning) 8%, var(--dsa-surface));
+}
+
+.project-page .summary.pending h3 {
+  color: var(--dsa-warning);
+}
+
+.project-score-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.project-score-grid span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--dsa-border);
+  border-radius: 6px;
+  background: var(--dsa-surface-muted);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.8em;
+}
+
+.project-score-grid strong {
+  color: var(--dsa-muted);
+  font-family: var(--vscode-font-family);
+  font-size: 0.82em;
+  font-weight: 600;
+}
+
+.project-task-result {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--dsa-border);
+}
+
+.project-task-result-heading {
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+.project-task-result-heading code {
+  color: var(--dsa-text);
+  font-weight: 650;
+}
+
+.project-result-table {
+  margin-top: 9px;
+}
+
+.project-diagnostic {
+  margin: 9px 0 0;
+  max-height: 260px;
+  overflow: auto;
+}
+
+.project-build-status {
+  margin: 9px 0 0;
+  color: var(--dsa-danger);
+  font-size: 0.82em;
+}
+
+.project-result-checklist {
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+@media (max-width: 720px) {
+  .project-page {
+    --lab-actionbar-reserve: 144px;
+  }
+
+  .project-page .lab-workspace,
+  .project-page .lab-workspace.is-inspector-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-page .lab-inspector {
+    position: static;
+    width: 100%;
+  }
+}
+
+@media (max-width: 460px) {
+  .project-page {
+    --lab-actionbar-reserve: 236px;
+  }
+
+  .project-page .lab-reading-surface {
+    padding: 18px 16px;
+  }
+
+  .project-task-meta,
+  .project-score-grid,
+  .project-case .io {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -72,3 +72,16 @@ test("program and quiz panels expose the stable Lab ID in their metadata", async
 
   assert.match(html, /题号 \$\{escapeHtml\(lab\.id\)\}/);
 });
+
+test("project panel exposes the task graph and manual pending state", async () => {
+  const html = await readPackageFile("src/panelHtml.ts");
+
+  assert.match(html, /renderProjectPanelHtml/);
+  assert.match(html, /project-task-card/);
+  assert.match(html, /PENDING/);
+  assert.match(html, /ctest/);
+  assert.match(html, /openProjectFile/);
+  assert.match(html, /project-score-grid/);
+  assert.match(html, /item\.comparison/);
+  assert.match(html, /item\.output/);
+});
