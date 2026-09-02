@@ -557,3 +557,24 @@ Added 30 C++17 dynamic programming Program Labs (14E01-14E30), each with 20 publ
 ### Status
 
 [OK] **Completed**
+
+
+## Session 24: Expand Chapter 1 Program Lab tests
+
+**Date**: 2026-09-02
+**Task**: Expand Chapter 1 Program Lab tests
+**Branch**: `codex/ch1-labs-20-test-cases`
+
+### Summary
+
+Expanded 01E01-01E15 to exactly 20 weighted cases each, added boundary/normal/special/stress coverage and deterministic oracle generation, corrected three baseline reference issues, and passed all Lab and repository quality gates.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `a168091` | (see git log) |
+
+### Status
+
+[OK] **Completed**

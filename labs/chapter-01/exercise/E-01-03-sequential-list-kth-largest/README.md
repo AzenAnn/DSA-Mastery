@@ -173,31 +173,43 @@ pnpm lab:score -- labs/chapter-01/exercise/E-01-03-sequential-list-kth-largest
 
 ```cpp
 #include <cstddef>
-#include <cstdlib>
 #include <iostream>
 #include <vector>
 
-std::size_t partition(std::vector<long long>& a, std::size_t left, std::size_t right) {
-    std::size_t pivot_idx = left + std::rand() % (right - left + 1);
-    std::swap(a[pivot_idx], a[right]);
+struct EqualRange {
+    std::size_t first{};
+    std::size_t last{};
+};
 
-    long long pivot = a[right];
-    std::size_t i = left;
-    for (std::size_t j = left; j < right; ++j) {
-        if (a[j] <= pivot) {
-            std::swap(a[i++], a[j]);
+EqualRange partition_three_way(std::vector<long long>& a, std::size_t left, std::size_t right) {
+    const long long pivot = a[left + (right - left) / 2];
+    std::size_t less = left;
+    std::size_t current = left;
+    std::size_t greater = right;
+
+    while (current <= greater) {
+        if (a[current] < pivot) {
+            std::swap(a[less++], a[current++]);
+        } else if (a[current] > pivot) {
+            std::swap(a[current], a[greater--]);
+        } else {
+            ++current;
         }
     }
-    std::swap(a[i], a[right]);
-    return i;
+
+    return {less, greater};
 }
 
 long long quickselect(std::vector<long long>& a, std::size_t left, std::size_t right, std::size_t target) {
     while (left < right) {
-        std::size_t p = partition(a, left, right);
-        if (p == target) return a[p];
-        if (p < target) left = p + 1;
-        else right = p - 1;
+        const EqualRange equal = partition_three_way(a, left, right);
+        if (target < equal.first) {
+            right = equal.first - 1;
+        } else if (target > equal.last) {
+            left = equal.last + 1;
+        } else {
+            return a[target];
+        }
     }
     return a[left];
 }

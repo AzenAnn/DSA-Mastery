@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
     ]
@@ -24,7 +24,7 @@
     "id": "003-two-nodes",
     "input": "tests/003-two-nodes.in",
     "expected": "tests/003-two-nodes.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
     ]
@@ -33,9 +33,160 @@
     "id": "004-empty",
     "input": "tests/004-empty.in",
     "expected": "tests/004-empty.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
+    ]
+  },
+  {
+    "id": "005-three-nodes",
+    "input": "tests/005-three-nodes.in",
+    "expected": "tests/005-three-nodes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-even-length",
+    "input": "tests/006-even-length.in",
+    "expected": "tests/006-even-length.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-odd-length",
+    "input": "tests/007-odd-length.in",
+    "expected": "tests/007-odd-length.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-duplicates",
+    "input": "tests/008-duplicates.in",
+    "expected": "tests/008-duplicates.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "009-all-equal",
+    "input": "tests/009-all-equal.in",
+    "expected": "tests/009-all-equal.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "010-negative-values",
+    "input": "tests/010-negative-values.in",
+    "expected": "tests/010-negative-values.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-min-max-values",
+    "input": "tests/011-min-max-values.in",
+    "expected": "tests/011-min-max-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "012-alternating-signs",
+    "input": "tests/012-alternating-signs.in",
+    "expected": "tests/012-alternating-signs.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-ascending",
+    "input": "tests/013-ascending.in",
+    "expected": "tests/013-ascending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-descending",
+    "input": "tests/014-descending.in",
+    "expected": "tests/014-descending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-zero-values",
+    "input": "tests/015-zero-values.in",
+    "expected": "tests/015-zero-values.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "016-medium-pattern",
+    "input": "tests/016-medium-pattern.in",
+    "expected": "tests/016-medium-pattern.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-medium-odd",
+    "input": "tests/017-medium-odd.in",
+    "expected": "tests/017-medium-odd.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-medium-even",
+    "input": "tests/018-medium-even.in",
+    "expected": "tests/018-medium-even.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-stress-repeated",
+    "input": "tests/019-stress-repeated.in",
+    "expected": "tests/019-stress-repeated.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "020-stress-ascending",
+    "input": "tests/020-stress-ascending.in",
+    "expected": "tests/020-stress-ascending.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
     ]
   }
 ]

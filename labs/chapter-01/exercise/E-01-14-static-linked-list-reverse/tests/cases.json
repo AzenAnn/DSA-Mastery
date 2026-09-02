@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
     ]
@@ -24,7 +24,7 @@
     "id": "003-empty",
     "input": "tests/003-empty.in",
     "expected": "tests/003-empty.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
     ]
@@ -33,9 +33,159 @@
     "id": "004-two-nodes",
     "input": "tests/004-two-nodes.in",
     "expected": "tests/004-two-nodes.out",
-    "points": 25,
+    "points": 5,
     "tags": [
       "boundary"
+    ]
+  },
+  {
+    "id": "005-head-last-index",
+    "input": "tests/005-head-last-index.in",
+    "expected": "tests/005-head-last-index.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-scrambled-physical-order",
+    "input": "tests/006-scrambled-physical-order.in",
+    "expected": "tests/006-scrambled-physical-order.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-ascending-index-chain",
+    "input": "tests/007-ascending-index-chain.in",
+    "expected": "tests/007-ascending-index-chain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-descending-index-chain",
+    "input": "tests/008-descending-index-chain.in",
+    "expected": "tests/008-descending-index-chain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-odd-length",
+    "input": "tests/009-odd-length.in",
+    "expected": "tests/009-odd-length.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-even-length",
+    "input": "tests/010-even-length.in",
+    "expected": "tests/010-even-length.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-negative-values",
+    "input": "tests/011-negative-values.in",
+    "expected": "tests/011-negative-values.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-min-max-values",
+    "input": "tests/012-min-max-values.in",
+    "expected": "tests/012-min-max-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "013-repeated-values",
+    "input": "tests/013-repeated-values.in",
+    "expected": "tests/013-repeated-values.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "014-head-middle-index",
+    "input": "tests/014-head-middle-index.in",
+    "expected": "tests/014-head-middle-index.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-zigzag-indices",
+    "input": "tests/015-zigzag-indices.in",
+    "expected": "tests/015-zigzag-indices.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-medium-permutation",
+    "input": "tests/016-medium-permutation.in",
+    "expected": "tests/016-medium-permutation.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-medium-reverse-chain",
+    "input": "tests/017-medium-reverse-chain.in",
+    "expected": "tests/017-medium-reverse-chain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-stress-ascending-chain",
+    "input": "tests/018-stress-ascending-chain.in",
+    "expected": "tests/018-stress-ascending-chain.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  },
+  {
+    "id": "019-stress-random-permutation",
+    "input": "tests/019-stress-random-permutation.in",
+    "expected": "tests/019-stress-random-permutation.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  },
+  {
+    "id": "020-stress-repeated-values",
+    "input": "tests/020-stress-repeated-values.in",
+    "expected": "tests/020-stress-repeated-values.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "duplicates"
     ]
   }
 ]

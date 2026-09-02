@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 23
+- **Total Sessions**: 24
 - **Last Active**: 2026-09-02
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~559 | Active |
+| `journal-1.md` | ~580 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 24 | 2026-09-02 | Expand Chapter 1 Program Lab tests | `a168091` | `codex/ch1-labs-20-test-cases` |
 | 23 | 2026-09-02 | Ch.1 Graphviz 图示迁移 | `ae0a4c9`, `25c63dc` | `codex/ch1-graphviz-rendering` |
 | 22 | 2026-09-01 | 修复测评行末空格误判 | `269b7a3` | `codex/fix-trailing-space-judge` |
 | 21 | 2026-09-01 | Chapter 14 dynamic programming exercise labs | `1c3aadb` | `codex/chapter-14-dp-labs` |
