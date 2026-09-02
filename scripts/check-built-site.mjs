@@ -441,7 +441,7 @@ if (!stableIdLabHtml.includes("01E04")) {
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "Lab 命令与接口使用指南", "第 0 章 绪论", "Lab 01-T-02：单链表选择题精练", "Lab 01-P-01：线性表双实现与工作负载评测器", "01E04"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "Lab 命令与接口使用指南", "第 0 章 基础", "Lab 01-T-02：单链表选择题精练", "Lab 01-P-01：线性表双实现与工作负载评测器", "01E04"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

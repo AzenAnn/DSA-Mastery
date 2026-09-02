@@ -124,7 +124,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
   {
     id: "chapter-00-memory-foundations",
     number: "0",
-    title: "内存基础",
+    title: "基础",
     description: "从内存组织方式理解数据结构为何具有不同的表示与操作成本。",
     url: "/learn/outline/chapter-00-memory-foundations/",
     lessonSources: [
@@ -522,7 +522,7 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     chapterLabel: chapterLabel(chapter),
     chapterTitle: text(
       parsed.data.chapterTitle,
-      chapter === "preface" ? "课程作者指南" : chapter === 0 ? "绪论" : `第 ${chapter} 章`,
+      chapter === "preface" ? "课程作者指南" : chapter === 0 ? "基础" : `第 ${chapter} 章`,
     ),
     order: number(parsed.data.order),
     updated: text(parsed.data.updated, "未标注"),

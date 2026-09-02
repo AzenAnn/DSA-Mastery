@@ -179,7 +179,7 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await page.getByRole("link", { name: /从第 0 章开始/ }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("课程总目录");
-  await page.locator(".course-curriculum-chapters").getByRole("link", { name: /Ch\.0 内存基础/ }).click();
+  await page.locator(".course-curriculum-chapters").getByRole("link", { name: /Ch\.0 基础/ }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-00-memory-foundations/`);
   await expect(
     page.locator('.VPSidebar a[href*="/labs/chapter-00/theory/T-00-01-learning-map/"]'),

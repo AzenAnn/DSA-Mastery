@@ -1,15 +1,15 @@
 ---
-title: "第 0 章 绪论"
+title: "第 0 章 基础"
 description: "建立数据结构的共同语言，学习评价算法时间与空间代价的基本方法。"
 order: 0
 chapter: 0
-chapterTitle: "绪论"
+chapterTitle: "基础"
 updated: "2026-08-10"
 contributors: ["Azen"]
 status: "draft"
 ---
 
-# 第 0 章 绪论
+# 第 0 章 基础
 
 学习数据结构与算法，首先要回答两个问题：**数据应该怎样组织和表示？怎样评价一种解法的效率与资源代价？** 本章围绕这两个问题建立后续课程共用的术语与分析方法。
 
