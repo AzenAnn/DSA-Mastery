@@ -1,0 +1,92 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "002-zero-exp",
+    "input": "tests/002-zero-exp.in",
+    "expected": "tests/002-zero-exp.out",
+    "points": 10,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-negative",
+    "input": "tests/003-negative.in",
+    "expected": "tests/003-negative.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-one",
+    "input": "tests/004-one.in",
+    "expected": "tests/004-one.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-zero-base",
+    "input": "tests/005-zero-base.in",
+    "expected": "tests/005-zero-base.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-large-exp",
+    "input": "tests/006-large-exp.in",
+    "expected": "tests/006-large-exp.out",
+    "points": 10,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "007-large-base",
+    "input": "tests/007-large-base.in",
+    "expected": "tests/007-large-base.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-mod-two",
+    "input": "tests/008-mod-two.in",
+    "expected": "tests/008-mod-two.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-even",
+    "input": "tests/009-even.in",
+    "expected": "tests/009-even.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-odd",
+    "input": "tests/010-odd.in",
+    "expected": "tests/010-odd.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  }
+]

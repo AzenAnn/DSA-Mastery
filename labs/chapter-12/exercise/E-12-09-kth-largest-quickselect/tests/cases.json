@@ -1,0 +1,92 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "002-largest",
+    "input": "tests/002-largest.in",
+    "expected": "tests/002-largest.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-smallest",
+    "input": "tests/003-smallest.in",
+    "expected": "tests/003-smallest.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-single",
+    "input": "tests/004-single.in",
+    "expected": "tests/004-single.out",
+    "points": 10,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-duplicates",
+    "input": "tests/005-duplicates.in",
+    "expected": "tests/005-duplicates.out",
+    "points": 10,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "006-all-equal",
+    "input": "tests/006-all-equal.in",
+    "expected": "tests/006-all-equal.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-negative",
+    "input": "tests/007-negative.in",
+    "expected": "tests/007-negative.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-mixed",
+    "input": "tests/008-mixed.in",
+    "expected": "tests/008-mixed.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-sorted",
+    "input": "tests/009-sorted.in",
+    "expected": "tests/009-sorted.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-reversed",
+    "input": "tests/010-reversed.in",
+    "expected": "tests/010-reversed.out",
+    "points": 10,
+    "tags": [
+      "stress"
+    ]
+  }
+]

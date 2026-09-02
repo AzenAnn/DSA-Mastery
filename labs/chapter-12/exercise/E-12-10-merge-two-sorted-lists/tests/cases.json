@@ -1,0 +1,92 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "002-both-empty",
+    "input": "tests/002-both-empty.in",
+    "expected": "tests/002-both-empty.out",
+    "points": 10,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-left-empty",
+    "input": "tests/003-left-empty.in",
+    "expected": "tests/003-left-empty.out",
+    "points": 10,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-right-empty",
+    "input": "tests/004-right-empty.in",
+    "expected": "tests/004-right-empty.out",
+    "points": 10,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-single",
+    "input": "tests/005-single.in",
+    "expected": "tests/005-single.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-duplicates",
+    "input": "tests/006-duplicates.in",
+    "expected": "tests/006-duplicates.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-negative",
+    "input": "tests/007-negative.in",
+    "expected": "tests/007-negative.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-separated",
+    "input": "tests/008-separated.in",
+    "expected": "tests/008-separated.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-unbalanced",
+    "input": "tests/009-unbalanced.in",
+    "expected": "tests/009-unbalanced.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-alternating",
+    "input": "tests/010-alternating.in",
+    "expected": "tests/010-alternating.out",
+    "points": 10,
+    "tags": [
+      "stress"
+    ]
+  }
+]
