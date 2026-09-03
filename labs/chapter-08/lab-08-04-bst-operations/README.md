@@ -1,7 +1,7 @@
 ---
-title: "Lab 08-02：BST 增删查与边界测试"
+title: "Lab 08-04：BST 增删查与边界测试"
 description: "实现 BST 的查找、插入与三类删除，用指令序列验证中序有序性与树高不变量。"
-order: 2
+order: 4
 chapter: 8
 chapterTitle: "基础查找与树形查找"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "基础"
 duration: "90～120 分钟"
 ---
 
-# Lab 08-02：BST 增删查与边界测试
+# Lab 08-04：BST 增删查与边界测试
 
 ## 目标
 
@@ -92,10 +92,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-08/lab-08-02-bst-operations
-pnpm lab:run -- labs/chapter-08/lab-08-02-bst-operations
-pnpm lab:run -- labs/chapter-08/lab-08-02-bst-operations --case 001-basic
-pnpm lab:score -- labs/chapter-08/lab-08-02-bst-operations
+pnpm lab:doctor -- labs/chapter-08/lab-08-04-bst-operations
+pnpm lab:run -- labs/chapter-08/lab-08-04-bst-operations
+pnpm lab:run -- labs/chapter-08/lab-08-04-bst-operations --case 001-basic
+pnpm lab:score -- labs/chapter-08/lab-08-04-bst-operations
 ```
 
 `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。

@@ -1,7 +1,7 @@
 ---
-title: "Lab 08-03：自平衡查找树——AVL 旋转维护与退化对比"
+title: "Lab 08-05：自平衡查找树——AVL 旋转维护与退化对比"
 description: "实现 AVL 树的四种旋转与删除再平衡，用不变量检查与普通 BST 基线对比退化。"
-order: 3
+order: 5
 chapter: 8
 chapterTitle: "基础查找与树形查找"
 updated: "2026-08-21"
@@ -12,7 +12,7 @@ difficulty: "综合"
 duration: "300～420 分钟"
 ---
 
-# Lab 08-03：自平衡查找树——AVL 旋转维护与退化对比
+# Lab 08-05：自平衡查找树——AVL 旋转维护与退化对比
 
 ## 目标
 
@@ -53,9 +53,9 @@ make score
 Windows 未安装 GNU Make 时，在仓库根使用免 Make 兜底：
 
 ```powershell
-pnpm lab:run -- labs/chapter-08/lab-08-03-avl-tree-rotations
-pnpm lab:run -- labs/chapter-08/lab-08-03-avl-tree-rotations --task bst --case 001-basic
-pnpm lab:score -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:run -- labs/chapter-08/lab-08-05-avl-tree-rotations
+pnpm lab:run -- labs/chapter-08/lab-08-05-avl-tree-rotations --task bst --case 001-basic
+pnpm lab:score -- labs/chapter-08/lab-08-05-avl-tree-rotations
 ```
 
 维护者可用 `--target solution` 验证参考实现自动部分满分。Project 使用 CMake ≥ 3.25 与 CTest；CMake 可选择当前平台的可用生成器，Ninja 只是可选加速项。所有构建产物只写入 `.lab-cache/`。

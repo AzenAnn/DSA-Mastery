@@ -325,9 +325,9 @@ $$
 
 若输入可能近似有序，或系统需要稳定的最坏延迟，普通 BST 风险很高。[平衡查找树](./03-balanced-search-tree.md)通过旋转和颜色等局部信息约束高度，把查找、插入、删除稳定在 $O(\log n)$。
 
-## 配套 Lab
+## 配套理论题与 Lab
 
-完成 [Lab 08-02：BST 增删查与边界测试](../../labs/chapter-08/lab-08-02-bst-operations/README.md)，用中序遍历验证每次修改后的不变量，并比较随机插入与有序插入的树高；进阶做 [Lab 08-03：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/lab-08-03-avl-tree-rotations/README.md)。
+先做 [Lab 08-02：二叉排序树理论题精练](../../labs/chapter-08/lab-08-02-bst-theory-quiz/README.md)，用 12 道选择题检查插入构造与查找路径判别；再完成 [Lab 08-04：BST 增删查与边界测试](../../labs/chapter-08/lab-08-04-bst-operations/README.md)，用中序遍历验证每次修改后的不变量，并比较随机插入与有序插入的树高。
 
 ## 小结
 

@@ -7,7 +7,7 @@ import { runProcess } from "../tools/lab/process.mjs";
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const lab = "labs/chapter-01/lab-01-06-sequential-list-deduplication";
 const labRoot = path.join(projectRoot, lab);
-const projectLabRoot = path.join(projectRoot, "labs", "chapter-08", "lab-08-03-avl-tree-rotations");
+const projectLabRoot = path.join(projectRoot, "labs", "chapter-08", "lab-08-05-avl-tree-rotations");
 
 async function chooseMake() {
   for (const command of [process.env.MAKE, "make", "mingw32-make"].filter(Boolean)) {

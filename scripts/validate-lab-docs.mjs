@@ -155,7 +155,7 @@ for (const variable of ["LAB", "CASE", "TASK", "TARGET", "JSON", "NO_COLOR", "WR
 const goldenLabs = [
   "labs/chapter-00/lab-00-03-complexity-quiz",
   "labs/chapter-01/lab-01-06-sequential-list-deduplication",
-  "labs/chapter-08/lab-08-03-avl-tree-rotations",
+  "labs/chapter-08/lab-08-05-avl-tree-rotations",
 ];
 for (const relative of goldenLabs) {
   if (!guide.includes(relative)) throw new Error(`Lab 作者指南未引用 Golden Lab：${relative}`);

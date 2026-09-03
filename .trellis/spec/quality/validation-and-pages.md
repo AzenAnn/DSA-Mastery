@@ -22,7 +22,7 @@ Lab 专项稳定入口：
 pnpm run test:lab-tools
 pnpm run test:lab-docs
 pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
-pnpm lab:verify -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:verify -- labs/chapter-08/lab-08-05-avl-tree-rotations
 ```
 
 `pnpm test` 当前依次执行 `validate`（内容 + `vue-tsc` + lint）、`test:discovery`、最终 `build` 与 `check:site`。涉及 Pages 时，在设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 与 `SITE_URL` 后重新 build/check，再运行 `pnpm run test:pages`。

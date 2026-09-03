@@ -23,7 +23,7 @@
 
 - Golden Quiz：`labs/chapter-00/lab-00-03-complexity-quiz`
 - Golden Program：`labs/chapter-01/lab-01-06-sequential-list-deduplication`
-- Golden Project：`labs/chapter-08/lab-08-03-avl-tree-rotations`
+- Golden Project：`labs/chapter-08/lab-08-05-avl-tree-rotations`
 
 ## 2. 平台与工具链基线
 
@@ -499,7 +499,7 @@ make run TASK=frequency
 make run TASK=codec
 make refresh-expected TASK=frequency
 make score
-pnpm lab:verify -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:verify -- labs/chapter-08/lab-08-05-avl-tree-rotations
 ```
 
 结果明确区分：
@@ -562,7 +562,7 @@ pnpm lab:pack -- labs/chapter-01/lab-01-06-sequential-list-deduplication --profi
 ```powershell
 pnpm test
 pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
-pnpm lab:verify -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:verify -- labs/chapter-08/lab-08-05-avl-tree-rotations
 ```
 
 PR 记录：操作系统、Node/pnpm、编译器/CMake 版本、实际命令、关键分数、未执行项及原因。CI 在 Ubuntu 验证 GCC/Clang，在 Windows 验证 MSVC；网站 job 验证静态契约、构建、Pages 产物和浏览器交互。外部 PR 只获得只读 token，不向执行学生代码的 job 注入部署秘密。

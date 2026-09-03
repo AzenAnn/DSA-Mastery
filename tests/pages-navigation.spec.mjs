@@ -1410,7 +1410,7 @@ test("chapter 9 hash index theory quiz exposes all 18 questions and reconstructe
   expect(failures).toEqual([]);
 });
 
-test("chapter 8 search theory quiz exposes all 6 questions", async ({ page }) => {
+test("chapter 8 search theory quiz exposes all 15 questions", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/labs/chapter-08/lab-08-01-search-theory-quiz/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
@@ -1418,10 +1418,55 @@ test("chapter 8 search theory quiz exposes all 6 questions", async ({ page }) =>
   );
 
   const questions = page.locator(".course-quiz-question");
-  await expect(questions).toHaveCount(6);
-  await expect(page.locator(".course-quiz-nav li")).toHaveCount(6);
-  await expect(page.locator(".course-quiz-option")).toHaveCount(24);
-  await expect(page.locator(".course-quiz-meta")).toHaveCount(6);
+  await expect(questions).toHaveCount(15);
+  await expect(page.locator(".course-quiz-nav li")).toHaveCount(15);
+  await expect(page.locator(".course-quiz-option")).toHaveCount(60);
+  await expect(page.locator(".course-quiz-meta")).toHaveCount(15);
+  await expect(page.locator(".vp-doc")).not.toContainText(
+    /查看原始页面|看交互可视化|答案来源说明|答案来源：Codex/,
+  );
+  expect(failures).toEqual([]);
+});
+
+test("chapter 8 BST theory quiz exposes all 12 questions with tree prompts", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/chapter-08/lab-08-02-bst-theory-quiz/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Lab 08-02：二叉排序树理论题精练",
+  );
+
+  const questions = page.locator(".course-quiz-question");
+  await expect(questions).toHaveCount(12);
+  await expect(page.locator(".course-quiz-nav li")).toHaveCount(12);
+  await expect(page.locator(".course-quiz-option")).toHaveCount(48);
+  await expect(page.locator(".course-quiz-meta")).toHaveCount(12);
+  await expect(questions.nth(6).locator("pre")).toContainText("k1(_, k2(k3(_, T), _))");
+  await expect(page.locator(".vp-doc")).not.toContainText(
+    /查看原始页面|看交互可视化|答案来源说明|答案来源：Codex/,
+  );
+
+  const firstQuestion = questions.first();
+  await firstQuestion.locator(".course-quiz-option").nth(1).click();
+  await firstQuestion.getByRole("button", { name: "提交答案" }).click();
+  await expect(firstQuestion.locator(".course-quiz-feedback")).toContainText("正确答案：B");
+  await firstQuestion.getByRole("button", { name: "重新作答" }).click();
+  await expect(firstQuestion.locator(".course-quiz-feedback")).toHaveCount(0);
+  expect(failures).toEqual([]);
+});
+
+test("chapter 8 balanced tree theory quiz exposes all 14 questions", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/chapter-08/lab-08-03-balanced-tree-quiz/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Lab 08-03：平衡查找树理论题精练",
+  );
+
+  const questions = page.locator(".course-quiz-question");
+  await expect(questions).toHaveCount(14);
+  await expect(page.locator(".course-quiz-nav li")).toHaveCount(14);
+  await expect(page.locator(".course-quiz-option")).toHaveCount(56);
+  await expect(page.locator(".course-quiz-meta")).toHaveCount(14);
+  await expect(questions.nth(6).locator(".course-quiz-stem")).toContainText("1(2(3,_),4)");
   await expect(page.locator(".vp-doc")).not.toContainText(
     /查看原始页面|看交互可视化|答案来源说明|答案来源：Codex/,
   );

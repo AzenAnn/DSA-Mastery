@@ -57,11 +57,24 @@ status: "draft"
 3. 继续学习[平衡查找树](./03-balanced-search-tree.md)，理解"修复局部结构"如何换来最坏情况保证。
 4. 完成操作 Lab 后，用历年理论题做一次自测，再进入第 9 章的[B 树与散列表](../chapter-09-hashing-indexes/01-b-tree-and-b-plus-tree.md)。
 
+## 配套理论题
+
+本章理论练习按知识主题拆成三组，覆盖基础查找与树形查找。选择题可在网页中即时提交和重做；
+题源为历年 408 统考真题与王道《2026 年数据结构考研复习指导》第 7 章习题，每题均标注出处。
+
+| 顺序 | 主题与入口 | 题数 |
+| ---: | --- | ---: |
+| 01 | [查找理论选择题精练（顺序 / 分块 / 折半）](../../labs/chapter-08/lab-08-01-search-theory-quiz/README.md) | 15 |
+| 02 | [二叉排序树理论题精练](../../labs/chapter-08/lab-08-02-bst-theory-quiz/README.md) | 12 |
+| 03 | [平衡查找树理论题精练（AVL 与红黑树）](../../labs/chapter-08/lab-08-03-balanced-tree-quiz/README.md) | 14 |
+
 ## 配套 Labs
 
 - [Lab 08-01：查找理论选择题精练](../../labs/chapter-08/lab-08-01-search-theory-quiz/README.md)
-- [Lab 08-02：BST 增删查与边界测试](../../labs/chapter-08/lab-08-02-bst-operations/README.md)
-- [Lab 08-03：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/lab-08-03-avl-tree-rotations/README.md)
+- [Lab 08-02：二叉排序树理论题精练](../../labs/chapter-08/lab-08-02-bst-theory-quiz/README.md)
+- [Lab 08-03：平衡查找树理论题精练](../../labs/chapter-08/lab-08-03-balanced-tree-quiz/README.md)
+- [Lab 08-04：BST 增删查与边界测试](../../labs/chapter-08/lab-08-04-bst-operations/README.md)
+- [Lab 08-05：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/lab-08-05-avl-tree-rotations/README.md)
 
 散列与索引相关的 Lab（09-01～09-03）见第 9 章各页的配套 Lab。
 

@@ -266,20 +266,20 @@ make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sa
 Project Lab 除了 MSVC，还需要 CMake。可以先检查：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:doctor -- labs/chapter-08/lab-08-05-avl-tree-rotations
 ```
 
 使用 Make 时可以运行：
 
 ```powershell
-make doctor LAB=labs/chapter-08/lab-08-03-avl-tree-rotations
+make doctor LAB=labs/chapter-08/lab-08-05-avl-tree-rotations
 ```
 
 make也可以在对应目录内执行：
 
 ```powershell
-PS C:\Proj\DSA-Mastery> cd labs/chapter-08/lab-08-03-avl-tree-rotations
-PS C:\Proj\DSA-Mastery\labs\chapter-08\lab-08-03-avl-tree-rotations> make doctor
+PS C:\Proj\DSA-Mastery> cd labs/chapter-08/lab-08-05-avl-tree-rotations
+PS C:\Proj\DSA-Mastery\labs\chapter-08\lab-08-05-avl-tree-rotations> make doctor
 PASS 环境检查
 平台：win32/x64 · Node v24.19.0
 
@@ -295,25 +295,25 @@ GNU Make 为推荐项而非必装依赖；免 Make 入口： pnpm lab:run -- <la
 然后运行 Project Lab：
 
 ```powershell
-pnpm lab:run -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:run -- labs/chapter-08/lab-08-05-avl-tree-rotations
 ```
 
 对应的 Make 命令是：
 
 ```powershell
-make run LAB=labs/chapter-08/lab-08-03-avl-tree-rotations
+make run LAB=labs/chapter-08/lab-08-05-avl-tree-rotations
 ```
 
 也可以运行指定 task 和测试用例：
 
 ```powershell
-pnpm lab:run -- labs/chapter-08/lab-08-03-avl-tree-rotations --task frequency --case weighted
+pnpm lab:run -- labs/chapter-08/lab-08-05-avl-tree-rotations --task frequency --case weighted
 ```
 
 使用 Make 时可以运行：
 
 ```powershell
-make run LAB=labs/chapter-08/lab-08-03-avl-tree-rotations TASK=frequency CASE=weighted
+make run LAB=labs/chapter-08/lab-08-05-avl-tree-rotations TASK=frequency CASE=weighted
 ```
 
 ![1786955720690](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955720690.png)

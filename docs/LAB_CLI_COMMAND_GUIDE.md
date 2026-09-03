@@ -228,7 +228,7 @@ Project 是多个子任务的集合。`lab.json` 为每个 task 声明 ID、类�
 ### 工程题的三层选择
 
 ```powershell:line-numbers [project-workflow.ps1]
-$project = "labs/chapter-08/lab-08-03-avl-tree-rotations"
+$project = "labs/chapter-08/lab-08-05-avl-tree-rotations"
 
 # 整个 Project：stdio + CTest + manual pending
 pnpm lab:run -- $project
@@ -267,7 +267,7 @@ Project 的 `score` 只严格判断自动部分。即使退出码为 `0`，只�
 Project 的 `interactive` 只支持 `stdio` task：
 
 ```powershell
-pnpm lab:interactive -- labs/chapter-08/lab-08-03-avl-tree-rotations --task frequency
+pnpm lab:interactive -- labs/chapter-08/lab-08-05-avl-tree-rotations --task frequency
 ```
 
 CTest 或 `manual` task 不能用交互模式。
@@ -349,9 +349,9 @@ make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sa
 ```
 
 ```powershell [Project task]
-make run LAB=labs/chapter-08/lab-08-03-avl-tree-rotations TASK=frequency
-make run LAB=labs/chapter-08/lab-08-03-avl-tree-rotations TASK=frequency CASE=weighted
-make run LAB=labs/chapter-08/lab-08-03-avl-tree-rotations TASK=codec
+make run LAB=labs/chapter-08/lab-08-05-avl-tree-rotations TASK=frequency
+make run LAB=labs/chapter-08/lab-08-05-avl-tree-rotations TASK=frequency CASE=weighted
+make run LAB=labs/chapter-08/lab-08-05-avl-tree-rotations TASK=codec
 ```
 
 :::
@@ -386,8 +386,8 @@ make run LAB=labs/chapter-08/lab-08-03-avl-tree-rotations TASK=codec
 
 ```powershell
 make score LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication JSON=1
-make refresh-expected LAB=labs/chapter-08/lab-08-03-avl-tree-rotations TASK=frequency
-make refresh-expected LAB=labs/chapter-08/lab-08-03-avl-tree-rotations TASK=frequency WRITE=1
+make refresh-expected LAB=labs/chapter-08/lab-08-05-avl-tree-rotations TASK=frequency
+make refresh-expected LAB=labs/chapter-08/lab-08-05-avl-tree-rotations TASK=frequency WRITE=1
 ```
 
 ::: tip `make` 无法识别时
@@ -420,7 +420,7 @@ Program 直接调用可用 C++ 编译器；Project 使用 CMake preset。编译�
 ```powershell
 pnpm lab:verify -- labs/chapter-00/lab-00-03-complexity-quiz
 pnpm lab:verify -- labs/chapter-01/lab-01-06-sequential-list-deduplication
-pnpm lab:verify -- labs/chapter-08/lab-08-03-avl-tree-rotations
+pnpm lab:verify -- labs/chapter-08/lab-08-05-avl-tree-rotations
 ```
 
 - Quiz：验证题库合同；
@@ -437,7 +437,7 @@ pnpm lab:refresh-expected -- labs/chapter-01/lab-01-06-sequential-list-deduplica
 pnpm lab:refresh-expected -- labs/chapter-01/lab-01-06-sequential-list-deduplication --write
 
 # Project 只选择 stdio task
-pnpm lab:refresh-expected -- labs/chapter-08/lab-08-03-avl-tree-rotations --task frequency
+pnpm lab:refresh-expected -- labs/chapter-08/lab-08-05-avl-tree-rotations --task frequency
 ```
 
 ### `pack`：生成学生包
