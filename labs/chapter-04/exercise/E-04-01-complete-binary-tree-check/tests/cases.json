@@ -1,9 +1,9 @@
 [
   {
-    "id": "001-sample",
-    "input": "tests/001-sample.in",
-    "expected": "tests/001-sample.out",
-    "points": 20,
+    "id": "001-sample1",
+    "input": "tests/001-sample1.in",
+    "expected": "tests/001-sample1.out",
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -12,10 +12,22 @@
     }
   },
   {
-    "id": "002-sample-false",
-    "input": "tests/002-sample-false.in",
-    "expected": "tests/002-sample-false.out",
-    "points": 20,
+    "id": "002-sample2",
+    "input": "tests/002-sample2.in",
+    "expected": "tests/002-sample2.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-empty",
+    "input": "tests/003-empty.in",
+    "expected": "tests/003-empty.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -24,10 +36,10 @@
     }
   },
   {
-    "id": "003-single",
-    "input": "tests/003-single.in",
-    "expected": "tests/003-single.out",
-    "points": 20,
+    "id": "004-single",
+    "input": "tests/004-single.in",
+    "expected": "tests/004-single.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -36,10 +48,10 @@
     }
   },
   {
-    "id": "004-skewed",
-    "input": "tests/004-skewed.in",
-    "expected": "tests/004-skewed.out",
-    "points": 20,
+    "id": "005-two-nodes-left",
+    "input": "tests/005-two-nodes-left.in",
+    "expected": "tests/005-two-nodes-left.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -48,12 +60,181 @@
     }
   },
   {
-    "id": "005-full",
-    "input": "tests/005-full.in",
-    "expected": "tests/005-full.out",
-    "points": 20,
+    "id": "006-two-nodes-right",
+    "input": "tests/006-two-nodes-right.in",
+    "expected": "tests/006-two-nodes-right.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-three-nodes-full",
+    "input": "tests/007-three-nodes-full.in",
+    "expected": "tests/007-three-nodes-full.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-three-nodes-left-skewed",
+    "input": "tests/008-three-nodes-left-skewed.in",
+    "expected": "tests/008-three-nodes-left-skewed.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-three-nodes-right-skewed",
+    "input": "tests/009-three-nodes-right-skewed.in",
+    "expected": "tests/009-three-nodes-right-skewed.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-four-nodes-cbt-left",
+    "input": "tests/010-four-nodes-cbt-left.in",
+    "expected": "tests/010-four-nodes-cbt-left.out",
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-four-nodes-gap-left",
+    "input": "tests/011-four-nodes-gap-left.in",
+    "expected": "tests/011-four-nodes-gap-left.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-gap-in-middle",
+    "input": "tests/012-gap-in-middle.in",
+    "expected": "tests/012-gap-in-middle.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-missing-then-children",
+    "input": "tests/013-missing-then-children.in",
+    "expected": "tests/013-missing-then-children.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-gap-bottom-right",
+    "input": "tests/014-gap-bottom-right.in",
+    "expected": "tests/014-gap-bottom-right.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-zigzag-false",
+    "input": "tests/015-zigzag-false.in",
+    "expected": "tests/015-zigzag-false.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-almost-full-14",
+    "input": "tests/016-almost-full-14.in",
+    "expected": "tests/016-almost-full-14.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-almost-full-13",
+    "input": "tests/017-almost-full-13.in",
+    "expected": "tests/017-almost-full-13.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-perfect-tree-15",
+    "input": "tests/018-perfect-tree-15.in",
+    "expected": "tests/018-perfect-tree-15.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-perfect-tree-31",
+    "input": "tests/019-perfect-tree-31.in",
+    "expected": "tests/019-perfect-tree-31.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-large-cbt",
+    "input": "tests/020-stress-large-cbt.in",
+    "expected": "tests/020-stress-large-cbt.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "scale"
     ],
     "compare": {
       "mode": "tokens"

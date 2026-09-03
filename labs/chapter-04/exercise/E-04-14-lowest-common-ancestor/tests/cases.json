@@ -3,7 +3,7 @@
     "id": "001-sample1",
     "input": "tests/001-sample1.in",
     "expected": "tests/001-sample1.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -12,22 +12,22 @@
     }
   },
   {
-    "id": "002-sample2",
-    "input": "tests/002-sample2.in",
-    "expected": "tests/002-sample2.out",
-    "points": 20,
+    "id": "002-sample-self-ancestor",
+    "input": "tests/002-sample-self-ancestor.in",
+    "expected": "tests/002-sample-self-ancestor.out",
+    "points": 5,
     "tags": [
-      "normal"
+      "sample"
     ],
     "compare": {
       "mode": "tokens"
     }
   },
   {
-    "id": "003-root-child",
-    "input": "tests/003-root-child.in",
-    "expected": "tests/003-root-child.out",
-    "points": 20,
+    "id": "003-two-nodes-left",
+    "input": "tests/003-two-nodes-left.in",
+    "expected": "tests/003-two-nodes-left.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -36,10 +36,106 @@
     }
   },
   {
-    "id": "004-deep-leaf",
-    "input": "tests/004-deep-leaf.in",
-    "expected": "tests/004-deep-leaf.out",
-    "points": 20,
+    "id": "004-two-nodes-right",
+    "input": "tests/004-two-nodes-right.in",
+    "expected": "tests/004-two-nodes-right.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-three-full-root",
+    "input": "tests/005-three-full-root.in",
+    "expected": "tests/005-three-full-root.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-three-full-left",
+    "input": "tests/006-three-full-left.in",
+    "expected": "tests/006-three-full-left.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-three-full-right",
+    "input": "tests/007-three-full-right.in",
+    "expected": "tests/007-three-full-right.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-left-chain-ancestor",
+    "input": "tests/008-left-chain-ancestor.in",
+    "expected": "tests/008-left-chain-ancestor.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-left-chain-adjacent",
+    "input": "tests/009-left-chain-adjacent.in",
+    "expected": "tests/009-left-chain-adjacent.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-right-chain-ancestor",
+    "input": "tests/010-right-chain-ancestor.in",
+    "expected": "tests/010-right-chain-ancestor.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-right-chain-adjacent",
+    "input": "tests/011-right-chain-adjacent.in",
+    "expected": "tests/011-right-chain-adjacent.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-same-deep-left",
+    "input": "tests/012-same-deep-left.in",
+    "expected": "tests/012-same-deep-left.out",
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -48,12 +144,97 @@
     }
   },
   {
-    "id": "005-skewed",
-    "input": "tests/005-skewed.in",
-    "expected": "tests/005-skewed.out",
-    "points": 20,
+    "id": "013-same-deep-left-self",
+    "input": "tests/013-same-deep-left-self.in",
+    "expected": "tests/013-same-deep-left-self.out",
+    "points": 5,
     "tags": [
-      "boundary"
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-cross-sides-deep",
+    "input": "tests/014-cross-sides-deep.in",
+    "expected": "tests/014-cross-sides-deep.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-negative-nodes-root",
+    "input": "tests/015-negative-nodes-root.in",
+    "expected": "tests/015-negative-nodes-root.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-negative-cross",
+    "input": "tests/016-negative-cross.in",
+    "expected": "tests/016-negative-cross.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-perfect-tree-15-deep-left",
+    "input": "tests/017-perfect-tree-15-deep-left.in",
+    "expected": "tests/017-perfect-tree-15-deep-left.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-perfect-tree-15-cross",
+    "input": "tests/018-perfect-tree-15-cross.in",
+    "expected": "tests/018-perfect-tree-15-cross.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-perfect-tree-31-cross",
+    "input": "tests/019-perfect-tree-31-cross.in",
+    "expected": "tests/019-perfect-tree-31-cross.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-cbt-63",
+    "input": "tests/020-stress-cbt-63.in",
+    "expected": "tests/020-stress-cbt-63.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "scale"
     ],
     "compare": {
       "mode": "tokens"

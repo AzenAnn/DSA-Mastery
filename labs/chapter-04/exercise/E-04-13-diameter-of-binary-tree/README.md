@@ -1,6 +1,6 @@
 ---
 title: "Lab 04-E-13：二叉树的直径"
-description: "理解单侧深度返回值与全局跨根最长路径的解耦，计算二叉树的直径。"
+description: "掌握自底向上后序递归思想，通过单侧深度汇报与全局跨根路径更新计算二叉树直径。"
 order: 21
 chapter: 4
 labId: "04E13"
@@ -15,7 +15,7 @@ duration: "20～30 分钟"
 
 # Lab 04-E-13：二叉树的直径
 
-在第 4.6.5 节中，我们建立了**二叉树后序状态解耦模型**：函数的返回值与全局维护的极值指标分离。
+在第 4.6.5 节中，我们学习了自底向上的递归汇总思想：二叉树的最长路径必然在某个最高节点处“拐弯”。递归函数只需向上汇报当前节点的**单侧最大深度**，在回溯时顺便计算以当前节点为最高拐弯点的**左深度与右深度之和**，即可在 $O(n)$ 时间内顺手更新出全局最大直径。
 
 ## 题目
 
@@ -27,14 +27,13 @@ duration: "20～30 分钟"
 ## 输出格式
 - 输出一个整数，表示二叉树的直径长度（边数）。
 
-::: tip 💡 输入处理与建树指引
-1. **读入序列**：
-   直接使用 `std::string token; while (std::cin >> token)` 循环读取输入放入 `std::vector<std::string> tokens` 中即可，C++ 会自动按空格和换行分词。
-2. **字符串转数字与 null 拦截**：
-   - 遇到 `"null"` 时，表示空子树，直接将子节点置为 `nullptr`；**切勿对 `"null"` 调用 `std::stoi("null")`**（会抛出 `std::invalid_argument` 异常导致崩溃）；
-   - 仅在 `token != "null"` 时，才调用 `std::stoi(token)` 转为整数并创建有效节点 `new TreeNode(val)`。
-3. **基于队列的 BFS 建树**：
-   借助 `std::queue<TreeNode*>` 存放父节点，队头出队后依次连接左右孩子，并将非空孩子入队。
+::: tip 💡 输入提示
+使用流分词极简读取；仅在 `token != "null"` 时调用 `std::stoi`，防止异常崩溃：
+```cpp
+std::vector<std::string> tokens;
+std::string token;
+while (std::cin >> token) tokens.push_back(token);
+```
 :::
 
 ## 样例

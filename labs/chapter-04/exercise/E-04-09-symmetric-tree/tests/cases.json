@@ -3,7 +3,7 @@
     "id": "001-sample-true",
     "input": "tests/001-sample-true.in",
     "expected": "tests/001-sample-true.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,19 @@
     "id": "002-sample-false",
     "input": "tests/002-sample-false.in",
     "expected": "tests/002-sample-false.out",
-    "points": 20,
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-empty",
+    "input": "tests/003-empty.in",
+    "expected": "tests/003-empty.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -24,10 +36,10 @@
     }
   },
   {
-    "id": "003-single",
-    "input": "tests/003-single.in",
-    "expected": "tests/003-single.out",
-    "points": 20,
+    "id": "004-single",
+    "input": "tests/004-single.in",
+    "expected": "tests/004-single.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -36,10 +48,10 @@
     }
   },
   {
-    "id": "004-empty",
-    "input": "tests/004-empty.in",
-    "expected": "tests/004-empty.out",
-    "points": 20,
+    "id": "005-two-nodes-left",
+    "input": "tests/005-two-nodes-left.in",
+    "expected": "tests/005-two-nodes-left.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -48,12 +60,181 @@
     }
   },
   {
-    "id": "005-asymmetric",
-    "input": "tests/005-asymmetric.in",
-    "expected": "tests/005-asymmetric.out",
-    "points": 20,
+    "id": "006-two-nodes-right",
+    "input": "tests/006-two-nodes-right.in",
+    "expected": "tests/006-two-nodes-right.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-three-nodes-diff-val",
+    "input": "tests/007-three-nodes-diff-val.in",
+    "expected": "tests/007-three-nodes-diff-val.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-three-nodes-same-val",
+    "input": "tests/008-three-nodes-same-val.in",
+    "expected": "tests/008-three-nodes-same-val.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-same-structure-diff-val",
+    "input": "tests/009-same-structure-diff-val.in",
+    "expected": "tests/009-same-structure-diff-val.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-diff-structure-same-val",
+    "input": "tests/010-diff-structure-same-val.in",
+    "expected": "tests/010-diff-structure-same-val.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-mirror-outer-only",
+    "input": "tests/011-mirror-outer-only.in",
+    "expected": "tests/011-mirror-outer-only.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-mirror-inner-only",
+    "input": "tests/012-mirror-inner-only.in",
+    "expected": "tests/012-mirror-inner-only.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-negative-symmetric",
+    "input": "tests/013-negative-symmetric.in",
+    "expected": "tests/013-negative-symmetric.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-negative-asymmetric",
+    "input": "tests/014-negative-asymmetric.in",
+    "expected": "tests/014-negative-asymmetric.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-four-level-symmetric",
+    "input": "tests/015-four-level-symmetric.in",
+    "expected": "tests/015-four-level-symmetric.out",
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-four-level-asymmetric-leaf",
+    "input": "tests/016-four-level-asymmetric-leaf.in",
+    "expected": "tests/016-four-level-asymmetric-leaf.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-five-level-symmetric",
+    "input": "tests/017-five-level-symmetric.in",
+    "expected": "tests/017-five-level-symmetric.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-all-same-value-symmetric",
+    "input": "tests/018-all-same-value-symmetric.in",
+    "expected": "tests/018-all-same-value-symmetric.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-all-same-value-asymmetric",
+    "input": "tests/019-all-same-value-asymmetric.in",
+    "expected": "tests/019-all-same-value-asymmetric.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-symmetric-127",
+    "input": "tests/020-stress-symmetric-127.in",
+    "expected": "tests/020-stress-symmetric-127.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "scale"
     ],
     "compare": {
       "mode": "tokens"

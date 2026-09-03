@@ -3,28 +3,241 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 25,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   },
   {
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   },
   {
-    "id": "003-star",
-    "input": "tests/003-star.in",
-    "expected": "tests/003-star.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "id": "003-two-nodes-even",
+    "input": "tests/003-two-nodes-even.in",
+    "expected": "tests/003-two-nodes-even.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   },
   {
-    "id": "004-edge-center",
-    "input": "tests/004-edge-center.in",
-    "expected": "tests/004-edge-center.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "id": "004-two-nodes-odd",
+    "input": "tests/004-two-nodes-odd.in",
+    "expected": "tests/004-two-nodes-odd.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-star-equal",
+    "input": "tests/005-star-equal.in",
+    "expected": "tests/005-star-equal.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-star-unequal",
+    "input": "tests/006-star-unequal.in",
+    "expected": "tests/006-star-unequal.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-three-node-center",
+    "input": "tests/007-three-node-center.in",
+    "expected": "tests/007-three-node-center.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-three-edge-center",
+    "input": "tests/008-three-edge-center.in",
+    "expected": "tests/008-three-edge-center.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-chain-5-unit",
+    "input": "tests/009-chain-5-unit.in",
+    "expected": "tests/009-chain-5-unit.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-chain-6-unit",
+    "input": "tests/010-chain-6-unit.in",
+    "expected": "tests/010-chain-6-unit.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-binary-tree-7",
+    "input": "tests/011-binary-tree-7.in",
+    "expected": "tests/011-binary-tree-7.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-bridge-edge-center",
+    "input": "tests/012-bridge-edge-center.in",
+    "expected": "tests/012-bridge-edge-center.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-large-weights",
+    "input": "tests/013-large-weights.in",
+    "expected": "tests/013-large-weights.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-spider-3-equal-arms",
+    "input": "tests/014-spider-3-equal-arms.in",
+    "expected": "tests/014-spider-3-equal-arms.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-spider-unequal-arms",
+    "input": "tests/015-spider-unequal-arms.in",
+    "expected": "tests/015-spider-unequal-arms.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-binary-tree-15",
+    "input": "tests/016-binary-tree-15.in",
+    "expected": "tests/016-binary-tree-15.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-caterpillar",
+    "input": "tests/017-caterpillar.in",
+    "expected": "tests/017-caterpillar.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-tree-20",
+    "input": "tests/018-tree-20.in",
+    "expected": "tests/018-tree-20.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-tree-30",
+    "input": "tests/019-tree-30.in",
+    "expected": "tests/019-tree-30.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-50",
+    "input": "tests/020-stress-50.in",
+    "expected": "tests/020-stress-50.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "scale"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   }
 ]

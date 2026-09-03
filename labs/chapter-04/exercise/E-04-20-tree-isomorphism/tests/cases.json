@@ -1,30 +1,243 @@
 [
   {
-    "id": "001-sample",
-    "input": "tests/001-sample.in",
-    "expected": "tests/001-sample.out",
-    "points": 25,
-    "tags": ["sample"]
+    "id": "001-sample-non-iso",
+    "input": "tests/001-sample-non-iso.in",
+    "expected": "tests/001-sample-non-iso.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   },
   {
-    "id": "002-isomorphic",
-    "input": "tests/002-isomorphic.in",
-    "expected": "tests/002-isomorphic.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "id": "002-sample-iso",
+    "input": "tests/002-sample-iso.in",
+    "expected": "tests/002-sample-iso.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   },
   {
     "id": "003-single",
     "input": "tests/003-single.in",
     "expected": "tests/003-single.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   },
   {
-    "id": "004-chain",
-    "input": "tests/004-chain.in",
-    "expected": "tests/004-chain.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "id": "004-two-nodes",
+    "input": "tests/004-two-nodes.in",
+    "expected": "tests/004-two-nodes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-three-nodes-chain-iso",
+    "input": "tests/005-three-nodes-chain-iso.in",
+    "expected": "tests/005-three-nodes-chain-iso.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-diff-size-non-iso",
+    "input": "tests/006-diff-size-non-iso.in",
+    "expected": "tests/006-diff-size-non-iso.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-chain-5-iso",
+    "input": "tests/007-chain-5-iso.in",
+    "expected": "tests/007-chain-5-iso.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-chain-5-vs-fork",
+    "input": "tests/008-chain-5-vs-fork.in",
+    "expected": "tests/008-chain-5-vs-fork.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-star-6-iso",
+    "input": "tests/009-star-6-iso.in",
+    "expected": "tests/009-star-6-iso.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-two-stars-diff-size",
+    "input": "tests/010-two-stars-diff-size.in",
+    "expected": "tests/010-two-stars-diff-size.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-caterpillar-iso",
+    "input": "tests/011-caterpillar-iso.in",
+    "expected": "tests/011-caterpillar-iso.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-caterpillar-non-iso",
+    "input": "tests/012-caterpillar-non-iso.in",
+    "expected": "tests/012-caterpillar-non-iso.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-tree-7-iso",
+    "input": "tests/013-tree-7-iso.in",
+    "expected": "tests/013-tree-7-iso.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-tree-7-non-iso",
+    "input": "tests/014-tree-7-non-iso.in",
+    "expected": "tests/014-tree-7-non-iso.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-two-centroids-iso",
+    "input": "tests/015-two-centroids-iso.in",
+    "expected": "tests/015-two-centroids-iso.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-two-centroids-vs-one",
+    "input": "tests/016-two-centroids-vs-one.in",
+    "expected": "tests/016-two-centroids-vs-one.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-tree-10-iso",
+    "input": "tests/017-tree-10-iso.in",
+    "expected": "tests/017-tree-10-iso.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-tree-10-non-iso",
+    "input": "tests/018-tree-10-non-iso.in",
+    "expected": "tests/018-tree-10-non-iso.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-tree-15-iso",
+    "input": "tests/019-tree-15-iso.in",
+    "expected": "tests/019-tree-15-iso.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-25-iso",
+    "input": "tests/020-stress-25-iso.in",
+    "expected": "tests/020-stress-25-iso.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "scale"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   }
 ]
