@@ -807,7 +807,7 @@ export async function runSetup(argv = [], dependencies = {}) {
         report.logError = error.message;
       }
     }
-    context.ui.finish();
+    context.ui.finish({ ok: report.ok });
   }
   report.exitCode ??= report.ok ? SETUP_EXIT.OK : SETUP_EXIT.INSTALLER;
   return { exitCode: report.exitCode, report, summary: summarizeReport(report) };

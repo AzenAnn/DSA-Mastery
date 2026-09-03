@@ -19,6 +19,7 @@ import {
   createProgressUI,
   displayWidth,
   renderPlain,
+  renderPixelBanner,
   createInstallSelection,
   decodeChoiceInput,
   handleChoiceKey,
@@ -136,6 +137,18 @@ test("colored TUI adds a banner and semantic status colors without changing layo
   assert.equal(stripAnsi(colored), plain);
 });
 
+test("pixel completion banner keeps a fixed-width block layout and colors DSA", () => {
+  const plain = renderPixelBanner({ width: 80, color: false });
+  const colored = renderPixelBanner({ width: 80, color: true });
+  const lines = plain.split("\n");
+  assert.equal(lines.length, 7);
+  assert.equal(new Set(lines.map(displayWidth)).size, 1);
+  assert.equal(colored.includes("\u001b[91m"), true);
+  assert.equal(colored.includes("\u001b[93m"), true);
+  assert.equal(colored.includes("\u001b[94m"), true);
+  assert.equal(stripAnsi(colored), plain);
+});
+
 test("progress UI falls back to stable plain output when stdout is not a TTY", () => {
   const writes = [];
   const ui = createProgressUI({
@@ -148,13 +161,14 @@ test("progress UI falls back to stable plain output when stdout is not a TTY", (
   assert.equal(ui.mode, "plain");
   ui.update("preflight", "success", "已有 Node.js");
   ui.update("toolchain", "running", "检查编译器");
-  ui.finish();
+  ui.finish({ ok: true });
   const output = writes.join("");
   assert.match(output, /DSA Mastery/);
   assert.match(output, /已有 Node\.js/);
   assert.match(output, /进度：1\/2/);
   assert.match(writes.at(-1), /进度：1\/2/);
   assert.equal(output.includes(String.fromCharCode(27)), false);
+  assert.equal(output.includes("███"), false);
 });
 
 test("install wizard defaults to Program and derives profile from selected bundles", () => {
