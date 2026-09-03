@@ -176,8 +176,8 @@ if (dataStructureBasicsHtml.includes("::: definition")) {
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 7) {
-  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, Graphviz authoring, macOS student, and VSCode extension guides, found ${prefacePages.length} pages`);
+if (prefacePages.length !== 8) {
+  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, Graphviz authoring, macOS student, VSCode extension, and Git guides, found ${prefacePages.length} pages`);
 }
 const prefaceHtml = await readFile(
   path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
