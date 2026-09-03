@@ -26,6 +26,8 @@ digraph BinaryTree {
 - `subgraph cluster_name`：把多个节点放入带标题的区域，用于并排比较两种结构。
 - `style=dashed`、`color` 和 `penwidth` 可突出边界或重点，但不要让颜色成为唯一语义。
 
+> **Warning**：`rankdir` 决定的是边的方向，不是 cluster 的排列方向。`rankdir=LR` 时多个 cluster 会**垂直堆叠**而非水平并排，正文写「左图/右图」就会与实际渲染相反。并排 cluster 请用 `rankdir=TB`（cluster 水平展开）；同层节点需要强制并排时再加不可见边（如 `a -> b [style=invis]`）。提交前用本地 `dot -Tsvg` 或在线编辑器预览实际方位，再让正文叙述与渲染一致。
+
 ## Caption 与 ID
 
 每个正式教材图都应使用唯一的 `diagram id` 和一句中文 caption。插件当前按完整的 fenced info string 匹配类型，因此代码块只写 `graphviz`，不要追加 `[filename]`；ID 只使用 ASCII、短且能表达页面语义。修改 DOT 内容时保留 ID，插件会按内容哈希更新缓存。Caption 说明读者要观察的关系，不写 Kroki 或缓存实现细节。
