@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-ll-rotation",
     "input": "tests/003-ll-rotation.in",
     "expected": "tests/003-ll-rotation.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -39,7 +39,7 @@
     "id": "004-rr-rotation",
     "input": "tests/004-rr-rotation.in",
     "expected": "tests/004-rr-rotation.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-lr-rotation",
     "input": "tests/005-lr-rotation.in",
     "expected": "tests/005-lr-rotation.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-boundary-single-minimum",
+    "input": "tests/006-boundary-single-minimum.in",
+    "expected": "tests/006-boundary-single-minimum.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-boundary-two-elements",
+    "input": "tests/007-boundary-two-elements.in",
+    "expected": "tests/007-boundary-two-elements.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-boundary-perfect-no-rotation",
+    "input": "tests/008-boundary-perfect-no-rotation.in",
+    "expected": "tests/008-boundary-perfect-no-rotation.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-boundary-int-extremes",
+    "input": "tests/009-boundary-int-extremes.in",
+    "expected": "tests/009-boundary-int-extremes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-normal-rl-rotation",
+    "input": "tests/010-normal-rl-rotation.in",
+    "expected": "tests/010-normal-rl-rotation.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-normal-ll-inner",
+    "input": "tests/011-normal-ll-inner.in",
+    "expected": "tests/011-normal-ll-inner.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-normal-rr-inner",
+    "input": "tests/012-normal-rr-inner.in",
+    "expected": "tests/012-normal-rr-inner.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-normal-lr-inner",
+    "input": "tests/013-normal-lr-inner.in",
+    "expected": "tests/013-normal-lr-inner.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-normal-rl-inner",
+    "input": "tests/014-normal-rl-inner.in",
+    "expected": "tests/014-normal-rl-inner.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-regression-all-four-types",
+    "input": "tests/015-regression-all-four-types.in",
+    "expected": "tests/015-regression-all-four-types.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-regression-double-chain",
+    "input": "tests/016-regression-double-chain.in",
+    "expected": "tests/016-regression-double-chain.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-regression-heavy-a",
+    "input": "tests/017-regression-heavy-a.in",
+    "expected": "tests/017-regression-heavy-a.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-regression-heavy-b",
+    "input": "tests/018-regression-heavy-b.in",
+    "expected": "tests/018-regression-heavy-b.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-random-100000",
+    "input": "tests/019-stress-random-100000.in",
+    "expected": "tests/019-stress-random-100000.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-descending-100000",
+    "input": "tests/020-stress-descending-100000.in",
+    "expected": "tests/020-stress-descending-100000.out",
+    "points": 5,
+    "tags": [
+      "stress"
     ],
     "compare": {
       "mode": "tokens"

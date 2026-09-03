@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-empty-ops",
     "input": "tests/002-empty-ops.in",
     "expected": "tests/002-empty-ops.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-insert-only",
     "input": "tests/003-insert-only.in",
     "expected": "tests/003-insert-only.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-delete-all",
     "input": "tests/004-delete-all.in",
     "expected": "tests/004-delete-all.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-alternate",
     "input": "tests/005-alternate.in",
     "expected": "tests/005-alternate.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-empty-query-delete",
+    "input": "tests/006-empty-query-delete.in",
+    "expected": "tests/006-empty-query-delete.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-single-element",
+    "input": "tests/007-single-element.in",
+    "expected": "tests/007-single-element.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-int-extremes",
+    "input": "tests/008-int-extremes.in",
+    "expected": "tests/008-int-extremes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-negative-only",
+    "input": "tests/009-negative-only.in",
+    "expected": "tests/009-negative-only.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-duplicate-cluster",
+    "input": "tests/010-duplicate-cluster.in",
+    "expected": "tests/010-duplicate-cluster.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-mixed-query-heavy",
+    "input": "tests/011-mixed-query-heavy.in",
+    "expected": "tests/011-mixed-query-heavy.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-ascending-min-top",
+    "input": "tests/012-ascending-min-top.in",
+    "expected": "tests/012-ascending-min-top.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-descending-sorted-delete",
+    "input": "tests/013-descending-sorted-delete.in",
+    "expected": "tests/013-descending-sorted-delete.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-interleaved-mod",
+    "input": "tests/014-interleaved-mod.in",
+    "expected": "tests/014-interleaved-mod.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-pop-min-repeated",
+    "input": "tests/015-pop-min-repeated.in",
+    "expected": "tests/015-pop-min-repeated.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-push-pop-drain",
+    "input": "tests/016-push-pop-drain.in",
+    "expected": "tests/016-push-pop-drain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-duplicates-equal-min",
+    "input": "tests/017-duplicates-equal-min.in",
+    "expected": "tests/017-duplicates-equal-min.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-refill-after-drain",
+    "input": "tests/018-refill-after-drain.in",
+    "expected": "tests/018-refill-after-drain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-mixed-100k",
+    "input": "tests/019-stress-mixed-100k.in",
+    "expected": "tests/019-stress-mixed-100k.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-pop-all-100k",
+    "input": "tests/020-stress-pop-all-100k.in",
+    "expected": "tests/020-stress-pop-all-100k.out",
+    "points": 5,
+    "tags": [
+      "stress"
     ],
     "compare": {
       "mode": "tokens"

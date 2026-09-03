@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single-query",
     "input": "tests/002-single-query.in",
     "expected": "tests/002-single-query.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-not-same-col",
     "input": "tests/003-not-same-col.in",
     "expected": "tests/003-not-same-col.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-long-chain",
     "input": "tests/004-long-chain.in",
     "expected": "tests/004-long-chain.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-merge-two-chains",
     "input": "tests/005-merge-two-chains.in",
     "expected": "tests/005-merge-two-chains.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-boundary-single-ship-fleets",
+    "input": "tests/006-boundary-single-ship-fleets.in",
+    "expected": "tests/006-boundary-single-ship-fleets.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-boundary-adjacent-zero",
+    "input": "tests/007-boundary-adjacent-zero.in",
+    "expected": "tests/007-boundary-adjacent-zero.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-boundary-id-extremes",
+    "input": "tests/008-boundary-id-extremes.in",
+    "expected": "tests/008-boundary-id-extremes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-boundary-same-fleet-noop",
+    "input": "tests/009-boundary-same-fleet-noop.in",
+    "expected": "tests/009-boundary-same-fleet-noop.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-normal-merge-chains",
+    "input": "tests/010-normal-merge-chains.in",
+    "expected": "tests/010-normal-merge-chains.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-normal-interleaved-queries",
+    "input": "tests/011-normal-interleaved-queries.in",
+    "expected": "tests/011-normal-interleaved-queries.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-normal-multi-fleet-reset",
+    "input": "tests/012-normal-multi-fleet-reset.in",
+    "expected": "tests/012-normal-multi-fleet-reset.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-regression-distance-sum",
+    "input": "tests/013-regression-distance-sum.in",
+    "expected": "tests/013-regression-distance-sum.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-regression-merge-order",
+    "input": "tests/014-regression-merge-order.in",
+    "expected": "tests/014-regression-merge-order.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-regression-remerge-pattern",
+    "input": "tests/015-regression-remerge-pattern.in",
+    "expected": "tests/015-regression-remerge-pattern.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-stress-full-column",
+    "input": "tests/016-stress-full-column.in",
+    "expected": "tests/016-stress-full-column.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-stress-random-large",
+    "input": "tests/017-stress-random-large.in",
+    "expected": "tests/017-stress-random-large.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-stress-many-queries",
+    "input": "tests/018-stress-many-queries.in",
+    "expected": "tests/018-stress-many-queries.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-multi-group",
+    "input": "tests/019-stress-multi-group.in",
+    "expected": "tests/019-stress-multi-group.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-extreme-mix",
+    "input": "tests/020-stress-extreme-mix.in",
+    "expected": "tests/020-stress-extreme-mix.out",
+    "points": 5,
+    "tags": [
+      "boundary"
     ],
     "compare": {
       "mode": "tokens"

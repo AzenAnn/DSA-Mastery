@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-empty-query",
     "input": "tests/002-empty-query.in",
     "expected": "tests/002-empty-query.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-single-element",
     "input": "tests/003-single-element.in",
     "expected": "tests/003-single-element.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-out-of-range",
     "input": "tests/004-out-of-range.in",
     "expected": "tests/004-out-of-range.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,7 +51,187 @@
     "id": "005-all-in-range",
     "input": "tests/005-all-in-range.in",
     "expected": "tests/005-all-in-range.out",
-    "points": 20,
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-empty-midstream",
+    "input": "tests/006-empty-midstream.in",
+    "expected": "tests/006-empty-midstream.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-no-keys-in-range",
+    "input": "tests/007-no-keys-in-range.in",
+    "expected": "tests/007-no-keys-in-range.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-single-key-range",
+    "input": "tests/008-single-key-range.in",
+    "expected": "tests/008-single-key-range.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-cover-all-keys",
+    "input": "tests/009-cover-all-keys.in",
+    "expected": "tests/009-cover-all-keys.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-extreme-int-bounds",
+    "input": "tests/010-extreme-int-bounds.in",
+    "expected": "tests/010-extreme-int-bounds.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-inverted-range",
+    "input": "tests/011-inverted-range.in",
+    "expected": "tests/011-inverted-range.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-middle-range",
+    "input": "tests/012-middle-range.in",
+    "expected": "tests/012-middle-range.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-across-leaf-boundary",
+    "input": "tests/013-across-leaf-boundary.in",
+    "expected": "tests/013-across-leaf-boundary.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-duplicate-inserts",
+    "input": "tests/014-duplicate-inserts.in",
+    "expected": "tests/014-duplicate-inserts.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-interleaved-queries",
+    "input": "tests/015-interleaved-queries.in",
+    "expected": "tests/015-interleaved-queries.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-wide-magnitude-range",
+    "input": "tests/016-wide-magnitude-range.in",
+    "expected": "tests/016-wide-magnitude-range.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-stress-insert-heavy",
+    "input": "tests/017-stress-insert-heavy.in",
+    "expected": "tests/017-stress-insert-heavy.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-stress-query-heavy",
+    "input": "tests/018-stress-query-heavy.in",
+    "expected": "tests/018-stress-query-heavy.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-sorted-inserts",
+    "input": "tests/019-sorted-inserts.in",
+    "expected": "tests/019-sorted-inserts.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-zero-centered-heavy",
+    "input": "tests/020-zero-centered-heavy.in",
+    "expected": "tests/020-zero-centered-heavy.out",
+    "points": 5,
     "tags": [
       "normal"
     ],

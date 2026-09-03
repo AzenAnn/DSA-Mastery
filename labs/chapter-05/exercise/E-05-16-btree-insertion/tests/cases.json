@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-no-split",
     "input": "tests/003-no-split.in",
     "expected": "tests/003-no-split.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-ascending",
     "input": "tests/004-ascending.in",
     "expected": "tests/004-ascending.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-descending",
     "input": "tests/005-descending.in",
     "expected": "tests/005-descending.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-below-split-min-order",
+    "input": "tests/006-below-split-min-order.in",
+    "expected": "tests/006-below-split-min-order.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-at-split-min-order",
+    "input": "tests/007-at-split-min-order.in",
+    "expected": "tests/007-at-split-min-order.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-full-root-max-order",
+    "input": "tests/008-full-root-max-order.in",
+    "expected": "tests/008-full-root-max-order.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-at-split-max-order",
+    "input": "tests/009-at-split-max-order.in",
+    "expected": "tests/009-at-split-max-order.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-key-extremes",
+    "input": "tests/010-key-extremes.in",
+    "expected": "tests/010-key-extremes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-above-split-min-order",
+    "input": "tests/011-above-split-min-order.in",
+    "expected": "tests/011-above-split-min-order.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-normal-even-order-m4",
+    "input": "tests/012-normal-even-order-m4.in",
+    "expected": "tests/012-normal-even-order-m4.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-normal-odd-order-m5",
+    "input": "tests/013-normal-odd-order-m5.in",
+    "expected": "tests/013-normal-odd-order-m5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-normal-almost-sorted-m6",
+    "input": "tests/014-normal-almost-sorted-m6.in",
+    "expected": "tests/014-normal-almost-sorted-m6.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-normal-signed-pairs-m8",
+    "input": "tests/015-normal-signed-pairs-m8.in",
+    "expected": "tests/015-normal-signed-pairs-m8.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-regression-cascade-odd-m3",
+    "input": "tests/016-regression-cascade-odd-m3.in",
+    "expected": "tests/016-regression-cascade-odd-m3.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-regression-cascade-even-m4",
+    "input": "tests/017-regression-cascade-even-m4.in",
+    "expected": "tests/017-regression-cascade-even-m4.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-regression-descending-m5",
+    "input": "tests/018-regression-descending-m5.in",
+    "expected": "tests/018-regression-descending-m5.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-ascending-m3-n100",
+    "input": "tests/019-stress-ascending-m3-n100.in",
+    "expected": "tests/019-stress-ascending-m3-n100.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-descending-m10-n100",
+    "input": "tests/020-stress-descending-m10-n100.in",
+    "expected": "tests/020-stress-descending-m10-n100.out",
+    "points": 5,
+    "tags": [
+      "stress"
     ],
     "compare": {
       "mode": "tokens"

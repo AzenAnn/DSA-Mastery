@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-no-cooldown",
     "input": "tests/002-no-cooldown.in",
     "expected": "tests/002-no-cooldown.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-all-same",
     "input": "tests/003-all-same.in",
     "expected": "tests/003-all-same.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-all-different",
     "input": "tests/004-all-different.in",
     "expected": "tests/004-all-different.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-large-cooldown",
     "input": "tests/005-large-cooldown.in",
     "expected": "tests/005-large-cooldown.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-single-task",
+    "input": "tests/006-single-task.in",
+    "expected": "tests/006-single-task.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-single-type-max-cooldown",
+    "input": "tests/007-single-type-max-cooldown.in",
+    "expected": "tests/007-single-type-max-cooldown.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-no-cooldown-mixed",
+    "input": "tests/008-no-cooldown-mixed.in",
+    "expected": "tests/008-no-cooldown-mixed.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-all-distinct-max-cooldown",
+    "input": "tests/009-all-distinct-max-cooldown.in",
+    "expected": "tests/009-all-distinct-max-cooldown.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-max-freq-tie",
+    "input": "tests/010-max-freq-tie.in",
+    "expected": "tests/010-max-freq-tie.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-uniform-rounds-no-idle",
+    "input": "tests/011-uniform-rounds-no-idle.in",
+    "expected": "tests/011-uniform-rounds-no-idle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-diverse-no-idle",
+    "input": "tests/012-diverse-no-idle.in",
+    "expected": "tests/012-diverse-no-idle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-skewed-one-idle",
+    "input": "tests/013-skewed-one-idle.in",
+    "expected": "tests/013-skewed-one-idle.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-moderate-idle",
+    "input": "tests/014-moderate-idle.in",
+    "expected": "tests/014-moderate-idle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-idle-present",
+    "input": "tests/015-idle-present.in",
+    "expected": "tests/015-idle-present.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-exact-fill-boundary",
+    "input": "tests/016-exact-fill-boundary.in",
+    "expected": "tests/016-exact-fill-boundary.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-long-idle",
+    "input": "tests/017-long-idle.in",
+    "expected": "tests/017-long-idle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-just-enough-filler",
+    "input": "tests/018-just-enough-filler.in",
+    "expected": "tests/018-just-enough-filler.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-even-many-types",
+    "input": "tests/019-stress-even-many-types.in",
+    "expected": "tests/019-stress-even-many-types.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-two-types",
+    "input": "tests/020-stress-two-types.in",
+    "expected": "tests/020-stress-two-types.out",
+    "points": 5,
+    "tags": [
+      "stress"
     ],
     "compare": {
       "mode": "tokens"

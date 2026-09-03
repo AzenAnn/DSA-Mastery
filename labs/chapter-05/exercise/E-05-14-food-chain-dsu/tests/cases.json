@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-simple-true",
     "input": "tests/002-simple-true.in",
     "expected": "tests/002-simple-true.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-out-of-range",
     "input": "tests/003-out-of-range.in",
     "expected": "tests/003-out-of-range.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-contradiction",
     "input": "tests/004-contradiction.in",
     "expected": "tests/004-contradiction.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-self-eat",
     "input": "tests/005-self-eat.in",
     "expected": "tests/005-self-eat.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-n1-boundary",
+    "input": "tests/006-n1-boundary.in",
+    "expected": "tests/006-n1-boundary.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-out-of-range-ids",
+    "input": "tests/007-out-of-range-ids.in",
+    "expected": "tests/007-out-of-range-ids.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-type2-self-eat",
+    "input": "tests/008-type2-self-eat.in",
+    "expected": "tests/008-type2-self-eat.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-minimal-contradictions",
+    "input": "tests/009-minimal-contradictions.in",
+    "expected": "tests/009-minimal-contradictions.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-valid-world-dense",
+    "input": "tests/010-valid-world-dense.in",
+    "expected": "tests/010-valid-world-dense.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-valid-world-with-false",
+    "input": "tests/011-valid-world-with-false.in",
+    "expected": "tests/011-valid-world-with-false.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-medium-mixed-story",
+    "input": "tests/012-medium-mixed-story.in",
+    "expected": "tests/012-medium-mixed-story.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-transitive-inference",
+    "input": "tests/013-transitive-inference.in",
+    "expected": "tests/013-transitive-inference.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-chain-eats-regression",
+    "input": "tests/014-chain-eats-regression.in",
+    "expected": "tests/014-chain-eats-regression.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-late-contradictions",
+    "input": "tests/015-late-contradictions.in",
+    "expected": "tests/015-late-contradictions.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-count-all-false-rules",
+    "input": "tests/016-count-all-false-rules.in",
+    "expected": "tests/016-count-all-false-rules.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-three-animal-density",
+    "input": "tests/017-three-animal-density.in",
+    "expected": "tests/017-three-animal-density.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-sametype-merge-eats-flood",
+    "input": "tests/018-sametype-merge-eats-flood.in",
+    "expected": "tests/018-sametype-merge-eats-flood.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-residue-chain",
+    "input": "tests/019-stress-residue-chain.in",
+    "expected": "tests/019-stress-residue-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-deterministic-mixed",
+    "input": "tests/020-stress-deterministic-mixed.in",
+    "expected": "tests/020-stress-deterministic-mixed.out",
+    "points": 5,
+    "tags": [
+      "boundary"
     ],
     "compare": {
       "mode": "tokens"

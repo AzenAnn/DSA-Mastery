@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-all-same",
     "input": "tests/002-all-same.in",
     "expected": "tests/002-all-same.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-no-merge",
     "input": "tests/003-no-merge.in",
     "expected": "tests/003-no-merge.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-self-query",
     "input": "tests/004-self-query.in",
     "expected": "tests/004-self-query.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-chain-merge",
     "input": "tests/005-chain-merge.in",
     "expected": "tests/005-chain-merge.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-boundary-n1",
+    "input": "tests/006-boundary-n1.in",
+    "expected": "tests/006-boundary-n1.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-boundary-self-union",
+    "input": "tests/007-boundary-self-union.in",
+    "expected": "tests/007-boundary-self-union.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-boundary-already-connected",
+    "input": "tests/008-boundary-already-connected.in",
+    "expected": "tests/008-boundary-already-connected.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-boundary-unknown-vs-known",
+    "input": "tests/009-boundary-unknown-vs-known.in",
+    "expected": "tests/009-boundary-unknown-vs-known.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-normal-merge-components",
+    "input": "tests/010-normal-merge-components.in",
+    "expected": "tests/010-normal-merge-components.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-normal-chain-build",
+    "input": "tests/011-normal-chain-build.in",
+    "expected": "tests/011-normal-chain-build.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-normal-interleaved",
+    "input": "tests/012-normal-interleaved.in",
+    "expected": "tests/012-normal-interleaved.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-regression-root-choice",
+    "input": "tests/013-regression-root-choice.in",
+    "expected": "tests/013-regression-root-choice.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-regression-path-compression",
+    "input": "tests/014-regression-path-compression.in",
+    "expected": "tests/014-regression-path-compression.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-regression-large-node-ids",
+    "input": "tests/015-regression-large-node-ids.in",
+    "expected": "tests/015-regression-large-node-ids.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-regression-reverse-order-unions",
+    "input": "tests/016-regression-reverse-order-unions.in",
+    "expected": "tests/016-regression-reverse-order-unions.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-normal-fan-in-merge",
+    "input": "tests/017-normal-fan-in-merge.in",
+    "expected": "tests/017-normal-fan-in-merge.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-normal-isolation",
+    "input": "tests/018-normal-isolation.in",
+    "expected": "tests/018-normal-isolation.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-unions-then-queries",
+    "input": "tests/019-stress-unions-then-queries.in",
+    "expected": "tests/019-stress-unions-then-queries.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-query-heavy",
+    "input": "tests/020-stress-query-heavy.in",
+    "expected": "tests/020-stress-query-heavy.out",
+    "points": 5,
+    "tags": [
+      "stress"
     ],
     "compare": {
       "mode": "tokens"
