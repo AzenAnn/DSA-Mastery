@@ -333,6 +333,16 @@ test("process runner enforces real timeout and output limits", async () => {
   assert.equal(output.outputExceeded, true);
 });
 
+test("process runner merges an injected toolchain environment", async () => {
+  const result = await runProcess(process.execPath, ["-e", "process.stdout.write(process.env.LAB_TOOLCHAIN_MARKER)"], {
+    env: { LAB_TOOLCHAIN_MARKER: "from-env" },
+    timeMs: 2000,
+    outputKb: 64,
+  });
+  assert.equal(result.code, 0);
+  assert.equal(result.stdout, "from-env");
+});
+
 test("stable Lab IDs normalize common shorthand", () => {
   assert.equal(normalizeLabId("02T3"), "02T03");
   assert.equal(normalizeLabId("2t3"), "02T03");
@@ -468,6 +478,33 @@ test("student pack follows multi-source manifests and excludes binaries", async 
   await access(path.join(packed.packageRoot, "include", "helper.hpp"));
   await assert.rejects(access(path.join(packed.packageRoot, "student", "stale.exe")));
   await assert.rejects(access(path.join(packed.packageRoot, "solution")));
+});
+
+test("student pack lab CLI runs outside the source repository", async (t) => {
+  const root = await fixture({
+    schemaVersion: 1,
+    type: "program",
+    language: "cpp",
+    toolchain: { standard: "c++17" },
+    targets: { student: { sources: ["student/main.cpp"] }, solution: { sources: ["solution/main.cpp"] } },
+    judge: { kind: "stdio", cases: "tests/cases.json" },
+  }, {
+    "Makefile": THIN_MAKEFILE,
+    "student/main.cpp": "int main() { return 0; }\n",
+    "solution/main.cpp": "int main() { return 0; }\n",
+    "tests/cases.json": JSON.stringify([{ id: "sample", input: "tests/sample.in", expected: "tests/sample.out", points: 100 }]),
+    "tests/sample.in": "",
+    "tests/sample.out": "",
+  });
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const packed = await packStudent(await loadLab(root));
+  const result = await runProcess(process.execPath, ["tools/lab/cli.mjs", "validate", "--json", "--no-color"], {
+    cwd: packed.packageRoot,
+    timeMs: 5000,
+    outputKb: 256,
+  });
+  assert.equal(result.code, 0, result.stderr || result.stdout);
+  assert.equal(JSON.parse(result.stdout).ok, true);
 });
 
 test("schema documents are valid JSON with stable v1 identities", async () => {

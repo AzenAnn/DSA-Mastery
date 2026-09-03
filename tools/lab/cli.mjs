@@ -38,7 +38,12 @@ function parseArgs(argv) {
 }
 
 function targetPath(positional) {
-  return positional[0] ?? process.env.INIT_CWD ?? process.cwd();
+  if (positional[0]) return positional[0];
+  const initialDirectory = process.env.INIT_CWD ? path.resolve(process.env.INIT_CWD) : undefined;
+  const projectBoundary = `${projectRoot}${path.sep}`;
+  return initialDirectory && (initialDirectory === projectRoot || initialDirectory.startsWith(projectBoundary))
+    ? initialDirectory
+    : process.cwd();
 }
 
 function validateOptions(parsed) {

@@ -1,27 +1,45 @@
 import { spawn } from "node:child_process";
 
-export function runProcess(command, args, options = {}) {
+export function runCommand(command, args = [], options = {}) {
   const {
     cwd,
-    input = "",
-    timeMs = 30_000,
-    outputKb = 4096,
-    inherit = false,
     env,
+    input = "",
+    timeoutMs = 30_000,
+    outputLimitKb = 4096,
+    inherit = false,
   } = options;
   const childEnvironment = env === undefined ? process.env : { ...process.env, ...env };
+
   if (inherit) {
     return new Promise((resolve, reject) => {
       const started = performance.now();
-      const child = spawn(command, args, { cwd, env: childEnvironment, shell: false, windowsHide: true, stdio: "inherit" });
+      const child = spawn(command, args, {
+        cwd,
+        env: childEnvironment,
+        shell: false,
+        windowsHide: true,
+        stdio: "inherit",
+      });
       child.once("error", reject);
-      child.once("close", (code, signal) => resolve({ code, signal, durationMs: performance.now() - started }));
+      child.once("close", (code, signal) => resolve({
+        code,
+        signal,
+        durationMs: performance.now() - started,
+      }));
     });
   }
+
   return new Promise((resolve) => {
     const started = performance.now();
-    const limitBytes = outputKb * 1024;
-    const child = spawn(command, args, { cwd, env: childEnvironment, shell: false, windowsHide: true, stdio: ["pipe", "pipe", "pipe"] });
+    const limitBytes = outputLimitKb * 1024;
+    const child = spawn(command, args, {
+      cwd,
+      env: childEnvironment,
+      shell: false,
+      windowsHide: true,
+      stdio: ["pipe", "pipe", "pipe"],
+    });
     const stdout = [];
     const stderr = [];
     let stdoutBytes = 0;
@@ -38,13 +56,13 @@ export function runProcess(command, args, options = {}) {
       const size = Buffer.byteLength(chunk);
       if (stream === "stdout") stdoutBytes += size;
       else stderrBytes += size;
-      const used = stream === "stdout" ? stdoutBytes : stderrBytes;
-      if (used <= limitBytes) bucket.push(Buffer.from(chunk));
+      if ((stream === "stdout" ? stdoutBytes : stderrBytes) <= limitBytes) bucket.push(Buffer.from(chunk));
       if (stdoutBytes + stderrBytes > limitBytes) {
         outputExceeded = true;
         stop();
       }
     };
+
     child.stdout.on("data", (chunk) => collect(stdout, chunk, "stdout"));
     child.stderr.on("data", (chunk) => collect(stderr, chunk, "stderr"));
     child.once("error", (error) => {
@@ -53,7 +71,7 @@ export function runProcess(command, args, options = {}) {
     const timer = setTimeout(() => {
       timedOut = true;
       stop();
-    }, timeMs);
+    }, timeoutMs);
     child.once("close", (code, signal) => {
       if (settled) return;
       settled = true;
@@ -74,4 +92,20 @@ export function runProcess(command, args, options = {}) {
     child.stdin.on("error", () => {});
     child.stdin.end(input);
   });
+}
+
+export async function commandExists(command, options = {}) {
+  const result = await runCommand(command, options.args ?? ["--version"], {
+    ...options,
+    timeoutMs: options.timeoutMs ?? 5000,
+    outputLimitKb: options.outputLimitKb ?? 256,
+  });
+  return !result.spawnError && result.code === 0;
+}
+
+export function commandText(command, args = []) {
+  return [command, ...args].map((part) => {
+    const value = String(part);
+    return /[\s"']/u.test(value) ? JSON.stringify(value) : value;
+  }).join(" ");
 }
