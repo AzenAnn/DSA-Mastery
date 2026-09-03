@@ -66,19 +66,39 @@ status: "review"
 
 ## 本章知识图谱
 
-```text [chapter-05-map.txt]
-第 4 章二叉树基础
-        │
-        ├─ 加入全序关系 ──> BST ── 加入高度约束 ──> AVL
-        │
-        ├─ 加入完全形态与局部偏序 ──> 堆 ──> 优先队列
-        │                                      │
-        │                                      └─> 赫夫曼贪心构造
-        │
-        ├─ 加入集合代表语义 ──> 并查集 ──> 动态连通性 / Kruskal
-        │
-        └─ 提高单节点分支数 ──> B 树 / B+ 树 ──> 外存与数据库索引
+```graphviz
+digraph Chapter05Map {
+  rankdir=LR;
+  node [shape=box, style=rounded, fontsize=11, margin="0.12,0.07"];
+  edge [fontsize=10];
+
+  base [label="第 4 章\n二叉树基础"];
+
+  bst  [label="BST"];
+  avl  [label="AVL"];
+  heap [label="堆"];
+  pq   [label="优先队列"];
+  huff [label="赫夫曼贪心构造"];
+  dsu  [label="并查集"];
+  conn [label="动态连通性 / Kruskal"];
+  btree [label="B 树 / B+ 树"];
+  disk [label="外存与数据库索引"];
+
+  base -> bst   [label="加入全序关系"];
+  bst  -> avl   [label="加入高度约束"];
+
+  base -> heap  [label="加入完全形态\n与局部偏序"];
+  heap -> pq;
+  pq   -> huff;
+
+  base -> dsu   [label="加入集合代表语义"];
+  dsu  -> conn;
+
+  base -> btree [label="提高单节点分支数"];
+  btree -> disk;
+}
 ```
+<!-- diagram id="chapter-05-map" caption: "本章五个结构都由第 4 章二叉树出发，各自追加一条约束或改变分支数；边上的文字即该结构相对基础二叉树新增的核心不变量" -->
 
 横向比较时始终问三个问题：
 
@@ -96,9 +116,34 @@ status: "review"
 
 ## 本章 Labs
 
-::: info 理论题库已开放
-侧栏“本章 Labs”的 **理论 Theory** 分类现已提供森林转换、树与森林遍历、赫夫曼编码、并查集和堆五组交互题库。每组选择题都可直接提交、查看解析并重新作答；源材料已有的综合题也保留在对应页面中。**实验 Exercise** 与 **工程 Project** 仍保留空槽位，收到可执行题目后再依据[站内 Lab 更新与测试指南](../chapter-preface/01-lab-authoring-guide.md)选择类型并接入。
+::: info 理论题库与编程实验均已开放
+侧栏“本章 Labs”当前提供两类练习：
+
+- **理论 Theory**：五组交互题库，覆盖森林转换、树与森林遍历、赫夫曼编码、并查集和堆。选择题可直接提交、查看解析并重新作答；源材料已有的综合题保留在对应页面中。
+- **实验 Exercise**：17 道可编译、可评测的编程实验，按主题分布为二叉搜索树 5 道、堆与优先队列 3 道、赫夫曼 3 道、并查集 4 道、B 树与 B+ 树 2 道。每道实验都提供 `student/` 起始代码、`solution/` 参考实现与配套测试用例。
+
+**工程 Project** 仍保留空槽位，收到可执行题目后再依据[站内 Lab 更新与测试指南](../chapter-preface/01-lab-authoring-guide.md)选择类型并接入。
 :::
+
+### 理论题库
+
+| 入口 | 对应文章 |
+| --- | --- |
+| [森林与二叉树转换题精练](../../labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/README.md) | 承接 [4.5 树、森林与二叉树](../chapter-04-tree/05-trees-and-forests.md) |
+| [树与森林遍历题精练](../../labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/README.md) | 承接 [4.5 树、森林与二叉树](../chapter-04-tree/05-trees-and-forests.md) |
+| [哈夫曼树与编码题精练](../../labs/chapter-05/theory/T-05-03-huffman-tree-coding-quiz/README.md) | [5.3 赫夫曼树与赫夫曼编码](./03-huffman-tree-and-coding.md) |
+| [并查集题精练](../../labs/chapter-05/theory/T-05-04-disjoint-set-union-quiz/README.md) | [5.4 并查集](./04-disjoint-set-union.md) |
+| [堆题精练](../../labs/chapter-05/theory/T-05-05-heap-quiz/README.md) | [5.2 堆与优先队列](./02-heap-and-priority-queue.md) |
+
+### 编程实验
+
+| 主题 | 实验 |
+| --- | --- |
+| 二叉搜索树与平衡 | [BST 插入与查找](../../labs/chapter-05/exercise/E-05-01-bst-insert-search/README.md)、[BST 删除](../../labs/chapter-05/exercise/E-05-02-bst-delete/README.md)、[验证 BST 先序序列](../../labs/chapter-05/exercise/E-05-03-validate-bst-preorder/README.md)、[BST 第 k 小元素](../../labs/chapter-05/exercise/E-05-04-bst-kth-smallest/README.md)、[AVL 插入与平衡](../../labs/chapter-05/exercise/E-05-05-avl-tree-insert/README.md) |
+| 堆与优先队列 | [最小堆实现](../../labs/chapter-05/exercise/E-05-06-min-heap-implementation/README.md)、[数据流中位数](../../labs/chapter-05/exercise/E-05-07-median-in-data-stream/README.md)、[任务调度器](../../labs/chapter-05/exercise/E-05-08-task-scheduler/README.md) |
+| 赫夫曼树与编码 | [哈夫曼编码](../../labs/chapter-05/exercise/E-05-09-huffman-coding/README.md)、[最优合并问题](../../labs/chapter-05/exercise/E-05-10-optimal-merge/README.md)、[k 叉哈夫曼树](../../labs/chapter-05/exercise/E-05-11-k-ary-huffman/README.md) |
+| 并查集 | [并查集实现](../../labs/chapter-05/exercise/E-05-12-disjoint-set-union/README.md)、[动态连通性查询](../../labs/chapter-05/exercise/E-05-13-dynamic-connectivity/README.md)、[食物链](../../labs/chapter-05/exercise/E-05-14-food-chain-dsu/README.md)、[银河英雄传说](../../labs/chapter-05/exercise/E-05-15-galaxy-heroes-dsu/README.md) |
+| B 树与 B+ 树 | [B 树的插入](../../labs/chapter-05/exercise/E-05-16-btree-insertion/README.md)、[B+ 树的范围查询](../../labs/chapter-05/exercise/E-05-17-bplus-range-query/README.md) |
 
 ## 学习方法
 
