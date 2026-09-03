@@ -7,6 +7,17 @@ const STATUS_ICON = Object.freeze({
   skipped: "–",
 });
 
+const ANSI_STYLE = Object.freeze({
+  reset: "\u001b[0m",
+  bold: "\u001b[1m",
+  dim: "\u001b[2m",
+  cyan: "\u001b[36m",
+  green: "\u001b[32m",
+  yellow: "\u001b[33m",
+  red: "\u001b[31m",
+  magenta: "\u001b[35m",
+});
+
 export const INSTALL_CHOICES = Object.freeze([
   {
     id: "runtime",
@@ -14,6 +25,7 @@ export const INSTALL_CHOICES = Object.freeze([
     description: "启动器和课程工具所需的 Git、Node.js、pnpm",
     detail: "必选。启动器需要它来下载仓库、安装依赖和运行课程工具。",
     profile: "runtime",
+    group: "基础环境",
     defaultSelected: true,
     required: true,
   },
@@ -23,6 +35,7 @@ export const INSTALL_CHOICES = Object.freeze([
     description: "编译并运行基础 C++ 练习（推荐）",
     detail: "准备 Apple Clang、MSVC 或其他受支持的 C++ 编译器。",
     profile: "basic",
+    group: "课程环境",
     defaultSelected: true,
   },
   {
@@ -31,6 +44,7 @@ export const INSTALL_CHOICES = Object.freeze([
     description: "运行需要 CMake 的综合项目",
     detail: "准备 CMake，并自动勾选 Program Lab。",
     profile: "full",
+    group: "课程环境",
     defaultSelected: false,
     requires: ["program"],
   },
@@ -39,6 +53,7 @@ export const INSTALL_CHOICES = Object.freeze([
     label: "VS Code 编辑器",
     description: "用图形界面编写和运行代码",
     detail: "可选，不影响命令行 Lab 使用。",
+    group: "编辑器与扩展",
     defaultSelected: false,
     optional: true,
   },
@@ -47,6 +62,7 @@ export const INSTALL_CHOICES = Object.freeze([
     label: "C/C++ 代码扩展",
     description: "VS Code 的补全、跳转和调试支持",
     detail: "需要先安装 VS Code。",
+    group: "编辑器与扩展",
     defaultSelected: false,
     optional: true,
     requires: ["vscode"],
@@ -56,6 +72,7 @@ export const INSTALL_CHOICES = Object.freeze([
     label: "CMake Tools 扩展",
     description: "在 VS Code 中管理 Project / CMake",
     detail: "需要先选择 Project / CMake 和 VS Code。",
+    group: "编辑器与扩展",
     defaultSelected: false,
     optional: true,
     requires: ["project", "vscode"],
@@ -157,34 +174,62 @@ export function handleChoiceKey(key, cursor, selection) {
   return { cursor, selection: selected, action: "noop" };
 }
 
-export function renderChoiceMenu({ title = "配置 DSA Mastery", subtitle = "用 ↑↓ 移动，空格勾选，Enter 开始", choices = INSTALL_CHOICES, selection = createInstallSelection(), cursor = 0, width = 88 } = {}) {
+export function renderBanner({ width = 88, subtitle = "本地实验环境安装向导", color = false } = {}) {
+  const safeWidth = clampWidth(width);
+  const innerWidth = safeWidth - 4;
+  return [
+    `╭${"─".repeat(safeWidth - 2)}╮`,
+    frameLine(`◆ DSA MASTERY  ·  ${subtitle}`, innerWidth, ["bold", "cyan"], color),
+    `╰${"─".repeat(safeWidth - 2)}╯`,
+  ].join("\n");
+}
+
+export function renderChoiceMenu({ title = "配置 DSA Mastery", subtitle = "用 ↑↓ 移动，空格勾选，Enter 开始", choices = INSTALL_CHOICES, selection = createInstallSelection(), cursor = 0, width = 88, color = false } = {}) {
   const safeWidth = clampWidth(width);
   const innerWidth = safeWidth - 4;
   const normalized = normalizeInstallSelection(selection);
   const lines = [
+    ...renderBanner({ width: safeWidth, subtitle: "本地实验环境安装向导", color }).split("\n"),
+    "",
     `╭${"─".repeat(safeWidth - 2)}╮`,
-    `│ ${truncate(title, innerWidth)} │`,
-    `│ ${truncate(subtitle, innerWidth)} │`,
+    frameLine(title, innerWidth, ["bold", "cyan"], color),
+    frameLine(subtitle, innerWidth, "dim", color),
     `├${"─".repeat(safeWidth - 2)}┤`,
   ];
+  let previousGroup;
   choices.forEach((choice, index) => {
+    if (choice.group && choice.group !== previousGroup) {
+      if (previousGroup) lines.push(frameLine("", innerWidth));
+      lines.push(frameLine(`▌ ${choice.group}`, innerWidth, ["bold", "magenta"], color));
+      previousGroup = choice.group;
+    }
     const prefix = index === cursor ? "▶" : " ";
     const checkbox = normalized.has(choice.id) ? "☑" : "☐";
     const lock = choice.required ? " · 必选" : "";
-    lines.push(`│ ${truncate(`${prefix} ${checkbox} ${choice.label}${lock}`, innerWidth)} │`);
-    lines.push(`│   ${truncate(choice.description, innerWidth - 2)} │`);
+    const choiceStyle = index === cursor
+      ? ["bold", "cyan"]
+      : choice.required
+        ? "yellow"
+        : normalized.has(choice.id)
+          ? "green"
+          : "dim";
+    lines.push(frameLine(`${prefix} ${checkbox} ${choice.label}${lock}`, innerWidth, choiceStyle, color));
+    lines.push(frameLine(`  ${choice.description}`, innerWidth, "dim", color));
   });
   const active = choices[cursor];
-  if (active?.detail) lines.push(`│ ${truncate(`说明：${active.detail}`, innerWidth)} │`);
+  if (active?.detail) {
+    lines.push(frameLine("", innerWidth));
+    lines.push(frameLine(`▸ 说明：${active.detail}`, innerWidth, "dim", color));
+  }
   const plan = selectionToOptions(normalized);
   const planLabel = plan.profile === "runtime"
     ? "runtime（仅课程工具）"
     : plan.profile === "full"
       ? "full（Program + Project）"
       : "basic（Program）";
-  lines.push(`│ ${truncate(`当前方案：${planLabel}`, innerWidth)} │`);
+  lines.push(frameLine(`▸ 当前方案：${planLabel}`, innerWidth, plan.profile === "full" ? "green" : "cyan", color));
   lines.push(`├${"─".repeat(safeWidth - 2)}┤`);
-  lines.push(`│ ${truncate("↑↓/jk 移动   空格 选择/取消   Enter 开始   q 退出", innerWidth)} │`);
+  lines.push(frameLine("↑↓/jk 移动   空格 选择/取消   Enter 开始   q 退出", innerWidth, "dim", color));
   lines.push(`╰${"─".repeat(safeWidth - 2)}╯`);
   return lines.join("\n");
 }
@@ -228,9 +273,10 @@ export async function promptInstallSelection({ input = process.stdin, output = p
   const previousRawMode = input.isRaw;
   let inputBuffer = "";
   let rendered = false;
+  const color = supportsColor(output);
   const render = () => {
     if (rendered) output.write("\u001b[2J\u001b[H");
-    output.write(`${renderChoiceMenu({ title, selection, cursor, width: output.columns ?? 88 })}\n`);
+    output.write(`${renderChoiceMenu({ title, selection, cursor, width: output.columns ?? 88, color })}\n`);
     rendered = true;
   };
   input.setRawMode?.(true);
@@ -272,11 +318,85 @@ function clampWidth(width) {
   return Math.max(28, Number.isFinite(Number(width)) ? Number(width) : 80);
 }
 
+function supportsColor(output) {
+  return Boolean(output?.isTTY && !process.env.NO_COLOR && process.env.TERM !== "dumb");
+}
+
+const COMBINING_CHARACTER = /^\p{Mark}$/u;
+
+function isZeroWidthCodePoint(codePoint, character) {
+  return codePoint === 0x200d
+    || (codePoint >= 0xfe00 && codePoint <= 0xfe0f)
+    || (codePoint >= 0xe0100 && codePoint <= 0xe01ef)
+    || COMBINING_CHARACTER.test(character);
+}
+
+function isWideCodePoint(codePoint) {
+  return (
+    (codePoint >= 0x1100 && codePoint <= 0x115f)
+    || codePoint === 0x2329
+    || codePoint === 0x232a
+    || (codePoint >= 0x2e80 && codePoint <= 0x303e)
+    || (codePoint >= 0x3040 && codePoint <= 0xa4cf)
+    || (codePoint >= 0xac00 && codePoint <= 0xd7a3)
+    || (codePoint >= 0xf900 && codePoint <= 0xfaff)
+    || (codePoint >= 0xfe10 && codePoint <= 0xfe19)
+    || (codePoint >= 0xfe30 && codePoint <= 0xfe6f)
+    || (codePoint >= 0xff00 && codePoint <= 0xff60)
+    || (codePoint >= 0xffe0 && codePoint <= 0xffe6)
+    || (codePoint >= 0x1f1e6 && codePoint <= 0x1f1ff)
+    || (codePoint >= 0x1f300 && codePoint <= 0x1faff)
+    || (codePoint >= 0x20000 && codePoint <= 0x3fffd)
+  );
+}
+export function displayWidth(value) {
+  let width = 0;
+  for (const character of stripAnsi(value)) {
+    const codePoint = character.codePointAt(0);
+    if (!codePoint || codePoint < 0x20 || (codePoint >= 0x7f && codePoint < 0xa0)) continue;
+    if (isZeroWidthCodePoint(codePoint, character)) continue;
+    width += isWideCodePoint(codePoint) ? 2 : 1;
+  }
+  return width;
+}
+
+function paint(value, styles, color) {
+  if (!color) return value;
+  const names = Array.isArray(styles) ? styles : [styles];
+  const prefix = names.filter(Boolean).map((name) => ANSI_STYLE[name]).join("");
+  return prefix ? `${prefix}${value}${ANSI_STYLE.reset}` : value;
+}
+
+function frameLine(value, width, styles, color = false) {
+  const content = truncate(value, width);
+  const padding = " ".repeat(Math.max(0, width - displayWidth(content)));
+  return `│ ${paint(`${content}${padding}`, styles, color)} │`;
+}
+
+function frameSegments(segments, width, color) {
+  const visible = segments.map((segment) => segment.value).join("");
+  if (displayWidth(visible) > width) return frameLine(visible, width);
+  const content = segments
+    .map((segment) => paint(segment.value, segment.styles, color))
+    .join("")
+    .concat(" ".repeat(Math.max(0, width - displayWidth(visible))));
+  return `│ ${content} │`;
+}
+
 function truncate(value, width) {
   const text = String(value ?? "");
-  if (text.length <= width) return text;
-  if (width <= 1) return text.slice(0, width);
-  return `${text.slice(0, width - 1)}…`;
+  if (displayWidth(text) <= width) return text;
+  if (width <= 1) return "…";
+  const targetWidth = width - 1;
+  let result = "";
+  let usedWidth = 0;
+  for (const character of text) {
+    const characterWidth = displayWidth(character);
+    if (usedWidth + characterWidth > targetWidth) break;
+    result += character;
+    usedWidth += characterWidth;
+  }
+  return `${result}…`;
 }
 
 function statusLabel(status) {
@@ -323,25 +443,52 @@ export function renderPlain({ title = "DSA Mastery 环境配置", profile = "", 
   return lines.filter(Boolean).map((line) => truncate(line, safeWidth)).join("\n");
 }
 
-export function renderTuiFrame({ title = "DSA Mastery 环境配置", profile = "", stages = [], width = 80 } = {}) {
+export function renderTuiFrame({ title = "DSA Mastery 环境配置", profile = "", stages = [], width = 80, color = false } = {}) {
   const safeWidth = clampWidth(width);
   const innerWidth = safeWidth - 4;
   const summary = progressSummary(stages);
   const barWidth = Math.max(8, innerWidth - 18);
   const filled = Math.round((summary.percent / 100) * barWidth);
-  const bar = `${"█".repeat(filled)}${"░".repeat(Math.max(0, barWidth - filled))}`;
+  const empty = Math.max(0, barWidth - filled);
   const lines = [
+    ...renderBanner({
+      width: safeWidth,
+      subtitle: profile ? `本地环境配置 · ${profile}` : "本地环境配置",
+      color,
+    }).split("\n"),
+    "",
     `╭${"─".repeat(safeWidth - 2)}╮`,
-    `│ ${truncate(`${title}${profile ? ` · ${profile}` : ""}`, innerWidth)} │`,
-    `│ ${truncate(`进度 ${bar} ${summary.percent}% (${summary.completed}/${summary.total})`, innerWidth)} │`,
+    frameLine(`${title}${profile ? ` · ${profile}` : ""}`, innerWidth, ["bold", "cyan"], color),
+    frameSegments([
+      { value: "进度 ", styles: ["bold", "cyan"] },
+      { value: "█".repeat(filled), styles: ["bold", "green"] },
+      { value: "░".repeat(empty), styles: "dim" },
+      { value: ` ${summary.percent}% (${summary.completed}/${summary.total})`, styles: "dim" },
+    ], innerWidth, color),
     `├${"─".repeat(safeWidth - 2)}┤`,
   ];
   for (const stage of stages) {
     const message = stage.message ? ` · ${stage.message}` : "";
-    lines.push(`│ ${truncate(`${STATUS_ICON[stage.status] ?? "·"} ${stage.name} · ${statusLabel(stage.status)}${message}`, innerWidth)} │`);
+    lines.push(frameLine(
+      `${STATUS_ICON[stage.status] ?? "·"} ${stage.name} · ${statusLabel(stage.status)}${message}`,
+      innerWidth,
+      statusStyles(stage.status),
+      color,
+    ));
   }
   lines.push(`╰${"─".repeat(safeWidth - 2)}╯`);
   return lines.join("\n");
+}
+
+function statusStyles(status) {
+  return {
+    pending: "dim",
+    running: ["bold", "cyan"],
+    success: ["bold", "green"],
+    warning: ["bold", "yellow"],
+    failed: ["bold", "red"],
+    skipped: "dim",
+  }[status];
 }
 
 export function stripAnsi(value) {
@@ -389,7 +536,7 @@ export function createProgressUI({
     render() {
       const width = Math.max(28, Number(ui.stdout?.columns) || 80);
       const frame = ui.mode === "tui"
-        ? renderTuiFrame({ title: ui.title, profile: ui.profile, stages: ui.stages, width })
+        ? renderTuiFrame({ title: ui.title, profile: ui.profile, stages: ui.stages, width, color: supportsColor(ui.stdout) })
         : renderPlain({ title: ui.title, profile: ui.profile, stages: ui.stages, width });
       if (ui.mode === "tui" && ui.currentFrame) ui.stdout.write("\u001b[2J\u001b[H");
       ui.stdout.write(`${frame}\n`);

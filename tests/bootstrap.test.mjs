@@ -17,6 +17,7 @@ import { parseSetupArgs } from "../scripts/bootstrap/options.mjs";
 import {
   createStageState,
   createProgressUI,
+  displayWidth,
   renderPlain,
   createInstallSelection,
   decodeChoiceInput,
@@ -24,6 +25,7 @@ import {
   promptInstallSelection,
   renderChoiceMenu,
   selectionToOptions,
+  stripAnsi,
   renderTuiFrame,
 } from "../scripts/bootstrap/ui.mjs";
 import {
@@ -123,6 +125,17 @@ test("TUI frame shows progress and clamps to the terminal width", () => {
   for (const line of frame.split("\n")) assert.ok(line.length <= 42, `line too wide: ${line}`);
 });
 
+test("colored TUI adds a banner and semantic status colors without changing layout", () => {
+  const stages = createStageState(["preflight", "toolchain"]);
+  stages[0].status = "success";
+  stages[1].status = "running";
+  const plain = renderTuiFrame({ title: "DSA Mastery", profile: "basic", stages, width: 52, color: false });
+  const colored = renderTuiFrame({ title: "DSA Mastery", profile: "basic", stages, width: 52, color: true });
+  assert.match(colored, /DSA MASTERY/);
+  assert.equal(colored.includes(`${String.fromCharCode(27)}[`), true);
+  assert.equal(stripAnsi(colored), plain);
+});
+
 test("progress UI falls back to stable plain output when stdout is not a TTY", () => {
   const writes = [];
   const ui = createProgressUI({
@@ -189,6 +202,32 @@ test("install wizard renders actionable checkboxes and keyboard help", () => {
   assert.match(menu, /当前方案：basic/);
   assert.match(menu, /空格 选择\/取消/);
   for (const line of menu.split("\n")) assert.ok(line.length <= 60, `line too wide: ${line}`);
+});
+
+test("colored install wizard adds a banner and grouped sections", () => {
+  const plain = renderChoiceMenu({ selection: createInstallSelection(), cursor: 0, width: 72, color: false });
+  const colored = renderChoiceMenu({ selection: createInstallSelection(), cursor: 0, width: 72, color: true });
+  assert.match(colored, /DSA MASTERY/);
+  assert.match(colored, /基础运行环境/);
+  assert.match(colored, /编辑器与扩展/);
+  assert.equal(colored.includes(`${String.fromCharCode(27)}[`), true);
+  assert.equal(stripAnsi(colored), plain);
+});
+
+test("TUI layout accounts for wide CJK characters when padding and truncating", () => {
+  const menu = renderChoiceMenu({ width: 42, color: false });
+  const frame = renderTuiFrame({
+    title: "DSA Mastery 环境配置",
+    profile: "basic",
+    stages: createStageState(["依赖安装"]),
+    width: 42,
+    color: false,
+  });
+  for (const line of [...menu.split("\n"), ...frame.split("\n")]) {
+    if (line.startsWith("╭") || line.startsWith("╰") || line.startsWith("├") || line.startsWith("│")) {
+      assert.equal(displayWidth(line), 42, `misaligned line: ${line}`);
+    }
+  }
 });
 
 test("install wizard decodes combined arrow, space, and enter input", () => {
