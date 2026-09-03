@@ -2,53 +2,74 @@
 
 > 适用对象：在 macOS 13 或更高版本上完成 DSA Mastery 本地 C++ Lab 的学生，支持 Apple Silicon 与 Intel Mac。
 
-## 0. 一键配置（推荐）
+## 0. 原生自举安装（推荐）
 
-如果你希望一次完成工具检查、仓库准备、依赖安装和第一个 Lab 验证，可以下载并审阅原生自举脚本。脚本只使用 macOS shell、Homebrew 官方安装入口和仓库自己的 Node 协调器，不需要预先安装 Node.js；支持 Apple Silicon 与 Intel Mac。普通用户不需要记住 profile 或其他参数，直接运行脚本即可进入选择界面。
+如果你希望一次完成工具检查、仓库准备、依赖安装和第一个 Lab 验证，直接运行仓库自带的 macOS 启动器即可。启动器会检查并按需准备 Git、Node.js、pnpm、Apple Clang、CMake、仓库依赖和 VS Code；不需要预先安装 Node.js，支持 Apple Silicon 与 Intel Mac。
 
-在终端执行：
+### 已经有仓库
+
+在终端直接粘贴下面两行：
 
 ```bash
-curl -fL https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-macos.sh -o bootstrap-macos.sh
-less bootstrap-macos.sh
-bash bootstrap-macos.sh
+cd ~/code/DSA-Mastery
+bash scripts/bootstrap/bootstrap-macos.sh
 ```
 
-启动后使用方向键和空格选择：
+如果仓库在其他位置，只需要把第一行换成实际目录，例如 `cd ~/DSA-Mastery`。
+
+### 还没有仓库
+
+如果 Git 和仓库都还没有准备好，先下载启动器，再由它准备工具并 clone 仓库：
 
 ```bash
-# ↑↓：移动；空格：选择/取消；Enter：开始；q：退出
+curl -fL https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-macos.sh -o /tmp/bootstrap-macos.sh
+bash /tmp/bootstrap-macos.sh --repo-dir "$HOME/code/DSA-Mastery"
+```
+
+如果你已经可以使用 Git，也可以先 clone，再回到上面的“已经有仓库”路径：
+
+```bash
+mkdir -p ~/code
+git clone https://github.com/AzenAnn/DSA-Mastery.git ~/code/DSA-Mastery
+cd ~/code/DSA-Mastery
+bash scripts/bootstrap/bootstrap-macos.sh
+```
+
+不带参数运行时会进入交互式选择界面：
+
+```bash
+# ↑↓ 或 j/k：移动；空格：选择/取消；Enter：开始；q：退出
 ```
 
 基础运行环境（Git、Node.js、pnpm）是必选项。默认会选择 Program Lab C++ 环境；如果需要 Project Lab，就勾选 Project Lab / CMake；需要图形界面时再勾选 VS Code 和相应扩展。脚本会自动勾选扩展依赖，并根据选择执行对应的环境检查。
 
 菜单中的方案对应：`runtime`（只准备课程工具）、`basic`（Program）和 `full`（Program + Project）。
 
-高级用户仍可以直接指定方案：
+熟悉命令行后，也可以直接指定方案：
 
 ```bash
 # 只安装并验证 Quiz/Program 所需环境
-bash bootstrap-macos.sh --profile basic
+bash scripts/bootstrap/bootstrap-macos.sh --profile basic
 
 # 完整课程环境，额外安装并验证 CMake/Project Lab
-bash bootstrap-macos.sh --profile full
+bash scripts/bootstrap/bootstrap-macos.sh --profile full
 ```
 
 常用选项：
 
 ```bash
 # 只读检查，不安装工具、不 clone/pull、不安装依赖、不运行 smoke
-bash bootstrap-macos.sh --check-only --profile basic --repo-dir "/Users/me/课程项目/DSA-Mastery"
+bash scripts/bootstrap/bootstrap-macos.sh --check-only --profile basic --repo-dir "/Users/me/课程项目/DSA-Mastery"
 
 # 跳过 VS Code；脚本默认不会强制安装 IDE
-bash bootstrap-macos.sh --profile full --skip-vscode
+bash scripts/bootstrap/bootstrap-macos.sh --profile full --skip-vscode
 
 # CI 或重定向时使用稳定纯文本/JSON 输出
-bash bootstrap-macos.sh --profile basic --non-interactive --ui plain
-bash bootstrap-macos.sh --profile basic --non-interactive --json
+bash scripts/bootstrap/bootstrap-macos.sh --profile basic --non-interactive --ui plain
+bash scripts/bootstrap/bootstrap-macos.sh --profile basic --non-interactive --json
 ```
 
-TTY 中会显示阶段面板、状态、进度和失败摘要；非 TTY 会自动降级为纯文本。安装失败后直接重跑同一命令即可，已满足的工具和依赖会被复用。核心失败日志写入 `~/Library/Logs/DSA-Mastery/setup/`；`--check-only` 不创建日志。
+TTY 中会显示阶段面板、状态、进度和失败摘要；成功时会显示完成信息，支持颜色的终端还会显示像素风完成 Banner。非 TTY 会自动降级为纯文本。安装失败后直接重跑同一命令即可，已满足的工具和依赖会被复用。核心失败日志写入 `~/Library/Logs/DSA-Mastery/setup/`；`--check-only` 不创建日志。
 
 脚本可能打开 Homebrew 或 Xcode Command Line Tools 系统安装流程。遇到密码、系统弹窗、网络代理或设备管理限制时，按提示完成操作后重新运行；脚本不会绕过 macOS 权限，也不会覆盖仓库中的未提交改动。
 

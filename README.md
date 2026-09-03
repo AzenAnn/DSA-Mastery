@@ -90,12 +90,62 @@ Lab 不是教材末尾的附属材料，而是用于检查理解、练习实现�
 git clone https://github.com/AzenAnn/DSA-Mastery.git
 ```
 
-如果需要本地运行 C++ Labs，推荐使用平台自举脚本：直接运行后用方向键、空格和回车选择要安装的内容；基础运行环境必选，Program、Project/CMake、VS Code 和扩展可以按需选择。脚本会自动处理依赖，并在重跑时复用已有工具和仓库。高级用户仍可指定 `runtime`、`basic` 或 `full` profile。
+### 本地一键配置（macOS / Windows）
+
+如果需要本地运行 C++ Labs，推荐使用仓库自带的原生自举启动器。先进入已经 clone 的仓库，再运行对应平台的脚本；普通用户不需要手动拼装 Node、pnpm、编译器或 CMake 的安装命令。
+
+macOS：
+
+```bash
+cd ~/code/DSA-Mastery
+bash scripts/bootstrap/bootstrap-macos.sh
+```
+
+Windows（PowerShell）：
+
+```powershell
+cd "$HOME\code\DSA-Mastery"
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1
+```
+
+启动器会打开交互式选择界面：用方向键移动、空格选择或取消、回车开始安装。基础运行环境始终保留；Program Lab C++ 环境、Project Lab / CMake、VS Code 和扩展可以按需选择。脚本会显示各阶段进度，重跑时会复用已经安装的工具、仓库和依赖。
+
+如果仓库还没有 clone，macOS 和 Windows 都可以先下载对应的启动器，再由它准备工具并 clone 仓库：
+
+macOS：
+
+```bash
+mkdir -p ~/code
+curl -fL https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-macos.sh -o /tmp/bootstrap-macos.sh
+bash /tmp/bootstrap-macos.sh --repo-dir "$HOME/code/DSA-Mastery"
+```
+
+Windows（PowerShell）：
+
+```powershell
+$bootstrap = Join-Path $env:TEMP "dsa-mastery-bootstrap.ps1"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-windows.ps1" -OutFile $bootstrap
+powershell.exe -ExecutionPolicy Bypass -File $bootstrap -RepoDir "$HOME\code\DSA-Mastery"
+```
+
+熟悉命令行后，也可以直接指定方案。`basic` 用于 Program Lab，`full` 用于 Program + Project Lab：
+
+```bash
+# macOS
+bash scripts/bootstrap/bootstrap-macos.sh --profile basic
+bash scripts/bootstrap/bootstrap-macos.sh --profile full
+```
+
+```powershell
+# Windows
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full
+```
 
 - macOS：[macOS 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/05-macos-student-setup/)
 - Windows：[Windows 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/02-windows-student-setup/)
 
-脚本也可以只做检查：`--check-only` 不安装工具、不 clone/pull 仓库、不安装依赖；学校设备、公司代理或包管理器不可用时，教程仍保留逐项手工安装路径。
+脚本也可以只做检查：`--check-only` 不安装工具、不 clone/pull 仓库、不安装依赖。学校设备、公司代理或包管理器不可用时，请按对应平台教程使用逐项手工安装路径。
 
 ## 参与贡献
 

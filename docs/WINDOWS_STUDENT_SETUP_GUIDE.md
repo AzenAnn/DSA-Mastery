@@ -2,52 +2,73 @@
 
 > 适用对象：在 Windows 10/11 上完成 DSA Mastery 本地 C++ Lab 的学生。
 
-## 0. 一键配置（推荐）
+## 0. 原生自举安装（推荐）
 
-如果希望一次完成 Git、Node.js、固定版本 pnpm、MSVC Build Tools、（按选择需要的）CMake、仓库依赖和 Lab 冒烟验证，可以下载并审阅 PowerShell 自举脚本。脚本优先使用 Windows 自带的 `winget`，不会把随 Visual Studio 版本变化的 `cl.exe` 目录永久写进 PATH；运行 Lab 时会通过 `vswhere.exe` 和 `VsDevCmd.bat` 自动导入完整 MSVC 开发环境。普通用户不需要记住 profile 或其他参数，直接运行脚本即可进入选择界面。
+如果希望一次完成 Git、Node.js、固定版本 pnpm、MSVC Build Tools、（按选择需要的）CMake、仓库依赖和 Lab 冒烟验证，直接运行仓库自带的 PowerShell 启动器即可。启动器优先使用 Windows 自带的 `winget`，不会把随 Visual Studio 版本变化的 `cl.exe` 目录永久写进 PATH；运行 Lab 时会通过 `vswhere.exe` 和 `VsDevCmd.bat` 自动导入完整 MSVC 开发环境。
 
-在 PowerShell 中执行：
+### 已经有仓库
+
+在 PowerShell 中直接粘贴下面两行：
 
 ```powershell
-$script = Join-Path $PWD "bootstrap-windows.ps1"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-windows.ps1" -OutFile $script
-Get-Content $script
-powershell.exe -ExecutionPolicy Bypass -File $script
+cd "$HOME\code\DSA-Mastery"
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1
 ```
 
-启动后使用方向键和空格选择：
+如果仓库在其他位置，只需要把第一行换成实际目录，例如 `cd "$HOME\DSA-Mastery"`。
+
+### 还没有仓库
+
+如果 Git 和仓库都还没有准备好，先下载启动器，再由它准备工具并 clone 仓库：
 
 ```powershell
-# ↑↓：移动；空格：选择/取消；Enter：开始；q：退出
+$bootstrap = Join-Path $env:TEMP "dsa-mastery-bootstrap.ps1"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-windows.ps1" -OutFile $bootstrap
+powershell.exe -ExecutionPolicy Bypass -File $bootstrap -RepoDir "$HOME\code\DSA-Mastery"
+```
+
+如果你已经可以使用 Git，也可以先 clone，再回到上面的“已经有仓库”路径：
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\code" | Out-Null
+git clone https://github.com/AzenAnn/DSA-Mastery.git "$HOME\code\DSA-Mastery"
+cd "$HOME\code\DSA-Mastery"
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1
+```
+
+不带参数运行时会进入交互式选择界面：
+
+```powershell
+# ↑↓ 或 j/k：移动；空格：选择/取消；Enter：开始；q：退出
 ```
 
 基础运行环境（Git、Node.js、pnpm）是必选项。默认会选择 Program Lab C++ 环境；如果需要 Project Lab，就勾选 Project Lab / CMake；需要图形界面时再勾选 VS Code 和相应扩展。脚本会自动勾选扩展依赖，并根据选择执行对应的环境检查。
 
 菜单中的方案对应：`runtime`（只准备课程工具）、`basic`（Program）和 `full`（Program + Project）。
 
-高级用户仍可以直接指定方案：
+熟悉命令行后，也可以直接指定方案：
 
 ```powershell
 # 只安装并验证 Quiz/Program 所需环境
-powershell.exe -ExecutionPolicy Bypass -File .\bootstrap-windows.ps1 -Profile basic
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic
 
 # 完整课程环境，额外安装并验证 CMake/Project Lab
-powershell.exe -ExecutionPolicy Bypass -File .\bootstrap-windows.ps1 -Profile full
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full
 ```
 
 常用选项：
 
 ```powershell
 # 只读检查，不安装工具、不 clone/pull、不安装依赖、不运行 smoke
-powershell.exe -ExecutionPolicy Bypass -File .\bootstrap-windows.ps1 -CheckOnly -Profile basic -RepoDir "C:\课程项目\DSA-Mastery"
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -CheckOnly -Profile basic -RepoDir "C:\课程项目\DSA-Mastery"
 
 # 跳过 VS Code，或显式安装 VS Code 与课程扩展
-powershell.exe -ExecutionPolicy Bypass -File .\bootstrap-windows.ps1 -Profile full -SkipVscode
-powershell.exe -ExecutionPolicy Bypass -File .\bootstrap-windows.ps1 -Profile full -InstallVscode
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full -SkipVscode
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full -InstallVscode
 
 # CI/重定向时使用稳定纯文本或 JSON 输出
-powershell.exe -ExecutionPolicy Bypass -File .\bootstrap-windows.ps1 -Profile basic -NonInteractive -Ui plain
-powershell.exe -ExecutionPolicy Bypass -File .\bootstrap-windows.ps1 -Profile basic -NonInteractive -Json
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic -NonInteractive -Ui plain
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic -NonInteractive -Json
 ```
 
 支持 TTY 时会显示阶段、状态和整体进度；非 TTY 会自动使用纯文本。安装失败后可以直接重跑，脚本会复用已安装工具和已有仓库。核心失败日志写入 `%LOCALAPPDATA%\DSA-Mastery\setup\`；`-CheckOnly` 不创建日志。
