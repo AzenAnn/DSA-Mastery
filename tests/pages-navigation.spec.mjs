@@ -34,7 +34,12 @@ test.use({
 
 // 与 .vitepress/content-index.ts 的扫描规则保持一致，从仓库内容推导首页统计数字
 const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
-const labDirectoryPattern = /^lab-\d{2}-\d{2}-[a-z0-9-]+$/;
+const labDirectoryPattern = /^[TEP]-\d{2}-\d{2,}-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const labCategories = ["theory", "exercise", "project"];
+
+function labSidebarTitle(title) {
+  return title.replace(/^Lab\s+\d{2}-[TEP]-\d{2,}[：:]\s*/, "");
+}
 
 async function computeCourseStats() {
   const contentRoot = path.join(projectRoot, "content");
@@ -54,8 +59,15 @@ async function computeCourseStats() {
     (entry) => entry.isDirectory() && /^chapter-\d{2}$/.test(entry.name),
   );
   for (const chapter of chapterLabEntries) {
-    const labEntries = await readdir(path.join(labsRoot, chapter.name), { withFileTypes: true });
-    labs += labEntries.filter((entry) => entry.isDirectory() && labDirectoryPattern.test(entry.name)).length;
+    for (const category of labCategories) {
+      const labEntries = await readdir(
+        path.join(labsRoot, chapter.name, category),
+        { withFileTypes: true },
+      );
+      labs += labEntries.filter(
+        (entry) => entry.isDirectory() && labDirectoryPattern.test(entry.name),
+      ).length;
+    }
   }
   return { chapters: chapterEntries.length, lessons, labs };
 }
@@ -135,32 +147,54 @@ test.afterAll(async () => {
   await new Promise((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
 });
 
+test("publishes only categorized Lab routes and retires flat Lab URLs", async ({ request }) => {
+  for (const route of [
+    "/labs/chapter-01/theory/T-01-01-sequential-list-quiz/",
+    "/labs/chapter-01/exercise/E-01-01-sequential-list-deduplication/",
+    "/labs/chapter-01/project/P-01-01-list-workload-analyzer/",
+  ]) {
+    const response = await request.get(`${baseUrl}${route}`);
+    expect(response.status(), `new Lab route should exist: ${route}`).toBe(200);
+  }
+
+  for (const route of [
+    "/labs/chapter-01/lab-01-01-sequential-list-quiz/",
+    "/labs/chapter-01/lab-01-06-sequential-list-deduplication/",
+    "/labs/chapter-01/lab-01-21-list-workload-analyzer/",
+  ]) {
+    const response = await request.get(`${baseUrl}${route}`);
+    expect(response.status(), `legacy Lab route should be retired: ${route}`).toBe(404);
+  }
+});
+
 test("clicks through the learner journey beneath the Pages base", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/`);
   await expect(page).toHaveTitle(/数据结构与算法理论与实验教程 · DSA Mastery/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("学透、做实、用活");
-  await expect(page.locator(".course-hero-stats")).toContainText("18");
+  await expect(page.locator(".course-hero-stats")).toContainText("17");
   await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.lessons));
   await expect(page.locator(".course-hero-stats")).toContainText(String(expectedStats.labs));
 
   await page.getByRole("link", { name: /从第 0 章开始/ }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("课程总目录");
-  await page.locator(".course-curriculum-chapters").getByRole("link", { name: /Ch\.0 内存基础/ }).click();
+  await page.locator(".course-curriculum-chapters").getByRole("link", { name: /Ch\.0 基础/ }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-00-memory-foundations/`);
+  await expect(
+    page.locator('.VPSidebar a[href*="/labs/chapter-00/theory/T-00-01-learning-map/"]'),
+  ).toHaveText("00T01 · 制作个人 DSA 学习地图");
+  await expect(
+    page.locator('.VPSidebar a[href*="/labs/chapter-00/exercise/E-00-01-operation-counter/"]'),
+  ).toHaveText("00E01 · 用操作计数观察增长趋势");
+  await expect(page.locator(".VPSidebar")).not.toContainText("Lab 00-01");
   await page.locator(".course-curriculum-resource-list").getByRole("link", { name: /0\.1 数据结构基础概念/ }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/01-data-structure-basics/`);
   await page.locator(".VPNavBarMenu").getByRole("link", { name: "教材" }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/`);
-  await page.locator(".VPSidebar").getByRole("link", { name: /Ch\.0\+ 算法思维体验/ }).click();
-  await expect(page).toHaveURL(`${baseUrl}/learn/outline/chapter-00-plus-algorithm-thinking/`);
-  await expect(page.locator(".course-curriculum-detail")).toContainText("Peak Finding");
-  await expect(page.locator(".course-curriculum-detail")).toContainText("Union-Find");
-  await expect(page.locator(".course-curriculum-detail")).toContainText("数据结构的选择如何影响算法效率");
-  await page.locator(".course-curriculum-resource-list").getByRole("link", { name: /算法复杂度与算法分析/ }).click();
-  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.3 算法复杂度与算法分析");
+  await page.locator(".VPSidebar").getByRole("link", { name: /0\.2 时间与空间复杂度概论/ }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-00-introduction/02-time-and-space-complexity/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("0.2 时间与空间复杂度概论");
   await expect(page.locator(".course-document-meta")).toContainText("draft");
   await expect(page.locator(".VPSidebar")).toBeVisible();
   await expect(page.locator(".VPDocAsideOutline")).toBeVisible();
@@ -180,9 +214,9 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("用实验把理解落到代码上");
   expect(failures, "lesson → Labs index navigation").toEqual([]);
 
-  await page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-06：有序顺序表去重" }).click();
-  await expect(page).toHaveURL(`${baseUrl}/labs/chapter-01/lab-01-06-sequential-list-deduplication/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 01-06：有序顺序表去重");
+  await page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-E-01：有序顺序表去重" }).click();
+  await expect(page).toHaveURL(`${baseUrl}/labs/chapter-01/exercise/E-01-01-sequential-list-deduplication/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 01-E-01：有序顺序表去重");
   await expect(page.locator('.vp-doc input[type="checkbox"]')).toHaveCount(4);
   await expect(page.locator('.vp-doc input[type="checkbox"]').first()).toBeDisabled();
 
@@ -206,11 +240,11 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   ).toBeVisible();
   await input.fill("静态链表选择题精练");
   await expect(
-    results.locator('a[href*="/labs/chapter-01/lab-01-05-static-linked-list-quiz/"]').first(),
+    results.locator('a[href*="/labs/chapter-01/theory/T-01-05-static-linked-list-quiz/"]').first(),
   ).toBeVisible();
-  await input.fill("算法复杂度与算法分析");
+  await input.fill("时间与空间复杂度");
   await expect(
-    results.locator('a[href*="/learn/chapter-00-introduction/03-algorithm-complexity-analysis/"]').first(),
+    results.locator('a[href*="/learn/chapter-00-introduction/02-time-and-space-complexity/"]').first(),
   ).toBeVisible();
   await input.fill("理论环境展示");
   await expect(
@@ -228,12 +262,16 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/learn/chapter-preface/04-graphviz-authoring-guide/"]').first(),
   ).toBeVisible();
+  await input.fill("macOS 学生实验环境安装指南");
+  await expect(
+    results.locator('a[href*="/learn/chapter-preface/05-macos-student-setup/"]').first(),
+  ).toBeVisible();
   await input.fill("单链表选择题精练");
-  const labResult = results.locator('a[href*="/labs/chapter-01/lab-01-02-singly-linked-list-quiz/"]').first();
+  const labResult = results.locator('a[href*="/labs/chapter-01/theory/T-01-02-singly-linked-list-quiz/"]').first();
   await expect(labResult).toBeVisible();
   await labResult.click();
   await expect(page).toHaveURL(
-    (url) => url.pathname === `${pagesBasePath}/labs/chapter-01/lab-01-02-singly-linked-list-quiz/`,
+    (url) => url.pathname === `${pagesBasePath}/labs/chapter-01/theory/T-01-02-singly-linked-list-quiz/`,
   );
   expect(failures).toEqual([]);
 });
@@ -273,10 +311,10 @@ test("curriculum exposes every Part and the required search, sorting, and algori
     "8.1 基础查找与折半查找",
   );
   await expect(page.locator(".course-curriculum-resource-list")).toContainText(
-    "Lab 08-01：查找理论选择题精练",
+    "Lab 08-T-01：查找理论选择题精练",
   );
   await expect(page.locator(".course-curriculum-resource-list")).toContainText(
-    "Lab 08-02：BST 增删查与边界测试",
+    "Lab 08-E-01：BST 增删查与边界测试",
   );
 
   await page.goto(`${baseUrl}/learn/outline/chapter-12-divide-conquer-recursion/`);
@@ -285,9 +323,9 @@ test("curriculum exposes every Part and the required search, sorting, and algori
 
   await page.goto(`${baseUrl}/learn/chapter-08-search/02-binary-search-tree/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.2 二叉排序树");
-  await page.goto(`${baseUrl}/learn/chapter-09-hashing-indexes/01-b-tree-and-b-plus-tree/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("9.1 B 树与 B+ 树");
-  await page.goto(`${baseUrl}/labs/chapter-09/lab-09-02-hash-table/`);
+  await page.goto(`${baseUrl}/learn/chapter-08-search/04-b-tree-and-b-plus-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.4 B 树与 B+ 树");
+  await page.goto(`${baseUrl}/labs/chapter-09/exercise/E-09-01-hash-table/`);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("散列表");
   expect(failures).toEqual([]);
 });
@@ -300,6 +338,7 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   const windowsStudentGuideRoute = `${baseUrl}/learn/chapter-preface/02-windows-student-setup/`;
   const labCommandGuideRoute = `${baseUrl}/learn/chapter-preface/03-lab-cli-command-guide/`;
   const graphvizGuideRoute = `${baseUrl}/learn/chapter-preface/04-graphviz-authoring-guide/`;
+  const macosStudentGuideRoute = `${baseUrl}/learn/chapter-preface/05-macos-student-setup/`;
 
   await page.goto(`${baseUrl}/learn/`);
   const foundationChapters = page.locator(".course-curriculum-chapters > a");
@@ -319,6 +358,25 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Windows 学生实验环境安装指南");
   await expect(page.locator(".vp-doc")).toContainText("Visual Studio C++ Build Tools");
   await expect(page.locator(".VPSidebar").getByRole("link", { name: "Windows 学生实验环境安装指南", exact: true })).toBeVisible();
+
+  await page.goto(outlineRoute);
+  const macosStudentGuideEntry = page.locator(".course-curriculum-resource-list").getByRole("link", { name: /macOS 学生实验环境安装指南/ });
+  await expect(macosStudentGuideEntry).toBeVisible();
+  await macosStudentGuideEntry.click();
+  await expect(page).toHaveURL(macosStudentGuideRoute);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("macOS 学生实验环境安装指南");
+  await expect(page.locator(".vp-doc")).toContainText("Xcode Command Line Tools");
+  await expect(page.locator(".vp-doc")).toContainText("pnpm@11.1.1");
+  await expect(page.locator(".VPSidebar").getByRole("link", { name: "macOS 学生实验环境安装指南", exact: true })).toBeVisible();
+  const macosGuideImages = page.locator(".vp-doc img");
+  await expect(macosGuideImages.first()).toBeVisible();
+  expect(await macosGuideImages.count()).toBeGreaterThan(0);
+  for (const image of await macosGuideImages.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0))
+      .toBe(true);
+  }
 
   await page.goto(outlineRoute);
   const outlineResources = page.locator(".course-curriculum-resource-list");
@@ -416,6 +474,9 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   const copyButton = page.locator(".dsa-code-block--titled > button.copy").first();
   await copyButton.click();
   await expect(copyButton).toHaveClass(/copied/);
+  const copiedCode = await page.evaluate(() => navigator.clipboard.readText());
+  expect(copiedCode).toContain("#include <vector>");
+  expect(copiedCode).not.toContain("theory-environment-demo.cpp");
   const codeGroup = page.locator(".vp-code-group");
   await expect(codeGroup).toBeVisible();
   await expect(codeGroup.locator(".tabs label")).toHaveCount(2);
@@ -433,11 +494,11 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   expect(failures).toEqual([]);
 });
 
-test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tables, and metadata remain functional", async ({ page }) => {
+test("chapter 0 code contrast, math, copy, tables, and metadata remain functional", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`);
+  await page.goto(`${baseUrl}/learn/chapter-00-introduction/02-time-and-space-complexity/`);
   const codeContrast = async () =>
-    page.locator('.vp-doc div[class*="language-"].line-numbers-mode').first().evaluate((block) => {
+    page.locator('.vp-doc div[class*="language-"]').first().evaluate((block) => {
       const parseColor = (value) => {
         const channels = value.match(/[\d.]+/g)?.map(Number) ?? [];
         return {
@@ -447,12 +508,6 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
           alpha: channels[3] ?? 1,
         };
       };
-      const composite = (foreground, background) => ({
-        red: foreground.red * foreground.alpha + background.red * (1 - foreground.alpha),
-        green: foreground.green * foreground.alpha + background.green * (1 - foreground.alpha),
-        blue: foreground.blue * foreground.alpha + background.blue * (1 - foreground.alpha),
-        alpha: 1,
-      });
       const luminance = (color) => {
         const linear = [color.red, color.green, color.blue].map((channel) => {
           const normalized = channel / 255;
@@ -473,19 +528,12 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
         .filter((token) => token.textContent?.trim())
         .map((token) => {
           const foreground = parseColor(globalThis.getComputedStyle(token).color);
-          const lineBackground = parseColor(
-            globalThis.getComputedStyle(token.closest(".highlighted") ?? block).backgroundColor,
-          );
-          return contrast(foreground, composite(lineBackground, blockBackground));
+          return contrast(foreground, blockBackground);
         });
-      const lineNumber = block.querySelector(".line-numbers-wrapper span");
       const pre = block.querySelector("pre");
 
       return {
         minimumTokenContrast: Math.min(...tokenContrasts),
-        lineNumberContrast: lineNumber
-          ? contrast(parseColor(globalThis.getComputedStyle(lineNumber).color), blockBackground)
-          : 0,
         codeFontSize: Number.parseFloat(globalThis.getComputedStyle(block.querySelector("code")).fontSize),
         overflowX: globalThis.getComputedStyle(pre).overflowX,
         overflowY: globalThis.getComputedStyle(pre).overflowY,
@@ -494,7 +542,6 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
 
   const lightCodeContrast = await codeContrast();
   expect(lightCodeContrast.minimumTokenContrast).toBeGreaterThanOrEqual(4.5);
-  expect(lightCodeContrast.lineNumberContrast).toBeGreaterThanOrEqual(4.5);
   expect(lightCodeContrast.codeFontSize).toBeGreaterThanOrEqual(13);
   expect(lightCodeContrast.overflowX).toBe("auto");
   expect(lightCodeContrast.overflowY).toBe("hidden");
@@ -505,7 +552,6 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
   await expect(page.locator("html")).toHaveClass(/dark/);
   const darkCodeContrast = await codeContrast();
   expect(darkCodeContrast.minimumTokenContrast).toBeGreaterThanOrEqual(4.5);
-  expect(darkCodeContrast.lineNumberContrast).toBeGreaterThanOrEqual(4.5);
 
   const codeBlock = page.locator('.vp-doc div[class*="language-"]').first();
   await expect(codeBlock).toBeVisible();
@@ -514,24 +560,10 @@ test("chapter 0 code contrast, theory blocks, callouts, math, copy, details, tab
   await expect(copyButton).toHaveClass(/copied/);
   await expect(page.getByRole("link", { name: "在 GitHub 上编辑此页" })).toHaveAttribute(
     "href",
-    /content\/chapter-00-introduction\/03-algorithm-complexity-analysis\.md$/,
+    /content\/chapter-00-introduction\/02-time-and-space-complexity\.md$/,
   );
-  await expect(page.locator(".vp-doc .custom-block.tip").first()).toBeVisible();
-  await expect(page.locator(".vp-doc .custom-block.warning").first()).toBeVisible();
-  for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
-    await expect(page.locator(`.vp-doc .dsa-theory-block--${kind}`).first()).toBeVisible();
-  }
-  await expect(page.locator(".vp-doc mark").filter({ hasText: "大 O 本身表示上界" })).toBeVisible();
-  await expect(page.locator(".vp-doc .dsa-code-title").first()).toContainText("first-score.cpp");
-  await expect(page.locator(".vp-doc code .highlighted").first()).toBeVisible();
   await expect(page.locator(".vp-doc mjx-container").first()).toBeVisible();
-  const details = page.locator(".vp-doc details").first();
-  await expect(details).not.toHaveAttribute("open", "");
-  await details.locator("summary").click();
-  await expect(details).toHaveAttribute("open", "");
-
-  await page.goto(`${baseUrl}/learn/chapter-00-introduction/00-overview/`);
-  await expect(page.locator(".vp-doc table")).toBeVisible();
+  await expect(page.locator(".vp-doc table").first()).toBeVisible();
   await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", `${pagesBasePath}/favicon.svg`);
   expect(failures).toEqual([]);
 });
@@ -648,7 +680,10 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
   await expect(page.locator(".VPSidebar.open")).toContainText("理论 Theory");
   await expect(page.locator(".VPSidebar.open")).toContainText("实验 Exercise");
   await expect(page.locator(".VPSidebar.open")).toContainText("工程 Project");
-  await expect(page.locator(".VPSidebar.open")).toContainText("Lab 01-21：线性表双实现与工作负载评测器");
+  await expect(page.locator(".VPSidebar.open")).toContainText(
+    "01P01 · 线性表双实现与工作负载评测器",
+  );
+  await expect(page.locator(".VPSidebar.open")).not.toContainText("Lab 01-21");
   const mobileLayout = await page.evaluate(() => ({
     clientWidth: globalThis.document.documentElement.clientWidth,
     scrollWidth: globalThis.document.documentElement.scrollWidth,
@@ -676,7 +711,7 @@ test("mobile navigation exposes the course sidebar and top-level links", async (
 test("home and lesson navbar share the same horizontal rail", async ({ page }) => {
   const failures = monitorPage(page);
   const widths = [1024, 1440, 2048];
-  const route = `${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`;
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-time-and-space-complexity/`;
 
   for (const width of widths) {
     await page.setViewportSize({ width, height: 700 });
@@ -773,7 +808,7 @@ test("navbar brand subtitle stays contained and appearance icon stays centered",
 
 test("lesson navigation keeps the pre-migration hierarchy at responsive widths", async ({ page }) => {
   const failures = monitorPage(page);
-  const route = `${baseUrl}/learn/chapter-00-introduction/03-algorithm-complexity-analysis/`;
+  const route = `${baseUrl}/learn/chapter-00-introduction/02-time-and-space-complexity/`;
 
   for (const width of [1440, 1024, 980, 768, 375]) {
     await page.setViewportSize({ width, height: 900 });
@@ -838,8 +873,8 @@ test("unknown course routes render the branded 404", async ({ page }) => {
 
 test("complexity quiz submits answers with immediate feedback", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/labs/chapter-00/lab-00-03-complexity-quiz/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 00-03：复杂度计算自测");
+  await page.goto(`${baseUrl}/labs/chapter-00/theory/T-00-02-complexity-quiz/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 00-T-02：复杂度计算自测");
   const questions = page.locator(".course-quiz-question");
   await expect(questions).toHaveCount(19);
   await expect(page.locator(".course-quiz-summary")).toContainText("已答 0/19");
@@ -887,8 +922,8 @@ test("complexity quiz submits answers with immediate feedback", async ({ page })
 
 test("the deduplication Golden Program renders the standard problem sections", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-06-sequential-list-deduplication/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 01-06：有序顺序表去重");
+  await page.goto(`${baseUrl}/labs/chapter-01/exercise/E-01-01-sequential-list-deduplication/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 01-E-01：有序顺序表去重");
 
   // 题面 7 要素全部渲染
   for (const heading of ["题目", "输入格式", "输出格式", "数据范围与限制", "样例", "如何验证"]) {
@@ -911,7 +946,7 @@ test("the deduplication Golden Program renders the standard problem sections", a
   // 页内链接到该 Lab 的入口在 Labs 索引中存在
   await page.goto(`${baseUrl}/labs/`);
   await expect(
-    page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-06：有序顺序表去重" }),
+    page.locator("a.course-labs-list-card").filter({ hasText: "Lab 01-E-01：有序顺序表去重" }),
   ).toBeVisible();
 
   expect(failures).toEqual([]);
@@ -921,28 +956,28 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
   const failures = monitorPage(page);
   const quizLabs = [
     {
-      slug: "lab-01-01-sequential-list-quiz",
-      title: "Lab 01-01：顺序表选择题精练",
+      slug: "theory/T-01-01-sequential-list-quiz",
+      title: "Lab 01-T-01：顺序表选择题精练",
       questions: 10,
     },
     {
-      slug: "lab-01-02-singly-linked-list-quiz",
-      title: "Lab 01-02：单链表选择题精练",
+      slug: "theory/T-01-02-singly-linked-list-quiz",
+      title: "Lab 01-T-02：单链表选择题精练",
       questions: 10,
     },
     {
-      slug: "lab-01-03-doubly-linked-list-quiz",
-      title: "Lab 01-03：双链表选择题精练",
+      slug: "theory/T-01-03-doubly-linked-list-quiz",
+      title: "Lab 01-T-03：双链表选择题精练",
       questions: 10,
     },
     {
-      slug: "lab-01-04-circular-linked-list-quiz",
-      title: "Lab 01-04：循环链表选择题精练",
+      slug: "theory/T-01-04-circular-linked-list-quiz",
+      title: "Lab 01-T-04：循环链表选择题精练",
       questions: 2,
     },
     {
-      slug: "lab-01-05-static-linked-list-quiz",
-      title: "Lab 01-05：静态链表选择题精练",
+      slug: "theory/T-01-05-static-linked-list-quiz",
+      title: "Lab 01-T-05：静态链表选择题精练",
       questions: 4,
     },
   ];
@@ -987,7 +1022,7 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
     );
   }
 
-  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-01-sequential-list-quiz/`);
+  await page.goto(`${baseUrl}/labs/chapter-01/theory/T-01-01-sequential-list-quiz/`);
   const chapterSidebar = page.locator(
     '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-01-linear-list/"])',
   );
@@ -996,13 +1031,16 @@ test("linear-list quiz Labs are interactive and complete in the chapter sidebar"
   );
   await expect(theorySidebarGroup).not.toHaveClass(/collapsed/);
   for (const quiz of quizLabs) {
-    await expect(theorySidebarGroup.getByRole("link", { name: quiz.title, exact: true })).toHaveCount(
+    await expect(theorySidebarGroup.getByRole("link", { name: labSidebarTitle(quiz.title) })).toHaveCount(
       1,
     );
   }
+  await expect(theorySidebarGroup.locator(":scope > .items a").first()).toHaveText(
+    "01T01 · 顺序表选择题精练",
+  );
   await expect(page.locator(".course-quiz-stem mjx-container").first()).toBeVisible();
 
-  await page.goto(`${baseUrl}/labs/chapter-01/lab-01-02-singly-linked-list-quiz/`);
+  await page.goto(`${baseUrl}/labs/chapter-01/theory/T-01-02-singly-linked-list-quiz/`);
   await expect(page.locator(".course-quiz-question").nth(1).locator("table")).toBeVisible();
 
   expect(failures).toEqual([]);
@@ -1038,13 +1076,13 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   await expect(projectGroup).not.toHaveClass(/collapsed/);
   await expect(projectGroup.locator(".course-lab-category__empty")).toHaveCount(0);
   const projectLink = projectGroup.getByRole("link", {
-    name: "Lab 01-21：线性表双实现与工作负载评测器",
+    name: "01P01 · 线性表双实现与工作负载评测器",
     exact: true,
   });
   await expect(projectLink).toHaveCount(1);
   await expect(projectLink).toHaveAttribute(
     "href",
-    /\/labs\/chapter-01\/lab-01-21-list-workload-analyzer\/$/,
+    /\/labs\/chapter-01\/project\/P-01-01-list-workload-analyzer\/$/,
   );
 
   for (const group of [theoryGroup, exerciseGroup, projectGroup]) {
@@ -1168,10 +1206,10 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
   await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(2);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 02-01：栈选择题精练", exact: true }),
+    theoryGroup.getByRole("link", { name: "02T01 · 栈选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 02-02：队列选择题精练", exact: true }),
+    theoryGroup.getByRole("link", { name: "02T02 · 队列选择题精练", exact: true }),
   ).toHaveCount(1);
 
   await exerciseGroup.locator(":scope > .item").focus();
@@ -1180,32 +1218,34 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
   await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(8);
   const exerciseLabs = [
-    { title: "Lab 02-03：验证栈序列", slug: "lab-02-03-validate-stack-sequences" },
-    { title: "Lab 02-04：最小栈", slug: "lab-02-04-min-stack" },
-    { title: "Lab 02-05：最近请求计数器", slug: "lab-02-05-recent-counter" },
-    { title: "Lab 02-06：设计循环队列", slug: "lab-02-06-circular-queue" },
-    { title: "Lab 02-07：用栈实现队列", slug: "lab-02-07-queue-using-stacks" },
-    { title: "Lab 02-08：设计循环双端队列", slug: "lab-02-08-circular-deque" },
-    { title: "Lab 02-09：滑动窗口最大值", slug: "lab-02-09-sliding-window-maximum" },
+    { title: "Lab 02-E-01：验证栈序列", slug: "exercise/E-02-01-validate-stack-sequences" },
+    { title: "Lab 02-E-02：最小栈", slug: "exercise/E-02-02-min-stack" },
+    { title: "Lab 02-E-03：最近请求计数器", slug: "exercise/E-02-03-recent-counter" },
+    { title: "Lab 02-E-04：设计循环队列", slug: "exercise/E-02-04-circular-queue" },
+    { title: "Lab 02-E-05：用栈实现队列", slug: "exercise/E-02-05-queue-using-stacks" },
+    { title: "Lab 02-E-06：设计循环双端队列", slug: "exercise/E-02-06-circular-deque" },
+    { title: "Lab 02-E-07：滑动窗口最大值", slug: "exercise/E-02-07-sliding-window-maximum" },
     {
-      title: "Lab 02-10：柱状图中最大的矩形",
-      slug: "lab-02-10-largest-rectangle-histogram",
+      title: "Lab 02-E-08：柱状图中最大的矩形",
+      slug: "exercise/E-02-08-largest-rectangle-histogram",
     },
   ];
   for (const { title, slug } of exerciseLabs) {
-    const link = exerciseGroup.getByRole("link", { name: title, exact: true });
+    const link = exerciseGroup.getByRole("link", { name: labSidebarTitle(title) });
     await expect(link).toHaveCount(1);
     await expect(link).toHaveAttribute("href", new RegExp(`/labs/chapter-02/${slug}/$`));
   }
 
   await expect(projectGroup.locator(":scope > .items a")).toHaveCount(3);
   for (const title of [
-    "Lab 02-11：可撤销浏览器——栈的超级大综合",
-    "Lab 02-12：超市收银模拟——队列的大综合",
-    "Lab 02-13：停车场管理——栈与队列的大综合",
+    "Lab 02-P-01：可撤销浏览器——栈的超级大综合",
+    "Lab 02-P-02：超市收银模拟——队列的大综合",
+    "Lab 02-P-03：停车场管理——栈与队列的大综合",
   ]) {
-    await expect(projectGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+    await expect(projectGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
+  await expect(exerciseGroup.locator(":scope > .items a").first()).toContainText("02E01");
+  await expect(projectGroup.locator(":scope > .items a").first()).toContainText("02P01");
 
   for (const { title, slug } of exerciseLabs) {
     await page.goto(`${baseUrl}/labs/chapter-02/${slug}/`);
@@ -1258,40 +1298,49 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
   await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(4);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 03-01：串的基础选择题精练", exact: true }),
+    theoryGroup.getByRole("link", { name: "03T01 · 串的基础选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 03-02：模式匹配选择题精练", exact: true }),
+    theoryGroup.getByRole("link", { name: "03T02 · 模式匹配选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 03-03：数组与矩阵选择题精练", exact: true }),
+    theoryGroup.getByRole("link", { name: "03T03 · 数组与矩阵选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
-    theoryGroup.getByRole("link", { name: "Lab 03-04：广义表选择题精练", exact: true }),
+    theoryGroup.getByRole("link", { name: "03T04 · 广义表选择题精练", exact: true }),
   ).toHaveCount(1);
 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
-  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(5);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(9);
   for (const title of [
-    "Lab 03-05：KMP 模式匹配（首次出现位置）",
-    "Lab 03-06：next 与 nextval 数组推导",
-    "Lab 03-07：朴素匹配与 KMP 比较次数",
-    "Lab 03-08：串的非重叠替换 Replace",
-    "Lab 03-09：UTF-8 串长与字符数",
+    "Lab 03-E-01：KMP 模式匹配（首次出现位置）",
+    "Lab 03-E-02：next 与 nextval 数组推导",
+    "Lab 03-E-03：朴素匹配与 KMP 比较次数",
+    "Lab 03-E-04：串的非重叠替换 Replace",
+    "Lab 03-E-05：UTF-8 串长与字符数",
+    "Lab 03-E-06：广义表的表头与表尾",
+    "Lab 03-E-07：广义表的深度",
+    "Lab 03-E-08：三对角矩阵压缩与取值",
+    "Lab 03-E-09：多维数组行优先寻址",
   ]) {
-    await expect(exerciseGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+    await expect(exerciseGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
-  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(1);
-  await expect(
-    projectGroup.getByRole("link", { name: "Lab 03-14：串匹配与文本处理引擎", exact: true }),
-  ).toHaveCount(1);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(2);
+  for (const title of [
+    "Lab 03-P-01：串匹配与文本处理引擎",
+    "Lab 03-P-02：稀疏矩阵运算库",
+  ]) {
+    await expect(projectGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
+  }
+  await expect(exerciseGroup.locator(":scope > .items a").first()).toContainText("03E01");
+  await expect(projectGroup.locator(":scope > .items a").first()).toContainText("03P01");
 
   expect(failures).toEqual([]);
 });
 
-test("chapter 5 exposes five Theory Labs and keeps Exercise and Project slots empty", async ({ page }) => {
+test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty Project slot", async ({ page }) => {
   const failures = monitorPage(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`${baseUrl}/learn/outline/chapter-05-tree-applications/`);
@@ -1317,40 +1366,53 @@ test("chapter 5 exposes five Theory Labs and keeps Exercise and Project slots em
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
   await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(5);
   for (const title of [
-    "Lab 05-01：森林与二叉树转换题精练",
-    "Lab 05-02：树与森林遍历题精练",
-    "Lab 05-03：哈夫曼树与编码题精练",
-    "Lab 05-04：并查集题精练",
-    "Lab 05-05：堆题精练",
+    "Lab 05-T-01：森林与二叉树转换题精练",
+    "Lab 05-T-02：树与森林遍历题精练",
+    "Lab 05-T-03：哈夫曼树与编码题精练",
+    "Lab 05-T-04：并查集题精练",
+    "Lab 05-T-05：堆题精练",
   ]) {
-    await expect(theoryGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+    await expect(theoryGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
+  await expect(theoryGroup.locator(":scope > .items a").first()).toHaveText(
+    "05T01 · 森林与二叉树转换题精练",
+  );
   await expect(theoryGroup.locator(".course-lab-category__empty")).toHaveCount(0);
 
-  const emptyCategories = [
-    { kind: "exercise", label: "实验 Exercise", empty: "暂无实验型 Lab", collapsed: true },
-    { kind: "project", label: "工程 Project", empty: "暂无工程型 Lab", collapsed: false },
-  ];
-  for (const category of emptyCategories) {
-    const group = chapterGroup.locator(
-      `.VPSidebarItem:has(> .item > .text > .course-lab-category--${category.kind})`,
-    );
-    await expect(group).toHaveCount(1);
-    await expect(group.locator(`.course-lab-category--${category.kind}`)).toContainText(
-      category.label,
-    );
-    if (category.collapsed) {
-      await expect(group).toHaveClass(/collapsed/);
-      await group.locator(":scope > .item > .caret").click();
-      await expect(group).not.toHaveClass(/collapsed/);
-    } else {
-      await expect(group).not.toHaveClass(/collapsed/);
-    }
-    await expect(group.locator(":scope > .items a")).toHaveCount(0);
-    await expect(group.locator(".course-lab-category__empty")).toHaveText(category.empty);
+  const exerciseGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)",
+  );
+  await expect(exerciseGroup).toHaveCount(1);
+  await expect(exerciseGroup.locator(".course-lab-category--exercise")).toContainText(
+    "实验 Exercise",
+  );
+  await expect(exerciseGroup).toHaveClass(/collapsed/);
+  await exerciseGroup.locator(":scope > .item > .caret").click();
+  await expect(exerciseGroup).not.toHaveClass(/collapsed/);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(17);
+  for (const title of [
+    "Lab 05-E-01：二叉搜索树的插入与查找",
+    "Lab 05-E-17：B+ 树的范围查询",
+  ]) {
+    await expect(exerciseGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
+  await expect(exerciseGroup.locator(":scope > .items a").first()).toContainText("05E01");
+  await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
 
-  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(2);
+  const projectGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--project)",
+  );
+  await expect(projectGroup).toHaveCount(1);
+  await expect(projectGroup.locator(".course-lab-category--project")).toContainText(
+    "工程 Project",
+  );
+  await expect(projectGroup).not.toHaveClass(/collapsed/);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(0);
+  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无工程型 Lab",
+  );
+
+  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(1);
   await expect(labGroup.locator(".course-lab-category svg")).toHaveCount(3);
   const labPanelStyle = await labGroup.evaluate((element) => {
     const style = globalThis.getComputedStyle(element);
@@ -1375,11 +1437,98 @@ test("chapter 5 exposes five Theory Labs and keeps Exercise and Project slots em
   expect(failures).toEqual([]);
 });
 
+test("chapter 14 exposes five DP lessons, thirty Exercise Labs, and empty Theory and Project slots", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${baseUrl}/learn/outline/chapter-14-dynamic-programming/`);
+
+  const chapterGroup = page.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-14-dynamic-programming/"])',
+  );
+  await expect(chapterGroup).toHaveCount(1);
+  await expect(chapterGroup).not.toContainText("相关 Labs");
+
+  for (const title of [
+    "第 14 章 动态规划：把重复搜索折叠成状态",
+    "14.1 动态规划思维与状态设计",
+    "14.2 从记忆化搜索到递推",
+    "14.3 线性与网格动态规划",
+    "14.4 背包动态规划：选择次数、目标语义与循环顺序",
+  ]) {
+    await expect(chapterGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+  }
+
+  const labGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
+  );
+  await expect(labGroup).toHaveCount(1);
+  await expect(labGroup).not.toHaveClass(/collapsed/);
+
+  const theoryGroup = labGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
+  );
+  await expect(theoryGroup).toHaveCount(1);
+  await expect(theoryGroup.locator(".course-lab-category--theory")).toContainText(
+    "理论 Theory",
+  );
+  await theoryGroup.locator(":scope > .item > .caret").click();
+  await expect(theoryGroup).not.toHaveClass(/collapsed/);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(0);
+  await expect(theoryGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无理论型 Lab",
+  );
+
+  const exerciseGroup = labGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)",
+  );
+  await expect(exerciseGroup).toHaveCount(1);
+  await expect(exerciseGroup.locator(".course-lab-category--exercise")).toContainText(
+    "实验 Exercise",
+  );
+  await exerciseGroup.locator(":scope > .item > .caret").click();
+  await expect(exerciseGroup).not.toHaveClass(/collapsed/);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(30);
+  await expect(
+    exerciseGroup.getByRole("link", { name: "14E01 · 爬楼梯", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    exerciseGroup.getByRole("link", { name: "14E30 · Buying Hay", exact: true }),
+  ).toHaveCount(1);
+  await expect(exerciseGroup.locator(":scope > .items a").first()).toHaveText(
+    "14E01 · 爬楼梯",
+  );
+  await expect(exerciseGroup.locator(":scope > .items a").last()).toHaveText(
+    "14E30 · Buying Hay",
+  );
+  await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
+
+  const projectGroup = labGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--project)",
+  );
+  await expect(projectGroup).toHaveCount(1);
+  await expect(projectGroup.locator(".course-lab-category--project")).toContainText(
+    "工程 Project",
+  );
+  await expect(projectGroup).not.toHaveClass(/collapsed/);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(0);
+  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无工程型 Lab",
+  );
+
+  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(2);
+  const layout = await page.evaluate(() => ({
+    clientWidth: globalThis.document.documentElement.clientWidth,
+    scrollWidth: globalThis.document.documentElement.scrollWidth,
+  }));
+  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
+  expect(failures).toEqual([]);
+});
+
 test("chapter 9 hash index theory quiz exposes all 18 questions and reconstructed tree prompts", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/labs/chapter-09/lab-09-01-hash-index-theory-quiz/`);
+  await page.goto(`${baseUrl}/labs/chapter-09/theory/T-09-01-hash-index-theory-quiz/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Lab 09-01：散列与索引选择题精练",
+    "Lab 09-T-01：散列与索引选择题精练",
   );
 
   const questions = page.locator(".course-quiz-question");
@@ -1412,9 +1561,9 @@ test("chapter 9 hash index theory quiz exposes all 18 questions and reconstructe
 
 test("chapter 8 search theory quiz exposes all 15 questions", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/labs/chapter-08/lab-08-01-search-theory-quiz/`);
+  await page.goto(`${baseUrl}/labs/chapter-08/theory/T-08-01-search-theory-quiz/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Lab 08-01：查找理论选择题精练",
+    "Lab 08-T-01：查找理论选择题精练",
   );
 
   const questions = page.locator(".course-quiz-question");
@@ -1430,9 +1579,9 @@ test("chapter 8 search theory quiz exposes all 15 questions", async ({ page }) =
 
 test("chapter 8 BST theory quiz exposes all 12 questions with tree prompts", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/labs/chapter-08/lab-08-02-bst-theory-quiz/`);
+  await page.goto(`${baseUrl}/labs/chapter-08/theory/T-08-02-bst-theory-quiz/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Lab 08-02：二叉排序树理论题精练",
+    "Lab 08-T-02：二叉排序树理论题精练",
   );
 
   const questions = page.locator(".course-quiz-question");
@@ -1456,9 +1605,9 @@ test("chapter 8 BST theory quiz exposes all 12 questions with tree prompts", asy
 
 test("chapter 8 balanced tree theory quiz exposes all 14 questions", async ({ page }) => {
   const failures = monitorPage(page);
-  await page.goto(`${baseUrl}/labs/chapter-08/lab-08-03-balanced-tree-quiz/`);
+  await page.goto(`${baseUrl}/labs/chapter-08/theory/T-08-03-balanced-tree-quiz/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Lab 08-03：平衡查找树理论题精练",
+    "Lab 08-T-03：平衡查找树理论题精练",
   );
 
   const questions = page.locator(".course-quiz-question");

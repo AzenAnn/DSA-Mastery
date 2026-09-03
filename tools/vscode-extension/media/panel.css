@@ -1,0 +1,2212 @@
+:root {
+  --gap: 16px;
+  --radius: 6px;
+}
+
+body {
+  padding: 0 24px 48px;
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-foreground);
+  line-height: 1.7;
+}
+
+.lab-header {
+  padding-top: 20px;
+}
+
+.title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lab-header h1 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.lab-header .meta {
+  margin: 6px 0 0;
+  color: var(--vscode-descriptionForeground);
+  font-size: 0.9em;
+}
+
+.badge {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.8em;
+  white-space: nowrap;
+}
+
+.badge.passed {
+  background: var(--vscode-testing-iconPassed);
+  color: var(--vscode-editor-background);
+}
+
+.badge.attempted {
+  background: var(--vscode-testing-iconQueued);
+  color: var(--vscode-editor-background);
+}
+
+.badge.fresh {
+  border: 1px solid var(--vscode-panel-border);
+  color: var(--vscode-descriptionForeground);
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+  padding: 14px 0;
+  background: var(--vscode-editor-background);
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+button {
+  padding: 6px 16px;
+  border: 1px solid var(--vscode-button-border, transparent);
+  border-radius: var(--radius);
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+button.primary {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  font-weight: 600;
+}
+
+button.primary:hover:not(:disabled) {
+  background: var(--vscode-button-hoverBackground);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* 把上/下一题推到工具栏右端,与提交类操作分开。 */
+.toolbar-gap {
+  flex: 1;
+}
+
+/* ---------- 统计面板 ---------- */
+
+/* 统计页只复用 WebView 的语义 token,不复用做题页的动作栏或 inspector。 */
+.stats-page {
+  --stats-chart-empty: color-mix(in srgb, var(--dsa-text, var(--vscode-foreground)) 9%, var(--dsa-surface, var(--vscode-editor-background)));
+  --stats-submit-1: color-mix(in srgb, var(--vscode-charts-orange, #ff6b35) 24%, var(--dsa-surface, var(--vscode-editor-background)));
+  --stats-submit-2: color-mix(in srgb, var(--vscode-charts-orange, #ff6b35) 44%, var(--dsa-surface, var(--vscode-editor-background)));
+  --stats-submit-3: color-mix(in srgb, var(--vscode-charts-orange, #ff6b35) 66%, var(--dsa-surface, var(--vscode-editor-background)));
+  --stats-submit-4: color-mix(in srgb, var(--vscode-charts-orange, #ff6b35) 84%, var(--dsa-surface, var(--vscode-editor-background)));
+  --stats-pass-1: color-mix(in srgb, var(--dsa-accent, #5e6de6) 22%, var(--dsa-surface, var(--vscode-editor-background)));
+  --stats-pass-2: color-mix(in srgb, var(--dsa-accent, #5e6de6) 42%, var(--dsa-surface, var(--vscode-editor-background)));
+  --stats-pass-3: color-mix(in srgb, var(--dsa-accent, #5e6de6) 64%, var(--dsa-surface, var(--vscode-editor-background)));
+  --stats-pass-4: var(--dsa-accent, #5e6de6);
+  --stats-cell-outline: transparent;
+  min-width: 0;
+}
+
+/* 深色 WebView 需要更强的热力图层级,避免低强度格子沉入背景。 */
+body.vscode-dark .stats-page,
+body.vscode-high-contrast .stats-page {
+  --stats-chart-empty: color-mix(in srgb, var(--vscode-foreground, #d4d4d4) 20%, var(--vscode-editor-background, #1e1e1e));
+  --stats-submit-1: color-mix(in srgb, var(--vscode-charts-orange, #ff9d5c) 38%, var(--vscode-editor-background, #1e1e1e));
+  --stats-submit-2: color-mix(in srgb, var(--vscode-charts-orange, #ff9d5c) 54%, var(--vscode-editor-background, #1e1e1e));
+  --stats-submit-3: color-mix(in srgb, var(--vscode-charts-orange, #ff9d5c) 72%, var(--vscode-editor-background, #1e1e1e));
+  --stats-submit-4: color-mix(in srgb, var(--vscode-charts-orange, #ffb37a) 92%, var(--vscode-editor-background, #1e1e1e));
+  --stats-pass-1: color-mix(in srgb, var(--vscode-textLink-foreground, #8290ff) 36%, var(--vscode-editor-background, #1e1e1e));
+  --stats-pass-2: color-mix(in srgb, var(--vscode-textLink-foreground, #8290ff) 52%, var(--vscode-editor-background, #1e1e1e));
+  --stats-pass-3: color-mix(in srgb, var(--vscode-textLink-foreground, #9da8ff) 70%, var(--vscode-editor-background, #1e1e1e));
+  --stats-pass-4: color-mix(in srgb, var(--vscode-textLink-foreground, #b8c0ff) 90%, var(--vscode-editor-background, #1e1e1e));
+  --stats-cell-outline: color-mix(in srgb, var(--vscode-foreground, #d4d4d4) 18%, transparent);
+}
+
+body.vscode-high-contrast .stats-page {
+  --stats-cell-outline: var(--vscode-contrastBorder, var(--vscode-focusBorder, #ffffff));
+}
+
+body.stats-body {
+  min-height: 100vh;
+}
+
+.lab-page.stats-page {
+  padding-bottom: 48px;
+}
+
+.lab-page.stats-page .stats-header {
+  padding: clamp(24px, 4vw, 44px) 0 20px;
+}
+
+.stats-page .stats-eyebrow {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--dsa-muted, var(--vscode-descriptionForeground));
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.68em;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.lab-page.stats-page .stats-header h1 {
+  max-width: 42rem;
+  font-size: clamp(1.45rem, 3vw, 1.9rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.stats-page .stats-subtitle {
+  margin: 8px 0 0;
+  color: var(--dsa-muted, var(--vscode-descriptionForeground));
+  font-size: 0.86em;
+  line-height: 1.6;
+}
+
+.stats-page .stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+  margin: 0 0 18px;
+  padding: 0;
+}
+
+.stats-page .stat-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 6px;
+  padding: 16px 18px;
+  border: 1px solid var(--dsa-border, var(--vscode-panel-border));
+  border-radius: var(--dsa-radius, 10px);
+  background: var(--dsa-surface-raised, var(--vscode-editorWidget-background, var(--vscode-editor-background)));
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+
+.stats-page .stat-value {
+  order: 1;
+  margin: 0;
+  color: var(--dsa-text, var(--vscode-foreground));
+  font-family: var(--vscode-editor-font-family);
+  font-size: clamp(1.45rem, 3vw, 1.85rem);
+  font-weight: 650;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-page .stat-label {
+  order: 2;
+  margin: 0;
+  color: var(--dsa-muted, var(--vscode-descriptionForeground));
+  font-size: 0.75em;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+.stats-page .stats-block {
+  min-width: 0;
+  margin: 0 0 18px;
+  padding: clamp(18px, 2.5vw, 26px);
+  border: 1px solid var(--dsa-border, var(--vscode-panel-border));
+  border-radius: var(--dsa-radius, 10px);
+  background: var(--dsa-surface, var(--vscode-editor-background));
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+
+.stats-page .stats-block:last-of-type {
+  margin-bottom: 0;
+}
+
+.stats-page .stats-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+  margin-bottom: 18px;
+}
+
+.stats-page .stats-section-heading {
+  min-width: 0;
+}
+
+.stats-page .stats-section-heading .stats-eyebrow {
+  margin-bottom: 4px;
+}
+
+.stats-page .stats-section-heading h2 {
+  margin: 0;
+  color: var(--dsa-text, var(--vscode-foreground));
+  font-size: 1em;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+.stats-page .stats-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.stats-page .heatmap-toggle {
+  display: inline-flex;
+  flex: 0 1 auto;
+  padding: 2px;
+  border: 1px solid var(--dsa-border, var(--vscode-panel-border));
+  border-radius: 8px;
+  background: var(--dsa-surface-muted, var(--vscode-textBlockQuote-background, var(--vscode-editor-background)));
+}
+
+.stats-page .heatmap-toggle button {
+  min-height: 30px;
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dsa-muted, var(--vscode-descriptionForeground));
+  font: inherit;
+  font-size: 0.78em;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: background-color var(--dsa-transition, 180ms ease-out), color var(--dsa-transition, 180ms ease-out), opacity var(--dsa-transition, 180ms ease-out);
+}
+
+.stats-page .heatmap-toggle button:hover:not(.active) {
+  color: var(--dsa-text, var(--vscode-foreground));
+}
+
+.stats-page .heatmap-toggle button.active {
+  background: var(--dsa-surface-raised, var(--vscode-editorWidget-background, var(--vscode-editor-background)));
+  color: var(--dsa-text, var(--vscode-foreground));
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+}
+
+.stats-page #year-select {
+  min-height: 34px;
+  max-width: 100%;
+  padding: 5px 9px;
+  border: 1px solid var(--dsa-border, var(--vscode-dropdown-border, var(--vscode-panel-border)));
+  border-radius: 7px;
+  background: var(--vscode-dropdown-background, var(--dsa-surface-raised, var(--vscode-editor-background)));
+  color: var(--vscode-dropdown-foreground, var(--dsa-text, var(--vscode-foreground)));
+  font: inherit;
+  font-size: 0.78em;
+}
+
+.stats-page .heatmap-toggle button:focus-visible,
+.stats-page #year-select:focus-visible {
+  outline: 2px solid var(--dsa-focus, var(--vscode-focusBorder));
+  outline-offset: 2px;
+}
+
+.stats-page .heatmap-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+
+.stats-page .heatmap-scroll svg {
+  display: block;
+}
+
+.stats-page .heatmap-scroll rect,
+.stats-page .heatmap-legend rect {
+  stroke: var(--stats-cell-outline);
+  stroke-width: 0.35;
+  vector-effect: non-scaling-stroke;
+}
+
+.stats-page .heatmap-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  min-width: 0;
+  margin-top: 12px;
+  color: var(--dsa-muted, var(--vscode-descriptionForeground));
+  font-size: 0.72em;
+  line-height: 1.5;
+}
+
+.stats-page .heatmap-legend svg {
+  flex: none;
+}
+
+.stats-page .legend-scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.stats-page .cal-label {
+  fill: var(--dsa-muted, var(--vscode-descriptionForeground));
+  font-size: 9px;
+  opacity: 0.85;
+}
+
+.stats-page .trend-wrap {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.stats-page .trend {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+}
+
+.stats-page .trend .axis {
+  fill: var(--dsa-muted, var(--vscode-descriptionForeground));
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.stats-page .trend .grid {
+  stroke: var(--dsa-text, var(--vscode-foreground));
+  stroke-opacity: 0.1;
+  stroke-width: 1;
+}
+
+.stats-page .trend-dot {
+  fill: var(--dsa-surface, var(--vscode-editor-background));
+  stroke: var(--dsa-accent, #5e6de6);
+  stroke-width: 1.5;
+}
+
+.stats-page .chapter-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.stats-page .chapter-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(120px, 1.4fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  font-size: 0.8em;
+}
+
+.stats-page .chapter-name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--dsa-text, var(--vscode-foreground));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stats-page .chapter-bar {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 8px;
+}
+
+.stats-page .chapter-count {
+  min-width: 3.25em;
+  color: var(--dsa-muted, var(--vscode-descriptionForeground));
+  text-align: right;
+  font-family: var(--vscode-editor-font-family);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-page .stats-empty {
+  margin: 0;
+  color: var(--dsa-muted, var(--vscode-descriptionForeground));
+  font-size: 0.8em;
+  line-height: 1.7;
+}
+
+.result:not(:empty) {
+  margin: var(--gap) 0;
+}
+
+.summary {
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  border-left: 4px solid var(--vscode-panel-border);
+  background: var(--vscode-textBlockQuote-background);
+}
+
+.summary h3 {
+  margin: 0 0 6px;
+  font-size: 1.1em;
+}
+
+.summary p {
+  margin: 4px 0;
+}
+
+.summary.passed {
+  border-left-color: var(--vscode-testing-iconPassed);
+}
+
+.summary.failed {
+  border-left-color: var(--vscode-testing-iconFailed);
+}
+
+.summary.stale {
+  opacity: 0.85;
+}
+
+.summary .note {
+  color: var(--vscode-descriptionForeground);
+  font-size: 0.9em;
+}
+
+.pending,
+.error {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: var(--vscode-textBlockQuote-background);
+}
+
+.error {
+  border-left: 4px solid var(--vscode-testing-iconFailed);
+}
+
+.cases-table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  font-size: 0.92em;
+}
+
+.cases-table th,
+.cases-table td {
+  padding: 5px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+
+.cases-table th {
+  color: var(--vscode-descriptionForeground);
+  font-weight: 500;
+}
+
+.cases-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cases-table .verdict {
+  font-weight: 600;
+}
+
+tr.verdict-AC .verdict {
+  color: var(--vscode-testing-iconPassed);
+}
+
+tr.verdict-WA .verdict,
+tr.verdict-RE .verdict,
+tr.verdict-CE .verdict,
+tr.verdict-OLE .verdict,
+tr.verdict-IE .verdict {
+  color: var(--vscode-testing-iconFailed);
+}
+
+tr.verdict-TLE .verdict {
+  color: var(--vscode-testing-iconQueued);
+}
+
+tr.difference td {
+  padding: 6px 12px;
+  color: var(--vscode-descriptionForeground);
+  font-size: 0.9em;
+  background: var(--vscode-editor-background);
+}
+
+tr.stderr-row td {
+  background: var(--vscode-editor-background);
+}
+
+.diagnostic {
+  max-height: 320px;
+  overflow: auto;
+}
+
+.readme {
+  margin-top: var(--gap);
+}
+
+.readme h2 {
+  margin-top: 28px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  font-size: 1.2em;
+}
+
+.readme h3 {
+  font-size: 1.05em;
+}
+
+.readme img {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+.readme table {
+  border-collapse: collapse;
+  margin: 12px 0;
+  display: block;
+  overflow-x: auto;
+}
+
+.readme th,
+.readme td {
+  padding: 5px 10px;
+  border: 1px solid var(--vscode-panel-border);
+}
+
+.readme blockquote {
+  margin: 12px 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--vscode-panel-border);
+  color: var(--vscode-descriptionForeground);
+}
+
+pre {
+  padding: 10px 12px;
+  overflow-x: auto;
+  border-radius: var(--radius);
+  background: var(--vscode-textCodeBlock-background);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+code {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--vscode-textCodeBlock-background);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.9em;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+}
+
+.cases {
+  margin-top: 32px;
+}
+
+.cases h2 {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  font-size: 1.2em;
+}
+
+.case {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: var(--radius);
+}
+
+.case summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.case .tag {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--vscode-badge-background);
+  color: var(--vscode-badge-foreground);
+  font-size: 0.78em;
+}
+
+.case .points {
+  margin-left: auto;
+  color: var(--vscode-descriptionForeground);
+  font-size: 0.85em;
+}
+
+.io {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.io h4 {
+  margin: 0 0 4px;
+  color: var(--vscode-descriptionForeground);
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.io pre {
+  margin: 0;
+  max-height: 220px;
+}
+
+@media (max-width: 620px) {
+  .io {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== 选择题 =====
+ * 结构与类名对齐 .vitepress/theme/components/QuizSet.vue，
+ * 把网页版的 --course-* 设计变量换成 VSCode 主题变量，
+ * 这样两端视觉语言一致，同时自动跟随用户的编辑器主题。 */
+
+.course-quiz {
+  margin-top: 28px;
+}
+
+.course-quiz-summary {
+  position: sticky;
+  top: 52px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: var(--radius);
+  background: var(--vscode-editor-background);
+  font-size: 0.9em;
+}
+
+.course-quiz-summary strong {
+  color: var(--vscode-foreground);
+}
+
+.course-quiz-summary span {
+  color: var(--vscode-descriptionForeground);
+  font-variant-numeric: tabular-nums;
+}
+
+.course-quiz-question {
+  margin-bottom: 20px;
+  padding: 18px 20px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 8px;
+  background: var(--vscode-editor-background);
+}
+
+.course-quiz-heading {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.course-quiz-number {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--vscode-badge-background);
+  color: var(--vscode-badge-foreground);
+  font-size: 0.78em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.course-quiz-heading-content {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.course-quiz-meta {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--vscode-descriptionForeground);
+  font-size: 0.8em;
+}
+
+.course-quiz-stem {
+  font-size: 1em;
+  line-height: 1.7;
+}
+
+.course-quiz-stem > :first-child {
+  margin-top: 0;
+}
+
+.course-quiz-stem > :last-child {
+  margin-bottom: 0;
+}
+
+/* 代码块：顶部三个圆点模仿网页版的窗口条 */
+.course-quiz-code {
+  margin: 14px 0;
+  overflow: hidden;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: var(--radius);
+}
+
+.course-quiz-code-bar {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  background: var(--vscode-editorGroupHeader-tabsBackground, var(--vscode-editor-background));
+}
+
+.course-quiz-code-bar span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--vscode-panel-border);
+}
+
+.course-quiz-code-body pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.course-quiz-hint {
+  margin: 12px 0;
+  padding: 8px 12px;
+  border: 1px dashed var(--vscode-panel-border);
+  border-radius: var(--radius);
+  font-size: 0.92em;
+}
+
+.course-quiz-hint summary {
+  cursor: pointer;
+  color: var(--vscode-textLink-foreground);
+}
+
+.course-quiz-hint > div {
+  margin-top: 8px;
+  color: var(--vscode-descriptionForeground);
+}
+
+.course-quiz-options {
+  margin: 14px 0 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.course-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+  white-space: nowrap;
+}
+
+.course-quiz-option {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 11px 42px 11px 13px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: var(--radius);
+  background: var(--vscode-editor-background);
+  cursor: pointer;
+  transition: border-color 0.12s, background-color 0.12s;
+}
+
+.course-quiz-option:hover {
+  border-color: var(--vscode-focusBorder);
+}
+
+.course-quiz-option:has(input:checked) {
+  border-color: var(--vscode-focusBorder);
+  background: var(--vscode-list-activeSelectionBackground);
+}
+
+.course-quiz-option:has(input:focus-visible) {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: 2px;
+}
+
+/* radio 视觉隐藏，交互由 label 与字母标承担 */
+.course-quiz-option input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+.course-quiz-option-mark {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 50%;
+  background: var(--vscode-editor-background);
+  color: var(--vscode-descriptionForeground);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.78em;
+  font-weight: 700;
+  transition: border-color 0.12s, background-color 0.12s, color 0.12s;
+}
+
+.course-quiz-option:has(input:checked) .course-quiz-option-mark {
+  border-color: var(--vscode-button-background);
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+.course-quiz-option-text {
+  min-width: 0;
+  padding-top: 2px;
+  color: var(--vscode-foreground);
+  font-size: 0.94em;
+  line-height: 1.6;
+}
+
+.course-quiz-option-text > :first-child {
+  margin-top: 0;
+}
+
+.course-quiz-option-text > :last-child {
+  margin-bottom: 0;
+}
+
+/* ----- 已提交：正确项打勾，选错的那项打叉 ----- */
+
+.course-quiz-options.is-submitted .course-quiz-option {
+  cursor: default;
+}
+
+.course-quiz-options.is-submitted .course-quiz-option:hover {
+  border-color: var(--vscode-panel-border);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-answer {
+  border-color: var(--vscode-testing-iconPassed);
+  background: color-mix(in srgb, var(--vscode-testing-iconPassed) 12%, transparent);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-answer .course-quiz-option-mark {
+  border-color: var(--vscode-testing-iconPassed);
+  background: var(--vscode-testing-iconPassed);
+  color: var(--vscode-editor-background);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-answer .course-quiz-option-text {
+  color: var(--vscode-testing-iconPassed);
+  font-weight: 600;
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-answer::after {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--vscode-testing-iconPassed);
+  font-size: 1.05em;
+  font-weight: 800;
+  content: "✓";
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-wrong-pick {
+  border-color: var(--vscode-testing-iconFailed);
+  background: color-mix(in srgb, var(--vscode-testing-iconFailed) 12%, transparent);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-wrong-pick .course-quiz-option-mark {
+  border-color: var(--vscode-testing-iconFailed);
+  background: var(--vscode-testing-iconFailed);
+  color: var(--vscode-editor-background);
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-wrong-pick .course-quiz-option-text {
+  color: var(--vscode-testing-iconFailed);
+  font-weight: 600;
+}
+
+.course-quiz-options.is-submitted .course-quiz-option.is-wrong-pick::after {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--vscode-testing-iconFailed);
+  font-size: 1.05em;
+  font-weight: 800;
+  content: "✕";
+}
+
+.course-quiz-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* 复用页面上方工具栏按钮的观感 */
+.course-button {
+  padding: 6px 16px;
+  border: 1px solid var(--vscode-button-border, transparent);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.course-button-primary {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  font-weight: 600;
+}
+
+.course-button-primary:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+
+.course-button-secondary {
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+}
+
+.course-button-secondary:hover {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+.course-quiz-feedback {
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-left: 3px solid var(--vscode-panel-border);
+  border-radius: var(--radius);
+  background: var(--vscode-textBlockQuote-background);
+}
+
+.course-quiz-feedback.is-correct {
+  border-left-color: var(--vscode-testing-iconPassed);
+}
+
+.course-quiz-feedback.is-wrong {
+  border-left-color: var(--vscode-testing-iconFailed);
+}
+
+.course-quiz-feedback-heading {
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.course-quiz-feedback.is-correct .course-quiz-feedback-heading {
+  color: var(--vscode-testing-iconPassed);
+}
+
+.course-quiz-feedback.is-wrong .course-quiz-feedback-heading {
+  color: var(--vscode-testing-iconFailed);
+}
+
+.course-quiz-answer {
+  margin: 0 0 10px;
+  font-size: 0.94em;
+}
+
+.course-quiz-answer .course-quiz-rich {
+  display: inline;
+}
+
+.course-quiz-answer .course-quiz-rich > p {
+  display: inline;
+  margin: 0;
+}
+
+.course-quiz-explanation {
+  padding-top: 10px;
+  border-top: 1px solid var(--vscode-panel-border);
+  font-size: 0.92em;
+  line-height: 1.7;
+}
+
+.course-quiz-explanation-title {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--vscode-descriptionForeground);
+  font-size: 0.9em;
+}
+
+/* 富文本片段：题干、选项、题解共用。抹掉首尾外边距避免撑开容器。 */
+.course-quiz-rich > :first-child {
+  margin-top: 0;
+}
+
+.course-quiz-rich > :last-child {
+  margin-bottom: 0;
+}
+
+.course-quiz-rich code {
+  font-size: 0.92em;
+}
+
+/* ===== WebView 工作台 =====
+ * 代码题与选择题共用这一层 token。颜色仍映射到 VS Code 主题变量，
+ * 浅色主题保持纸面般的层次，切换到深色主题时不需要另一套结构。 */
+
+.lab-page {
+  --dsa-surface: var(--vscode-editor-background);
+  --dsa-surface-muted: var(--vscode-textBlockQuote-background, var(--vscode-editor-background));
+  --dsa-surface-raised: var(--vscode-editorWidget-background, var(--vscode-editor-background));
+  --dsa-border: var(--vscode-panel-border, color-mix(in srgb, var(--vscode-foreground) 16%, transparent));
+  --dsa-border-strong: var(--vscode-focusBorder, color-mix(in srgb, var(--vscode-foreground) 34%, transparent));
+  --dsa-text: var(--vscode-foreground);
+  --dsa-muted: var(--vscode-descriptionForeground);
+  --dsa-accent: var(--vscode-textLink-foreground, var(--vscode-button-background));
+  --dsa-accent-soft: var(--vscode-list-activeSelectionBackground, color-mix(in srgb, var(--vscode-button-background) 12%, transparent));
+  --dsa-success: var(--vscode-testing-iconPassed, #2e7d32);
+  --dsa-danger: var(--vscode-testing-iconFailed, #c62828);
+  --dsa-warning: var(--vscode-testing-iconQueued, #9a6700);
+  --dsa-focus: var(--vscode-focusBorder, var(--vscode-textLink-foreground));
+  --dsa-radius: 10px;
+  --dsa-transition: 180ms ease-out;
+}
+
+body {
+  background: var(--vscode-editor-background);
+  overflow-x: hidden;
+}
+
+body.program-body {
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 24px;
+  overflow: hidden;
+}
+
+.lab-page,
+.lab-page * {
+  box-sizing: border-box;
+}
+
+.lab-page {
+  width: 100%;
+  max-width: 1180px;
+  min-width: 0;
+  margin: 0 auto;
+  color: var(--dsa-text);
+}
+
+.program-page {
+  --lab-actionbar-reserve: 112px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding-bottom: var(--lab-actionbar-reserve);
+}
+
+.program-scroll-region {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 16px;
+  scrollbar-gutter: stable;
+}
+
+.lab-page .lab-header {
+  padding: clamp(20px, 3vw, 32px) 0 18px;
+}
+
+.lab-page .lab-header h1 {
+  max-width: 42rem;
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+.lab-page .lab-header .meta {
+  margin-top: 8px;
+  color: var(--dsa-muted);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.82em;
+  line-height: 1.5;
+}
+
+.lab-page .badge {
+  border: 1px solid var(--dsa-border);
+  background: transparent;
+  color: var(--dsa-muted);
+  font-size: 0.75em;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.lab-page .badge.passed {
+  border-color: color-mix(in srgb, var(--dsa-success) 48%, var(--dsa-border));
+  background: color-mix(in srgb, var(--dsa-success) 10%, transparent);
+  color: var(--dsa-success);
+}
+
+.lab-page .badge.attempted {
+  border-color: color-mix(in srgb, var(--dsa-warning) 48%, var(--dsa-border));
+  background: color-mix(in srgb, var(--dsa-warning) 10%, transparent);
+  color: var(--dsa-warning);
+}
+
+.program-page .lab-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(220px, min(34%, 360px));
+  gap: 20px;
+  align-items: start;
+  min-width: 0;
+}
+
+.program-page .lab-workspace.is-inspector-collapsed {
+  grid-template-columns: minmax(0, 1fr) 44px;
+}
+
+.program-page .lab-reading-surface,
+.program-page .lab-inspector,
+.quiz-page .quiz-reading-surface {
+  min-width: 0;
+  border: 1px solid var(--dsa-border);
+  border-radius: var(--dsa-radius);
+  background: var(--dsa-surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+.program-page .lab-reading-surface,
+.quiz-page .quiz-reading-surface {
+  padding: clamp(20px, 3vw, 32px);
+}
+
+.program-page .readme,
+.quiz-page .readme {
+  max-width: 76ch;
+  margin: 0;
+}
+
+.lab-page .readme h2 {
+  margin-top: 32px;
+  padding: 0;
+  border: 0;
+  font-size: 1.2em;
+  line-height: 1.35;
+}
+
+.lab-page .readme h3 {
+  margin-top: 24px;
+  font-size: 1.05em;
+}
+
+.lab-page .readme p,
+.lab-page .readme li {
+  line-height: 1.75;
+}
+
+.lab-page .readme a {
+  color: var(--dsa-accent);
+}
+
+.lab-page .readme img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.lab-page .readme table {
+  max-width: 100%;
+}
+
+.lab-inspector {
+  position: sticky;
+  top: 16px;
+  overflow: hidden;
+}
+
+.inspector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--dsa-border);
+  background: var(--dsa-surface-muted);
+}
+
+.inspector-title-group {
+  min-width: 0;
+}
+
+.inspector-eyebrow {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--dsa-muted);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.72em;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.inspector-title {
+  overflow: hidden;
+  margin: 0;
+  color: var(--dsa-text);
+  font-size: 0.98em;
+  font-weight: 650;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inspector-toggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  min-width: 44px;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--dsa-muted);
+  font: inherit;
+  font-size: 0.78em;
+  cursor: pointer;
+  transition: background-color var(--dsa-transition), color var(--dsa-transition);
+}
+
+.inspector-toggle:hover {
+  background: var(--dsa-accent-soft);
+  color: var(--dsa-text);
+}
+
+.inspector-toggle-glyph {
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(225deg);
+  transition: transform var(--dsa-transition);
+}
+
+.lab-inspector.is-collapsed .inspector-toggle-glyph {
+  transform: rotate(45deg);
+}
+
+.lab-inspector.is-collapsed .inspector-header {
+  justify-content: center;
+  padding-inline: 4px;
+}
+
+.lab-inspector.is-collapsed .inspector-title-group,
+.lab-inspector.is-collapsed .inspector-toggle-text {
+  display: none;
+}
+
+.lab-inspector.is-collapsed .inspector-toggle {
+  min-width: 36px;
+  padding-inline: 8px;
+}
+
+.inspector-content[hidden],
+.inspector-pane[hidden] {
+  display: none;
+}
+
+.inspector-content {
+  min-width: 0;
+  padding: 0 14px 14px;
+}
+
+.inspector-tabs {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+  border-bottom: 1px solid var(--dsa-border);
+}
+
+.inspector-tab {
+  position: relative;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--dsa-muted);
+  font: inherit;
+  font-size: 0.82em;
+  cursor: pointer;
+  transition: color var(--dsa-transition), background-color var(--dsa-transition);
+}
+
+.inspector-tab:hover {
+  background: var(--dsa-accent-soft);
+  color: var(--dsa-text);
+}
+
+.inspector-tab.is-active {
+  color: var(--dsa-text);
+  font-weight: 600;
+}
+
+.inspector-tab.is-active::after {
+  position: absolute;
+  right: 8px;
+  bottom: -1px;
+  left: 8px;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--dsa-accent);
+  content: "";
+}
+
+.inspector-pane {
+  min-width: 0;
+}
+
+.lab-inspector .result {
+  min-width: 0;
+  margin: 14px 0 0;
+}
+
+.inspector-empty {
+  margin: 14px 0 0;
+  color: var(--dsa-muted);
+  font-size: 0.86em;
+  line-height: 1.6;
+}
+
+.lab-inspector .summary,
+.lab-inspector .pending,
+.lab-inspector .error {
+  padding: 14px;
+  border: 1px solid var(--dsa-border);
+  border-left: 3px solid var(--dsa-border-strong);
+  border-radius: 8px;
+  background: var(--dsa-surface-muted);
+}
+
+.lab-inspector .summary.passed {
+  border-left-color: var(--dsa-success);
+}
+
+.lab-inspector .summary.failed,
+.lab-inspector .error {
+  border-left-color: var(--dsa-danger);
+}
+
+.lab-inspector .summary h3 {
+  margin: 0 0 6px;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+.lab-inspector .summary p {
+  margin: 5px 0;
+}
+
+.lab-inspector .summary .note {
+  color: var(--dsa-muted);
+}
+
+.lab-inspector .cases {
+  min-width: 0;
+  margin: 14px 0 0;
+}
+
+.lab-inspector .cases h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  color: var(--dsa-muted);
+  font-size: 0.75em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lab-inspector .case {
+  min-width: 0;
+  margin: 8px 0;
+  padding: 4px 10px;
+  border: 1px solid var(--dsa-border);
+  border-radius: 8px;
+  background: var(--dsa-surface-raised);
+}
+
+.lab-inspector .case[open] {
+  border-color: var(--dsa-border-strong);
+}
+
+.lab-inspector .case summary {
+  min-height: 36px;
+  font-size: 0.84em;
+}
+
+.lab-inspector .case .tag {
+  background: var(--dsa-accent-soft);
+  color: var(--dsa-accent);
+}
+
+.lab-inspector .io {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+.lab-inspector .io pre,
+.lab-inspector .diagnostic {
+  max-width: 100%;
+  overflow: auto;
+  white-space: pre;
+}
+
+.lab-inspector .cases-table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+.lab-inspector .cases-table th,
+.lab-inspector .cases-table td {
+  padding: 6px 7px;
+  white-space: nowrap;
+}
+
+.lab-inspector .cases-table .verdict {
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.9em;
+}
+
+.lab-inspector tr.verdict-AC .verdict {
+  color: var(--dsa-success);
+}
+
+.lab-inspector tr.verdict-WA .verdict,
+.lab-inspector tr.verdict-RE .verdict,
+.lab-inspector tr.verdict-CE .verdict,
+.lab-inspector tr.verdict-OLE .verdict,
+.lab-inspector tr.verdict-IE .verdict {
+  color: var(--dsa-danger);
+}
+
+.lab-inspector tr.verdict-TLE .verdict {
+  color: var(--dsa-warning);
+}
+
+.lab-actionbar {
+  /* 固定在视口底部；program-page 会动态预留同等高度，避免遮挡题面。 */
+  position: fixed;
+  right: max(24px, calc((100vw - 1180px) / 2));
+  bottom: 16px;
+  left: max(24px, calc((100vw - 1180px) / 2));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 6px 10px calc(6px + env(safe-area-inset-bottom, 0px));
+  border: 1px solid var(--dsa-border);
+  border-radius: 10px;
+  background: var(--dsa-surface);
+  box-shadow: 0 4px 18px rgb(0 0 0 / 0.14);
+}
+
+.lab-actionbar-main,
+.lab-actionbar-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.lab-actionbar-nav {
+  margin-left: auto;
+}
+
+.lab-actionbar .lab-button {
+  min-height: 32px;
+  padding: 5px 10px;
+}
+
+.lab-button,
+.lab-page .course-button {
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 0.86em;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: background-color var(--dsa-transition), border-color var(--dsa-transition), color var(--dsa-transition), opacity var(--dsa-transition);
+}
+
+.lab-button:focus-visible,
+.lab-page .course-button:focus-visible,
+.inspector-toggle:focus-visible,
+.inspector-tab:focus-visible,
+.lab-page summary:focus-visible {
+  outline: 2px solid var(--dsa-focus);
+  outline-offset: 2px;
+}
+
+.lab-button-primary,
+.lab-page .course-button-primary {
+  border-color: var(--vscode-button-background);
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  font-weight: 650;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+}
+
+.lab-button-primary:hover:not(:disabled),
+.lab-page .course-button-primary:hover:not(:disabled) {
+  background: var(--vscode-button-hoverBackground);
+}
+
+.lab-button-secondary,
+.lab-page .course-button-secondary {
+  background: transparent;
+  color: var(--dsa-muted);
+}
+
+.lab-button-secondary:hover:not(:disabled),
+.lab-page .course-button-secondary:hover:not(:disabled) {
+  border-color: var(--dsa-border);
+  background: var(--dsa-accent-soft);
+  color: var(--dsa-text);
+}
+
+.lab-page button:disabled {
+  opacity: 0.52;
+  cursor: default;
+}
+
+.quiz-page .quiz-reading-surface {
+  max-width: 900px;
+}
+
+.quiz-page .course-quiz {
+  max-width: 760px;
+  margin-top: 32px;
+}
+
+.quiz-page .course-quiz-summary {
+  top: 12px;
+  margin-bottom: 20px;
+  padding: 11px 14px;
+  border: 1px solid var(--dsa-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--dsa-surface) 94%, transparent);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+.quiz-page .course-quiz-question {
+  margin-bottom: 18px;
+  padding: clamp(18px, 2.5vw, 24px);
+  border: 1px solid var(--dsa-border);
+  border-radius: var(--dsa-radius);
+  background: var(--dsa-surface-raised);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+}
+
+.quiz-page .course-quiz-number {
+  background: var(--dsa-accent-soft);
+  color: var(--dsa-accent);
+}
+
+.quiz-page .course-quiz-option {
+  min-height: 44px;
+  border-color: var(--dsa-border);
+  background: var(--dsa-surface);
+  transition: border-color var(--dsa-transition), background-color var(--dsa-transition), color var(--dsa-transition);
+}
+
+.quiz-page .course-quiz-option:hover {
+  border-color: var(--dsa-border-strong);
+  background: var(--dsa-accent-soft);
+}
+
+.quiz-page .course-quiz-option:has(input:checked) {
+  border-color: var(--dsa-focus);
+  background: var(--dsa-accent-soft);
+}
+
+.quiz-page .course-quiz-option-mark {
+  border-color: var(--dsa-border);
+  background: var(--dsa-surface-raised);
+}
+
+.quiz-page .course-quiz-code,
+.quiz-page .course-quiz-hint {
+  border-color: var(--dsa-border);
+}
+
+.quiz-page .course-quiz-feedback {
+  border: 1px solid var(--dsa-border);
+  border-left-width: 3px;
+  background: var(--dsa-surface-muted);
+}
+
+.quiz-page .course-quiz-feedback.is-correct {
+  border-left-color: var(--dsa-success);
+}
+
+.quiz-page .course-quiz-feedback.is-wrong {
+  border-left-color: var(--dsa-danger);
+}
+
+@media (max-width: 720px) {
+  .stats-page .stat-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats-page .stats-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stats-page .stats-controls {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .stats-page .legend-scale {
+    margin-left: 0;
+  }
+
+  .program-page {
+    --lab-actionbar-reserve: 128px;
+  }
+
+  .program-page .lab-workspace,
+  .program-page .lab-workspace.is-inspector-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .program-page .lab-inspector {
+    position: static;
+    width: 100%;
+  }
+
+  .program-page .lab-inspector.is-collapsed .inspector-header {
+    min-height: 52px;
+    justify-content: space-between;
+    padding-inline: 16px;
+  }
+
+  .program-page .lab-inspector.is-collapsed .inspector-title-group,
+  .program-page .lab-inspector.is-collapsed .inspector-toggle-text {
+    display: block;
+  }
+
+  .program-page .lab-inspector.is-collapsed .inspector-toggle {
+    min-width: 44px;
+    padding-inline: 8px;
+  }
+
+  .lab-actionbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .lab-actionbar-main,
+  .lab-actionbar-nav {
+    margin-left: 0;
+  }
+
+  .lab-actionbar-main {
+    width: 100%;
+  }
+
+  .lab-actionbar-main .lab-button-primary {
+    order: -1;
+  }
+
+  .lab-actionbar-nav {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 460px) {
+  .stats-page .stat-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stats-page .stats-block {
+    padding: 18px 16px;
+  }
+
+  .stats-page .stats-controls,
+  .stats-page .heatmap-toggle {
+    width: 100%;
+  }
+
+  .stats-page .heatmap-toggle button {
+    flex: 1 1 0;
+  }
+
+  .stats-page .chapter-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 5px;
+  }
+
+  .stats-page .chapter-name {
+    grid-column: 1 / -1;
+  }
+
+  .stats-page .chapter-bar {
+    grid-column: 1;
+  }
+
+  .stats-page .chapter-count {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .program-page {
+    --lab-actionbar-reserve: 220px;
+  }
+
+  .program-page .lab-reading-surface,
+  .quiz-page .quiz-reading-surface {
+    padding: 18px 16px;
+  }
+
+  .lab-actionbar-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lab-actionbar-main .lab-button,
+  .lab-actionbar-nav .lab-button {
+    width: 100%;
+  }
+
+  .lab-actionbar-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quiz-page .course-quiz-heading {
+    gap: 10px;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-button,
+  .lab-page .course-button,
+  .inspector-toggle,
+  .inspector-toggle-glyph,
+  .inspector-tab,
+  .stats-page .heatmap-toggle button,
+  .quiz-page .course-quiz-option {
+    transition: none;
+  }
+}
+
+/* ===== Project 工作台 ===== */
+
+body.project-body {
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 24px;
+  overflow: hidden;
+}
+
+.project-page {
+  --lab-actionbar-reserve: 128px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding-bottom: var(--lab-actionbar-reserve);
+}
+
+.project-scroll-region {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 16px;
+  scrollbar-gutter: stable;
+}
+
+.project-page .lab-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, min(38%, 420px));
+  gap: 20px;
+  align-items: start;
+  min-width: 0;
+}
+
+.project-page .lab-workspace.is-inspector-collapsed {
+  grid-template-columns: minmax(0, 1fr) 44px;
+}
+
+.project-page .lab-reading-surface,
+.project-page .lab-inspector {
+  min-width: 0;
+  border: 1px solid var(--dsa-border);
+  border-radius: var(--dsa-radius);
+  background: var(--dsa-surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+.project-page .lab-reading-surface {
+  padding: clamp(20px, 3vw, 32px);
+}
+
+.project-page .readme {
+  max-width: 76ch;
+  margin: 0;
+}
+
+.project-task-overview {
+  margin-top: 34px;
+  padding-top: 24px;
+  border-top: 1px solid var(--dsa-border);
+}
+
+.project-section-heading {
+  margin-bottom: 14px;
+}
+
+.project-eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--dsa-muted);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.7em;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.project-section-heading h2 {
+  margin: 0;
+  font-size: 1.1em;
+  line-height: 1.35;
+}
+
+.project-task-card {
+  min-width: 0;
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid var(--dsa-border);
+  border-radius: 9px;
+  background: var(--dsa-surface-raised);
+}
+
+.project-task-header,
+.project-task-result-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.project-task-header strong {
+  flex: none;
+  color: var(--dsa-accent);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.86em;
+  font-weight: 650;
+}
+
+.project-task-id {
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.92em;
+  font-weight: 650;
+}
+
+.project-task-kind {
+  margin-left: 9px;
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+}
+
+.project-task-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 8px 14px;
+  margin: 12px 0 14px;
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+}
+
+.project-task-meta div {
+  min-width: 0;
+}
+
+.project-task-meta dt {
+  margin-bottom: 2px;
+  font-size: 0.84em;
+}
+
+.project-task-meta dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.project-task-files,
+.project-task-cases,
+.project-task-tests,
+.project-manual {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--dsa-border);
+}
+
+.project-task-card h4 {
+  margin: 0 0 8px;
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+  font-weight: 650;
+}
+
+.project-file-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 0;
+  margin-top: 6px;
+  padding: 7px 9px;
+  border-color: var(--dsa-border);
+  background: var(--dsa-surface);
+  color: var(--dsa-text);
+  text-align: left;
+}
+
+.project-file-button code {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--dsa-accent);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-file-button span {
+  flex: none;
+  margin-left: 10px;
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+.project-file-button:hover {
+  border-color: var(--dsa-border-strong);
+  background: var(--dsa-accent-soft);
+}
+
+.project-case {
+  margin-top: 7px;
+}
+
+.project-case summary {
+  padding: 8px 0;
+}
+
+.project-case .io {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.project-case h5 {
+  margin: 0 0 5px;
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+  font-weight: 650;
+}
+
+.project-test-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.project-test-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--dsa-border);
+  border-radius: 6px;
+  background: var(--dsa-surface);
+  color: var(--dsa-muted);
+  font-size: 0.78em;
+}
+
+.project-test-chip code {
+  overflow: hidden;
+  color: var(--dsa-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-manual {
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+.project-manual ul,
+.project-result-checklist {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.project-pending {
+  color: var(--dsa-warning);
+  font-weight: 650;
+}
+
+.project-empty {
+  margin: 0;
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+.project-page .summary.pending {
+  border-left: 3px solid var(--dsa-warning);
+  background: color-mix(in srgb, var(--dsa-warning) 8%, var(--dsa-surface));
+}
+
+.project-page .summary.pending h3 {
+  color: var(--dsa-warning);
+}
+
+.project-score-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.project-score-grid span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--dsa-border);
+  border-radius: 6px;
+  background: var(--dsa-surface-muted);
+  font-family: var(--vscode-editor-font-family);
+  font-size: 0.8em;
+}
+
+.project-score-grid strong {
+  color: var(--dsa-muted);
+  font-family: var(--vscode-font-family);
+  font-size: 0.82em;
+  font-weight: 600;
+}
+
+.project-task-result {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--dsa-border);
+}
+
+.project-task-result-heading {
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+.project-task-result-heading code {
+  color: var(--dsa-text);
+  font-weight: 650;
+}
+
+.project-result-table {
+  margin-top: 9px;
+}
+
+.project-diagnostic {
+  margin: 9px 0 0;
+  max-height: 260px;
+  overflow: auto;
+}
+
+.project-build-status {
+  margin: 9px 0 0;
+  color: var(--dsa-danger);
+  font-size: 0.82em;
+}
+
+.project-result-checklist {
+  color: var(--dsa-muted);
+  font-size: 0.82em;
+}
+
+@media (max-width: 720px) {
+  .project-page {
+    --lab-actionbar-reserve: 144px;
+  }
+
+  .project-page .lab-workspace,
+  .project-page .lab-workspace.is-inspector-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-page .lab-inspector {
+    position: static;
+    width: 100%;
+  }
+}
+
+@media (max-width: 460px) {
+  .project-page {
+    --lab-actionbar-reserve: 236px;
+  }
+
+  .project-page .lab-reading-surface {
+    padding: 18px 16px;
+  }
+
+  .project-task-meta,
+  .project-score-grid,
+  .project-case .io {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

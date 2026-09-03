@@ -1,0 +1,137 @@
+[
+  {
+    "id": "ds-generalized-list-001",
+    "title": "广义表与线性表的区别",
+    "source": "王道《数据结构》考研复习指导",
+    "difficulty": "★",
+    "topics": ["广义表", "基本概念"],
+    "stem": "广义表与线性表的本质区别在于（ ）。",
+    "options": [
+      "广义表的元素既可以是原子，也可以是子表；线性表的元素只能是原子",
+      "广义表不能是空表",
+      "线性表不能共享或递归引用自身",
+      "广义表只能采用链式存储"
+    ],
+    "answer": 0,
+    "explanation": "广义表的元素既可以是原子也可以是子表，这是它与线性表（元素只能是原子）的本质区别；$E=(a,E)$ 说明广义表可被共享和递归引用，从而表示层次甚至无限的结构。"
+  },
+  {
+    "id": "ds-generalized-list-002",
+    "title": "表头与表尾的定义",
+    "source": "王道《数据结构》考研复习指导",
+    "difficulty": "★",
+    "topics": ["广义表", "表头", "表尾"],
+    "stem": "下面关于广义表的说法中，不正确的是（ ）。",
+    "options": [
+      "广义表的表头总是一个广义表",
+      "广义表的表尾总是一个广义表",
+      "广义表难以用顺序存储结构表示",
+      "广义表可以是一个多层次的结构"
+    ],
+    "answer": 0,
+    "explanation": "表尾是去掉表头后剩余元素组成的表，一定是广义表；但表头是第一个元素，可以是原子（如 $(a,b)$ 的表头是原子 $a$），也可以是子表，不一定总是广义表。"
+  },
+  {
+    "id": "ds-generalized-list-003",
+    "title": "表头的取值",
+    "source": "王道《数据结构》考研复习指导",
+    "difficulty": "★",
+    "topics": ["广义表", "表头"],
+    "stem": "广义表 $((a,b,c),d)$ 的表头是（ ）。",
+    "options": ["$a$", "$()$", "$(a,b,c,d)$", "$(a,b,c)$"],
+    "answer": 3,
+    "explanation": "表头是非空广义表的第一个元素，这里第一个元素是子表 $(a,b,c)$，故表头为 $(a,b,c)$。"
+  },
+  {
+    "id": "ds-generalized-list-004",
+    "title": "Tail 运算的结果",
+    "source": "王道《数据结构》考研复习指导",
+    "difficulty": "★",
+    "topics": ["广义表", "表尾"],
+    "stem": "广义表 $L=(a,(b,c))$，进行 $Tail(L)$ 操作后的结果为（ ）。",
+    "options": ["$c$", "$b,c$", "$(b,c)$", "$((b,c))$"],
+    "answer": 3,
+    "explanation": "表尾是去掉表头 $a$ 后剩余元素组成的表：剩余元素只有子表 $(b,c)$，但还要套在原表里，故 $Tail(L)=((b,c))$，比直觉多一层括号。"
+  },
+  {
+    "id": "ds-generalized-list-005",
+    "title": "长度与深度的计算",
+    "source": "王道《数据结构》考研复习指导",
+    "difficulty": "★★",
+    "topics": ["广义表", "长度", "深度"],
+    "stem": "设广义表 $L=((a,b,c),d)$，则 $L$ 的长度和深度分别为（ ）。",
+    "options": ["1 和 2", "2 和 2", "2 和 3", "1 和 3"],
+    "answer": 1,
+    "explanation": "长度数最外层元素个数：$L$ 有 $(a,b,c)$ 与 $d$ 两个元素，长度 2；深度数括号最大层次：最外层一层 + 内层 $(a,b,c)$ 一层 = 2。"
+  },
+  {
+    "id": "ds-generalized-list-006",
+    "title": "深度的计算",
+    "source": "王道《数据结构》考研复习指导",
+    "difficulty": "★★",
+    "topics": ["广义表", "深度"],
+    "stem": "设广义表 $F=(a,(b,(c,d)))$，则 $depth(F)$ 为（ ）。",
+    "options": ["1", "2", "3", "4"],
+    "answer": 2,
+    "explanation": "最内层 $(c,d)$ 深度为 1，$(b,(c,d))$ 深度为 2，最外层再加一层，故 $depth(F)=3$。"
+  },
+  {
+    "id": "ds-generalized-list-007",
+    "title": "Head 与 Tail 的组合运算",
+    "source": "严蔚敏《数据结构》习题",
+    "difficulty": "★★★",
+    "topics": ["广义表", "表头", "表尾"],
+    "stem": "设广义表 $A=(a,b,(c,d),(e,(f,g)))$，则 $Head(Tail(Head(Tail(Tail(A)))))$ 的值为（ ）。",
+    "options": ["$(g)$", "$(d)$", "$c$", "$d$"],
+    "answer": 3,
+    "explanation": "从内到外拆解：$Tail(A)=(b,(c,d),(e,(f,g)))$；再取 $Tail$ 得 $((c,d),(e,(f,g)))$；取 $Head$ 得 $(c,d)$；取 $Tail$ 得 $(d)$；最后取 $Head$ 得 $d$。"
+  },
+  {
+    "id": "ds-generalized-list-008",
+    "title": "广义表的存储结构",
+    "source": "王道《数据结构》考研复习指导",
+    "difficulty": "★★",
+    "topics": ["广义表", "存储结构"],
+    "stem": "关于广义表的存储，下列说法错误的是（ ）。",
+    "options": [
+      "头尾链表与扩展线性链表都用标志位区分原子与子表",
+      "头尾链表中空表用空指针表示",
+      "扩展线性链表比头尾链表更节省空间",
+      "扩展线性链表用 $next$ 指针串起同一层元素"
+    ],
+    "answer": 2,
+    "explanation": "扩展线性链表每个结点多一个 $next$ 指针，空间开销更大（并非更省）；其余均正确：两种表示都用标志位区分原子与子表、头尾链表中空表用空指针表示、扩展线性链表用 $next$ 串起同层元素便于顺序遍历。"
+  },
+  {
+    "id": "ds-generalized-list-009",
+    "title": "广义表的递归定义",
+    "source": "王道《数据结构》考研复习指导",
+    "difficulty": "★",
+    "topics": ["广义表", "递归", "基本概念"],
+    "stem": "设广义表 $E=(a,E)$，下列说法正确的是（ ）。",
+    "options": [
+      "$E$ 的长度为 2，含原子 $a$ 和它本身的引用，是递归表",
+      "$E$ 是空表",
+      "$E$ 的长度为 1",
+      "$E$ 是不合法的广义表"
+    ],
+    "answer": 0,
+    "explanation": "$E=(a,E)$ 有两个元素：原子 $a$ 和对 $E$ 自身的引用，长度 2，是递归表，可展开为 $(a,(a,(a,\\dots)))$，说明广义表可被递归引用。"
+  },
+  {
+    "id": "ds-generalized-list-010",
+    "title": "用 Head/Tail 取出原子",
+    "source": "王道《数据结构》考研复习指导",
+    "difficulty": "★★★",
+    "topics": ["广义表", "表头", "表尾"],
+    "stem": "设广义表 $L=((x,y,z),a,(u,t,w))$，从 $L$ 中取出原子 $t$ 的运算是（ ）。",
+    "options": [
+      "$Head(Tail(Tail(L)))$",
+      "$Tail(Head(Tail(L)))$",
+      "$Head(Tail(Head(Tail(L))))$",
+      "$Head(Tail(Head(Tail(Tail(L)))))$"
+    ],
+    "answer": 3,
+    "explanation": "$Tail(L)=(a,(u,t,w))$；$Tail(Tail(L))=((u,t,w))$；$Head(Tail(Tail(L)))=(u,t,w)$；$Tail(Head(Tail(Tail(L))))=(t,w)$；$Head(Tail(Head(Tail(Tail(L)))))=t$。"
+  }
+]

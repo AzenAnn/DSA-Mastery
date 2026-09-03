@@ -220,13 +220,13 @@ cd C:\Proj\DSA-Mastery
 先使用环境检查命令：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 如果已安装 GNU Make，也可以使用等价命令：
 
 ```powershell
-make doctor LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
+make doctor LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 ![1786955586099](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955586099.png)
@@ -234,13 +234,13 @@ make doctor LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
 如果环境检查通过，可以运行公开测试：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 使用 Make 时可以运行：
 
 ```powershell
-make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
+make run LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 结果中的 `AC`、`PASS` 和满分会显示为绿色；未通过状态及未满分的实际得分会醒目标出，Project 的待人工评分会显示 `PENDING`。颜色只帮助阅读，不改变判定；如果终端不适合显示颜色，可以在命令末尾加 `--no-color`。没有安装 GNU Make 也不影响使用 `pnpm lab:*` 入口。
@@ -250,13 +250,13 @@ make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication
 也可以只运行示例测试：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --case 001-sample
+pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --case 001-sample
 ```
 
 对应的 Make 命令是：
 
 ```powershell
-make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sample
+make run LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication CASE=001-sample
 ```
 
 ![1786955613245](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955613245.png)
@@ -266,20 +266,20 @@ make run LAB=labs/chapter-01/lab-01-06-sequential-list-deduplication CASE=001-sa
 Project Lab 除了 MSVC，还需要 CMake。可以先检查：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-08/lab-08-05-avl-tree-rotations
+pnpm lab:doctor -- labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 使用 Make 时可以运行：
 
 ```powershell
-make doctor LAB=labs/chapter-08/lab-08-05-avl-tree-rotations
+make doctor LAB=labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 make也可以在对应目录内执行：
 
 ```powershell
-PS C:\Proj\DSA-Mastery> cd labs/chapter-08/lab-08-05-avl-tree-rotations
-PS C:\Proj\DSA-Mastery\labs\chapter-08\lab-08-05-avl-tree-rotations> make doctor
+PS C:\Proj\DSA-Mastery> cd labs/chapter-08/project/P-08-01-avl-tree-rotations
+PS C:\Proj\DSA-Mastery\labs\chapter-08\project\P-08-01-avl-tree-rotations> make doctor
 PASS 环境检查
 平台：win32/x64 · Node v24.19.0
 
@@ -295,25 +295,25 @@ GNU Make 为推荐项而非必装依赖；免 Make 入口： pnpm lab:run -- <la
 然后运行 Project Lab：
 
 ```powershell
-pnpm lab:run -- labs/chapter-08/lab-08-05-avl-tree-rotations
+pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 对应的 Make 命令是：
 
 ```powershell
-make run LAB=labs/chapter-08/lab-08-05-avl-tree-rotations
+make run LAB=labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 也可以运行指定 task 和测试用例：
 
 ```powershell
-pnpm lab:run -- labs/chapter-08/lab-08-05-avl-tree-rotations --task frequency --case weighted
+pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations --task frequency --case weighted
 ```
 
 使用 Make 时可以运行：
 
 ```powershell
-make run LAB=labs/chapter-08/lab-08-05-avl-tree-rotations TASK=frequency CASE=weighted
+make run LAB=labs/chapter-08/project/P-08-01-avl-tree-rotations TASK=frequency CASE=weighted
 ```
 
 ![1786955720690](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955720690.png)

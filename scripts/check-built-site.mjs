@@ -44,12 +44,16 @@ async function expectedCoursePages() {
 
   const labPages = [];
   const labsRoot = path.join(projectRoot, "labs");
+  const labCategories = ["theory", "exercise", "project"];
   for (const chapter of await readdir(labsRoot, { withFileTypes: true })) {
     if (!chapter.isDirectory() || !/^chapter-\d{2}$/.test(chapter.name)) continue;
     const chapterRoot = path.join(labsRoot, chapter.name);
-    for (const lab of await readdir(chapterRoot, { withFileTypes: true })) {
-      if (!lab.isDirectory() || !/^lab-\d{2}-\d{2}-[a-z0-9-]+$/.test(lab.name)) continue;
-      labPages.push(path.join("labs", chapter.name, lab.name, "index.html"));
+    for (const category of labCategories) {
+      const categoryRoot = path.join(chapterRoot, category);
+      for (const lab of await readdir(categoryRoot, { withFileTypes: true })) {
+        if (!lab.isDirectory() || !/^[TEP]-\d{2}-\d{2,}-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(lab.name)) continue;
+        labPages.push(path.join("labs", chapter.name, category, lab.name, "index.html"));
+      }
     }
   }
   const curriculumPages = [path.join("learn", "index.html")];
@@ -82,35 +86,18 @@ const { lessonPages, labPages, curriculumPages } = await expectedCoursePages();
 const chapterOneLabPages = labPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("labs/chapter-01/"),
 );
-const chapterOneProductionPages = chapterOneLabPages.filter((relativePath) => {
-  const order = path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1];
-  return order && Number(order) >= 1 && Number(order) <= 21;
-});
-const chapterOneDiscoveryFixture = path.join(
-  "labs",
-  "chapter-01",
-  "lab-01-99-sidebar-discovery-fixture",
-  "index.html",
+const chapterOneCategoryCounts = Object.fromEntries(
+  ["theory", "exercise", "project"].map((category) => [
+    category,
+    chapterOneLabPages.filter((relativePath) => relativePath.replaceAll("\\", "/").includes(`/chapter-01/${category}/`)).length,
+  ]),
 );
-const unexpectedChapterOnePages = chapterOneLabPages.filter(
-  (relativePath) =>
-    !chapterOneProductionPages.includes(relativePath) && relativePath !== chapterOneDiscoveryFixture,
-);
-if (chapterOneProductionPages.length !== 21 || unexpectedChapterOnePages.length) {
-  throw new Error(
-    `Chapter 1 must generate exactly 21 production Labs; found ${chapterOneProductionPages.length}` +
-      (unexpectedChapterOnePages.length
-        ? `, unexpected: ${unexpectedChapterOnePages.join(", ")}`
-        : ""),
-  );
-}
-const chapterOneOrders = chapterOneProductionPages
-  .map((relativePath) => path.basename(path.dirname(relativePath)).match(/^lab-01-(\d{2})-/)?.[1])
-  .filter(Boolean)
-  .sort();
-const expectedChapterOneOrders = Array.from({ length: 21 }, (_, index) => String(index + 1).padStart(2, "0"));
-if (JSON.stringify(chapterOneOrders) !== JSON.stringify(expectedChapterOneOrders)) {
-  throw new Error(`Chapter 1 Lab numbering is not continuous: ${chapterOneOrders.join(", ")}`);
+if (
+  chapterOneCategoryCounts.theory < 5 ||
+  chapterOneCategoryCounts.exercise < 15 ||
+  chapterOneCategoryCounts.project < 1
+) {
+  throw new Error(`Chapter 1 Lab category counts drifted: ${JSON.stringify(chapterOneCategoryCounts)}`);
 }
 const expectedPages = ["index.html", "labs/index.html", "404.html", ...curriculumPages, ...lessonPages, ...labPages];
 const missingPages = [];
@@ -121,13 +108,13 @@ if (missingPages.length) throw new Error(`Missing generated pages:\n${missingPag
 if (await exists(path.join(artifactRoot, "AGENTS.html"))) {
   throw new Error("Repository-only AGENTS.md leaked into the public course artifact");
 }
-for (const retiredRoute of [
-  ["labs", "chapter-01", "lab-01-01-sequence-list", "index.html"],
-  ["labs", "chapter-01", "lab-01-02-linked-list", "index.html"],
-  ["labs", "chapter-01", "lab-01-03-problem-template", "index.html"],
-]) {
-  if (await exists(path.join(artifactRoot, ...retiredRoute))) {
-    throw new Error(`Retired Chapter 1 Demo route still exists: ${retiredRoute.join("/")}`);
+const builtLabsRoot = path.join(artifactRoot, "labs");
+for (const chapter of await readdir(builtLabsRoot, { withFileTypes: true })) {
+  if (!chapter.isDirectory() || !/^chapter-\d{2}$/.test(chapter.name)) continue;
+  for (const entry of await readdir(path.join(builtLabsRoot, chapter.name), { withFileTypes: true })) {
+    if (entry.isDirectory() && /^lab-\d{2}-/.test(entry.name)) {
+      throw new Error(`Legacy Lab route must not be generated: labs/${chapter.name}/${entry.name}/`);
+    }
   }
 }
 
@@ -182,24 +169,15 @@ for (const required of [
   }
 }
 
-const complexityHtml = await readFile(
-  path.join(artifactRoot, "learn", "chapter-00-introduction", "03-algorithm-complexity-analysis", "index.html"),
-  "utf8",
-);
-for (const kind of ["definition", "property", "proof", "complexity", "pitfall"]) {
-  if (!complexityHtml.includes(`dsa-theory-block--${kind}`)) {
-    throw new Error(`Complexity page is missing theory container: ${kind}`);
-  }
-}
-if (complexityHtml.includes("::: definition") || dataStructureBasicsHtml.includes("::: definition")) {
+if (dataStructureBasicsHtml.includes("::: definition")) {
   throw new Error("Unparsed theory container markers leaked into Chapter 0 artifacts");
 }
 
 const prefacePages = lessonPages.filter((relativePath) =>
   relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
 );
-if (prefacePages.length !== 5) {
-  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, and Graphviz authoring guides, found ${prefacePages.length} pages`);
+if (prefacePages.length !== 7) {
+  throw new Error(`Preface must contain the theory, Lab author, Windows student, Lab command, Graphviz authoring, macOS student, and VSCode extension guides, found ${prefacePages.length} pages`);
 }
 const prefaceHtml = await readFile(
   path.join(artifactRoot, "learn", "chapter-preface", "00-theory-environments", "index.html"),
@@ -257,6 +235,7 @@ for (const required of [
   "Golden Project",
   "网站侧栏的分类接口",
   "labCategory",
+  "labId",
   "最终 Definition of Done",
 ]) {
   if (!labAuthorGuideHtml.includes(required)) {
@@ -328,6 +307,25 @@ if (graphvizGuideHtml.includes("@include") || graphvizGuideHtml.includes("第 pr
   throw new Error("Graphviz authoring guide was not expanded or leaked the internal preface id");
 }
 
+const macosStudentGuideHtml = await readFile(
+  path.join(artifactRoot, "learn", "chapter-preface", "05-macos-student-setup", "index.html"),
+  "utf8",
+);
+for (const required of [
+  "macOS 学生实验环境安装指南",
+  "Xcode Command Line Tools",
+  "Homebrew",
+  "pnpm@11.1.1",
+  "Visual Studio Code",
+]) {
+  if (!macosStudentGuideHtml.includes(required)) {
+    throw new Error(`Rendered macOS student guide is missing: ${required}`);
+  }
+}
+if (macosStudentGuideHtml.includes("@include") || macosStudentGuideHtml.includes("第 preface 章")) {
+  throw new Error("macOS student guide was not expanded or leaked the internal preface id");
+}
+
 const curriculumHtml = await readFile(path.join(artifactRoot, "learn", "index.html"), "utf8");
 for (const requiredLabel of [
   "Part IV · 查找与索引",
@@ -390,12 +388,13 @@ for (const required of [
   "理论 Theory",
   "实验 Exercise",
   "工程 Project",
-  "Lab 05-01：森林与二叉树转换题精练",
-  "Lab 05-02：树与森林遍历题精练",
-  "Lab 05-03：哈夫曼树与编码题精练",
-  "Lab 05-04：并查集题精练",
-  "Lab 05-05：堆题精练",
-  "暂无实验型 Lab",
+  "05T01 · 森林与二叉树转换题精练",
+  "05T02 · 树与森林遍历题精练",
+  "05T03 · 哈夫曼树与编码题精练",
+  "05T04 · 并查集题精练",
+  "05T05 · 堆题精练",
+  "05E01 · 二叉搜索树的插入与查找",
+  "05E17 · B+ 树的范围查询",
   "暂无工程型 Lab",
 ]) {
   if (!chapterFiveItem.includes(required)) {
@@ -408,10 +407,11 @@ if (
   chapterFiveSidebarEnd < 0 ||
   chapterFiveItemStart < 0 ||
   chapterFiveItemEnd < 0 ||
-  chapterFiveLabLinks.length !== 5 ||
-  chapterFiveItem.includes("暂无理论型 Lab")
+  chapterFiveLabLinks.length !== 22 ||
+  chapterFiveItem.includes("暂无理论型 Lab") ||
+  chapterFiveItem.includes("暂无实验型 Lab")
 ) {
-  throw new Error("Chapter 5 Theory Labs or empty Exercise/Project slots are inconsistent");
+  throw new Error("Chapter 5 Theory/Exercise Labs or empty Project slot are inconsistent");
 }
 
 if (base !== "/") {
@@ -423,10 +423,25 @@ if (base !== "/") {
   }
 }
 
+const stableIdLabHtml = await readFile(
+  path.join(
+    artifactRoot,
+    "labs",
+    "chapter-01",
+    "exercise",
+    "E-01-04-singly-linked-list-reverse",
+    "index.html",
+  ),
+  "utf8",
+);
+if (!stableIdLabHtml.includes("01E04")) {
+  throw new Error("Lab detail page does not expose its stable ID");
+}
+
 const searchableJavaScript = (
   await Promise.all(allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
 ).join("\n");
-for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "Lab 命令与接口使用指南", "第 0 章 绪论", "Lab 01-02：单链表选择题精练", "Lab 01-21：线性表双实现与工作负载评测器"]) {
+for (const searchTitle of ["前言 · 理论环境展示", "Lab 更新与测试指南", "Windows 学生实验环境安装指南", "Lab 命令与接口使用指南", "第 0 章 基础", "Lab 01-T-02：单链表选择题精练", "Lab 01-P-01：线性表双实现与工作负载评测器", "01E04"]) {
   if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
 }
 

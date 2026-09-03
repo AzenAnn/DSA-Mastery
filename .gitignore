@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/.pnpm-store/
 /.pnp
 .pnp.*
 .yarn/*
@@ -33,9 +34,18 @@ yarn-error.log*
 
 /dist/
 **/.lab-cache/
+**/solution/*.exe
 /.vitepress/cache/
 /.vitepress/.temp/
 /outputs/
 /work/
 /graphify-out/
 *.tsbuildinfo
+
+# local visual brainstorming previews and server state
+/.superpowers/
+
+# local Trellis task records kept outside the product commit
+/.trellis/tasks/08-31-vscode-stats-dashboard-ui/
+/.trellis/tasks/archive/2026-08/08-31-vscode-exercise-webview-ui/
+/.trellis/tasks/archive/2026-08/08-31-vscode-stats-dashboard-ui/

@@ -320,13 +320,13 @@ $$
 
 ## 配套理论题与 Lab
 
-先做 [Lab 08-03：平衡查找树理论题精练](../../labs/chapter-08/lab-08-03-balanced-tree-quiz/README.md)，用 14 道选择题检查 AVL 的最少结点递推、旋转判型与红黑树性质；进阶完成 [Lab 08-05：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/lab-08-05-avl-tree-rotations/README.md)，观察旋转维护与退化对比。
+先做 [Lab 08-T-03：平衡查找树理论题精练](../../labs/chapter-08/theory/T-08-03-balanced-tree-quiz/README.md)，用 14 道选择题检查 AVL 的最少结点递推、旋转判型与红黑树性质；进阶完成 [Lab 08-P-01：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/project/P-08-01-avl-tree-rotations/README.md)，观察旋转维护与退化对比。
 
 ## 小结
 
 AVL 用精确高度约束获得更矮的树，红黑树用颜色和黑高换取更便宜的更新。两者都依赖旋转保持中序次序，只是触发条件和修复目标不同。掌握它们时，与其背旋转图，不如先找最低失衡位置，再检查路径形状或颜色冲突。
 
-下一篇进入第 9 章，把"一个结点一个关键字"的二叉搜索推广到一次装入多个关键字的[B 树与 B+ 树](../chapter-09-hashing-indexes/01-b-tree-and-b-plus-tree.md)。
+下一篇将把"一个结点一个关键字"的二叉搜索推广到一次装入多个关键字的[B 树与 B+ 树](./04-b-tree-and-b-plus-tree.md)。
 
 ## 练习
 

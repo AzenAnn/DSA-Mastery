@@ -351,11 +351,11 @@ int main() {
 4. 设计一个最小用例，专门验证“扩容后顺序不乱”。
 5. 用栈判断 `([{}])`、`([)]`、`(()` 是否匹配，并说明理由。
 
-完成纸笔练习后，先前往 [Lab 02-01：栈选择题精练](../../labs/chapter-02/lab-02-01-stack-quiz/README.md)检查概念，再依次完成：
+完成纸笔练习后，先前往 [Lab 02-T-01：栈选择题精练](../../labs/chapter-02/theory/T-02-01-stack-quiz/README.md)检查概念，再依次完成：
 
-- [Lab 02-03：验证栈序列](../../labs/chapter-02/lab-02-03-validate-stack-sequences/README.md)：把出栈序列判断落实为 `O(n)` 模拟；
-- [Lab 02-04：最小栈](../../labs/chapter-02/lab-02-04-min-stack/README.md)：用辅助状态实现 `O(1)` 最小值查询；
-- [Lab 02-10：柱状图中最大的矩形](../../labs/chapter-02/lab-02-10-largest-rectangle-histogram/README.md)：学完 2.3 的单调栈后再完成，用单调栈确定每根柱子的左右边界。
+- [Lab 02-E-01：验证栈序列](../../labs/chapter-02/exercise/E-02-01-validate-stack-sequences/README.md)：把出栈序列判断落实为 `O(n)` 模拟；
+- [Lab 02-E-02：最小栈](../../labs/chapter-02/exercise/E-02-02-min-stack/README.md)：用辅助状态实现 `O(1)` 最小值查询；
+- [Lab 02-E-08：柱状图中最大的矩形](../../labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram/README.md)：学完 2.3 的单调栈后再完成，用单调栈确定每根柱子的左右边界。
 
 逆波兰表达式求值改为 [2.3 节的完整例题](./03-applications.md#例题-逆波兰表达式求值)，用于集中学习操作数顺序、非法 token、除零和最终栈基数检查。
 

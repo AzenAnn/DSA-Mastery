@@ -1,0 +1,168 @@
+{
+  "name": "dsa-mastery-labs",
+  "displayName": "DSA Mastery Labs",
+  "description": "在 VSCode 中浏览、作答与提交 DSA Mastery 的代码题、项目题与选择题",
+  "version": "0.1.12",
+  "private": true,
+  "publisher": "dsa-mastery",
+  "license": "SEE LICENSE IN ../../README.md",
+  "engines": {
+    "vscode": "^1.90.0",
+    "node": ">=22.13.0"
+  },
+  "categories": [
+    "Education",
+    "Testing"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "workspaceContains:labs/index.md"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "dsaMastery",
+          "title": "DSA Mastery",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "dsaMastery": [
+        {
+          "id": "dsaMastery.labs",
+          "name": "题目",
+          "contextualTitle": "DSA Mastery 题目"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "dsaMastery.labs",
+        "contents": "当前工作区中没有找到 DSA Mastery 的 labs/ 目录。\n请打开 DSA Mastery 仓库根目录后重试。"
+      }
+    ],
+    "commands": [
+      {
+        "command": "dsaMastery.openLab",
+        "title": "打开题目",
+        "category": "DSA Mastery"
+      },
+      {
+        "command": "dsaMastery.submit",
+        "title": "提交当前题目",
+        "category": "DSA Mastery",
+        "icon": "$(play)"
+      },
+      {
+        "command": "dsaMastery.refreshTree",
+        "title": "刷新题目列表",
+        "category": "DSA Mastery",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "dsaMastery.showHistory",
+        "title": "查看提交历史",
+        "category": "DSA Mastery",
+        "icon": "$(history)"
+      },
+      {
+        "command": "dsaMastery.showStats",
+        "title": "查看做题统计",
+        "category": "DSA Mastery",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "dsaMastery.runDoctor",
+        "title": "检查实验环境",
+        "category": "DSA Mastery"
+      },
+      {
+        "command": "dsaMastery.resetProgress",
+        "title": "重置全部做题进度",
+        "category": "DSA Mastery"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "dsaMastery.showStats",
+          "when": "view == dsaMastery.labs",
+          "group": "navigation@1"
+        },
+        {
+          "command": "dsaMastery.refreshTree",
+          "when": "view == dsaMastery.labs",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "dsaMastery.submit",
+          "when": "view == dsaMastery.labs && (viewItem == dsaMasteryLab || viewItem == dsaMasteryProject)",
+          "group": "inline"
+        },
+        {
+          "command": "dsaMastery.showHistory",
+          "when": "view == dsaMastery.labs && viewItem == dsaMasteryLab",
+          "group": "1_actions"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "dsaMastery.openLab",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "DSA Mastery",
+      "properties": {
+        "dsaMastery.historyLimit": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "每道题保留的提交历史条数，超出后自动删除最旧的源码快照。"
+        },
+        "dsaMastery.nodePath": {
+          "type": "string",
+          "default": "",
+          "description": "判题使用的 Node 可执行文件路径。留空则先尝试 PATH 中的 node，找不到时回退到 VSCode 内置 Node。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "package": "node build.mjs && vsce package --no-dependencies --allow-missing-repository"
+  },
+  "dependencies": {
+    "gray-matter": "4.0.3",
+    "katex": "0.16.11",
+    "markdown-it": "14.3.0"
+  },
+  "devDependencies": {
+    "@types/katex": "0.16.7",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "22.19.19",
+    "@types/vscode": "^1.90.0",
+    "esbuild": "0.25.0",
+    "typescript": "5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AzenAnn/DSA-Mastery.git",
+    "directory": "tools/vscode-extension"
+  },
+  "homepage": "https://azenann.github.io/DSA-Mastery/learn/chapter-preface/06-vscode-extension-guide/"
+}

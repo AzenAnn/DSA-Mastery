@@ -1066,6 +1066,8 @@ input:focus-visible {
   color: var(--course-ink-soft);
   font-size: 15px;
   line-height: 1.85;
+  min-width: 0;
+  overflow-x: clip;
 }
 
 .course-document-layout .vp-doc h2,
@@ -1507,15 +1509,38 @@ input:focus-visible {
   line-height: 1.7;
 }
 
+/* 代码块里的 code 有 white-space:pre 的固定内容宽度，会撑破容器。
+   pre 本身要成为横向滚动容器（overflow-x:auto + max-width:100%），
+   code 再配 max-width:100%，两者共同把长代码行限制在正文列内。 */
+.course-document-layout .vp-doc [class*="language-"] code {
+  max-width: 100%;
+}
+
 .course-document-layout .vp-doc [class*="language-"] pre {
+  max-width: 100%;
+  overflow-x: auto;
   overflow-y: hidden;
 }
 
 .course-document-layout .vp-doc .katex-display,
 .course-document-layout .vp-doc mjx-container[display="true"] {
+  display: block;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 10px 0;
+}
+
+/* 行内公式不撑宽正文：允许在长公式处换行。 */
+.course-document-layout .vp-doc mjx-container:not([display="true"]) {
+  max-width: 100%;
+}
+
+/* 超长公式的 SVG 有固定 ex 宽度（最宽 72ex≈544px），必须让 svg 本身能收缩，
+   否则会撑破 mjx-container 和整页。等比缩放，避免纵向变形。 */
+.course-document-layout .vp-doc mjx-container > svg {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Graphviz/Kroki output stays readable without widening the document column. */
@@ -1878,14 +1903,21 @@ input:focus-visible {
   cursor: pointer;
 }
 
-.course-quiz-hint > .course-quiz-rich,
-.course-quiz-answer-overview > ol { padding: 0 16px 14px; }
+.course-quiz-hint > .course-quiz-rich { padding: 0 16px 14px; }
 
 .course-quiz-answer-overview > ol {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 6px 18px;
   margin: 0;
+  padding: 0 16px 14px;
+  list-style: none;
+}
+
+.course-quiz-answer-overview > ol > li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35em;
 }
 
 .course-quiz-heading-content {
@@ -2423,6 +2455,15 @@ input:focus-visible {
 
   .course-quiz-feedback {
     padding: 15px 14px;
+  }
+
+  /* 窄屏放宽表格单元格最小宽度，避免多列表格（主定理表 7 列）
+     撑破 375px 视口的正文列。min-width:0 允许单元格收缩，配合
+     table 的 overflow-x:auto 让内容在表格内横向滚动。 */
+  .course-document-layout .vp-doc th,
+  .course-document-layout .vp-doc td {
+    min-width: 0;
+    padding: 8px 10px;
   }
 }
 

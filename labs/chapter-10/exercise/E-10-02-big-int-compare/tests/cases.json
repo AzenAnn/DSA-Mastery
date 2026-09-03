@@ -1,0 +1,37 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-same-length",
+    "input": "tests/002-same-length.in",
+    "expected": "tests/002-same-length.out",
+    "points": 20,
+    "tags": ["normal"]
+  },
+  {
+    "id": "003-front-runner",
+    "input": "tests/003-front-runner.in",
+    "expected": "tests/003-front-runner.out",
+    "points": 20,
+    "tags": ["normal"]
+  },
+  {
+    "id": "004-huge",
+    "input": "tests/004-huge.in",
+    "expected": "tests/004-huge.out",
+    "points": 25,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-single",
+    "input": "tests/005-single.in",
+    "expected": "tests/005-single.out",
+    "points": 15,
+    "tags": ["boundary"]
+  }
+]

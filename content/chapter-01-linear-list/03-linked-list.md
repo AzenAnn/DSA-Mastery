@@ -35,20 +35,43 @@ status: "draft"
 
 假设顺序表当前保存：
 
-```text
-下标     0    1    2    3
-元素    10   20   30   40
+```graphviz
+digraph SequentialInsertBefore {
+  graph [bgcolor="#ffffff"];
+  node [shape=plain, fontname="sans-serif"];
+
+  state [label=<
+    <table border="0" cellborder="1" color="#64748b" cellspacing="0" cellpadding="10">
+      <tr><td border="0" align="right"><b>下标</b></td><td>0</td><td>1</td><td>2</td><td>3</td></tr>
+      <tr><td border="0" align="right"><b>元素</b></td><td bgcolor="#eef2ff">10</td><td bgcolor="#eef2ff">20</td><td bgcolor="#eef2ff">30</td><td bgcolor="#eef2ff">40</td></tr>
+    </table>
+  >];
+}
 ```
+<!-- diagram id="sequential-insert-before" caption="在下标 1 插入 15 之前，顺序表按下标 0 到 3 连续保存 10、20、30、40" -->
 
 要在位置 `1` 插入 `15`，必须先把 `20、30、40` 依次向右移动：
 
-```text
-[10, 20, 30, 40, _]
-[10, 20, 30, 40, 40]
-[10, 20, 30, 30, 40]
-[10, 20, 20, 30, 40]
-[10, 15, 20, 30, 40]
+```graphviz
+digraph SequentialInsertShiftTrace {
+  rankdir=TB;
+  graph [ranksep=0.38, bgcolor="#ffffff"];
+  node [shape=plain, fontname="sans-serif"];
+  edge [color="#475569", fontcolor="#334155", fontname="sans-serif", arrowsize=0.7];
+
+  step0 [label=<<table border="0" cellborder="1" color="#64748b" cellspacing="0" cellpadding="8"><tr><td>10</td><td>20</td><td>30</td><td>40</td><td bgcolor="#f8fafc">空槽</td></tr></table>>];
+  step1 [label=<<table border="0" cellborder="1" color="#64748b" cellspacing="0" cellpadding="8"><tr><td>10</td><td>20</td><td>30</td><td>40</td><td bgcolor="#fff7ed"><b>40</b></td></tr></table>>];
+  step2 [label=<<table border="0" cellborder="1" color="#64748b" cellspacing="0" cellpadding="8"><tr><td>10</td><td>20</td><td>30</td><td bgcolor="#fff7ed"><b>30</b></td><td>40</td></tr></table>>];
+  step3 [label=<<table border="0" cellborder="1" color="#64748b" cellspacing="0" cellpadding="8"><tr><td>10</td><td>20</td><td bgcolor="#fff7ed"><b>20</b></td><td>30</td><td>40</td></tr></table>>];
+  step4 [label=<<table border="0" cellborder="1" color="#64748b" cellspacing="0" cellpadding="8"><tr><td>10</td><td bgcolor="#ecfdf5"><b>15</b></td><td>20</td><td>30</td><td>40</td></tr></table>>];
+
+  step0 -> step1 [label="把 40 右移到空槽"];
+  step1 -> step2 [label="把 30 右移一位"];
+  step2 -> step3 [label="把 20 右移一位"];
+  step3 -> step4 [label="在下标 1 写入 15"];
+}
 ```
+<!-- diagram id="sequential-insert-shift-trace" caption="在下标 1 插入 15 时，必须先从尾部开始把 40、30、20 依次右移" -->
 
 若当前长度为 `n`，在位置 `i` 插入需要移动 `n-i` 个元素；删除则要把后面的元素向左补位。在大规模数据中反复进行头部或中间插删，移动成本会成为主要开销。
 
@@ -69,13 +92,24 @@ struct Node {
 
 三个节点的物理地址可能相距很远，但 `next` 仍能建立稳定的逻辑顺序：
 
-```text
-head
-  │
-  ▼
-[10 | •] ─────► [20 | •] ─────► [30 | null]
-0x1200          0x8A40          0x31F0
+```graphviz
+digraph LinkedListLogicalOrder {
+  rankdir=LR;
+  graph [nodesep=0.45, bgcolor="#ffffff"];
+  node [shape=record, style="filled", color="#64748b", fillcolor="#f8fafc", fontcolor="#0f172a", fontname="sans-serif", margin="0.12,0.08"];
+  edge [color="#4655e8", fontcolor="#334155", fontname="sans-serif", arrowsize=0.8];
+
+  head [shape=plain, label="head"];
+  n10 [label="{10|next}", xlabel="0x1200"];
+  n20 [label="{20|next}", xlabel="0x8A40"];
+  n30 [label="{30|null}", xlabel="0x31F0"];
+
+  head -> n10;
+  n10 -> n20;
+  n20 -> n30;
+}
 ```
+<!-- diagram id="linked-list-logical-order" caption="三个节点的物理地址彼此离散，但 next 指针仍把它们连接为 10、20、30 的稳定逻辑顺序" -->
 
 这里要刻意分开两个概念：
 
@@ -197,12 +231,35 @@ if (index == 0) {
 
 哨兵节点不保存业务数据，只负责站在所有有效节点之前：
 
-```text
-空表： dummy ─────► null
+```graphviz
+digraph DummyHeadCases {
+  rankdir=TB;
+  graph [nodesep=0.35, ranksep=0.8, bgcolor="#ffffff"];
+  node [shape=box, style="rounded,filled", color="#64748b", fillcolor="#f8fafc", fontcolor="#0f172a", fontname="sans-serif", margin="0.14,0.08"];
+  edge [color="#4655e8", fontcolor="#334155", fontname="sans-serif", arrowsize=0.75];
 
-非空： dummy ─────► [10 | •] ─────► [20 | null]
-        永远存在       第 0 个有效节点
+  empty_title [shape=plain, label="空表"];
+  empty_dummy [label="dummy", color="#4655e8", fillcolor="#eef2ff"];
+  empty_null [shape=plain, label="null"];
+  { rank=same; empty_title; empty_dummy; empty_null; }
+  empty_title -> empty_dummy [style=invis];
+  empty_dummy -> empty_null;
+
+  full_title [shape=plain, label="非空"];
+  full_dummy [label="dummy\n永远存在", color="#4655e8", fillcolor="#eef2ff"];
+  n10 [label="10 | next", xlabel="第 0 个有效节点"];
+  n20 [label="20 | null"];
+  full_null [shape=plain, label="null"];
+  { rank=same; full_title; full_dummy; n10; n20; full_null; }
+  full_title -> full_dummy [style=invis];
+  full_dummy -> n10;
+  n10 -> n20;
+  n20 -> full_null;
+
+  empty_title -> full_title [style=invis, weight=10];
+}
 ```
+<!-- diagram id="dummy-head-cases" caption="dummy 节点在空表和非空表中始终存在，使第 0 个有效节点之前总有统一的前驱" -->
 
 这样，第 `i` 个有效节点之前总有一个节点：
 
@@ -327,11 +384,27 @@ public:
 
 给单链表增加 `tail_` 后，尾部追加可以直接接在 `tail_` 后面；但删除尾节点仍需要找到它的前驱：
 
-```text
-head ─► [10] ─► [20] ─► [30] ─► null
-                    ▲       ▲
-               必须找到    tail
+```graphviz
+digraph SinglyLinkedTailPredecessor {
+  rankdir=LR;
+  graph [nodesep=0.4, bgcolor="#ffffff"];
+  node [shape=box, style="rounded,filled", color="#64748b", fillcolor="#f8fafc", fontcolor="#0f172a", fontname="sans-serif", margin="0.14,0.08"];
+  edge [color="#4655e8", fontcolor="#334155", fontname="sans-serif", arrowsize=0.75];
+
+  head [shape=plain, label="head"];
+  n10 [label="10"];
+  n20 [label="20"];
+  n30 [label="30"];
+  null_node [shape=plain, label="null"];
+  predecessor_note [shape=note, label="删除尾节点前\n必须找到前驱", color="#c2410c", fillcolor="#fff7ed"];
+  tail_note [shape=plain, label="tail"];
+
+  head -> n10 -> n20 -> n30 -> null_node;
+  predecessor_note -> n20 [style=dashed, color="#c2410c", constraint=false];
+  tail_note -> n30 [style=dashed, color="#4655e8", constraint=false];
+}
 ```
+<!-- diagram id="singly-linked-tail-predecessor" caption="tail 只定位尾节点 30；要删除它，单链表仍必须从 head 出发找到前驱节点 20" -->
 
 `tail_` 只告诉我们“尾节点是谁”，没有告诉我们“谁指向尾节点”。因此，除非调用者已经持有前驱，否则尾删仍需从头遍历，复杂度为 `O(n)`。
 
@@ -360,18 +433,31 @@ target->next->prev = target->prev;
 
 只使用一个哨兵，就能同时表达头、尾与空表：
 
-```text
-空表：
-        ┌────────────────────┐
-        ▼                    │
-    sentinel ────────────────┘
-    next = prev = sentinel
+```graphviz
+digraph CircularSentinelCases {
+  rankdir=TB;
+  graph [nodesep=0.35, ranksep=0.8, bgcolor="#ffffff"];
+  node [shape=box, style="rounded,filled", color="#64748b", fillcolor="#f8fafc", fontcolor="#0f172a", fontname="sans-serif", margin="0.14,0.08"];
+  edge [color="#4655e8", fontcolor="#334155", fontname="sans-serif", arrowsize=0.7];
 
-非空：
-    sentinel ⇄ [10] ⇄ [20] ⇄ [30]
-        ▲                         │
-        └─────────────────────────┘
+  empty_sentinel [label="空表 sentinel\nnext = prev = sentinel", color="#4655e8", fillcolor="#eef2ff"];
+  empty_sentinel -> empty_sentinel [dir=both, label="自环"];
+
+  full_sentinel [label="非空 sentinel", color="#4655e8", fillcolor="#eef2ff"];
+  n10 [label="10"];
+  n20 [label="20"];
+  n30 [label="30"];
+  { rank=same; full_sentinel; n10; n20; n30; }
+
+  full_sentinel -> n10 [dir=both, label="next / prev"];
+  n10 -> n20 [dir=both];
+  n20 -> n30 [dir=both];
+  n30 -> full_sentinel [dir=both, constraint=false, label="闭环"];
+
+  empty_sentinel -> full_sentinel [style=invis, weight=10];
+}
 ```
+<!-- diagram id="circular-sentinel-cases" caption="同一个 sentinel 在空表时自环，在非空表时与首尾节点组成双向闭环" -->
 
 - `sentinel_.next` 是首个有效节点；
 - `sentinel_.prev` 是最后一个有效节点；
@@ -524,9 +610,9 @@ T_{\text{operation}}
 + T_{\text{relink}}
 $$
 
-- 输入是下标 `i`：通常要先遍历，`T_{\text{locate}} = O(n)`；
-- 输入是有效节点或前驱指针：定位已由调用者完成，`T_{\text{locate}} = O(1)`；
-- 已知相邻节点后，修改有限条链接，`T_{\text{relink}} = O(1)`。
+- 按下标 $i$ 输入通常需遍历，定位成本 $T_{\text{locate}} = O(n)$
+- 若输入是有效节点或前驱指针，定位已由调用者完成，则定位成本为 $O(1)$
+- 已知相邻节点后，修改有限条链接，重新链接成本 $T_{\text{relink}} = O(1)$
 
 所以“链表插入删除是 `O(1)`”缺少重要前提。更准确的说法是：
 
@@ -622,4 +708,4 @@ left->next = node;
 5. 防范悬空指针。节点释放后，旧地址不能再读取；工程中常用受控迭代器、句柄或明确生命周期约束。
 :::
 
-接下来完成 [Lab 01-09：单链表逆置](../../labs/chapter-01/lab-01-09-singly-linked-list-reverse/README.md)，用可运行测试覆盖空表、单节点和多节点链接修改。下一篇将把这些实现放到同一张决策表中：[1.4 比较与权衡](./04-comparison-and-selection.md)。
+接下来完成 [Lab 01-E-04：单链表逆置](../../labs/chapter-01/exercise/E-01-04-singly-linked-list-reverse/README.md)，用可运行测试覆盖空表、单节点和多节点链接修改。下一篇将把这些实现放到同一张决策表中：[1.4 比较与权衡](./04-comparison-and-selection.md)。

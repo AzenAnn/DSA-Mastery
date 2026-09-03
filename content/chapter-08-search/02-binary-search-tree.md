@@ -327,7 +327,7 @@ $$
 
 ## 配套理论题与 Lab
 
-先做 [Lab 08-02：二叉排序树理论题精练](../../labs/chapter-08/lab-08-02-bst-theory-quiz/README.md)，用 12 道选择题检查插入构造与查找路径判别；再完成 [Lab 08-04：BST 增删查与边界测试](../../labs/chapter-08/lab-08-04-bst-operations/README.md)，用中序遍历验证每次修改后的不变量，并比较随机插入与有序插入的树高。
+先做 [Lab 08-T-02：二叉排序树理论题精练](../../labs/chapter-08/theory/T-08-02-bst-theory-quiz/README.md)，用 12 道选择题检查插入构造与查找路径判别；再完成 [Lab 08-E-01：BST 增删查与边界测试](../../labs/chapter-08/exercise/E-08-01-bst-operations/README.md)，用中序遍历验证每次修改后的不变量，并比较随机插入与有序插入的树高。
 
 ## 小结
 

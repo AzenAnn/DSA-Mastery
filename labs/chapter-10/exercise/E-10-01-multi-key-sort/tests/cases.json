@@ -1,0 +1,37 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-tie-total",
+    "input": "tests/002-tie-total.in",
+    "expected": "tests/002-tie-total.out",
+    "points": 20,
+    "tags": ["normal", "tie"]
+  },
+  {
+    "id": "003-tie-chinese",
+    "input": "tests/003-tie-chinese.in",
+    "expected": "tests/003-tie-chinese.out",
+    "points": 25,
+    "tags": ["normal", "tie"]
+  },
+  {
+    "id": "004-less-than-five",
+    "input": "tests/004-less-than-five.in",
+    "expected": "tests/004-less-than-five.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-full-score",
+    "input": "tests/005-full-score.in",
+    "expected": "tests/005-full-score.out",
+    "points": 20,
+    "tags": ["boundary", "tie"]
+  }
+]

@@ -10,12 +10,13 @@ content/
 │   ├── 00-theory-environments.md
 │   ├── 01-lab-authoring-guide.md
 │   ├── 02-windows-student-setup.md
-│   └── 03-lab-cli-command-guide.md
+│   ├── 03-lab-cli-command-guide.md
+│   └── 05-macos-student-setup.md
 ├── chapter-00-introduction/
 │   ├── 00-overview.md
 │   ├── 01-data-structure-basics.md
-│   ├── 02-memory-perspective.md
-│   └── 03-algorithm-complexity-analysis.md
+│   ├── 02-time-and-space-complexity.md
+│   └── 03-memory-perspective.md
 └── chapter-01-linear-list/
     ├── 00-overview.md
     ├── 01-abstract-data-type.md

@@ -1,177 +1,114 @@
-# DSA Mastery
+<p align="center">
+  <img src="./public/og.png" alt="DSA Mastery：学透、做实、用活" width="100%" />
+</p>
 
-> 把理论、实现、实验与问题训练连成一条完整路径，帮助课程学习者扎实掌握数据结构与算法。
+<h1 align="center">DSA Mastery</h1>
 
-DSA Mastery 是两名学生共同维护、面向课程学习者的数据结构与算法理论与实验教程。它不只帮助读者记住定义或通过几次作业，而是沿着“理解概念 → 推导性质与复杂度 → 独立实现 → 设计测试 → 解决典型问题”的路径，建立能够应对课堂、考试、实验和综合应用的扎实能力。
+<p align="center">
+  <strong>学透 · 做实 · 用活</strong>
+</p>
 
-两名维护者通过写作、实现、复现与交叉 Review 为内容提供持续的质量控制；这是项目的生产方式，不是最终目的。最终发布面向同学和其他读者，希望他们能够把理论理解与实验能力真正结合，在学校的数据结构与算法课程中达到高水平，并为后续算法学习打下可靠基础。
+<p align="center">
+  面向大学课程的数据结构与算法理论与实验教程。<br />
+  把抽象概念讲清楚，也把动手实践真正落到代码与实验中。
+</p>
 
-当前是用于团队讨论的 **Demo / MVP**，重点是用第 0、1 章验证这套教程结构是否清楚、实验是否可复现、网站是否适合持续阅读，而不是一次性做完一本教材。
+<p align="center">
+  <a href="https://azenann.github.io/DSA-Mastery/"><strong>进入在线课程</strong></a>
+  ·
+  <a href="https://azenann.github.io/DSA-Mastery/learn/">查看课程地图</a>
+  ·
+  <a href="https://azenann.github.io/DSA-Mastery/labs/">浏览全部 Labs</a>
+  ·
+  <a href="./CONTRIBUTING.md">参与贡献</a>
+</p>
 
-在线课程网站：[https://azenann.github.io/DSA-Mastery/](https://azenann.github.io/DSA-Mastery/)
+<p align="center">
+  <a href="https://github.com/AzenAnn/DSA-Mastery/actions/workflows/pages.yml">
+    <img src="https://github.com/AzenAnn/DSA-Mastery/actions/workflows/pages.yml/badge.svg" alt="GitHub Pages 构建状态" />
+  </a>
+</p>
 
-## 希望读者最终做到
+---
 
-- 准确说明核心概念、ADT、表示方法与关键不变量，而不是只背结论。
-- 独立推导典型操作和算法的时间、空间复杂度，并说清分析前提。
-- 从接口约定出发完成实现，处理正常、边界与错误输入。
-- 用测试和小型实验比较不同表示与算法的取舍。
-- 把所学方法迁移到课程题目、综合实验和新的问题情境中。
+## 从“知道”到“会做”
 
-## Demo 已包含
+数据结构与算法不只是定义、公式和模板。真正困难的地方，是看懂一个结构为什么这样设计，并把它变成能够正确运行的程序。
 
-- 第 0 章“绪论”：数据结构基础概念、算法复杂度与分析方法。
-- 第 1 章“线性表”：ADT、顺序表与链表的基础内容，以及 5 个理论 Quiz、15 个编程实验。
-- Quiz、Program、Project 三类统一 Lab 工具链；章节侧栏从内容索引自动生成分类目录。
-- VitePress 自动渲染的教程网站：章节导航、中文搜索、深色模式、MathJax 公式、代码复制与前后页跳转等。
-- 项目蓝图、两人轮换协作、章节完成标准和更新方法。
+DSA Mastery 将课程讲解与实验练习放在同一个学习入口中：读完一个主题后，可以继续完成对应的概念题、编程练习或综合实验，让理论与实践彼此衔接。
 
-## 快速开始
+| 理论理解 | 动手实现 | 多层练习 |
+| --- | --- | --- |
+| 从定义、抽象数据类型与关键性质出发，理解结构和算法背后的设计取舍。 | 使用 C++ 完成核心结构与算法，把纸面过程转化为可以运行的程序。 | 通过 Theory、Exercise 与 Project 三类 Lab，承接不同阶段的学习目标。 |
 
-需要 Node.js `>= 22.13.0`。
+## 课程内容
+
+<p align="center">
+  <strong>60+ 教材页面</strong>
+  &nbsp;·&nbsp;
+  <strong>100+ Lab</strong>
+</p>
+
+课程从基础概念与线性结构出发，逐步进入树、图、查找、排序和算法方法。内容仍在持续完善；尚未完成的页面会明确标注状态，不把草稿包装成完成品。
+
+<p align="center">
+  <img src="./public/readme/course-panorama.png" alt="从数组、链表到树、图、查找与排序的课程全景插图" width="100%" />
+</p>
+
+| 学习主题 | 已覆盖方向 |
+| --- | --- |
+| 基础与线性结构 | 绪论、线性表、栈与队列、字符串、数组与矩阵 |
+| 树与图 | 树与二叉树、树的应用、图的基础、存储、遍历与应用 |
+| 查找与排序 | 查找、基础排序、高效排序与外部排序 |
+| 算法方法 | 贪心算法、动态规划，以及围绕课程主线持续补充的练习与实验 |
+
+完整章节安排请前往[课程地图](https://azenann.github.io/DSA-Mastery/learn/)，也可以直接从[在线课程首页](https://azenann.github.io/DSA-Mastery/)开始阅读。
+
+## 三类 Lab
+
+Lab 不是教材末尾的附属材料，而是用于检查理解、练习实现和完成综合任务的独立学习单元。
+
+<p align="center">
+  <img src="./public/readme/lab-modes.png" alt="概念判断、程序实现与综合项目三类 Lab 的学习场景插图" width="100%" />
+</p>
+
+| Theory | Exercise | Project |
+| --- | --- | --- |
+| 通过交互选择题和概念辨析，检查术语、性质与关键结论。 | 通过可编译、可运行的 C++ 任务，练习核心结构、算法和边界处理。 | 通过包含多个任务与依赖关系的综合实验，组织完整的问题解决过程。 |
+
+你可以在 [Labs 目录](https://azenann.github.io/DSA-Mastery/labs/)中按章节和类型选择练习。
+
+## 开始学习
+
+### 在线阅读
+
+推荐直接访问[在线课程](https://azenann.github.io/DSA-Mastery/)。课程地图、教材页面和 Labs 已经整理在同一个网站中，无需先配置本地环境。
+
+### 获取仓库
 
 ```bash
-corepack enable
-pnpm install --frozen-lockfile
-pnpm run dev
+git clone https://github.com/AzenAnn/DSA-Mastery.git
 ```
 
-仓库使用 Corepack 固定的 pnpm `11.1.1`。日常检出后使用 `pnpm install --frozen-lockfile` 获得一致依赖；只有主动新增或更新依赖时才用 `pnpm install`，并提交更新后的 `pnpm-lock.yaml`。开发服务只监听 `127.0.0.1`；启动后打开终端显示的本地地址。提交改动前运行：
+需要在 Windows 上配置 Git、Node.js、pnpm、C++ 编译器或 VS Code 时，请按照站内的 [Windows 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/02-windows-student-setup/)完成准备。
 
-```bash
-pnpm test
-```
+## 参与贡献
 
-`pnpm test` 会串行执行内容校验、Vue/TypeScript 检查、ESLint、临时内容自动发现、VitePress 生产构建和最终产物审计。`validate:content` 会检查必填字段、章节顺序和 Markdown 相对 `.md` 链接。涉及 Pages base、导航或主题时，还需按 [迁移与回滚说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)运行 `pnpm run test:pages`。
+欢迎通过 Issue 提交勘误、实验建议和章节改进，也欢迎贡献能够帮助学习者理解概念或完成实践的内容。
 
-做 C++ Lab 时，Windows、Linux 与 macOS 的首选入口是进入题目目录后运行 `make run`；Windows 未安装 GNU Make 时，使用 `pnpm lab:run -- <lab-path>`。环境、三类 Lab 结构、判题器、测试数据和 Review 的完整约定见 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md)。
+提交改动前，请先阅读[贡献指南](./CONTRIBUTING.md)。较大的内容或结构调整建议先创建 Issue，说明希望解决的学习问题和预期结果。
 
-## 内容如何自动更新
+如果你准备新增或调整 Lab，请继续阅读 [Lab 更新与测试指南](./docs/LAB_AUTHORING_GUIDE.md)，确保练习类型、运行方式和验收标准与项目保持一致。
 
-教材正文位于 `content/chapter-*/`。网站会扫描这些目录中的 `.md` 文件，并依据 frontmatter 中的 `chapter` 与 `order` 自动排序；URL 由目录和文件名推导，因此新增页面后不需要手工注册路由或修改导航。
+## 许可与使用
 
-最小示例：
+本仓库目前公开可见，但尚未添加明确的内容与代码 License。公开可见不等于获得复制、修改或再分发授权；在许可方案确定之前，如需在其他项目中使用仓库内容，请先取得作者的明确许可。
 
-```md
----
-title: "第 2 章 栈与队列"
-description: "理解受限线性结构及其典型应用。"
-order: 0
-chapter: 2
-chapterTitle: "栈与队列"
-updated: "2026-08-09"
-contributors: ["你的名字"]
-status: "draft"
----
-
-# 第 2 章 栈与队列
-```
-
-Lab 位于 `labs/chapter-*/lab-*/README.md`，除上述字段外还需要：
-
-```yaml
-lab: true
-difficulty: "入门"
-duration: "45～60 分钟"
-```
-
-正文之间可以直接使用 `./01-page.md` 或跨目录相对 `.md` 链接：内容校验先检查源文件存在，VitePress 构建再改写为 Pages-aware 课程 URL。不要在正文中硬编码 `/DSA-Mastery/`。
-
-保存文件后，开发模式会更新页面；正式合并前运行测试即可验证站点。教材协作见 [更新工作流](docs/UPDATE_WORKFLOW.md)，Quiz、Program、Project 的机器接口与完整模板见 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md)。
-
-通过 Review 的改动合并到 `main` 后，GitHub Actions 会自动完成内容检查、网站测试、静态构建与 GitHub Pages 发布。维护者无需提交 `dist/` 等生成目录；发布状态可在仓库的 **Actions** 页面查看。
-
-## 仓库导览
-
-```text
-dsa-mastery/
-├─ .vitepress/                  # VitePress 配置、内容索引与 Vue 主题
-│  ├─ config.ts                # 路由、Markdown、搜索、Pages base
-│  ├─ content-index.ts         # 构建期课程索引
-│  ├─ content.data.ts          # Vue 数据加载器
-│  └─ theme/                   # 默认主题扩展与品牌组件
-├─ index.md                     # 品牌首页入口
-├─ content/                     # 教材 Markdown（内容单一事实来源）
-│  ├─ chapter-00-introduction/
-│  └─ chapter-01-linear-list/
-├─ labs/                        # 分章节实验说明与后续可运行材料
-│  ├─ index.md                 # Lab 目录入口
-│  ├─ chapter-00/
-│  └─ chapter-01/
-├─ public/                      # 网站静态资源
-├─ scripts/                     # 内容、自动发现与静态产物检查
-├─ tools/lab/                   # 统一 Lab CLI、判题器与共享 Make 规则
-├─ schemas/                     # Lab、Quiz、Cases、Task 的 v1 Schema
-├─ tests/                       # Pages 最终产物浏览器测试
-├─ .trellis/                    # 团队任务、规范与协作工作流
-├─ .agents/、.codex/            # Trellis 提供的 Agent/Codex 集成
-├─ docs/
-│  ├─ PROJECT_BLUEPRINT.md      # 项目定位、架构、路线图与风险
-│  ├─ UPDATE_WORKFLOW.md        # 日常新增章节、Lab 与 Review 流程
-│  ├─ LAB_AUTHORING_GUIDE.md    # 三类 Lab 的创建、运行、评分与迁移手册
-│  ├─ LAB_MIGRATION_TRACKER.md  # README-only Lab 的渐进迁移清单
-│  ├─ TRELLIS_ONBOARDING.md     # 团队任务与规范入门
-│  ├─ VITEPRESS_MIGRATION.md    # 迁移结果、已知风险与回滚
-│  └─ CLEANUP_REPORT.md         # 旧栈删除证据与恢复边界
-└─ .github/                     # 协作模板与 GitHub Pages 自动发布
-```
-
-建议从以下入口开始：
-
-- 想读教材：访问[在线课程网站](https://azenann.github.io/DSA-Mastery/)，或进入 `content/` 阅读 Markdown。
-- 想做实验：进入 `labs/`，按 Lab 的目标、步骤和验收清单完成。
-- 想参与更新：先读 [CONTRIBUTING.md](CONTRIBUTING.md)、[更新工作流](docs/UPDATE_WORKFLOW.md) 和 [Trellis 协作入门](docs/TRELLIS_ONBOARDING.md)。
-- 想新增或迁移 Lab：按 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md) 使用统一 Schema、脚手架、Make 与评分工作流。
-- 想理解长期规划：阅读 [项目蓝图](docs/PROJECT_BLUEPRINT.md)。
-- 想了解站点架构、Pages 验证或回滚：阅读 [VitePress 迁移说明](docs/VITEPRESS_MIGRATION.md)。
-
-## Single Source of Truth
-
-```text
-content/chapter-*/*.md ─────► 教程网站
-     │                            │
-     ├─ 当前：人工校对 + 自动构建 ┤
-     └─ 未来：统一导出流程 ──────► PDF / 全书归档
-
-labs/**/README.md ──────────► Lab 页面与实验入口
-labs 中的 manifest/源码/测试 ─► 统一 CLI、Make、评分与质量验证
-```
-
-原则很简单：
-
-- 教材内容只改 Markdown，不直接修改构建产物。
-- 网站代码负责“如何展示”，Markdown 负责“讲什么”。
-- 完整实现、测试和基准测试留在 Lab/代码目录，正文只保留关键片段与解释。
-- PDF 与 LaTeX 暂不纳入 Demo；以后如引入，应从 Markdown 自动生成，避免双份维护。
-
-## 协作方式
-
-两位核心维护者按章轮换：一章由 A 担任 Chapter Owner、B 担任 Review Owner，下一章交换。Owner 负责把理论、示例和 Lab 串成完整学习体验；Reviewer 必须亲自复现、测试并审阅正确性。作者不能在没有另一人批准时自行合并。
-
-我们只保留 `main` 与短生命周期分支，MVP 阶段不增加长期 `dev` 分支。示例：
-
-```text
-chapter/02-stack-queue
-lab/02-stack-simulator
-fix/linear-list-complexity
-```
-
-## 质量底线
-
-每个章节进入 `main` 前需要满足：读者成果明确、目标与术语清楚、关键结论和复杂度经人工核验、示例或 Lab 可复现、练习能够检查理解、引用可追溯、网站构建与测试通过、另一名成员完成 Review。AI 可以起草、找反例和辅助检查，但不能替代知识正确性、版权与最终合并决定的人工确认。
-
-## 现在与以后
-
-**MVP 现在做：** 两章 Markdown、基础网站、少量 Lab、稳定的新增内容规则、轻量 Review。
-
-**验证后再做：** 按课程主线补齐章节、综合练习与可运行 Lab，再逐步加入交互可视化、多语言实现、Benchmark、LaTeX/PDF、版本发布与更完整的质量门禁和预览流程。先证明内容能够形成真实的读者能力，再增加基础设施。
-
-## 贡献与许可
-
-欢迎通过 Issue 提出勘误、实验建议和章节改进。提交内容前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。仓库目前公开可见，但尚未添加明确的内容与代码 License；公开可见不等于获得复制、修改或再分发授权。维护者应尽快共同确定许可方案，在此之前请先取得作者明确许可。
-
-引用教材、论文、网页、图片或开源代码时必须标明来源和许可，尽量用自己的结构与语言讲解，不复制受版权保护的正文或图表。详见 [更新工作流中的版权规则](docs/UPDATE_WORKFLOW.md#8-版权引用与-ai-复核)。
+引用教材、论文、网页、图片或开源代码时，请保留来源与许可信息，并避免复制受版权保护的正文或图表。
 
 ---
 
-真正掌握 > 短期记忆，理论与实验并重，正确性 > 更新速度。
+<p align="center">
+  <strong>准备好开始了吗？</strong><br />
+  <a href="https://azenann.github.io/DSA-Mastery/">进入 DSA Mastery 在线课程</a>
+</p>

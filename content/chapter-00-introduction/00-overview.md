@@ -1,15 +1,15 @@
 ---
-title: "第 0 章 绪论"
+title: "第 0 章 基础"
 description: "建立数据结构的共同语言，学习评价算法时间与空间代价的基本方法。"
 order: 0
 chapter: 0
-chapterTitle: "绪论"
+chapterTitle: "基础"
 updated: "2026-08-10"
 contributors: ["Azen"]
 status: "draft"
 ---
 
-# 第 0 章 绪论
+# 第 0 章 基础
 
 学习数据结构与算法，首先要回答两个问题：**数据应该怎样组织和表示？怎样评价一种解法的效率与资源代价？** 本章围绕这两个问题建立后续课程共用的术语与分析方法。
 
@@ -32,20 +32,20 @@ status: "draft"
 | 学习问题 | 对应文章 | 完成后的可检查能力 |
 | --- | --- | --- |
 | 数据应该怎样组织和表示？ | [0.1 数据结构基础概念](./01-data-structure-basics.md) | 能从逻辑关系、存储方式和基本操作描述一个数据组织方案 |
-| 怎样从内存布局理解操作代价？ | [0.2 从内存视角理解复杂度](./02-memory-perspective.md) | 能说明缓存行与内存布局如何影响单次操作的代价 |
-| 怎样评价算法的效率与资源代价？ | [0.3 算法复杂度与算法分析](./03-algorithm-complexity-analysis.md) | 能说明输入规模，推导简单代码的时间与辅助空间复杂度 |
+| 怎样评价算法的效率与资源代价？ | [0.2 时间与空间复杂度概论](./02-time-and-space-complexity.md) | 能说明输入规模，推导简单代码的时间与辅助空间复杂度 |
+| 怎样从内存布局理解操作代价？ | [0.3 从内存视角理解复杂度](./03-memory-perspective.md) | 能说明缓存行与内存布局如何影响单次操作的代价 |
 
 ## 推荐学习顺序
 
 1. 先学习[数据结构基础概念](./01-data-structure-basics.md)，建立“问题—关系—操作—实现”的共同语言。
-2. 再学习[从内存视角理解复杂度](./02-memory-perspective.md)，从硬件层理解「单次操作代价」这一环。
-3. 然后学习[算法复杂度与算法分析](./03-algorithm-complexity-analysis.md)，掌握比较不同实现的方法。
+2. 再学习[时间与空间复杂度概论](./02-time-and-space-complexity.md)，掌握比较不同实现的方法。
+3. 然后学习[从内存视角理解复杂度](./03-memory-perspective.md)，从硬件层理解「单次操作代价」这一环。
 4. 阅读后完成配套 Lab，用图示、操作计数和实际运行结果检查自己的理解。
 
 ## 配套 Labs
 
-- [Lab 00-01：制作个人 DSA 学习地图](../../labs/chapter-00/lab-00-01-learning-map/README.md)
-- [Lab 00-02：用操作计数观察增长趋势](../../labs/chapter-00/lab-00-02-operation-counter/README.md)
+- [Lab 00-T-01：制作个人 DSA 学习地图](../../labs/chapter-00/theory/T-00-01-learning-map/README.md)
+- [Lab 00-E-01：用操作计数观察增长趋势](../../labs/chapter-00/exercise/E-00-01-operation-counter/README.md)
 
 ## 学习建议
 

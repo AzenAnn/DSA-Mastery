@@ -26,15 +26,12 @@
 - [ ] `lab-02-01-stack-simulator`
 - [ ] `lab-02-02-cycle-queue`
 - [ ] `lab-04-01-binary-tree-traversal`
-- [ ] `lab-07-01-bfs-maze`（由旧物理 Ch.5 路径迁入 Ch.7）
-- [ ] `lab-07-02-dijkstra-path`（由旧物理 Ch.5 路径迁入 Ch.7）
 
 每项迁移必须补齐：stdin/stdout、可编译 starter、经审阅 solution、合计 100 的 normal/boundary/regression cases、薄 Makefile、`verify` 证据和学生包检查。
 
 ## Project 候选
 
-- [ ] `lab-10-01-stability-compare`：可拆“正确性/稳定性验证 + 分析报告”。
-- [ ] `lab-10-02-performance-benchmark`：可拆“基准执行 + 结果分析 + 人工报告”。
+（当前无候选。`lab-10-01-stability-compare` 与 `lab-10-02-performance-benchmark` 已随排序专题 Labs 迁移到 autoLabChapter 机制时删除。）
 
 升级前先证明存在多个可独立验收 task、共享接口或人工分；否则保持 Program，避免为目录复杂度而使用 Project。
 

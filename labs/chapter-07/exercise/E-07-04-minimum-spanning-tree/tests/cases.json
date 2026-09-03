@@ -1,0 +1,65 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 10,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-cycle",
+    "input": "tests/002-cycle.in",
+    "expected": "tests/002-cycle.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "003-multiedge",
+    "input": "tests/003-multiedge.in",
+    "expected": "tests/003-multiedge.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-line",
+    "input": "tests/004-line.in",
+    "expected": "tests/004-line.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-dense",
+    "input": "tests/005-dense.in",
+    "expected": "tests/005-dense.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "006-self-loop",
+    "input": "tests/006-self-loop.in",
+    "expected": "tests/006-self-loop.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "007-single-vertex",
+    "input": "tests/007-single-vertex.in",
+    "expected": "tests/007-single-vertex.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "008-stress",
+    "input": "tests/008-stress.in",
+    "expected": "tests/008-stress.out",
+    "points": 20,
+    "tags": ["stress"]
+  },
+  {
+    "id": "009-multiedge-reversed",
+    "input": "tests/009-multiedge-reversed.in",
+    "expected": "tests/009-multiedge-reversed.out",
+    "points": 10,
+    "tags": ["regression"]
+  }
+]

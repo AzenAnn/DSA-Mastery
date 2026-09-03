@@ -293,7 +293,7 @@ $2^4=16$，所以 $\lfloor\log_2 16\rfloor+1=5$。最多比较 **5** 次，而�
 
 ## 配套理论题
 
-完成 [Lab 08-01：查找理论选择题精练](../../labs/chapter-08/lab-08-01-search-theory-quiz/README.md)，用 15 道选择题检验顺序查找、分块查找与折半查找的前提条件、比较次数与判定树形态。
+完成 [Lab 08-T-01：查找理论选择题精练](../../labs/chapter-08/theory/T-08-01-search-theory-quiz/README.md)，用 15 道选择题检验顺序查找、分块查找与折半查找的前提条件、比较次数与判定树形态。
 
 <style scoped>
 .search-demo-frame {

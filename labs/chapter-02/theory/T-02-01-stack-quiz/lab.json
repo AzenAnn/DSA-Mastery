@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../schemas/lab.schema.json",
+  "schemaVersion": 1,
+  "type": "quiz",
+  "quiz": {
+    "questions": "quiz.json",
+    "questionType": "single-choice",
+    "reveal": "after-submit",
+    "scoring": "points"
+  }
+}

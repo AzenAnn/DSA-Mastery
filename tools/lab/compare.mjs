@@ -2,6 +2,19 @@ export function normalizeNewlines(value) {
   return value.replace(/\r\n?/g, "\n");
 }
 
+function removeOptionalFinalLineBreak(value) {
+  return value.endsWith("\n") ? value.slice(0, -1) : value;
+}
+
+function normalizeExact(value) {
+  return removeOptionalFinalLineBreak(
+    normalizeNewlines(value)
+      .split("\n")
+      .map((line) => line.replace(/[\t ]+$/u, ""))
+      .join("\n"),
+  );
+}
+
 function locationAt(value, offset) {
   const before = value.slice(0, offset);
   const lines = before.split("\n");
@@ -13,8 +26,8 @@ function excerpt(value, offset) {
 }
 
 function exact(expected, actual) {
-  const left = normalizeNewlines(expected);
-  const right = normalizeNewlines(actual);
+  const left = normalizeExact(expected);
+  const right = normalizeExact(actual);
   if (left === right) return { equal: true };
   let index = 0;
   while (index < left.length && index < right.length && left[index] === right[index]) index += 1;
