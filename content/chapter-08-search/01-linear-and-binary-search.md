@@ -291,6 +291,10 @@ $2^4=16$，所以 $\lfloor\log_2 16\rfloor+1=5$。最多比较 **5** 次，而�
 4. 把示例代码改成半开区间 $[low, high)$，写出对应循环条件和边界更新。
 5. 若查询很多而更新很少，排序后折半查找何时能抵消预处理成本？请用查询次数 $q$ 表示总复杂度。
 
+## 配套理论题
+
+完成 [Lab 08-T-01：查找理论选择题精练](../../labs/chapter-08/theory/T-08-01-search-theory-quiz/README.md)，用 15 道选择题检验顺序查找、分块查找与折半查找的前提条件、比较次数与判定树形态。
+
 <style scoped>
 .search-demo-frame {
   display: block;
