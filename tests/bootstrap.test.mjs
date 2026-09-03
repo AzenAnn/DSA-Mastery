@@ -20,6 +20,7 @@ import {
   displayWidth,
   renderPlain,
   renderPixelBanner,
+  renderTuiSummary,
   createInstallSelection,
   decodeChoiceInput,
   handleChoiceKey,
@@ -149,6 +150,30 @@ test("pixel completion banner keeps a fixed-width block layout and colors DSA", 
   assert.equal(stripAnsi(colored), plain);
 });
 
+test("TUI completion summary groups metadata, stages, and result details", () => {
+  const summary = [
+    "DSA Mastery 环境配置：成功",
+    "Profile：basic · 平台：darwin/arm64",
+    "已选择：基础运行环境、Program Lab C++ 环境",
+    "✓ preflight：Node 26.0.0 · 编译器可用",
+    "✓ toolchain：Node/pnpm/编译器 已就绪",
+    "– ide：未选择 VS Code",
+    "✓ smoke：Program reference 验证通过",
+    "仓库：/Users/shuoyuchen/code/DSA-Mastery",
+  ].join("\n");
+  const plain = renderTuiSummary({ summary, width: 72, color: false });
+  const colored = renderTuiSummary({ summary, width: 72, color: true });
+  assert.match(plain, /配置结果/);
+  assert.match(plain, /执行阶段/);
+  assert.match(plain, /仓库\s+\/Users\/shuoyuchen\/code\/DSA-Mastery/);
+  assert.equal(stripAnsi(colored), plain);
+  for (const line of plain.split("\n")) {
+    if (line.startsWith("╭") || line.startsWith("╰") || line.startsWith("├") || line.startsWith("│")) {
+      assert.equal(displayWidth(line), 72, `misaligned line: ${line}`);
+    }
+  }
+});
+
 test("progress UI falls back to stable plain output when stdout is not a TTY", () => {
   const writes = [];
   const ui = createProgressUI({
@@ -169,6 +194,39 @@ test("progress UI falls back to stable plain output when stdout is not a TTY", (
   assert.match(writes.at(-1), /进度：1\/2/);
   assert.equal(output.includes(String.fromCharCode(27)), false);
   assert.equal(output.includes("███"), false);
+});
+
+test("TUI completion renders the summary card and pixel banner together", () => {
+  const previousNoColor = process.env.NO_COLOR;
+  const previousTerm = process.env.TERM;
+  delete process.env.NO_COLOR;
+  process.env.TERM = "xterm";
+  const writes = [];
+  try {
+    const ui = createProgressUI({
+      mode: "tui",
+      stdout: { isTTY: true, columns: 80, write: (value) => writes.push(value) },
+      title: "DSA Mastery 环境配置",
+      profile: "basic",
+      stageNames: ["preflight"],
+      spinner: false,
+    });
+    ui.finish({
+      ok: true,
+      summary: "DSA Mastery 环境配置：成功\nProfile：basic\n✓ preflight：完成",
+    });
+    const output = writes.join("");
+    assert.equal(ui.mode, "tui");
+    assert.match(output, /配置结果/);
+    assert.match(output, /执行阶段/);
+    assert.match(output, /配置结果 · 成功/);
+    assert.match(output, /███/);
+  } finally {
+    if (previousNoColor === undefined) delete process.env.NO_COLOR;
+    else process.env.NO_COLOR = previousNoColor;
+    if (previousTerm === undefined) delete process.env.TERM;
+    else process.env.TERM = previousTerm;
+  }
 });
 
 test("install wizard defaults to Program and derives profile from selected bundles", () => {

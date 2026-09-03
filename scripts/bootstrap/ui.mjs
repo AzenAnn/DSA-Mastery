@@ -236,6 +236,94 @@ export function renderPixelBanner({ width = 88, color = false } = {}) {
   return lines.join("\n");
 }
 
+export function renderTuiSummary({ summary = "", width = 88, color = false } = {}) {
+  const safeWidth = clampWidth(width);
+  const innerWidth = safeWidth - 4;
+  const sourceLines = String(summary ?? "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  if (!sourceLines.length) return "";
+
+  const headline = sourceLines.shift();
+  const metadata = [];
+  const stages = [];
+  const resultDetails = [];
+  for (const line of sourceLines) {
+    const stage = parseSummaryStage(line);
+    if (stage) stages.push(stage);
+    else if (/^(仓库|日志|下一步)[：:]/u.test(line)) resultDetails.push(line);
+    else metadata.push(line);
+  }
+
+  const success = headline.includes("成功");
+  const headlineLabel = headline.match(/^DSA Mastery 环境配置[：:]\s*(.*)$/u)?.[1] || headline;
+  const metadataFields = metadata.map(parseSummaryField).filter(Boolean);
+  const resultFields = resultDetails.map(parseSummaryField).filter(Boolean);
+  const metadataLabelWidth = Math.max(4, ...metadataFields.map((field) => displayWidth(field.label)));
+  const resultLabelWidth = Math.max(4, ...resultFields.map((field) => displayWidth(field.label)));
+  const lines = [
+    `╭${"─".repeat(safeWidth - 2)}╮`,
+    frameLine(`配置结果 · ${headlineLabel}`, innerWidth, ["bold", success ? "green" : "red"], color),
+  ];
+  for (const field of metadataFields) lines.push(frameSegments(alignedSummarySegments(field, metadataLabelWidth, innerWidth), innerWidth, color));
+
+  if (stages.length) {
+    lines.push(`├${"─".repeat(safeWidth - 2)}┤`);
+    lines.push(frameLine("执行阶段", innerWidth, ["bold", "magenta"], color));
+    const labelWidth = Math.max(14, ...stages.map((stage) => displayWidth(`${stage.icon} ${stage.name}`)));
+    for (const stage of stages) {
+      const label = `${stage.icon} ${stage.name}`;
+      const padding = " ".repeat(Math.max(0, labelWidth - displayWidth(label)));
+      lines.push(frameSegments([
+        { value: `${label}${padding}`, styles: statusStyles(stage.status) },
+        { value: stage.message ? `  ${stage.message}` : "", styles: "dim" },
+      ], innerWidth, color));
+    }
+  }
+
+  if (resultDetails.length) {
+    lines.push(`├${"─".repeat(safeWidth - 2)}┤`);
+    lines.push(frameLine("输出信息", innerWidth, ["bold", "magenta"], color));
+    for (const field of resultFields) {
+      lines.push(frameSegments(alignedSummarySegments(field, resultLabelWidth, innerWidth, field.label === "下一步" ? ["bold", "yellow"] : "dim"), innerWidth, color));
+    }
+  }
+  lines.push(`╰${"─".repeat(safeWidth - 2)}╯`);
+  return lines.join("\n");
+}
+
+function parseSummaryStage(line) {
+  const match = line.match(/^([✓⚠–✗·▶])\s+([^：:]+)[：:]\s*(.*)$/u);
+  if (!match) return undefined;
+  return {
+    icon: match[1],
+    name: match[2],
+    message: match[3],
+    status: {
+      "✓": "success",
+      "⚠": "warning",
+      "–": "skipped",
+      "✗": "failed",
+      "▶": "running",
+      "·": "pending",
+    }[match[1]] ?? "pending",
+  };
+}
+
+function parseSummaryField(line) {
+  const match = line.match(/^([^：:]+)[：:](.*)$/u);
+  if (!match) return undefined;
+  return { label: match[1].trim() === "Profile" ? "方案" : match[1].trim(), value: match[2].trimStart() };
+}
+
+function alignedSummarySegments(field, labelWidth, innerWidth, valueStyles = "dim") {
+  const padding = " ".repeat(Math.max(0, labelWidth - displayWidth(field.label)));
+  const prefix = `${field.label}${padding}  `;
+  const value = truncate(field.value, Math.max(0, innerWidth - displayWidth(prefix)));
+  return [
+    { value: prefix, styles: ["bold", "cyan"] },
+    { value, styles: valueStyles },
+  ];
+}
+
 function pixelRowSegments(row) {
   const segments = [];
   for (const [wordIndex, word] of PIXEL_WORDS.entries()) {
@@ -616,14 +704,19 @@ export function createProgressUI({
         ui.timer.unref?.();
       }
     },
-    finish({ ok = false } = {}) {
+    finish({ ok = false, summary = "" } = {}) {
       if (ui.timer) clearInterval(ui.timer);
       ui.timer = undefined;
       if (!ui.started) ui.started = true;
       ui.render();
+      if (summary && ui.mode === "tui") {
+        const width = Math.max(28, Number(ui.stdout?.columns) || 80);
+        const color = supportsColor(ui.stdout);
+        ui.stdout.write(`\n${renderTuiSummary({ summary, width, color })}\n`);
+      }
       if (ok && ui.mode === "tui") {
         const width = Math.max(28, Number(ui.stdout?.columns) || 80);
-        ui.stdout.write(`${renderPixelBanner({ width, color: supportsColor(ui.stdout) })}\n`);
+        ui.stdout.write(`\n${renderPixelBanner({ width, color: supportsColor(ui.stdout) })}\n`);
       }
       ui.started = false;
     },

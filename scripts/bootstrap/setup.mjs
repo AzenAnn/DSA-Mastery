@@ -591,6 +591,7 @@ function summarizeReport(report) {
 function createSilentProgressUI() {
   const stages = SETUP_STAGES.map((id) => ({ id, name: id, status: "pending", message: "" }));
   return {
+    mode: "plain",
     stages,
     start() {},
     update(id, status, message = "") {
@@ -730,6 +731,7 @@ export async function runSetup(argv = [], dependencies = {}) {
     selectionLabels: options.selection ? choiceSelectionSummary(options.selection) : undefined,
     stages: SETUP_STAGES.map((id) => ({ id, status: "pending", message: "" })),
   };
+  let summary = "";
   try {
     context.ui.start();
     await executeStage(context, "preflight", async () => {
@@ -807,10 +809,11 @@ export async function runSetup(argv = [], dependencies = {}) {
         report.logError = error.message;
       }
     }
-    context.ui.finish({ ok: report.ok });
+    summary = summarizeReport(report);
+    context.ui.finish({ ok: report.ok, summary });
   }
   report.exitCode ??= report.ok ? SETUP_EXIT.OK : SETUP_EXIT.INSTALLER;
-  return { exitCode: report.exitCode, report, summary: summarizeReport(report) };
+  return { exitCode: report.exitCode, report, summary, uiMode: context.ui.mode };
 }
 
 async function main() {
@@ -818,7 +821,7 @@ async function main() {
   if (result.report.help) console.log(result.report.help);
   else if (result.report.command === "setup" && !result.report.error && process.argv.includes("--json")) console.log(JSON.stringify(result.report, null, 2));
   else if (process.argv.includes("--json")) console.log(JSON.stringify(result.report, null, 2));
-  else if (result.summary) console.log(result.summary);
+  else if (result.summary && result.uiMode !== "tui") console.log(result.summary);
   process.exitCode = result.exitCode;
 }
 
