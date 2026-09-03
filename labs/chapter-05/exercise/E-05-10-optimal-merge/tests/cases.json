@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-two-elements",
     "input": "tests/003-two-elements.in",
     "expected": "tests/003-two-elements.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-four-elements",
     "input": "tests/004-four-elements.in",
     "expected": "tests/004-four-elements.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-ascending",
     "input": "tests/005-ascending.in",
     "expected": "tests/005-ascending.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-single-min",
+    "input": "tests/006-single-min.in",
+    "expected": "tests/006-single-min.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-single-max",
+    "input": "tests/007-single-max.in",
+    "expected": "tests/007-single-max.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-two-unequal",
+    "input": "tests/008-two-unequal.in",
+    "expected": "tests/008-two-unequal.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-two-equal-max",
+    "input": "tests/009-two-equal-max.in",
+    "expected": "tests/009-two-equal-max.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-equal-sizes",
+    "input": "tests/010-equal-sizes.in",
+    "expected": "tests/010-equal-sizes.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-zero-one-runs",
+    "input": "tests/011-zero-one-runs.in",
+    "expected": "tests/011-zero-one-runs.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-ones-heavy",
+    "input": "tests/012-ones-heavy.in",
+    "expected": "tests/012-ones-heavy.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-varied",
+    "input": "tests/013-varied.in",
+    "expected": "tests/013-varied.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-descending",
+    "input": "tests/014-descending.in",
+    "expected": "tests/014-descending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-fibonacci",
+    "input": "tests/015-fibonacci.in",
+    "expected": "tests/015-fibonacci.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-tiebreak-dense",
+    "input": "tests/016-tiebreak-dense.in",
+    "expected": "tests/016-tiebreak-dense.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-dominant-run",
+    "input": "tests/017-dominant-run.in",
+    "expected": "tests/017-dominant-run.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-medium-random",
+    "input": "tests/018-medium-random.in",
+    "expected": "tests/018-medium-random.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-random",
+    "input": "tests/019-stress-random.in",
+    "expected": "tests/019-stress-random.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-equal-max",
+    "input": "tests/020-stress-equal-max.in",
+    "expected": "tests/020-stress-equal-max.out",
+    "points": 5,
+    "tags": [
+      "boundary"
     ],
     "compare": {
       "mode": "tokens"

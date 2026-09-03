@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-two-elements",
     "input": "tests/003-two-elements.in",
     "expected": "tests/003-two-elements.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-equal-freq",
     "input": "tests/004-equal-freq.in",
     "expected": "tests/004-equal-freq.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-ascending",
     "input": "tests/005-ascending.in",
     "expected": "tests/005-ascending.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-single-zero",
+    "input": "tests/006-single-zero.in",
+    "expected": "tests/006-single-zero.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-two-equal",
+    "input": "tests/007-two-equal.in",
+    "expected": "tests/007-two-equal.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-all-zero",
+    "input": "tests/008-all-zero.in",
+    "expected": "tests/008-all-zero.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-zero-mixed",
+    "input": "tests/009-zero-mixed.in",
+    "expected": "tests/009-zero-mixed.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-skewed-one-vs-huge",
+    "input": "tests/010-skewed-one-vs-huge.in",
+    "expected": "tests/010-skewed-one-vs-huge.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-equal-freq-eight",
+    "input": "tests/011-equal-freq-eight.in",
+    "expected": "tests/011-equal-freq-eight.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-fib-collision",
+    "input": "tests/012-fib-collision.in",
+    "expected": "tests/012-fib-collision.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-descending",
+    "input": "tests/013-descending.in",
+    "expected": "tests/013-descending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-geometric-chain",
+    "input": "tests/014-geometric-chain.in",
+    "expected": "tests/014-geometric-chain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-mixed-ten",
+    "input": "tests/015-mixed-ten.in",
+    "expected": "tests/015-mixed-ten.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-duplicate-runs",
+    "input": "tests/016-duplicate-runs.in",
+    "expected": "tests/016-duplicate-runs.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-64bit-accumulation",
+    "input": "tests/017-64bit-accumulation.in",
+    "expected": "tests/017-64bit-accumulation.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-powers-two",
+    "input": "tests/018-powers-two.in",
+    "expected": "tests/018-powers-two.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-equal",
+    "input": "tests/019-stress-equal.in",
+    "expected": "tests/019-stress-equal.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-skewed",
+    "input": "tests/020-stress-skewed.in",
+    "expected": "tests/020-stress-skewed.out",
+    "points": 5,
+    "tags": [
+      "regression"
     ],
     "compare": {
       "mode": "tokens"

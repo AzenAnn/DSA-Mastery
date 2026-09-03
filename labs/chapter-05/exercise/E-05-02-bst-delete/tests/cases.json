@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-delete-root",
     "input": "tests/002-delete-root.in",
     "expected": "tests/002-delete-root.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-delete-leaf",
     "input": "tests/003-delete-leaf.in",
     "expected": "tests/003-delete-leaf.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-delete-all",
     "input": "tests/004-delete-all.in",
     "expected": "tests/004-delete-all.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -51,9 +51,189 @@
     "id": "005-no-delete",
     "input": "tests/005-no-delete.in",
     "expected": "tests/005-no-delete.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-delete-root-two-children",
+    "input": "tests/006-delete-root-two-children.in",
+    "expected": "tests/006-delete-root-two-children.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-delete-deep-leaves",
+    "input": "tests/007-delete-deep-leaves.in",
+    "expected": "tests/007-delete-deep-leaves.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-delete-one-child-nodes",
+    "input": "tests/008-delete-one-child-nodes.in",
+    "expected": "tests/008-delete-one-child-nodes.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-delete-until-empty",
+    "input": "tests/009-delete-until-empty.in",
+    "expected": "tests/009-delete-until-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-no-delete-twenty",
+    "input": "tests/010-no-delete-twenty.in",
+    "expected": "tests/010-no-delete-twenty.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-delete-min-and-max",
+    "input": "tests/011-delete-min-and-max.in",
+    "expected": "tests/011-delete-min-and-max.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-negative-values",
+    "input": "tests/012-negative-values.in",
+    "expected": "tests/012-negative-values.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-single-node-extreme",
+    "input": "tests/013-single-node-extreme.in",
+    "expected": "tests/013-single-node-extreme.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-mixed-inserts-multi-deletes",
+    "input": "tests/014-mixed-inserts-multi-deletes.in",
+    "expected": "tests/014-mixed-inserts-multi-deletes.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-delete-whole-subtree",
+    "input": "tests/015-delete-whole-subtree.in",
+    "expected": "tests/015-delete-whole-subtree.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-delete-successor-after-copy",
+    "input": "tests/016-delete-successor-after-copy.in",
+    "expected": "tests/016-delete-successor-after-copy.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-delete-right-spine",
+    "input": "tests/017-delete-right-spine.in",
+    "expected": "tests/017-delete-right-spine.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-delete-min-ascending",
+    "input": "tests/018-delete-min-ascending.in",
+    "expected": "tests/018-delete-min-ascending.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-random-delete-half",
+    "input": "tests/019-stress-random-delete-half.in",
+    "expected": "tests/019-stress-random-delete-half.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-random-delete-all",
+    "input": "tests/020-stress-random-delete-all.in",
+    "expected": "tests/020-stress-random-delete-all.out",
+    "points": 5,
+    "tags": [
+      "stress"
     ],
     "compare": {
       "mode": "tokens"

@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-no-edge",
     "input": "tests/002-no-edge.in",
     "expected": "tests/002-no-edge.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-complete-graph",
     "input": "tests/003-complete-graph.in",
     "expected": "tests/003-complete-graph.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-alternate",
     "input": "tests/004-alternate.in",
     "expected": "tests/004-alternate.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-self-loop",
     "input": "tests/005-self-loop.in",
     "expected": "tests/005-self-loop.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-single-node",
+    "input": "tests/006-single-node.in",
+    "expected": "tests/006-single-node.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-queries-before-unions",
+    "input": "tests/007-queries-before-unions.in",
+    "expected": "tests/007-queries-before-unions.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-disconnected-pairs",
+    "input": "tests/008-disconnected-pairs.in",
+    "expected": "tests/008-disconnected-pairs.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-extreme-node-ids",
+    "input": "tests/009-extreme-node-ids.in",
+    "expected": "tests/009-extreme-node-ids.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-self-loops",
+    "input": "tests/010-self-loops.in",
+    "expected": "tests/010-self-loops.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-network-growth",
+    "input": "tests/011-network-growth.in",
+    "expected": "tests/011-network-growth.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-full-chain",
+    "input": "tests/012-full-chain.in",
+    "expected": "tests/012-full-chain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-cycle-forming",
+    "input": "tests/013-cycle-forming.in",
+    "expected": "tests/013-cycle-forming.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-chains-and-bridge",
+    "input": "tests/014-chains-and-bridge.in",
+    "expected": "tests/014-chains-and-bridge.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-big-halves-merge",
+    "input": "tests/015-big-halves-merge.in",
+    "expected": "tests/015-big-halves-merge.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-all-queries",
+    "input": "tests/016-all-queries.in",
+    "expected": "tests/016-all-queries.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-hub-growth",
+    "input": "tests/017-hub-growth.in",
+    "expected": "tests/017-hub-growth.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-stress-full-chain",
+    "input": "tests/018-stress-full-chain.in",
+    "expected": "tests/018-stress-full-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-sampled-growth",
+    "input": "tests/019-stress-sampled-growth.in",
+    "expected": "tests/019-stress-sampled-growth.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-query-storm",
+    "input": "tests/020-stress-query-storm.in",
+    "expected": "tests/020-stress-query-storm.out",
+    "points": 5,
+    "tags": [
+      "stress"
     ],
     "compare": {
       "mode": "tokens"

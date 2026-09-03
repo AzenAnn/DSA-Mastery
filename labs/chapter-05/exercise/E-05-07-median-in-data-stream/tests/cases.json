@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-two-elements",
     "input": "tests/003-two-elements.in",
     "expected": "tests/003-two-elements.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-sorted-asc",
     "input": "tests/004-sorted-asc.in",
     "expected": "tests/004-sorted-asc.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-sorted-desc",
     "input": "tests/005-sorted-desc.in",
     "expected": "tests/005-sorted-desc.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-single-negative",
+    "input": "tests/006-single-negative.in",
+    "expected": "tests/006-single-negative.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-two-elements-mixed-sign",
+    "input": "tests/007-two-elements-mixed-sign.in",
+    "expected": "tests/007-two-elements-mixed-sign.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-all-negative",
+    "input": "tests/008-all-negative.in",
+    "expected": "tests/008-all-negative.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-duplicates-block",
+    "input": "tests/009-duplicates-block.in",
+    "expected": "tests/009-duplicates-block.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-zero-stable-median",
+    "input": "tests/010-zero-stable-median.in",
+    "expected": "tests/010-zero-stable-median.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-int-extremes",
+    "input": "tests/011-int-extremes.in",
+    "expected": "tests/011-int-extremes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-monotonic-ascending",
+    "input": "tests/012-monotonic-ascending.in",
+    "expected": "tests/012-monotonic-ascending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-monotonic-descending",
+    "input": "tests/013-monotonic-descending.in",
+    "expected": "tests/013-monotonic-descending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-alternating-high-low",
+    "input": "tests/014-alternating-high-low.in",
+    "expected": "tests/014-alternating-high-low.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-equal-values-negative",
+    "input": "tests/015-equal-values-negative.in",
+    "expected": "tests/015-equal-values-negative.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-large-small-interleave",
+    "input": "tests/016-large-small-interleave.in",
+    "expected": "tests/016-large-small-interleave.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-stress-random-100k",
+    "input": "tests/017-stress-random-100k.in",
+    "expected": "tests/017-stress-random-100k.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-stress-mountain-100k",
+    "input": "tests/018-stress-mountain-100k.in",
+    "expected": "tests/018-stress-mountain-100k.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-boundary-large-equal-pair",
+    "input": "tests/019-boundary-large-equal-pair.in",
+    "expected": "tests/019-boundary-large-equal-pair.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-small-domain-duplicates",
+    "input": "tests/020-small-domain-duplicates.in",
+    "expected": "tests/020-small-domain-duplicates.out",
+    "points": 5,
+    "tags": [
+      "regression"
     ],
     "compare": {
       "mode": "tokens"

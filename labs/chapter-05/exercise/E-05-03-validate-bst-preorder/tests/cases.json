@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-sorted-desc",
     "input": "tests/003-sorted-desc.in",
     "expected": "tests/003-sorted-desc.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -39,7 +39,7 @@
     "id": "004-invalid-mid",
     "input": "tests/004-invalid-mid.in",
     "expected": "tests/004-invalid-mid.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-right-skewed",
     "input": "tests/005-right-skewed.in",
     "expected": "tests/005-right-skewed.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-boundary-single-extremes",
+    "input": "tests/006-boundary-single-extremes.in",
+    "expected": "tests/006-boundary-single-extremes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-boundary-tiny-mixed",
+    "input": "tests/007-boundary-tiny-mixed.in",
+    "expected": "tests/007-boundary-tiny-mixed.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-normal-left-skew-negative",
+    "input": "tests/008-normal-left-skew-negative.in",
+    "expected": "tests/008-normal-left-skew-negative.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-normal-perfect-balanced",
+    "input": "tests/009-normal-perfect-balanced.in",
+    "expected": "tests/009-normal-perfect-balanced.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-normal-zigzag-valid",
+    "input": "tests/010-normal-zigzag-valid.in",
+    "expected": "tests/010-normal-zigzag-valid.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-normal-right-skew-spaced",
+    "input": "tests/011-normal-right-skew-spaced.in",
+    "expected": "tests/011-normal-right-skew-spaced.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-normal-random-medium",
+    "input": "tests/012-normal-random-medium.in",
+    "expected": "tests/012-normal-random-medium.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-regression-invalid-mixed",
+    "input": "tests/013-regression-invalid-mixed.in",
+    "expected": "tests/013-regression-invalid-mixed.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-regression-duplicates",
+    "input": "tests/014-regression-duplicates.in",
+    "expected": "tests/014-regression-duplicates.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-regression-extreme-values",
+    "input": "tests/015-regression-extreme-values.in",
+    "expected": "tests/015-regression-extreme-values.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-regression-nonbst-orders",
+    "input": "tests/016-regression-nonbst-orders.in",
+    "expected": "tests/016-regression-nonbst-orders.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-regression-medium-late-break",
+    "input": "tests/017-regression-medium-late-break.in",
+    "expected": "tests/017-regression-medium-late-break.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-stress-random-valid",
+    "input": "tests/018-stress-random-valid.in",
+    "expected": "tests/018-stress-random-valid.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-skewed-valid",
+    "input": "tests/019-stress-skewed-valid.in",
+    "expected": "tests/019-stress-skewed-valid.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-invalid-large",
+    "input": "tests/020-stress-invalid-large.in",
+    "expected": "tests/020-stress-invalid-large.out",
+    "points": 5,
+    "tags": [
+      "stress"
     ],
     "compare": {
       "mode": "tokens"

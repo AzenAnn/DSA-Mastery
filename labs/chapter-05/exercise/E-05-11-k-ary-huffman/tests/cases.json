@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-binary",
     "input": "tests/002-binary.in",
     "expected": "tests/002-binary.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -27,7 +27,7 @@
     "id": "003-single",
     "input": "tests/003-single.in",
     "expected": "tests/003-single.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -39,7 +39,7 @@
     "id": "004-need-padding",
     "input": "tests/004-need-padding.in",
     "expected": "tests/004-need-padding.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -51,9 +51,189 @@
     "id": "005-no-padding",
     "input": "tests/005-no-padding.in",
     "expected": "tests/005-no-padding.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-single-binary",
+    "input": "tests/006-single-binary.in",
+    "expected": "tests/006-single-binary.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-pad-one-node",
+    "input": "tests/007-pad-one-node.in",
+    "expected": "tests/007-pad-one-node.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-many-pad-zeros",
+    "input": "tests/008-many-pad-zeros.in",
+    "expected": "tests/008-many-pad-zeros.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-pad-equal-weights",
+    "input": "tests/009-pad-equal-weights.in",
+    "expected": "tests/009-pad-equal-weights.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-k4-no-pad",
+    "input": "tests/010-k4-no-pad.in",
+    "expected": "tests/010-k4-no-pad.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-regress-short-merge",
+    "input": "tests/011-regress-short-merge.in",
+    "expected": "tests/011-regress-short-merge.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-normal-with-zeros",
+    "input": "tests/012-normal-with-zeros.in",
+    "expected": "tests/012-normal-with-zeros.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-binary-equal",
+    "input": "tests/013-binary-equal.in",
+    "expected": "tests/013-binary-equal.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-binary-mixed",
+    "input": "tests/014-binary-mixed.in",
+    "expected": "tests/014-binary-mixed.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-k-equals-n",
+    "input": "tests/015-k-equals-n.in",
+    "expected": "tests/015-k-equals-n.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-regress-primes-pad",
+    "input": "tests/016-regress-primes-pad.in",
+    "expected": "tests/016-regress-primes-pad.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-regress-ties-k5",
+    "input": "tests/017-regress-ties-k5.in",
+    "expected": "tests/017-regress-ties-k5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-stress-max-k2",
+    "input": "tests/018-stress-max-k2.in",
+    "expected": "tests/018-stress-max-k2.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-max-k3-pad",
+    "input": "tests/019-stress-max-k3-pad.in",
+    "expected": "tests/019-stress-max-k3-pad.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-max-k10",
+    "input": "tests/020-stress-max-k10.in",
+    "expected": "tests/020-stress-max-k10.out",
+    "points": 5,
+    "tags": [
+      "boundary"
     ],
     "compare": {
       "mode": "tokens"
