@@ -369,10 +369,10 @@ test("preface is the first author-guide chapter and exposes all complete guides"
   await expect(page.locator(".vp-doc")).toContainText("pnpm@11.1.1");
   await expect(page.locator(".VPSidebar").getByRole("link", { name: "macOS 学生实验环境安装指南", exact: true })).toBeVisible();
   const macosGuideImages = page.locator(".vp-doc img");
-  await expect(macosGuideImages.first()).toBeVisible();
   expect(await macosGuideImages.count()).toBeGreaterThan(0);
   for (const image of await macosGuideImages.all()) {
     await image.scrollIntoViewIfNeeded();
+    await expect(image).toBeVisible();
     await expect
       .poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0))
       .toBe(true);
