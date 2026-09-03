@@ -191,5 +191,5 @@ if [[ ! -f "$setup_path" ]]; then
   exit 13
 fi
 
-# 始终传入解析后的绝对路径；Node 协调器负责 profile、CMake、pnpm、IDE 和 smoke 阶段。
+# 始终传入解析后的绝对路径；Node 协调器负责交互选择、profile、CMake、pnpm、IDE 和 smoke 阶段。
 exec node "$setup_path" "$@" --repo-dir "$repo_dir"

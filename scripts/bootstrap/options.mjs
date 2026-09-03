@@ -19,8 +19,8 @@ function invalid(message) {
 }
 
 function assignValue(result, key, value) {
-  if (key === "profile" && !["basic", "full"].includes(value)) {
-    throw invalid(`--profile 必须是 basic 或 full，收到：${value}`);
+  if (key === "profile" && !["runtime", "basic", "full"].includes(value)) {
+    throw invalid(`--profile 必须是 runtime、basic 或 full，收到：${value}`);
   }
   if (key === "ui" && !["auto", "tui", "plain"].includes(value)) {
     throw invalid(`--ui 必须是 auto、tui 或 plain，收到：${value}`);

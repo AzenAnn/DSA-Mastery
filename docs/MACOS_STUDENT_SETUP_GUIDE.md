@@ -4,20 +4,30 @@
 
 ## 0. 一键配置（推荐）
 
-如果你希望一次完成工具检查、仓库准备、依赖安装和第一个 Lab 验证，可以下载并审阅原生自举脚本。脚本只使用 macOS shell、Homebrew 官方安装入口和仓库自己的 Node 协调器，不需要预先安装 Node.js；支持 Apple Silicon 与 Intel Mac。
+如果你希望一次完成工具检查、仓库准备、依赖安装和第一个 Lab 验证，可以下载并审阅原生自举脚本。脚本只使用 macOS shell、Homebrew 官方安装入口和仓库自己的 Node 协调器，不需要预先安装 Node.js；支持 Apple Silicon 与 Intel Mac。普通用户不需要记住 profile 或其他参数，直接运行脚本即可进入选择界面。
 
 在终端执行：
 
 ```bash
 curl -fL https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-macos.sh -o bootstrap-macos.sh
 less bootstrap-macos.sh
-bash bootstrap-macos.sh --profile full
+bash bootstrap-macos.sh
 ```
 
-两种安装方案：
+启动后使用方向键和空格选择：
 
 ```bash
-# 只安装并验证 Quiz/Program 所需环境，CMake 不作为必需项
+# ↑↓：移动；空格：选择/取消；Enter：开始；q：退出
+```
+
+基础运行环境（Git、Node.js、pnpm）是必选项。默认会选择 Program Lab C++ 环境；如果需要 Project Lab，就勾选 Project Lab / CMake；需要图形界面时再勾选 VS Code 和相应扩展。脚本会自动勾选扩展依赖，并根据选择执行对应的环境检查。
+
+菜单中的方案对应：`runtime`（只准备课程工具）、`basic`（Program）和 `full`（Program + Project）。
+
+高级用户仍可以直接指定方案：
+
+```bash
+# 只安装并验证 Quiz/Program 所需环境
 bash bootstrap-macos.sh --profile basic
 
 # 完整课程环境，额外安装并验证 CMake/Project Lab

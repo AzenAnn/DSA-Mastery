@@ -90,7 +90,7 @@ Lab 不是教材末尾的附属材料，而是用于检查理解、练习实现�
 git clone https://github.com/AzenAnn/DSA-Mastery.git
 ```
 
-如果需要本地运行 C++ Labs，推荐使用平台自举脚本：它会显示安装进度，支持 `basic`（Program）和 `full`（Program + CMake/Project）两种方案，并在重跑时复用已有工具和仓库。
+如果需要本地运行 C++ Labs，推荐使用平台自举脚本：直接运行后用方向键、空格和回车选择要安装的内容；基础运行环境必选，Program、Project/CMake、VS Code 和扩展可以按需选择。脚本会自动处理依赖，并在重跑时复用已有工具和仓库。高级用户仍可指定 `runtime`、`basic` 或 `full` profile。
 
 - macOS：[macOS 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/05-macos-student-setup/)
 - Windows：[Windows 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/02-windows-student-setup/)

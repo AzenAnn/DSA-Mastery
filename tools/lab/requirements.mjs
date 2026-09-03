@@ -11,6 +11,7 @@ export const MINIMUMS = Object.freeze({
 });
 
 export const PROFILES = Object.freeze({
+  runtime: Object.freeze({ name: "runtime", requiresCompiler: false, requiresCmake: false }),
   basic: Object.freeze({ name: "basic", requiresCompiler: true, requiresCmake: false }),
   full: Object.freeze({ name: "full", requiresCompiler: true, requiresCmake: true }),
 });
@@ -36,7 +37,7 @@ export function formatVersion(version) {
 export function profileRequirements(profile) {
   const result = PROFILES[profile];
   if (!result) {
-    const error = new Error(`不支持的安装 profile：${profile}（可选 basic 或 full）`);
+    const error = new Error(`不支持的安装 profile：${profile}（可选 runtime、basic 或 full）`);
     error.code = "ARGUMENT_INVALID";
     throw error;
   }

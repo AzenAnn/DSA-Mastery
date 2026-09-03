@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { EventEmitter } from "node:events";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -17,6 +18,12 @@ import {
   createStageState,
   createProgressUI,
   renderPlain,
+  createInstallSelection,
+  decodeChoiceInput,
+  handleChoiceKey,
+  promptInstallSelection,
+  renderChoiceMenu,
+  selectionToOptions,
   renderTuiFrame,
 } from "../scripts/bootstrap/ui.mjs";
 import {
@@ -34,6 +41,7 @@ import { runCommand } from "../scripts/bootstrap/commands.mjs";
 import {
   assertRepositorySafe,
   planToolchainInstall,
+  planIdeExtensions,
   resolveRepositoryDir,
   runSetup,
 } from "../scripts/bootstrap/setup.mjs";
@@ -46,8 +54,10 @@ test("version helpers compare partial versions and reject malformed values", () 
   assert.equal(compareVersion([22, 12, 99], NODE_MINIMUM), false);
 });
 
-test("basic and full profiles differ only by the Project CMake requirement", () => {
-  assert.deepEqual(Object.keys(PROFILES), ["basic", "full"]);
+test("runtime, basic, and full profiles describe progressively larger installs", () => {
+  assert.deepEqual(Object.keys(PROFILES), ["runtime", "basic", "full"]);
+  assert.equal(profileRequirements("runtime").requiresCompiler, false);
+  assert.equal(profileRequirements("runtime").requiresCmake, false);
   assert.equal(profileRequirements("basic").requiresCmake, false);
   assert.equal(profileRequirements("full").requiresCmake, true);
   assert.equal(PNPM_VERSION, "11.1.1");
@@ -132,6 +142,77 @@ test("progress UI falls back to stable plain output when stdout is not a TTY", (
   assert.match(output, /进度：1\/2/);
   assert.match(writes.at(-1), /进度：1\/2/);
   assert.equal(output.includes(String.fromCharCode(27)), false);
+});
+
+test("install wizard defaults to Program and derives profile from selected bundles", () => {
+  const defaults = createInstallSelection();
+  assert.deepEqual(selectionToOptions(defaults), {
+    profile: "basic",
+    installVscode: false,
+    skipVscode: true,
+    installCppExtension: false,
+    installCmakeExtension: false,
+    selection: ["runtime", "program"],
+  });
+  const runtime = selectionToOptions(new Set());
+  assert.equal(runtime.profile, "runtime");
+  assert.deepEqual(runtime.selection, ["runtime"]);
+  const full = selectionToOptions(new Set(["project", "cmake-extension"]));
+  assert.equal(full.profile, "full");
+  assert.equal(full.installVscode, true);
+  assert.equal(full.installCmakeExtension, true);
+  assert.deepEqual(full.selection, ["runtime", "program", "project", "vscode", "cmake-extension"]);
+});
+
+test("install wizard keeps dependencies consistent when a parent is toggled", () => {
+  const selected = new Set(["runtime", "program", "vscode", "cpp-extension"]);
+  const removedParent = handleChoiceKey("space", 3, selected);
+  assert.equal(removedParent.action, "toggle");
+  assert.equal(removedParent.selection.has("vscode"), false);
+  assert.equal(removedParent.selection.has("cpp-extension"), false);
+  const addedChild = handleChoiceKey("space", 5, new Set(["runtime"]));
+  assert.equal(addedChild.selection.has("project"), true);
+  assert.equal(addedChild.selection.has("program"), true);
+  assert.equal(addedChild.selection.has("vscode"), true);
+  assert.equal(addedChild.selection.has("cmake-extension"), true);
+  const removedProgram = handleChoiceKey("space", 1, addedChild.selection);
+  assert.equal(removedProgram.selection.has("program"), false);
+  assert.equal(removedProgram.selection.has("project"), false);
+  assert.equal(removedProgram.selection.has("cmake-extension"), false);
+});
+
+test("install wizard renders actionable checkboxes and keyboard help", () => {
+  const menu = renderChoiceMenu({ selection: createInstallSelection(), cursor: 0, width: 60 });
+  assert.match(menu, /☑ 基础运行环境/);
+  assert.match(menu, /☑ Program Lab/);
+  assert.match(menu, /☐ Project Lab/);
+  assert.match(menu, /当前方案：basic/);
+  assert.match(menu, /空格 选择\/取消/);
+  for (const line of menu.split("\n")) assert.ok(line.length <= 60, `line too wide: ${line}`);
+});
+
+test("install wizard decodes combined arrow, space, and enter input", () => {
+  assert.deepEqual(decodeChoiceInput("\u001b[B\u001b[B \r"), ["down", "down", "space", "enter"]);
+});
+
+test("interactive install wizard accepts keyboard choices and restores terminal mode", async () => {
+  const input = new EventEmitter();
+  input.isTTY = true;
+  input.isRaw = false;
+  input.setRawMode = (value) => { input.isRaw = value; };
+  input.resume = () => {};
+  input.pause = () => {};
+  const writes = [];
+  const output = { isTTY: true, columns: 80, write: (value) => writes.push(value) };
+  const pending = promptInstallSelection({ input, output });
+  setImmediate(() => input.emit("data", "\u001b[B \r"));
+  const result = await pending;
+  assert.equal(result.cancelled, false);
+  assert.equal(result.profile, "full");
+  assert.equal(result.installCmakeExtension, false);
+  assert.equal(input.isRaw, false);
+  assert.match(writes.join(""), /当前方案：basic（Program）/);
+  assert.match(writes.join(""), /当前方案：full（Program \+ Project）/);
 });
 
 test("MSVC environment parsing preserves values containing equals signs", () => {
@@ -287,6 +368,28 @@ test("system install plan is profile-aware and never makes GNU Make mandatory", 
   assert.equal(plan.some((item) => item.id === "make"), false);
 });
 
+test("runtime install plan keeps compiler and CMake optional", () => {
+  const plan = planToolchainInstall("runtime", {
+    platform: "darwin",
+    packageManager: { kind: "brew", command: "brew" },
+    tools: [
+      { name: "Git", meetsMinimum: false },
+      { name: "Node.js", meetsMinimum: false },
+      { name: "Clang", meetsMinimum: false },
+      { name: "GCC", meetsMinimum: false },
+      { name: "CMake", meetsMinimum: false },
+    ],
+  });
+  assert.deepEqual(plan.map((item) => item.id), ["git", "node"]);
+});
+
+test("IDE extension plan follows interactive selections and preserves legacy profiles", () => {
+  assert.deepEqual(planIdeExtensions({ selection: ["runtime", "program", "vscode"] }, "basic"), []);
+  assert.deepEqual(planIdeExtensions({ selection: ["runtime", "program", "project", "vscode", "cpp-extension", "cmake-extension"], installCppExtension: true, installCmakeExtension: true }, "full"), ["ms-vscode.cpptools", "ms-vscode.cmake-tools"]);
+  assert.deepEqual(planIdeExtensions({}, "runtime"), []);
+  assert.deepEqual(planIdeExtensions({}, "full"), ["ms-vscode.cpptools", "ms-vscode.cmake-tools"]);
+});
+
 test("dirty repositories are protected from implicit updates", () => {
   assert.throws(
     () => assertRepositorySafe({ exists: true, directory: true, valid: true, dirty: true, updateRepo: true }),
@@ -342,4 +445,121 @@ test("check-only runs read-only probes and never installs or clones", async (t) 
   assert.equal(calls.some(({ args }) => ["install", "clone", "pull"].includes(args?.[0])), false);
   assert.equal(result.report.stages.find((stage) => stage.id === "dependencies").status, "skipped");
   assert.equal(result.report.stages.find((stage) => stage.id === "smoke").status, "skipped");
+});
+
+test("check-only and plain UI never open the interactive install wizard", async () => {
+  const input = new EventEmitter();
+  input.isTTY = true;
+  const output = { isTTY: true, columns: 80, write: () => {} };
+  const checkOnly = await runSetup(["--check-only", "--repo-dir", "/tmp/missing-check-only"], {
+    io: { input, output },
+    cwd: "/tmp",
+    env: { PATH: "/usr/bin", HOME: "/tmp" },
+    runner: async () => ({ code: null, stdout: "", stderr: "", spawnError: { code: "ENOENT" } }),
+  });
+  assert.equal(checkOnly.report.error?.code, "ENVIRONMENT_NOT_READY");
+  assert.equal(checkOnly.report.cancelled, undefined);
+});
+
+test("canceling the interactive install wizard stops before any command runs", async () => {
+  const input = new EventEmitter();
+  input.isTTY = true;
+  input.isRaw = false;
+  input.setRawMode = () => {};
+  input.resume = () => {};
+  input.pause = () => {};
+  const output = { isTTY: true, columns: 80, write: () => {} };
+  let ran = false;
+  const pending = runSetup([], {
+    io: { input, output },
+    runner: async () => {
+      ran = true;
+      return { code: 0, stdout: "", stderr: "" };
+    },
+  });
+  setImmediate(() => input.emit("data", "q"));
+  const result = await pending;
+  assert.equal(result.exitCode, 0);
+  assert.equal(result.report.cancelled, true);
+  assert.equal(ran, false);
+});
+
+test("toolchain probes use the caller directory before cloning a new repository", async (t) => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "dsa bootstrap command cwd "));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const missingRepo = path.join(root, "future-repository");
+  const calls = [];
+  let pnpmChecks = 0;
+  const result = await runSetup(["--profile", "basic", "--repo-dir", missingRepo, "--non-interactive", "--ui", "plain"], {
+    platform: "darwin",
+    architecture: "arm64",
+    cwd: root,
+    env: { PATH: "/usr/bin", HOME: root },
+    io: {
+      input: { isTTY: false },
+      output: { isTTY: false, write: () => {} },
+    },
+    runner: async (command, args, options = {}) => {
+      calls.push({ command, args, cwd: options.cwd });
+      if (command === "brew") return { code: 0, stdout: "Homebrew 4.0.0\n", stderr: "" };
+      if (command === "git") return { code: 0, stdout: "git version 2.50.1\n", stderr: "" };
+      if (command === process.execPath) return { code: 0, stdout: "v26.0.0\n", stderr: "" };
+      if (command === "pnpm") {
+        pnpmChecks += 1;
+        return { code: 0, stdout: `${pnpmChecks <= 2 ? "10.0.0" : PNPM_VERSION}\n`, stderr: "" };
+      }
+      if (command === "corepack") return { code: null, spawnError: { code: "ENOENT" }, stdout: "", stderr: "" };
+      if (command === "npm") return { code: 0, stdout: "11.0.0\n", stderr: "" };
+      if (command === "g++" || command === "clang++") return { code: 0, stdout: "Apple clang version 21.0.0\n", stderr: "" };
+      if (command === "cl") return { code: null, spawnError: { code: "ENOENT" }, stdout: "", stderr: "" };
+      if (command === "cmake") return { code: 0, stdout: "cmake version 3.30.0\n", stderr: "" };
+      if (command === "make") return { code: 0, stdout: "GNU Make 4.4\n", stderr: "" };
+      return { code: 0, stdout: "", stderr: "" };
+    },
+  });
+  assert.equal(result.exitCode, 13);
+  assert.match(result.report.error.message, /clone 完成/);
+  assert.ok(calls.some(({ command, args, cwd }) => command === "npm" && args?.[0] === "install" && cwd === root));
+  assert.ok(calls.some(({ command, args, cwd }) => command === "git" && args?.[0] === "clone" && cwd === root));
+  assert.equal(calls.some(({ cwd }) => cwd === missingRepo), false);
+});
+
+test("runtime setup installs only course tooling and skips C++ smoke", async (t) => {
+  const repo = await mkdtemp(path.join(os.tmpdir(), "dsa bootstrap runtime "));
+  t.after(() => rm(repo, { recursive: true, force: true }));
+  await mkdir(path.join(repo, "labs"), { recursive: true });
+  await mkdir(path.join(repo, "tools", "lab"), { recursive: true });
+  await writeFile(path.join(repo, "package.json"), "{}\n");
+  await writeFile(path.join(repo, "pnpm-lock.yaml"), "lockfileVersion: '9.0'\n");
+  await writeFile(path.join(repo, "tools", "lab", "cli.mjs"), "\n");
+  const calls = [];
+  const result = await runSetup(["--profile", "runtime", "--repo-dir", repo, "--non-interactive", "--ui", "plain"], {
+    platform: "darwin",
+    architecture: "arm64",
+    cwd: repo,
+    env: { PATH: "/usr/bin", HOME: repo },
+    io: {
+      input: { isTTY: false },
+      output: { isTTY: false, write: () => {} },
+    },
+    runner: async (command, args) => {
+      calls.push({ command, args });
+      if (command === "brew") return { code: 0, stdout: "Homebrew 4.0.0\n", stderr: "" };
+      if (command === "git") return { code: 0, stdout: "git version 2.50.1\n", stderr: "" };
+      if (command === process.execPath) return { code: 0, stdout: "v26.0.0\n", stderr: "" };
+      if (command === "pnpm") return { code: 0, stdout: `${PNPM_VERSION}\n`, stderr: "" };
+      if (command === "g++" || command === "clang++") return { code: 0, stdout: "Apple clang version 21.0.0\n", stderr: "" };
+      if (command === "cl") return { code: null, spawnError: { code: "ENOENT" }, stdout: "", stderr: "" };
+      if (command === "cmake") return { code: null, spawnError: { code: "ENOENT" }, stdout: "", stderr: "" };
+      if (command === "make") return { code: 0, stdout: "GNU Make 4.4\n", stderr: "" };
+      return { code: 0, stdout: "", stderr: "" };
+    },
+  });
+  assert.equal(result.exitCode, 0);
+  assert.equal(result.report.ok, true);
+  assert.equal(result.report.profile, "runtime");
+  assert.equal(result.report.stages.find((stage) => stage.id === "smoke").status, "skipped");
+  assert.equal(calls.some(({ command, args }) => command === "pnpm" && args?.[0] === "install"), true);
+  assert.equal(calls.some(({ command, args }) => command === "xcode-select" || (command === "brew" && args?.[0] === "install" && args?.[1] === "cmake")), false);
+  assert.equal(calls.some(({ command, args }) => command === process.execPath && args?.[0] === "tools/lab/cli.mjs"), false);
 });

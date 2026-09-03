@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("basic", "full")]
+    [ValidateSet("runtime", "basic", "full")]
     [string]$Profile,
     [string]$RepoDir,
     [string]$RepoUrl = "https://github.com/AzenAnn/DSA-Mastery.git",

@@ -4,7 +4,7 @@
 
 ## 0. 一键配置（推荐）
 
-如果希望一次完成 Git、Node.js、固定版本 pnpm、MSVC Build Tools、（`full` 才需要的）CMake、仓库依赖和 Lab 冒烟验证，可以下载并审阅 PowerShell 自举脚本。脚本优先使用 Windows 自带的 `winget`，不会把随 Visual Studio 版本变化的 `cl.exe` 目录永久写进 PATH；运行 Lab 时会通过 `vswhere.exe` 和 `VsDevCmd.bat` 自动导入完整 MSVC 开发环境。
+如果希望一次完成 Git、Node.js、固定版本 pnpm、MSVC Build Tools、（按选择需要的）CMake、仓库依赖和 Lab 冒烟验证，可以下载并审阅 PowerShell 自举脚本。脚本优先使用 Windows 自带的 `winget`，不会把随 Visual Studio 版本变化的 `cl.exe` 目录永久写进 PATH；运行 Lab 时会通过 `vswhere.exe` 和 `VsDevCmd.bat` 自动导入完整 MSVC 开发环境。普通用户不需要记住 profile 或其他参数，直接运行脚本即可进入选择界面。
 
 在 PowerShell 中执行：
 
@@ -12,10 +12,20 @@
 $script = Join-Path $PWD "bootstrap-windows.ps1"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-windows.ps1" -OutFile $script
 Get-Content $script
-powershell.exe -ExecutionPolicy Bypass -File $script -Profile full
+powershell.exe -ExecutionPolicy Bypass -File $script
 ```
 
-两种安装方案：
+启动后使用方向键和空格选择：
+
+```powershell
+# ↑↓：移动；空格：选择/取消；Enter：开始；q：退出
+```
+
+基础运行环境（Git、Node.js、pnpm）是必选项。默认会选择 Program Lab C++ 环境；如果需要 Project Lab，就勾选 Project Lab / CMake；需要图形界面时再勾选 VS Code 和相应扩展。脚本会自动勾选扩展依赖，并根据选择执行对应的环境检查。
+
+菜单中的方案对应：`runtime`（只准备课程工具）、`basic`（Program）和 `full`（Program + Project）。
+
+高级用户仍可以直接指定方案：
 
 ```powershell
 # 只安装并验证 Quiz/Program 所需环境

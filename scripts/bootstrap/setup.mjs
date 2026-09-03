@@ -11,7 +11,7 @@ import { runCommand, commandText } from "./commands.mjs";
 import { inspectHost, evaluateProfile } from "./checks.mjs";
 import { parseSetupArgs } from "./options.mjs";
 import { PNPM_VERSION, profileRequirements } from "./requirements.mjs";
-import { createProgressUI } from "./ui.mjs";
+import { choiceSelectionSummary, createInstallSelection, createProgressUI, promptInstallSelection } from "./ui.mjs";
 
 export const SETUP_EXIT = Object.freeze({
   OK: 0,
@@ -170,7 +170,7 @@ export function planToolchainInstall(profile, host = {}) {
   if (platform === "darwin") {
     if (missing("Git")) add("git", "安装 Git", packageManager, ["install", "git"]);
     if (missing("Node.js")) add("node", "安装 Node.js", packageManager, ["install", "node"]);
-    if (!hasTool(host, "Clang") && !hasTool(host, "GCC")) {
+    if (requirement.requiresCompiler && !hasTool(host, "Clang") && !hasTool(host, "GCC")) {
       add("compiler", "安装 Xcode Command Line Tools", "xcode-select", ["--install"], { requiresUserAction: true });
     }
     if (requirement.requiresCmake && missing("CMake")) add("cmake", "安装 CMake", packageManager, ["install", "cmake"]);
@@ -180,7 +180,7 @@ export function planToolchainInstall(profile, host = {}) {
   if (platform === "win32") {
     if (missing("Git")) add("git", "安装 Git", ...Object.values(wingetInstall("Git.Git")));
     if (missing("Node.js")) add("node", "安装 Node.js LTS", ...Object.values(wingetInstall("OpenJS.NodeJS.LTS")));
-    if (!hasTool(host, "MSVC")) {
+    if (requirement.requiresCompiler && !hasTool(host, "MSVC")) {
       add("msvc", "安装 Visual Studio C++ Build Tools", ...Object.values(wingetInstall("Microsoft.VisualStudio.2022.BuildTools", [
         "--override",
         "--wait --passive --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended",
@@ -193,10 +193,23 @@ export function planToolchainInstall(profile, host = {}) {
   throw setupError("SETUP_UNSUPPORTED", `暂不支持自动配置平台：${platform}`);
 }
 
+export function planIdeExtensions(options = {}, profile = "basic") {
+  if (options.selection) {
+    return [
+      ...(options.installCppExtension ? ["ms-vscode.cpptools"] : []),
+      ...(options.installCmakeExtension ? ["ms-vscode.cmake-tools"] : []),
+    ];
+  }
+  return [
+    ...(profile === "runtime" ? [] : ["ms-vscode.cpptools"]),
+    ...(profile === "full" ? ["ms-vscode.cmake-tools"] : []),
+  ];
+}
+
 async function runWithRunner(context, command, args = [], options = {}) {
   try {
     return await context.runner(command, args, {
-      cwd: options.cwd ?? context.repoDir,
+      cwd: options.cwd ?? context.commandCwd ?? context.repoDir,
       env: options.env ?? context.env,
       timeoutMs: options.timeoutMs ?? options.timeMs ?? 30_000,
       timeMs: options.timeMs ?? options.timeoutMs ?? 30_000,
@@ -439,34 +452,28 @@ async function installDependencies(context) {
 }
 
 async function askInstallChoices(options, io) {
-  const interactive = !options.nonInteractive && !options.json && Boolean(io.input?.isTTY && io.output?.isTTY);
-  const result = { ...options };
-  if (!result.profile) {
-    if (!interactive) result.profile = "basic";
-    else {
-      const readline = createInterface({ input: io.input, output: io.output });
-      try {
-        const answer = (await readline.question("选择安装方案：[1] basic（Program） [2] full（含 CMake/Project，默认 2）：")).trim().toLowerCase();
-        result.profile = answer === "1" || answer === "basic" ? "basic" : "full";
-      } finally {
-        readline.close();
-      }
-    }
-  }
-  if (!result.skipVscode && !result.installVscode && interactive) {
-    const readline = createInterface({ input: io.input, output: io.output });
-    try {
-      const answer = (await readline.question("是否安装 VS Code 与课程扩展？[y/N]：")).trim().toLowerCase();
-      result.installVscode = ["y", "yes", "是"].includes(answer);
-    } finally {
-      readline.close();
-    }
-  }
-  return result;
+  const interactive = !options.checkOnly && !options.nonInteractive && !options.json && options.ui !== "plain" && Boolean(io.input?.isTTY && io.output?.isTTY);
+  if (!interactive) return { ...options, profile: options.profile ?? "basic" };
+  if (options.profile) return { ...options };
+  const initialSelection = createInstallSelection({
+    program: true,
+    project: false,
+    vscode: options.installVscode,
+    "cpp-extension": options.installCppExtension,
+    "cmake-extension": options.installCmakeExtension,
+  });
+  const selected = await promptInstallSelection({
+    input: io.input,
+    output: io.output,
+    initialSelection,
+    title: "配置 DSA Mastery · 选择要安装的内容",
+  });
+  if (selected.cancelled) return { ...options, cancelled: true };
+  return { ...options, ...selected };
 }
 
 async function askRepositoryUpdate(options, { io, cwd, runner, env }) {
-  const interactive = !options.nonInteractive && !options.json && !options.checkOnly && Boolean(io.input?.isTTY && io.output?.isTTY);
+  const interactive = !options.nonInteractive && !options.json && !options.checkOnly && options.ui !== "plain" && Boolean(io.input?.isTTY && io.output?.isTTY);
   if (!interactive || options.updateRepo) return options;
   const repositoryDir = resolveRepositoryDir({ cwd, repoDir: options.repoDir });
   const state = await inspectRepository(repositoryDir, { runner, env });
@@ -501,6 +508,10 @@ async function runLabJson(context, args, label) {
 }
 
 async function runSmoke(context) {
+  if (context.profile === "runtime") {
+    context.smoke = [];
+    return context.smoke;
+  }
   const program = path.join(context.repoDir, "labs", "chapter-01", "exercise", "E-01-01-sequential-list-deduplication");
   const results = [{
     label: "Program doctor",
@@ -535,15 +546,14 @@ async function installIde(context) {
     code = await commandAvailable(context, "code", ["--version"]);
   }
   if (!code) return { status: "warning", message: "VS Code 安装后当前终端仍找不到 code，请打开新终端" };
-  const extensions = ["ms-vscode.cpptools"];
-  if (context.profile === "full") extensions.push("ms-vscode.cmake-tools");
+  const extensions = planIdeExtensions(context.options, context.profile);
   const failures = [];
   for (const extension of extensions) {
     const result = await runWithRunner(context, "code", ["--install-extension", extension, "--force"], { timeoutMs: 120_000, outputLimitKb: 2048 });
     recordCommand(context, "code", ["--install-extension", extension, "--force"], result);
     if (resultFailed(result)) failures.push(extension);
   }
-  return failures.length ? { status: "warning", message: `扩展安装失败：${failures.join(", ")}` } : { status: "success", message: "VS Code 与扩展已准备" };
+  return failures.length ? { status: "warning", message: `扩展安装失败：${failures.join(", ")}` } : { status: "success", message: extensions.length ? "VS Code 与所选扩展已准备" : "VS Code 已准备" };
 }
 
 function serializeHost(host) {
@@ -570,6 +580,7 @@ function summarizeReport(report) {
     `DSA Mastery 环境配置：${report.ok ? "成功" : "未完成"}`,
     `Profile：${report.profile} · 平台：${report.platform}/${report.architecture}`,
   ];
+  if (report.selectionLabels?.length) lines.push(`已选择：${report.selectionLabels.join("、")}`);
   for (const stage of report.stages ?? []) lines.push(`${stage.status === "success" ? "✓" : stage.status === "warning" ? "⚠" : stage.status === "skipped" ? "–" : stage.status === "failed" ? "✗" : "·"} ${stage.id}：${stage.message ?? ""}`);
   if (report.repository?.path) lines.push(`仓库：${report.repository.path}`);
   if (report.logPath) lines.push(`日志：${report.logPath}`);
@@ -665,12 +676,22 @@ export async function runSetup(argv = [], dependencies = {}) {
   if (options.help) {
     return {
       exitCode: SETUP_EXIT.OK,
-      report: { reportVersion: 1, command: "setup", ok: true, help: "node scripts/bootstrap/setup.mjs [--profile basic|full] [--check-only] [--repo-dir <path>] [--ui auto|tui|plain]" },
+      report: { reportVersion: 1, command: "setup", ok: true, help: "node scripts/bootstrap/setup.mjs [--profile runtime|basic|full] [--check-only] [--repo-dir <path>] [--ui auto|tui|plain]" },
     };
   }
 
   const io = dependencies.io ?? { input: process.stdin, output: process.stdout };
   options = await askInstallChoices(options, io);
+  if (options.cancelled) {
+    const report = {
+      reportVersion: 1,
+      command: "setup",
+      ok: false,
+      cancelled: true,
+      message: "已取消安装",
+    };
+    return { exitCode: SETUP_EXIT.OK, report, summary: "\nDSA Mastery 环境配置：已取消" };
+  }
   const profile = profileRequirements(options.profile).name;
   const runner = dependencies.runner ?? runCommand;
   options = await askRepositoryUpdate(options, {
@@ -686,6 +707,7 @@ export async function runSetup(argv = [], dependencies = {}) {
     architecture: dependencies.architecture ?? process.arch,
     env: { ...(dependencies.env ?? process.env) },
     runner,
+    commandCwd: dependencies.commandCwd ?? dependencies.cwd ?? process.cwd(),
     repoDir: resolveRepositoryDir({ cwd: dependencies.cwd ?? process.cwd(), repoDir: options.repoDir }),
     nodeCommand: dependencies.nodeCommand ?? process.execPath,
     commands: [],
@@ -704,13 +726,18 @@ export async function runSetup(argv = [], dependencies = {}) {
     platform: context.platform,
     architecture: context.architecture,
     repoDir: context.repoDir,
+    selection: options.selection,
+    selectionLabels: options.selection ? choiceSelectionSummary(options.selection) : undefined,
     stages: SETUP_STAGES.map((id) => ({ id, status: "pending", message: "" })),
   };
   try {
     context.ui.start();
     await executeStage(context, "preflight", async () => {
       await inspectContextHost(context);
-      return { message: `Node ${context.host.tools.find((tool) => tool.name === "Node.js")?.version ?? "unknown"} · 编译器${context.host.compilerReady ? "可用" : "缺失"}` };
+      const compilerMessage = profile === "runtime"
+        ? "未选择 C++ 编译器"
+        : `编译器${context.host.compilerReady ? "可用" : "缺失"}`;
+      return { message: `Node ${context.host.tools.find((tool) => tool.name === "Node.js")?.version ?? "unknown"} · ${compilerMessage}` };
     });
     if (options.checkOnly) {
       await executeStage(context, "toolchain", async () => {
@@ -724,7 +751,7 @@ export async function runSetup(argv = [], dependencies = {}) {
     } else {
       await executeStage(context, "toolchain", async () => {
         await ensureToolchain(context);
-        return { message: `Node/pnpm/编译器${profile === "full" ? "/CMake" : ""} 已就绪` };
+        return { message: profile === "runtime" ? "Node/pnpm 已就绪" : `Node/pnpm/编译器${profile === "full" ? "/CMake" : ""} 已就绪` };
       });
       await executeStage(context, "repository", async () => {
         const repository = await ensureRepository(context);
@@ -735,10 +762,14 @@ export async function runSetup(argv = [], dependencies = {}) {
         return { message: "pnpm install --frozen-lockfile 完成" };
       });
       await executeStage(context, "ide", async () => installIde(context));
-      await executeStage(context, "smoke", async () => {
-        await runSmoke(context);
-        return { message: profile === "full" ? "Program + Project reference 验证通过" : "Program reference 验证通过" };
-      });
+      if (profile === "runtime") {
+        context.ui.update("smoke", "skipped", "runtime 方案不运行 C++ smoke");
+      } else {
+        await executeStage(context, "smoke", async () => {
+          await runSmoke(context);
+          return { message: profile === "full" ? "Program + Project reference 验证通过" : "Program reference 验证通过" };
+        });
+      }
     }
     report.ok = true;
   } catch (rawError) {
