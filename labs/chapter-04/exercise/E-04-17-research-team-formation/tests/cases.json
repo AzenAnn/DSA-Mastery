@@ -3,28 +3,241 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 25,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   },
   {
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   },
   {
-    "id": "003-chain",
-    "input": "tests/003-chain.in",
-    "expected": "tests/003-chain.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "id": "003-single-impossible",
+    "input": "tests/003-single-impossible.in",
+    "expected": "tests/003-single-impossible.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   },
   {
-    "id": "004-negative",
-    "input": "tests/004-negative.in",
-    "expected": "tests/004-negative.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "id": "004-two-nodes-k1",
+    "input": "tests/004-two-nodes-k1.in",
+    "expected": "tests/004-two-nodes-k1.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-two-nodes-k2",
+    "input": "tests/005-two-nodes-k2.in",
+    "expected": "tests/005-two-nodes-k2.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-chain-k2",
+    "input": "tests/006-chain-k2.in",
+    "expected": "tests/006-chain-k2.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-chain-k3",
+    "input": "tests/007-chain-k3.in",
+    "expected": "tests/007-chain-k3.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-star-pick-best",
+    "input": "tests/008-star-pick-best.in",
+    "expected": "tests/008-star-pick-best.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-negative-root-worthwhile",
+    "input": "tests/009-negative-root-worthwhile.in",
+    "expected": "tests/009-negative-root-worthwhile.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-all-negative",
+    "input": "tests/010-all-negative.in",
+    "expected": "tests/010-all-negative.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-k-equals-n",
+    "input": "tests/011-k-equals-n.in",
+    "expected": "tests/011-k-equals-n.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-k-equals-1",
+    "input": "tests/012-k-equals-1.in",
+    "expected": "tests/012-k-equals-1.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-deep-vs-shallow",
+    "input": "tests/013-deep-vs-shallow.in",
+    "expected": "tests/013-deep-vs-shallow.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-cbt-7-k3",
+    "input": "tests/014-cbt-7-k3.in",
+    "expected": "tests/014-cbt-7-k3.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-cbt-7-k5",
+    "input": "tests/015-cbt-7-k5.in",
+    "expected": "tests/015-cbt-7-k5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-zero-values",
+    "input": "tests/016-zero-values.in",
+    "expected": "tests/016-zero-values.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-multi-branch-4",
+    "input": "tests/017-multi-branch-4.in",
+    "expected": "tests/017-multi-branch-4.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-cbt-15-k5",
+    "input": "tests/018-cbt-15-k5.in",
+    "expected": "tests/018-cbt-15-k5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-cbt-15-k10",
+    "input": "tests/019-cbt-15-k10.in",
+    "expected": "tests/019-cbt-15-k10.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-25-k12",
+    "input": "tests/020-stress-25-k12.in",
+    "expected": "tests/020-stress-25-k12.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "scale"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
   }
 ]

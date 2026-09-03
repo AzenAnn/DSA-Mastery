@@ -3,7 +3,7 @@
     "id": "001-sample-true",
     "input": "tests/001-sample-true.in",
     "expected": "tests/001-sample-true.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,19 @@
     "id": "002-sample-false",
     "input": "tests/002-sample-false.in",
     "expected": "tests/002-sample-false.out",
-    "points": 20,
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-single-match",
+    "input": "tests/003-single-match.in",
+    "expected": "tests/003-single-match.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -24,10 +36,34 @@
     }
   },
   {
-    "id": "003-identical",
-    "input": "tests/003-identical.in",
-    "expected": "tests/003-identical.out",
-    "points": 20,
+    "id": "004-single-differ",
+    "input": "tests/004-single-differ.in",
+    "expected": "tests/004-single-differ.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-exact-same-tree",
+    "input": "tests/005-exact-same-tree.in",
+    "expected": "tests/005-exact-same-tree.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-left-child-match",
+    "input": "tests/006-left-child-match.in",
+    "expected": "tests/006-left-child-match.out",
+    "points": 5,
     "tags": [
       "normal"
     ],
@@ -36,10 +72,34 @@
     }
   },
   {
-    "id": "004-single-match",
-    "input": "tests/004-single-match.in",
-    "expected": "tests/004-single-match.out",
-    "points": 20,
+    "id": "007-right-child-match",
+    "input": "tests/007-right-child-match.in",
+    "expected": "tests/007-right-child-match.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-deep-leaf-match",
+    "input": "tests/008-deep-leaf-match.in",
+    "expected": "tests/008-deep-leaf-match.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-subroot-larger-than-root",
+    "input": "tests/009-subroot-larger-than-root.in",
+    "expected": "tests/009-subroot-larger-than-root.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -48,12 +108,134 @@
     }
   },
   {
-    "id": "005-no-match",
-    "input": "tests/005-no-match.in",
-    "expected": "tests/005-no-match.out",
-    "points": 20,
+    "id": "010-same-values-diff-structure",
+    "input": "tests/010-same-values-diff-structure.in",
+    "expected": "tests/010-same-values-diff-structure.out",
+    "points": 5,
     "tags": [
-      "boundary"
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-all-same-val-match",
+    "input": "tests/011-all-same-val-match.in",
+    "expected": "tests/011-all-same-val-match.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-all-same-val-extra-child-false",
+    "input": "tests/012-all-same-val-extra-child-false.in",
+    "expected": "tests/012-all-same-val-extra-child-false.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-duplicate-roots-in-main",
+    "input": "tests/013-duplicate-roots-in-main.in",
+    "expected": "tests/013-duplicate-roots-in-main.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-left-chain-tail-match",
+    "input": "tests/014-left-chain-tail-match.in",
+    "expected": "tests/014-left-chain-tail-match.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-left-chain-middle-false",
+    "input": "tests/015-left-chain-middle-false.in",
+    "expected": "tests/015-left-chain-middle-false.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-right-chain-tail-match",
+    "input": "tests/016-right-chain-tail-match.in",
+    "expected": "tests/016-right-chain-tail-match.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-negative-values-match",
+    "input": "tests/017-negative-values-match.in",
+    "expected": "tests/017-negative-values-match.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-negative-values-mismatch",
+    "input": "tests/018-negative-values-mismatch.in",
+    "expected": "tests/018-negative-values-mismatch.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-large-tree-subroot-at-bottom",
+    "input": "tests/019-large-tree-subroot-at-bottom.in",
+    "expected": "tests/019-large-tree-subroot-at-bottom.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "scale"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-not-found",
+    "input": "tests/020-stress-not-found.in",
+    "expected": "tests/020-stress-not-found.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "scale"
     ],
     "compare": {
       "mode": "tokens"

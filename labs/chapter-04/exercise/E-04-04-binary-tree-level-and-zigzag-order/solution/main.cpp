@@ -49,26 +49,47 @@ void freeTree(TreeNode* root) {
 }
 
 void printLevelAndZigzag(TreeNode* root) {
-    std::vector<std::vector<int>> levels;
-    if (root) {
-        std::queue<TreeNode*> q;
-        q.push(root);
-        while (!q.empty()) {
-            size_t sz = q.size();
-            std::vector<int> cur;
-            for (size_t i = 0; i < sz; i++) {
-                TreeNode* node = q.front();
-                q.pop();
-                cur.push_back(node->val);
-                if (node->left) q.push(node->left);
-                if (node->right) q.push(node->right);
+    if (!root) {
+        std::cout << "LEVEL_ORDER:\nZIGZAG_ORDER:\n";
+        return;
+    }
+
+    std::vector<std::vector<int>> levelOrder;
+    std::vector<std::deque<int>> zigzagOrder;
+
+    std::queue<TreeNode*> q;
+    q.push(root);
+    bool leftToRight = true;
+
+    while (!q.empty()) {
+        size_t sz = q.size();
+        std::vector<int> curLevel;
+        std::deque<int> curZigzag;
+
+        for (size_t i = 0; i < sz; i++) {
+            TreeNode* node = q.front();
+            q.pop();
+
+            curLevel.push_back(node->val);
+
+            // 解法一（双端队列法）：偶数层尾插，奇数层头插，无需 std::reverse
+            if (leftToRight) {
+                curZigzag.push_back(node->val);
+            } else {
+                curZigzag.push_front(node->val);
             }
-            levels.push_back(cur);
+
+            if (node->left) q.push(node->left);
+            if (node->right) q.push(node->right);
         }
+
+        levelOrder.push_back(curLevel);
+        zigzagOrder.push_back(curZigzag);
+        leftToRight = !leftToRight;
     }
 
     std::cout << "LEVEL_ORDER:\n";
-    for (const auto& lv : levels) {
+    for (const auto& lv : levelOrder) {
         for (size_t i = 0; i < lv.size(); i++) {
             std::cout << (i == 0 ? "" : " ") << lv[i];
         }
@@ -76,13 +97,9 @@ void printLevelAndZigzag(TreeNode* root) {
     }
 
     std::cout << "ZIGZAG_ORDER:\n";
-    for (size_t l = 0; l < levels.size(); l++) {
-        auto lv = levels[l];
-        if (l % 2 == 1) {
-            std::reverse(lv.begin(), lv.end());
-        }
-        for (size_t i = 0; i < lv.size(); i++) {
-            std::cout << (i == 0 ? "" : " ") << lv[i];
+    for (const auto& row : zigzagOrder) {
+        for (size_t i = 0; i < row.size(); i++) {
+            std::cout << (i == 0 ? "" : " ") << row[i];
         }
         std::cout << "\n";
     }

@@ -30,14 +30,13 @@ duration: "20～30 分钟"
 - 第一段输出 `LEVEL_ORDER:` 后跟标准层序遍历，每层占一行；
 - 第二段输出 `ZIGZAG_ORDER:` 后跟锯齿形层序遍历，每层占一行。
 
-::: tip 💡 输入处理与建树指引
-1. **读入序列**：
-   直接使用 `std::string token; while (std::cin >> token)` 循环读取输入放入 `std::vector<std::string> tokens` 中即可，C++ 会自动按空格和换行分词。
-2. **字符串转数字与 null 拦截**：
-   - 遇到 `"null"` 时，表示空子树，直接将子节点置为 `nullptr`；**切勿对 `"null"` 调用 `std::stoi("null")`**（会抛出 `std::invalid_argument` 异常导致崩溃）；
-   - 仅在 `token != "null"` 时，才调用 `std::stoi(token)` 转为整数并创建有效节点 `new TreeNode(val)`。
-3. **基于队列的 BFS 建树**：
-   借助 `std::queue<TreeNode*>` 存放父节点，队头出队后依次连接左右孩子，并将非空孩子入队。
+::: tip 💡 输入提示
+使用流分词极简读取；仅在 `token != "null"` 时调用 `std::stoi`，防止异常崩溃：
+```cpp
+std::vector<std::string> tokens;
+std::string token;
+while (std::cin >> token) tokens.push_back(token);
+```
 :::
 
 ## 样例
@@ -120,25 +119,49 @@ pnpm lab:score -- labs/chapter-04/exercise/E-04-04-binary-tree-level-and-zigzag-
 
 ### 核心思路
 
-1. **分层遍历标准套路**：利用队列的当前大小 `sz = q.size()` 锁定当前层的节点数量，使用固定循环弹出恰好 `sz` 个节点，将其子节点推入下一层；
-2. **锯齿形翻转**：在收集完所有层的结果后，对所有奇数层（第 1, 3, 5... 层）执行 `std::reverse` 翻转即可。
+二叉树锯齿形层序遍历的本质是：**在广度优先搜索（BFS）按层推进的同时，控制每层元素的存储次序**。本题有两种优雅的实现方案：
 
-### 复杂度分析
+#### 方案一：双端队列法（`std::deque`）
+* **核心机制**：利用 `std::deque` 允许在**两端均以 $O(1)$ 时间插入**的物理特性；
+* **遍历流程**：
+  1. 偶数层（从左到右）：直接向队尾推进 `deque.push_back(node->val)`；
+  2. 奇数层（从右到左）：直接向队头推入 `deque.push_front(node->val)`；
+* **优势**：利用了deque本身两端pop和push的特性，省去了翻转或下标处理的操作。
 
-- **时间复杂度**：$O(n)$，每个节点进出队列一次，翻转操作总用时为 $O(n)$。
-- **空间复杂度**：$O(n)$，队列和输出数组所占空间。
+#### 方案二：定长 Vector 镜像坐标填充法（进阶）
+* **核心机制**：在进入每层循环时，当前层的节点总数已知为 `sz = q.size()`；
+* **遍历流程**：
+  1. 一次性精准开辟大小为 `sz` 的连续内存：`std::vector<int> row(sz)`；
+  2. 若当前层从左向右，填入下标 `row[i] = node->val`；
+  3. 若当前层从右向左，直接从后向前填入镜像下标 `row[sz - 1 - i] = node->val`；
+* **优势**：单块物理内存连续分配，CPU L1/L2 缓存行预取效率极高，无多次指针解引用或额外开辟分段 buffer 的常数开销。
+
+---
+
+### 复杂度分析与性能对比
+
+| 解法对比 | 传统解法 (`vector` + `reverse`) | 方案一：双端队列法 (`std::deque`) | 方案二：镜像下标法 (`vector` 镜像索引) |
+| :--- | :--- | :--- | :--- |
+| **时间复杂度** | $O(n)$（含额外 $\lfloor k/2 \rfloor$ 次 swap） | $O(n)$（头尾插入均为 $O(1)$） | $O(n)$（单次赋值到位，常数项最小） |
+| **空间复杂度** | $O(n)$（若按值拷贝会产生冗余堆内存） | $O(n)$（中控 map + 分段 chunk） | $O(n)$（单块连续物理内存） |
+| **缓存局部性** | 高（但在按值拷贝时开销大） | 中等（跨 chunk 访问时有两次解引用） | **极高**（100% 缓存行顺序命中） |
+| **设计契约** | 需后置倒序处理 | **算法语义最纯粹，吻合题意** | 理论执行速度更快 |
 
 </details>
 
 <details>
 <summary>点击查看参考代码</summary>
 
-```cpp
+### 方案一：双端队列法（`std::deque` 推荐面试解）
+
+利用 `std::deque` 的双端插入能力，偶数层 `push_back`，奇数层 `push_front`，无需事后倒序翻转。
+
+```cpp:line-numbers [solution-deque.cpp]
 #include <iostream>
 #include <vector>
 #include <string>
 #include <queue>
-#include <algorithm>
+#include <deque>
 
 struct TreeNode {
     int val = 0;
@@ -184,41 +207,60 @@ void freeTree(TreeNode* root) {
     delete root;
 }
 
-void printLevelAndZigzag(TreeNode* root) {
-    std::vector<std::vector<int>> levels;
-    if (root) {
-        std::queue<TreeNode*> q;
-        q.push(root);
-        while (!q.empty()) {
-            size_t sz = q.size();
-            std::vector<int> cur;
-            for (size_t i = 0; i < sz; i++) {
-                TreeNode* node = q.front();
-                q.pop();
-                cur.push_back(node->val);
-                if (node->left) q.push(node->left);
-                if (node->right) q.push(node->right);
-            }
-            levels.push_back(cur);
-        }
+void printLevelAndZigzagDeque(TreeNode* root) {
+    if (!root) {
+        std::cout << "LEVEL_ORDER:\nZIGZAG_ORDER:\n";
+        return;
     }
 
+    std::vector<std::vector<int>> levelOrder;
+    std::vector<std::deque<int>> zigzagOrder;
+
+    std::queue<TreeNode*> q;
+    q.push(root);
+    bool leftToRight = true;
+
+    while (!q.empty()) {
+        size_t sz = q.size();
+        std::vector<int> curLevel;
+        std::deque<int> curZigzag;
+
+        for (size_t i = 0; i < sz; i++) {
+            TreeNode* node = q.front();
+            q.pop();
+
+            curLevel.push_back(node->val);
+
+            // 偶数层尾插，奇数层头插
+            if (leftToRight) {
+                curZigzag.push_back(node->val);
+            } else {
+                curZigzag.push_front(node->val);
+            }
+
+            if (node->left) q.push(node->left);
+            if (node->right) q.push(node->right);
+        }
+
+        levelOrder.push_back(curLevel);
+        zigzagOrder.push_back(curZigzag);
+        leftToRight = !leftToRight;
+    }
+
+    // 1. 输出标准层序
     std::cout << "LEVEL_ORDER:\n";
-    for (const auto& lv : levels) {
+    for (const auto& lv : levelOrder) {
         for (size_t i = 0; i < lv.size(); i++) {
             std::cout << (i == 0 ? "" : " ") << lv[i];
         }
         std::cout << "\n";
     }
 
+    // 2. 输出锯齿层序
     std::cout << "ZIGZAG_ORDER:\n";
-    for (size_t l = 0; l < levels.size(); l++) {
-        auto lv = levels[l];
-        if (l % 2 == 1) {
-            std::reverse(lv.begin(), lv.end());
-        }
-        for (size_t i = 0; i < lv.size(); i++) {
-            std::cout << (i == 0 ? "" : " ") << lv[i];
+    for (const auto& row : zigzagOrder) {
+        for (size_t i = 0; i < row.size(); i++) {
+            std::cout << (i == 0 ? "" : " ") << row[i];
         }
         std::cout << "\n";
     }
@@ -231,9 +273,76 @@ int main() {
         tokens.push_back(token);
     }
     TreeNode* root = buildTree(tokens);
-    printLevelAndZigzag(root);
+    printLevelAndZigzagDeque(root);
     freeTree(root);
     return 0;
+}
+```
+
+---
+
+### 方案二：定长 Vector 镜像坐标法（追求极致性能与 CPU 缓存）
+
+预分配确定长度的 `vector<int> curZigzag(sz)`，按方向选择下标 `i` 或 `sz - 1 - i` 写入，享受单块连续内存最高缓存命中率。
+
+```cpp:line-numbers [solution-vector-mirror.cpp]
+#include <iostream>
+#include <vector>
+#include <string>
+#include <queue>
+
+void printLevelAndZigzagMirror(TreeNode* root) {
+    if (!root) {
+        std::cout << "LEVEL_ORDER:\nZIGZAG_ORDER:\n";
+        return;
+    }
+
+    std::vector<std::vector<int>> levelOrder;
+    std::vector<std::vector<int>> zigzagOrder;
+
+    std::queue<TreeNode*> q;
+    q.push(root);
+    bool leftToRight = true;
+
+    while (!q.empty()) {
+        size_t sz = q.size();
+        std::vector<int> curLevel(sz);
+        std::vector<int> curZigzag(sz); // 精准预分配，零冗余开销
+
+        for (size_t i = 0; i < sz; i++) {
+            TreeNode* node = q.front();
+            q.pop();
+
+            curLevel[i] = node->val;
+
+            // 核心：偶数层填在 i，奇数层直接填在镜像位置 sz - 1 - i
+            size_t zigzagIdx = leftToRight ? i : (sz - 1 - i);
+            curZigzag[zigzagIdx] = node->val;
+
+            if (node->left) q.push(node->left);
+            if (node->right) q.push(node->right);
+        }
+
+        levelOrder.push_back(curLevel);
+        zigzagOrder.push_back(curZigzag);
+        leftToRight = !leftToRight;
+    }
+
+    std::cout << "LEVEL_ORDER:\n";
+    for (const auto& lv : levelOrder) {
+        for (size_t i = 0; i < lv.size(); i++) {
+            std::cout << (i == 0 ? "" : " ") << lv[i];
+        }
+        std::cout << "\n";
+    }
+
+    std::cout << "ZIGZAG_ORDER:\n";
+    for (const auto& row : zigzagOrder) {
+        for (size_t i = 0; i < row.size(); i++) {
+            std::cout << (i == 0 ? "" : " ") << row[i];
+        }
+        std::cout << "\n";
+    }
 }
 ```
 

@@ -19,8 +19,9 @@ duration: "25～35 分钟"
 
 ## 题目
 
-给定一个二叉树, 找到该树中两个指定节点 $p$ 和 $q$ 的**最近公共祖先 (LCA)**。
-根据百度百科中对 LCA 的定义：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+给定一棵二叉树以及树中的两个指定节点 $p$ 和 $q$，找到它们的**最近公共祖先（Lowest Common Ancestor, LCA）**。
+
+最近公共祖先是指：在二叉树中同时为 $p$ 和 $q$ 的祖先、且在树中**深度最深（离两节点最近）**的节点（注：一个节点也可以是其自身的祖先）。
 
 ## 输入格式
 - 第一行：二叉树的层序遍历序列；
@@ -29,14 +30,18 @@ duration: "25～35 分钟"
 ## 输出格式
 - 输出一个整数，表示最近公共祖先节点的值。
 
-::: tip 💡 输入处理与建树指引
-1. **读入序列**：
-   直接使用 `std::string token; while (std::cin >> token)` 循环读取输入放入 `std::vector<std::string> tokens` 中即可，C++ 会自动按空格和换行分词。
-2. **字符串转数字与 null 拦截**：
-   - 遇到 `"null"` 时，表示空子树，直接将子节点置为 `nullptr`；**切勿对 `"null"` 调用 `std::stoi("null")`**（会抛出 `std::invalid_argument` 异常导致崩溃）；
-   - 仅在 `token != "null"` 时，才调用 `std::stoi(token)` 转为整数并创建有效节点 `new TreeNode(val)`。
-3. **基于队列的 BFS 建树**：
-   借助 `std::queue<TreeNode*>` 存放父节点，队头出队后依次连接左右孩子，并将非空孩子入队。
+::: tip 💡 输入提示
+本题第 1 行为树序列，第 2 行为节点 `p` 和 `q`。需引入 `<sstream>` 按行切分以防数据混淆：
+```cpp
+#include <sstream>
+
+std::string line, token;
+std::getline(std::cin, line);
+std::stringstream ss(line);
+while (ss >> token) tokens.push_back(token);
+int p, q;
+std::cin >> p >> q;
+```
 :::
 
 ## 样例

@@ -30,6 +30,17 @@ duration: "25～35 分钟"
 - 第一行：`POSTORDER:` 后跟空格分隔的后序遍历序列；
 - 第二行：`LEVELORDER:` 后跟空格分隔的层序遍历序列。
 
+::: tip 💡 输入提示
+先读取节点数量 $N$，再依次流式读入两个遍历序列：
+```cpp
+int n;
+if (!(std::cin >> n) || n <= 0) return 0;
+std::vector<int> seq1(n), seq2(n);
+for (int i = 0; i < n; i++) std::cin >> seq1[i];
+for (int i = 0; i < n; i++) std::cin >> seq2[i];
+```
+:::
+
 ## 样例
 
 ### 样例输入 1

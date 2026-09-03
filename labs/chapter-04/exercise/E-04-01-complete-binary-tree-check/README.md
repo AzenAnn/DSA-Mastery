@@ -40,6 +40,15 @@ duration: "20～30 分钟"
 | 时间复杂度要求 | $O(n)$ |
 | 额外空间复杂度 | $O(n)$（队列空间） |
 
+::: tip 💡 输入提示
+使用流分词极简读取；仅在 `token != "null"` 时调用 `std::stoi`，防止异常崩溃：
+```cpp
+std::vector<std::string> tokens;
+std::string token;
+while (std::cin >> token) tokens.push_back(token);
+```
+:::
+
 ## 样例
 
 ### 样例输入 1

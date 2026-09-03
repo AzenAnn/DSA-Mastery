@@ -1,9 +1,9 @@
 [
   {
-    "id": "001-sample",
-    "input": "tests/001-sample.in",
-    "expected": "tests/001-sample.out",
-    "points": 20,
+    "id": "001-sample1",
+    "input": "tests/001-sample1.in",
+    "expected": "tests/001-sample1.out",
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -24,10 +24,10 @@
     }
   },
   {
-    "id": "003-left-skewed",
-    "input": "tests/003-left-skewed.in",
-    "expected": "tests/003-left-skewed.out",
-    "points": 20,
+    "id": "003-two-left",
+    "input": "tests/003-two-left.in",
+    "expected": "tests/003-two-left.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -36,10 +36,10 @@
     }
   },
   {
-    "id": "004-right-skewed",
-    "input": "tests/004-right-skewed.in",
-    "expected": "tests/004-right-skewed.out",
-    "points": 20,
+    "id": "004-two-right",
+    "input": "tests/004-two-right.in",
+    "expected": "tests/004-two-right.out",
+    "points": 5,
     "tags": [
       "boundary"
     ],
@@ -48,12 +48,193 @@
     }
   },
   {
-    "id": "005-full",
-    "input": "tests/005-full.in",
-    "expected": "tests/005-full.out",
-    "points": 20,
+    "id": "005-three-full",
+    "input": "tests/005-three-full.in",
+    "expected": "tests/005-three-full.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-three-left-chain",
+    "input": "tests/006-three-left-chain.in",
+    "expected": "tests/006-three-left-chain.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-three-right-chain",
+    "input": "tests/007-three-right-chain.in",
+    "expected": "tests/007-three-right-chain.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-skewed-left-6",
+    "input": "tests/008-skewed-left-6.in",
+    "expected": "tests/008-skewed-left-6.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-skewed-right-6",
+    "input": "tests/009-skewed-right-6.in",
+    "expected": "tests/009-skewed-right-6.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-skewed-left-15",
+    "input": "tests/010-skewed-left-15.in",
+    "expected": "tests/010-skewed-left-15.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-skewed-right-15",
+    "input": "tests/011-skewed-right-15.in",
+    "expected": "tests/011-skewed-right-15.out",
+    "points": 5,
+    "tags": [
+      "skewed"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-negative-values",
+    "input": "tests/012-negative-values.in",
+    "expected": "tests/012-negative-values.out",
+    "points": 5,
+    "tags": [
+      "trick"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-zigzag-5",
+    "input": "tests/013-zigzag-5.in",
+    "expected": "tests/013-zigzag-5.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-zigzag-7",
+    "input": "tests/014-zigzag-7.in",
+    "expected": "tests/014-zigzag-7.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-left-heavy",
+    "input": "tests/015-left-heavy.in",
+    "expected": "tests/015-left-heavy.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-right-heavy",
+    "input": "tests/016-right-heavy.in",
+    "expected": "tests/016-right-heavy.out",
+    "points": 5,
+    "tags": [
+      "structure"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-perfect-tree-7",
+    "input": "tests/017-perfect-tree-7.in",
+    "expected": "tests/017-perfect-tree-7.out",
+    "points": 5,
     "tags": [
       "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-perfect-tree-15",
+    "input": "tests/018-perfect-tree-15.in",
+    "expected": "tests/018-perfect-tree-15.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-perfect-tree-31",
+    "input": "tests/019-perfect-tree-31.in",
+    "expected": "tests/019-perfect-tree-31.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-100",
+    "input": "tests/020-stress-100.in",
+    "expected": "tests/020-stress-100.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "scale"
     ],
     "compare": {
       "mode": "tokens"
