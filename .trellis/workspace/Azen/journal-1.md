@@ -578,3 +578,26 @@ Expanded 01E01-01E15 to exactly 20 weighted cases each, added boundary/normal/sp
 ### Status
 
 [OK] **Completed**
+
+
+## Session 25: 完成 Ch12 分治与递归整体重构
+
+**Date**: 2026-09-04
+**Task**: 完成 Ch12 分治与递归整体重构
+**Branch**: `chapter/ch12-divide-conquer-rebuild`
+
+### Summary
+
+重写 8 篇 Ch12 教材，替换为 16 个分治与递归 Exercise Lab，补充 320 组用例、独立合同审计、Pages 回归与 Windows Bootstrap 路径规范；全仓及浏览器验证通过。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `18c0794` | (see git log) |
+| `4939071` | (see git log) |
+| `6662839` | (see git log) |
+
+### Status
+
+[OK] **Completed**

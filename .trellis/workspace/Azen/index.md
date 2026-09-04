@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 24
-- **Last Active**: 2026-09-02
+- **Total Sessions**: 25
+- **Last Active**: 2026-09-04
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~580 | Active |
+| `journal-1.md` | ~603 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 25 | 2026-09-04 | 完成 Ch12 分治与递归整体重构 | `18c0794`, `4939071`, `6662839` | `chapter/ch12-divide-conquer-rebuild` |
 | 24 | 2026-09-02 | Expand Chapter 1 Program Lab tests | `a168091` | `codex/ch1-labs-20-test-cases` |
 | 23 | 2026-09-02 | Ch.1 Graphviz 图示迁移 | `ae0a4c9`, `25c63dc` | `codex/ch1-graphviz-rendering` |
 | 22 | 2026-09-01 | 修复测评行末空格误判 | `269b7a3` | `codex/fix-trailing-space-judge` |

@@ -319,7 +319,13 @@ test("curriculum exposes every Part and the required search, sorting, and algori
 
   await page.goto(`${baseUrl}/learn/outline/chapter-12-divide-conquer-recursion/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("分治与递归");
-  await expect(page.locator(".course-curriculum-empty")).toContainText("后续迭代中完善");
+  await expect(page.locator(".course-curriculum-empty")).toHaveCount(0);
+  await expect(page.locator(".course-curriculum-resource-list")).toContainText(
+    "第 12 章：从自相似问题到分治框架",
+  );
+  await expect(page.locator(".course-curriculum-resource-list")).toContainText(
+    "Lab 12-E-01：Function",
+  );
 
   await page.goto(`${baseUrl}/learn/chapter-08-search/02-binary-search-tree/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.2 二叉排序树");
@@ -1516,6 +1522,85 @@ test("chapter 14 exposes five DP lessons, thirty Exercise Labs, and empty Theory
   );
 
   await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(2);
+  const layout = await page.evaluate(() => ({
+    clientWidth: globalThis.document.documentElement.clientWidth,
+    scrollWidth: globalThis.document.documentElement.scrollWidth,
+  }));
+  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
+  expect(failures).toEqual([]);
+});
+
+test("chapter 12 exposes eight lessons, sixteen Exercise Labs, and empty Theory and Project slots", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${baseUrl}/learn/outline/chapter-12-divide-conquer-recursion/`);
+
+  const chapterGroup = page.locator(
+    '.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-12-divide-conquer-recursion/"])',
+  );
+  await expect(chapterGroup).toHaveCount(1);
+  await expect(chapterGroup).not.toContainText("相关 Labs");
+
+  for (const title of [
+    "第 12 章：从自相似问题到分治框架",
+    "递归建模：函数契约、边界与规模递减",
+    "递与归：调用栈、递归树和迭代改写",
+    "分治建模：Divide–Conquer–Combine",
+    "合并答案：分治算法真正困难的部分",
+    "递归算法的终止性与正确性证明",
+    "从递推式到复杂度：递归树与主定理",
+    "方法选择：递归、分治、迭代、DP 与回溯",
+  ]) {
+    await expect(chapterGroup.getByRole("link", { name: title, exact: true })).toHaveCount(1);
+  }
+
+  const labGroup = chapterGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)",
+  );
+  await expect(labGroup).toHaveCount(1);
+  await expect(labGroup).not.toHaveClass(/collapsed/);
+
+  const theoryGroup = labGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--theory)",
+  );
+  await expect(theoryGroup).toHaveCount(1);
+  await theoryGroup.locator(":scope > .item > .caret").click();
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(0);
+  await expect(theoryGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无理论型 Lab",
+  );
+
+  const exerciseGroup = labGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)",
+  );
+  await expect(exerciseGroup).toHaveCount(1);
+  await exerciseGroup.locator(":scope > .item > .caret").click();
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(16);
+  await expect(exerciseGroup.locator(":scope > .items a").first()).toHaveText(
+    "12E01 · Function",
+  );
+  await expect(exerciseGroup.locator(":scope > .items a").last()).toHaveText(
+    "12E16 · Count of Range Sum",
+  );
+  await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
+
+  const projectGroup = labGroup.locator(
+    ".VPSidebarItem:has(> .item > .text > .course-lab-category--project)",
+  );
+  await expect(projectGroup).toHaveCount(1);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(0);
+  await expect(projectGroup.locator(".course-lab-category__empty")).toHaveText(
+    "暂无工程型 Lab",
+  );
+
+  await expect(labGroup.locator(".course-lab-category__empty")).toHaveCount(2);
+  await exerciseGroup.getByRole("link", { name: "12E10 · 地毯填补问题", exact: true }).click();
+  await expect(page).toHaveURL(
+    `${baseUrl}/labs/chapter-12/exercise/E-12-10-carpet-tromino/`,
+  );
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Lab 12-E-10：地毯填补问题",
+  );
   const layout = await page.evaluate(() => ({
     clientWidth: globalThis.document.documentElement.clientWidth,
     scrollWidth: globalThis.document.documentElement.scrollWidth,
