@@ -376,8 +376,8 @@ test("MSVC environment resolver uses vswhere and imports the developer environme
 });
 
 test("bootstrap command runner preserves arguments containing spaces without a shell", async (t) => {
-  const root = await import("node:fs/promises").then(({ mkdtemp }) => mkdtemp("/tmp/dsa bootstrap command "));
-  t.after(async () => import("node:fs/promises").then(({ rm }) => rm(root, { recursive: true, force: true })));
+  const root = await mkdtemp(path.join(os.tmpdir(), "dsa bootstrap command "));
+  t.after(async () => rm(root, { recursive: true, force: true }));
   const result = await runCommand(process.execPath, [
     "-e",
     "process.stdout.write(`${process.argv[1]}:${process.env.BOOTSTRAP_TEST}`)",
@@ -452,13 +452,15 @@ test("Windows host inspection accepts MSVC's nonzero no-input exit after environ
 });
 
 test("repository paths resolve relative to the caller and preserve spaces", () => {
+  const callerDirectory = path.join(os.tmpdir(), "work");
   assert.equal(
-    resolveRepositoryDir({ cwd: "/tmp/work", repoDir: "student project" }),
-    "/tmp/work/student project",
+    resolveRepositoryDir({ cwd: callerDirectory, repoDir: "student project" }),
+    path.resolve(callerDirectory, "student project"),
   );
+  const absoluteRepository = path.resolve(os.tmpdir(), "DSA Mastery");
   assert.equal(
-    resolveRepositoryDir({ cwd: "/tmp/work", repoDir: "/Volumes/Labs/DSA Mastery" }),
-    "/Volumes/Labs/DSA Mastery",
+    resolveRepositoryDir({ cwd: callerDirectory, repoDir: absoluteRepository }),
+    absoluteRepository,
   );
 });
 

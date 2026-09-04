@@ -48,14 +48,16 @@ node scripts/bootstrap/setup.mjs [--profile basic|full] [--check-only] [--repo-d
 
 - Good：用户下载并审阅平台脚本，运行 `--profile basic`；已有 pnpm/仓库被复用，依赖冻结安装后 Program reference smoke 通过。
 - Good：Windows 普通 PowerShell 没有动态 `cl.exe` PATH，但 `vswhere` + `VsDevCmd.bat` 导入环境后，doctor、编译和 Project CMake 使用同一环境。
+- Good：Node 测试用 `mkdtemp(path.join(os.tmpdir(), "dsa-bootstrap-"))` 建临时目录，并用 `path.resolve()` 规范化仓库路径后再断言；同一测试可在 Windows、Linux 与 macOS 运行。
 - Base：`full --check-only` 在没有 CMake 的主机上返回 `14`，输出缺项和下一步，且不改变工作树。
-- Bad：使用 `curl | bash`、`irm | iex`，静默 pull dirty worktree，强制安装 GNU Make，或把 VS 的 `14.x` 目录永久写入用户 PATH。
+- Bad：使用 `curl | bash`、`irm | iex`，静默 pull dirty worktree，强制安装 GNU Make，把 VS 的 `14.x` 目录永久写入用户 PATH，或在跨平台测试中硬编码 `/tmp` 与未规范化的 POSIX 路径。
 
 ## 6. Tests Required
 
 - 版本/profile/参数单测：断言 `basic` 与 `full` 的差异、固定 pnpm、未知选项和 UI 冲突退出行为。
 - UI 单测：断言阶段状态、进度、窄终端截断、ANSI 清理、非 TTY fallback 和 JSON 无 ANSI。
 - 命令/仓库单测：断言空格路径、`shell:false`、dirty worktree 保护、check-only 不调用安装/clone/pull，以及学生包脱离源仓库运行。
+- 测试临时目录必须来自 `os.tmpdir()`，再由 `mkdtemp(path.join(...))` 创建；仓库和命令参数路径断言使用 `path.resolve()` 或等价规范化结果，不得硬编码 `/tmp`、驱动器号或路径分隔符。
 - MSVC fake runner 单测：断言 `vswhere` 查询参数、环境块中含 `=` 的值、路径空格、`VsDevCmd` 环境复用和找不到实例的恢复信息。
 - 项目门禁：运行 `pnpm run validate`、`pnpm run test:bootstrap`、`pnpm run test:lab-tools`、`pnpm run test:lab-docs`、`pnpm run test:discovery`、`pnpm test`；在可用平台 runner 上分别验证原生入口和 Program/Project smoke。
 
@@ -79,3 +81,10 @@ cl /std:c++17 ...
 ```
 
 只把批处理导出的环境传给当前 doctor/编译/CMake/CTest 子进程，不污染用户 PATH。
+
+跨平台测试同样遵循原生路径合同：
+
+```js
+const root = await mkdtemp(path.join(os.tmpdir(), "dsa-bootstrap-"));
+assert.equal(actualRepoDir, path.resolve(root, "repo"));
+```
