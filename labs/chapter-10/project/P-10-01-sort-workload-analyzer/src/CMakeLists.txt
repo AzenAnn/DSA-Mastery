@@ -1,0 +1,2 @@
+add_executable(sort_workload sort_workload.cpp)
+target_link_libraries(sort_workload PRIVATE insertion_sort selection_sort bubble_sort shell_sort)
