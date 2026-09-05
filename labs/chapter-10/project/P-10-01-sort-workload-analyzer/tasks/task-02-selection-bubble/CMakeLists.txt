@@ -1,0 +1,20 @@
+set(SELECTION_SOURCE student/selection.cpp)
+set(BUBBLE_SOURCE student/bubble.cpp)
+if(LAB_USE_SOLUTION)
+  set(SELECTION_SOURCE solution/selection.cpp)
+  set(BUBBLE_SOURCE solution/bubble.cpp)
+endif()
+
+add_library(selection_sort STATIC ${SELECTION_SOURCE})
+add_library(bubble_sort STATIC ${BUBBLE_SOURCE})
+target_include_directories(selection_sort PUBLIC ${PROJECT_SOURCE_DIR}/contracts)
+target_include_directories(bubble_sort PUBLIC ${PROJECT_SOURCE_DIR}/contracts)
+
+add_executable(selection_bubble_tests tests/selection_bubble_tests.cpp)
+target_link_libraries(selection_bubble_tests PRIVATE selection_sort bubble_sort)
+
+add_test(NAME selection-correctness COMMAND selection_bubble_tests selection-correctness)
+add_test(NAME selection-instability COMMAND selection_bubble_tests selection-instability)
+add_test(NAME bubble-correctness COMMAND selection_bubble_tests bubble-correctness)
+add_test(NAME bubble-stability COMMAND selection_bubble_tests bubble-stability)
+add_test(NAME selection-bubble-counts COMMAND selection_bubble_tests selection-bubble-counts)
