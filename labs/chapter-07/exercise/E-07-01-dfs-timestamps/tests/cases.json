@@ -2,50 +2,181 @@
   {
     "id": "001-sample",
     "input": "tests/001-sample.in",
-    "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "expected": "tests/001-sample.out"
   },
   {
     "id": "002-single-vertex",
     "input": "tests/002-single-vertex.in",
-    "expected": "tests/002-single-vertex.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "expected": "tests/002-single-vertex.out"
   },
   {
     "id": "003-disconnected",
     "input": "tests/003-disconnected.in",
-    "expected": "tests/003-disconnected.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "expected": "tests/003-disconnected.out"
   },
   {
     "id": "004-chain",
     "input": "tests/004-chain.in",
-    "expected": "tests/004-chain.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/004-chain.out"
   },
   {
     "id": "005-star",
     "input": "tests/005-star.in",
-    "expected": "tests/005-star.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/005-star.out"
   },
   {
     "id": "006-cycle",
     "input": "tests/006-cycle.in",
-    "expected": "tests/006-cycle.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/006-cycle.out"
   },
   {
     "id": "007-stress",
     "input": "tests/007-stress.in",
-    "expected": "tests/007-stress.out",
-    "points": 10,
-    "tags": ["stress"]
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "expected": "tests/007-stress.out"
+  },
+  {
+    "id": "008-two-components",
+    "input": "tests/008-two-components.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/008-two-components.out"
+  },
+  {
+    "id": "009-many-components",
+    "input": "tests/009-many-components.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/009-many-components.out"
+  },
+  {
+    "id": "010-binary-tree",
+    "input": "tests/010-binary-tree.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/010-binary-tree.out"
+  },
+  {
+    "id": "011-complete-k4",
+    "input": "tests/011-complete-k4.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/011-complete-k4.out"
+  },
+  {
+    "id": "012-bipartite",
+    "input": "tests/012-bipartite.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/012-bipartite.out"
+  },
+  {
+    "id": "013-dense",
+    "input": "tests/013-dense.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/013-dense.out"
+  },
+  {
+    "id": "014-sparse",
+    "input": "tests/014-sparse.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/014-sparse.out"
+  },
+  {
+    "id": "015-path",
+    "input": "tests/015-path.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/015-path.out"
+  },
+  {
+    "id": "016-ring",
+    "input": "tests/016-ring.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/016-ring.out"
+  },
+  {
+    "id": "017-tree",
+    "input": "tests/017-tree.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/017-tree.out"
+  },
+  {
+    "id": "018-two-cliques",
+    "input": "tests/018-two-cliques.in",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "expected": "tests/018-two-cliques.out"
+  },
+  {
+    "id": "019-max-edges",
+    "input": "tests/019-max-edges.in",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "expected": "tests/019-max-edges.out"
+  },
+  {
+    "id": "020-max-vertices",
+    "input": "tests/020-max-vertices.in",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "expected": "tests/020-max-vertices.out"
   }
 ]
