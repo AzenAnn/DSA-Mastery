@@ -482,14 +482,59 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 
 路径可以从树中任意节点出发，到达任意节点，路径中至少包含一个节点。求所有可能路径的最大权值和。
 
-::: property 单侧贡献与跨根路径的解耦
-- **函数的返回值（向上汇报）**：当前节点能为父节点提供的**单侧最大贡献值**（只能选左或选右）：
+要求整棵树中所有可能路径的**最大路径和**，很容易想到去遍历每一个节点，然后求出经过该节点的所有路径并取最大值。但是这样操作过于暴力，耗时很长（时间复杂度为 $O(n^2)$），有没有效率更高的算法？
+
+我们前面提到过自底向上的递归逻辑，可用于需要向父节点传递信息的流程。可以这样想：任意一条路径都必然有一个“**最高拐弯节点**“。以某个节点为最高拐弯点时，它能达到的局部最大路径和，正好等于**左子树提供的最大正收益 + 右子树提供的最大正收益 + 节点值本身**。因此我们只需全局维护一个 `maxPath`，遍历回溯到每个节点时顺手结算并比较即可。同时，这个节点本身也是其父节点的孩子，在函数结束时，它还需要向父节点传递自身能提供的**单侧最大延伸贡献**。
+
+要注意的是：**如果一个节点内部的最大贡献路径横跨了其左右子树（如下图中的红色路径），这个贡献是绝对不能直接汇报给父节点的！**
+
+因为树上的“简单路径”绝不能出现分叉。若将这条横跨左右的红色路径（左子树 $\to$ 当前节点 $\to$ 右子树）再连向通往父节点的黑色树枝，就会在当前节点处出现“三叉路口”，这就不是我们想求的路径了。因此，算法必须将“**当前节点就地结算完整路径**”与“**向父节点汇报单侧延伸**”彻底区分开。
+
+```graphviz
+digraph MaxPathSumLocal {
+  rankdir=TB;
+  node [shape=point, width=0.08, color="#2D3748"];
+  edge [arrowhead=none, penwidth=2.5];
+
+  // 全局树骨架（黑色）
+  root [color="#2D3748"];
+  L [color="#2D3748"];
+  R [color="#E53E3E"];
+  root -> L [color="#2D3748"];
+  root -> R [color="#2D3748"];
+
+  // 左子树（黑色分支）
+  L_left [color="#2D3748"];
+  L_mid [color="#2D3748"];
+  L_leaf [color="#2D3748"];
+  L -> L_left [color="#2D3748"];
+  L -> L_mid [color="#2D3748"];
+  L_mid -> L_leaf [color="#2D3748"];
+
+  // 右子树内部：横跨左右子树的红色路径（已成完整路径，不能再连向父节点）
+  R_L [color="#E53E3E"];
+  R_L_leaf [color="#E53E3E"];
+  R_R [color="#E53E3E"];
+  R_R_leaf [color="#E53E3E"];
+
+  R -> R_L [color="#E53E3E"];
+  R_L -> R_L_leaf [color="#E53E3E"];
+  R -> R_R [color="#E53E3E"];
+  R_R -> R_R_leaf [color="#E53E3E"];
+}
+```
+<!-- diagram id="max-path-sum-local" caption: "红色路径横跨了左右子树，若再连向父节点就会发生分叉，故只能向父节点汇报单侧最大贡献" -->
+
+::: property 状态转移与结算公式
+记子树提供的非负贡献为 $\text{leftGain} = \max(0, \text{dfs}(\text{root}\to\text{left}))$ 与 $\text{rightGain} = \max(0, \text{dfs}(\text{root}\to\text{right}))$（若子树收益为负则直接剪枝归零）：
+
+- **局部结算（更新全局答案）**：以当前节点为最高拐弯点的完整路径和
   $$
-  \text{gain}(\text{root}) = \text{root}\to\text{val} + \max(0, \max(\text{leftGain}, \text{rightGain}))
+  \text{currentPathSum} = \text{root}\to\text{val} + \text{leftGain} + \text{rightGain}
   $$
-- **全局答案的更新（局部结算）**：以当前节点作为最高拐弯点的**跨根最大路径和**：
+- **向上汇报（函数返回值）**：为父节点提供的单侧最大延伸贡献
   $$
-  \text{currentMaxPath} = \text{root}\to\text{val} + \max(0, \text{leftGain}) + \max(0, \text{rightGain})
+  \text{gain}(\text{root}) = \text{root}\to\text{val} + \max(\text{leftGain}, \text{rightGain})
   $$
 :::
 
