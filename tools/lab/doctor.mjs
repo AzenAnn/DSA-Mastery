@@ -1,76 +1,49 @@
-import { spawn } from "node:child_process";
 import process from "node:process";
 import { LabError } from "./errors.mjs";
+import { compareVersion, formatVersion, MINIMUMS, parseVersion } from "./requirements.mjs";
+import { runProcess } from "./process.mjs";
+import { createMsvcEnvironment } from "./toolchain.mjs";
 
-const MINIMUMS = Object.freeze({
-  gcc: [11, 0, 0],
-  clang: [14, 0, 0],
-  msvc: [19, 30, 0],
-  cmake: [3, 25, 0],
-  make: [4, 0, 0],
-});
-
-function runProbe(command, args) {
-  return new Promise((resolve) => {
-    const child = spawn(command, args, { shell: false, windowsHide: true });
-    let stdout = "";
-    let stderr = "";
-    child.stdout?.on("data", (chunk) => {
-      stdout += chunk;
-    });
-    child.stderr?.on("data", (chunk) => {
-      stderr += chunk;
-    });
-    child.once("error", (error) => resolve({ available: false, error: error.code ?? error.message }));
-    child.once("close", (code) => resolve({ available: true, code, output: `${stdout}\n${stderr}`.trim() }));
-  });
-}
-
-function versionTuple(source, pattern = /(\d+)\.(\d+)(?:\.(\d+))?/) {
-  const match = source?.match(pattern);
-  return match ? [Number(match[1]), Number(match[2]), Number(match[3] ?? 0)] : undefined;
-}
-
-function compareVersion(actual, minimum) {
-  if (!actual) return false;
-  for (let index = 0; index < Math.max(actual.length, minimum.length); index += 1) {
-    const difference = (actual[index] ?? 0) - (minimum[index] ?? 0);
-    if (difference !== 0) return difference > 0;
-  }
-  return true;
-}
-
-function printable(tuple) {
-  return tuple?.join(".") ?? "unknown";
-}
-
-async function probe(name, command, args, minimum, pattern) {
-  const result = await runProbe(command, args);
-  if (!result.available) return { name, command, available: false, meetsMinimum: false };
-  const version = versionTuple(result.output, pattern);
+async function probe(name, command, args, minimum, pattern, options = {}) {
+  const result = await options.runner(command, args, { env: options.env, timeMs: 5000, outputKb: 256 });
+  if (result.spawnError) return { name, command, available: false, meetsMinimum: false, error: result.spawnError.code ?? result.spawnError.message };
+  const output = `${result.stdout ?? ""}\n${result.stderr ?? ""}`.trim();
+  const version = parseVersion(output, pattern);
   return {
     name,
     command,
     available: true,
-    version: printable(version),
-    minimum: printable(minimum),
+    version: formatVersion(version),
+    minimum: formatVersion(minimum),
     meetsMinimum: compareVersion(version, minimum),
-    summary: result.output.split(/\r?\n/).find(Boolean)?.trim(),
+    summary: output.split(/\r?\n/).find(Boolean)?.trim(),
   };
 }
 
-export async function inspectEnvironment(lab) {
+export async function inspectEnvironment(lab, options = {}) {
+  const platform = options.platform ?? process.platform;
+  const env = options.env ?? process.env;
+  const runner = options.runner ?? runProcess;
+  let msvcEnvironment;
+  let msvcError;
+  if (platform === "win32") {
+    try {
+      msvcEnvironment = await createMsvcEnvironment({ platform, env, runner });
+    } catch (error) {
+      msvcError = error;
+    }
+  }
   const probes = await Promise.all([
-    probe("GCC", "g++", ["--version"], MINIMUMS.gcc),
-    probe("Clang", "clang++", ["--version"], MINIMUMS.clang),
-    probe("MSVC", "cl", [], MINIMUMS.msvc, /Version\s+(\d+)\.(\d+)(?:\.(\d+))?/i),
-    probe("CMake", "cmake", ["--version"], MINIMUMS.cmake),
-    probe("GNU Make", "make", ["--version"], MINIMUMS.make),
+    probe("GCC", "g++", ["--version"], MINIMUMS.gcc, undefined, { env, runner }),
+    probe("Clang", "clang++", ["--version"], MINIMUMS.clang, undefined, { env, runner }),
+    probe("MSVC", "cl", [], MINIMUMS.msvc, /Version\s+(\d+)\.(\d+)(?:\.(\d+))?/i, { env: msvcEnvironment?.env, runner }),
+    probe("CMake", "cmake", ["--version"], MINIMUMS.cmake, undefined, { env, runner }),
+    probe("GNU Make", "make", ["--version"], MINIMUMS.make, undefined, { env, runner }),
   ]);
   if (probes[0].available && /clang/i.test(probes[0].summary ?? "")) {
     probes[0].name = "Clang (g++ driver)";
-    probes[0].minimum = printable(MINIMUMS.clang);
-    probes[0].meetsMinimum = compareVersion(versionTuple(probes[0].version), MINIMUMS.clang);
+    probes[0].minimum = formatVersion(MINIMUMS.clang);
+    probes[0].meetsMinimum = compareVersion(parseVersion(probes[0].version), MINIMUMS.clang);
   }
   const compilers = probes.slice(0, 3);
   const requiresCompiler = lab.manifest.type !== "quiz";
@@ -91,6 +64,12 @@ export async function inspectEnvironment(lab) {
     tools: probes,
     makeOptional: true,
     makeAvailable: make.available,
+    msvc: {
+      initialized: Boolean(msvcEnvironment),
+      installationPath: msvcEnvironment?.installationPath,
+      developerCommand: msvcEnvironment?.developerCommand,
+      error: msvcError?.message,
+    },
     fallback: "pnpm lab:run -- <lab-path>",
     ok: issues.length === 0,
     issues,

@@ -24,7 +24,7 @@ const chapters = computed(() => getCourseChapters().filter((chapter) => chapter.
         <a v-for="lab in chapter.labs" :key="lab.url" class="course-labs-list-card" :href="withBase(lab.url)" target="_self">
           <span class="course-lab-icon"><FlaskConical aria-hidden="true" :size="20" /></span>
           <span class="course-labs-list-copy">
-            <small>第 {{ lab.chapter }} 章 · {{ lab.difficulty || "基础" }}</small>
+            <small><code v-if="lab.labId">{{ lab.labId }}</code><template v-if="lab.labId"> · </template>第 {{ lab.chapter }} 章 · {{ lab.difficulty || "基础" }}</small>
             <strong>{{ lab.title }}</strong>
             <span>{{ lab.description }}</span>
             <em><Clock3 aria-hidden="true" :size="14" />{{ lab.duration || `约 ${lab.readingMinutes} 分钟` }}</em>

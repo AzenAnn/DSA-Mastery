@@ -57,7 +57,7 @@ status: "draft"
 
 ## 配套 Project Lab
 
-- [Lab 01-21：线性表双实现与工作负载评测器](../../labs/chapter-01/lab-01-21-list-workload-analyzer/README.md)：在同一套 `IntList` 契约下实现动态顺序表与双向循环链表，用可复现工作负载比较元素搬移、节点跳转、扩容、链接改写、空间估算和实际耗时。
+- [Lab 01-P-01：线性表双实现与工作负载评测器](../../labs/chapter-01/project/P-01-01-list-workload-analyzer/README.md)：在同一套 `IntList` 契约下实现动态顺序表与双向循环链表，用可复现工作负载比较元素搬移、节点跳转、扩容、链接改写、空间估算和实际耗时。
 
 建议在完成 1.4「比较与权衡」后进入该项目。Project 会把本章的 ADT、边界语义、复杂度、不变量和工程选型串成一个闭环；其余选择题与单点编码 Lab 可从侧栏按需选做。
 

@@ -1,15 +1,15 @@
 ---
-title: "第 0 章 绪论"
+title: "第 0 章 基础"
 description: "建立数据结构的共同语言，学习评价算法时间与空间代价的基本方法。"
 order: 0
 chapter: 0
-chapterTitle: "绪论"
+chapterTitle: "基础"
 updated: "2026-08-10"
 contributors: ["Azen"]
 status: "draft"
 ---
 
-# 第 0 章 绪论
+# 第 0 章 基础
 
 学习数据结构与算法，首先要回答两个问题：**数据应该怎样组织和表示？怎样评价一种解法的效率与资源代价？** 本章围绕这两个问题建立后续课程共用的术语与分析方法。
 
@@ -44,8 +44,8 @@ status: "draft"
 
 ## 配套 Labs
 
-- [Lab 00-01：制作个人 DSA 学习地图](../../labs/chapter-00/lab-00-01-learning-map/README.md)
-- [Lab 00-02：用操作计数观察增长趋势](../../labs/chapter-00/lab-00-02-operation-counter/README.md)
+- [Lab 00-T-01：制作个人 DSA 学习地图](../../labs/chapter-00/theory/T-00-01-learning-map/README.md)
+- [Lab 00-E-01：用操作计数观察增长趋势](../../labs/chapter-00/exercise/E-00-01-operation-counter/README.md)
 
 ## 学习建议
 

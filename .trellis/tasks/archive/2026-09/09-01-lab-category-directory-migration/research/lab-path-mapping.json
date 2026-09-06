@@ -1,0 +1,1048 @@
+{
+  "schemaVersion": 1,
+  "counts": {
+    "theory": 43,
+    "exercise": 122,
+    "project": 8
+  },
+  "entries": [
+    {
+      "id": "00E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-00/lab-00-02-operation-counter",
+      "newPath": "labs/chapter-00/exercise/E-00-01-operation-counter"
+    },
+    {
+      "id": "00T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-00/lab-00-01-learning-map",
+      "newPath": "labs/chapter-00/theory/T-00-01-learning-map"
+    },
+    {
+      "id": "00T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-00/lab-00-03-complexity-quiz",
+      "newPath": "labs/chapter-00/theory/T-00-02-complexity-quiz"
+    },
+    {
+      "id": "01E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-06-sequential-list-deduplication",
+      "newPath": "labs/chapter-01/exercise/E-01-01-sequential-list-deduplication"
+    },
+    {
+      "id": "01E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-07-sequential-list-rotate",
+      "newPath": "labs/chapter-01/exercise/E-01-02-sequential-list-rotate"
+    },
+    {
+      "id": "01E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-08-sequential-list-kth-largest",
+      "newPath": "labs/chapter-01/exercise/E-01-03-sequential-list-kth-largest"
+    },
+    {
+      "id": "01E04",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-09-singly-linked-list-reverse",
+      "newPath": "labs/chapter-01/exercise/E-01-04-singly-linked-list-reverse"
+    },
+    {
+      "id": "01E05",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-10-singly-linked-list-remove-nth",
+      "newPath": "labs/chapter-01/exercise/E-01-05-singly-linked-list-remove-nth"
+    },
+    {
+      "id": "01E06",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-11-singly-linked-list-merge",
+      "newPath": "labs/chapter-01/exercise/E-01-06-singly-linked-list-merge"
+    },
+    {
+      "id": "01E07",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-12-doubly-linked-list-palindrome",
+      "newPath": "labs/chapter-01/exercise/E-01-07-doubly-linked-list-palindrome"
+    },
+    {
+      "id": "01E08",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-13-lru-cache-simulation",
+      "newPath": "labs/chapter-01/exercise/E-01-08-lru-cache-simulation"
+    },
+    {
+      "id": "01E09",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-14-doubly-linked-list-swap-pairs",
+      "newPath": "labs/chapter-01/exercise/E-01-09-doubly-linked-list-swap-pairs"
+    },
+    {
+      "id": "01E10",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-15-josephus-problem",
+      "newPath": "labs/chapter-01/exercise/E-01-10-josephus-problem"
+    },
+    {
+      "id": "01E11",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-16-circular-linked-list-split",
+      "newPath": "labs/chapter-01/exercise/E-01-11-circular-linked-list-split"
+    },
+    {
+      "id": "01E12",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-17-circular-linked-list-delete-value",
+      "newPath": "labs/chapter-01/exercise/E-01-12-circular-linked-list-delete-value"
+    },
+    {
+      "id": "01E13",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-18-static-linked-list-insert",
+      "newPath": "labs/chapter-01/exercise/E-01-13-static-linked-list-insert"
+    },
+    {
+      "id": "01E14",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-19-static-linked-list-reverse",
+      "newPath": "labs/chapter-01/exercise/E-01-14-static-linked-list-reverse"
+    },
+    {
+      "id": "01E15",
+      "category": "exercise",
+      "oldPath": "labs/chapter-01/lab-01-20-static-linked-list-merge",
+      "newPath": "labs/chapter-01/exercise/E-01-15-static-linked-list-merge"
+    },
+    {
+      "id": "01P01",
+      "category": "project",
+      "oldPath": "labs/chapter-01/lab-01-21-list-workload-analyzer",
+      "newPath": "labs/chapter-01/project/P-01-01-list-workload-analyzer"
+    },
+    {
+      "id": "01T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-01/lab-01-01-sequential-list-quiz",
+      "newPath": "labs/chapter-01/theory/T-01-01-sequential-list-quiz"
+    },
+    {
+      "id": "01T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-01/lab-01-02-singly-linked-list-quiz",
+      "newPath": "labs/chapter-01/theory/T-01-02-singly-linked-list-quiz"
+    },
+    {
+      "id": "01T03",
+      "category": "theory",
+      "oldPath": "labs/chapter-01/lab-01-03-doubly-linked-list-quiz",
+      "newPath": "labs/chapter-01/theory/T-01-03-doubly-linked-list-quiz"
+    },
+    {
+      "id": "01T04",
+      "category": "theory",
+      "oldPath": "labs/chapter-01/lab-01-04-circular-linked-list-quiz",
+      "newPath": "labs/chapter-01/theory/T-01-04-circular-linked-list-quiz"
+    },
+    {
+      "id": "01T05",
+      "category": "theory",
+      "oldPath": "labs/chapter-01/lab-01-05-static-linked-list-quiz",
+      "newPath": "labs/chapter-01/theory/T-01-05-static-linked-list-quiz"
+    },
+    {
+      "id": "02E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-02/lab-02-03-validate-stack-sequences",
+      "newPath": "labs/chapter-02/exercise/E-02-01-validate-stack-sequences"
+    },
+    {
+      "id": "02E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-02/lab-02-04-min-stack",
+      "newPath": "labs/chapter-02/exercise/E-02-02-min-stack"
+    },
+    {
+      "id": "02E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-02/lab-02-05-recent-counter",
+      "newPath": "labs/chapter-02/exercise/E-02-03-recent-counter"
+    },
+    {
+      "id": "02E04",
+      "category": "exercise",
+      "oldPath": "labs/chapter-02/lab-02-06-circular-queue",
+      "newPath": "labs/chapter-02/exercise/E-02-04-circular-queue"
+    },
+    {
+      "id": "02E05",
+      "category": "exercise",
+      "oldPath": "labs/chapter-02/lab-02-07-queue-using-stacks",
+      "newPath": "labs/chapter-02/exercise/E-02-05-queue-using-stacks"
+    },
+    {
+      "id": "02E06",
+      "category": "exercise",
+      "oldPath": "labs/chapter-02/lab-02-08-circular-deque",
+      "newPath": "labs/chapter-02/exercise/E-02-06-circular-deque"
+    },
+    {
+      "id": "02E07",
+      "category": "exercise",
+      "oldPath": "labs/chapter-02/lab-02-09-sliding-window-maximum",
+      "newPath": "labs/chapter-02/exercise/E-02-07-sliding-window-maximum"
+    },
+    {
+      "id": "02E08",
+      "category": "exercise",
+      "oldPath": "labs/chapter-02/lab-02-10-largest-rectangle-histogram",
+      "newPath": "labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram"
+    },
+    {
+      "id": "02P01",
+      "category": "project",
+      "oldPath": "labs/chapter-02/lab-02-11-undoable-browser",
+      "newPath": "labs/chapter-02/project/P-02-01-undoable-browser"
+    },
+    {
+      "id": "02P02",
+      "category": "project",
+      "oldPath": "labs/chapter-02/lab-02-12-supermarket-checkout",
+      "newPath": "labs/chapter-02/project/P-02-02-supermarket-checkout"
+    },
+    {
+      "id": "02P03",
+      "category": "project",
+      "oldPath": "labs/chapter-02/lab-02-13-parking-lot-management",
+      "newPath": "labs/chapter-02/project/P-02-03-parking-lot-management"
+    },
+    {
+      "id": "02T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-02/lab-02-01-stack-quiz",
+      "newPath": "labs/chapter-02/theory/T-02-01-stack-quiz"
+    },
+    {
+      "id": "02T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-02/lab-02-02-queue-quiz",
+      "newPath": "labs/chapter-02/theory/T-02-02-queue-quiz"
+    },
+    {
+      "id": "03E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-03/lab-03-05-kmp-match",
+      "newPath": "labs/chapter-03/exercise/E-03-01-kmp-match"
+    },
+    {
+      "id": "03E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-03/lab-03-06-next-array",
+      "newPath": "labs/chapter-03/exercise/E-03-02-next-array"
+    },
+    {
+      "id": "03E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-03/lab-03-07-match-comparison",
+      "newPath": "labs/chapter-03/exercise/E-03-03-match-comparison"
+    },
+    {
+      "id": "03E04",
+      "category": "exercise",
+      "oldPath": "labs/chapter-03/lab-03-08-string-replace",
+      "newPath": "labs/chapter-03/exercise/E-03-04-string-replace"
+    },
+    {
+      "id": "03E05",
+      "category": "exercise",
+      "oldPath": "labs/chapter-03/lab-03-09-utf8-char-count",
+      "newPath": "labs/chapter-03/exercise/E-03-05-utf8-char-count"
+    },
+    {
+      "id": "03E06",
+      "category": "exercise",
+      "oldPath": "labs/chapter-03/lab-03-10-generalized-list-head-tail",
+      "newPath": "labs/chapter-03/exercise/E-03-06-generalized-list-head-tail"
+    },
+    {
+      "id": "03E07",
+      "category": "exercise",
+      "oldPath": "labs/chapter-03/lab-03-11-generalized-list-depth",
+      "newPath": "labs/chapter-03/exercise/E-03-07-generalized-list-depth"
+    },
+    {
+      "id": "03E08",
+      "category": "exercise",
+      "oldPath": "labs/chapter-03/lab-03-12-tridiagonal-compress",
+      "newPath": "labs/chapter-03/exercise/E-03-08-tridiagonal-compress"
+    },
+    {
+      "id": "03E09",
+      "category": "exercise",
+      "oldPath": "labs/chapter-03/lab-03-13-ndarray-offset",
+      "newPath": "labs/chapter-03/exercise/E-03-09-ndarray-offset"
+    },
+    {
+      "id": "03P01",
+      "category": "project",
+      "oldPath": "labs/chapter-03/lab-03-14-string-match-engine",
+      "newPath": "labs/chapter-03/project/P-03-01-string-match-engine"
+    },
+    {
+      "id": "03P02",
+      "category": "project",
+      "oldPath": "labs/chapter-03/lab-03-15-sparse-matrix-library",
+      "newPath": "labs/chapter-03/project/P-03-02-sparse-matrix-library"
+    },
+    {
+      "id": "03T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-03/lab-03-01-string-basics-quiz",
+      "newPath": "labs/chapter-03/theory/T-03-01-string-basics-quiz"
+    },
+    {
+      "id": "03T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-03/lab-03-02-string-matching-quiz",
+      "newPath": "labs/chapter-03/theory/T-03-02-string-matching-quiz"
+    },
+    {
+      "id": "03T03",
+      "category": "theory",
+      "oldPath": "labs/chapter-03/lab-03-03-array-matrix-quiz",
+      "newPath": "labs/chapter-03/theory/T-03-03-array-matrix-quiz"
+    },
+    {
+      "id": "03T04",
+      "category": "theory",
+      "oldPath": "labs/chapter-03/lab-03-04-generalized-list-quiz",
+      "newPath": "labs/chapter-03/theory/T-03-04-generalized-list-quiz"
+    },
+    {
+      "id": "04E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-09-complete-binary-tree-check",
+      "newPath": "labs/chapter-04/exercise/E-04-01-complete-binary-tree-check"
+    },
+    {
+      "id": "04E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-10-binary-tree-maximum-width",
+      "newPath": "labs/chapter-04/exercise/E-04-02-binary-tree-maximum-width"
+    },
+    {
+      "id": "04E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-11-binary-tree-preorder-traversal",
+      "newPath": "labs/chapter-04/exercise/E-04-03-binary-tree-preorder-traversal"
+    },
+    {
+      "id": "04E04",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-12-binary-tree-level-and-zigzag-order",
+      "newPath": "labs/chapter-04/exercise/E-04-04-binary-tree-level-and-zigzag-order"
+    },
+    {
+      "id": "04E05",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-13-binary-tree-right-side-view",
+      "newPath": "labs/chapter-04/exercise/E-04-05-binary-tree-right-side-view"
+    },
+    {
+      "id": "04E06",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-14-construct-binary-tree-pre-in",
+      "newPath": "labs/chapter-04/exercise/E-04-06-construct-binary-tree-pre-in"
+    },
+    {
+      "id": "04E07",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-15-construct-binary-tree-in-post",
+      "newPath": "labs/chapter-04/exercise/E-04-07-construct-binary-tree-in-post"
+    },
+    {
+      "id": "04E08",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-16-flatten-binary-tree-to-linked-list",
+      "newPath": "labs/chapter-04/exercise/E-04-08-flatten-binary-tree-to-linked-list"
+    },
+    {
+      "id": "04E09",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-17-symmetric-tree",
+      "newPath": "labs/chapter-04/exercise/E-04-09-symmetric-tree"
+    },
+    {
+      "id": "04E10",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-18-subtree-of-another-tree",
+      "newPath": "labs/chapter-04/exercise/E-04-10-subtree-of-another-tree"
+    },
+    {
+      "id": "04E11",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-19-sum-root-to-leaf-numbers",
+      "newPath": "labs/chapter-04/exercise/E-04-11-sum-root-to-leaf-numbers"
+    },
+    {
+      "id": "04E12",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-20-path-sum-all-paths",
+      "newPath": "labs/chapter-04/exercise/E-04-12-path-sum-all-paths"
+    },
+    {
+      "id": "04E13",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-21-diameter-of-binary-tree",
+      "newPath": "labs/chapter-04/exercise/E-04-13-diameter-of-binary-tree"
+    },
+    {
+      "id": "04E14",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-22-lowest-common-ancestor",
+      "newPath": "labs/chapter-04/exercise/E-04-14-lowest-common-ancestor"
+    },
+    {
+      "id": "04E15",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-23-binary-tree-maximum-path-sum",
+      "newPath": "labs/chapter-04/exercise/E-04-15-binary-tree-maximum-path-sum"
+    },
+    {
+      "id": "04E16",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-24-network-optimal-location",
+      "newPath": "labs/chapter-04/exercise/E-04-16-network-optimal-location"
+    },
+    {
+      "id": "04E17",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-25-research-team-formation",
+      "newPath": "labs/chapter-04/exercise/E-04-17-research-team-formation"
+    },
+    {
+      "id": "04E18",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-26-communication-base-station",
+      "newPath": "labs/chapter-04/exercise/E-04-18-communication-base-station"
+    },
+    {
+      "id": "04E19",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-27-longest-zigzag-path",
+      "newPath": "labs/chapter-04/exercise/E-04-19-longest-zigzag-path"
+    },
+    {
+      "id": "04E20",
+      "category": "exercise",
+      "oldPath": "labs/chapter-04/lab-04-28-tree-isomorphism",
+      "newPath": "labs/chapter-04/exercise/E-04-20-tree-isomorphism"
+    },
+    {
+      "id": "04T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-04/lab-04-01-binary-tree-basics-quiz",
+      "newPath": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz"
+    },
+    {
+      "id": "04T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-04/lab-04-02-preorder-traversal-quiz",
+      "newPath": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz"
+    },
+    {
+      "id": "04T03",
+      "category": "theory",
+      "oldPath": "labs/chapter-04/lab-04-03-inorder-traversal-quiz",
+      "newPath": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz"
+    },
+    {
+      "id": "04T04",
+      "category": "theory",
+      "oldPath": "labs/chapter-04/lab-04-04-postorder-traversal-quiz",
+      "newPath": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz"
+    },
+    {
+      "id": "04T05",
+      "category": "theory",
+      "oldPath": "labs/chapter-04/lab-04-05-level-order-traversal-quiz",
+      "newPath": "labs/chapter-04/theory/T-04-05-level-order-traversal-quiz"
+    },
+    {
+      "id": "04T06",
+      "category": "theory",
+      "oldPath": "labs/chapter-04/lab-04-06-reconstruct-binary-tree-quiz",
+      "newPath": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz"
+    },
+    {
+      "id": "04T07",
+      "category": "theory",
+      "oldPath": "labs/chapter-04/lab-04-07-threaded-binary-tree-quiz",
+      "newPath": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz"
+    },
+    {
+      "id": "04T08",
+      "category": "theory",
+      "oldPath": "labs/chapter-04/lab-04-08-trees-and-forests-quiz",
+      "newPath": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz"
+    },
+    {
+      "id": "05E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-06-bst-insert-search",
+      "newPath": "labs/chapter-05/exercise/E-05-01-bst-insert-search"
+    },
+    {
+      "id": "05E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-07-bst-delete",
+      "newPath": "labs/chapter-05/exercise/E-05-02-bst-delete"
+    },
+    {
+      "id": "05E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-08-validate-bst-preorder",
+      "newPath": "labs/chapter-05/exercise/E-05-03-validate-bst-preorder"
+    },
+    {
+      "id": "05E04",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-09-bst-kth-smallest",
+      "newPath": "labs/chapter-05/exercise/E-05-04-bst-kth-smallest"
+    },
+    {
+      "id": "05E05",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-10-avl-tree-insert",
+      "newPath": "labs/chapter-05/exercise/E-05-05-avl-tree-insert"
+    },
+    {
+      "id": "05E06",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-11-min-heap-implementation",
+      "newPath": "labs/chapter-05/exercise/E-05-06-min-heap-implementation"
+    },
+    {
+      "id": "05E07",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-12-median-in-data-stream",
+      "newPath": "labs/chapter-05/exercise/E-05-07-median-in-data-stream"
+    },
+    {
+      "id": "05E08",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-13-task-scheduler",
+      "newPath": "labs/chapter-05/exercise/E-05-08-task-scheduler"
+    },
+    {
+      "id": "05E09",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-14-huffman-coding",
+      "newPath": "labs/chapter-05/exercise/E-05-09-huffman-coding"
+    },
+    {
+      "id": "05E10",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-15-optimal-merge",
+      "newPath": "labs/chapter-05/exercise/E-05-10-optimal-merge"
+    },
+    {
+      "id": "05E11",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-16-k-ary-huffman",
+      "newPath": "labs/chapter-05/exercise/E-05-11-k-ary-huffman"
+    },
+    {
+      "id": "05E12",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-17-disjoint-set-union",
+      "newPath": "labs/chapter-05/exercise/E-05-12-disjoint-set-union"
+    },
+    {
+      "id": "05E13",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-18-dynamic-connectivity",
+      "newPath": "labs/chapter-05/exercise/E-05-13-dynamic-connectivity"
+    },
+    {
+      "id": "05E14",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-19-food-chain-dsu",
+      "newPath": "labs/chapter-05/exercise/E-05-14-food-chain-dsu"
+    },
+    {
+      "id": "05E15",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-20-galaxy-heroes-dsu",
+      "newPath": "labs/chapter-05/exercise/E-05-15-galaxy-heroes-dsu"
+    },
+    {
+      "id": "05E16",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-21-btree-insertion",
+      "newPath": "labs/chapter-05/exercise/E-05-16-btree-insertion"
+    },
+    {
+      "id": "05E17",
+      "category": "exercise",
+      "oldPath": "labs/chapter-05/lab-05-22-bplus-range-query",
+      "newPath": "labs/chapter-05/exercise/E-05-17-bplus-range-query"
+    },
+    {
+      "id": "05T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-05/lab-05-01-forest-binary-tree-conversion-quiz",
+      "newPath": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz"
+    },
+    {
+      "id": "05T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-05/lab-05-02-tree-forest-traversal-quiz",
+      "newPath": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz"
+    },
+    {
+      "id": "05T03",
+      "category": "theory",
+      "oldPath": "labs/chapter-05/lab-05-03-huffman-tree-coding-quiz",
+      "newPath": "labs/chapter-05/theory/T-05-03-huffman-tree-coding-quiz"
+    },
+    {
+      "id": "05T04",
+      "category": "theory",
+      "oldPath": "labs/chapter-05/lab-05-04-disjoint-set-union-quiz",
+      "newPath": "labs/chapter-05/theory/T-05-04-disjoint-set-union-quiz"
+    },
+    {
+      "id": "05T05",
+      "category": "theory",
+      "oldPath": "labs/chapter-05/lab-05-05-heap-quiz",
+      "newPath": "labs/chapter-05/theory/T-05-05-heap-quiz"
+    },
+    {
+      "id": "06E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-06/lab-06-03-graph-degree-statistics",
+      "newPath": "labs/chapter-06/exercise/E-06-01-graph-degree-statistics"
+    },
+    {
+      "id": "06E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-06/lab-06-04-minimum-trio-degree",
+      "newPath": "labs/chapter-06/exercise/E-06-02-minimum-trio-degree"
+    },
+    {
+      "id": "06E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-06/lab-06-05-flower-planting",
+      "newPath": "labs/chapter-06/exercise/E-06-03-flower-planting"
+    },
+    {
+      "id": "06T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-06/lab-06-01-graph-basics-quiz",
+      "newPath": "labs/chapter-06/theory/T-06-01-graph-basics-quiz"
+    },
+    {
+      "id": "06T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-06/lab-06-02-graph-storage-quiz",
+      "newPath": "labs/chapter-06/theory/T-06-02-graph-storage-quiz"
+    },
+    {
+      "id": "07E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-04-dfs-timestamps",
+      "newPath": "labs/chapter-07/exercise/E-07-01-dfs-timestamps"
+    },
+    {
+      "id": "07E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-05-connected-components",
+      "newPath": "labs/chapter-07/exercise/E-07-02-connected-components"
+    },
+    {
+      "id": "07E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-06-directed-cycle-detection",
+      "newPath": "labs/chapter-07/exercise/E-07-03-directed-cycle-detection"
+    },
+    {
+      "id": "07E04",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-07-minimum-spanning-tree",
+      "newPath": "labs/chapter-07/exercise/E-07-04-minimum-spanning-tree"
+    },
+    {
+      "id": "07E05",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-08-iterative-dfs",
+      "newPath": "labs/chapter-07/exercise/E-07-05-iterative-dfs"
+    },
+    {
+      "id": "07E06",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-09-bfs-bipartite",
+      "newPath": "labs/chapter-07/exercise/E-07-06-bfs-bipartite"
+    },
+    {
+      "id": "07E07",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-10-dijkstra-trace",
+      "newPath": "labs/chapter-07/exercise/E-07-07-dijkstra-trace"
+    },
+    {
+      "id": "07E08",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-11-dijkstra-matrix-path",
+      "newPath": "labs/chapter-07/exercise/E-07-08-dijkstra-matrix-path"
+    },
+    {
+      "id": "07E09",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-12-network-delay-time",
+      "newPath": "labs/chapter-07/exercise/E-07-09-network-delay-time"
+    },
+    {
+      "id": "07E10",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-13-emergency-rescue",
+      "newPath": "labs/chapter-07/exercise/E-07-10-emergency-rescue"
+    },
+    {
+      "id": "07E11",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-14-bellman-ford-negative",
+      "newPath": "labs/chapter-07/exercise/E-07-11-bellman-ford-negative"
+    },
+    {
+      "id": "07E12",
+      "category": "exercise",
+      "oldPath": "labs/chapter-07/lab-07-15-floyd-all-pairs",
+      "newPath": "labs/chapter-07/exercise/E-07-12-floyd-all-pairs"
+    },
+    {
+      "id": "07T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-07/lab-07-01-graph-traversal-quiz",
+      "newPath": "labs/chapter-07/theory/T-07-01-graph-traversal-quiz"
+    },
+    {
+      "id": "07T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-07/lab-07-02-minimum-spanning-tree",
+      "newPath": "labs/chapter-07/theory/T-07-02-minimum-spanning-tree"
+    },
+    {
+      "id": "07T03",
+      "category": "theory",
+      "oldPath": "labs/chapter-07/lab-07-03-shortest-path-quiz",
+      "newPath": "labs/chapter-07/theory/T-07-03-shortest-path-quiz"
+    },
+    {
+      "id": "08E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-08/lab-08-02-bst-operations",
+      "newPath": "labs/chapter-08/exercise/E-08-01-bst-operations"
+    },
+    {
+      "id": "08P01",
+      "category": "project",
+      "oldPath": "labs/chapter-08/lab-08-03-avl-tree-rotations",
+      "newPath": "labs/chapter-08/project/P-08-01-avl-tree-rotations"
+    },
+    {
+      "id": "08T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-08/lab-08-01-search-theory-quiz",
+      "newPath": "labs/chapter-08/theory/T-08-01-search-theory-quiz"
+    },
+    {
+      "id": "09E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-09/lab-09-02-hash-table",
+      "newPath": "labs/chapter-09/exercise/E-09-01-hash-table"
+    },
+    {
+      "id": "09P01",
+      "category": "project",
+      "oldPath": "labs/chapter-09/lab-09-03-hash-index-engine",
+      "newPath": "labs/chapter-09/project/P-09-01-hash-index-engine"
+    },
+    {
+      "id": "09T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-09/lab-09-01-hash-index-theory-quiz",
+      "newPath": "labs/chapter-09/theory/T-09-01-hash-index-theory-quiz"
+    },
+    {
+      "id": "10E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-07-multi-key-sort",
+      "newPath": "labs/chapter-10/exercise/E-10-01-multi-key-sort"
+    },
+    {
+      "id": "10E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-08-big-int-compare",
+      "newPath": "labs/chapter-10/exercise/E-10-02-big-int-compare"
+    },
+    {
+      "id": "10E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-09-insertion-sort-template",
+      "newPath": "labs/chapter-10/exercise/E-10-03-insertion-sort-template"
+    },
+    {
+      "id": "10E04",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-10-insertion-sort-steps",
+      "newPath": "labs/chapter-10/exercise/E-10-04-insertion-sort-steps"
+    },
+    {
+      "id": "10E05",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-11-insertion-sort-update",
+      "newPath": "labs/chapter-10/exercise/E-10-05-insertion-sort-update"
+    },
+    {
+      "id": "10E06",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-12-selection-sort-template",
+      "newPath": "labs/chapter-10/exercise/E-10-06-selection-sort-template"
+    },
+    {
+      "id": "10E07",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-13-selection-sort-count",
+      "newPath": "labs/chapter-10/exercise/E-10-07-selection-sort-count"
+    },
+    {
+      "id": "10E08",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-14-stable-sort-check",
+      "newPath": "labs/chapter-10/exercise/E-10-08-stable-sort-check"
+    },
+    {
+      "id": "10E09",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-15-selection-sort-bcsp",
+      "newPath": "labs/chapter-10/exercise/E-10-09-selection-sort-bcsp"
+    },
+    {
+      "id": "10E10",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-16-bubble-sort-template",
+      "newPath": "labs/chapter-10/exercise/E-10-10-bubble-sort-template"
+    },
+    {
+      "id": "10E11",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-17-bubble-sort-basic",
+      "newPath": "labs/chapter-10/exercise/E-10-11-bubble-sort-basic"
+    },
+    {
+      "id": "10E12",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-18-bubble-sort-count",
+      "newPath": "labs/chapter-10/exercise/E-10-12-bubble-sort-count"
+    },
+    {
+      "id": "10E13",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-19-shell-sort-count",
+      "newPath": "labs/chapter-10/exercise/E-10-13-shell-sort-count"
+    },
+    {
+      "id": "10E14",
+      "category": "exercise",
+      "oldPath": "labs/chapter-10/lab-10-20-shell-sort-xufu",
+      "newPath": "labs/chapter-10/exercise/E-10-14-shell-sort-xufu"
+    },
+    {
+      "id": "10T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-10/lab-10-03-insertion-sort-quiz",
+      "newPath": "labs/chapter-10/theory/T-10-01-insertion-sort-quiz"
+    },
+    {
+      "id": "10T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-10/lab-10-04-selection-sort-quiz",
+      "newPath": "labs/chapter-10/theory/T-10-02-selection-sort-quiz"
+    },
+    {
+      "id": "10T03",
+      "category": "theory",
+      "oldPath": "labs/chapter-10/lab-10-05-bubble-sort-quiz",
+      "newPath": "labs/chapter-10/theory/T-10-03-bubble-sort-quiz"
+    },
+    {
+      "id": "10T04",
+      "category": "theory",
+      "oldPath": "labs/chapter-10/lab-10-06-shell-sort-quiz",
+      "newPath": "labs/chapter-10/theory/T-10-04-shell-sort-quiz"
+    },
+    {
+      "id": "11E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-07-counting-votes",
+      "newPath": "labs/chapter-11/exercise/E-11-01-counting-votes"
+    },
+    {
+      "id": "11E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-08-inversion-pairs",
+      "newPath": "labs/chapter-11/exercise/E-11-02-inversion-pairs"
+    },
+    {
+      "id": "11E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-09-concat-max",
+      "newPath": "labs/chapter-11/exercise/E-11-03-concat-max"
+    },
+    {
+      "id": "11E04",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-10-sort-template",
+      "newPath": "labs/chapter-11/exercise/E-11-04-sort-template"
+    },
+    {
+      "id": "11E05",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-11-merge-sort-template",
+      "newPath": "labs/chapter-11/exercise/E-11-05-merge-sort-template"
+    },
+    {
+      "id": "11E06",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-12-merge-sort-count",
+      "newPath": "labs/chapter-11/exercise/E-11-06-merge-sort-count"
+    },
+    {
+      "id": "11E07",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-13-quick-sort-template",
+      "newPath": "labs/chapter-11/exercise/E-11-07-quick-sort-template"
+    },
+    {
+      "id": "11E08",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-14-kth-smallest",
+      "newPath": "labs/chapter-11/exercise/E-11-08-kth-smallest"
+    },
+    {
+      "id": "11E09",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-15-kth-distinct",
+      "newPath": "labs/chapter-11/exercise/E-11-09-kth-distinct"
+    },
+    {
+      "id": "11E10",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-16-heap-sort-template",
+      "newPath": "labs/chapter-11/exercise/E-11-10-heap-sort-template"
+    },
+    {
+      "id": "11E11",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-17-min-heap-template",
+      "newPath": "labs/chapter-11/exercise/E-11-11-min-heap-template"
+    },
+    {
+      "id": "11E12",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-18-black-box",
+      "newPath": "labs/chapter-11/exercise/E-11-12-black-box"
+    },
+    {
+      "id": "11E13",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-19-median-heaps",
+      "newPath": "labs/chapter-11/exercise/E-11-13-median-heaps"
+    },
+    {
+      "id": "11E14",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-20-distinct-sort",
+      "newPath": "labs/chapter-11/exercise/E-11-14-distinct-sort"
+    },
+    {
+      "id": "11E15",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-21-bucket-sort-basic",
+      "newPath": "labs/chapter-11/exercise/E-11-15-bucket-sort-basic"
+    },
+    {
+      "id": "11E16",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-22-bucket-sort-template",
+      "newPath": "labs/chapter-11/exercise/E-11-16-bucket-sort-template"
+    },
+    {
+      "id": "11E17",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-23-radix-sort-template",
+      "newPath": "labs/chapter-11/exercise/E-11-17-radix-sort-template"
+    },
+    {
+      "id": "11E18",
+      "category": "exercise",
+      "oldPath": "labs/chapter-11/lab-11-24-radix-sort-steps",
+      "newPath": "labs/chapter-11/exercise/E-11-18-radix-sort-steps"
+    },
+    {
+      "id": "11T01",
+      "category": "theory",
+      "oldPath": "labs/chapter-11/lab-11-01-merge-sort-quiz",
+      "newPath": "labs/chapter-11/theory/T-11-01-merge-sort-quiz"
+    },
+    {
+      "id": "11T02",
+      "category": "theory",
+      "oldPath": "labs/chapter-11/lab-11-02-quick-sort-quiz",
+      "newPath": "labs/chapter-11/theory/T-11-02-quick-sort-quiz"
+    },
+    {
+      "id": "11T03",
+      "category": "theory",
+      "oldPath": "labs/chapter-11/lab-11-03-heap-sort-quiz",
+      "newPath": "labs/chapter-11/theory/T-11-03-heap-sort-quiz"
+    },
+    {
+      "id": "11T04",
+      "category": "theory",
+      "oldPath": "labs/chapter-11/lab-11-04-counting-sort-quiz",
+      "newPath": "labs/chapter-11/theory/T-11-04-counting-sort-quiz"
+    },
+    {
+      "id": "11T05",
+      "category": "theory",
+      "oldPath": "labs/chapter-11/lab-11-05-bucket-sort-quiz",
+      "newPath": "labs/chapter-11/theory/T-11-05-bucket-sort-quiz"
+    },
+    {
+      "id": "11T06",
+      "category": "theory",
+      "oldPath": "labs/chapter-11/lab-11-06-radix-sort-quiz",
+      "newPath": "labs/chapter-11/theory/T-11-06-radix-sort-quiz"
+    },
+    {
+      "id": "13E01",
+      "category": "exercise",
+      "oldPath": "labs/chapter-13/lab-13-01-container-with-most-water",
+      "newPath": "labs/chapter-13/exercise/E-13-01-container-with-most-water"
+    },
+    {
+      "id": "13E02",
+      "category": "exercise",
+      "oldPath": "labs/chapter-13/lab-13-02-longest-palindrome",
+      "newPath": "labs/chapter-13/exercise/E-13-02-longest-palindrome"
+    },
+    {
+      "id": "13E03",
+      "category": "exercise",
+      "oldPath": "labs/chapter-13/lab-13-03-jump-game",
+      "newPath": "labs/chapter-13/exercise/E-13-03-jump-game"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "ch08-quiz-sourcing",
+  "name": "ch08-quiz-sourcing",
+  "title": "完善第 8 章查找选择题（补 8.2 BST 与 8.3 平衡树题源）",
+  "description": "为第 8 章补齐查找理论选择题：8.2 BST 与 8.3 平衡树目前零题。候选为 2009-2025 年 408 真题中 13 道选择题 + 1 道综合题（全部经 neville-studio 与 JDC2001 两个独立转录源 + 独立推导三方核对），待用户拍板组织形式与题量后写入 quiz.json。",
+  "status": "planning",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "RichardYi-SYSU-Mac",
+  "assignee": "RichardYi-SYSU-Mac",
+  "createdAt": "2026-09-03",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "labs/chapter-08/lab-08-01-search-theory-quiz/quiz.json",
+    "content/chapter-08-search/00-overview.md",
+    ".trellis/spec/content/labs.md"
+  ],
+  "notes": "2026-09-03：完成真题全卷排查与候选清单（research/source-list.md，408 候选三方核对）；随后 OCR 王道 2026 版第 7 章 7.2/7.3 习题（41 道新题+答案），定稿每课一 quiz：lab-08-01 扩至 15 题、新建 lab-08-02-bst-theory-quiz（12 题）与 lab-08-03-balanced-tree-quiz（14 题），合计 41 题；编程 lab 重编号为 08-04/08-05；同步 overview 配套理论题表、三篇课文配套区、LAB_AUTHORING_GUIDE 等 4 个文档、3 个校验脚本与 pages 导航测试。门禁：validate:content / lab:validate×5 / lint / typecheck / lab-docs / lab-tools / lab-make / discovery / build / check:site / test:pages（21/22，唯一失败为分支预先存在的 curriculum 用例，已在干净 HEAD 复现）。待用户复核后提交。",
+  "meta": {}
+}

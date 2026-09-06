@@ -56,16 +56,38 @@ $$
 
 孩子下标不小于数组长度时，对应孩子不存在。含 $n$ 个元素的堆，最后一个非叶节点下标是 $\lfloor n/2\rfloor-1$；下标从 $\lfloor n/2\rfloor$ 开始的元素都是叶节点。
 
-```text [heap-array.txt]
-数组下标：  0   1   2   3   4   5   6
-关键字：   90  70  80  10  60  30  50
+以七个元素的大根堆为例，数组内容为：
 
-             90(0)
-           /       \
-       70(1)       80(2)
-      /   \        /   \
-  10(3) 60(4)  30(5) 50(6)
+| 下标 | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 关键字 | 90 | 70 | 80 | 10 | 60 | 30 | 50 |
+
+按上面的下标公式还原出的树形是：
+
+```graphviz
+digraph HeapArray {
+  rankdir=TB;
+  ordering=out;
+  node [shape=circle, width=0.62, fontsize=11];
+  edge [arrowhead=none];
+
+  h0 [label="90\n(0)"];
+  h1 [label="70\n(1)"];
+  h2 [label="80\n(2)"];
+  h3 [label="10\n(3)"];
+  h4 [label="60\n(4)"];
+  h5 [label="30\n(5)"];
+  h6 [label="50\n(6)"];
+
+  h0 -> h1;
+  h0 -> h2;
+  h1 -> h3;
+  h1 -> h4;
+  h2 -> h5;
+  h2 -> h6;
+}
 ```
+<!-- diagram id="heap-array-mapping" caption: "括号内是数组下标；每个节点的孩子下标由 2i+1、2i+2 直接算出，因此不需要保存任何指针。此处 n=7，最后一个非叶节点是下标 2，下标 3~6 全是叶节点" -->
 
 ::: property 性质 · 形态不需要额外维护
 只要新元素追加在数组末尾、删除堆顶时用末尾元素填根，再调整堆序，数组始终对应一棵完全二叉树。插入和删除只需要修复偏序，不需要重新连接树形指针。
@@ -80,6 +102,10 @@ $$
 在数组末尾插入新值后，只有“新节点—父节点”关系可能违规。若新值大于父值，就交换并继续向上，直到到达根或父值已经不小于它。
 
 ```cpp:line-numbers [max-heap-sift-up.cpp]
+#include <cstddef>
+#include <utility>
+#include <vector>
+
 void siftUp(std::vector<int>& heap, std::size_t index) {
     while (index > 0) {
         const std::size_t parent = (index - 1) / 2;
@@ -100,6 +126,11 @@ void push(std::vector<int>& heap, int value) {
 删除堆顶时，先保存根值，再把数组最后一个元素移到根并缩短数组。此时只有根到某个叶节点的路径可能违规。大根堆每一步必须与两个孩子中更大的那个比较；若误选较小孩子，交换后仍可能小于另一个孩子。
 
 ```cpp:line-numbers [max-heap-sift-down.cpp]
+#include <cstddef>
+#include <stdexcept>
+#include <utility>
+#include <vector>
+
 void siftDown(std::vector<int>& heap, std::size_t index) {
     const std::size_t n = heap.size();
     while (true) {
@@ -147,6 +178,7 @@ int pop(std::vector<int>& heap) {
 2. 直接把元素放进数组，再从最后一个非叶节点向根执行 `siftDown`：这就是自底向上的 <dfn>Heapify</dfn>。
 
 ```cpp:line-numbers [heapify.cpp]
+// 沿用上一节的 siftDown 与其头文件
 void heapify(std::vector<int>& values) {
     if (values.size() < 2) return;
     for (std::size_t i = values.size() / 2; i-- > 0;) {
@@ -181,6 +213,7 @@ $$
 升序堆排序先把数组建成大根堆，再反复交换堆顶与当前末尾，把堆范围缩短一格，并对新根下沉。每一轮把当前最大值固定到最终位置。
 
 ```cpp:line-numbers [heap-sort.cpp]
+// 沿用上面的 heapify；siftDownRange 是 siftDown 的“限定右边界”版本
 void siftDownRange(std::vector<int>& values, std::size_t index, std::size_t end) {
     while (true) {
         std::size_t best = index;
@@ -265,6 +298,12 @@ int smallest = minQueue.top(); // 2
 3. 最终堆中保留最大的 $k$ 个元素，堆顶就是第 $k$ 大。
 
 ```cpp:line-numbers [kth-largest.cpp]
+#include <cstddef>
+#include <functional>
+#include <queue>
+#include <stdexcept>
+#include <vector>
+
 int kthLargest(const std::vector<int>& values, std::size_t k) {
     if (k == 0 || k > values.size()) throw std::out_of_range("invalid k");
     std::priority_queue<int, std::vector<int>, std::greater<int>> kept;
@@ -301,6 +340,16 @@ $$
 若任务以 `(nextRunTime, sequence)` 排序，小根堆顶就是最早应执行的任务；`sequence` 保证时间相同的任务按到达顺序稳定处理。任务执行后若要周期性重排，更新下一次时间并重新入堆，而不是直接修改堆内键值。
 :::
 
+## 配套 Lab
+
+先做[堆题精练](../../labs/chapter-05/theory/T-05-05-heap-quiz/README.md)巩固下标公式与调整过程，再进入编程实验：
+
+| 实验 | 练习内容 |
+| --- | --- |
+| [最小堆实现](../../labs/chapter-05/exercise/E-05-06-min-heap-implementation/README.md) | 上浮、下沉、插入与删除堆顶的完整实现 |
+| [数据流中位数](../../labs/chapter-05/exercise/E-05-07-median-in-data-stream/README.md) | 用大根堆与小根堆对顶维护动态中位数 |
+| [任务调度器](../../labs/chapter-05/exercise/E-05-08-task-scheduler/README.md) | 用优先队列按优先级与到达序号调度任务 |
+
 ## 小结与自测
 
 堆用完全二叉树保证高度，用父子偏序保证根为极值。上浮和下沉只修复一条路径；自底向上 Heapify 之所以线性，是因为绝大多数节点离叶层很近。优先队列把这些成本封装为行为接口，再延伸到 Top-K、多路归并和调度。
@@ -309,6 +358,16 @@ $$
 2. 为什么大根堆下沉时必须先在两个孩子中选较大者？
 3. 用“各高度节点数”解释 Heapify 为何不是 $O(n\log n)$。
 4. 堆排序为什么能原地完成，却通常不稳定？
-5. 找第 `k` 大为什么使用大小为 `k` 的小根堆，而不是大根堆？
+5. 有人提出另一种 Top-K 做法：**维护大小至多为 `k` 的大根堆，超出时弹出堆顶，最后取堆顶作为第 `k` 大**。请构造一个具体的小例子说明它为什么是错的，并指出这个做法实际求出的是什么。
+
+::: details 查看自测答案
+1. 对 0-based 堆，$\operatorname{parent}(4)=\lfloor(4-1)/2\rfloor=1$，$\operatorname{left}(4)=2\times4+1=9$，$\operatorname{right}(4)=10$。长度为 `10` 的数组合法下标是 `0..9`，所以父节点 `1` 和左孩子 `9` 存在，**右孩子 `10` 越界不存在**。这也说明下标 `4` 只有一个孩子，正是完全二叉树中最多只会出现一个的“半满”节点。
+2. 因为下沉的目标是让当前节点与**两个**孩子同时满足偏序。若误选较小的孩子交换，新的父节点是原来较小的那个值，它仍可能小于另一个孩子，堆序在这一层就没有真正修复，而算法却继续向下走了。选较大者交换后，上升的值是三者中的最大值，必然不小于另外两个，该层一定合法。
+3. 宽松上界“$n$ 个节点 $\times$ 每个 $O(\log n)$”把最坏高度机械地摊给了所有节点，但下沉成本只与节点**距离叶层的高度** $h$ 有关，而高度大的节点极少。距叶层高度为 $h$ 的节点至多约 $n/2^{h+1}$ 个（约一半是叶节点，$h=0$，完全不用下沉），于是
+   $$T(n)\le\sum_{h\ge0}\frac{n}{2^{h+1}}O(h)=O(n)\sum_{h\ge0}\frac{h}{2^{h+1}}=O(n),$$
+   其中级数 $\sum_{h\ge0} h/2^{h+1}$ 收敛到常数 $1$。代价最高的根只有一个，数量最多的叶子不花成本，因此总量是线性而非 $n\log n$。
+4. **原地**：堆用数组隐式表示，父子关系由下标算出而非指针保存，排序全过程只需交换数组元素，辅助空间 $O(1)$。每轮把堆顶（当前最大值）与当前堆末尾交换，最大值就落到了它的最终位置，堆范围缩短一格。**不稳定**：堆顶与末尾的交换是**远距离**的，会跨越中间所有元素。例如对 `5a, 5b, 3`（`5a` 在前）建堆并排序后，两个 `5` 的相对次序可能被交换，而稳定性要求相等关键字保持原有先后。
+5. 取 `values = [1, 2, 3, 4]`、`k = 2`，第 2 大应为 `3`。按该做法：压入 `1`、`2` 后堆为 `{1,2}`；压入 `3` 时超出大小，弹出堆顶最大值 `3`，剩 `{1,2}`；压入 `4` 时再弹出 `4`，仍剩 `{1,2}`，堆顶为 `2` $\ne$ `3`。**错因**：弹出堆顶就是不断丢弃当前最大值，最终留下的是最小的 `k` 个元素，堆顶给出的是**第 `k` 小**。要保留最大的 `k` 个，就必须每次丢弃其中最小者，这需要能在 $O(1)$ 时间拿到最小值的**小根堆**。（顺带可见，用大根堆求第 `k` 大也可以，但只能把全部 $n$ 个元素入堆再弹出 `k` 次，时间 $O(n+k\log n)$、空间 $O(n)$，在数据流场景下不可行。）
+:::
 
 下一节进入[5.3 赫夫曼树与赫夫曼编码](./03-huffman-tree-and-coding.md)：它会把小根优先队列作为贪心选择器，反复合并当前最小权重。

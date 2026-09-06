@@ -36,6 +36,7 @@ const duration = computed(() => {
     <h1>{{ document.title }}</h1>
     <p>{{ document.description }}</p>
     <div class="course-document-meta">
+      <span v-if="document.labId"><code>{{ document.labId }}</code></span>
       <span><Clock3 aria-hidden="true" :size="15" />{{ duration }}</span>
       <span><CalendarDays aria-hidden="true" :size="15" />更新于 {{ document.updated }}</span>
       <span><Users aria-hidden="true" :size="15" />{{ document.contributors.join("、") || "待认领" }}</span>

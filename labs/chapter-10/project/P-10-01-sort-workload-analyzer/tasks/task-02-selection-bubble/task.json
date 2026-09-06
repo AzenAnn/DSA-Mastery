@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "ctest",
+  "ctest": {
+    "tests": [
+      { "name": "selection-correctness", "points": 20 },
+      { "name": "selection-instability", "points": 15 },
+      { "name": "bubble-correctness", "points": 20 },
+      { "name": "bubble-stability", "points": 15 },
+      { "name": "selection-bubble-counts", "points": 30 }
+    ]
+  }
+}

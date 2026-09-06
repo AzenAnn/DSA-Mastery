@@ -258,7 +258,7 @@ $\deg(0)=3$：自环在顶点 $0$ 处贡献两次度，边 $\{0,1\}$ 再贡献�
 
 ## 下一步
 
-先完成 [Lab 06-01：图的基本概念选择题精练](../../labs/chapter-06/lab-06-01-graph-basics-quiz/README.md)，检查自己能否独立判断度、路径与连通性；再完成 [Lab 06-03：图的度数与奇偶性统计](../../labs/chapter-06/lab-06-03-graph-degree-statistics/README.md)，用代码处理无向度数、有向入度与出度、自环和平行边。最后继续学习 [6.2 图的存储结构](./02-graph-storage.md)，把顶点与边装进邻接矩阵、邻接表和边集数组。
+先完成 [Lab 06-T-01：图的基本概念选择题精练](../../labs/chapter-06/theory/T-06-01-graph-basics-quiz/README.md)，检查自己能否独立判断度、路径与连通性；再完成 [Lab 06-E-01：图的度数与奇偶性统计](../../labs/chapter-06/exercise/E-06-01-graph-degree-statistics/README.md)，用代码处理无向度数、有向入度与出度、自环和平行边。最后继续学习 [6.2 图的存储结构](./02-graph-storage.md)，把顶点与边装进邻接矩阵、邻接表和边集数组。
 
 ## 参考资料
 

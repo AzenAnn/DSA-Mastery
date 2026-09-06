@@ -350,3 +350,29 @@ labs/index.md
 | `content/chapter-05-graph/04-astar-visualization.md` | A* 交互正文，被课程映射到 Ch.7 | `content/chapter-07-graph-applications/04-astar-visualization.md` | 新页保留原演示路由并改用现有主题令牌 | 迁移 | 同上 |
 
 迁移前目标目录经只读检查确认不存在受跟踪文件冲突。旧产品路径将在 source map、正文、脚本、测试和文档中清零；旧 Trellis 规划任务中的路径只作为历史证据保留。替代页必须通过 frontmatter/链接校验、自动发现、构建、静态产物检查与 Pages 浏览器测试，失败则回退整组迁移，不留下半套编号。
+
+## 13. 2026-09-04 第 12 章分治与递归 Labs 重建
+
+本节是第 9.3 节“不得删除已有 Lab”的显式、经维护者批准的例外。旧 Ch12 的 2 个 Theory Quiz 与 13 个 Exercise Program 将由 16 个重新选题、重新编号并重新编写的 Exercise Program 完整替代；`theory/` 与 `project/` 分类目录保留空的 `.gitkeep`，不创建虚假占位 Lab。
+
+删除前已经逐题运行新 Lab 的严格验证：`12E01`～`12E16` 的参考解均为 `100/100`，starter 均可编译且不能满分，320 个公开用例的标准输出均由仓库 Lab CLI 从参考解生成。旧路径在课程正文中的引用已通过 `rg` 列出，并将在同一变更中由新的 8 篇 Ch12 正文与 `autoLabChapter: 12` 自动收录取代；删除后的产品源码必须不再引用下表路径。
+
+| 候选路径 | 旧职责 | 替代物 | 无引用与替代证据 | 决定 | 回滚方式 |
+| --- | --- | --- | --- | --- | --- |
+| `labs/chapter-12/theory/T-12-01-recursion-foundations-quiz` | 递归基础选择题 | 新 Ch12 的 8 篇正文、自检题与 `12E01`～`12E06` | 新正文直接承担契约、调用栈、递归建模与自检；目录由 ContentIndex 自动发现，不再手写该 Quiz 链接 | 删除 | 合并前放弃本分支；合并后 revert 本任务提交 |
+| `labs/chapter-12/theory/T-12-02-divide-conquer-applications-quiz` | 分治应用选择题 | 新 Ch12 的 8 篇正文、自检题与 `12E07`～`12E16` | 新正文直接承担 Divide–Conquer–Combine、合并模式、证明与复杂度自检 | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-01-hanoi-recursion` | 汉诺塔输出递归 | `E-12-01-function-memoization` | 新题已通过 20 组测试与严格 verify；旧正文手写链接将在重写时移除 | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-02-maximum-subarray` | 最大子数组分治 | `E-12-02-power-expression` 与 `E-12-08-sort-array-merge` | 新题分别覆盖输出型递归和标准分治合并，均已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-03-inversion-count` | 逆序对计数 | `E-12-11-inversion-count` | 同一核心能力迁移到指定的新顺序；新题 20 组测试已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-04-stair-climbing` | 朴素递归与记忆化 | `E-12-01-function-memoization` | 新题直接覆盖递归状态复用与定义域裁剪，已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-05-recursive-binary-search` | 区间递归 | `E-12-07-kth-smallest-quickselect` | 新题覆盖区间划分、目标侧递归与重复值边界，已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-06-fast-power` | 整数快速幂 | `E-12-04-pow-x-n` | 新题增加负指数、`INT_MIN` 与浮点比较合同，已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-07-merge-sort` | 归并排序 | `E-12-08-sort-array-merge` | 新题按指定题源重建，20 组测试已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-08-quicksort` | 快速排序 | `E-12-07-kth-smallest-quickselect` | 新题聚焦三路划分与单侧递归，20 组测试已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-09-kth-largest-quickselect` | 第 k 大快速选择 | `E-12-07-kth-smallest-quickselect` | 按指定的 0-based 第 k 小合同重建，已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-10-merge-two-sorted-lists` | 两路链表递归合并 | `E-12-09-construct-quad-tree` 与 `E-12-10-carpet-tromino` | 新题加强结构递归与四象限组合，均已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-11-majority-element` | 候选合并 | `E-12-13-beautiful-array` | 新题覆盖性质保持与确定性构造，已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-12-merge-k-sorted-lists` | 多路链表分治 | `E-12-14-reverse-pairs`、`E-12-15-count-smaller-after-self`、`E-12-16-count-range-sum` | 三题形成归并计数进阶链，均已严格 verify | 删除 | 同上 |
+| `labs/chapter-12/exercise/E-12-13-different-ways-to-compute` | 表达式结果集合 | `E-12-12-different-ways-add-parentheses` | 新题明确保留重复结果并提供 20 组测试，已严格 verify | 删除 | 同上 |
+
+执行时须先把上述路径解析为绝对路径并逐项确认都位于 `labs/chapter-12/theory` 或 `labs/chapter-12/exercise` 内，再按这份固定清单删除。删除后运行产品源码引用检查、16 个 Lab verify、内容发现、完整 `pnpm test` 与 Pages-base 浏览器验收；任一门禁失败则回退本组删除和对应正文改写。

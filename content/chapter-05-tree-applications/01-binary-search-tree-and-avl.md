@@ -42,15 +42,39 @@ status: "review"
 
 例如，把 `8, 3, 10, 1, 6, 14, 4, 7, 13` 依次插入空树：
 
-```text [bst-example.txt]
-        8
-      /   \
-     3     10
-    / \      \
-   1   6      14
-      / \    /
-     4   7  13
+```graphviz
+digraph BstExample {
+  rankdir=TB;
+  node [shape=circle, width=0.5];
+  edge [arrowsize=0.7];
+
+  n8 [label="8"];
+  n3 [label="3"];
+  n10 [label="10"];
+  n1 [label="1"];
+  n6 [label="6"];
+  n14 [label="14"];
+  n4 [label="4"];
+  n7 [label="7"];
+  n13 [label="13"];
+
+  h8 [style=invis, width=0.05];
+  h3 [style=invis, width=0.05];
+  h6 [style=invis, width=0.05];
+
+  n8 -> n3 [label="左"];
+  n8 -> n10 [label="右"];
+  n3 -> n1 [label="左"];
+  n3 -> n6 [label="右"];
+  n10 -> h8 [style=invis];
+  n10 -> n14 [label="右"];
+  n6 -> n4 [label="左"];
+  n6 -> n7 [label="右"];
+  n14 -> n13 [label="左"];
+  n14 -> h3 [style=invis];
+}
 ```
+<!-- diagram id="bst-example-tree" caption: "示例 BST：每个节点的左子树全部更小、右子树全部更大" -->
 
 中序遍历为 `1, 3, 4, 6, 7, 8, 10, 13, 14`。
 
@@ -134,17 +158,21 @@ bool insert(Node*& root, int key) {
 
 把 `1, 2, 3, 4, 5` 按递增顺序插入空 BST：
 
-```text [degenerate-bst.txt]
-1
- \
-  2
-   \
-    3
-     \
-      4
-       \
-        5
+```graphviz
+digraph DegenerateBst {
+  rankdir=TB;
+  node [shape=circle, width=0.5];
+  edge [arrowsize=0.7];
+
+  d1 [label="1"]; d2 [label="2"]; d3 [label="3"]; d4 [label="4"]; d5 [label="5"];
+
+  d1 -> d2 [label="右"];
+  d2 -> d3 [label="右"];
+  d3 -> d4 [label="右"];
+  d4 -> d5 [label="右"];
+}
 ```
+<!-- diagram id="bst-degenerate" caption: "递增插入使每个新节点都挂在右侧，树退化成与单链表等价的形态" -->
 
 这棵树的结构与单链表相同。查找 `5` 要比较 5 次；若继续插入递增数据，第 $n$ 次插入也要走过接近 $n$ 个节点。
 
@@ -210,17 +238,51 @@ std::unique_ptr<BstNode> erase(std::unique_ptr<BstNode> root, int key) {
 
 右旋前后：
 
-```text [right-rotation.txt]
-        y                       x
-       / \                     / \
-      x   C    --右旋 y-->     A   y
-     / \                         / \
-    A   B                       B   C
+```graphviz
+digraph RightRotation {
+  rankdir=TB;
+  node [shape=circle, width=0.6];
 
-中序：A, x, B, y, C       中序：A, x, B, y, C
+  subgraph cluster_before {
+    label="右旋前：y 为根，x 左高";
+    style=dashed;
+    color="#888888";
+    margin=16;
+
+    y1 [label="y"];
+    x1 [label="x"];
+    A1 [label="A", shape=triangle, width=0.7];
+    B1 [label="B", shape=triangle, width=0.7];
+    C1 [label="C", shape=triangle, width=0.7];
+
+    y1 -> x1 [label="左"];
+    y1 -> C1 [label="右"];
+    x1 -> A1 [label="左"];
+    x1 -> B1 [label="右"];
+  }
+
+  subgraph cluster_after {
+    label="右旋后：x 上升为根，B 改挂到 y 左侧";
+    style=dashed;
+    color="#888888";
+    margin=16;
+
+    x2 [label="x"];
+    y2 [label="y"];
+    A2 [label="A", shape=triangle, width=0.7];
+    B2 [label="B", shape=triangle, width=0.7];
+    C2 [label="C", shape=triangle, width=0.7];
+
+    x2 -> A2 [label="左"];
+    x2 -> y2 [label="右"];
+    y2 -> B2 [label="左"];
+    y2 -> C2 [label="右"];
+  }
+}
 ```
+<!-- diagram id="avl-right-rotation" caption: "右旋让 x 上升、y 下降，中间子树 B 从 x 的右侧改挂到 y 的左侧；两侧中序均为 A, x, B, y, C" -->
 
-左旋是完全对称的操作：当 `y` 的右孩子 `x` 上升时，`x` 的左子树成为 `y` 的右子树。
+旋转前后的中序序列都是 `A, x, B, y, C`。左旋是完全对称的操作：当 `y` 的右孩子 `x` 上升时，`x` 的左子树成为 `y` 的右子树。
 
 ::: property 性质 · 为什么旋转保持有序
 旋转前有 `A < x < B < y < C`。旋转只重新分配 `x`、`y` 与中间子树 `B` 的父子关系，没有改变这五个区间的相对顺序，因此中序序列不变。
@@ -255,8 +317,100 @@ $$
 | LR | 左孩子的右侧 | `BF(root)=2` 且 `BF(left)<0` | 先左旋左孩子，再右旋根 |
 | RL | 右孩子的左侧 | `BF(root)=-2` 且 `BF(right)>0` | 先右旋右孩子，再左旋根 |
 
+四种失衡的重路径形态如下。把从失衡根出发的两段方向连起来读，就是类型名称：
+
+```graphviz
+digraph FourImbalances {
+  rankdir=TB;
+  nodesep=0.6;
+  node [shape=circle, width=0.5];
+
+  subgraph cluster_ll {
+    label="LL：左-左，一次右旋";
+    style=dashed;
+    color="#888888";
+    margin=12;
+    ll_a [label="A"]; ll_b [label="B"]; ll_c [label="C"];
+    ll_a -> ll_b [label="左"];
+    ll_b -> ll_c [label="左"];
+  }
+
+  subgraph cluster_rr {
+    label="RR：右-右，一次左旋";
+    style=dashed;
+    color="#888888";
+    margin=12;
+    rr_a [label="A"]; rr_b [label="B"]; rr_c [label="C"];
+    rr_a -> rr_b [label="右"];
+    rr_b -> rr_c [label="右"];
+  }
+
+  subgraph cluster_lr {
+    label="LR：左-右，先左旋再右旋";
+    style=dashed;
+    color="#888888";
+    margin=12;
+    lr_a [label="A"]; lr_b [label="B"]; lr_c [label="C"];
+    lr_a -> lr_b [label="左"];
+    lr_b -> lr_c [label="右"];
+  }
+
+  subgraph cluster_rl {
+    label="RL：右-左，先右旋再左旋";
+    style=dashed;
+    color="#888888";
+    margin=12;
+    rl_a [label="A"]; rl_b [label="B"]; rl_c [label="C"];
+    rl_a -> rl_b [label="右"];
+    rl_b -> rl_c [label="左"];
+  }
+}
+```
+<!-- diagram id="avl-four-imbalances" caption: "四类失衡由失衡根向下的两段方向命名：同向的 LL 与 RR 用一次旋转，异向的 LR 与 RL 需要两次" -->
+
 ::: example 示例 · LR 双旋
-依次插入 `30, 10, 20`：`30` 左侧过高，但新节点位于左孩子 `10` 的右侧。先对 `10` 左旋，让 `20` 上升；再对 `30` 右旋，得到根为 `20`、左右孩子为 `10` 和 `30` 的 AVL 树。
+依次插入 `30, 10, 20`：`30` 左侧过高，但新节点 `20` 位于左孩子 `10` 的**右**侧，属于 LR 型。单次右旋无法修复——`20` 会从 `10` 的右侧原样搬到 `30` 的左侧，重路径依然是折线。正确做法是先把折线“掰直”，再整体旋转：
+
+```graphviz
+digraph LrDoubleRotation {
+  rankdir=TB;
+  nodesep=0.7;
+  node [shape=circle, width=0.55];
+
+  subgraph cluster_s1 {
+    label="① 失衡：BF(30)=2，BF(10)=-1";
+    style=dashed;
+    color="#888888";
+    margin=14;
+    a30 [label="30"]; a10 [label="10"]; a20 [label="20"];
+    a30 -> a10 [label="左"];
+    a10 -> a20 [label="右"];
+  }
+
+  subgraph cluster_s2 {
+    label="② 对左孩子 10 左旋，重路径变为同向";
+    style=dashed;
+    color="#888888";
+    margin=14;
+    b30 [label="30"]; b20 [label="20"]; b10 [label="10"];
+    b30 -> b20 [label="左"];
+    b20 -> b10 [label="左"];
+  }
+
+  subgraph cluster_s3 {
+    label="③ 对根 30 右旋，恢复平衡";
+    style=dashed;
+    color="#888888";
+    margin=14;
+    c20 [label="20"]; c10 [label="10"]; c30 [label="30"];
+    c20 -> c10 [label="左"];
+    c20 -> c30 [label="右"];
+  }
+}
+```
+<!-- diagram id="avl-lr-double-rotation" caption: "LR 双旋两步：先对左孩子左旋把折线拉成同向的 LL，再对根右旋完成修复" -->
+
+第 ② 步之后重路径变成 `30 → 20 → 10` 的连续向左，正是 LL 型，因此第 ③ 步用一次右旋即可收尾。最终根为 `20`，左右孩子分别是 `10` 和 `30`，三个节点的 `BF` 全为 `0`。
 :::
 
 ### 插入后的再平衡
@@ -392,6 +546,16 @@ AVL 树的最少节点数满足类似斐波那契的递推，因此高度为 $O(
 4. 节点数与成功插入、删除记录一致；
 5. 空树、单节点、根删除、连续递增插入和交替插删均不泄漏或重复拥有节点。
 
+## 配套 Lab
+
+| 实验 | 练习内容 |
+| --- | --- |
+| [BST 插入与查找](../../labs/chapter-05/exercise/E-05-01-bst-insert-search/README.md) | 沿比较方向下降，在空链接处接入新节点 |
+| [BST 删除](../../labs/chapter-05/exercise/E-05-02-bst-delete/README.md) | 三种结构情况，尤其是双孩子节点的替身选择 |
+| [验证 BST 先序序列](../../labs/chapter-05/exercise/E-05-03-validate-bst-preorder/README.md) | 用区间约束判断序列能否还原为合法 BST |
+| [BST 第 k 小元素](../../labs/chapter-05/exercise/E-05-04-bst-kth-smallest/README.md) | 利用中序有序性，避免全量排序 |
+| [AVL 插入与平衡](../../labs/chapter-05/exercise/E-05-05-avl-tree-insert/README.md) | 四类失衡的识别与单/双旋转实现 |
+
 ## 小结与自测
 
 BST 用全序关系缩小查找范围，但性能仍由树高决定；AVL 在每次更新后用局部旋转恢复高度约束。旋转之所以安全，是因为它保持中序次序；旋转之所以高效，是因为只修改常数个链接。
@@ -401,5 +565,18 @@ BST 用全序关系缩小查找范围，但性能仍由树高决定；AVL 在每
 3. 依次插入 `50, 30, 40` 会产生哪类 AVL 失衡？画出两次旋转。
 4. 为什么 AVL 删除可能一路向根继续旋转，而插入通常只需修复最低失衡点？
 5. 若把高度约定改为“空树 0、叶节点 1”，哪些代码和公式要改，哪些判断不变？
+
+::: details 查看自测答案
+1. 示例 BST 的中序序列是 `1, 3, 4, 6, 7, 8, 10, 13, 14`。`6` 的前驱是**左子树中的最大值 `4`**，后继是**右子树中的最小值 `7`**。删除 `6` 时它有两个孩子，用前驱 `4` 或后继 `7` 顶替都可以：这两个值恰好是中序序列中 `6` 的紧邻元素，用它们替换不会破坏中序递增性。
+2. 递增插入时每个新键都大于已有全部键，因而一路走右链接，最终形成只有右孩子的链。它仍满足“左子树 < 根 < 右子树”（左子树全为空，条件平凡成立），中序序列也正确，所以是合法 BST。但 BST 的有序不变量只约束**顺序**，对**高度**不作任何保证；此时树高为 $n-1$，查找退化为 $O(n)$。这正是需要额外平衡约束的原因。
+3. 依次插入后，`50` 为根、`30` 为其左孩子、`40` 为 `30` 的右孩子。节点 `50` 的 $BF = h(\text{左}) - h(\text{右}) = 1 - (-1) = 2$，失衡且“左子树重、左子树内部右偏”，属于 **LR 型**，需要两次旋转：
+   - 第 ① 步，对左孩子 `30` **左旋**，得到 `50 → 40 → 30` 的连续向左路径，问题转化为 LL 型；
+   - 第 ② 步，对失衡点 `50` **右旋**，`40` 上升为根，`30` 与 `50` 成为它的左右孩子。
+   最终形态为根 `40`、左 `30`、右 `50`，高度从 2 降为 1。
+4. 关键差别在于**修复后子树的高度是否回到原状**。插入时，从最低失衡点完成恰当旋转后，该局部子树的高度恢复到插入前的水平，因此所有祖先的平衡因子都不再改变，一次旋转即可收工。删除则可能让子树高度**减少** 1，旋转修复后高度仍可能比原来低，于是父节点的平衡因子随之变化并可能产生新的失衡，必须一路检查到根。
+5. 需要改的是**基准值**，不需要改的是**相对关系**：
+   - 要改：空链接的哨兵返回值由 $-1$ 改为 $0$（`height()` 中的 `: -1`）；新节点的初值 `height{0}` 改为 `1`；所有把高度数值与节点数直接挂钩的公式整体平移 1。
+   - 不变：`update()` 中的 `1 + max(left, right)` 递推形式；`balanceFactor()` 及其 `|BF| > 1` 的判定——因为平衡因子是两个高度的**差**，两者同时加 1 后差值不变；四种失衡类型的判别与旋转代码；$O(\log n)$ 的渐近结论。
+:::
 
 下一节进入[5.2 堆与优先队列](./02-heap-and-priority-queue.md)：它不维护完整排序，而是用更弱的局部偏序换取高效的最高优先级访问。

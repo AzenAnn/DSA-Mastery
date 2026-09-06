@@ -1,0 +1,192 @@
+[
+  {
+    "id": "ds-drill-counting-sort-001",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-001",
+    "stem": "计数排序的核心思想是？",
+    "options": [
+      "比较元素大小交换",
+      "统计每个关键字出现次数，再按计数回填",
+      "分治合并",
+      "相邻冒泡"
+    ],
+    "answer": 1,
+    "explanation": "计数排序「唱票」式：统计每个值出现次数，按计数回填结果，不做元素间比较。"
+  },
+  {
+    "id": "ds-drill-counting-sort-002",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-002",
+    "stem": "计数排序适用于什么数据？",
+    "options": [
+      "任意浮点数",
+      "整数且值域不大的序列",
+      "任意字符串",
+      "值域极大的整数"
+    ],
+    "answer": 1,
+    "explanation": "计数排序要求关键字是整数且值域 k 不大（k = O(n) 或更小），否则计数数组爆炸。"
+  },
+  {
+    "id": "ds-drill-counting-sort-003",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-003",
+    "stem": "计数排序的时间复杂度是？",
+    "options": [
+      "O(n²)",
+      "O(n log n)",
+      "O(n + k)",
+      "O(n)"
+    ],
+    "answer": 2,
+    "explanation": "T(n) = O(n + k)，k 是值域大小；计数 O(n)，回填 O(n)，前缀和 O(k)。"
+  },
+  {
+    "id": "ds-drill-counting-sort-004",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-004",
+    "stem": "计数排序中前缀和后，cnt[x] 的含义是？",
+    "options": [
+      "值为 x 的元素个数",
+      "值不超过 x 的元素个数",
+      "值大于 x 的元素个数",
+      "值等于 x 的最大下标"
+    ],
+    "answer": 1,
+    "explanation": "前缀和后 cnt[x] 表示值 ≤ x 的个数，据此确定元素落点区间。"
+  },
+  {
+    "id": "ds-drill-counting-sort-005",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-005",
+    "stem": "计数排序为什么从后往前回填？",
+    "options": [
+      "提高速度",
+      "保证相等元素的相对顺序不变，即稳定性",
+      "节省空间",
+      "避免越界"
+    ],
+    "answer": 1,
+    "explanation": "从后往前逆序填充，保证相同值原数组靠后的元素输出也靠后，实现稳定。"
+  },
+  {
+    "id": "ds-drill-counting-sort-006",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-006",
+    "stem": "关于计数排序的稳定性，下列说法正确的是？",
+    "options": [
+      "不稳定，因为按值域计数",
+      "稳定，采用从后往前的逆序回填",
+      "不稳定，因为需要前缀和",
+      "稳定性取决于值域大小"
+    ],
+    "answer": 1,
+    "explanation": "从后往前逆序回填，保证相同值原数组靠后的元素输出也靠后，故稳定。"
+  },
+  {
+    "id": "ds-drill-counting-sort-007",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-007",
+    "stem": "计数排序为什么能突破比较排序的 Ω(n log n) 下界？",
+    "options": [
+      "它用了更快的比较",
+      "它不比较，而是利用值域结构（整数、有限范围）",
+      "它使用了分治",
+      "它总是更快"
+    ],
+    "answer": 1,
+    "explanation": "计数排序是非比较排序，利用值域结构绕过比较，不适用决策树下界。"
+  },
+  {
+    "id": "ds-drill-counting-sort-008",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-008",
+    "stem": "若 n=10 个数但值域到 10^9，计数排序会怎样？",
+    "options": [
+      "依然高效",
+      "计数数组爆炸，时间和空间都扛不住",
+      "退化为 O(n log n)",
+      "无法运行"
+    ],
+    "answer": 1,
+    "explanation": "k ≫ n 时计数数组（大小为 k）爆炸，计数排序反而比比较排序更差。"
+  },
+  {
+    "id": "ds-drill-counting-sort-009",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-009",
+    "stem": "计数排序的空间复杂度是？",
+    "options": [
+      "O(n + k)",
+      "O(n)",
+      "O(k)",
+      "O(1)"
+    ],
+    "answer": 0,
+    "explanation": "计数数组 O(k) + 输出数组 O(n) = O(n + k)。"
+  },
+  {
+    "id": "ds-drill-counting-sort-010",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "counting sort"
+    ],
+    "targetId": "ds-drill-counting-sort-010",
+    "stem": "计数排序与桶排序的关系是？",
+    "options": [
+      "完全无关",
+      "计数排序可看作桶排序值域为单个整数时的特殊情况",
+      "计数排序是桶排序的父类",
+      "两者都是比较排序"
+    ],
+    "answer": 1,
+    "explanation": "计数排序可视为每个桶只装一个整数值的桶排序特例；两者都是非比较排序。"
+  }
+]

@@ -1,0 +1,194 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-one-empty",
+    "input": "tests/002-one-empty.in",
+    "expected": "tests/002-one-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-duplicates",
+    "input": "tests/003-duplicates.in",
+    "expected": "tests/003-duplicates.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "004-separated",
+    "input": "tests/004-separated.in",
+    "expected": "tests/004-separated.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-both-empty",
+    "input": "tests/005-both-empty.in",
+    "expected": "tests/005-both-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "006-left-empty",
+    "input": "tests/006-left-empty.in",
+    "expected": "tests/006-left-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-right-empty",
+    "input": "tests/007-right-empty.in",
+    "expected": "tests/007-right-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-single-single",
+    "input": "tests/008-single-single.in",
+    "expected": "tests/008-single-single.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-interleaved",
+    "input": "tests/009-interleaved.in",
+    "expected": "tests/009-interleaved.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-equal-heads",
+    "input": "tests/010-equal-heads.in",
+    "expected": "tests/010-equal-heads.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "011-cross-list-duplicates",
+    "input": "tests/011-cross-list-duplicates.in",
+    "expected": "tests/011-cross-list-duplicates.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "012-negative-values",
+    "input": "tests/012-negative-values.in",
+    "expected": "tests/012-negative-values.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-min-max-values",
+    "input": "tests/013-min-max-values.in",
+    "expected": "tests/013-min-max-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "014-left-scrambled-indices",
+    "input": "tests/014-left-scrambled-indices.in",
+    "expected": "tests/014-left-scrambled-indices.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-right-scrambled-indices",
+    "input": "tests/015-right-scrambled-indices.in",
+    "expected": "tests/015-right-scrambled-indices.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-skewed-sizes",
+    "input": "tests/016-skewed-sizes.in",
+    "expected": "tests/016-skewed-sizes.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-medium-interleaved",
+    "input": "tests/017-medium-interleaved.in",
+    "expected": "tests/017-medium-interleaved.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-medium-one-empty",
+    "input": "tests/018-medium-one-empty.in",
+    "expected": "tests/018-medium-one-empty.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "boundary"
+    ]
+  },
+  {
+    "id": "019-stress-duplicates",
+    "input": "tests/019-stress-duplicates.in",
+    "expected": "tests/019-stress-duplicates.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "020-stress-scrambled-indices",
+    "input": "tests/020-stress-scrambled-indices.in",
+    "expected": "tests/020-stress-scrambled-indices.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  }
+]

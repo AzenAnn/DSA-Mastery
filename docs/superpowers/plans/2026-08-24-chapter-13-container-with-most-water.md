@@ -12,14 +12,14 @@
 
 ## File map
 
-- Create `labs/chapter-13/lab-13-01-container-with-most-water/README.md` — learner-facing Chinese problem statement, constraints, greedy explanation, image, commands, checklist, and reflection questions.
-- Create `labs/chapter-13/lab-13-01-container-with-most-water/lab.json` — Program Lab v1 manifest.
-- Create `labs/chapter-13/lab-13-01-container-with-most-water/Makefile` — exact three-line thin Lab entry point.
-- Create `labs/chapter-13/lab-13-01-container-with-most-water/assets/container-with-most-water.png` — supplied 801×383 diagram copied into the Lab.
-- Create `labs/chapter-13/lab-13-01-container-with-most-water/student/main.cpp` — compile-safe incomplete learner starter.
-- Create `labs/chapter-13/lab-13-01-container-with-most-water/solution/main.cpp` — reviewed O(n), O(1) two-pointer reference.
-- Create `labs/chapter-13/lab-13-01-container-with-most-water/tests/cases.json` — seven cases whose points total 100.
-- Create `labs/chapter-13/lab-13-01-container-with-most-water/tests/*.in` and `tests/*.out` — stable input/oracle fixtures.
+- Create `labs/chapter-13/exercise/E-13-01-container-with-most-water/README.md` — learner-facing Chinese problem statement, constraints, greedy explanation, image, commands, checklist, and reflection questions.
+- Create `labs/chapter-13/exercise/E-13-01-container-with-most-water/lab.json` — Program Lab v1 manifest.
+- Create `labs/chapter-13/exercise/E-13-01-container-with-most-water/Makefile` — exact three-line thin Lab entry point.
+- Create `labs/chapter-13/exercise/E-13-01-container-with-most-water/assets/container-with-most-water.png` — supplied 801×383 diagram copied into the Lab.
+- Create `labs/chapter-13/exercise/E-13-01-container-with-most-water/student/main.cpp` — compile-safe incomplete learner starter.
+- Create `labs/chapter-13/exercise/E-13-01-container-with-most-water/solution/main.cpp` — reviewed O(n), O(1) two-pointer reference.
+- Create `labs/chapter-13/exercise/E-13-01-container-with-most-water/tests/cases.json` — seven cases whose points total 100.
+- Create `labs/chapter-13/exercise/E-13-01-container-with-most-water/tests/*.in` and `tests/*.out` — stable input/oracle fixtures.
 - Modify `content/chapter-13-greedy/00-overview.md` — add the Chapter 13 Lab learning link.
 - Modify `.vitepress/content-index.ts` — add `autoLabChapter: 13` to the Chapter 13 curriculum definition.
 
@@ -35,16 +35,16 @@ Run:
 pnpm lab:new -- --type program --chapter 13 --order 1 --slug container-with-most-water
 ```
 
-Expected result: the command creates `labs/chapter-13/lab-13-01-container-with-most-water/` with `README.md`, `lab.json`, `Makefile`, `student/main.cpp`, `solution/main.cpp`, and one sample case. It must not overwrite an existing directory.
+Expected result: the command creates `labs/chapter-13/exercise/E-13-01-container-with-most-water/` with `README.md`, `lab.json`, `Makefile`, `student/main.cpp`, `solution/main.cpp`, and one sample case. It must not overwrite an existing directory.
 
 - [ ] **Step 2: Create the Lab asset directory and copy the user-provided diagram.**
 
 Run:
 
 ```bash
-mkdir -p labs/chapter-13/lab-13-01-container-with-most-water/assets
-cp /var/folders/jc/gqs_c8zs6jj4hlskmm2lm9080000gn/T/codex-clipboard-BG9pvE.png labs/chapter-13/lab-13-01-container-with-most-water/assets/container-with-most-water.png
-file labs/chapter-13/lab-13-01-container-with-most-water/assets/container-with-most-water.png
+mkdir -p labs/chapter-13/exercise/E-13-01-container-with-most-water/assets
+cp /var/folders/jc/gqs_c8zs6jj4hlskmm2lm9080000gn/T/codex-clipboard-BG9pvE.png labs/chapter-13/exercise/E-13-01-container-with-most-water/assets/container-with-most-water.png
+file labs/chapter-13/exercise/E-13-01-container-with-most-water/assets/container-with-most-water.png
 ```
 
 Expected result: the destination is a local 801×383 PNG and no README reference points to `/var/folders`.
@@ -54,7 +54,7 @@ Expected result: the destination is a local 801×383 PNG and no README reference
 Run:
 
 ```bash
-find labs/chapter-13/lab-13-01-container-with-most-water -maxdepth 3 -type f -print | sort
+find labs/chapter-13/exercise/E-13-01-container-with-most-water -maxdepth 3 -type f -print | sort
 ```
 
 Expected result: only the generated Lab files, the `assets/` image, and later the planned tests are present; no unrelated files are created.
@@ -65,7 +65,7 @@ Expected result: only the generated Lab files, the `assets/` image, and later th
 
 - [ ] **Step 1: Replace the generated `lab.json` with the repository Program contract.**
 
-Write exactly this manifest to `labs/chapter-13/lab-13-01-container-with-most-water/lab.json`:
+Write exactly this manifest to `labs/chapter-13/exercise/E-13-01-container-with-most-water/lab.json`:
 
 ```json
 {
@@ -96,12 +96,12 @@ Write exactly this manifest to `labs/chapter-13/lab-13-01-container-with-most-wa
 
 - [ ] **Step 2: Keep the generated Makefile as the exact thin entry point.**
 
-The file `labs/chapter-13/lab-13-01-container-with-most-water/Makefile` must contain exactly:
+The file `labs/chapter-13/exercise/E-13-01-container-with-most-water/Makefile` must contain exactly:
 
 ```makefile
 LAB_DIR := $(CURDIR)
-REPO_ROOT := $(LAB_DIR)/../../..
-include ../../../tools/lab/lab.mk
+REPO_ROOT := $(LAB_DIR)/../../../..
+include ../../../../tools/lab/lab.mk
 ```
 
 - [ ] **Step 3: Write a compile-safe but incomplete student starter.**
@@ -135,7 +135,7 @@ This starter compiles, reads the declared input, and is intentionally not a comp
 Create `tests/cases.json` and all fourteen `.in`/`.out` files using the exact seven-case JSON and fixture table in the next case-contract step, then run the generated student target:
 
 ```bash
-pnpm lab:run -- labs/chapter-13/lab-13-01-container-with-most-water --target student --no-color
+pnpm lab:run -- labs/chapter-13/exercise/E-13-01-container-with-most-water --target student --no-color
 ```
 
 Expected result: the command completes as a valid student run but reports `NOT FULL`; the zero-output starter may pass only the all-zero case and must not score 100. This is the required failing test observation for the algorithm implementation.
@@ -270,7 +270,7 @@ Write `README.md` with this frontmatter:
 
 ```yaml
 ---
-title: "Lab 13-01：盛最多水的容器"
+title: "Lab 13-E-01：盛最多水的容器"
 description: "使用相向双指针和贪心选择求解最大容水量，理解为什么应该移动短板。"
 order: 1
 chapter: 13
@@ -309,7 +309,7 @@ Do not include the downloaded local path, crawl/API metadata, multi-language fun
 Run:
 
 ```bash
-pnpm lab:validate -- labs/chapter-13/lab-13-01-container-with-most-water --no-color
+pnpm lab:validate -- labs/chapter-13/exercise/E-13-01-container-with-most-water --no-color
 ```
 
 Expected result: `VALIDATION PASS`, type `program`, seven tests, and `100/100` points. If it fails, fix only the Lab files before touching the course index.
@@ -325,7 +325,7 @@ In `content/chapter-13-greedy/00-overview.md`, add a `## 配套 Lab` section aft
 ```md
 ## 配套 Lab
 
-完成 [Lab 13-01：盛最多水的容器](../../labs/chapter-13/lab-13-01-container-with-most-water/README.md)，把“移动短板”的贪心选择落实为可运行程序，并用边界测试检查面积与指针更新。
+完成 [Lab 13-E-01：盛最多水的容器](../../labs/chapter-13/exercise/E-13-01-container-with-most-water/README.md)，把“移动短板”的贪心选择落实为可运行程序，并用边界测试检查面积与指针更新。
 ```
 
 - [ ] **Step 2: Enable automatic Chapter 13 Lab collection.**
@@ -358,8 +358,8 @@ Expected result: content validation reports one additional Lab and one additiona
 Run:
 
 ```bash
-pnpm lab:build -- labs/chapter-13/lab-13-01-container-with-most-water --target student --no-color
-pnpm lab:build -- labs/chapter-13/lab-13-01-container-with-most-water --target solution --no-color
+pnpm lab:build -- labs/chapter-13/exercise/E-13-01-container-with-most-water --target student --no-color
+pnpm lab:build -- labs/chapter-13/exercise/E-13-01-container-with-most-water --target solution --no-color
 ```
 
 Expected result: both targets compile with C++17 and only `.lab-cache/` receives generated build artifacts.
@@ -369,8 +369,8 @@ Expected result: both targets compile with C++17 and only `.lab-cache/` receives
 Run:
 
 ```bash
-pnpm lab:run -- labs/chapter-13/lab-13-01-container-with-most-water --target solution --no-color
-pnpm lab:verify -- labs/chapter-13/lab-13-01-container-with-most-water --no-color
+pnpm lab:run -- labs/chapter-13/exercise/E-13-01-container-with-most-water --target solution --no-color
+pnpm lab:verify -- labs/chapter-13/exercise/E-13-01-container-with-most-water --no-color
 ```
 
 Expected result: all seven cases pass, the reference scores `100/100`, and verification confirms the student target compiles but is not full score.
@@ -406,7 +406,7 @@ Run:
 git diff --check
 git status --short --branch
 git diff --name-only main...HEAD
-find labs/chapter-13/lab-13-01-container-with-most-water -type f -path '*/.lab-cache/*' -prune -o -type f -print | sort
+find labs/chapter-13/exercise/E-13-01-container-with-most-water -type f -path '*/.lab-cache/*' -prune -o -type f -print | sort
 ```
 
 Expected result: only the new Lab, the two Chapter 13 integration files, and task/planning commits are in scope; no temporary source path, binary build output, `dist/`, screenshot, or trace is staged.
@@ -416,7 +416,7 @@ Expected result: only the new Lab, the two Chapter 13 integration files, and tas
 Run:
 
 ```bash
-git add .vitepress/content-index.ts content/chapter-13-greedy/00-overview.md labs/chapter-13/lab-13-01-container-with-most-water
+git add .vitepress/content-index.ts content/chapter-13-greedy/00-overview.md labs/chapter-13/exercise/E-13-01-container-with-most-water
 git commit -m "feat(ch13): add container with most water lab"
 ```
 

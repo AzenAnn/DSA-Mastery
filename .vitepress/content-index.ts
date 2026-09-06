@@ -26,6 +26,7 @@ export interface CourseDocument {
   difficulty?: string;
   duration?: string;
   labCategory?: LabCategory;
+  labId?: string;
   readingMinutes: number;
 }
 
@@ -76,7 +77,8 @@ export type LabSidebarIcons = Record<LabCategory, string>;
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
-const labDirectoryPattern = /^lab-\d{2}-\d{2}-[a-z0-9-]+$/;
+const labDirectoryPattern = /^[TEP]-\d{2}-\d{2,}-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const labCategories = ["theory", "exercise", "project"] as const;
 
 type CurriculumChapterDefinition = Omit<CurriculumChapter, "label" | "lessons" | "labs"> & {
   label?: string;
@@ -117,12 +119,13 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-preface/04-graphviz-authoring-guide.md",
       "content/chapter-preface/05-macos-student-setup.md",
       "content/chapter-preface/06-vscode-extension-guide.md",
+      "content/chapter-preface/07-git-guide.md",
     ],
   },
   {
     id: "chapter-00-memory-foundations",
     number: "0",
-    title: "内存基础",
+    title: "基础",
     description: "从内存组织方式理解数据结构为何具有不同的表示与操作成本。",
     url: "/learn/outline/chapter-00-memory-foundations/",
     lessonSources: [
@@ -131,9 +134,9 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-00-introduction/03-memory-perspective.md",
     ],
     labSources: [
-      "labs/chapter-00/lab-00-01-learning-map/README.md",
-      "labs/chapter-00/lab-00-02-operation-counter/README.md",
-      "labs/chapter-00/lab-00-03-complexity-quiz/README.md",
+      "labs/chapter-00/theory/T-00-01-learning-map/README.md",
+      "labs/chapter-00/exercise/E-00-01-operation-counter/README.md",
+      "labs/chapter-00/theory/T-00-02-complexity-quiz/README.md",
     ],
   },
   {
@@ -201,11 +204,12 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-04-tree-binary-tree/",
     lessonSources: [
       "content/chapter-04-tree/00-overview.md",
-      "content/chapter-04-tree/01-binary-tree.md",
-      "content/chapter-04-tree/02-binary-tree-traversal.md",
-      "content/chapter-04-tree/03-threaded-binary-tree.md",
-      "content/chapter-04-tree/04-trees-and-forests.md",
-      "content/chapter-04-tree/05-binary-tree-classic-problems.md",
+      "content/chapter-04-tree/01-tree-basics.md",
+      "content/chapter-04-tree/02-binary-tree.md",
+      "content/chapter-04-tree/03-binary-tree-traversal.md",
+      "content/chapter-04-tree/04-threaded-binary-tree.md",
+      "content/chapter-04-tree/05-trees-and-forests.md",
+      "content/chapter-04-tree/06-binary-tree-classic-problems.md",
     ],
     autoLabChapter: 4,
   },
@@ -325,6 +329,30 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "分治与递归",
     description: "建立递归定义、问题分解、合并结果与复杂度分析框架。",
     url: "/learn/outline/chapter-12-divide-conquer-recursion/",
+    learningObjectives: [
+      "用函数契约、基本情况和规模度量建立可终止的递归模型",
+      "从题意提炼 Divide–Conquer–Combine 并判断子问题独立性",
+      "用合并不变量解决排序、结构构造与跨区间计数问题",
+      "用归纳法、递归树和主定理验证正确性与复杂度",
+    ],
+    focusTitle: "从递归合同到可证明的分治",
+    focusAreas: [
+      "12.1 函数契约、调用栈、边界与规模递减",
+      "12.2 自相似结构、均衡拆分与单侧递归",
+      "12.3 有序归并、结构拼装、结果组合与跨区间计数",
+      "12.4 终止性、归纳证明、递推式与方法边界",
+    ],
+    lessonSources: [
+      "content/chapter-12-divide-conquer-recursion/00-overview.md",
+      "content/chapter-12-divide-conquer-recursion/01-recursion-contracts.md",
+      "content/chapter-12-divide-conquer-recursion/02-call-stack-and-iteration.md",
+      "content/chapter-12-divide-conquer-recursion/03-divide-conquer-modeling.md",
+      "content/chapter-12-divide-conquer-recursion/04-combine-patterns.md",
+      "content/chapter-12-divide-conquer-recursion/05-recursive-correctness.md",
+      "content/chapter-12-divide-conquer-recursion/06-recurrence-complexity.md",
+      "content/chapter-12-divide-conquer-recursion/07-strategy-boundaries.md",
+    ],
+    autoLabChapter: 12,
   },
   {
     id: "chapter-13-greedy",
@@ -347,6 +375,27 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "动态规划",
     description: "围绕状态、转移、边界和计算顺序建立动态规划方法。",
     url: "/learn/outline/chapter-14-dynamic-programming/",
+    learningObjectives: [
+      "从暴力搜索中识别重叠子问题，并写出精确的状态语义",
+      "在记忆化搜索、自底向上递推和空间压缩之间双向翻译",
+      "根据依赖方向完成线性、网格与背包动态规划建模",
+      "用正确性证明、复杂度分析和最小反例验证状态设计",
+    ],
+    focusTitle: "从状态合同到可验证的转移",
+    focusAreas: [
+      "14.1 状态、决策、无后效性与答案位置",
+      "14.2 递归参数、缓存维度、拓扑顺序与方案还原",
+      "14.3 线性/网格依赖、滚动数组与附加状态",
+      "14.4 0-1/完全背包、组合/排列与循环方向",
+    ],
+    lessonSources: [
+      "content/chapter-14-dynamic-programming/00-overview.md",
+      "content/chapter-14-dynamic-programming/01-dp-thinking-and-state-design.md",
+      "content/chapter-14-dynamic-programming/02-memoization-to-tabulation.md",
+      "content/chapter-14-dynamic-programming/03-linear-and-grid-dp.md",
+      "content/chapter-14-dynamic-programming/04-knapsack-dp.md",
+    ],
+    autoLabChapter: 14,
   },
   {
     id: "chapter-15-backtracking-search",
@@ -386,9 +435,13 @@ function listLabFiles(root: string): string[] {
     .filter((entry) => entry.isDirectory() && /^chapter-\d{2}$/.test(entry.name))
     .flatMap((chapterEntry) => {
       const chapterPath = path.join(labsRoot, chapterEntry.name);
-      return readdirSync(chapterPath, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory() && labDirectoryPattern.test(entry.name))
-        .map((entry) => path.join(chapterPath, entry.name, "README.md"));
+      return labCategories.flatMap((category) => {
+        const categoryPath = path.join(chapterPath, category);
+        if (!existsSync(categoryPath)) return [];
+        return readdirSync(categoryPath, { withFileTypes: true })
+          .filter((entry) => entry.isDirectory() && labDirectoryPattern.test(entry.name))
+          .map((entry) => path.join(categoryPath, entry.name, "README.md"));
+      });
     });
 }
 
@@ -494,7 +547,7 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     chapterLabel: chapterLabel(chapter),
     chapterTitle: text(
       parsed.data.chapterTitle,
-      chapter === "preface" ? "课程作者指南" : chapter === 0 ? "绪论" : `第 ${chapter} 章`,
+      chapter === "preface" ? "课程作者指南" : chapter === 0 ? "基础" : `第 ${chapter} 章`,
     ),
     order: number(parsed.data.order),
     updated: text(parsed.data.updated, "未标注"),
@@ -503,6 +556,7 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     difficulty: text(parsed.data.difficulty) || undefined,
     duration: text(parsed.data.duration) || undefined,
     labCategory: kind === "lab" ? resolveLabCategory(file, parsed.data) : undefined,
+    labId: kind === "lab" ? text(parsed.data.labId) || undefined : undefined,
     readingMinutes: estimateReadingMinutes(parsed.content),
   };
 }
@@ -593,6 +647,16 @@ function sidebarCategoryLabel(
   return `<span class="course-lab-category course-lab-category--${category}">${icon}<span>${label}</span></span>`;
 }
 
+function labSidebarLabel(lab: CourseDocument): string {
+  if (!lab.labId) return lab.title;
+
+  const title = lab.title.replace(
+    /^Lab\s+\d{2}-[TEP]-\d{2,}[：:]\s*/,
+    "",
+  );
+  return `${lab.labId} · ${title}`;
+}
+
 function chapterLabGroup(
   labs: CourseDocument[],
   icons: LabSidebarIcons,
@@ -612,7 +676,7 @@ function chapterLabGroup(
         text: sidebarCategoryLabel(category, label, icons[category]),
         collapsed: category !== "project",
         items: categoryLabs.length
-          ? categoryLabs.map((lab) => ({ text: lab.title, link: lab.url }))
+          ? categoryLabs.map((lab) => ({ text: labSidebarLabel(lab), link: lab.url }))
           : [{ text: `<span class="course-lab-category__empty">${empty}</span>` }],
       };
     }),
@@ -645,7 +709,7 @@ export function createCourseSidebar(
                 {
                   text: "相关 Labs",
                   collapsed: true,
-                  items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })),
+                  items: chapter.labs.map((lab) => ({ text: labSidebarLabel(lab), link: lab.url })),
                 },
               ]
             : []),

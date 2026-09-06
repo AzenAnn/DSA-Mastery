@@ -59,7 +59,7 @@ VitePress `1.6.4` 的 Labs 跨页面 outline 兼容例外必须保留：顶栏 L
 
 ## 6. Routes, Links, and Pages Base
 
-- `content/:chapter/:page.md` 映射到 `/learn/:chapter/:page/`；`labs/:chapter/:lab/README.md` 映射到 `/labs/:chapter/:lab/`。公共 URL 由 config 的 rewrites 和统一 route map 维护。
+- `content/:chapter/:page.md` 映射到 `/learn/:chapter/:page/`；`labs/:chapter/:category/:lab/README.md` 映射到 `/labs/:chapter/:category/:lab/`。公共 URL 由 config 的 rewrites 和统一 route map 维护。
 - 源码 URL 不含 `/DSA-Mastery/`。正文优先使用相对 `.md` 链接；Vue 站内链接使用 `withBase` 或 VitePress 生成的 route。
 - `GITHUB_PAGES_BASE_PATH` 只在 config 中规范化一次，空值为 `/`，Pages 构建输出固定为 `dist/pages`。任何双 base、硬编码 base 或 source path 泄漏都是阻塞问题。
 - 修改 route、rewrite、base、Markdown link transform 或 Labs 导航时，同时验证本地 `/` 与 Pages `/DSA-Mastery/`；不要只打开开发服务判断成功。
@@ -122,6 +122,7 @@ createBuildTimeDiagramsPlugin({
 - 图源只能写在 Markdown 的纯 ```` ```graphviz ```` fenced block 中；插件按完整 info string 匹配，不支持 `[filename]` 后缀。
 - `diagram id` 只能使用稳定 ASCII 标识；caption 描述教学关系。SVG 缓存位于 `public/diagrams/`，最终资产位于 `dist/pages/diagrams/`。
 - `KROKI_SERVER_URL` 可选；未设置时使用 `https://kroki.io`。`publicPath` 必须包含规范化 Pages base。
+- DOT 若固定使用深色文字或边线，画布必须使用不透明浅色背景（当前基线为 `bgcolor="#ffffff"`）；禁止同时使用透明画布与固定深色文字，否则暗色主题会让表格外标签失去对比度。只有在全部节点、边和文字都经过浅/暗主题实测可读时才能使用透明画布。
 
 ### Validation & Error Matrix
 
@@ -153,6 +154,22 @@ createBuildTimeDiagramsPlugin({
 <!-- Correct -->
 ```graphviz
 ````
+
+暗色主题下的固定色 SVG 还需保证画布对比度：
+
+```dot
+// Wrong: 暗色页面会透过透明画布，固定深色标签几乎不可见
+digraph WrongDiagram {
+  graph [bgcolor="transparent"];
+  node [fontcolor="#0f172a"];
+}
+
+// Correct: SVG 自带稳定浅色画布，浅色与暗色页面都可读
+digraph CorrectDiagram {
+  graph [bgcolor="#ffffff"];
+  node [fontcolor="#0f172a"];
+}
+```
 
 ## 10. Completion Review
 

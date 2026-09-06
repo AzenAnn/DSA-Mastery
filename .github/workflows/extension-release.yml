@@ -107,7 +107,9 @@ jobs:
             > [!WARNING]
             > **这是测试版，还没有经过充分的真实使用检验。** 判题链路、题解切除、进度状态机跑过验证，但界面部分测得不充分，预期会有 bug。遇到问题请提 Issue。
 
-            在 VSCode 中浏览、作答与提交 DSA Mastery 的 Lab：**73 道 Program（代码题）+ 38 道 Quiz（选择题）**。
+            在 VSCode 中浏览、作答与提交 DSA Mastery 的 Lab：**Program（代码题）、Project（项目题）和 Quiz（选择题）**。
+
+            Project 支持 stdio 与 CTest 自动判题；manual task 暂时显示 `PENDING`，不在插件内录入人工分数。
 
             ## 安装
 
@@ -127,8 +129,9 @@ jobs:
             | | 用途 |
             | --- | --- |
             | VSCode ≥ 1.90 | 插件 API 下限 |
-            | Node.js ≥ 22.13 | 运行判题内核（代码题需要） |
-            | C++ 编译器 | 编译答案（代码题需要）—— GCC ≥ 11、Clang ≥ 14 或 MSVC ≥ 19.30 |
+            | Node.js ≥ 22.13 | 运行判题内核（Program/Project 需要） |
+            | C++ 编译器 | 编译答案（Program/Project 需要）—— GCC ≥ 11、Clang ≥ 14 或 MSVC ≥ 19.30 |
+            | CMake ≥ 3.25 | 构建 Project 的 CTest task |
 
             选择题不需要 Node 和编译器。缺编译器时插件会提示并链到对应平台的安装指南。
 

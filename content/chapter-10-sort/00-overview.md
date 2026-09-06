@@ -49,24 +49,24 @@ status: "draft"
 
 第 10 章（基础排序）理论自测与算法实现：
 
-- [Lab 10-03：插入排序自测](../../labs/chapter-10/lab-10-03-insertion-sort-quiz/README.md)
-- [Lab 10-04：选择排序自测](../../labs/chapter-10/lab-10-04-selection-sort-quiz/README.md)
-- [Lab 10-05：冒泡排序自测](../../labs/chapter-10/lab-10-05-bubble-sort-quiz/README.md)
-- [Lab 10-06：希尔排序自测](../../labs/chapter-10/lab-10-06-shell-sort-quiz/README.md)
-- [Lab 10-07：多关键字排序（奖学金）](../../labs/chapter-10/lab-10-07-multi-key-sort/README.md)
-- [Lab 10-08：大整数比较（宇宙总统）](../../labs/chapter-10/lab-10-08-big-int-compare/README.md)
+- [Lab 10-T-01：插入排序自测](../../labs/chapter-10/theory/T-10-01-insertion-sort-quiz/README.md)
+- [Lab 10-T-02：选择排序自测](../../labs/chapter-10/theory/T-10-02-selection-sort-quiz/README.md)
+- [Lab 10-T-03：冒泡排序自测](../../labs/chapter-10/theory/T-10-03-bubble-sort-quiz/README.md)
+- [Lab 10-T-04：希尔排序自测](../../labs/chapter-10/theory/T-10-04-shell-sort-quiz/README.md)
+- [Lab 10-E-01：多关键字排序（奖学金）](../../labs/chapter-10/exercise/E-10-01-multi-key-sort/README.md)
+- [Lab 10-E-02：大整数比较（宇宙总统）](../../labs/chapter-10/exercise/E-10-02-big-int-compare/README.md)
 
 第 11 章（高效排序）理论自测与算法实现：
 
-- [Lab 11-01：归并排序自测](../../labs/chapter-11/lab-11-01-merge-sort-quiz/README.md)
-- [Lab 11-02：快速排序自测](../../labs/chapter-11/lab-11-02-quick-sort-quiz/README.md)
-- [Lab 11-03：堆排序自测](../../labs/chapter-11/lab-11-03-heap-sort-quiz/README.md)
-- [Lab 11-04：计数排序自测](../../labs/chapter-11/lab-11-04-counting-sort-quiz/README.md)
-- [Lab 11-05：桶排序自测](../../labs/chapter-11/lab-11-05-bucket-sort-quiz/README.md)
-- [Lab 11-06：基数排序自测](../../labs/chapter-11/lab-11-06-radix-sort-quiz/README.md)
-- [Lab 11-07：计数排序（选举学生会）](../../labs/chapter-11/lab-11-07-counting-votes/README.md)
-- [Lab 11-08：归并求逆序对](../../labs/chapter-11/lab-11-08-inversion-pairs/README.md)
-- [Lab 11-09：拼接最大数（拼数）](../../labs/chapter-11/lab-11-09-concat-max/README.md)
+- [Lab 11-T-01：归并排序自测](../../labs/chapter-11/theory/T-11-01-merge-sort-quiz/README.md)
+- [Lab 11-T-02：快速排序自测](../../labs/chapter-11/theory/T-11-02-quick-sort-quiz/README.md)
+- [Lab 11-T-03：堆排序自测](../../labs/chapter-11/theory/T-11-03-heap-sort-quiz/README.md)
+- [Lab 11-T-04：计数排序自测](../../labs/chapter-11/theory/T-11-04-counting-sort-quiz/README.md)
+- [Lab 11-T-05：桶排序自测](../../labs/chapter-11/theory/T-11-05-bucket-sort-quiz/README.md)
+- [Lab 11-T-06：基数排序自测](../../labs/chapter-11/theory/T-11-06-radix-sort-quiz/README.md)
+- [Lab 11-E-01：计数排序（选举学生会）](../../labs/chapter-11/exercise/E-11-01-counting-votes/README.md)
+- [Lab 11-E-02：归并求逆序对](../../labs/chapter-11/exercise/E-11-02-inversion-pairs/README.md)
+- [Lab 11-E-03：拼接最大数（拼数）](../../labs/chapter-11/exercise/E-11-03-concat-max/README.md)
 
 ## 学习建议
 

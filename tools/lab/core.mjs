@@ -1,13 +1,14 @@
 import { access, lstat, readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { LabError } from "./errors.mjs";
+import { parseLabId } from "./lab-id.mjs";
 
 export const LAB_SCHEMA_VERSION = 1;
 export const JSON_REPORT_VERSION = 1;
 export const LAB_TYPES = new Set(["quiz", "program", "project"]);
 export const COMPARE_MODES = new Set(["exact", "tokens", "float"]);
 export const TASK_KINDS = new Set(["stdio", "ctest", "manual"]);
-const THIN_MAKEFILE = "LAB_DIR := $(CURDIR)\nREPO_ROOT := $(LAB_DIR)/../../..\ninclude ../../../tools/lab/lab.mk\n";
+const THIN_MAKEFILE = "LAB_DIR := $(CURDIR)\nREPO_ROOT := $(LAB_DIR)/../../../..\ninclude ../../../../tools/lab/lab.mk\n";
 
 export function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -332,6 +333,8 @@ export async function loadLab(start = process.cwd()) {
   const manifestPath = path.join(labRoot, "lab.json");
   const readmePath = await resolveLabPath(labRoot, "README.md", "README.md");
   const readme = await readFile(readmePath, "utf8");
+  const labIdMatch = readme.match(/^labId:\s*["']?([^"'\s]+)["']?\s*$/m);
+  const labId = labIdMatch ? parseLabId(labIdMatch[1]).id : undefined;
   const manifest = await readJson(manifestPath, path.relative(process.cwd(), manifestPath) || "lab.json");
   requireRecord(manifest, "lab.json");
   if (!Number.isInteger(manifest.schemaVersion)) throw new LabError("SCHEMA_VERSION", "schemaVersion 必须是整数");
@@ -353,7 +356,7 @@ export async function loadLab(start = process.cwd()) {
     validateQuizReadme(readme, path.relative(labRoot, readmePath));
     const quizPath = await resolveLabPath(labRoot, quiz.questions, "quiz.questions");
     const quizResult = validateQuizQuestions(await readJson(quizPath, path.relative(labRoot, quizPath)), path.relative(labRoot, quizPath));
-    return { labRoot, manifestPath, manifest, quizPath, quizResult };
+    return { labRoot, manifestPath, manifest, labId, quizPath, quizResult };
   }
   if (manifest.language !== "cpp") throw new LabError("SCHEMA_INVALID", "可执行 Lab 的 language 必须是 cpp");
   const toolchain = requireRecord(manifest.toolchain, "toolchain");
@@ -374,12 +377,12 @@ export async function loadLab(start = process.cwd()) {
     validateLimits(judge.limits, "judge.limits");
     const cases = await loadCases(labRoot, requireString(judge.cases, "judge.cases"));
     await validateThinMakefile(labRoot, manifest.distribution);
-    return { labRoot, manifestPath, manifest, cases };
+    return { labRoot, manifestPath, manifest, labId, cases };
   }
   assertKnownKeys(manifest, new Set([...baseKeys, "language", "toolchain", "buildSystem", "tasks"]), "lab.json");
   const tasks = await validateProject(labRoot, manifest);
   await validateThinMakefile(labRoot, manifest.distribution);
-  return { labRoot, manifestPath, manifest, tasks };
+  return { labRoot, manifestPath, manifest, labId, tasks };
 }
 
 export function createReport(command, lab, data = {}) {
@@ -388,6 +391,7 @@ export function createReport(command, lab, data = {}) {
     command,
     ok: true,
     lab: {
+      id: lab.labId,
       path: lab.labRoot,
       type: lab.manifest.type,
       schemaVersion: lab.manifest.schemaVersion,

@@ -35,11 +35,11 @@ status: "draft"
 
 ## 配套 Lab
 
-完成 [Lab 13-01：盛最多水的容器](../../labs/chapter-13/lab-13-01-container-with-most-water/README.md)，把“移动短板”的贪心选择落实为可运行程序，并用边界测试检查面积与指针更新。
+完成 [Lab 13-E-01：盛最多水的容器](../../labs/chapter-13/exercise/E-13-01-container-with-most-water/README.md)，把“移动短板”的贪心选择落实为可运行程序，并用边界测试检查面积与指针更新。
 
-完成 [Lab 13-02：最长回文串](../../labs/chapter-13/lab-13-02-longest-palindrome/README.md)，把“优先使用成对字符、保留一个中心字符”的贪心选择落实为可运行程序，并用测试检查奇偶计数与大小写区分。
+完成 [Lab 13-E-02：最长回文串](../../labs/chapter-13/exercise/E-13-02-longest-palindrome/README.md)，把“优先使用成对字符、保留一个中心字符”的贪心选择落实为可运行程序，并用测试检查奇偶计数与大小写区分。
 
-完成 [Lab 13-03：跳跃游戏](../../labs/chapter-13/lab-13-03-jump-game/README.md)，把“维护最远可达位置”的贪心选择落实为可运行程序，并用障碍与边界测试检查可达性判断。
+完成 [Lab 13-E-03：跳跃游戏](../../labs/chapter-13/exercise/E-13-03-jump-game/README.md)，把“维护最远可达位置”的贪心选择落实为可运行程序，并用障碍与边界测试检查可达性判断。
 
 ::: intuition 直觉 · 先做眼前最好的选择
 

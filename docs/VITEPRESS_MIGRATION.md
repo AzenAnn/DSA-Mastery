@@ -30,14 +30,14 @@ vitepress build .     ─► dist/pages
 
 - `.vitepress/config.ts` 是唯一 Vite/VitePress 配置入口，`outDir` 固定为 `dist/pages`。
 - `.vitepress/content-index.ts` 在构建期扫描并派生课程数据；Node 文件系统 API 不进入浏览器 bundle。
-- `.vitepress/content.data.ts` 监听 `content/chapter-*/*.md` 与 `labs/chapter-*/lab-*/README.md`，供 Vue 组件消费同一索引。
+- `.vitepress/content.data.ts` 监听 `content/chapter-*/*.md` 与 `labs/chapter-*/*/*/README.md`，供 Vue 组件消费同一索引。
 - `scripts/validate-content.mjs` 是独立校验防线；`scripts/test-content-discovery.mjs` 用临时教材与 Lab 证明自动发现，并在 `finally` 中安全清理。
 
 公开 URL 保持不变：
 
 ```text
 content/:chapter/:page.md       -> /learn/:chapter/:page/
-labs/:chapter/:lab/README.md    -> /labs/:chapter/:lab/
+labs/:chapter/:category/:lab/README.md -> /labs/:chapter/:category/:lab/
 ```
 
 GitHub Pages 的 base 只从 `actions/configure-pages` 输出写入 `GITHUB_PAGES_BASE_PATH`，再由 VitePress 规范化一次。Markdown 与 Vue 数据中的课程 URL 都不硬编码 `/DSA-Mastery/`。
@@ -50,7 +50,7 @@ GitHub Pages 的 base 只从 `actions/configure-pages` 输出写入 `GITHUB_PAGE
 
 ```md
 [数据结构基础概念](./01-data-structure-basics.md)
-[对应 Lab](../../labs/chapter-01/lab-01-02-singly-linked-list-quiz/README.md)
+[对应 Lab](../../labs/chapter-01/theory/T-01-02-singly-linked-list-quiz/README.md)
 ```
 
 `pnpm run validate:content` 先检查目标源文件存在；VitePress 构建时再把可识别的相对 `.md` 链接改写为无扩展名课程路由，并由统一 base 处理部署前缀。不要把 `/DSA-Mastery/` 写进正文。

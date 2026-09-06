@@ -1,6 +1,14 @@
 import { access, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { loadLab, validateQuizReadme } from "../tools/lab/core.mjs";
+import {
+  LAB_CATEGORIES,
+  LAB_DIRECTORY_PATTERN,
+  formatLabDocumentTitlePrefix,
+  parseLabDirectoryName,
+  parseLabId,
+  tagForCategory,
+} from "../tools/lab/identity.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const requiredFields = [
@@ -27,6 +35,47 @@ async function findFiles(root, predicate) {
   return results;
 }
 
+async function validateLabDirectoryLayout(root) {
+  for (const chapter of await readdir(root, { withFileTypes: true })) {
+    if (!chapter.isDirectory()) continue;
+    if (!/^chapter-\d{2}$/.test(chapter.name)) {
+      throw new Error(`labs/${chapter.name}: 章节目录应为 chapter-CC`);
+    }
+    const chapterRoot = path.join(root, chapter.name);
+    const chapterEntries = await readdir(chapterRoot, { withFileTypes: true });
+    for (const entry of chapterEntries) {
+      if (entry.isDirectory() && !LAB_CATEGORIES.includes(entry.name)) {
+        throw new Error(`labs/${chapter.name}/${entry.name}: Lab 必须放在 theory、exercise 或 project 中`);
+      }
+    }
+    for (const category of LAB_CATEGORIES) {
+      const categoryRoot = path.join(chapterRoot, category);
+      let entries;
+      try {
+        entries = await readdir(categoryRoot, { withFileTypes: true });
+      } catch (error) {
+        if (error?.code === "ENOENT") {
+          throw new Error(`labs/${chapter.name}/${category}: 每章必须保留三个分类目录`);
+        }
+        throw error;
+      }
+      const labDirectories = entries.filter((entry) => entry.isDirectory());
+      for (const entry of labDirectories) {
+        if (!LAB_DIRECTORY_PATTERN.test(entry.name)) {
+          throw new Error(`labs/${chapter.name}/${category}/${entry.name}: Lab 目录应为 X-CC-SS-kebab-slug`);
+        }
+      }
+      const marker = entries.some((entry) => entry.isFile() && entry.name === ".gitkeep");
+      if (labDirectories.length === 0 && !marker) {
+        throw new Error(`labs/${chapter.name}/${category}: 空分类必须使用 .gitkeep 保留目录`);
+      }
+      if (labDirectories.length > 0 && marker) {
+        throw new Error(`labs/${chapter.name}/${category}: 已有 Lab 时必须移除 .gitkeep`);
+      }
+    }
+  }
+}
+
 function parseFrontmatter(source, relativePath) {
   const match = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---\s*\r?\n?/);
   if (!match) throw new Error(`${relativePath}: 缺少 YAML frontmatter`);
@@ -41,7 +90,7 @@ function parseFrontmatter(source, relativePath) {
   return { data, body: source.slice(match[0].length) };
 }
 
-function assertFileContract(file, kind, parsed, seenOrder) {
+function assertFileContract(file, kind, parsed, seenOrder, seenLabIds, labCategory) {
   const relativePath = path.relative(projectRoot, file).replaceAll("\\", "/");
   for (const field of requiredFields) {
     if (!parsed.data[field]) throw new Error(`${relativePath}: 缺少必填字段 ${field}`);
@@ -77,20 +126,52 @@ function assertFileContract(file, kind, parsed, seenOrder) {
     if (parsed.data.labCategory && !validLabCategories.has(parsed.data.labCategory)) {
       throw new Error(`${relativePath}: labCategory 必须是 theory、exercise 或 project`);
     }
-    const pathMatch = relativePath.match(
-      /^labs\/chapter-(\d{2})\/lab-(\d{2})-(\d{2})-[a-z0-9-]+\/README\.md$/,
-    );
-    if (
-      !pathMatch ||
-      Number(pathMatch[1]) !== Number(parsed.data.chapter) ||
-      Number(pathMatch[2]) !== Number(parsed.data.chapter) ||
-      Number(pathMatch[3]) !== Number(parsed.data.order)
-    ) {
-      throw new Error(`${relativePath}: 目录编号必须与 frontmatter chapter/order 一致`);
+    if (!parsed.data.labId) throw new Error(`${relativePath}: Lab 缺少稳定编号 labId`);
+    let identity;
+    try {
+      identity = parseLabId(parsed.data.labId);
+    } catch (error) {
+      throw new Error(`${relativePath}: ${error.message}`);
     }
-    const expectedTitlePrefix = `Lab ${pathMatch[2]}-${pathMatch[3]}：`;
-    if (!parsed.data.title.startsWith(expectedTitlePrefix)) {
-      throw new Error(`${relativePath}: title 必须以 ${expectedTitlePrefix} 开头`);
+    if (identity.id !== parsed.data.labId) {
+      throw new Error(`${relativePath}: labId 必须使用规范形式 ${identity.id}`);
+    }
+    if (identity.chapter !== Number(parsed.data.chapter)) {
+      throw new Error(`${relativePath}: labId 章节必须与 frontmatter chapter 一致`);
+    }
+    const expectedTag = tagForCategory(labCategory);
+    if (!expectedTag || identity.tag !== expectedTag) {
+      throw new Error(`${relativePath}: labId 标签必须与 ${labCategory ?? "未分类"} 类型一致`);
+    }
+    const previous = seenLabIds.get(identity.id);
+    if (previous) throw new Error(`${relativePath}: labId ${identity.id} 与 ${previous} 重复`);
+    seenLabIds.set(identity.id, relativePath);
+
+    const directoryName = path.basename(path.dirname(file));
+    const categoryDirectory = path.basename(path.dirname(path.dirname(file)));
+    const chapterDirectory = path.basename(path.dirname(path.dirname(path.dirname(file))));
+    const chapterMatch = chapterDirectory.match(/^chapter-(\d{2})$/);
+    if (!chapterMatch || Number(chapterMatch[1]) !== Number(parsed.data.chapter)) {
+      throw new Error(`${relativePath}: chapter 目录必须与 frontmatter chapter 一致`);
+    }
+    if (!LAB_CATEGORIES.includes(categoryDirectory) || categoryDirectory !== labCategory) {
+      throw new Error(`${relativePath}: 分类目录必须与 ${labCategory ?? "未分类"} 类型一致`);
+    }
+    let directoryIdentity;
+    try {
+      directoryIdentity = parseLabDirectoryName(directoryName);
+    } catch (error) {
+      throw new Error(`${relativePath}: ${error.message}`);
+    }
+    if (directoryIdentity.id !== identity.id) {
+      throw new Error(`${relativePath}: 目录编号必须与 labId ${identity.id} 一致`);
+    }
+    const stableTitlePrefix = formatLabDocumentTitlePrefix(identity.id);
+    if (!parsed.data.title.startsWith(stableTitlePrefix)) {
+      throw new Error(`${relativePath}: title 必须以 ${stableTitlePrefix} 开头`);
+    }
+    if (!parsed.data.title.slice(stableTitlePrefix.length).trim()) {
+      throw new Error(`${relativePath}: title 的编号后必须包含题目名称`);
     }
     if (!parsed.body.includes(`# ${parsed.data.title}`)) {
       throw new Error(`${relativePath}: H1 必须与 frontmatter title 一致`);
@@ -99,6 +180,19 @@ function assertFileContract(file, kind, parsed, seenOrder) {
   const orderKey = `${kind}:${parsed.data.chapter}:${parsed.data.order}`;
   if (seenOrder.has(orderKey)) throw new Error(`${relativePath}: chapter + order 与另一文件重复`);
   seenOrder.add(orderKey);
+}
+
+async function resolveLabCategory(file, parsed) {
+  try {
+    const manifest = JSON.parse(await readFile(path.join(path.dirname(file), "lab.json"), "utf8"));
+    const categories = { quiz: "theory", program: "exercise", project: "project" };
+    const category = categories[manifest.type];
+    if (!category) throw new Error(`${path.relative(projectRoot, file)}: lab.json.type 必须是 quiz、program 或 project`);
+    return category;
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+  }
+  return parsed.data.labCategory;
 }
 
 async function validateLinks(file, source) {
@@ -212,24 +306,23 @@ async function validateQuizLab(file, readme) {
 
 const lessonRoot = path.join(projectRoot, "content");
 const labRoot = path.join(projectRoot, "labs");
+await validateLabDirectoryLayout(labRoot);
 const lessonFiles = (await findFiles(lessonRoot, (file) => file.endsWith(".md")))
   .filter((file) => path.basename(file).toLowerCase() !== "readme.md");
 const labFiles = (await findFiles(labRoot, (file) => path.basename(file).toLowerCase() === "readme.md"))
-  .filter((file) => /^labs\/chapter-\d{2}\/lab-\d{2}-\d{2}-[a-z0-9-]+\/README\.md$/i.test(
-    path.relative(projectRoot, file).replaceAll("\\", "/"),
-  ));
+  .filter((file) => LAB_DIRECTORY_PATTERN.test(path.basename(path.dirname(file))));
 const manifestFiles = (await findFiles(labRoot, (file) => path.basename(file).toLowerCase() === "lab.json"))
-  .filter((file) => /^labs\/chapter-\d{2}\/lab-\d{2}-\d{2}-[a-z0-9-]+\/lab\.json$/i.test(
-    path.relative(projectRoot, file).replaceAll("\\", "/"),
-  ));
+  .filter((file) => LAB_DIRECTORY_PATTERN.test(path.basename(path.dirname(file))));
 
 const seenOrder = new Set();
+const seenLabIds = new Map();
 let interactiveQuizCount = 0;
 for (const [kind, files] of [["lesson", lessonFiles], ["lab", labFiles]]) {
   for (const file of files) {
     const source = await readFile(file, "utf8");
     const parsed = parseFrontmatter(source, path.relative(projectRoot, file));
-    assertFileContract(file, kind, parsed, seenOrder);
+    const labCategory = kind === "lab" ? await resolveLabCategory(file, parsed) : undefined;
+    assertFileContract(file, kind, parsed, seenOrder, seenLabIds, labCategory);
     if (kind === "lab" && ["1", "2", "3", "4", "5", "8", "9"].includes(parsed.data.chapter)) {
       let hasManifest = true;
       try {

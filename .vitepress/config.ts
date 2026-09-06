@@ -74,7 +74,7 @@ export default defineConfig({
   lastUpdated: false,
   rewrites: {
     "content/:chapter/:page.md": "learn/:chapter/:page/index.md",
-    "labs/:chapter/:lab/README.md": "labs/:chapter/:lab/index.md",
+    "labs/:chapter/:category/:lab/README.md": "labs/:chapter/:category/:lab/index.md",
     "curriculum/index.md": "learn/index.md",
     "curriculum/parts/:part.md": "learn/parts/:part/index.md",
     "curriculum/outline/:chapter.md": "learn/outline/:chapter/index.md",
@@ -208,7 +208,9 @@ export default defineConfig({
           const html = markdown.render(source, env);
           // 自定义渲染器不会走 VitePress 内置的 frontmatter.search 排除逻辑，
           // 这里手动尊重 `search: false`，把配图源等构建专用页排除出站内搜索。
-          return env.frontmatter?.search === false ? "" : html;
+          if (env.frontmatter?.search === false) return "";
+          const labId = typeof env.frontmatter?.labId === "string" ? env.frontmatter.labId : "";
+          return labId ? `<p>${labId}</p>${html}` : html;
         },
         translations: {
           button: { buttonText: "搜索教材与实验", buttonAriaLabel: "搜索教材与实验" },

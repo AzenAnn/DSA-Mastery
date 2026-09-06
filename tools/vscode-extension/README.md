@@ -1,6 +1,6 @@
 # DSA Mastery Labs · VSCode 扩展
 
-在 VSCode 中浏览、作答与提交 DSA Mastery 的 Program Lab 和四选一 Quiz Lab。代码题继续调用仓库判题内核，选择题在插件内本地判定。
+在 VSCode 中浏览、作答与提交 DSA Mastery 的 Program Lab、Project Lab 和四选一 Quiz Lab。代码题与项目题继续调用仓库判题内核，选择题在插件内本地判定。
 
 > **使用说明请看站内文档**：[VSCode 插件安装与使用指南](../../docs/VSCODE_EXTENSION_GUIDE.md)。
 > 本文件只面向要改这个扩展的人。
@@ -20,22 +20,24 @@ node tools/lab/cli.mjs score <lab-path> --json
 | 文件 | 职责 |
 | --- | --- |
 | `extension.ts` | 激活入口、命令注册、依赖装配 |
-| `labIndex.ts` | 扫描 `labs/`，读 `lab.json` 与 README frontmatter，只收 `type: "program"` |
-| `cli.ts` | 判题内核适配层：spawn、解析 JSON、校验 `reportVersion`、Node 回退 |
-| `progress.ts` | 做题进度：`globalState` 索引 + `globalStorage` 源码快照 |
+| `labIndex.ts` | 扫描 `labs/chapter-*/{theory,exercise,project}/`，读取 `lab.json`、task manifest 与 README frontmatter，收录 `program`、`quiz`、`project`；迁移期兼容旧平铺目录 |
+| `cli.ts` | 判题内核适配层：spawn、解析 JSON、校验 `reportVersion`、Program/Project 结果类型与 Node 回退 |
+| `progress.ts` | 做题进度：Program/Quiz 旧状态、Project 独立摘要、`globalStorage` 源码快照 |
 | `tree.ts` | 侧边栏 TreeDataProvider（章节 → 题目） |
-| `panel.ts` | 题目面板 webview 的生命周期与提交流程 |
-| `panelHtml.ts` | 面板 HTML 渲染（题面外壳、用例区、结果表） |
+| `panel.ts` | 题目面板 webview 的生命周期、学生文件保存与提交流程 |
+| `panelHtml.ts` | 面板 HTML 渲染（题面外壳、task/case/CTest 层级、结果表） |
 | `markdown.ts` | README 渲染：切除题解、重写图片 URI、KaTeX |
 | `doctor.ts` | 环境检测与平台化安装指引 |
 
 ### 几个容易踩的约束
 
-**题解必须切掉。** 67/71 个 Lab 的 README 有 `## 题解` 小节，含完整参考代码。`markdown.ts` 的 `stripSections()` 负责移除。改动那里之后务必验证 71 个 Lab 全部无泄露 —— 不只检查标题消失，还要拿题解段内的代码行去结果里反查。
+**题解必须切掉。** 部分 program Lab 的 README 有 `## 题解` 小节，含完整参考代码。`markdown.ts` 的 `stripSections()` 负责移除。改动那里之后务必验证所有可作答 Lab 无泄露 —— 不只检查标题消失，还要拿题解段内的代码行去结果里反查。
 
 **通知不能 await。** `vscode.window.showXxxMessage()` 要等用户点击或通知自动消失才 resolve。如果在提交流程里 `await` 它，`submitting` 锁会迟迟不释放，第二次点提交就没反应。只有真正需要用户答复的对话框（比如环境检测的「打开指南 / 忽略」）才该 await。
 
 **状态只在提交时写。** 编辑器改动不触发任何进度更新。`passed` 一旦置位永不回退。
+
+**进度主键只能用 `labId`。** `name` 是当前目录名，只用于资源定位和旧版本迁移。首次读取新版题库时，扩展会把旧目录键、Quiz 键和活动记录迁移到稳定 ID，并在迁移前保留 `globalState` 备份；历史快照继续按记录中的 `snapshot` 路径读取，不批量搬动用户文件。
 
 **webview 资源必须走 `media/`。** KaTeX 的 CSS 与字体已复制到 `media/katex/`，因为打包后 `node_modules` 不存在。`localResourceRoots` 也只声明 `labs/` 和 `media/`。
 
@@ -72,7 +74,7 @@ code tools/vscode-extension
 
 ```bash
 pnpm run package
-code --install-extension dsa-mastery-labs-0.1.0.vsix
+code --install-extension dsa-mastery-labs-0.1.12.vsix
 ```
 
 装完需要**完全退出 VSCode 再打开** —— 它不会热加载新装的插件。
@@ -86,6 +88,12 @@ code --install-extension dsa-mastery-labs-0.1.0.vsix
 独立 package，不加入仓库的 pnpm workspace。根目录的 `pnpm install`、`pnpm test`、`pnpm lint`、`pnpm typecheck` 与 CI 都不受影响。
 
 `dist/`、`node_modules/`、`*.vsix` 均不进版本控制。站点构建通过 `.vitepress/config.ts` 的 `srcExclude: ["tools/**"]` 排除本目录，所以这份 README 不会变成网页。
+
+### Project Lab 的实现边界
+
+Project 面板会按 task 展示依赖、权重、学生文件、stdio 公开 case、CTest 名称和 manual checklist。提交时只保存当前 Project 下已打开且属于 `student/` 的 dirty 文件，然后调用同一个 `node tools/lab/cli.mjs score <project-path> --json`。
+
+`manual` task 固定显示为 `PENDING`，自动部分满分时状态是“自动通过 · 待人工”，不是最终完成。Project 目前只保存最近一次自动判题摘要，不生成多文件提交历史和逐文件 diff；Program 的提交历史保持原行为。
 
 ## 版本耦合
 

@@ -3,7 +3,7 @@ title: "0.2 时间与空间复杂度概论"
 description: "系统学习时间复杂度、递推式、主定理与辅助空间复杂度的分析方法。"
 order: 2
 chapter: 0
-chapterTitle: "绪论"
+chapterTitle: "基础"
 updated: "2026-08-19"
 contributors: ["Ph1z"]
 status: "draft"
@@ -712,6 +712,7 @@ $$T(x) = \sum a_i T(b_i x + h_i(x)) + g(x) \le \sum a_i U(b_i x + h_i(x)) + g(x)
 
 
  - **Akra-Bazzi 是主定理的严格推广**，会 Akra-Bazzi 就会主定理
+
 ---
 
 ## 第四部分：空间复杂度分析

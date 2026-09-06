@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "ctest",
+  "ctest": {
+    "tests": [
+      { "name": "insertion-correctness", "points": 40 },
+      { "name": "insertion-stability", "points": 30 },
+      { "name": "insertion-counts", "points": 30 }
+    ]
+  }
+}

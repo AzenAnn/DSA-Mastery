@@ -62,7 +62,7 @@ test("Program formatter shows an aligned green PASS summary", () => {
       sampleCase({ id: "002-single", points: 80, maxPoints: 80, durationMs: 33 }),
     ],
   };
-  const output = formatJudge(result, { theme: colorTheme, labPath: "labs/chapter-01/lab-01-06-demo" });
+  const output = formatJudge(result, { theme: colorTheme, labPath: "labs/chapter-01/exercise/E-01-01-demo" });
   const plain = cleanTerminalText(output);
   assert.equal(output.includes(`${ESC}1;32mAC`), true);
   assert.equal(output.includes(`${ESC}1;32mPASS`), true);

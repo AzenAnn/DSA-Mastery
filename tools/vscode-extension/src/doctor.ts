@@ -1,7 +1,7 @@
 import path from "node:path";
 import * as vscode from "vscode";
 import { CliError, runDoctor, type DoctorResult } from "./cli";
-import type { ProgramLab } from "./labIndex";
+import type { LabEntry } from "./labIndex";
 
 /** 仓库内已有的环境准备指南，按平台选择。 */
 function setupGuide(platform: string): { label: string; relativePath: string } {
@@ -46,7 +46,7 @@ export class EnvironmentGuard {
 
   constructor(private readonly repoRoot: string) {}
 
-  async ensureReady(lab: ProgramLab): Promise<boolean> {
+  async ensureReady(lab: LabEntry): Promise<boolean> {
     if (this.verified) return true;
 
     let environment: DoctorResult;
@@ -71,7 +71,7 @@ export class EnvironmentGuard {
   }
 
   /** 手动重跑检查，并把完整结果显示出来。 */
-  async inspect(lab: ProgramLab): Promise<void> {
+  async inspect(lab: LabEntry): Promise<void> {
     const environment = await runDoctor(this.repoRoot, lab.relativePath);
     this.verified = environment.ok;
 

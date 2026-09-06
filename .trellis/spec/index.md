@@ -30,7 +30,7 @@
 
 ## 不变量
 
-- `content/chapter-*/*.md` 与 `labs/chapter-*/lab-*/README.md` 是课程内容的单一事实来源。
+- `content/chapter-*/*.md` 与 `labs/chapter-*/*/*/README.md` 是课程内容的单一事实来源。
 - VitePress 只负责发现、验证和呈现内容；组件中不得复制课程正文或维护第二份导航清单。
 - `main` 始终可构建、可发布；知识内容必须经过另一名维护者核验。
 - Pages 子路径只由 VitePress `base` 处理一次，源码中不硬编码 `/DSA-Mastery/`。

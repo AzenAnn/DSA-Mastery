@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "ctest",
+  "ctest": {
+    "tests": [
+      { "name": "shell-correctness", "points": 35 },
+      { "name": "shell-hibbard-gaps", "points": 30 },
+      { "name": "shell-counts", "points": 35 }
+    ]
+  }
+}

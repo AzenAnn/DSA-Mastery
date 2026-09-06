@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1,
+  "kind": "ctest",
+  "ctest": {
+    "tests": [
+      { "name": "engine-chaining", "points": 30 },
+      { "name": "engine-open-addressing", "points": 40 },
+      { "name": "engine-probe-counts", "points": 30 }
+    ]
+  }
+}

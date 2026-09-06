@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 14
-- **Last Active**: 2026-08-31
+- **Total Sessions**: 25
+- **Last Active**: 2026-09-04
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~364 | Active |
+| `journal-1.md` | ~603 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,17 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 25 | 2026-09-04 | 完成 Ch12 分治与递归整体重构 | `18c0794`, `4939071`, `6662839` | `chapter/ch12-divide-conquer-rebuild` |
+| 24 | 2026-09-02 | Expand Chapter 1 Program Lab tests | `a168091` | `codex/ch1-labs-20-test-cases` |
+| 23 | 2026-09-02 | Ch.1 Graphviz 图示迁移 | `ae0a4c9`, `25c63dc` | `codex/ch1-graphviz-rendering` |
+| 22 | 2026-09-01 | 修复测评行末空格误判 | `269b7a3` | `codex/fix-trailing-space-judge` |
+| 21 | 2026-09-01 | Chapter 14 dynamic programming exercise labs | `1c3aadb` | `codex/chapter-14-dp-labs` |
+| 20 | 2026-09-01 | Labs 三分类目录迁移 | `917b482` | `codex/lab-category-directories` |
+| 19 | 2026-09-01 | 稳定 Lab 文档标题约束 | `5f0a637` | `codex/lab-stable-id` |
+| 18 | 2026-08-31 | Resolve PR 119 CI failures | `ead8db8`, `388cfe0` | `codex/lab-stable-id` |
+| 17 | 2026-08-31 | Normalize all Lab navigation labels | `90a26ca` | `codex/lab-stable-id` |
+| 16 | 2026-08-31 | Lab stable IDs and automatic numbering | `0bbec8e`, `e11f1f9`, `966557a`, `3a8c01e`, `5f0c328` | `codex/lab-stable-id` |
+| 15 | 2026-08-31 | Chapter 14 dynamic programming foundations | `b0e0552` | `Azen-ch14` |
 | 14 | 2026-08-31 | Chapter 1 array-to-linked-list problem-solving article | `84dbb44` | `codex/ch01-array-to-linked-list-problem-solving` |
 | 13 | 2026-08-26 | README 信息架构与视觉改版 | `6456397` | `codex/readme-redesign` |
 | 12 | 2026-08-24 | 第 5 章树结构题库 Lab | `baa23fe` | `codex/chapter05-tree-labs` |

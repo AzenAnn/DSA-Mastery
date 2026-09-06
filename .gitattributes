@@ -7,3 +7,6 @@
 # picking either side (task state lives in task.json, not index.md). See
 # .trellis/spec/cli/backend/directory-structure.md for details.
 .trellis/workspace/*/journal-*.md merge=union
+
+# Program Lab oracle files are platform-independent judge fixtures.
+labs/**/tests/*.out text eol=lf

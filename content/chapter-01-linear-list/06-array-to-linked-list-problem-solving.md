@@ -335,7 +335,7 @@ int reverse_cursor_list(std::vector<Slot>& slots, int head) {
 三指针迭代恰好访问每个节点一次，时间复杂度为 `O(n)`，额外空间为 `O(1)`。这里的“原地”指复用原节点并改写链接，不是把值复制到辅助数组再倒序写回。
 :::
 
-可以用 [Lab 01-09：单链表逆置](../../labs/chapter-01/lab-01-09-singly-linked-list-reverse/README.md) 和 [Lab 01-19：静态链表逆置](../../labs/chapter-01/lab-01-19-static-linked-list-reverse/README.md) 做一次逐行对照。
+可以用 [Lab 01-E-04：单链表逆置](../../labs/chapter-01/exercise/E-01-04-singly-linked-list-reverse/README.md) 和 [Lab 01-E-14：静态链表逆置](../../labs/chapter-01/exercise/E-01-14-static-linked-list-reverse/README.md) 做一次逐行对照。
 
 ## 6.4 链表到底能不能使用 `reverse` 和 STL
 
@@ -460,7 +460,7 @@ Node* remove_nth_from_end(Node* head, std::size_t k) {
 
 哨兵让“删除头节点”也变成普通的“删除 `slow->next`”。风险主要有两个：没有验证 `k` 导致空指针解引用；删除后继续使用 `target` 导致悬空访问。
 
-时间复杂度为 `O(n)`，额外空间为 `O(1)`，对应练习是 [Lab 01-10：删除单链表倒数第 k 个节点](../../labs/chapter-01/lab-01-10-singly-linked-list-remove-nth/README.md)。
+时间复杂度为 `O(n)`，额外空间为 `O(1)`，对应练习是 [Lab 01-E-05：删除单链表倒数第 k 个节点](../../labs/chapter-01/exercise/E-01-05-singly-linked-list-remove-nth/README.md)。
 
 ### 6.5.2 合并两个有序序列：从输出数组到尾游标
 
@@ -491,13 +491,13 @@ Node* merge_sorted_lists(Node* left, Node* right) {
 
 当使用 `<=` 选择左链节点时，相等元素保持左链优先，合并是稳定的。该写法复用原节点，额外空间为 `O(1)`，但也转移了两条输入链的结构所有权：合并后不能再把原来的 `left/right` 当作两条独立链表管理和释放。
 
-对应练习是 [Lab 01-11：合并两个有序单链表](../../labs/chapter-01/lab-01-11-singly-linked-list-merge/README.md)。再把 `Node*` 换成游标，就得到 [Lab 01-20：静态链表合并两个有序表](../../labs/chapter-01/lab-01-20-static-linked-list-merge/README.md)。
+对应练习是 [Lab 01-E-06：合并两个有序单链表](../../labs/chapter-01/exercise/E-01-06-singly-linked-list-merge/README.md)。再把 `Node*` 换成游标，就得到 [Lab 01-E-15：静态链表合并两个有序表](../../labs/chapter-01/exercise/E-01-15-static-linked-list-merge/README.md)。
 
 ### 6.5.3 回文判断：先问能不能从右向左走
 
 数组回文的经典写法是 `left++`、`right--`。迁移时，决定方案的不是“它叫回文题”，而是链表能否找到前驱。
 
-- 双向链表：`head` 和 `tail` 可以像左右下标一样向中间走，对应 [Lab 01-12：双链表回文判断](../../labs/chapter-01/lab-01-12-doubly-linked-list-palindrome/README.md)；
+- 双向链表：`head` 和 `tail` 可以像左右下标一样向中间走，对应 [Lab 01-E-07：双链表回文判断](../../labs/chapter-01/exercise/E-01-07-doubly-linked-list-palindrome/README.md)；
 - 单链表：无法由尾节点后退，需要“快慢指针找中点 + 反转后半段 + 同向比较”；
 - 允许额外空间：可以把值压入栈或数组，但这绕开了原地链表训练。
 
@@ -578,7 +578,7 @@ Node* swap_pairs(Node* head) {
 
 `next_pair` 必须在覆盖链接前保存。每轮结束后，`prev` 指向已经交换完成部分的最后一个节点，也就是原来的 `first`。
 
-双向链表还要同步维护 `prev` 字段，检查 `x->next->prev == x` 与 `x->prev->next == x`。只验证正向输出可能发现不了反向链接损坏。对应练习是 [Lab 01-14：双链表相邻节点交换](../../labs/chapter-01/lab-01-14-doubly-linked-list-swap-pairs/README.md)。
+双向链表还要同步维护 `prev` 字段，检查 `x->next->prev == x` 与 `x->prev->next == x`。只验证正向输出可能发现不了反向链接损坏。对应练习是 [Lab 01-E-09：双链表相邻节点交换](../../labs/chapter-01/exercise/E-01-09-doubly-linked-list-swap-pairs/README.md)。
 
 ### 6.5.5 约瑟夫环：把取模循环变成真实的环
 
@@ -603,7 +603,7 @@ delete target;
 
 这里的终止条件不能再写 `curr != nullptr`，因为合法循环链表永远不会走到空指针。通常需要维护剩余节点数，或者记住起点并判断是否绕行一周。
 
-若需要输出完整淘汰顺序，每次报数仍需沿链走过相应节点；链表优化的是删除本身，不会让“数 (m) 步”消失。对应练习是 [Lab 01-15：约瑟夫环](../../labs/chapter-01/lab-01-15-josephus-problem/README.md)。继续练习 [循环链表拆分](../../labs/chapter-01/lab-01-16-circular-linked-list-split/README.md) 和 [删除指定值](../../labs/chapter-01/lab-01-17-circular-linked-list-delete-value/README.md) 时，要把“走一整圈”的终止不变量写在代码旁边。
+若需要输出完整淘汰顺序，每次报数仍需沿链走过相应节点；链表优化的是删除本身，不会让“数 (m) 步”消失。对应练习是 [Lab 01-E-10：约瑟夫环](../../labs/chapter-01/exercise/E-01-10-josephus-problem/README.md)。继续练习 [循环链表拆分](../../labs/chapter-01/exercise/E-01-11-circular-linked-list-split/README.md) 和 [删除指定值](../../labs/chapter-01/exercise/E-01-12-circular-linked-list-delete-value/README.md) 时，要把“走一整圈”的终止不变量写在代码旁边。
 
 ### 6.5.6 静态链表：最适合做迁移桥梁
 
@@ -614,7 +614,7 @@ delete target;
 3. 用 `pa/pb/tail` 游标完成有序合并；
 4. 最后把 `int` 游标替换成 `Node*`，补上 `new/delete` 和所有权约束。
 
-对应练习分别是 [Lab 01-18：静态链表有序插入](../../labs/chapter-01/lab-01-18-static-linked-list-insert/README.md)、[Lab 01-19：静态链表逆置](../../labs/chapter-01/lab-01-19-static-linked-list-reverse/README.md) 和 [Lab 01-20：静态链表合并两个有序表](../../labs/chapter-01/lab-01-20-static-linked-list-merge/README.md)。
+对应练习分别是 [Lab 01-E-13：静态链表有序插入](../../labs/chapter-01/exercise/E-01-13-static-linked-list-insert/README.md)、[Lab 01-E-14：静态链表逆置](../../labs/chapter-01/exercise/E-01-14-static-linked-list-reverse/README.md) 和 [Lab 01-E-15：静态链表合并两个有序表](../../labs/chapter-01/exercise/E-01-15-static-linked-list-merge/README.md)。
 
 静态链表合并两个独立节点池时还有一个数组特有的问题：如果把第二个池复制到第一个池后面，第二个池中的所有有效游标都要加上偏移量。这个步骤是在重定位物理槽位，不是算法上的有序合并。
 
@@ -805,12 +805,12 @@ void deduplicate_sorted_list(Node* head) {
 
 建议不要一次把所有链表题刷完，而是做“一题多表示”的纵向对照：
 
-1. **基础改链**：[单链表逆置](../../labs/chapter-01/lab-01-09-singly-linked-list-reverse/README.md)与[静态链表逆置](../../labs/chapter-01/lab-01-19-static-linked-list-reverse/README.md)逐行互译。
-2. **距离不变量**：[删除倒数第 k 个节点](../../labs/chapter-01/lab-01-10-singly-linked-list-remove-nth/README.md)，分别写“求长度两遍扫描”和“快慢指针一遍扫描”。
-3. **尾游标建链**：[合并有序单链表](../../labs/chapter-01/lab-01-11-singly-linked-list-merge/README.md)，再迁移到[静态链表合并](../../labs/chapter-01/lab-01-20-static-linked-list-merge/README.md)。
-4. **双端能力重建**：[双链表回文](../../labs/chapter-01/lab-01-12-doubly-linked-list-palindrome/README.md)，再自行补写单链表“中点 + 反转 + 恢复”版本。
-5. **局部结构重写**：[双链表相邻节点交换](../../labs/chapter-01/lab-01-14-doubly-linked-list-swap-pairs/README.md)，同时验证正反两个方向。
-6. **终止条件迁移**：[约瑟夫环](../../labs/chapter-01/lab-01-15-josephus-problem/README.md)、[循环链表拆分](../../labs/chapter-01/lab-01-16-circular-linked-list-split/README.md)和[循环链表删除指定值](../../labs/chapter-01/lab-01-17-circular-linked-list-delete-value/README.md)。
+1. **基础改链**：[单链表逆置](../../labs/chapter-01/exercise/E-01-04-singly-linked-list-reverse/README.md)与[静态链表逆置](../../labs/chapter-01/exercise/E-01-14-static-linked-list-reverse/README.md)逐行互译。
+2. **距离不变量**：[删除倒数第 k 个节点](../../labs/chapter-01/exercise/E-01-05-singly-linked-list-remove-nth/README.md)，分别写“求长度两遍扫描”和“快慢指针一遍扫描”。
+3. **尾游标建链**：[合并有序单链表](../../labs/chapter-01/exercise/E-01-06-singly-linked-list-merge/README.md)，再迁移到[静态链表合并](../../labs/chapter-01/exercise/E-01-15-static-linked-list-merge/README.md)。
+4. **双端能力重建**：[双链表回文](../../labs/chapter-01/exercise/E-01-07-doubly-linked-list-palindrome/README.md)，再自行补写单链表“中点 + 反转 + 恢复”版本。
+5. **局部结构重写**：[双链表相邻节点交换](../../labs/chapter-01/exercise/E-01-09-doubly-linked-list-swap-pairs/README.md)，同时验证正反两个方向。
+6. **终止条件迁移**：[约瑟夫环](../../labs/chapter-01/exercise/E-01-10-josephus-problem/README.md)、[循环链表拆分](../../labs/chapter-01/exercise/E-01-11-circular-linked-list-split/README.md)和[循环链表删除指定值](../../labs/chapter-01/exercise/E-01-12-circular-linked-list-delete-value/README.md)。
 
 每道题至少保留三份思考记录：数组版靠什么完成，链表版维护什么不变量，为什么这个题值得或不值得迁移。这样练到最后，真正留下的不是若干模板，而是一种表示变化后重新建模的能力。
 

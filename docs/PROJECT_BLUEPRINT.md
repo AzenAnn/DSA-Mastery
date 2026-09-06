@@ -211,7 +211,7 @@ LaTeX 适合出版级 PDF，但 Web 组件、交互 Demo、GitHub diff 和学生
 
 ## 8. 网站内容契约
 
-正文放在 `content/chapter-NN-topic/*.md`，Lab 放在 `labs/chapter-NN/lab-NN-MM-topic/README.md`。正文 frontmatter 的当前必填字段是：
+正文放在 `content/chapter-NN-topic/*.md`，Lab 放在 `labs/chapter-NN/<theory|exercise|project>/X-NN-SS-topic/README.md`（`X` 为 `T/E/P`，`SS` 为类型内稳定序号）。旧平铺 Lab 路径不再发布。正文 frontmatter 的当前必填字段是：
 
 ```yaml
 title: "页面标题"

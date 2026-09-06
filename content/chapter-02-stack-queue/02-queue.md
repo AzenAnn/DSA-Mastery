@@ -539,12 +539,12 @@ C++ 标准库中的 `std::queue` 是**容器适配器**：它提供 `push`、`po
 - [`std::queue`](https://en.cppreference.com/w/cpp/container/queue.html)：容器适配器的接口与默认底层容器。
 - [`std::deque`](https://en.cppreference.com/w/cpp/container/deque.html)：双端操作、复杂度与迭代器失效规则。
 
-完成理论后，先进入 [Lab 02-02：队列选择题精练](../../labs/chapter-02/lab-02-02-queue-quiz/README.md)检查概念，再完成以下可自动评分的实现练习：
+完成理论后，先进入 [Lab 02-T-02：队列选择题精练](../../labs/chapter-02/theory/T-02-02-queue-quiz/README.md)检查概念，再完成以下可自动评分的实现练习：
 
-- [Lab 02-05：最近请求计数器](../../labs/chapter-02/lab-02-05-recent-counter/README.md)：用队头淘汰维护时间窗口；
-- [Lab 02-06：设计循环队列](../../labs/chapter-02/lab-02-06-circular-queue/README.md)：实现空一格约定、环绕下标和稳定失败状态；
-- [Lab 02-07：用栈实现队列](../../labs/chapter-02/lab-02-07-queue-using-stacks/README.md)：通过延迟转移理解摊还 `O(1)`；
-- [Lab 02-08：设计循环双端队列](../../labs/chapter-02/lab-02-08-circular-deque/README.md)：把环绕扩展到两端插入和删除；
-- [Lab 02-09：滑动窗口最大值](../../labs/chapter-02/lab-02-09-sliding-window-maximum/README.md)：学完 2.3 的单调候选思想后，用双端队列维护窗口最大值。
+- [Lab 02-E-03：最近请求计数器](../../labs/chapter-02/exercise/E-02-03-recent-counter/README.md)：用队头淘汰维护时间窗口；
+- [Lab 02-E-04：设计循环队列](../../labs/chapter-02/exercise/E-02-04-circular-queue/README.md)：实现空一格约定、环绕下标和稳定失败状态；
+- [Lab 02-E-05：用栈实现队列](../../labs/chapter-02/exercise/E-02-05-queue-using-stacks/README.md)：通过延迟转移理解摊还 `O(1)`；
+- [Lab 02-E-06：设计循环双端队列](../../labs/chapter-02/exercise/E-02-06-circular-deque/README.md)：把环绕扩展到两端插入和删除；
+- [Lab 02-E-07：滑动窗口最大值](../../labs/chapter-02/exercise/E-02-07-sliding-window-maximum/README.md)：学完 2.3 的单调候选思想后，用双端队列维护窗口最大值。
 
-随后进入 [Lab 02-12：超市收银模拟](../../labs/chapter-02/lab-02-12-supermarket-checkout/README.md)和 [Lab 02-13：停车场管理](../../labs/chapter-02/lab-02-13-parking-lot-management/README.md)，把接口、边界断言和调度状态组合成综合系统。
+随后进入 [Lab 02-P-02：超市收银模拟](../../labs/chapter-02/project/P-02-02-supermarket-checkout/README.md)和 [Lab 02-P-03：停车场管理](../../labs/chapter-02/project/P-02-03-parking-lot-management/README.md)，把接口、边界断言和调度状态组合成综合系统。
