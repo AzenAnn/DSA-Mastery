@@ -1,65 +1,182 @@
 [
   {
+    "tags": [
+      "sample"
+    ],
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 15,
-    "tags": ["sample"]
+    "points": 5
   },
   {
+    "tags": [
+      "normal"
+    ],
     "id": "002-odd-cycle",
     "input": "tests/002-odd-cycle.in",
     "expected": "tests/002-odd-cycle.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5
   },
   {
+    "tags": [
+      "boundary"
+    ],
     "id": "003-disconnected-nonbip",
     "input": "tests/003-disconnected-nonbip.in",
     "expected": "tests/003-disconnected-nonbip.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5
   },
   {
+    "tags": [
+      "normal"
+    ],
     "id": "004-even-cycle",
     "input": "tests/004-even-cycle.in",
     "expected": "tests/004-even-cycle.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5
   },
   {
+    "tags": [
+      "normal"
+    ],
     "id": "005-star",
     "input": "tests/005-star.in",
     "expected": "tests/005-star.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5
   },
   {
+    "tags": [
+      "boundary"
+    ],
     "id": "006-isolated",
     "input": "tests/006-isolated.in",
     "expected": "tests/006-isolated.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "points": 5
   },
   {
+    "tags": [
+      "stress"
+    ],
     "id": "007-stress",
     "input": "tests/007-stress.in",
     "expected": "tests/007-stress.out",
-    "points": 15,
-    "tags": ["stress"]
+    "points": 5
   },
   {
+    "tags": [
+      "regression"
+    ],
     "id": "008-normalize-conflict",
     "input": "tests/008-normalize-conflict.in",
     "expected": "tests/008-normalize-conflict.out",
-    "points": 5,
-    "tags": ["regression"]
+    "points": 5
   },
   {
+    "tags": [
+      "regression"
+    ],
     "id": "009-neighbor-order",
     "input": "tests/009-neighbor-order.in",
     "expected": "tests/009-neighbor-order.out",
-    "points": 5,
-    "tags": ["regression"]
+    "points": 5
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "010-two-components-bip",
+    "input": "tests/010-two-components-bip.in",
+    "expected": "tests/010-two-components-bip.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "011-complete-bip-k33",
+    "input": "tests/011-complete-bip-k33.in",
+    "expected": "tests/011-complete-bip-k33.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "012-path-bip",
+    "input": "tests/012-path-bip.in",
+    "expected": "tests/012-path-bip.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "013-tree-bip",
+    "input": "tests/013-tree-bip.in",
+    "expected": "tests/013-tree-bip.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "014-triangle",
+    "input": "tests/014-triangle.in",
+    "expected": "tests/014-triangle.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "015-pentagon",
+    "input": "tests/015-pentagon.in",
+    "expected": "tests/015-pentagon.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "016-k5",
+    "input": "tests/016-k5.in",
+    "expected": "tests/016-k5.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "017-mixed-bip-nonbip",
+    "input": "tests/017-mixed-bip-nonbip.in",
+    "expected": "tests/017-mixed-bip-nonbip.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "boundary"
+    ],
+    "id": "018-all-isolated",
+    "input": "tests/018-all-isolated.in",
+    "expected": "tests/018-all-isolated.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "boundary"
+    ],
+    "id": "019-single-edge",
+    "input": "tests/019-single-edge.in",
+    "expected": "tests/019-single-edge.out",
+    "points": 5
+  },
+  {
+    "tags": [
+      "stress"
+    ],
+    "id": "020-large-bipartite",
+    "input": "tests/020-large-bipartite.in",
+    "expected": "tests/020-large-bipartite.out",
+    "points": 5
   }
 ]

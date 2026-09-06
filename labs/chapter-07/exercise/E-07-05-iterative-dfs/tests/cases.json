@@ -1,55 +1,182 @@
 [
   {
-    "id": "001-sample",
+    "tags": [
+      "sample"
+    ],
+    "points": 5,
     "input": "tests/001-sample.in",
-    "expected": "tests/001-sample.out",
-    "points": 10,
-    "tags": ["sample"]
+    "id": "001-sample",
+    "expected": "tests/001-sample.out"
   },
   {
-    "id": "002-chain-stress",
+    "tags": [
+      "stress"
+    ],
+    "points": 5,
     "input": "tests/002-chain-stress.in",
-    "expected": "tests/002-chain-stress.out",
-    "points": 20,
-    "tags": ["stress"],
-    "timeMs": 4000,
-    "outputKb": 2048
+    "id": "002-chain-stress",
+    "expected": "tests/002-chain-stress.out"
   },
   {
-    "id": "003-star-stress",
+    "tags": [
+      "stress"
+    ],
+    "points": 5,
     "input": "tests/003-star-stress.in",
-    "expected": "tests/003-star-stress.out",
-    "points": 20,
-    "tags": ["stress"],
-    "timeMs": 4000,
-    "outputKb": 2048
+    "id": "003-star-stress",
+    "expected": "tests/003-star-stress.out"
   },
   {
-    "id": "004-single-vertex",
+    "tags": [
+      "boundary"
+    ],
+    "points": 5,
     "input": "tests/004-single-vertex.in",
-    "expected": "tests/004-single-vertex.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "id": "004-single-vertex",
+    "expected": "tests/004-single-vertex.out"
   },
   {
-    "id": "005-disconnected",
+    "tags": [
+      "boundary"
+    ],
+    "points": 5,
     "input": "tests/005-disconnected.in",
-    "expected": "tests/005-disconnected.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "id": "005-disconnected",
+    "expected": "tests/005-disconnected.out"
   },
   {
-    "id": "006-cycle",
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
     "input": "tests/006-cycle.in",
-    "expected": "tests/006-cycle.out",
-    "points": 15,
-    "tags": ["normal"]
+    "id": "006-cycle",
+    "expected": "tests/006-cycle.out"
   },
   {
-    "id": "007-cross-edge",
+    "tags": [
+      "regression"
+    ],
+    "points": 5,
     "input": "tests/007-cross-edge.in",
-    "expected": "tests/007-cross-edge.out",
-    "points": 10,
-    "tags": ["regression"]
+    "id": "007-cross-edge",
+    "expected": "tests/007-cross-edge.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/008-two-components.in",
+    "id": "008-two-components",
+    "expected": "tests/008-two-components.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/009-many-components.in",
+    "id": "009-many-components",
+    "expected": "tests/009-many-components.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/010-binary-tree.in",
+    "id": "010-binary-tree",
+    "expected": "tests/010-binary-tree.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/011-complete-k4.in",
+    "id": "011-complete-k4",
+    "expected": "tests/011-complete-k4.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/012-bipartite.in",
+    "id": "012-bipartite",
+    "expected": "tests/012-bipartite.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/013-dense.in",
+    "id": "013-dense",
+    "expected": "tests/013-dense.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/014-sparse.in",
+    "id": "014-sparse",
+    "expected": "tests/014-sparse.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/015-path.in",
+    "id": "015-path",
+    "expected": "tests/015-path.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/016-ring.in",
+    "id": "016-ring",
+    "expected": "tests/016-ring.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/017-tree.in",
+    "id": "017-tree",
+    "expected": "tests/017-tree.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "points": 5,
+    "input": "tests/018-nonzero-start.in",
+    "id": "018-nonzero-start",
+    "expected": "tests/018-nonzero-start.out"
+  },
+  {
+    "tags": [
+      "stress"
+    ],
+    "points": 5,
+    "input": "tests/019-max-vertices.in",
+    "id": "019-max-vertices",
+    "expected": "tests/019-max-vertices.out"
+  },
+  {
+    "tags": [
+      "stress"
+    ],
+    "points": 5,
+    "input": "tests/020-max-edges.in",
+    "id": "020-max-edges",
+    "expected": "tests/020-max-edges.out"
   }
 ]
