@@ -159,6 +159,96 @@ function wingetInstall(id, extra = []) {
   };
 }
 
+const VS_BUILDTOOLS_INSTALLER_URL = "https://aka.ms/vs/17/release/vs_buildtools.exe";
+const VC_TOOLS_COMPONENT = "Microsoft.VisualStudio.Component.VC.Tools.x86.x64";
+
+async function findVisualStudioViaVsWhere(context) {
+  const candidates = [];
+  if (context.env["ProgramFiles(x86)"]) {
+    candidates.push(path.join(context.env["ProgramFiles(x86)"], "Microsoft Visual Studio", "Installer", "vswhere.exe"));
+  }
+  candidates.push("vswhere.exe");
+  for (const command of [...new Set(candidates)]) {
+    const result = await runWithRunner(context, command, [
+      "-latest",
+      "-products",
+      "*",
+      "-requires",
+      VC_TOOLS_COMPONENT,
+      "-property",
+      "installationPath",
+    ], { timeoutMs: 10_000, outputLimitKb: 256 });
+    if (!resultFailed(result)) {
+      const installationPath = resultOutput(result).split(/\r?\n/).find(Boolean)?.trim();
+      if (installationPath) return { installationPath, vswhere: command };
+    }
+  }
+  return undefined;
+}
+
+async function downloadFileWithPowershell(context, url, destination) {
+  const result = await runWithRunner(context, "powershell.exe", [
+    "-NoProfile",
+    "-NonInteractive",
+    "-Command",
+    `[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '${url}' -OutFile '${destination}' -UseBasicParsing`,
+  ], { timeoutMs: 10 * 60_000, outputLimitKb: 4096 });
+  if (resultFailed(result)) {
+    throw setupError("INSTALLER_FAILED", `下载失败：${url}`, { command: "powershell.exe", result });
+  }
+  return destination;
+}
+
+async function installVisualStudioBuildTools(context) {
+  const existing = await findVisualStudioViaVsWhere(context);
+  if (existing) {
+    context.ui.update("toolchain", "running", `检测到已安装 Visual Studio C++ 工具：${existing.installationPath}`);
+    return { skipped: true, reason: "already-installed", installationPath: existing.installationPath };
+  }
+
+  if (context.packageManager?.kind === "winget") {
+    const install = wingetInstall("Microsoft.VisualStudio.2022.BuildTools", [
+      "--wait",
+      "--override",
+      "--passive --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended",
+    ]);
+    try {
+      context.ui.update("toolchain", "running", "通过 winget 安装 Visual Studio C++ Build Tools");
+      await runExternal(context, install.command, install.args, {
+        inherit: true,
+        timeoutMs: 45 * 60_000,
+        errorMessage: "winget 安装 Visual Studio C++ Build Tools 失败",
+      });
+      return { method: "winget" };
+    } catch (wingetError) {
+      context.ui.update("toolchain", "running", "winget 安装未成功，回退到官方安装程序");
+    }
+  }
+
+  const tempDir = await mkdtemp(path.join(os.tmpdir(), "dsa-mastery-vs-"));
+  const installer = path.join(tempDir, "vs_buildtools.exe");
+  try {
+    context.ui.update("toolchain", "running", "下载 Visual Studio Build Tools 官方安装程序");
+    await downloadFileWithPowershell(context, VS_BUILDTOOLS_INSTALLER_URL, installer);
+    context.ui.update("toolchain", "running", "运行官方安装程序（可能需要 10-30 分钟）");
+    await runExternal(context, installer, [
+      "--wait",
+      "--passive",
+      "--norestart",
+      "--add",
+      "Microsoft.VisualStudio.Workload.VCTools",
+      "--includeRecommended",
+    ], {
+      inherit: true,
+      timeoutMs: 90 * 60_000,
+      errorMessage: "官方安装程序安装 Visual Studio C++ Build Tools 失败",
+    });
+    return { method: "official-installer" };
+  } finally {
+    await rm(tempDir, { recursive: true, force: true }).catch(() => {});
+  }
+}
+
 export function planToolchainInstall(profile, host = {}) {
   const requirement = profileRequirements(profile);
   const plan = [];
@@ -180,10 +270,12 @@ export function planToolchainInstall(profile, host = {}) {
   if (platform === "win32") {
     if (missing("Git")) add("git", "安装 Git", ...Object.values(wingetInstall("Git.Git")));
     if (missing("Node.js")) add("node", "安装 Node.js LTS", ...Object.values(wingetInstall("OpenJS.NodeJS.LTS")));
-    if (requirement.requiresCompiler && !hasTool(host, "MSVC")) {
+    const hasAnyCompiler = hasTool(host, "MSVC") || hasTool(host, "GCC") || hasTool(host, "Clang");
+    if (requirement.requiresCompiler && !hasAnyCompiler) {
       add("msvc", "安装 Visual Studio C++ Build Tools", ...Object.values(wingetInstall("Microsoft.VisualStudio.2022.BuildTools", [
+        "--wait",
         "--override",
-        "--wait --passive --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended",
+        "--passive --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended",
       ])));
     }
     if (requirement.requiresCmake && missing("CMake")) add("cmake", "安装 CMake", ...Object.values(wingetInstall("Kitware.CMake")));
@@ -378,13 +470,17 @@ async function installSystemTools(context) {
       await runExternal(context, action.command, action.args, { inherit: true, errorCode: "NEEDS_USER_ACTION" });
       throw setupError("NEEDS_USER_ACTION", "Xcode Command Line Tools 安装窗口已打开；请完成安装后重新运行此脚本。", { restartRequired: true });
     }
+    if (action.id === "msvc" && context.platform === "win32") {
+      await installVisualStudioBuildTools(context);
+      context.ui.update("toolchain", "running", "Visual Studio 安装完成，准备捕获开发环境");
+      continue;
+    }
     const command = action.command === "brew" ? context.packageManager.command : action.command;
     await runExternal(context, command, action.args, {
       inherit: true,
       timeoutMs: 20 * 60_000,
       errorMessage: `${action.description}失败：${commandText(command, action.args)}`,
     });
-    if (action.id === "msvc") context.ui.update("toolchain", "running", "Visual Studio 安装完成，准备捕获开发环境");
   }
   await refreshPlatformEnvironment(context);
   context.nodeCommand = await resolveExecutable(context, "node");
@@ -529,8 +625,52 @@ async function runSmoke(context) {
   return results;
 }
 
+async function detectVSCode(context) {
+  const direct = await commandAvailable(context, "code", ["--version"]);
+  if (direct) return { found: true, inPath: true };
+
+  if (context.platform !== "win32") return { found: false };
+
+  // Try where.exe against the live process PATH (may have entries lost by refresh)
+  try {
+    const { execFileSync } = await import("node:child_process");
+    const found = execFileSync("where.exe", ["code"], {
+      encoding: "utf8",
+      timeout: 5000,
+      stdio: ["ignore", "pipe", "ignore"],
+      env: process.env,
+    });
+    const candidates = found.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+    const codeCmd = candidates.find((p) => /\.cmd$/i.test(p)) || candidates.find((p) => /\.exe$/i.test(p)) || candidates[0];
+    if (codeCmd && (await pathExists(codeCmd))) {
+      const binDir = path.dirname(codeCmd);
+      context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
+      const retry = await commandAvailable(context, "code", ["--version"]);
+      if (retry) return { found: true, inPath: false, path: binDir };
+    }
+  } catch { /* where.exe not available or code not found */ }
+
+  // Scan standard install directories
+  const standardDirs = [];
+  if (context.env.LOCALAPPDATA) standardDirs.push(path.join(context.env.LOCALAPPDATA, "Programs", "Microsoft VS Code", "bin"));
+  if (context.env["ProgramFiles"]) standardDirs.push(path.join(context.env["ProgramFiles"], "Microsoft VS Code", "bin"));
+  if (context.env["ProgramFiles(x86)"]) standardDirs.push(path.join(context.env["ProgramFiles(x86)"], "Microsoft VS Code", "bin"));
+  for (const binDir of standardDirs) {
+    if (await pathExists(path.join(binDir, "code.cmd"))) {
+      context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
+      const retry = await commandAvailable(context, "code", ["--version"]);
+      if (retry) return { found: true, inPath: false, path: binDir };
+    }
+  }
+  return { found: false };
+}
+
 async function installIde(context) {
   if (context.options.skipVscode || !context.options.installVscode) return { status: "skipped", message: "未选择 VS Code" };
+  const detected = await detectVSCode(context);
+  if (detected.found && !detected.inPath) {
+    context.ui.update("ide", "running", `检测到已安装 VS Code：${detected.path}`);
+  }
   let code = await commandAvailable(context, "code", ["--version"]);
   if (!code) {
     if (context.platform === "darwin") {
@@ -664,6 +804,10 @@ function normalizeError(rawError) {
 }
 
 export async function runSetup(argv = [], dependencies = {}) {
+  if (process.platform === "win32") {
+    try { process.stdout.setEncoding("utf8"); } catch {}
+    try { process.stderr.setEncoding("utf8"); } catch {}
+  }
   let options;
   try {
     options = parseSetupArgs(argv);
@@ -816,12 +960,35 @@ export async function runSetup(argv = [], dependencies = {}) {
   return { exitCode: report.exitCode, report, summary, uiMode: context.ui.mode };
 }
 
+function printSuccessBanner() {
+  const reset = "\x1b[0m";
+  const bold = "\x1b[1m";
+  // Gradient: blue -> cyan -> green
+  const colors = ["\x1b[38;5;27m", "\x1b[38;5;33m", "\x1b[38;5;39m", "\x1b[38;5;42m", "\x1b[38;5;46m"];
+  const lines = [
+    "  ____  ____   _    __  __           __  __           _             ",
+    " |  _ \\/ ___| / \\  |  \\/  |         |  \\/  | __ _ ___| |_ ___ _ __  ",
+    " | | | \\___ \\/ _ \\ | |\\/| |  _____  | |\\/| |/ _` / __| __/ _ \\ '__| ",
+    " | |_| |___) / ___ \\| |  | | |_____| | |  | | (_| \\__ \\ ||  __/ |    ",
+    " |____/|____/_/   \\_\\_|  |_|         |_|  |_|\\__,_|___/\\__\\___|_|    ",
+  ];
+  let output = "\n";
+  lines.forEach((line, i) => {
+    output += colors[i % colors.length] + bold + line + reset + "\n";
+  });
+  output += "\n";
+  return output;
+}
+
 async function main() {
   const result = await runSetup(process.argv.slice(2));
   if (result.report.help) console.log(result.report.help);
   else if (result.report.command === "setup" && !result.report.error && process.argv.includes("--json")) console.log(JSON.stringify(result.report, null, 2));
   else if (process.argv.includes("--json")) console.log(JSON.stringify(result.report, null, 2));
   else if (result.summary && result.uiMode !== "tui") console.log(result.summary);
+  if (result.report.ok && !process.argv.includes("--json") && result.uiMode !== "tui") {
+    process.stdout.write(printSuccessBanner());
+  }
   process.exitCode = result.exitCode;
 }
 
