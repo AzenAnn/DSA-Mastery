@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../schemas/lab.schema.json",
+  "schemaVersion": 1,
+  "type": "project",
+  "language": "cpp",
+  "toolchain": {
+    "standard": "c++17",
+    "profile": "course-default"
+  },
+  "buildSystem": "cmake",
+  "tasks": [
+    {
+      "id": "insertion",
+      "path": "tasks/task-01-insertion",
+      "weight": 25,
+      "kind": "ctest",
+      "dependsOn": []
+    },
+    {
+      "id": "selection-bubble",
+      "path": "tasks/task-02-selection-bubble",
+      "weight": 30,
+      "kind": "ctest",
+      "dependsOn": []
+    },
+    {
+      "id": "shell",
+      "path": "tasks/task-03-shell",
+      "weight": 25,
+      "kind": "ctest",
+      "dependsOn": []
+    },
+    {
+      "id": "report",
+      "path": "report",
+      "weight": 20,
+      "kind": "manual",
+      "dependsOn": ["insertion", "selection-bubble", "shell"]
+    }
+  ]
+}
