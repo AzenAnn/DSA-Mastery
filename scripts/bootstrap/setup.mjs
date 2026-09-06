@@ -220,7 +220,7 @@ async function installVisualStudioBuildTools(context) {
         errorMessage: "winget 安装 Visual Studio C++ Build Tools 失败",
       });
       return { method: "winget" };
-    } catch (wingetError) {
+    } catch {
       context.ui.update("toolchain", "running", "winget 安装未成功，回退到官方安装程序");
     }
   }
@@ -805,8 +805,8 @@ function normalizeError(rawError) {
 
 export async function runSetup(argv = [], dependencies = {}) {
   if (process.platform === "win32") {
-    try { process.stdout.setEncoding("utf8"); } catch {}
-    try { process.stderr.setEncoding("utf8"); } catch {}
+    try { process.stdout.setEncoding("utf8"); } catch { /* non-TTY environments may throw */ }
+    try { process.stderr.setEncoding("utf8"); } catch { /* non-TTY environments may throw */ }
   }
   let options;
   try {
