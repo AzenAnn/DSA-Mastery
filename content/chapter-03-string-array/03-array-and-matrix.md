@@ -147,7 +147,7 @@ $$
 cpot[0] = 0,\qquad cpot[col] = cpot[col-1] + num[col-1].
 $$
 
-之后对 `M.data` 一趟扫描，直接放到 `T.data` 的恰当位置，复杂度降到 $O(\text{rows} + \text{cols} + t)$。实现细节见配套 Lab 03-02。
+之后对 `M.data` 一趟扫描，直接放到 `T.data` 的恰当位置，复杂度降到 $O(\text{rows} + \text{cols} + t)$。实现细节见配套 Lab 03-E-08。
 
 ### 十字链表
 
