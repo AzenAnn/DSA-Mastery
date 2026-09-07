@@ -133,5 +133,115 @@
     ],
     "answer": 3,
     "explanation": "$Tail(L)=(a,(u,t,w))$；$Tail(Tail(L))=((u,t,w))$；$Head(Tail(Tail(L)))=(u,t,w)$；$Tail(Head(Tail(Tail(L))))=(t,w)$；$Head(Tail(Head(Tail(Tail(L)))))=t$。"
+  },
+  {
+    "id": "ds-generalized-list-011",
+    "title": "表尾的类型",
+    "source": "课程自编",
+    "difficulty": "★",
+    "topics": ["广义表", "表尾"],
+    "stem": "对非空广义表 $L$ 执行 Tail(L)，结果一定是（ ）。",
+    "options": ["一个表", "一个原子", "一个整数", "空指针以外的原子"],
+    "answer": 0,
+    "explanation": "表尾由去掉表头后的剩余元素重新组成，仍然是一个表，可能是空表。"
+  },
+  {
+    "id": "ds-generalized-list-012",
+    "title": "单元素表的表尾",
+    "source": "课程自编",
+    "difficulty": "★",
+    "topics": ["广义表", "表尾"],
+    "stem": "Tail((a)) 的结果是（ ）。",
+    "options": ["()", "a", "(a)", "((a))"],
+    "answer": 0,
+    "explanation": "去掉唯一的表头 a 后，剩余元素为空，表尾是空表 ()，不能写成原子 a。"
+  },
+  {
+    "id": "ds-generalized-list-013",
+    "title": "表头可能是子表",
+    "source": "课程自编",
+    "difficulty": "★",
+    "topics": ["广义表", "表头"],
+    "stem": "Head(((a,b),c)) 的结果是（ ）。",
+    "options": ["(a,b)", "((a,b))", "c", "()"],
+    "answer": 0,
+    "explanation": "最外层表的第一个元素本身是子表 (a,b)，因此表头仍是一个表。"
+  },
+  {
+    "id": "ds-generalized-list-014",
+    "title": "广义表长度",
+    "source": "课程自编",
+    "difficulty": "★",
+    "topics": ["广义表", "长度"],
+    "stem": "广义表 $L=(a,(b,c),d)$ 的长度是（ ）。",
+    "options": ["3", "4", "2", "5"],
+    "answer": 0,
+    "explanation": "长度只统计最外层元素个数，分别是 a、(b,c)、d，共 3 个。"
+  },
+  {
+    "id": "ds-generalized-list-015",
+    "title": "广义表深度",
+    "source": "课程自编",
+    "difficulty": "★★",
+    "topics": ["广义表", "深度"],
+    "stem": "按本文约定，原子的深度为（ ）。",
+    "options": ["0", "1", "-1", "原子个数"],
+    "answer": 0,
+    "explanation": "原子不能再拆分，是递归终点，深度约定为 0；空表深度约定为 1。"
+  },
+  {
+    "id": "ds-generalized-list-016",
+    "title": "空表深度",
+    "source": "课程自编",
+    "difficulty": "★",
+    "topics": ["广义表", "深度"],
+    "stem": "按本文约定，空表 () 的深度是（ ）。",
+    "options": ["1", "0", "-1", "无法定义"],
+    "answer": 0,
+    "explanation": "为了让递归定义统一，空表深度约定为 1。"
+  },
+  {
+    "id": "ds-generalized-list-017",
+    "title": "深度递归终止",
+    "source": "课程自编",
+    "difficulty": "★",
+    "topics": ["广义表", "递归"],
+    "stem": "求广义表深度时，递归应在哪些对象处终止？",
+    "options": ["原子和空表", "所有非空表", "只有根表", "只有原子"],
+    "answer": 0,
+    "explanation": "原子深度为 0，空表深度为 1，二者都不能继续拆分。"
+  },
+  {
+    "id": "ds-generalized-list-018",
+    "title": "头尾链表指针",
+    "source": "课程自编",
+    "difficulty": "★★",
+    "topics": ["广义表", "头尾链表"],
+    "stem": "在头尾链表表示中，List 节点的 hp 和 tp 分别指向（ ）。",
+    "options": ["表头和表尾", "表尾和表头", "同层下一个元素和父表", "行和列"],
+    "answer": 0,
+    "explanation": "hp 指向表头元素，tp 指向表尾表，正对应 Head/Tail 的递归定义。"
+  },
+  {
+    "id": "ds-generalized-list-019",
+    "title": "广义表存储标志",
+    "source": "课程自编",
+    "difficulty": "★",
+    "topics": ["广义表", "存储结构"],
+    "stem": "广义表结点需要 tag 标志位的主要原因是（ ）。",
+    "options": ["区分当前结点是原子还是子表", "记录元素的排序位置", "保存表的长度", "避免使用指针"],
+    "answer": 0,
+    "explanation": "一个结点可能保存原子值，也可能保存 hp/tp 指针，必须用 tag 区分两种解释方式。"
+  },
+  {
+    "id": "ds-generalized-list-020",
+    "title": "表尾括号",
+    "source": "课程自编",
+    "difficulty": "★★",
+    "topics": ["广义表", "表尾"],
+    "stem": "Tail((a,(b,c))) 的序列化结果是（ ）。",
+    "options": ["((b,c))", "(b,c)", "b", "(a)"],
+    "answer": 0,
+    "explanation": "去掉外层表头 a 后，剩余元素只有子表 (b,c)，重新组成表，所以结果是 ((b,c))。"
   }
 ]

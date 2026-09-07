@@ -45,21 +45,42 @@
     "id": "007-single-vertex",
     "input": "tests/007-single-vertex.in",
     "expected": "tests/007-single-vertex.out",
-    "points": 10,
+    "points": 5,
     "tags": ["boundary"]
   },
   {
     "id": "008-stress",
     "input": "tests/008-stress.in",
     "expected": "tests/008-stress.out",
-    "points": 20,
+    "points": 15,
     "tags": ["stress"]
   },
   {
     "id": "009-multiedge-reversed",
     "input": "tests/009-multiedge-reversed.in",
     "expected": "tests/009-multiedge-reversed.out",
-    "points": 10,
+    "points": 5,
     "tags": ["regression"]
+  },
+  {
+    "id": "010-equal-weights",
+    "input": "tests/010-equal-weights.in",
+    "expected": "tests/010-equal-weights.out",
+    "points": 5,
+    "tags": ["normal", "regression"]
+  },
+  {
+    "id": "011-negative-weights",
+    "input": "tests/011-negative-weights.in",
+    "expected": "tests/011-negative-weights.out",
+    "points": 5,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "012-large-weight",
+    "input": "tests/012-large-weight.in",
+    "expected": "tests/012-large-weight.out",
+    "points": 5,
+    "tags": ["boundary"]
   }
 ]
