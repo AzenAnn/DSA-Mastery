@@ -325,85 +325,15 @@ public:
 若播放列表更常见的操作其实是按编号跳转、随机播放和完整顺序扫描，顺序表仍可能更好。选型取决于主导访问模式，不取决于“播放列表”这个名字。
 :::
 
-### 组合例题：LRU 为什么需要两种结构
+### 场景 5：高频置顶与淘汰策略（LRU 的本质）
 
-LRU 缓存需要同时完成：
+在维护“最近使用列表”（如最近打开的文件、前 8 个播放历史）时，核心规则是：**命中立即置顶，满额淘汰最旧**（即 LRU 策略）。
 
-1. 按键查找缓存项；
-2. 命中后把该项移到“最近使用”端；
-3. 容量满时删除“最久未使用”端。
+- **纯顺序表（数组）**：小容量（如 $N \le 16$）时极佳。CPU 硬件 L1/L2 组相联缓存就是用小数组移位实现的，享有 100% 缓存局部性且无指针开销；但大容量时每次向后平移元素需要 $O(n)$ 搬移成本。
+- **纯双向链表**：已知节点置顶只需修改 4 根指针（$O(1)$），彻底免除搬移；但若只给一个 Key，在链表中定位节点依然需要线性遍历（$O(n)$）。
 
-单独的顺序表能按位置访问，却无法按键平均 `O(1)` 定位；单独的链表能 `O(1)` 调整已知节点，却仍需 `O(n)` 按键查找。组合结构让两者各自负责擅长的部分：
-
-```cpp:line-numbers [lru-cache.cpp]
-#include <cstddef>
-#include <list>
-#include <optional>
-#include <unordered_map>
-#include <utility>
-
-class LRUCache {
-private:
-    using Entry = std::pair<int, int>;  // key, value
-    using Iterator = std::list<Entry>::iterator;
-
-    std::size_t capacity_;
-    std::list<Entry> order_;  // 表头最近使用，表尾最久未使用
-    std::unordered_map<int, Iterator> index_;
-
-public:
-    explicit LRUCache(std::size_t capacity) : capacity_(capacity) {}
-
-    std::optional<int> get(int key) {
-        auto found = index_.find(key);
-        if (found == index_.end()) {
-            return std::nullopt;
-        }
-
-        order_.splice(order_.begin(), order_, found->second);
-        return found->second->second;
-    }
-
-    void put(int key, int value) {
-        if (capacity_ == 0) {
-            return;
-        }
-
-        auto found = index_.find(key);
-        if (found != index_.end()) {
-            found->second->second = value;
-            order_.splice(order_.begin(), order_, found->second);
-            return;
-        }
-
-        if (order_.size() == capacity_) {
-            const int expired_key = order_.back().first;
-            index_.erase(expired_key);
-            order_.pop_back();
-        }
-
-        order_.emplace_front(key, value);
-        index_[key] = order_.begin();
-    }
-};
-```
-
-#### 代码讲解
-
-- `index_` 把键映射到链表迭代器；在散列均匀的通常假设下，定位平均为 `O(1)`。
-- `std::list::splice` 把已有节点移到表头，不复制元素，并保持该节点迭代器有效。
-- `order_.back()` 与 `pop_back()` 在尾部淘汰最旧项，均为 `O(1)`。
-- 哈希表必须在链表节点删除前移除对应键，否则会留下指向已释放节点的迭代器。
-- 这里的平均 `O(1)` 依赖散列表负载与散列质量；最坏情况不能被省略成无条件保证。
-
-#### 例题 5：为什么不用“哈希表 + 顺序表”
-
-哈希表也可以把键映射到顺序表下标。为什么 LRU 更常配双向链表？
-
-::: details 查看分析
-命中后需要把任意元素移到最近使用端。顺序表删除中间元素并插到头部会搬移一段数据；移动后，大量元素下标改变，哈希表里的映射也要同步更新。
-
-双向链表迭代器直接定位节点，摘下并拼到表头只改局部链接，其他节点句柄保持有效。
+::: tip 思考与工程延伸
+当缓存规模达到数万时，如何消除双向链表的 $O(n)$ 查找瓶颈？详见下一节 [1.5.3 LRU 缓存：从线性表到组合结构](./05-real-world-practices.md#1-5-3-lru-缓存-从线性表到组合结构)。
 :::
 
 ## 一页选型检查表
