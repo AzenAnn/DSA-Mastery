@@ -25,7 +25,7 @@ pnpm lab:verify -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplicatio
 pnpm lab:verify -- labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
-`pnpm test` 当前依次执行 `validate`（内容 + `vue-tsc` + lint）、`test:discovery`、最终 `build` 与 `check:site`。涉及 Pages 时，在设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 与 `SITE_URL` 后重新 build/check，再运行 `pnpm run test:pages`。
+`pnpm test` 当前依次执行 `validate`（内容 + `vue-tsc` + lint）、`test:tree-demos`、`test:bootstrap`、`test:lab-tools`、`test:lab-docs`、`test:discovery`、最终 `build` 与 `check:site`。涉及 Pages 时，在设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 与 `SITE_URL` 后重新 build/check，再运行 `pnpm run test:pages`。
 
 Pages 构建输入/输出：
 

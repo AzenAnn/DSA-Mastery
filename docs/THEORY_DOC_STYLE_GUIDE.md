@@ -248,6 +248,16 @@ int invalid = 5;    // [!code error]
 <span style="color: red">不要这样写。</span>
 ```
 
+## 交互式演示
+
+教材演示沿用 8.1、8.2 的独立 HTML 与深色卡片格式。第 4 章的中序线索化/Morris、树与二叉树同步遍历、先序展开分别位于 `public/demos/threaded-tree.html`、`tree-forest-traversal.html`、`flatten-tree.html`，可作为新演示的参考。
+
+- 在算法说明之后放“交互式演示”小标题；用一段话告诉读者先选什么案例、观察哪个指针、验证什么结论。
+- iframe URL 通过 `withBase` 生成，提供中文 `title` 和 `loading="lazy"`；使用 8.1/8.2 同款局部 `search-demo-frame` 样式，不能仅写类名而漏掉样式。
+- 演示可逐步播放、回退和重置，保留阶段说明、节点身份、指针含义与访问序列。线型及文字应足以区分含义，不能只靠颜色。
+- 双图对照按“访问并输出一个节点”同步，并允许点击核对同一节点。对暂时有环或多条入边的算法状态，图示应忠实呈现指针，不得强行画成普通树。
+- 修改后运行 `pnpm run test:tree-demos`，并在最终构建的教材 iframe 中检查控件、浅暗主题和手机布局。实现及测试约定见 [独立交互式演示规范](../.trellis/spec/frontend/interactive-demos.md)。
+
 ## 浅色、深色与移动端注意事项
 
 - 不在正文中假设背景一定为白色或黑色；所有语义色由主题切换。
