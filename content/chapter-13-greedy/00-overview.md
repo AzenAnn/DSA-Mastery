@@ -4,7 +4,7 @@ description: "理解局部最优选择、最优子结构与贪心算法的正确
 order: 0
 chapter: 13
 chapterTitle: "贪心算法"
-updated: "2026-08-21"
+updated: "2026-09-08"
 contributors: ["Shuoyuchen"]
 status: "draft"
 ---
@@ -40,6 +40,10 @@ status: "draft"
 完成 [Lab 13-E-02：最长回文串](../../labs/chapter-13/exercise/E-13-02-longest-palindrome/README.md)，把“优先使用成对字符、保留一个中心字符”的贪心选择落实为可运行程序，并用测试检查奇偶计数与大小写区分。
 
 完成 [Lab 13-E-03：跳跃游戏](../../labs/chapter-13/exercise/E-13-03-jump-game/README.md)，把“维护最远可达位置”的贪心选择落实为可运行程序，并用障碍与边界测试检查可达性判断。
+
+完成 [Lab 13-E-04：分发饼干](../../labs/chapter-13/exercise/E-13-04-assign-cookies/README.md)，通过排序与双指针匹配，把最小可行饼干分给当前胃口最小的孩子。
+
+完成 [Lab 13-E-05：无重叠区间](../../labs/chapter-13/exercise/E-13-05-non-overlapping-intervals/README.md)，按结束时间完成区间调度，从最多保留区间数推导最少删除数。
 
 ::: intuition 直觉 · 先做眼前最好的选择
 

@@ -5,7 +5,7 @@ order: 3
 chapter: 13
 labId: "13E03"
 chapterTitle: "贪心算法"
-updated: "2026-08-28"
+updated: "2026-09-08"
 contributors: ["Shuoyuchen"]
 status: "draft"
 lab: true
@@ -97,6 +97,10 @@ false
 - 时间复杂度：O(n)，数组只扫描一次。
 - 额外空间复杂度：O(1)。
 
+## 测试设计提示
+
+公开测试共 20 组，每组 5 分，总分 100 分。它们覆盖可达与不可达样例、单元素、零步障碍、恰好到达、越过终点、保持最远边界的回归输入，以及 `n = 10^4` 的可达和不可达压力数据。
+
 ## 运行与评分
 
 在本 Lab 目录执行：
@@ -126,6 +130,7 @@ pnpm lab:verify -- labs/chapter-13/exercise/E-13-03-jump-game --no-color
 - [ ] 遇到 `i > maxReach` 时返回 `false`。
 - [ ] 正确处理单元素、零步障碍、恰好到达和提前到达终点等情况。
 - [ ] 输出严格为小写 `true` 或 `false`。
+- [ ] 20 个公开测试全部通过，严格评分为 100/100。
 
 ## 思考与复盘
 
