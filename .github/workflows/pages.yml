@@ -57,6 +57,9 @@ jobs:
       - name: Test Lab schemas, scaffolding, comparators, and process limits
         run: pnpm run test:lab-tools
 
+      - name: Verify tree visualization algorithms and replay snapshots
+        run: pnpm run test:tree-demos
+
       - name: Validate Lab author-guide examples and entry points
         run: pnpm run test:lab-docs
 

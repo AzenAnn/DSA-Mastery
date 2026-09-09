@@ -11,6 +11,12 @@ status: "draft"
 
 # 4.6 二叉树的经典问题
 
+<script setup>
+import { withBase } from "vitepress";
+
+const flattenDemoUrl = withBase("/demos/flatten-tree.html");
+</script>
+
 在掌握了二叉树的形态定义、存储结构与遍历机制之后，接下来我们来研究二叉树里面的经典问题。
 
 二叉树的问题虽然千变万化，涵盖节点统计、结构判断、形态变换、路径搜索、祖先定位乃至树形动态规划，但它们的底层逻辑高度收敛于一个共同的数学基石：**分治（Divide and Conquer）与递归状态转移**。
@@ -436,6 +442,21 @@ void flatten(TreeNode* root) {
 }
 ```
 
+#### 交互式演示：逐条指针重连
+
+让左侧原树保持不变，在右侧依次执行 `pred->right = curr->right`、`curr->right = curr->left` 和 `curr->left = nullptr`。每一步用绿色粗线标出新增边，用红色虚线与叉号标出删除边；节点位置先保持稳定，便于看清连接改变，完成时再排成先序右链。
+
+<iframe
+  :src="flattenDemoUrl"
+  title="二叉树展开 · 看见每一次重连"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 观察什么
+课本示例最终应为 `1 → 2 → 3 → 4 → 5 → 6`，所有 `left` 均为空。切换“拼接点仍有左孩子”，检查为什么 `pred` 不一定是先序最后一个节点；再切换长左链，观察 `pred` 的总移动次数为 **0**。重连中间短暂出现两条指针指向同一节点，是逐条赋值的现场，下一步会清空旧 `left`。
+:::
+
 ::: complexity 最坏时间 O(n)，辅助空间 O(1)
 设二叉树有 $n$ 个节点。外层 `curr` 按最终先序顺序访问每个节点一次；内层虽然也有 `while`，但各次寻找 `pred` 的扫描不能简单相乘。
 
@@ -729,3 +750,21 @@ public:
 ---
 
 至此，第 4 章《树与二叉树》的理论与经典问题已全部建立。在下一章《树的应用》中，我们将探索二叉搜索树（BST）、AVL 平衡树、堆与优先队列、赫夫曼编码以及 B/B+ 树在现代工业系统中的应用。
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1100px;
+  }
+}
+</style>

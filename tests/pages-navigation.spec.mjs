@@ -15,6 +15,7 @@ const mimeTypes = new Map([
   [".css", "text/css; charset=utf-8"],
   [".html", "text/html; charset=utf-8"],
   [".js", "text/javascript; charset=utf-8"],
+  [".mjs", "text/javascript; charset=utf-8"],
   [".json", "application/json; charset=utf-8"],
   [".png", "image/png"],
   [".svg", "image/svg+xml"],
@@ -22,6 +23,13 @@ const mimeTypes = new Map([
   [".woff2", "font/woff2"],
   [".xml", "application/xml; charset=utf-8"],
 ]);
+
+const treeDemoCases = [
+  { id: "threading", lesson: "04-threaded-binary-tree", file: "threaded-tree.html", title: "中序线索化 · 指针如何连起来", output: ["D", "B", "E", "A", "C"] },
+  { id: "morris", lesson: "04-threaded-binary-tree", file: "threaded-tree.html?mode=morris", title: "Morris 遍历 · 临时回边的建立与恢复", output: ["D", "B", "E", "A", "C"] },
+  { id: "forest", lesson: "05-trees-and-forests", file: "tree-forest-traversal.html", title: "树与二叉树 · 转换与同步遍历", output: ["B", "E", "C", "D", "A"] },
+  { id: "flatten", lesson: "06-binary-tree-classic-problems", file: "flatten-tree.html", title: "二叉树展开 · 看见每一次重连", output: ["1", "2", "3", "4", "5", "6"] },
+];
 
 let server;
 let baseUrl;
@@ -1704,5 +1712,171 @@ test("chapter 8 balanced tree theory quiz exposes all 14 questions", async ({ pa
   await expect(page.locator(".vp-doc")).not.toContainText(
     /查看原始页面|看交互可视化|答案来源说明|答案来源：Codex/,
   );
+  expect(failures).toEqual([]);
+});
+
+async function openTreeDemo(page, demo) {
+  await page.goto(`${baseUrl}/learn/chapter-04-tree/${demo.lesson}/`);
+  const iframe = page.locator(`iframe[title="${demo.title}"]`);
+  await expect(iframe).toHaveAttribute("src", `${pagesBasePath}/demos/${demo.file}`);
+  await iframe.scrollIntoViewIfNeeded();
+  const frame = iframe.contentFrame();
+  await expect(frame.locator("#demo")).toHaveAttribute("data-step", "0");
+  return frame;
+}
+
+async function finishTreeDemo(frame) {
+  const timeline = frame.getByRole("slider", { name: "时间线进度" });
+  await timeline.fill(await timeline.getAttribute("max"));
+  await expect(frame.locator("#demo")).toHaveAttribute("data-phase", "done");
+}
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"]) {
+    for (const demo of treeDemoCases) {
+      test(`chapter 4 ${demo.id} iframe supports replay at ${width}px in ${theme}`, async ({ page }) => {
+        const failures = monitorPage(page);
+        await page.setViewportSize({ width, height: 900 });
+        await page.emulateMedia({ colorScheme: theme, reducedMotion: "reduce" });
+        await page.addInitScript(value => globalThis.localStorage.setItem("vitepress-theme-appearance", value), theme);
+        const frame = await openTreeDemo(page, demo);
+        await expect(page.locator("html")).toHaveClass(theme === "dark" ? /dark/ : /^(?!.*\bdark\b)/);
+        const progress = frame.locator("#demo");
+        const play = frame.locator("[data-action=play]");
+        await expect(play).toHaveAttribute("aria-pressed", "false");
+        await expect(frame.locator("[data-action=prev]")).toBeDisabled();
+        await frame.getByRole("button", { name: "下一步 →", exact: true }).click();
+        await expect(progress).toHaveAttribute("data-step", "1");
+        await frame.getByRole("button", { name: "← 上一步", exact: true }).click();
+        await expect(progress).toHaveAttribute("data-step", "0");
+        await finishTreeDemo(frame);
+        await expect(frame.locator("#right-sequence .tok")).toHaveText(demo.output);
+        await expect(frame.locator("[data-action=next]")).toBeDisabled();
+        if (demo.id === "forest" || demo.id === "flatten") {
+          await expect(frame.locator("#left-sequence .tok")).toHaveText(demo.output);
+          const id = demo.id === "forest" ? "C" : "2";
+          const node = frame.locator(`#left-tree [data-node="${id}"]`);
+          await node.focus();
+          await node.press("Enter");
+          await expect(node).toBeFocused();
+          await expect(frame.locator(`[data-node="${id}"][aria-pressed=true]`)).toHaveCount(2);
+          await expect(frame.locator("#inspector")).toContainText(id);
+        }
+        expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.innerWidth + 1)).toBe(true);
+        expect(await frame.locator("body").evaluate(element => element.ownerDocument.documentElement.scrollWidth <= element.ownerDocument.defaultView.innerWidth + 1)).toBe(true);
+        await frame.getByRole("combobox", { name: "播放速度" }).selectOption("350");
+        await play.click();
+        await expect(progress).toHaveAttribute("data-step", "0");
+        await expect(play).toHaveAttribute("aria-pressed", "true");
+        await expect(progress).not.toHaveAttribute("data-step", "0");
+        await play.click();
+        const pausedStep = await progress.getAttribute("data-step");
+        await page.waitForTimeout(450); // Exceeds one tick: pause must cancel the live timer.
+        await expect(progress).toHaveAttribute("data-step", pausedStep);
+        await play.click();
+        await frame.getByRole("combobox", { name: "选择树形" }).selectOption("single");
+        await expect(progress).toHaveAttribute("data-step", "0");
+        await expect(play).toHaveAttribute("aria-pressed", "false");
+        await page.waitForTimeout(450); // Changing the case must also cancel the previous timer.
+        await expect(progress).toHaveAttribute("data-step", "0");
+        await finishTreeDemo(frame);
+        await expect(frame.locator("#right-sequence .tok")).toHaveText(["A"]);
+        await frame.getByRole("combobox", { name: "选择树形" }).selectOption("empty");
+        await finishTreeDemo(frame);
+        await expect(frame.locator("#right-tree [data-node]")).toHaveCount(0);
+        await expect(frame.locator("#right-tree")).toContainText("空结构");
+        await frame.getByRole("button", { name: "↺ 重置", exact: true }).click();
+        await expect(progress).toHaveAttribute("data-step", "0");
+        expect(failures).toEqual([]);
+      });
+    }
+  }
+}
+
+test("chapter 4 threading and Morris distinguish permanent and temporary links", async ({ page }) => {
+  const failures = monitorPage(page);
+  const frame = await openTreeDemo(page, treeDemoCases[0]);
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#right-tree .edge.predecessor")).toHaveCount(2);
+  await expect(frame.locator("#right-tree .edge.successor")).toHaveCount(2);
+  await expect(frame.locator('#table tbody tr:has([data-select="D"])')).toHaveText(/Dnull1B1/);
+  await frame.locator("[data-action=play]").click();
+  await frame.getByRole("combobox", { name: "选择算法" }).selectOption("morris");
+  await expect(frame.locator("#demo")).toHaveAttribute("data-step", "0");
+  await expect(frame.locator("[data-action=play]")).toHaveAttribute("aria-pressed", "false");
+  const initialPointers = await frame.locator("#table").textContent();
+  const timeline = frame.getByRole("slider", { name: "时间线进度" });
+  for (let i = 0; i <= Number(await timeline.getAttribute("max")); i++) {
+    await timeline.fill(String(i));
+    if (await frame.locator("#demo").getAttribute("data-phase") === "create") break;
+  }
+  await expect(frame.locator("#right-tree .edge.temporary")).not.toHaveCount(0);
+  await expect(frame.locator("#right-tree .edge.temporary").first()).toHaveAttribute("d", / C /);
+  for (let i = Number(await timeline.inputValue()); i <= Number(await timeline.getAttribute("max")); i++) {
+    await timeline.fill(String(i));
+    if (await frame.locator("#demo").getAttribute("data-phase") === "remove") break;
+  }
+  await expect(frame.locator("#right-tree .edge.removed").first()).toHaveAttribute("d", / C /);
+  await expect(frame.locator("#right-tree .removed-cross")).not.toHaveCount(0);
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#right-tree .edge.temporary")).toHaveCount(0);
+  await expect(frame.locator("#table")).toHaveText(initialPointers);
+  expect(failures).toEqual([]);
+});
+
+test("chapter 4 forest conversion preserves identity and both traversal correspondences", async ({ page }) => {
+  const failures = monitorPage(page);
+  const frame = await openTreeDemo(page, treeDemoCases[2]);
+  const timeline = frame.getByRole("slider", { name: "时间线进度" });
+  await timeline.fill("1");
+  await expect(frame.locator("#right-tree .edge.sibling")).toHaveCount(2);
+  await timeline.fill("2");
+  await expect(frame.locator("#right-tree .removed-cross")).toHaveCount(2);
+  await frame.getByRole("combobox", { name: "选择树形" }).selectOption("forest");
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#left-sequence .tok")).toHaveText(["D", "E", "B", "C", "A", "G", "F", "H"]);
+  await expect(frame.locator("#right-sequence .tok")).toHaveText(["D", "E", "B", "C", "A", "G", "F", "H"]);
+  await frame.locator("[data-action=play]").click();
+  await frame.getByRole("combobox", { name: "选择算法" }).selectOption("preorder");
+  await expect(frame.locator("[data-action=play]")).toHaveAttribute("aria-pressed", "false");
+  await expect(frame.locator("#demo")).toHaveAttribute("data-step", "0");
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#left-sequence .tok")).toHaveText(["A", "B", "D", "E", "C", "F", "G", "H"]);
+  await expect(frame.locator("#right-sequence .tok")).toHaveText(["A", "B", "D", "E", "C", "F", "G", "H"]);
+  await frame.locator('#right-tree [data-node="F"]').click();
+  await expect(frame.locator('[data-node="F"][aria-pressed=true]')).toHaveCount(2);
+  await expect(frame.locator("#inspector")).toContainText("left → G");
+  await expect(frame.locator("#inspector")).toContainText("right → H");
+  expect(failures).toEqual([]);
+});
+
+test("chapter 4 flatten shows individual writes and supports a predecessor with a left child", async ({ page }) => {
+  const failures = monitorPage(page);
+  const frame = await openTreeDemo(page, treeDemoCases[3]);
+  const timeline = frame.getByRole("slider", { name: "时间线进度" });
+  await frame.getByRole("combobox", { name: "选择树形" }).selectOption("nested");
+  for (let i = 0; i <= Number(await timeline.getAttribute("max")); i++) {
+    await timeline.fill(String(i));
+    if (await frame.locator("#demo").getAttribute("data-phase") === "promote") break;
+  }
+  const left = frame.locator('#right-tree .edge[data-from="1"][data-to="2"][data-slot="left"]');
+  const right = frame.locator('#right-tree .edge[data-from="1"][data-to="2"][data-slot="right"]');
+  await expect(left).toHaveCount(1);
+  await expect(right).toHaveClass(/added/);
+  expect(await left.getAttribute("d")).not.toBe(await right.getAttribute("d"));
+  await expect(frame.locator('#right-tree .edge.removed[data-from="1"][data-to="5"]')).toHaveCount(1);
+  await frame.locator("[data-action=next]").click();
+  await expect(frame.locator("#demo")).toHaveAttribute("data-phase", "clear");
+  await expect(frame.locator('#right-tree .edge.removed[data-from="1"][data-to="2"]')).toHaveCount(1);
+  await frame.locator("[data-action=prev]").click();
+  await expect(frame.locator("#demo")).toHaveAttribute("data-phase", "promote");
+  await expect(left).not.toHaveClass(/removed/);
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#right-sequence .tok")).toHaveText(["1", "2", "3", "4", "7", "5", "6"]);
+  await expect(frame.locator("#right-tree .edge[data-slot=left]")).toHaveCount(0);
+  await frame.getByRole("combobox", { name: "选择树形" }).selectOption("left");
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#metrics")).toContainText("pred 总移动：0 次");
+  await expect(frame.locator("#right-sequence .tok")).toHaveText(["A", "B", "C", "D"]);
   expect(failures).toEqual([]);
 });

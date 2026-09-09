@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>中序线索化与 Morris 遍历 · 指针可视化</title>
+  <link rel="stylesheet" href="./tree-demo.css">
+</head>
+<body data-demo="threaded">
+<main class="app">
+  <header class="hero">
+    <div class="eyebrow">Interactive Algorithm Lab</div>
+    <h1>中序线索化 · 指针如何连起来</h1>
+    <p>逐步跟随 curr 与 prev，把空指针连向中序前驱和后继；也可切换到 Morris，观察临时回边如何建立、使用，再恢复为空。</p>
+  </header>
+  <div id="demo"></div>
+  <noscript>请启用 JavaScript 操作演示。线索化步骤与 C++ 代码也可在教材正文中阅读。</noscript>
+</main>
+<script type="module" src="./tree-demo.mjs"></script>
+</body>
+</html>
