@@ -108,6 +108,7 @@ public:
 ```cpp
 struct PageDocument {
     std::string text;
+    bool submitted = false;
 };
 
 struct PageState {
@@ -138,9 +139,11 @@ bool redo();                                    // 重做一次
 
 实现至少 3 个具体 `Command` 子类，并落地一条业务约束：
 
-1. `InputCommand`：模拟"在某表单输入文本"，`undo()` 应移除这段输入；
-2. `SubmitCommand`：模拟"提交表单"，**业务约束：只有上一条命令是 `InputCommand` 时才能执行**；
-3. `ClearCommand`：清空当前页输入，`undo()` 应恢复清空前的文本。
+1. `InputCommand`：模拟"在某表单输入文本"；执行前保存原 `text` 与 `submitted`，`execute()` 把输入追加到 `text` 并令 `submitted = false`，`undo()` 恢复保存的完整旧状态；
+2. `SubmitCommand`：模拟"提交表单"，**业务约束：只有上一条命令是 `InputCommand` 时才能执行**；执行前保存原 `submitted`，`execute()` 令其为 `true`，`undo()` 恢复旧值；
+3. `ClearCommand`：执行前保存原 `text` 与 `submitted`，`execute()` 清空文本并令 `submitted = false`，`undo()` 恢复保存的完整旧状态。
+
+这里的“提交”是可观察的文档状态，而不是网络请求；`HISTORY` 应同时显示当前文档的 `text` 与 `submitted`，从而能够验证提交、撤销与重做。
 
 业务约束可以由 `Browser::doCommand` 在执行前检查 `undo_stack_.top()` 是否为 `InputCommand`，也可以让命令暴露独立的 `validate()`。不满足时抛异常，由命令行驱动层捕获并打印日志，程序不崩溃。不要让 `Browser` 一边声明向调用方抛异常，一边在内部吞掉同一异常。
 
@@ -177,6 +180,10 @@ bool redo();                                    // 重做一次
 | `HISTORY`         | 打印导航历史 + Undo/Redo 状态 |
 | `EXIT`            | 退出并打印统计               |
 
+**解析约定**：`BACK` / `FORWARD` 的 `k` 必须是正整数；`k <= 0`、非整数或多余参数均视为整行非法，输出错误且状态不变。`VISIT` 与 `DO INPUT` 取命令前缀后的剩余文本并去掉首尾空白；若剩余文本由一对双引号完整包围，则去掉这对引号（不处理反斜杠转义）。去除后为空时拒绝该命令，因此 `VISIT ""` 与 `DO INPUT ""` 都非法。
+
+日志中的时间来源应可注入：交互运行可使用真实时钟，自动测试应使用固定时钟或只比较时间戳之后的内容。下方示例时间仅用于展示格式，不是必须逐字匹配的值。`Browser::current()` 必须返回完整 URL；Logger 可以另外提供缩写显示函数，但缩写规则必须统一并在设计说明中写明。下方日志中的主机名以及栈内的 `home`、`cs`、`dsa` 都只是为排版采用的显示缩写。
+
 ### 示例输入
 
 ```input
@@ -212,6 +219,7 @@ EXIT
 HISTORY:
   back_stack_  = [home.sysu.edu.cn, cs.sysu.edu.cn, dsa.sysu.edu.cn/lab02]
   current      = github.com
+  document     = { text="lab02-03 = done", submitted=true }
   forward_stack_ = []
   undo_stack_  = [INPUT "lab02-03 = done", SUBMIT]
   redo_stack_  = []
@@ -229,7 +237,7 @@ EXIT
 | 3 | 无输入直接提交  | 新页直接 `DO SUBMIT`   | 抛出"未输入不可提交"，不压栈，`undo_stack_` 为空 |
 | 4 | 空撤销      | 新页直接 `UNDO`        | 返回失败信息，程序继续运行                    |
 | 5 | 空重做      | 撤销后把可重做项耗尽再 `REDO` | 返回失败信息，不崩溃                       |
-| 6 | 非法步数     | `BACK abc`         | 提示"步数必须是整数"，跳过该行                 |
+| 6 | 非法步数     | `BACK abc`、`BACK 0`、`FORWARD -1` | 提示"步数必须是正整数"，跳过该行，状态不变 |
 | 7 | 未知指令     | `FLY to moon`      | 提示"未知指令"，跳过该行                    |
 | 8 | 访问空 URL  | `VISIT ""`         | 拒绝访问，当前页不变                       |
 
