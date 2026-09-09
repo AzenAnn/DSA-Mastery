@@ -109,7 +109,7 @@ digraph SubsetTreeDFS {
 前置知识与衔接：
 
 - [图的遍历：DFS 与 BFS](../chapter-07-graph-traversal/01-dfs-and-bfs.md)：本章直接复用其 DFS 骨架与 BFS 队列，15.4 会说明分支限界的队列式搜索就是显式图 BFS 的推广；
-- [递归基础](../chapter-12-divide-conquer-recursion/01-recursion-foundations.md)：递归调用栈、终止条件与递归树，是阅读回溯模板的前提；
+- [递归建模：函数契约与规模递减](../chapter-12-divide-conquer-recursion/01-recursion-contracts.md)：函数合同、基本情况与递归调用栈，是阅读回溯模板的前提；
 - [第 14 章 动态规划](../chapter-14-dynamic-programming/00-overview.md)：方法判别的另一半；15.3 的 0-1 背包回溯版与[背包动态规划](../chapter-14-dynamic-programming/04-knapsack-dp.md)是同一道题的两种解法，值得对照阅读。
 
 ::: tip 学习建议
