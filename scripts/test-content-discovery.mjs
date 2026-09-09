@@ -105,6 +105,10 @@ container-code
 示例正文。
 :::
 
+::: example 示例 · $n=16$ 时最多比较几次
+标题公式渲染检查正文。
+:::
+
 ::: counterexample
 反例正文。
 :::
@@ -359,6 +363,9 @@ try {
   }
   if (lessonHtml.includes('<span><img src="x"') || lessonHtml.includes("<span><img src=x")) {
     throw new Error("Theory container title emitted executable HTML");
+  }
+  if (!lessonHtml.includes("示例 · <mjx-container")) {
+    throw new Error("Theory container title did not render inline MathJax");
   }
   if (!lessonHtml.includes("<mark>语义高亮</mark>")) {
     throw new Error("Mark syntax did not render semantic <mark>");
