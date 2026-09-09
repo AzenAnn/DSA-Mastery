@@ -104,3 +104,25 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 5: 扩充第 13 章贪心 Lab 与测试
+
+**Date**: 2026-09-09
+**Task**: 扩充第 13 章贪心 Lab 与测试
+**Branch**: `codex/chapter-13-greedy-labs-tests`
+
+### Summary
+
+新增 LeetCode 455 与 435 两个 Program Lab，将第 13 章五道贪心题各扩充到 20 组测试；五次 lab:verify、章节独立 oracle、pnpm test 与 Make/CLI 检查全部通过。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `f9544c5` | (see git log) |
+| `231aa09` | (see git log) |
+
+### Status
+
+[OK] **Completed**
