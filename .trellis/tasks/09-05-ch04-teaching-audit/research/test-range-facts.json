@@ -1,0 +1,131 @@
+[
+  {
+    "key": "E01",
+    "max_n": 500,
+    "max_binary_levels": 9,
+    "out_of_contract": []
+  },
+  {
+    "key": "E02",
+    "max_n": 511,
+    "max_binary_levels": 15,
+    "out_of_contract": [
+      "003-empty:空树超出n>=1"
+    ]
+  },
+  {
+    "key": "E03",
+    "max_n": 500,
+    "max_binary_levels": 20,
+    "out_of_contract": []
+  },
+  {
+    "key": "E04",
+    "max_n": 255,
+    "max_binary_levels": 12,
+    "out_of_contract": []
+  },
+  {
+    "key": "E05",
+    "max_n": 255,
+    "max_binary_levels": 10,
+    "out_of_contract": []
+  },
+  {
+    "key": "E06",
+    "max_n": 100,
+    "max_binary_levels": null,
+    "out_of_contract": []
+  },
+  {
+    "key": "E07",
+    "max_n": 100,
+    "max_binary_levels": null,
+    "out_of_contract": []
+  },
+  {
+    "key": "E08",
+    "max_n": 200,
+    "max_binary_levels": 15,
+    "out_of_contract": []
+  },
+  {
+    "key": "E09",
+    "max_n": 127,
+    "max_binary_levels": 7,
+    "out_of_contract": []
+  },
+  {
+    "key": "E10",
+    "max_n": 127,
+    "max_binary_levels": 7,
+    "out_of_contract": []
+  },
+  {
+    "key": "E11",
+    "max_n": 31,
+    "max_binary_levels": 6,
+    "out_of_contract": []
+  },
+  {
+    "key": "E12",
+    "max_n": 31,
+    "max_binary_levels": 5,
+    "out_of_contract": []
+  },
+  {
+    "key": "E13",
+    "max_n": 255,
+    "max_binary_levels": 15,
+    "out_of_contract": []
+  },
+  {
+    "key": "E14",
+    "max_n": 63,
+    "max_binary_levels": 6,
+    "out_of_contract": []
+  },
+  {
+    "key": "E15",
+    "max_n": 63,
+    "max_binary_levels": 6,
+    "out_of_contract": []
+  },
+  {
+    "key": "E16",
+    "max_n": 100,
+    "max_binary_levels": null,
+    "out_of_contract": [
+      "013-large-weights-1e6:边权越界",
+      "014-large-weights-1e9:边权越界"
+    ]
+  },
+  {
+    "key": "E17",
+    "max_n": 25,
+    "max_binary_levels": null,
+    "out_of_contract": [
+      "003-single-impossible:k>n"
+    ]
+  },
+  {
+    "key": "E18",
+    "max_n": 50,
+    "max_binary_levels": null,
+    "out_of_contract": [
+      "013-large-weights:边权越界"
+    ]
+  },
+  {
+    "key": "E19",
+    "max_n": 63,
+    "max_binary_levels": 11,
+    "out_of_contract": []
+  },
+  {
+    "key": "E20",
+    "max_n": 25,
+    "max_binary_levels": null,
+    "out_of_contract": []
+  }
+]
