@@ -632,3 +632,36 @@ Expanded 01E01-01E15 to exactly 20 weighted cases each, added boundary/normal/sp
 ### Next Steps
 
 - 等待独立 Reviewer 审阅 [PR #159](https://github.com/AzenAnn/DSA-Mastery/pull/159)；任务记录 .trellis/tasks/archive/2026-09/09-09-ch04-section-46-clarifications/research/review.md。
+
+
+## Session 27: 第 4 章树算法交互式演示
+
+**Date**: 2026-09-09
+**Task**: 第 4 章树算法交互式演示
+**Branch**: `codex/ch04-interactive-tree-demos`
+
+### Summary
+
+以 Azen 在最新 main 新建分支，参照 8.1/8.2 完成中序线索化、Morris、孩子兄弟转换与双遍历、先序展开四项演示。实现已验证，用户已授权提交 PR；代码已提交并完成实现任务归档。
+
+### Main Changes
+
+- 新增三份独立 HTML 和共享算法/视图/样式，挂载 4.4/4.5/4.6；提供播放、回退、重置、时间线、案例与模式切换、节点映射和指针快照。
+- 算法测试接入 pnpm test 与 Pages CI；同步演示规范和作者指南。
+
+### Git Commits
+
+- `9ee5578` — feat(ch04): add interactive tree algorithm demonstrations
+
+### Testing
+
+- [OK] pnpm test 全部通过；算法检查涵盖 626 种二叉树和 626 种有序森林。
+- [OK] 根路径新增 19 项、Pages 子路径全站 44 项浏览器测试全部通过；实际桌面/手机浅暗页面已检查。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 等待该分支的 GitHub PR 审阅；复核记录位于 .trellis/tasks/archive/2026-09/09-09-ch04-interactive-tree-demos/review.md，合并由维护者决定。
