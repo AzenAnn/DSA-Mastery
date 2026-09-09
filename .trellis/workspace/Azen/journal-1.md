@@ -601,3 +601,34 @@ Expanded 01E01-01E15 to exactly 20 weighted cases each, added boundary/normal/sp
 ### Status
 
 [OK] **Completed**
+
+
+## Session 26: 4.6 二叉树经典问题定义与复杂度修订
+
+**Date**: 2026-09-09
+**Task**: 4.6 二叉树经典问题定义与复杂度修订
+**Branch**: `codex/ch04-section-46-clarifications`
+
+### Summary
+
+从最新 origin/main 建分支，以 Azen 完成 4.6 宽度双定义、flatten 摊还分析、LCA 存储前提与图示、路径范围及标题修订。
+
+### Main Changes
+
+- 更新教材及两张配套 SVG；已按用户授权创建 PR #159，任务已归档。
+
+### Git Commits
+
+- `3df8149` — docs(ch04): 澄清 4.6 宽度定义、展开复杂度与 LCA
+
+### Testing
+
+- [OK] validate、discovery（含最终构建）、Pages 产物审计通过；C++ 6918 树形和 512443 次 LCA 查询、桌面/手机浅暗页面检查通过。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 等待独立 Reviewer 审阅 [PR #159](https://github.com/AzenAnn/DSA-Mastery/pull/159)；任务记录 .trellis/tasks/archive/2026-09/09-09-ch04-section-46-clarifications/research/review.md。
