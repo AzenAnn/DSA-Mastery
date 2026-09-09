@@ -51,10 +51,19 @@
     "id": "006-scale",
     "input": "tests/006-scale.in",
     "expected": "tests/006-scale.out",
-    "points": 10,
+    "points": 1,
     "tags": [
       "scale",
       "complexity"
     ]
-  }
+  },
+  {"id":"007-single","input":"tests/007-single.in","expected":"tests/007-single.out","points":1,"tags":["boundary"]},
+  {"id":"008-all-within","input":"tests/008-all-within.in","expected":"tests/008-all-within.out","points":1,"tags":["normal"]},
+  {"id":"009-boundary-repeated","input":"tests/009-boundary-repeated.in","expected":"tests/009-boundary-repeated.out","points":1,"tags":["boundary","regression"]},
+  {"id":"010-large-gaps","input":"tests/010-large-gaps.in","expected":"tests/010-large-gaps.out","points":1,"tags":["normal"]},
+  {"id":"011-burst-and-gap","input":"tests/011-burst-and-gap.in","expected":"tests/011-burst-and-gap.out","points":1,"tags":["normal"]},
+  {"id":"012-near-zero","input":"tests/012-near-zero.in","expected":"tests/012-near-zero.out","points":1,"tags":["boundary"]},
+  {"id":"013-max-timestamp","input":"tests/013-max-timestamp.in","expected":"tests/013-max-timestamp.out","points":1,"tags":["boundary"]},
+  {"id":"014-steady-spacing","input":"tests/014-steady-spacing.in","expected":"tests/014-steady-spacing.out","points":1,"tags":["normal"]},
+  {"id":"015-window-expiry","input":"tests/015-window-expiry.in","expected":"tests/015-window-expiry.out","points":1,"tags":["regression"]}
 ]

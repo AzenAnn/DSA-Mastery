@@ -52,11 +52,20 @@
     "id": "006-scale-transfer",
     "input": "tests/006-scale-transfer.in",
     "expected": "tests/006-scale-transfer.out",
-    "points": 10,
+    "points": 1,
     "tags": [
       "scale",
       "complexity",
       "amortized"
     ]
-  }
+  },
+  {"id":"007-single","input":"tests/007-single.in","expected":"tests/007-single.out","points":1,"tags":["boundary"]},
+  {"id":"008-front-repeat","input":"tests/008-front-repeat.in","expected":"tests/008-front-repeat.out","points":1,"tags":["regression"]},
+  {"id":"009-drain-refill","input":"tests/009-drain-refill.in","expected":"tests/009-drain-refill.out","points":1,"tags":["normal"]},
+  {"id":"010-empty-interleave","input":"tests/010-empty-interleave.in","expected":"tests/010-empty-interleave.out","points":1,"tags":["boundary","error"]},
+  {"id":"011-negative-values","input":"tests/011-negative-values.in","expected":"tests/011-negative-values.out","points":1,"tags":["normal"]},
+  {"id":"012-transfer-chain","input":"tests/012-transfer-chain.in","expected":"tests/012-transfer-chain.out","points":1,"tags":["regression"]},
+  {"id":"013-size-empty","input":"tests/013-size-empty.in","expected":"tests/013-size-empty.out","points":1,"tags":["normal"]},
+  {"id":"014-int64-values","input":"tests/014-int64-values.in","expected":"tests/014-int64-values.out","points":1,"tags":["boundary"]},
+  {"id":"015-alternating","input":"tests/015-alternating.in","expected":"tests/015-alternating.out","points":1,"tags":["normal"]}
 ]

@@ -62,7 +62,13 @@
     "id": "009-scale",
     "input": "tests/009-scale.in",
     "expected": "tests/009-scale.out",
-    "points": 10,
+    "points": 4,
     "tags": ["scale", "complexity"]
-  }
+  },
+  {"id":"010-two-bars","input":"tests/010-two-bars.in","expected":"tests/010-two-bars.out","points":1,"tags":["boundary"]},
+  {"id":"011-zero-only","input":"tests/011-zero-only.in","expected":"tests/011-zero-only.out","points":1,"tags":["boundary"]},
+  {"id":"012-tall-middle","input":"tests/012-tall-middle.in","expected":"tests/012-tall-middle.out","points":1,"tags":["normal"]},
+  {"id":"013-plateau-with-dips","input":"tests/013-plateau-with-dips.in","expected":"tests/013-plateau-with-dips.out","points":1,"tags":["regression"]},
+  {"id":"014-mixed-small","input":"tests/014-mixed-small.in","expected":"tests/014-mixed-small.out","points":1,"tags":["normal"]},
+  {"id":"015-large-height","input":"tests/015-large-height.in","expected":"tests/015-large-height.out","points":1,"tags":["overflow"]}
 ]
