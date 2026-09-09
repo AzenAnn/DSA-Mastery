@@ -4,7 +4,7 @@ description: "学习受限线性结构的后进先出与先进先出语义，以
 order: 0
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-21"
+updated: "2026-09-09"
 contributors: ["Azen", "Jeff", "walker2398", "qzmqzm123"]
 status: "draft"
 ---

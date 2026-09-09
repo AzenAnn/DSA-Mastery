@@ -24,7 +24,7 @@ duration: "90～120 分钟"
 
 ## 前置知识
 
-完成 [Lab 07-10](../E-07-07-dijkstra-trace/README.md) 与 [Lab 07-12](../E-07-09-network-delay-time/README.md)。本题是考研与期末"最短路 + 附加判据"大题的典型代表，也是浙大 PAT 1003（Emergency）的原题改编。
+完成 [Lab 07-E-07：Dijkstra 逐轮推演](../E-07-07-dijkstra-trace/README.md)与 [Lab 07-E-09：网络延迟时间](../E-07-09-network-delay-time/README.md)。本题需要在求最短距离的同时维护路径条数与最大救援队数，改编自浙大 PAT 1003（Emergency）。
 
 ## 题目背景
 
@@ -49,7 +49,7 @@ Dijkstra 原来的 `prev` 只记录一条前驱；本题需要记录的是"有�
 1. **更短**（`dist[u] + w < dist[v]`）：旧的最短路全部作废。`dist[v]` 更新；`cnt[v] = cnt[u]`；`sum[v] = sum[u] + c[v]`；
 2. **等长**（`dist[u] + w == dist[v]`）：新发现同长度路径。`cnt[v] += cnt[u]`；`sum[v] = max(sum[v], sum[u] + c[v])`。
 
-注意**等长分支不能动 `dist`**，且两种分支都要在 `dist[v]` 的基础上做，不要写成别的方式。
+实现时先计算候选距离 `candidate = dist[u] + w`，再与当前 `dist[v]` 比较。候选距离严格更小时，覆盖 `dist[v]`、`cnt[v]` 和 `sum[v]`；候选距离相等时，保持 `dist[v]` 不变，只累加路径条数并更新最大救援队数。不要只比较单条边权 `w`。
 
 ## 输入格式
 
