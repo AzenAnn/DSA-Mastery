@@ -35,7 +35,8 @@
     "expected": "tests/004-single.out",
     "points": 15,
     "tags": [
-      "boundary"
+      "boundary",
+      "numeric-boundary"
     ]
   },
   {

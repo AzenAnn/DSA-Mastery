@@ -1252,9 +1252,9 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
 
   await expect(projectGroup.locator(":scope > .items a")).toHaveCount(3);
   for (const title of [
-    "Lab 02-P-01：可撤销浏览器——栈的超级大综合",
-    "Lab 02-P-02：超市收银模拟——队列的大综合",
-    "Lab 02-P-03：停车场管理——栈与队列的大综合",
+    "Lab 02-P-01：可撤销浏览器——栈的综合应用",
+    "Lab 02-P-02：超市收银模拟——队列的综合应用",
+    "Lab 02-P-03：停车场管理——栈与队列的综合应用",
   ]) {
     await expect(projectGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }

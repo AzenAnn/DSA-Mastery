@@ -44,7 +44,8 @@
     "expected": "tests/005-alternating.out",
     "points": 15,
     "tags": [
-      "normal"
+      "normal",
+      "numeric-boundary"
     ]
   },
   {
