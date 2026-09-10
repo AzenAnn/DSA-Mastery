@@ -250,6 +250,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/labs/chapter-01/theory/T-01-05-static-linked-list-quiz/"]').first(),
   ).toBeVisible();
+  await input.fill("线性表理论大题训练");
+  await expect(
+    results.locator('a[href*="/labs/chapter-01/theory/T-01-06-linear-list-written/"]').first(),
+  ).toBeVisible();
   await input.fill("栈与队列综合理论题");
   await expect(
     results.locator('a[href*="/labs/chapter-02/theory/T-02-03-stack-queue-comprehensive/"]').first(),
@@ -1112,7 +1116,10 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   await theoryGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
-  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(5);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(6);
+  await expect(
+    theoryGroup.getByRole("link", { name: "01T06 · 线性表理论大题训练", exact: true }),
+  ).toHaveAttribute("href", /\/labs\/chapter-01\/theory\/T-01-06-linear-list-written\/$/);
 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");

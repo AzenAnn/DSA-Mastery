@@ -685,6 +685,68 @@ Expanded 01E01-01E15 to exactly 20 weighted cases each, added boundary/normal/sp
 
 - [OK] pnpm test; Lab schema validation; exhaustive answers and 584-question dedup; Pages regression; desktop/mobile light/dark browser checks passed.
 
+
+## Session 29: Ch1 线性表 15 道理论大题与本地预览
+
+**Date**: 2026-09-10
+**Task**: Ch1 线性表 15 道理论大题与本地预览
+**Branch**: `feat/ch01-linear-list-written-theory`
+
+### Summary
+
+以 Azen 整理指定线性表笔记，新增 01T06：15 道理论大题、折叠解析、证明和评分要点，来源与排重记录完整。已完成本地预览，等待用户验收后再推送。
+
+### Main Changes
+
+- 新增 README-only Theory Lab、拆链示意图、来源清单、章节入口与导航回归。
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] pnpm test 通过；Pages 子路径构建和 check:site 通过；44 项 Pages 浏览器回归通过；新 Lab 四组浅暗/桌面手机浏览器验收通过。
+- [OK] 独立模型验证 53629 个数组用例与 34034 个链表用例，另覆盖共享尾段；git diff --check 通过。
+
 ### Status
 
 [OK] **Completed**
+
+### Next Steps
+
+- 用户预览 http://127.0.0.1:4173/DSA-Mastery/labs/chapter-01/theory/T-01-06-linear-list-written/ ，验收前不提交、不推送、不创建 PR。
+
+
+## Session 30: Ch1 理论大题训练提交 PR #170
+
+**Date**: 2026-09-10
+**Task**: Ch1 理论大题训练提交 PR #170
+**Branch**: `feat/ch01-linear-list-written-theory`
+
+### Summary
+
+用户验收本地预览后授权提交 PR。同步 main 已合入的栈与队列 PR #167，保留两章搜索回归和独立日志，提交 15 道线性表理论大题训练并创建 https://github.com/AzenAnn/DSA-Mastery/pull/170 。
+
+### Main Changes
+
+- 新增 01T06、题图、来源与排重记录、章节入口和导航测试；任务归档至 .trellis/tasks/archive/2026-09/09-10-ch01-linear-list-written-theory/。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5923e5c` | (see git log) |
+
+### Testing
+
+- [OK] 同步后 pnpm test、Pages 子路径构建与 check:site、完整 44 项 Pages 回归全部通过；新 Lab 桌面手机浅暗四组检查通过。
+- [OK] 对最新仓库 390 个内容文件排重，53629 个数组用例和 34034 个链表用例通过；仅 1 项既有 Windows 符号链接测试按策略跳过。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- PR #170 等待审阅，未合并；本地预览 http://127.0.0.1:4173/DSA-Mastery/labs/chapter-01/theory/T-01-06-linear-list-written/ 保持运行。
