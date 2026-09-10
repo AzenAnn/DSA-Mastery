@@ -1,0 +1,193 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-single",
+    "input": "tests/002-single.in",
+    "expected": "tests/002-single.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-m-equals-one",
+    "input": "tests/003-m-equals-one.in",
+    "expected": "tests/003-m-equals-one.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-larger-m",
+    "input": "tests/004-larger-m.in",
+    "expected": "tests/004-larger-m.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-two-m-one",
+    "input": "tests/005-two-m-one.in",
+    "expected": "tests/005-two-m-one.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-two-m-two",
+    "input": "tests/006-two-m-two.in",
+    "expected": "tests/006-two-m-two.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-two-m-large",
+    "input": "tests/007-two-m-large.in",
+    "expected": "tests/007-two-m-large.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-m-equals-n",
+    "input": "tests/008-m-equals-n.in",
+    "expected": "tests/008-m-equals-n.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-m-n-plus-one",
+    "input": "tests/009-m-n-plus-one.in",
+    "expected": "tests/009-m-n-plus-one.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-prime-pair",
+    "input": "tests/010-prime-pair.in",
+    "expected": "tests/010-prime-pair.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-power-of-two",
+    "input": "tests/011-power-of-two.in",
+    "expected": "tests/011-power-of-two.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-large-m-small-n",
+    "input": "tests/012-large-m-small-n.in",
+    "expected": "tests/012-large-m-small-n.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "013-n-max-m-one",
+    "input": "tests/013-n-max-m-one.in",
+    "expected": "tests/013-n-max-m-one.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "complexity"
+    ]
+  },
+  {
+    "id": "014-n-max-m-two",
+    "input": "tests/014-n-max-m-two.in",
+    "expected": "tests/014-n-max-m-two.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "complexity"
+    ]
+  },
+  {
+    "id": "015-medium-balanced",
+    "input": "tests/015-medium-balanced.in",
+    "expected": "tests/015-medium-balanced.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-m-max-n-one",
+    "input": "tests/016-m-max-n-one.in",
+    "expected": "tests/016-m-max-n-one.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "017-m-max-small-n",
+    "input": "tests/017-m-max-small-n.in",
+    "expected": "tests/017-m-max-small-n.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "complexity"
+    ]
+  },
+  {
+    "id": "018-stress-balanced",
+    "input": "tests/018-stress-balanced.in",
+    "expected": "tests/018-stress-balanced.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  },
+  {
+    "id": "019-stress-n-max",
+    "input": "tests/019-stress-n-max.in",
+    "expected": "tests/019-stress-n-max.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "boundary"
+    ]
+  },
+  {
+    "id": "020-stress-m-max",
+    "input": "tests/020-stress-m-max.in",
+    "expected": "tests/020-stress-m-max.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "boundary"
+    ]
+  }
+]

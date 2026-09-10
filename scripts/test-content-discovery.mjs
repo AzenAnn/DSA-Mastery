@@ -5,13 +5,29 @@ import { fileURLToPath } from "node:url";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const lessonDirectory = path.join(projectRoot, "content", "chapter-99-discovery-fixture");
-const labDirectory = path.join(projectRoot, "labs", "chapter-99", "lab-99-01-discovery-fixture");
+const labDirectory = path.join(
+  projectRoot,
+  "labs",
+  "chapter-99",
+  "exercise",
+  "E-99-01-discovery-fixture",
+);
+const stableTitleLabDirectory = path.join(
+  projectRoot,
+  "labs",
+  "chapter-99",
+  "theory",
+  "T-99-01-stable-title-fixture",
+);
 const sidebarLabDirectory = path.join(
   projectRoot,
   "labs",
   "chapter-01",
-  "lab-01-99-sidebar-discovery-fixture",
+  "exercise",
+  "E-01-99-sidebar-discovery-fixture",
 );
+const projectCategoryDirectory = path.join(projectRoot, "labs", "chapter-99", "project");
+const projectCategoryMarker = path.join(projectCategoryDirectory, ".gitkeep");
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const pagesEnvironment = {
   ...process.env,
@@ -89,6 +105,10 @@ container-code
 示例正文。
 :::
 
+::: example 示例 · $n=16$ 时最多比较几次
+标题公式渲染检查正文。
+:::
+
 ::: counterexample
 反例正文。
 :::
@@ -123,35 +143,61 @@ const grouped: boolean = true
 
 - [ ] 自动发现任务列表
 
-[进入自动发现 Lab](../../labs/chapter-99/lab-99-01-discovery-fixture/README.md)
+[进入自动发现 Lab](../../labs/chapter-99/exercise/E-99-01-discovery-fixture/README.md)
 `;
 
 const lab = `---
-title: "Lab 99-01：自动发现验证"
+title: "Lab 99-E-01：自动发现验证"
 description: "验证新增 Lab 会自动进入页面、导航、搜索和统计。"
 order: 1
 chapter: 99
+labId: "99E01"
 chapterTitle: "自动发现验证"
 updated: "2026-08-10"
 contributors: ["Discovery Test"]
 status: "draft"
 lab: true
+labCategory: exercise
 difficulty: "测试"
 duration: "1 分钟"
 ---
 
-# Lab 99-01：自动发现验证
+# Lab 99-E-01：自动发现验证
 
 ## 验收标准
 
 - [ ] 页面、导航和搜索均包含本 Lab。
 `;
 
+const stableTitleLab = `---
+title: "Lab 99-T-01：稳定标题验证"
+description: "验证目录、labId、frontmatter 标题和 H1 使用同一稳定编号。"
+order: 2
+chapter: 99
+labId: "99T01"
+chapterTitle: "自动发现验证"
+updated: "2026-09-01"
+contributors: ["Discovery Test"]
+status: "draft"
+lab: true
+labCategory: theory
+difficulty: "测试"
+duration: "1 分钟"
+---
+
+# Lab 99-T-01：稳定标题验证
+
+## 验收标准
+
+- [ ] 目录、题号和标题保持一致。
+`;
+
 const sidebarLab = `---
-title: "Lab 01-99：章节侧栏自动收录验证"
+title: "Lab 01-E-99：章节侧栏自动收录验证"
 description: "验证新增线性表 Lab 会自动进入本章 Labs 的实验分类。"
 order: 99
 chapter: 1
+labId: "01E99"
 chapterTitle: "线性表"
 updated: "2026-08-14"
 contributors: ["Discovery Test"]
@@ -162,7 +208,7 @@ duration: "1 分钟"
 labCategory: exercise
 ---
 
-# Lab 01-99：章节侧栏自动收录验证
+# Lab 01-E-99：章节侧栏自动收录验证
 
 ## 验收标准
 
@@ -211,10 +257,18 @@ let primaryError;
 try {
   await mkdir(lessonDirectory, { recursive: true });
   await mkdir(labDirectory, { recursive: true });
+  await mkdir(stableTitleLabDirectory, { recursive: true });
+  await mkdir(projectCategoryDirectory, { recursive: true });
   await mkdir(sidebarLabDirectory, { recursive: true });
   await writeFile(path.join(lessonDirectory, "00-autodiscovery.md"), lesson, "utf8");
   await writeFile(path.join(labDirectory, "README.md"), lab, "utf8");
+  await writeFile(
+    path.join(stableTitleLabDirectory, "README.md"),
+    stableTitleLab,
+    "utf8",
+  );
   await writeFile(path.join(sidebarLabDirectory, "README.md"), sidebarLab, "utf8");
+  await writeFile(projectCategoryMarker, "", "utf8");
 
   runNpm(["run", "validate:content"]);
   runNpm(["run", "build:vitepress"]);
@@ -225,7 +279,29 @@ try {
     "utf8",
   );
   const labHtml = await readFile(
-    path.join(projectRoot, "dist", "pages", "labs", "chapter-99", "lab-99-01-discovery-fixture", "index.html"),
+    path.join(
+      projectRoot,
+      "dist",
+      "pages",
+      "labs",
+      "chapter-99",
+      "exercise",
+      "E-99-01-discovery-fixture",
+      "index.html",
+    ),
+    "utf8",
+  );
+  const stableTitleLabHtml = await readFile(
+    path.join(
+      projectRoot,
+      "dist",
+      "pages",
+      "labs",
+      "chapter-99",
+      "theory",
+      "T-99-01-stable-title-fixture",
+      "index.html",
+    ),
     "utf8",
   );
   const sidebarLabHtml = await readFile(
@@ -235,7 +311,20 @@ try {
       "pages",
       "labs",
       "chapter-01",
-      "lab-01-99-sidebar-discovery-fixture",
+      "exercise",
+      "E-01-99-sidebar-discovery-fixture",
+      "index.html",
+    ),
+    "utf8",
+  );
+  const chapterFiveOutlineHtml = await readFile(
+    path.join(
+      projectRoot,
+      "dist",
+      "pages",
+      "learn",
+      "outline",
+      "chapter-05-tree-applications",
       "index.html",
     ),
     "utf8",
@@ -275,6 +364,9 @@ try {
   if (lessonHtml.includes('<span><img src="x"') || lessonHtml.includes("<span><img src=x")) {
     throw new Error("Theory container title emitted executable HTML");
   }
+  if (!lessonHtml.includes("示例 · <mjx-container")) {
+    throw new Error("Theory container title did not render inline MathJax");
+  }
   if (!lessonHtml.includes("<mark>语义高亮</mark>")) {
     throw new Error("Mark syntax did not render semantic <mark>");
   }
@@ -301,10 +393,16 @@ try {
   if (lessonHtml.includes("::: definition") || lessonHtml.includes("::: theorem")) {
     throw new Error("Unparsed theory container marker leaked into the artifact");
   }
-  if (!lessonHtml.includes("/DSA-Mastery/labs/chapter-99/lab-99-01-discovery-fixture/")) {
+  if (!lessonHtml.includes("/DSA-Mastery/labs/chapter-99/exercise/E-99-01-discovery-fixture/")) {
     throw new Error("Relative Markdown link was not rewritten to the Pages-aware Lab route");
   }
-  if (!labHtml.includes("Lab 99-01：自动发现验证")) throw new Error("Temporary Lab page was not generated");
+  if (!labHtml.includes("Lab 99-E-01：自动发现验证") || !labHtml.includes("99E01")) throw new Error("Temporary Lab page or stable ID was not generated");
+  if (
+    !stableTitleLabHtml.includes("Lab 99-T-01：稳定标题验证") ||
+    !stableTitleLabHtml.includes("99T01")
+  ) {
+    throw new Error("Stable Lab directory and document title did not stay aligned");
+  }
   const searchFiles = (await filesRecursively(path.join(projectRoot, "dist", "pages")))
     .filter((file) => file.endsWith(".js"));
   const searchableJavaScript = (await Promise.all(searchFiles.map((file) => readFile(file, "utf8")))).join("\n");
@@ -320,26 +418,88 @@ try {
     !sidebarHtml.includes("本章 Labs") ||
     !sidebarHtml.includes("实验 Exercise") ||
     !sidebarHtml.includes("course-lab-category--exercise") ||
-    !sidebarHtml.includes("Lab 01-99：章节侧栏自动收录验证") ||
+    !sidebarHtml.includes("01E99 · 章节侧栏自动收录验证") ||
+    sidebarHtml.includes("01E99 · Lab 01-E-99") ||
     !sidebarHtml.includes(
-      'href="/DSA-Mastery/labs/chapter-01/lab-01-99-sidebar-discovery-fixture/"',
+      'href="/DSA-Mastery/labs/chapter-01/exercise/E-01-99-sidebar-discovery-fixture/"',
     )
   ) {
     throw new Error("Temporary chapter-01 Lab did not enter Ch.1 Exercise sidebar automatically");
+  }
+  const chapterFiveSidebarStart = chapterFiveOutlineHtml.indexOf('<aside class="VPSidebar"');
+  const chapterFiveSidebarEnd = chapterFiveOutlineHtml.indexOf(
+    "</aside>",
+    chapterFiveSidebarStart,
+  );
+  const chapterFiveSidebar = chapterFiveOutlineHtml.slice(
+    chapterFiveSidebarStart,
+    chapterFiveSidebarEnd,
+  );
+  const chapterFiveItemStart = chapterFiveSidebar.indexOf(
+    "/learn/outline/chapter-05-tree-applications/",
+  );
+  const chapterFiveItemEnd = chapterFiveSidebar.indexOf(
+    "Part III · 图结构",
+    chapterFiveItemStart,
+  );
+  const chapterFiveItem = chapterFiveSidebar.slice(chapterFiveItemStart, chapterFiveItemEnd);
+  for (const required of [
+    "本章 Labs",
+    "理论 Theory",
+    "实验 Exercise",
+    "工程 Project",
+    "05T01 · 森林与二叉树转换题精练",
+    "05T02 · 树与森林遍历题精练",
+    "05T03 · 哈夫曼树与编码题精练",
+    "05T04 · 并查集题精练",
+    "05T05 · 堆题精练",
+    "05E01 · 二叉搜索树的插入与查找",
+    "05E17 · B+ 树的范围查询",
+    "暂无工程型 Lab",
+  ]) {
+    if (!chapterFiveItem.includes(required)) {
+      throw new Error(`Chapter 5 categorized Lab interface is missing: ${required}`);
+    }
+  }
+  const chapterFiveLabLinks = chapterFiveItem.match(/\/labs\/chapter-05\//g) ?? [];
+  if (
+    chapterFiveSidebarStart < 0 ||
+    chapterFiveSidebarEnd < 0 ||
+    chapterFiveItemStart < 0 ||
+    chapterFiveItemEnd < 0 ||
+    chapterFiveLabLinks.length !== 22 ||
+    chapterFiveItem.includes("暂无理论型 Lab") ||
+    chapterFiveItem.includes("暂无实验型 Lab")
+  ) {
+    throw new Error("Chapter 5 Theory/Exercise Labs or empty Project slot are inconsistent");
   }
 } catch (error) {
   primaryError = error;
 } finally {
   assertFixtureTarget(lessonDirectory, path.join(projectRoot, "content"), "chapter-99-discovery-fixture");
-  assertFixtureTarget(labDirectory, path.join(projectRoot, "labs", "chapter-99"), "lab-99-01-discovery-fixture");
+  assertFixtureTarget(
+    labDirectory,
+    path.join(projectRoot, "labs", "chapter-99", "exercise"),
+    "E-99-01-discovery-fixture",
+  );
+  assertFixtureTarget(
+    stableTitleLabDirectory,
+    path.join(projectRoot, "labs", "chapter-99", "theory"),
+    "T-99-01-stable-title-fixture",
+  );
   assertFixtureTarget(
     sidebarLabDirectory,
-    path.join(projectRoot, "labs", "chapter-01"),
-    "lab-01-99-sidebar-discovery-fixture",
+    path.join(projectRoot, "labs", "chapter-01", "exercise"),
+    "E-01-99-sidebar-discovery-fixture",
   );
   await rm(lessonDirectory, { recursive: true, force: true });
   await rm(labDirectory, { recursive: true, force: true });
+  await rm(stableTitleLabDirectory, { recursive: true, force: true });
   await rm(sidebarLabDirectory, { recursive: true, force: true });
+  await rm(projectCategoryMarker, { force: true });
+  await rmdir(path.join(projectRoot, "labs", "chapter-99", "theory")).catch(() => {});
+  await rmdir(path.join(projectRoot, "labs", "chapter-99", "exercise")).catch(() => {});
+  await rmdir(projectCategoryDirectory).catch(() => {});
   await rmdir(path.join(projectRoot, "labs", "chapter-99")).catch(() => {});
   try {
     runNpm(["run", "build:vitepress"]);
@@ -349,4 +509,4 @@ try {
 }
 
 if (primaryError) throw primaryError;
-console.log("自动发现检查通过：临时教材与 Lab 已进入构建、导航、搜索及第 1 章分类 Labs，并被安全清理。");
+console.log("自动发现检查通过：临时内容与分类 Labs 已进入构建，Ch.5 Theory 5 个、Exercise 17 个入口及 Project 空槽位存在，fixture 已安全清理。");

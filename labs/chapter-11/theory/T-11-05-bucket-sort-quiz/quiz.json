@@ -1,0 +1,192 @@
+[
+  {
+    "id": "ds-drill-bucket-sort-001",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-001",
+    "stem": "桶排序的核心思想是？",
+    "options": [
+      "相邻交换",
+      "把值域分成若干桶，元素入桶，桶内排序后按桶序合并",
+      "递归划分",
+      "按位分桶"
+    ],
+    "answer": 1,
+    "explanation": "桶排序把值域划分成区间（桶），元素入对应桶，桶内排序，最后按桶序合并。"
+  },
+  {
+    "id": "ds-drill-bucket-sort-002",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-002",
+    "stem": "桶排序在数据均匀分布时，平均时间复杂度接近？",
+    "options": [
+      "O(n²)",
+      "O(n log n)",
+      "O(n)",
+      "O(n + k)"
+    ],
+    "answer": 2,
+    "explanation": "均匀分布时每桶元素很少，桶内排序开销可忽略，整体接近线性 O(n)。"
+  },
+  {
+    "id": "ds-drill-bucket-sort-003",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-003",
+    "stem": "桶排序最坏情况退化为 O(n²) 的原因是？",
+    "options": [
+      "桶数量太多",
+      "所有元素落入同一个桶，退化为插入排序",
+      "数据太小",
+      "使用了稳定排序"
+    ],
+    "answer": 1,
+    "explanation": "所有元素挤进一个桶时，桶内排序退化为插入排序，O(n²)。"
+  },
+  {
+    "id": "ds-drill-bucket-sort-004",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-004",
+    "stem": "关于桶排序的稳定性，下列说法正确的是？",
+    "options": [
+      "一定稳定，因为是分桶",
+      "一定不稳定",
+      "取决于桶内排序策略；桶内稳定且按桶序合并才稳定",
+      "稳定性取决于桶的数量"
+    ],
+    "answer": 2,
+    "explanation": "桶排序稳定性取决于桶内排序策略；桶内用稳定排序且按桶序合并才稳定。"
+  },
+  {
+    "id": "ds-drill-bucket-sort-005",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-005",
+    "stem": "桶排序的空间复杂度是？",
+    "options": [
+      "O(1)",
+      "O(n)",
+      "O(n log n)",
+      "O(k)"
+    ],
+    "answer": 1,
+    "explanation": "桶 + 桶内元素总共 O(n)。"
+  },
+  {
+    "id": "ds-drill-bucket-sort-006",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-006",
+    "stem": "桶排序要接近线性时间，数据需要满足什么条件？",
+    "options": [
+      "完全逆序",
+      "均匀分布在各桶",
+      "值域极大",
+      "全部相同"
+    ],
+    "answer": 1,
+    "explanation": "数据均匀分布时每桶元素少，桶内排序快，整体接近 O(n)。"
+  },
+  {
+    "id": "ds-drill-bucket-sort-007",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-007",
+    "stem": "桶排序和计数排序的共同点是？",
+    "options": [
+      "都是比较排序",
+      "都利用值域结构，都是非比较排序",
+      "都稳定",
+      "都要求数据是字符串"
+    ],
+    "answer": 1,
+    "explanation": "两者都是非比较排序，利用值域区间/值域计数，可突破 Ω(n log n)。"
+  },
+  {
+    "id": "ds-drill-bucket-sort-008",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-008",
+    "stem": "设 m 个桶、每桶 n/m 个元素、桶内用插入排序，桶排序复杂度表达式是？",
+    "options": [
+      "O(n) + O(n²/m)",
+      "O(n log n)",
+      "O(n²)",
+      "O(n + m)"
+    ],
+    "answer": 0,
+    "explanation": "T(n) = O(n) + m·O((n/m)²) = O(n) + O(n²/m)。"
+  },
+  {
+    "id": "ds-drill-bucket-sort-009",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-009",
+    "stem": "桶排序每个元素会被放入几个桶？",
+    "options": [
+      "0 个",
+      "恰好 1 个（唯一对应桶）",
+      "多个",
+      "随机"
+    ],
+    "answer": 1,
+    "explanation": "每个元素都放进唯一对应的桶，保证不重不漏。"
+  },
+  {
+    "id": "ds-drill-bucket-sort-010",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "bucket sort"
+    ],
+    "targetId": "ds-drill-bucket-sort-010",
+    "stem": "桶排序正确性的关键保证是？",
+    "options": [
+      "桶内比较",
+      "桶编号按区间顺序排列 + 桶内有序，合并后全局有序",
+      "稳定排序",
+      "随机划分"
+    ],
+    "answer": 1,
+    "explanation": "桶按区间顺序编号，桶内排序保证区间内有序，故按桶序合并得到全局有序。"
+  }
+]

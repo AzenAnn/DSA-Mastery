@@ -1,0 +1,5 @@
+[
+  { "id": "001-chaining", "input": "tests/001-chaining.in", "expected": "tests/001-chaining.out", "points": 40, "tags": ["normal"] },
+  { "id": "002-linear", "input": "tests/002-linear.in", "expected": "tests/002-linear.out", "points": 30, "tags": ["normal"] },
+  { "id": "003-quadratic", "input": "tests/003-quadratic.in", "expected": "tests/003-quadratic.out", "points": 30, "tags": ["normal"] }
+]

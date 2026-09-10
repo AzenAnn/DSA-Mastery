@@ -1,0 +1,61 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 15,
+    "tags": ["sample"],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-window-one",
+    "input": "tests/002-window-one.in",
+    "expected": "tests/002-window-one.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-window-all",
+    "input": "tests/003-window-all.in",
+    "expected": "tests/003-window-all.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-increasing",
+    "input": "tests/004-increasing.in",
+    "expected": "tests/004-increasing.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "005-decreasing",
+    "input": "tests/005-decreasing.in",
+    "expected": "tests/005-decreasing.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "006-duplicate-maxima",
+    "input": "tests/006-duplicate-maxima.in",
+    "expected": "tests/006-duplicate-maxima.out",
+    "points": 10,
+    "tags": ["regression"]
+  },
+  {
+    "id": "007-negative-values",
+    "input": "tests/007-negative-values.in",
+    "expected": "tests/007-negative-values.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "008-scale",
+    "input": "tests/008-scale.in",
+    "expected": "tests/008-scale.out",
+    "points": 10,
+    "tags": ["scale", "complexity"]
+  }
+]

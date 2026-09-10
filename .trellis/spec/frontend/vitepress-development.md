@@ -59,7 +59,7 @@ VitePress `1.6.4` 的 Labs 跨页面 outline 兼容例外必须保留：顶栏 L
 
 ## 6. Routes, Links, and Pages Base
 
-- `content/:chapter/:page.md` 映射到 `/learn/:chapter/:page/`；`labs/:chapter/:lab/README.md` 映射到 `/labs/:chapter/:lab/`。公共 URL 由 config 的 rewrites 和统一 route map 维护。
+- `content/:chapter/:page.md` 映射到 `/learn/:chapter/:page/`；`labs/:chapter/:category/:lab/README.md` 映射到 `/labs/:chapter/:category/:lab/`。公共 URL 由 config 的 rewrites 和统一 route map 维护。
 - 源码 URL 不含 `/DSA-Mastery/`。正文优先使用相对 `.md` 链接；Vue 站内链接使用 `withBase` 或 VitePress 生成的 route。
 - `GITHUB_PAGES_BASE_PATH` 只在 config 中规范化一次，空值为 `/`，Pages 构建输出固定为 `dist/pages`。任何双 base、硬编码 base 或 source path 泄漏都是阻塞问题。
 - 修改 route、rewrite、base、Markdown link transform 或 Labs 导航时，同时验证本地 `/` 与 Pages `/DSA-Mastery/`；不要只打开开发服务判断成功。
@@ -97,6 +97,80 @@ const files = import.meta.glob('../content/**/*.md')
 
 前者让索引只有一个来源并保持浏览器 bundle 可序列化；后者复制数据、泄漏 Pages base 并跨越构建期/浏览器边界。
 
-## 9. Completion Review
+## 9. Graphviz Diagram Integration
+
+### Scope / Trigger
+
+修改 `vitepress-plugin-diagrams`、Graphviz fenced blocks、Kroki 环境变量、图资源缓存或 Pages 图资源路径时适用。
+
+### Signatures
+
+`.vitepress/config.ts` 必须创建：
+
+```ts
+createBuildTimeDiagramsPlugin({
+  diagramsDir: "public/diagrams",
+  diagramsDistDir: "diagrams",
+  publicPath: `${base}diagrams`,
+  krokiServerUrl: process.env.KROKI_SERVER_URL ?? "https://kroki.io",
+  enableFileImports: false,
+})
+```
+
+### Contracts
+
+- 图源只能写在 Markdown 的纯 ```` ```graphviz ```` fenced block 中；插件按完整 info string 匹配，不支持 `[filename]` 后缀。
+- `diagram id` 只能使用稳定 ASCII 标识；caption 描述教学关系。SVG 缓存位于 `public/diagrams/`，最终资产位于 `dist/pages/diagrams/`。
+- `KROKI_SERVER_URL` 可选；未设置时使用 `https://kroki.io`。`publicPath` 必须包含规范化 Pages base。
+- DOT 若固定使用深色文字或边线，画布必须使用不透明浅色背景（当前基线为 `bgcolor="#ffffff"`）；禁止同时使用透明画布与固定深色文字，否则暗色主题会让表格外标签失去对比度。只有在全部节点、边和文字都经过浅/暗主题实测可读时才能使用透明画布。
+
+### Validation & Error Matrix
+
+| 条件 | 结果 |
+| --- | --- |
+| 缺少或无法生成 SVG | build 在 `generateBundle` 阶段失败并指出图路径 |
+| `graphviz [name]` info string | 被当作普通代码块；作者必须改为纯 `graphviz` |
+| Pages 构建使用 `/diagrams/...` | `check:site` 报 base 越界；使用 `${base}diagrams` |
+| SVG 未进入 `dist/pages/diagrams` | 产物断链；保留 `diagramsDistDir: "diagrams"` |
+
+### Good / Base / Bad Cases
+
+- Good：`graphviz` 块配稳定 ID，`publicPath` 为 `/DSA-Mastery/diagrams`，Pages 产物能找到对应 SVG。
+- Base：本地 `base=/`，图 URL 为 `/diagrams/...`，构建复用缓存。
+- Bad：浏览器端 Graphviz/WASM、手写 `/DSA-Mastery/`，或把 SVG 当作第二份 Markdown 来源。
+
+### Tests Required
+
+- `pnpm run validate`、`pnpm run build`、`pnpm run check:site`。
+- 设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 后重复 build/check，并断言图资源只含一个 Pages base。
+- `rg -n '^```text \[[^]]+\.txt\]$' content/chapter-04-tree` 必须无结果；代表性树/图页面检查 `<figure class="vpd-diagram">`、`<img>` 和 caption。
+
+### Wrong vs Correct
+
+````md
+<!-- Wrong: plugin will not match the full info string -->
+```graphviz [tree.dot]
+
+<!-- Correct -->
+```graphviz
+````
+
+暗色主题下的固定色 SVG 还需保证画布对比度：
+
+```dot
+// Wrong: 暗色页面会透过透明画布，固定深色标签几乎不可见
+digraph WrongDiagram {
+  graph [bgcolor="transparent"];
+  node [fontcolor="#0f172a"];
+}
+
+// Correct: SVG 自带稳定浅色画布，浅色与暗色页面都可读
+digraph CorrectDiagram {
+  graph [bgcolor="#ffffff"];
+  node [fontcolor="#0f172a"];
+}
+```
+
+## 10. Completion Review
 
 收尾前逐项确认：源码无硬编码 Pages base；没有新增第二份内容/导航索引；默认主题能力仍可访问；SSR/build、类型、lint、产物、真实点击和必要的视觉/键盘检查都有真实结果；fixture、服务、截图和缓存已按精确路径清理；规范与实现若有偏差已在同一变更中同步或明确阻塞。

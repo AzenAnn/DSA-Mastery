@@ -1,0 +1,74 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-single-hop",
+    "input": "tests/002-single-hop.in",
+    "expected": "tests/002-single-hop.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-unreachable",
+    "input": "tests/003-unreachable.in",
+    "expected": "tests/003-unreachable.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-single-vertex",
+    "input": "tests/004-single-vertex.in",
+    "expected": "tests/004-single-vertex.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-source-isolated",
+    "input": "tests/005-source-isolated.in",
+    "expected": "tests/005-source-isolated.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-multi-path",
+    "input": "tests/006-multi-path.in",
+    "expected": "tests/006-multi-path.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-chain",
+    "input": "tests/007-chain.in",
+    "expected": "tests/007-chain.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-sparse-large",
+    "input": "tests/008-sparse-large.in",
+    "expected": "tests/008-sparse-large.out",
+    "points": 20,
+    "tags": [
+      "stress"
+    ]
+  }
+]

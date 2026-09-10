@@ -118,14 +118,37 @@ linked.insert(cursor, 15);
 
 链表节点通常由多次分配得到，物理地址可能分散。读取当前节点后，处理器必须先取得 `next`，才能知道下一个地址；若下一个节点不在缓存中，就可能等待更慢的内存访问。这类依赖指针的跳转称为 pointer chasing。
 
-```text
-顺序表：
-| 10 | 20 | 30 | 40 | 50 | 60 |  ...连续读取...
+```graphviz
+digraph CacheLocalityComparison {
+  rankdir=TB;
+  graph [nodesep=0.32, ranksep=0.8, bgcolor="#ffffff"];
+  node [fontname="sans-serif", fontcolor="#0f172a"];
+  edge [color="#4655e8", fontcolor="#334155", fontname="sans-serif", arrowsize=0.75];
 
-链表：
-[10|•] ──► [20|•] ─────────► [30|•]
- 0x1000      0x9A20            0x3140
+  array_title [shape=plain, label="顺序表"];
+  array [shape=plain, label=<
+    <table border="0" cellborder="1" color="#64748b" cellspacing="0" cellpadding="9">
+      <tr><td bgcolor="#eef2ff">10</td><td bgcolor="#eef2ff">20</td><td bgcolor="#eef2ff">30</td><td bgcolor="#eef2ff">40</td><td bgcolor="#eef2ff">50</td><td bgcolor="#eef2ff">60</td></tr>
+    </table>
+  >];
+  stream [shape=note, style="filled", color="#16a34a", fillcolor="#ecfdf5", label="连续读取\n利用空间局部性"];
+  { rank=same; array_title; array; stream; }
+  array_title -> array [style=invis];
+  array -> stream;
+
+  list_title [shape=plain, label="链表"];
+  n10 [shape=box, style="rounded,filled", color="#64748b", fillcolor="#f8fafc", label="10 | next", xlabel="0x1000"];
+  n20 [shape=box, style="rounded,filled", color="#64748b", fillcolor="#f8fafc", label="20 | next", xlabel="0x9A20"];
+  n30 [shape=box, style="rounded,filled", color="#64748b", fillcolor="#f8fafc", label="30 | next", xlabel="0x3140"];
+  { rank=same; list_title; n10; n20; n30; }
+  list_title -> n10 [style=invis];
+  n10 -> n20 [label="pointer chasing"];
+  n20 -> n30 [label="等待 next 后才能定位"];
+
+  array_title -> list_title [style=invis, weight=10];
+}
 ```
+<!-- diagram id="cache-locality-comparison" caption="顺序表连续读取可利用空间局部性，链表则必须沿离散地址逐次追踪 next 指针" -->
 
 即使二者完整遍历都是 `O(n)`，顺序表通常也更容易利用缓存和预取。这里的“通常”不能替换成固定倍数：实际结果还受元素大小、分配器、硬件、编译优化与访问模式影响。
 
@@ -176,19 +199,35 @@ $$
 
 复杂度表回答“单个操作怎样增长”，决策树回答“哪类操作在当前业务中最重要”：
 
-```text
-需要高频按下标随机访问吗？
-├─ 是 → 优先动态顺序表
-└─ 否
-   ├─ 只在尾部增删吗？
-   │  ├─ 是 → 优先动态顺序表（栈）或 deque（队列）
-   │  └─ 否
-   ├─ 高频操作两端吗？
-   │  └─ 是 → 优先 deque；需要稳定节点时再考虑双向链表
-   └─ 已长期持有稳定节点，且频繁在节点附近插删/移动吗？
-      ├─ 是 → 双向链表是强候选
-      └─ 否 → 先用顺序表，测量后再升级
+```graphviz
+digraph ListSelectionDecisionTree {
+  rankdir=TB;
+  graph [nodesep=0.35, ranksep=0.55, bgcolor="#ffffff"];
+  node [shape=diamond, style="filled", color="#64748b", fillcolor="#f8fafc", fontcolor="#0f172a", fontname="sans-serif", margin="0.15,0.08"];
+  edge [color="#475569", fontcolor="#334155", fontname="sans-serif", arrowsize=0.7];
+
+  random_access [label="需要高频按下标\n随机访问吗？"];
+  tail_only [label="只在尾部\n增删吗？"];
+  both_ends [label="高频操作\n两端吗？"];
+  stable_nodes [label="长期持有稳定节点，且频繁在\n节点附近插删或移动吗？"];
+
+  prefer_array [shape=box, style="rounded,filled", color="#4655e8", fillcolor="#eef2ff", label="优先动态顺序表"];
+  stack_or_deque [shape=box, style="rounded,filled", color="#4655e8", fillcolor="#eef2ff", label="优先动态顺序表（栈）\n或 deque（队列）"];
+  prefer_deque [shape=box, style="rounded,filled", color="#16a34a", fillcolor="#ecfdf5", label="优先 deque\n需要稳定节点时再考虑双向链表"];
+  prefer_list [shape=box, style="rounded,filled", color="#c2410c", fillcolor="#fff7ed", label="双向链表是强候选"];
+  measure_first [shape=box, style="rounded,filled", color="#4655e8", fillcolor="#eef2ff", label="先用顺序表\n测量后再升级"];
+
+  random_access -> prefer_array [label="是"];
+  random_access -> tail_only [label="否"];
+  tail_only -> stack_or_deque [label="是"];
+  tail_only -> both_ends [label="否"];
+  both_ends -> prefer_deque [label="是"];
+  both_ends -> stable_nodes [label="否"];
+  stable_nodes -> prefer_list [label="是"];
+  stable_nodes -> measure_first [label="否"];
+}
 ```
+<!-- diagram id="list-selection-decision-tree" caption="线性表选型应依次判断随机访问、尾部操作、两端操作与稳定节点需求" -->
 
 ### 4.2.1 “读多写少”选型法则
 
@@ -286,85 +325,15 @@ public:
 若播放列表更常见的操作其实是按编号跳转、随机播放和完整顺序扫描，顺序表仍可能更好。选型取决于主导访问模式，不取决于“播放列表”这个名字。
 :::
 
-### 组合例题：LRU 为什么需要两种结构
+### 场景 5：高频置顶与淘汰策略（LRU 的本质）
 
-LRU 缓存需要同时完成：
+在维护“最近使用列表”（如最近打开的文件、前 8 个播放历史）时，核心规则是：**命中立即置顶，满额淘汰最旧**（即 LRU 策略）。
 
-1. 按键查找缓存项；
-2. 命中后把该项移到“最近使用”端；
-3. 容量满时删除“最久未使用”端。
+- **纯顺序表（数组）**：小容量（如 $N \le 16$）时极佳。CPU 硬件 L1/L2 组相联缓存就是用小数组移位实现的，享有 100% 缓存局部性且无指针开销；但大容量时每次向后平移元素需要 $O(n)$ 搬移成本。
+- **纯双向链表**：已知节点置顶只需修改 4 根指针（$O(1)$），彻底免除搬移；但若只给一个 Key，在链表中定位节点依然需要线性遍历（$O(n)$）。
 
-单独的顺序表能按位置访问，却无法按键平均 `O(1)` 定位；单独的链表能 `O(1)` 调整已知节点，却仍需 `O(n)` 按键查找。组合结构让两者各自负责擅长的部分：
-
-```cpp:line-numbers [lru-cache.cpp]
-#include <cstddef>
-#include <list>
-#include <optional>
-#include <unordered_map>
-#include <utility>
-
-class LRUCache {
-private:
-    using Entry = std::pair<int, int>;  // key, value
-    using Iterator = std::list<Entry>::iterator;
-
-    std::size_t capacity_;
-    std::list<Entry> order_;  // 表头最近使用，表尾最久未使用
-    std::unordered_map<int, Iterator> index_;
-
-public:
-    explicit LRUCache(std::size_t capacity) : capacity_(capacity) {}
-
-    std::optional<int> get(int key) {
-        auto found = index_.find(key);
-        if (found == index_.end()) {
-            return std::nullopt;
-        }
-
-        order_.splice(order_.begin(), order_, found->second);
-        return found->second->second;
-    }
-
-    void put(int key, int value) {
-        if (capacity_ == 0) {
-            return;
-        }
-
-        auto found = index_.find(key);
-        if (found != index_.end()) {
-            found->second->second = value;
-            order_.splice(order_.begin(), order_, found->second);
-            return;
-        }
-
-        if (order_.size() == capacity_) {
-            const int expired_key = order_.back().first;
-            index_.erase(expired_key);
-            order_.pop_back();
-        }
-
-        order_.emplace_front(key, value);
-        index_[key] = order_.begin();
-    }
-};
-```
-
-#### 代码讲解
-
-- `index_` 把键映射到链表迭代器；在散列均匀的通常假设下，定位平均为 `O(1)`。
-- `std::list::splice` 把已有节点移到表头，不复制元素，并保持该节点迭代器有效。
-- `order_.back()` 与 `pop_back()` 在尾部淘汰最旧项，均为 `O(1)`。
-- 哈希表必须在链表节点删除前移除对应键，否则会留下指向已释放节点的迭代器。
-- 这里的平均 `O(1)` 依赖散列表负载与散列质量；最坏情况不能被省略成无条件保证。
-
-#### 例题 5：为什么不用“哈希表 + 顺序表”
-
-哈希表也可以把键映射到顺序表下标。为什么 LRU 更常配双向链表？
-
-::: details 查看分析
-命中后需要把任意元素移到最近使用端。顺序表删除中间元素并插到头部会搬移一段数据；移动后，大量元素下标改变，哈希表里的映射也要同步更新。
-
-双向链表迭代器直接定位节点，摘下并拼到表头只改局部链接，其他节点句柄保持有效。
+::: tip 思考与工程延伸
+当缓存规模达到数万时，如何消除双向链表的 $O(n)$ 查找瓶颈？详见下一节 [1.5.3 LRU 缓存：从线性表到组合结构](./05-real-world-practices.md#1-5-3-lru-缓存-从线性表到组合结构)。
 :::
 
 ## 一页选型检查表
@@ -405,4 +374,4 @@ public:
 5. 哈希表保证键能找到对应链表节点；链表保证从最近到最久的顺序，且每个缓存项恰好出现一次。
 :::
 
-现在可以继续阅读[1.5 现实中的 List 与工程扩展](./05-real-world-practices.md)，或回到[第 1 章总览](./00-overview.md)复盘两种实现。也可以完成 [Lab 01-01：顺序表选择题精练](../../labs/chapter-01/lab-01-01-sequential-list-quiz/README.md) 与 [Lab 01-02：单链表选择题精练](../../labs/chapter-01/lab-01-02-singly-linked-list-quiz/README.md)，比较两种表示在访问、插入、删除和空间开销上的适用条件。
+现在可以继续阅读[1.5 现实中的 List 与工程扩展](./05-real-world-practices.md)，或回到[第 1 章总览](./00-overview.md)复盘两种实现。也可以完成 [Lab 01-T-01：顺序表选择题精练](../../labs/chapter-01/theory/T-01-01-sequential-list-quiz/README.md) 与 [Lab 01-T-02：单链表选择题精练](../../labs/chapter-01/theory/T-01-02-singly-linked-list-quiz/README.md)，比较两种表示在访问、插入、删除和空间开销上的适用条件。

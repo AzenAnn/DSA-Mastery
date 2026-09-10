@@ -1,0 +1,644 @@
+[
+  {
+    "alias": "INDEX",
+    "path": ".vitepress/content-index.ts",
+    "line": 200,
+    "actual": "    id: \"chapter-04-tree-binary-tree\","
+  },
+  {
+    "alias": "INDEX",
+    "path": ".vitepress/content-index.ts",
+    "line": 525,
+    "actual": "function createDocument(root: string, file: string, kind: DocumentKind): CourseDocument {"
+  },
+  {
+    "alias": "QUIZUI",
+    "path": ".vitepress/theme/components/QuizSet.vue",
+    "line": 5,
+    "actual": "import { data as quizIndex, type QuizQuestion } from \"../../quiz.data\";"
+  },
+  {
+    "alias": "QUIZUI",
+    "path": ".vitepress/theme/components/QuizSet.vue",
+    "line": 14,
+    "actual": "// 题目数据来自 data loader 扫描的 quiz.json，组件只负责渲染，不内置题目。"
+  },
+  {
+    "alias": "QUIZUI",
+    "path": ".vitepress/theme/components/QuizSet.vue",
+    "line": 31,
+    "actual": "const labQuestions = computed<QuizQuestion[]>(() => quizIndex[labDir.value] ?? []);"
+  },
+  {
+    "alias": "QUIZDATA",
+    "path": ".vitepress/quiz.data.ts",
+    "line": 131,
+    "actual": "    \"labs/chapter-*/theory/*/quiz.json\","
+  },
+  {
+    "alias": "QUIZDATA",
+    "path": ".vitepress/quiz.data.ts",
+    "line": 149,
+    "actual": "          const parsed = JSON.parse(readFileSync(quizPath, \"utf8\")) as unknown;"
+  },
+  {
+    "alias": "REVIEWDATA",
+    "path": ".vitepress/review.data.ts",
+    "line": 86,
+    "actual": "  watch: [\"content/chapter-*/**/*.review.json\"],"
+  },
+  {
+    "alias": "X01.readme",
+    "path": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/README.md",
+    "line": 26,
+    "actual": "建议先阅读[4.5 树、森林与二叉树](../../../../content/chapter-04-tree/05-trees-and-forests.md)和[第 5 章概览](../../../../content/chapter-05-tree-applications/00-overview.md)，再开始本组练习。"
+  },
+  {
+    "alias": "X02.readme",
+    "path": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/README.md",
+    "line": 26,
+    "actual": "建议先阅读[4.3 二叉树的遍历](../../../../content/chapter-04-tree/03-binary-tree-traversal.md)和[4.5 树、森林与二叉树](../../../../content/chapter-04-tree/05-trees-and-forests.md)，再开始本组练习。"
+  },
+  {
+    "alias": "STACK",
+    "path": "content/chapter-02-stack-queue/01-stack.md",
+    "line": 274,
+    "actual": "## 6. 经典应用：括号匹配"
+  },
+  {
+    "alias": "STACKAPP",
+    "path": "content/chapter-02-stack-queue/03-applications.md",
+    "line": 76,
+    "actual": "### 表达式求值"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 546,
+    "actual": "至此，第 4 章《树与二叉树》的理论与经典问题已全部建立。在下一章《树的应用》中，我们将探索二叉搜索树（BST）、AVL 平衡树、堆与优先队列、赫夫曼编码以及 B/B+ 树在现代工业系统中的应用。"
+  },
+  {
+    "alias": "A0",
+    "path": "content/chapter-04-tree/00-overview.md",
+    "line": 12,
+    "actual": "# 第 4 章 树与二叉树"
+  },
+  {
+    "alias": "A1",
+    "path": "content/chapter-04-tree/01-tree-basics.md",
+    "line": 12,
+    "actual": "# 4.1 树的基本概念与存储结构"
+  },
+  {
+    "alias": "A1",
+    "path": "content/chapter-04-tree/01-tree-basics.md",
+    "line": 98,
+    "actual": "### 边数、路径与度数和"
+  },
+  {
+    "alias": "A1",
+    "path": "content/chapter-04-tree/01-tree-basics.md",
+    "line": 171,
+    "actual": "### 双亲表示法"
+  },
+  {
+    "alias": "A1",
+    "path": "content/chapter-04-tree/01-tree-basics.md",
+    "line": 206,
+    "actual": "### 孩子兄弟表示法"
+  },
+  {
+    "alias": "A1",
+    "path": "content/chapter-04-tree/01-tree-basics.md",
+    "line": 270,
+    "actual": "## 4.1.4 一般树的实现【C/C++】与多叉树工程【拓展】"
+  },
+  {
+    "alias": "A1",
+    "path": "content/chapter-04-tree/01-tree-basics.md",
+    "line": 350,
+    "actual": "### C++：用 RAII 表达唯一所有权"
+  },
+  {
+    "alias": "A2",
+    "path": "content/chapter-04-tree/02-binary-tree.md",
+    "line": 12,
+    "actual": "# 4.2 二叉树"
+  },
+  {
+    "alias": "A2",
+    "path": "content/chapter-04-tree/02-binary-tree.md",
+    "line": 75,
+    "actual": "## 4.2.2 二叉树的特殊形态：满（Full）/ 完全（Complete）/ 完美（Perfect）"
+  },
+  {
+    "alias": "A2",
+    "path": "content/chapter-04-tree/02-binary-tree.md",
+    "line": 197,
+    "actual": "### 叶节点数与度为 2 的节点数"
+  },
+  {
+    "alias": "A2",
+    "path": "content/chapter-04-tree/02-binary-tree.md",
+    "line": 242,
+    "actual": "### 完全二叉树的编号性质"
+  },
+  {
+    "alias": "A2",
+    "path": "content/chapter-04-tree/02-binary-tree.md",
+    "line": 369,
+    "actual": "## 4.2.5 二叉树的创建、实现与销毁【C/C++】"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 12,
+    "actual": "# 4.3 二叉树的遍历"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 47,
+    "actual": "### 递归遍历的执行轨迹与“三遍路过”模型"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 137,
+    "actual": "### 1. 中序遍历的非递归实现（最基础的左下潜模型）"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 249,
+    "actual": "### 3. 后序遍历的非递归实现"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 390,
+    "actual": "### 分层输出模板（Level-by-Level）"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 448,
+    "actual": "### 1. 从前序与中序遍历序列构造二叉树"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 511,
+    "actual": "### 2. 从层序遍历序列构造完全二叉树（CBT）"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 358,
+    "actual": "::: tip 💡 两种后序遍历非递归写法的对比与取舍"
+  },
+  {
+    "alias": "A4",
+    "path": "content/chapter-04-tree/04-threaded-binary-tree.md",
+    "line": 12,
+    "actual": "# 4.4 线索二叉树"
+  },
+  {
+    "alias": "A4",
+    "path": "content/chapter-04-tree/04-threaded-binary-tree.md",
+    "line": 252,
+    "actual": "### 1. 寻找中序直接后继（In-order Successor）"
+  },
+  {
+    "alias": "A4",
+    "path": "content/chapter-04-tree/04-threaded-binary-tree.md",
+    "line": 323,
+    "actual": "::: pitfall 易错点 · 线索二叉树“找前驱/后继”的时间复杂度误区"
+  },
+  {
+    "alias": "A4",
+    "path": "content/chapter-04-tree/04-threaded-binary-tree.md",
+    "line": 142,
+    "actual": "### 3. 中序线索化算法（In-order Threading）"
+  },
+  {
+    "alias": "A5",
+    "path": "content/chapter-04-tree/05-trees-and-forests.md",
+    "line": 12,
+    "actual": "# 4.5 树、森林与二叉树"
+  },
+  {
+    "alias": "A5",
+    "path": "content/chapter-04-tree/05-trees-and-forests.md",
+    "line": 38,
+    "actual": "### 1. 转换的底层语义：左孩子，右兄弟"
+  },
+  {
+    "alias": "A5",
+    "path": "content/chapter-04-tree/05-trees-and-forests.md",
+    "line": 151,
+    "actual": "### 1. 森林转换为二叉树"
+  },
+  {
+    "alias": "A5",
+    "path": "content/chapter-04-tree/05-trees-and-forests.md",
+    "line": 220,
+    "actual": "### 3. 核心定理：树/森林遍历与二叉树遍历的等价对应"
+  },
+  {
+    "alias": "A5",
+    "path": "content/chapter-04-tree/05-trees-and-forests.md",
+    "line": 346,
+    "actual": "这是一个典型的“陷阱题”：**先根 + 后根并不能唯一确定一棵多叉树**，但在孩子兄弟表示中，它们恰好分别对应二叉树的前序与中序，因此无需还原整棵树即可直接得到答案。"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 12,
+    "actual": "# 4.6 二叉树的经典问题"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 31,
+    "actual": "- 建立求解二叉树直径、最近公共祖先（LCA）与最大路径和（树形 DP）的自底向上递归模型。"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 481,
+    "actual": "### 2. 二叉树中的最大路径和（树形 DP 压轴）"
+  },
+  {
+    "alias": "A2",
+    "path": "content/chapter-04-tree/02-binary-tree.md",
+    "line": 369,
+    "actual": "## 4.2.5 二叉树的创建、实现与销毁【C/C++】"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 511,
+    "actual": "### 2. 从层序遍历序列构造完全二叉树（CBT）"
+  },
+  {
+    "alias": "E03.student",
+    "path": "labs/chapter-04/exercise/E-04-03-binary-tree-preorder-traversal/student/main.cpp",
+    "line": 16,
+    "actual": "int main() {"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 448,
+    "actual": "### 1. 从前序与中序遍历序列构造二叉树"
+  },
+  {
+    "alias": "T06.readme",
+    "path": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/README.md",
+    "line": 307,
+    "actual": "**Step 1: 顶层（整棵树）**"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 430,
+    "actual": "## 4.3.4 由遍历序列恢复二叉树"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 546,
+    "actual": "至此，第 4 章《树与二叉树》的理论与经典问题已全部建立。在下一章《树的应用》中，我们将探索二叉搜索树（BST）、AVL 平衡树、堆与优先队列、赫夫曼编码以及 B/B+ 树在现代工业系统中的应用。"
+  },
+  {
+    "alias": "T08.readme",
+    "path": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+    "line": 343,
+    "actual": "任一个字符的编码都不是其它字符编码的前缀，则称这种编码具有前缀特性。现有某字符集（字符个数 ≥ 2）的不等长编码，每个字符的编码均为二进制的 0、1 序列，最长为 L 位，且具有前缀特性。请回答下列问题："
+  },
+  {
+    "alias": "T02.readme",
+    "path": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/README.md",
+    "line": 54,
+    "actual": "二叉树的带权路径长度（WPL）是二叉树中所有叶结点的带权路径长度之和。给定一棵二叉树 T，采用二叉链表存储，结点结构为："
+  },
+  {
+    "alias": "T08.readme",
+    "path": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+    "line": 54,
+    "actual": "二叉树的带权路径长度（WPL）是二叉树中所有叶结点的带权路径长度之和。给定一棵二叉树 T，采用二叉链表存储，结点结构为："
+  },
+  {
+    "alias": "A5",
+    "path": "content/chapter-04-tree/05-trees-and-forests.md",
+    "line": 201,
+    "actual": "::: pitfall 易错点 · 为什么一般树没有“中根遍历”？"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 440,
+    "actual": "## 4.6.5 二叉树问题的统一递归框架"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 481,
+    "actual": "### 2. 二叉树中的最大路径和（树形 DP 压轴）"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 339,
+    "actual": "::: property 寻找前驱节点的 O(1) 空间解法"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 459,
+    "actual": "**后序状态汇聚逻辑**："
+  },
+  {
+    "alias": "E14.readme",
+    "path": "labs/chapter-04/exercise/E-04-14-lowest-common-ancestor/README.md",
+    "line": 118,
+    "actual": "   - 若只有一侧非空，说明 $p$ 和 $q$ 都在那一侧（或者找到的那个节点本身就是祖先），返回非空的那一侧指针；"
+  },
+  {
+    "alias": "A1",
+    "path": "content/chapter-04-tree/01-tree-basics.md",
+    "line": 60,
+    "actual": "下面统一约定：根在第 $1$ 层；节点深度按“从根到该节点经过的边数”计算，因此根的深度为 $0$；节点高度按“从该节点到最远叶节点经过的边数”计算，因此叶节点高度为 $0$。"
+  },
+  {
+    "alias": "A5",
+    "path": "content/chapter-04-tree/05-trees-and-forests.md",
+    "line": 237,
+    "actual": "**1、基础情况（高度为 1 的树）**"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 60,
+    "actual": "### 2. 树的最大深度（高度）"
+  },
+  {
+    "alias": "A2",
+    "path": "content/chapter-04-tree/02-binary-tree.md",
+    "line": 75,
+    "actual": "## 4.2.2 二叉树的特殊形态：满（Full）/ 完全（Complete）/ 完美（Perfect）"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 606,
+    "actual": "5. 比较一棵具有 $n$ 个节点的满二叉树在进行 DFS 与 BFS 遍历时的最大辅助内存消耗，并解释原因。"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 71,
+    "actual": "### 3. 二叉树的最大宽度（编号性质应用）"
+  },
+  {
+    "alias": "A5",
+    "path": "content/chapter-04-tree/05-trees-and-forests.md",
+    "line": 346,
+    "actual": "这是一个典型的“陷阱题”：**先根 + 后根并不能唯一确定一棵多叉树**，但在孩子兄弟表示中，它们恰好分别对应二叉树的前序与中序，因此无需还原整棵树即可直接得到答案。"
+  },
+  {
+    "alias": "A4",
+    "path": "content/chapter-04-tree/04-threaded-binary-tree.md",
+    "line": 118,
+    "actual": "::: info 既然“复用原有指针”还需要增加 `ltag` / `rtag` 标志位，为什么不直接另开前驱/后继字段？"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 578,
+    "actual": "四种遍历在计算机底层的时间与空间表现具有鲜明的结构特征："
+  },
+  {
+    "alias": "E03.readme",
+    "path": "labs/chapter-04/exercise/E-04-03-binary-tree-preorder-traversal/README.md",
+    "line": 163,
+    "actual": "- **空间复杂度**：$\\Theta(h)$，递归调用栈或显式栈的最大深度等于树的高度 $h$（最好 $O(\\log n)$，最坏单链 $O(n)$）。"
+  },
+  {
+    "alias": "E18.solution",
+    "path": "labs/chapter-04/exercise/E-04-18-communication-base-station/solution/main.cpp",
+    "line": 63,
+    "actual": "    ll sum = 0;"
+  },
+  {
+    "alias": "E18.solution",
+    "path": "labs/chapter-04/exercise/E-04-18-communication-base-station/solution/main.cpp",
+    "line": 75,
+    "actual": "            if (u < v) cout << u << \" \" << v << \" \" << fixed << setprecision(2) << d << \"\\n\";"
+  },
+  {
+    "alias": "E16.readme",
+    "path": "labs/chapter-04/exercise/E-04-16-network-optimal-location/README.md",
+    "line": 185,
+    "actual": "    function<void(int, int)> dfs1 = [&](int%20u,%20int%20p) {"
+  },
+  {
+    "alias": "E17.readme",
+    "path": "labs/chapter-04/exercise/E-04-17-research-team-formation/README.md",
+    "line": 234,
+    "actual": "    function<void(int)> dfs = [&](int%20u) {"
+  },
+  {
+    "alias": "E18.readme",
+    "path": "labs/chapter-04/exercise/E-04-18-communication-base-station/README.md",
+    "line": 193,
+    "actual": "    auto bfs = [&](int%20src,%20vector%3Cll%3E&%20dist,%20vector%3Cint%3E&%20parent,%20vector%3Cint%3E&%20pw) {"
+  },
+  {
+    "alias": "E19.readme",
+    "path": "labs/chapter-04/exercise/E-04-19-longest-zigzag-path/README.md",
+    "line": 240,
+    "actual": "    function<pair<int,int>(TreeNode*)> dfs = [&](TreeNode*%20u) -> pair<int,int> {"
+  },
+  {
+    "alias": "E20.readme",
+    "path": "labs/chapter-04/exercise/E-04-20-tree-isomorphism/README.md",
+    "line": 220,
+    "actual": "    function<void(int, int)> dfs = [&](int%20u,%20int%20p) {"
+  },
+  {
+    "alias": "T03.readme",
+    "path": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/README.md",
+    "line": 491,
+    "actual": "   ```c"
+  },
+  {
+    "alias": "E17.readme",
+    "path": "labs/chapter-04/exercise/E-04-17-research-team-formation/README.md",
+    "line": 95,
+    "actual": "### 样例输入 2"
+  },
+  {
+    "alias": "E20.readme",
+    "path": "labs/chapter-04/exercise/E-04-20-tree-isomorphism/README.md",
+    "line": 58,
+    "actual": "### 样例输入 1"
+  },
+  {
+    "alias": "E01.readme",
+    "path": "labs/chapter-04/exercise/E-04-01-complete-binary-tree-check/README.md",
+    "line": 30,
+    "actual": "- 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列，空节点使用 `null` 或 `#` 表示。"
+  },
+  {
+    "alias": "E01.solution",
+    "path": "labs/chapter-04/exercise/E-04-01-complete-binary-tree-check/solution/main.cpp",
+    "line": 17,
+    "actual": "    if (tokens.empty() || tokens[0] == \"null\") return nullptr;"
+  },
+  {
+    "alias": "E10.solution",
+    "path": "labs/chapter-04/exercise/E-04-10-subtree-of-another-tree/solution/main.cpp",
+    "line": 69,
+    "actual": "    while (std::cin >> token) {"
+  },
+  {
+    "alias": "E12.solution",
+    "path": "labs/chapter-04/exercise/E-04-12-path-sum-all-paths/solution/main.cpp",
+    "line": 79,
+    "actual": "    while (std::cin >> token) {"
+  },
+  {
+    "alias": "E14.solution",
+    "path": "labs/chapter-04/exercise/E-04-14-lowest-common-ancestor/solution/main.cpp",
+    "line": 65,
+    "actual": "    while (std::cin >> token) {"
+  },
+  {
+    "alias": "E12.readme",
+    "path": "labs/chapter-04/exercise/E-04-12-path-sum-all-paths/README.md",
+    "line": 118,
+    "actual": "### 复杂度分析"
+  },
+  {
+    "alias": "T03.readme",
+    "path": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/README.md",
+    "line": 174,
+    "actual": "- **复杂度**：时间 O(n)（n 个结点各访问一次，`strcat` 单次累加是常数次字符）；空间 O(h)（递归栈深 = 树高）。"
+  },
+  {
+    "alias": "T08.readme",
+    "path": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+    "line": 332,
+    "actual": "- **复杂度**：时间 O(n)（n 个结点各访问一次，`strcat` 单次累加是常数次字符）；空间 O(h)（递归栈深 = 树高）。"
+  },
+  {
+    "alias": "E20.solution",
+    "path": "labs/chapter-04/exercise/E-04-20-tree-isomorphism/solution/main.cpp",
+    "line": 4,
+    "actual": "string encode(int u, int p, const vector<vector<int>>& adj) {"
+  },
+  {
+    "alias": "E20.readme",
+    "path": "labs/chapter-04/exercise/E-04-20-tree-isomorphism/README.md",
+    "line": 189,
+    "actual": "### 复杂度分析"
+  },
+  {
+    "alias": "E18.test006",
+    "path": "labs/chapter-04/exercise/E-04-18-communication-base-station/tests/006-star-unequal.out",
+    "line": 1,
+    "actual": "4.00"
+  },
+  {
+    "alias": "E18.test008",
+    "path": "labs/chapter-04/exercise/E-04-18-communication-base-station/tests/008-three-edge-center.out",
+    "line": 1,
+    "actual": "2.00"
+  },
+  {
+    "alias": "E18.test015",
+    "path": "labs/chapter-04/exercise/E-04-18-communication-base-station/tests/015-spider-unequal-arms.out",
+    "line": 1,
+    "actual": "8.00"
+  },
+  {
+    "alias": "T01.readme",
+    "path": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/README.md",
+    "line": 400,
+    "actual": "   408 教辅有时讨论\"扩充二叉树\"——把每个 NULL 当作一个虚拟\"外部节点\"。在扩充二叉树里，外部节点数 = 内部叶子数 + 1（这是另一条恒等式）。考生若把扩充视角带进本题，可能算出 `n_0 + 1` 而非 `n_0`。"
+  },
+  {
+    "alias": "T01.readme",
+    "path": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/README.md",
+    "line": 202,
+    "actual": "   正解共识：**记忆锚点是\"二叉树有 $n - 1$ 条边\"**——叶子是\"被指向但不指向他人\"的，度 2 节点是\"指向两人\"。每条边至少有一个叶子端\"输入\"，每个度 2 节点\"输出\"两条边——必然叶子比度 2 多 1 个（多出来的那个是根节点链外那条不存在的边的\"虚位\"）。这条直觉锚点几乎不会记反方向。"
+  },
+  {
+    "alias": "T06.readme",
+    "path": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/README.md",
+    "line": 121,
+    "actual": "每次在中序里找根要扫一遍 `[il, ir]`，链状二叉树（左斜 / 右斜）会让总扫描次数达到 $\\Theta(n^2)$。优化方案：**预处理**一个 `pos[v] = i` 的反查表，使得\"在中序里找根\"$O(1)$ 完成；总时间降到 $O(n)$，空间多 $O(n)$。"
+  },
+  {
+    "alias": "T06.readme",
+    "path": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/README.md",
+    "line": 197,
+    "actual": "- **最坏情形**（左/右斜链）：每次划分 $m_L = m - 1, m_R = 0$（或对称），递推式 $T(n) = T(n-1) + n$，解得 $T(n) = \\Theta(n^2)$。"
+  },
+  {
+    "alias": "T08.readme",
+    "path": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+    "line": 557,
+    "actual": "$$S(n) = O(\\max(h, w))$$"
+  },
+  {
+    "alias": "T08.readme",
+    "path": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+    "line": 405,
+    "actual": "对每个字符的编码 code："
+  },
+  {
+    "alias": "COMPARE",
+    "path": "tools/lab/compare.mjs",
+    "line": 46,
+    "actual": "function tokens(value) {"
+  },
+  {
+    "alias": "X01.readme",
+    "path": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/README.md",
+    "line": 238,
+    "actual": "- **情况 ③**：$v$ 既无孩子也无兄弟（左右指针都空）。先根序回溯到某个**最近的、有未被访问的下一个兄弟**的祖先 $u$，访问 $u$ 的\"下一兄弟\"。在二叉树中\"沿右指针向上回溯\"的语义恰好是同一件事——因为右指针在森林视角下就是\"同层下一个未被访问\"。"
+  },
+  {
+    "alias": "X01.readme",
+    "path": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/README.md",
+    "line": 280,
+    "actual": "   错误推演：拼接时不知道挂在哪——挂到 $T_1$ 的根右？挂到 $T_1$ 最右叶？两种拼法都不是孩子兄弟法的规范。容易写出 $T_1$ 的根 A 同时挂 $T_2, T_3$ 在右指针（即 A.right = H, H.right = L）的形式——这其实**等价于正解**，但通过\"绕了一圈再发现\"得到，浪费考场时间。"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 358,
+    "actual": "::: tip 💡 两种后序遍历非递归写法的对比与取舍"
+  },
+  {
+    "alias": "E16.manifest",
+    "path": "labs/chapter-04/exercise/E-04-16-network-optimal-location/lab.json",
+    "line": 30,
+    "actual": "      \"outputKb\": 1024"
+  },
+  {
+    "alias": "A3",
+    "path": "content/chapter-04-tree/03-binary-tree-traversal.md",
+    "line": 430,
+    "actual": "## 4.3.4 由遍历序列恢复二叉树"
+  },
+  {
+    "alias": "A6",
+    "path": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "line": 440,
+    "actual": "## 4.6.5 二叉树问题的统一递归框架"
+  }
+]

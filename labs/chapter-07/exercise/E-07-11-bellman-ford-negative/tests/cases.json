@@ -1,0 +1,83 @@
+[
+  {
+    "id": "001-sample-negative",
+    "input": "tests/001-sample-negative.in",
+    "expected": "tests/001-sample-negative.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-negative-cycle",
+    "input": "tests/002-negative-cycle.in",
+    "expected": "tests/002-negative-cycle.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-unreachable-cycle",
+    "input": "tests/003-unreachable-cycle.in",
+    "expected": "tests/003-unreachable-cycle.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-no-negative",
+    "input": "tests/004-no-negative.in",
+    "expected": "tests/004-no-negative.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-single-vertex",
+    "input": "tests/005-single-vertex.in",
+    "expected": "tests/005-single-vertex.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-zero-weights",
+    "input": "tests/006-zero-weights.in",
+    "expected": "tests/006-zero-weights.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-negative-self-loop",
+    "input": "tests/007-negative-self-loop.in",
+    "expected": "tests/007-negative-self-loop.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-random-dag",
+    "input": "tests/008-random-dag.in",
+    "expected": "tests/008-random-dag.out",
+    "points": 10,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "009-single-negative-loop",
+    "input": "tests/009-single-negative-loop.in",
+    "expected": "tests/009-single-negative-loop.out",
+    "points": 10,
+    "tags": [
+      "edge-case"
+    ]
+  }
+]

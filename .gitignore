@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/.pnpm-store/
 /.pnp
 .pnp.*
 .yarn/*
@@ -19,6 +20,9 @@
 .DS_Store
 *.pem
 
+# local package manager config (pnpm hoisted for Windows sandbox, machine-specific)
+.npmrc
+
 # debug
 npm-debug.log*
 yarn-debug.log*
@@ -30,9 +34,18 @@ yarn-error.log*
 
 /dist/
 **/.lab-cache/
+**/solution/*.exe
 /.vitepress/cache/
 /.vitepress/.temp/
 /outputs/
 /work/
 /graphify-out/
 *.tsbuildinfo
+
+# local visual brainstorming previews and server state
+/.superpowers/
+
+# local Trellis task records kept outside the product commit
+/.trellis/tasks/08-31-vscode-stats-dashboard-ui/
+/.trellis/tasks/archive/2026-08/08-31-vscode-exercise-webview-ui/
+/.trellis/tasks/archive/2026-08/08-31-vscode-stats-dashboard-ui/

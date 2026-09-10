@@ -3,6 +3,7 @@ import { tasklist } from "@mdit/plugin-tasklist";
 import { Blocks, BookOpen, FlaskConical } from "@lucide/vue";
 import type MarkdownIt from "markdown-it";
 import { defineConfig } from "vitepress";
+import { createBuildTimeDiagramsPlugin } from "vitepress-plugin-diagrams";
 import { h } from "vue";
 import { renderToString } from "vue/server-renderer";
 import {
@@ -28,6 +29,14 @@ const virtualSources = new Map(
   ]),
 );
 const base = normalizePagesBase();
+const { configureMarkdown: configureDiagramsMarkdown, vitePlugin: createDiagramsVitePlugin } =
+  createBuildTimeDiagramsPlugin({
+    diagramsDir: "public/diagrams",
+    publicPath: `${base}diagrams`,
+    diagramsDistDir: "diagrams",
+    krokiServerUrl: process.env.KROKI_SERVER_URL ?? "https://kroki.io",
+    enableFileImports: false,
+  });
 const absoluteSiteUrl = process.env.SITE_URL ?? `https://azenann.github.io${base}`;
 const withBase = (asset: string) => `${base}${asset.replace(/^\//, "")}`;
 const courseDescription =
@@ -65,7 +74,7 @@ export default defineConfig({
   lastUpdated: false,
   rewrites: {
     "content/:chapter/:page.md": "learn/:chapter/:page/index.md",
-    "labs/:chapter/:lab/README.md": "labs/:chapter/:lab/index.md",
+    "labs/:chapter/:category/:lab/README.md": "labs/:chapter/:category/:lab/index.md",
     "curriculum/index.md": "learn/index.md",
     "curriculum/parts/:part.md": "learn/parts/:part/index.md",
     "curriculum/outline/:chapter.md": "learn/outline/:chapter/index.md",
@@ -78,6 +87,7 @@ export default defineConfig({
     "CLAUDE.local.md",
     "content/README.md",
     "docs/**",
+    "tools/**",
     ".github/**",
     ".trellis/**",
     ".agents/**",
@@ -87,7 +97,10 @@ export default defineConfig({
     "playwright-report/**",
     "test-results/**",
   ],
-  sitemap: { hostname: absoluteSiteUrl },
+  sitemap: {
+    hostname: absoluteSiteUrl,
+    transformItems: (items) => items.filter((item) => !item.url.includes("quiz-figures")),
+  },
   transformHead({ pageData }) {
     const route = routeForSource(pageData.relativePath);
     const pageTitle = pageData.title
@@ -110,6 +123,7 @@ export default defineConfig({
   vite: {
     // Keep `.vitepress/config.ts` as the sole Vite configuration boundary.
     configFile: false,
+    plugins: [createDiagramsVitePlugin()],
   },
   head: [
     ["link", { rel: "icon", type: "image/svg+xml", href: withBase("favicon.svg") }],
@@ -133,6 +147,7 @@ export default defineConfig({
       // plugin publishes the equivalent @types/markdown-it signature.
       tasklist(md as unknown as Parameters<typeof tasklist>[0]);
       installTheoryMarkdown(md as unknown as MarkdownIt);
+      configureDiagramsMarkdown(md);
       md.core.ruler.after("block", "dsa-course-source-transform", (state) => {
         const renderedPath =
           typeof state.env?.relativePath === "string"
@@ -189,7 +204,13 @@ export default defineConfig({
       provider: "local",
       options: {
         _render(source, environment, markdown) {
-          return markdown.render(source, { ...environment, dsaSearchIndex: true });
+          const env = { ...environment, dsaSearchIndex: true };
+          const html = markdown.render(source, env);
+          // 自定义渲染器不会走 VitePress 内置的 frontmatter.search 排除逻辑，
+          // 这里手动尊重 `search: false`，把配图源等构建专用页排除出站内搜索。
+          if (env.frontmatter?.search === false) return "";
+          const labId = typeof env.frontmatter?.labId === "string" ? env.frontmatter.labId : "";
+          return labId ? `<p>${labId}</p>${html}` : html;
         },
         translations: {
           button: { buttonText: "搜索教材与实验", buttonAriaLabel: "搜索教材与实验" },

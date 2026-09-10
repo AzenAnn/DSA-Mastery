@@ -1,0 +1,5 @@
+[
+  { "id": "001-basic", "input": "tests/001-basic.in", "expected": "tests/001-basic.out", "points": 40, "tags": ["normal"] },
+  { "id": "002-delete", "input": "tests/002-delete.in", "expected": "tests/002-delete.out", "points": 30, "tags": ["normal"] },
+  { "id": "003-missing-and-empty", "input": "tests/003-missing-and-empty.in", "expected": "tests/003-missing-and-empty.out", "points": 30, "tags": ["boundary"] }
+]

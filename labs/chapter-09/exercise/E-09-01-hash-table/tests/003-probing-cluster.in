@@ -1,0 +1,10 @@
+probing
+7
+insert 1
+insert 8
+insert 15
+dump
+find 8
+find 22
+probe 15
+probe 22

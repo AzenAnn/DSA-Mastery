@@ -1,0 +1,74 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-negative-edges",
+    "input": "tests/002-negative-edges.in",
+    "expected": "tests/002-negative-edges.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-self-query",
+    "input": "tests/003-self-query.in",
+    "expected": "tests/003-self-query.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-unreachable",
+    "input": "tests/004-unreachable.in",
+    "expected": "tests/004-unreachable.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-multi-edges",
+    "input": "tests/005-multi-edges.in",
+    "expected": "tests/005-multi-edges.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-chain",
+    "input": "tests/006-chain.in",
+    "expected": "tests/006-chain.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-complete",
+    "input": "tests/007-complete.in",
+    "expected": "tests/007-complete.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-random",
+    "input": "tests/008-random.in",
+    "expected": "tests/008-random.out",
+    "points": 20,
+    "tags": [
+      "stress"
+    ]
+  }
+]

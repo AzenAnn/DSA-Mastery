@@ -1,0 +1,4 @@
+{"file":".trellis/spec/frontend/vitepress-development.md","reason":"Review plugin registration, Markdown rendering, dependency ownership, and responsive output."}
+{"file":".trellis/spec/frontend/vitepress-architecture.md","reason":"Review public SVG paths, Pages base compatibility, and build boundaries."}
+{"file":".trellis/spec/content/frontmatter-and-routing.md","reason":"Review content edits, source links, and frontmatter invariants."}
+{"file":".trellis/spec/quality/validation-and-pages.md","reason":"Review quality gates, static artifact checks, and browser verification."}

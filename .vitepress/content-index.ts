@@ -26,6 +26,7 @@ export interface CourseDocument {
   difficulty?: string;
   duration?: string;
   labCategory?: LabCategory;
+  labId?: string;
   readingMinutes: number;
 }
 
@@ -43,6 +44,10 @@ export interface CurriculumChapter {
   title: string;
   description: string;
   url: string;
+  autoLabChapter?: number;
+  learningObjectives?: string[];
+  focusTitle?: string;
+  focusAreas?: string[];
   lessons: CourseDocument[];
   labs: CourseDocument[];
 }
@@ -72,7 +77,8 @@ export type LabSidebarIcons = Record<LabCategory, string>;
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
-const labDirectoryPattern = /^lab-\d{2}-\d{2}-[a-z0-9-]+$/;
+const labDirectoryPattern = /^[TEP]-\d{2}-\d{2,}-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const labCategories = ["theory", "exercise", "project"] as const;
 
 type CurriculumChapterDefinition = Omit<CurriculumChapter, "label" | "lessons" | "labs"> & {
   label?: string;
@@ -88,36 +94,49 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     number: "preface",
     label: "前言",
     title: "课程作者指南",
-    description: "查看理论文档语法，以及 Quiz、Program、Project 三类 Lab 的更新与测试流程。",
+    description: "查看理论文档语法、实验环境，以及 Quiz、Program、Project 的命令、更新与测试流程。",
     url: "/learn/outline/chapter-preface/",
+    learningObjectives: [
+      "统一理解课程理论文档与三类 Lab 的作者接口。",
+      "能够按规范创建、测试、评分和 Review 后续题目。",
+      "能够选择 pnpm 或 Make 运行、定位和严格评分当前 Lab。",
+      "能够用 Graphviz DOT 编写、预览和验证树与图示例。",
+      "从站内完整指南直接复制经过自动验证的示例。",
+      "能够在 VSCode 中安装插件、浏览代码题并一键提交判题。",
+    ],
+    focusAreas: [
+      "理论环境与 Markdown 语法展示",
+      "Quiz、Program、Project 更新机制",
+      "pnpm 参数、Make 映射与判定语义",
+      "本地测试、CI、Review 与发布清单",
+      "Graphviz DOT、Kroki 与响应式图示",
+    ],
     lessonSources: [
       "content/chapter-preface/00-theory-environments.md",
       "content/chapter-preface/01-lab-authoring-guide.md",
       "content/chapter-preface/02-windows-student-setup.md",
+      "content/chapter-preface/03-lab-cli-command-guide.md",
+      "content/chapter-preface/04-graphviz-authoring-guide.md",
+      "content/chapter-preface/05-macos-student-setup.md",
+      "content/chapter-preface/06-vscode-extension-guide.md",
+      "content/chapter-preface/07-git-guide.md",
     ],
   },
   {
     id: "chapter-00-memory-foundations",
     number: "0",
-    title: "内存基础",
+    title: "基础",
     description: "从内存组织方式理解数据结构为何具有不同的表示与操作成本。",
     url: "/learn/outline/chapter-00-memory-foundations/",
     lessonSources: [
       "content/chapter-00-introduction/01-data-structure-basics.md",
-      "content/chapter-00-introduction/02-memory-perspective.md",
+      "content/chapter-00-introduction/02-time-and-space-complexity.md",
+      "content/chapter-00-introduction/03-memory-perspective.md",
     ],
-    labSources: ["labs/chapter-00/lab-00-02-operation-counter/README.md"],
-  },
-  {
-    id: "chapter-00-plus-algorithm-thinking",
-    number: "0+",
-    title: "算法思维体验",
-    description: "通过 Peak Finding 与 Union-Find 体验数据结构选择如何改变算法效率。",
-    url: "/learn/outline/chapter-00-plus-algorithm-thinking/",
-    lessonSources: ["content/chapter-00-introduction/03-algorithm-complexity-analysis.md"],
     labSources: [
-      "labs/chapter-00/lab-00-01-learning-map/README.md",
-      "labs/chapter-00/lab-00-03-complexity-quiz/README.md",
+      "labs/chapter-00/theory/T-00-01-learning-map/README.md",
+      "labs/chapter-00/exercise/E-00-01-operation-counter/README.md",
+      "labs/chapter-00/theory/T-00-02-complexity-quiz/README.md",
     ],
   },
   {
@@ -133,6 +152,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-01-linear-list/03-linked-list.md",
       "content/chapter-01-linear-list/04-comparison-and-selection.md",
       "content/chapter-01-linear-list/05-real-world-practices.md",
+      "content/chapter-01-linear-list/06-array-to-linked-list-problem-solving.md",
     ],
     autoLabChapter: 1,
   },
@@ -140,18 +160,26 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     id: "chapter-02-stack-queue",
     number: "2",
     title: "栈与队列",
-    description: "掌握受限线性结构及其在表达式、递归和层序处理中的应用。",
+    description: "从 LIFO/FIFO 的结构语义出发，掌握栈、循环队列及其在表达式、回溯与逐层扩散中的应用。",
     url: "/learn/outline/chapter-02-stack-queue/",
+    learningObjectives: [
+      "区分栈的后进先出与队列的先进先出语义，并据此选择合适结构。",
+      "实现顺序栈、链栈、循环队列与链队列，处理空、满和扩容边界。",
+      "使用栈与队列完成表达式、单调栈、逐层扩散及综合场景建模。",
+    ],
+    focusTitle: "学习路径",
+    focusAreas: [
+      "2.1 栈：ADT、顺序/链式实现、边界与括号匹配",
+      "2.2 队列：FIFO、循环队列、链队列与边界测试",
+      "2.3 应用：表达式、单调栈、逐层扩散与三个综合 Lab",
+    ],
     lessonSources: [
       "content/chapter-02-stack-queue/00-overview.md",
       "content/chapter-02-stack-queue/01-stack.md",
       "content/chapter-02-stack-queue/02-queue.md",
       "content/chapter-02-stack-queue/03-applications.md",
     ],
-    labSources: [
-      "labs/chapter-02/lab-02-01-stack-simulator/README.md",
-      "labs/chapter-02/lab-02-02-cycle-queue/README.md",
-    ],
+    autoLabChapter: 2,
   },
   {
     id: "chapter-03-string-array-matrix",
@@ -164,11 +192,9 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-03-string-array/01-string-basics.md",
       "content/chapter-03-string-array/02-string-matching-and-processing.md",
       "content/chapter-03-string-array/03-array-and-matrix.md",
+      "content/chapter-03-string-array/04-generalized-list.md",
     ],
-    labSources: [
-      "labs/chapter-03/lab-03-01-string-matcher/README.md",
-      "labs/chapter-03/lab-03-02-sparse-matrix/README.md",
-    ],
+    autoLabChapter: 3,
   },
   {
     id: "chapter-04-tree-binary-tree",
@@ -178,32 +204,54 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     url: "/learn/outline/chapter-04-tree-binary-tree/",
     lessonSources: [
       "content/chapter-04-tree/00-overview.md",
-      "content/chapter-04-tree/01-binary-tree.md",
+      "content/chapter-04-tree/01-tree-basics.md",
+      "content/chapter-04-tree/02-binary-tree.md",
+      "content/chapter-04-tree/03-binary-tree-traversal.md",
+      "content/chapter-04-tree/04-threaded-binary-tree.md",
+      "content/chapter-04-tree/05-trees-and-forests.md",
+      "content/chapter-04-tree/06-binary-tree-classic-problems.md",
     ],
-    labSources: ["labs/chapter-04/lab-04-01-binary-tree-traversal/README.md"],
+    autoLabChapter: 4,
   },
   {
     id: "chapter-05-tree-applications",
     number: "5",
     title: "树的应用",
-    description: "把树结构用于 Huffman 编码、表达式树、堆与优先队列。",
+    description: "学习搜索树与平衡、堆与优先队列、赫夫曼编码、并查集及多路索引树。",
     url: "/learn/outline/chapter-05-tree-applications/",
-    lessonSources: [
-      "content/chapter-04-tree/02-tree-applications.md",
-      "content/chapter-04-tree/03-heap.md",
+    learningObjectives: [
+      "根据有序、平衡、偏序、权重与集合不变量选择并维护合适的树结构。",
+      "实现 BST/AVL、堆、赫夫曼树与并查集的核心操作，并准确分析复杂度前提。",
+      "解释 B 树与 B+ 树如何用高分支降低外存 I/O，并比较点查与范围查询。",
     ],
-    labSources: ["labs/chapter-04/lab-04-02-huffman-coding/README.md"],
+    focusTitle: "本章路径",
+    focusAreas: [
+      "二叉搜索树、AVL 与局部旋转",
+      "堆、优先队列与赫夫曼编码",
+      "并查集、B 树与 B+ 树",
+    ],
+    lessonSources: [
+      "content/chapter-05-tree-applications/00-overview.md",
+      "content/chapter-05-tree-applications/01-binary-search-tree-and-avl.md",
+      "content/chapter-05-tree-applications/02-heap-and-priority-queue.md",
+      "content/chapter-05-tree-applications/03-huffman-tree-and-coding.md",
+      "content/chapter-05-tree-applications/04-disjoint-set-union.md",
+      "content/chapter-05-tree-applications/05-b-tree-and-b-plus-tree.md",
+    ],
+    autoLabChapter: 5,
   },
   {
     id: "chapter-06-graph-foundations-storage",
     number: "6",
     title: "图的基础与存储",
-    description: "学习图的基本概念，以及邻接矩阵和邻接表的表示取舍。",
+    description: "学习图的基本概念、存储方式，以及遍历如何计算可达性和连通分量。",
     url: "/learn/outline/chapter-06-graph-foundations-storage/",
     lessonSources: [
-      "content/chapter-05-graph/00-overview.md",
-      "content/chapter-05-graph/01-representation.md",
+      "content/chapter-06-graph-foundations/01-graph-basics.md",
+      "content/chapter-06-graph-foundations/02-graph-storage.md",
+      "content/chapter-06-graph-foundations/03-graph-traversal-connectivity.md",
     ],
+    autoLabChapter: 6,
   },
   {
     id: "chapter-07-graph-traversal-applications",
@@ -212,14 +260,12 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "从 DFS、BFS 走向最小生成树、最短路径等图算法。",
     url: "/learn/outline/chapter-07-graph-traversal-applications/",
     lessonSources: [
-      "content/chapter-05-graph/02-traversal.md",
-      "content/chapter-05-graph/03-applications.md",
-      "content/chapter-05-graph/04-astar-visualization.md",
+      "content/chapter-07-graph-traversal/01-dfs-and-bfs.md",
+      "content/chapter-07-graph-traversal/02-minimum-spanning-tree.md",
+      "content/chapter-07-graph-traversal/03-shortest-path.md",
+      "content/chapter-07-graph-applications/04-astar-visualization.md",
     ],
-    labSources: [
-      "labs/chapter-05/lab-05-01-bfs-maze/README.md",
-      "labs/chapter-05/lab-05-02-dijkstra-path/README.md",
-    ],
+    autoLabChapter: 7,
   },
   {
     id: "chapter-08-basic-tree-search",
@@ -228,15 +274,12 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "从基础查找策略过渡到二叉搜索树及其操作。",
     url: "/learn/outline/chapter-08-basic-tree-search/",
     lessonSources: [
-      "content/chapter-06-search/00-overview.md",
-      "content/chapter-06-search/01-linear-and-binary-search.md",
-      "content/chapter-06-search/02-binary-search-tree.md",
-      "content/chapter-06-search/03-balanced-search-tree.md",
+      "content/chapter-08-search/00-overview.md",
+      "content/chapter-08-search/01-linear-and-binary-search.md",
+      "content/chapter-08-search/02-binary-search-tree.md",
+      "content/chapter-08-search/03-balanced-search-tree.md",
     ],
-    labSources: [
-      "labs/chapter-06/lab-06-01-bst-operations/README.md",
-      "labs/chapter-06/lab-06-03-search-theory-quiz/README.md",
-    ],
+    autoLabChapter: 8,
   },
   {
     id: "chapter-09-hashing-indexes",
@@ -245,13 +288,10 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "理解多路索引、散列函数、冲突处理和外存查找结构。",
     url: "/learn/outline/chapter-09-hashing-indexes/",
     lessonSources: [
-      "content/chapter-06-search/04-b-tree-and-b-plus-tree.md",
-      "content/chapter-06-search/05-hash-table.md",
+      "content/chapter-09-hashing-indexes/01-b-tree-and-b-plus-tree.md",
+      "content/chapter-09-hashing-indexes/02-hash-table.md",
     ],
-    labSources: [
-      "labs/chapter-06/lab-06-02-hash-table/README.md",
-      "labs/chapter-06/lab-06-03-search-theory-quiz/README.md",
-    ],
+    autoLabChapter: 9,
   },
   {
     id: "chapter-10-basic-sorting",
@@ -260,10 +300,13 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "比较插入、交换与选择类排序的过程、稳定性和复杂度。",
     url: "/learn/outline/chapter-10-basic-sorting/",
     lessonSources: [
-      "content/chapter-07-sort/00-overview.md",
-      "content/chapter-07-sort/01-compare-sort.md",
+      "content/chapter-10-sort/00-overview.md",
+      "content/chapter-10-sort/01-insertion-sort.md",
+      "content/chapter-10-sort/02-selection-sort.md",
+      "content/chapter-10-sort/03-bubble-sort.md",
+      "content/chapter-10-sort/04-shell-sort.md",
     ],
-    labSources: ["labs/chapter-07/lab-07-01-stability-compare/README.md"],
+    autoLabChapter: 10,
   },
   {
     id: "chapter-11-advanced-external-sorting",
@@ -272,10 +315,14 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "组织快速、归并、堆、基数与外部排序的进阶学习框架。",
     url: "/learn/outline/chapter-11-advanced-external-sorting/",
     lessonSources: [
-      "content/chapter-07-sort/01-compare-sort.md",
-      "content/chapter-07-sort/02-heap-and-radix-sort.md",
+      "content/chapter-11-advanced-sort/01-merge-sort.md",
+      "content/chapter-11-advanced-sort/02-quick-sort.md",
+      "content/chapter-11-advanced-sort/03-heap-sort.md",
+      "content/chapter-11-advanced-sort/04-counting-sort.md",
+      "content/chapter-11-advanced-sort/05-bucket-sort.md",
+      "content/chapter-11-advanced-sort/06-radix-sort.md",
     ],
-    labSources: ["labs/chapter-07/lab-07-02-performance-benchmark/README.md"],
+    autoLabChapter: 11,
   },
   {
     id: "chapter-12-divide-conquer-recursion",
@@ -283,6 +330,30 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "分治与递归",
     description: "建立递归定义、问题分解、合并结果与复杂度分析框架。",
     url: "/learn/outline/chapter-12-divide-conquer-recursion/",
+    learningObjectives: [
+      "用函数契约、基本情况和规模度量建立可终止的递归模型",
+      "从题意提炼 Divide–Conquer–Combine 并判断子问题独立性",
+      "用合并不变量解决排序、结构构造与跨区间计数问题",
+      "用归纳法、递归树和主定理验证正确性与复杂度",
+    ],
+    focusTitle: "从递归合同到可证明的分治",
+    focusAreas: [
+      "12.1 函数契约、调用栈、边界与规模递减",
+      "12.2 自相似结构、均衡拆分与单侧递归",
+      "12.3 有序归并、结构拼装、结果组合与跨区间计数",
+      "12.4 终止性、归纳证明、递推式与方法边界",
+    ],
+    lessonSources: [
+      "content/chapter-12-divide-conquer-recursion/00-overview.md",
+      "content/chapter-12-divide-conquer-recursion/01-recursion-contracts.md",
+      "content/chapter-12-divide-conquer-recursion/02-call-stack-and-iteration.md",
+      "content/chapter-12-divide-conquer-recursion/03-divide-conquer-modeling.md",
+      "content/chapter-12-divide-conquer-recursion/04-combine-patterns.md",
+      "content/chapter-12-divide-conquer-recursion/05-recursive-correctness.md",
+      "content/chapter-12-divide-conquer-recursion/06-recurrence-complexity.md",
+      "content/chapter-12-divide-conquer-recursion/07-strategy-boundaries.md",
+    ],
+    autoLabChapter: 12,
   },
   {
     id: "chapter-13-greedy",
@@ -290,6 +361,14 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "贪心算法",
     description: "理解局部选择、最优子结构以及贪心正确性的证明思路。",
     url: "/learn/outline/chapter-13-greedy/",
+    lessonSources: [
+      "content/chapter-13-greedy/00-overview.md",
+      "content/chapter-13-greedy/01-greedy-basics.md",
+      "content/chapter-13-greedy/02-classic-problems.md",
+      "content/chapter-13-greedy/03-correctness-proof.md",
+      "content/chapter-13-greedy/04-greedy-vs-dp.md",
+    ],
+    autoLabChapter: 13,
   },
   {
     id: "chapter-14-dynamic-programming",
@@ -297,6 +376,27 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "动态规划",
     description: "围绕状态、转移、边界和计算顺序建立动态规划方法。",
     url: "/learn/outline/chapter-14-dynamic-programming/",
+    learningObjectives: [
+      "从暴力搜索中识别重叠子问题，并写出精确的状态语义",
+      "在记忆化搜索、自底向上递推和空间压缩之间双向翻译",
+      "根据依赖方向完成线性、网格与背包动态规划建模",
+      "用正确性证明、复杂度分析和最小反例验证状态设计",
+    ],
+    focusTitle: "从状态合同到可验证的转移",
+    focusAreas: [
+      "14.1 状态、决策、无后效性与答案位置",
+      "14.2 递归参数、缓存维度、拓扑顺序与方案还原",
+      "14.3 线性/网格依赖、滚动数组与附加状态",
+      "14.4 0-1/完全背包、组合/排列与循环方向",
+    ],
+    lessonSources: [
+      "content/chapter-14-dynamic-programming/00-overview.md",
+      "content/chapter-14-dynamic-programming/01-dp-thinking-and-state-design.md",
+      "content/chapter-14-dynamic-programming/02-memoization-to-tabulation.md",
+      "content/chapter-14-dynamic-programming/03-linear-and-grid-dp.md",
+      "content/chapter-14-dynamic-programming/04-knapsack-dp.md",
+    ],
+    autoLabChapter: 14,
   },
   {
     id: "chapter-15-backtracking-search",
@@ -304,6 +404,25 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "回溯与搜索",
     description: "使用状态空间、选择、撤销与剪枝组织系统搜索。",
     url: "/learn/outline/chapter-15-backtracking-search/",
+    learningObjectives: [
+      "把问题建模为解向量与约束，画出子集树或排列树",
+      "用选择-探索-撤销的回溯模板实现全排列、子集与 N 皇后",
+      "用可行性、限界与对称剪枝收缩搜索树，并辨析回溯与分支限界的取舍",
+    ],
+    focusTitle: "从状态空间到剪枝策略",
+    focusAreas: [
+      "15.1 解向量、状态空间树与回溯模板",
+      "15.2 子集树与排列树：全排列、子集和、N 皇后",
+      "15.3 可行性、限界与对称去重剪枝",
+      "15.4 分支限界：队列式与优先队列式搜索",
+    ],
+    lessonSources: [
+      "content/chapter-15-backtracking-search/00-overview.md",
+      "content/chapter-15-backtracking-search/01-backtracking-framework.md",
+      "content/chapter-15-backtracking-search/02-classic-problems.md",
+      "content/chapter-15-backtracking-search/03-pruning.md",
+      "content/chapter-15-backtracking-search/04-branch-and-bound.md",
+    ],
   },
 ];
 
@@ -336,9 +455,13 @@ function listLabFiles(root: string): string[] {
     .filter((entry) => entry.isDirectory() && /^chapter-\d{2}$/.test(entry.name))
     .flatMap((chapterEntry) => {
       const chapterPath = path.join(labsRoot, chapterEntry.name);
-      return readdirSync(chapterPath, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory() && labDirectoryPattern.test(entry.name))
-        .map((entry) => path.join(chapterPath, entry.name, "README.md"));
+      return labCategories.flatMap((category) => {
+        const categoryPath = path.join(chapterPath, category);
+        if (!existsSync(categoryPath)) return [];
+        return readdirSync(categoryPath, { withFileTypes: true })
+          .filter((entry) => entry.isDirectory() && labDirectoryPattern.test(entry.name))
+          .map((entry) => path.join(categoryPath, entry.name, "README.md"));
+      });
     });
 }
 
@@ -444,7 +567,7 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     chapterLabel: chapterLabel(chapter),
     chapterTitle: text(
       parsed.data.chapterTitle,
-      chapter === "preface" ? "课程作者指南" : chapter === 0 ? "绪论" : `第 ${chapter} 章`,
+      chapter === "preface" ? "课程作者指南" : chapter === 0 ? "基础" : `第 ${chapter} 章`,
     ),
     order: number(parsed.data.order),
     updated: text(parsed.data.updated, "未标注"),
@@ -453,6 +576,7 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     difficulty: text(parsed.data.difficulty) || undefined,
     duration: text(parsed.data.duration) || undefined,
     labCategory: kind === "lab" ? resolveLabCategory(file, parsed.data) : undefined,
+    labId: kind === "lab" ? text(parsed.data.labId) || undefined : undefined,
     readingMinutes: estimateReadingMinutes(parsed.content),
   };
 }
@@ -469,9 +593,18 @@ function sortDocuments(documents: CourseDocument[]): CourseDocument[] {
 export function collectCourseIndex(root = projectRoot): CourseIndex {
   const lessons = sortDocuments(listLessonFiles(root).map((file) => createDocument(root, file, "lesson")));
   const labs = sortDocuments(listLabFiles(root).map((file) => createDocument(root, file, "lab")));
-  for (const lab of labs.filter((document) => document.chapter === 1)) {
+  const categorizedLabChapters = new Set(
+    curriculumChapterDefinitions
+      .map((definition) => definition.autoLabChapter)
+      .filter((chapter): chapter is number => chapter !== undefined),
+  );
+  for (const lab of labs.filter((document) =>
+    typeof document.chapter === "number" && categorizedLabChapters.has(document.chapter),
+  )) {
     if (!lab.labCategory) {
-      throw new Error(`${lab.sourcePath}: Chapter 1 Labs must declare a category through lab.json or labCategory`);
+      throw new Error(
+        `${lab.sourcePath}: categorized chapter Labs must declare a category through lab.json or labCategory`,
+      );
     }
   }
   const chapterNumbers = [...new Set([...lessons, ...labs].map((document) => document.chapter))].sort(
@@ -490,17 +623,17 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
 
   const documentsBySource = new Map([...lessons, ...labs].map((document) => [document.sourcePath, document]));
   const outlineChapters = curriculumChapterDefinitions.map(
-    ({ label, lessonSources = [], labSources = [], autoLabChapter, ...chapter }) => ({
+    ({ label, lessonSources = [], labSources = [], ...chapter }) => ({
       ...chapter,
       label: label ?? `Ch.${chapter.number}`,
       lessons: lessonSources
         .map((source) => documentsBySource.get(source))
         .filter((item): item is CourseDocument => Boolean(item)),
-      labs: autoLabChapter === undefined
+      labs: chapter.autoLabChapter === undefined
         ? labSources
             .map((source) => documentsBySource.get(source))
             .filter((item): item is CourseDocument => Boolean(item))
-        : labs.filter((lab) => lab.chapter === autoLabChapter),
+        : labs.filter((lab) => lab.chapter === chapter.autoLabChapter),
     }),
   );
   const outlineByNumber = new Map(outlineChapters.map((chapter) => [chapter.number, chapter]));
@@ -519,7 +652,7 @@ export function collectCourseIndex(root = projectRoot): CourseIndex {
     curriculum: {
       url: "/learn/",
       foundations: outlineChapters.filter((chapter) =>
-        chapter.number === "preface" || chapter.number === "0" || chapter.number === "0+"
+        chapter.number === "preface" || chapter.number === "0"
       ),
       parts,
     },
@@ -532,6 +665,16 @@ function sidebarCategoryLabel(
   icon: string,
 ): string {
   return `<span class="course-lab-category course-lab-category--${category}">${icon}<span>${label}</span></span>`;
+}
+
+function labSidebarLabel(lab: CourseDocument): string {
+  if (!lab.labId) return lab.title;
+
+  const title = lab.title.replace(
+    /^Lab\s+\d{2}-[TEP]-\d{2,}[：:]\s*/,
+    "",
+  );
+  return `${lab.labId} · ${title}`;
 }
 
 function chapterLabGroup(
@@ -553,7 +696,7 @@ function chapterLabGroup(
         text: sidebarCategoryLabel(category, label, icons[category]),
         collapsed: category !== "project",
         items: categoryLabs.length
-          ? categoryLabs.map((lab) => ({ text: lab.title, link: lab.url }))
+          ? categoryLabs.map((lab) => ({ text: labSidebarLabel(lab), link: lab.url }))
           : [{ text: `<span class="course-lab-category__empty">${empty}</span>` }],
       };
     }),
@@ -579,17 +722,17 @@ export function createCourseSidebar(
       collapsed: true,
       items: [
         ...chapter.lessons.map((lesson) => ({ text: lesson.title, link: lesson.url })),
-        ...(chapter.labs.length
-          ? [
-              chapter.number === "1"
-                ? chapterLabGroup(chapter.labs, icons)
-                : {
-                    text: "相关 Labs",
-                    collapsed: true,
-                    items: chapter.labs.map((lab) => ({ text: lab.title, link: lab.url })),
-                  },
-            ]
-          : []),
+        ...(chapter.autoLabChapter !== undefined
+          ? [chapterLabGroup(chapter.labs, icons)]
+          : chapter.labs.length
+            ? [
+                {
+                  text: "相关 Labs",
+                  collapsed: true,
+                  items: chapter.labs.map((lab) => ({ text: labSidebarLabel(lab), link: lab.url })),
+                },
+              ]
+            : []),
       ],
     };
   };

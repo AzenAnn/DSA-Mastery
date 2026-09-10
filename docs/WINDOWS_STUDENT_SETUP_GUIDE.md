@@ -2,6 +2,79 @@
 
 > 适用对象：在 Windows 10/11 上完成 DSA Mastery 本地 C++ Lab 的学生。
 
+## 0. 原生自举安装（推荐）
+
+如果希望一次完成 Git、Node.js、固定版本 pnpm、MSVC Build Tools、（按选择需要的）CMake、仓库依赖和 Lab 冒烟验证，直接运行仓库自带的 PowerShell 启动器即可。启动器优先使用 Windows 自带的 `winget`，不会把随 Visual Studio 版本变化的 `cl.exe` 目录永久写进 PATH；运行 Lab 时会通过 `vswhere.exe` 和 `VsDevCmd.bat` 自动导入完整 MSVC 开发环境。
+
+### 已经有仓库
+
+在 PowerShell 中直接粘贴下面两行：
+
+```powershell
+cd "$HOME\code\DSA-Mastery"
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1
+```
+
+如果仓库在其他位置，只需要把第一行换成实际目录，例如 `cd "$HOME\DSA-Mastery"`。
+
+### 还没有仓库
+
+如果 Git 和仓库都还没有准备好，先下载启动器，再由它准备工具并 clone 仓库：
+
+```powershell
+$bootstrap = Join-Path $env:TEMP "dsa-mastery-bootstrap.ps1"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-windows.ps1" -OutFile $bootstrap
+powershell.exe -ExecutionPolicy Bypass -File $bootstrap -RepoDir "$HOME\code\DSA-Mastery"
+```
+
+如果你已经可以使用 Git，也可以先 clone，再回到上面的“已经有仓库”路径：
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\code" | Out-Null
+git clone https://github.com/AzenAnn/DSA-Mastery.git "$HOME\code\DSA-Mastery"
+cd "$HOME\code\DSA-Mastery"
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1
+```
+
+不带参数运行时会进入交互式选择界面：
+
+```powershell
+# ↑↓ 或 j/k：移动；空格：选择/取消；Enter：开始；q：退出
+```
+
+基础运行环境（Git、Node.js、pnpm）是必选项。默认会选择 Program Lab C++ 环境；如果需要 Project Lab，就勾选 Project Lab / CMake；需要图形界面时再勾选 VS Code 和相应扩展。脚本会自动勾选扩展依赖，并根据选择执行对应的环境检查。
+
+菜单中的方案对应：`runtime`（只准备课程工具）、`basic`（Program）和 `full`（Program + Project）。
+
+熟悉命令行后，也可以直接指定方案：
+
+```powershell
+# 只安装并验证 Quiz/Program 所需环境
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic
+
+# 完整课程环境，额外安装并验证 CMake/Project Lab
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full
+```
+
+常用选项：
+
+```powershell
+# 只读检查，不安装工具、不 clone/pull、不安装依赖、不运行 smoke
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -CheckOnly -Profile basic -RepoDir "C:\课程项目\DSA-Mastery"
+
+# 跳过 VS Code，或显式安装 VS Code 与课程扩展
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full -SkipVscode
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full -InstallVscode
+
+# CI/重定向时使用稳定纯文本或 JSON 输出
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic -NonInteractive -Ui plain
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic -NonInteractive -Json
+```
+
+支持 TTY 时会显示阶段、状态和整体进度；非 TTY 会自动使用纯文本。安装失败后可以直接重跑，脚本会复用已安装工具和已有仓库。核心失败日志写入 `%LOCALAPPDATA%\DSA-Mastery\setup\`；`-CheckOnly` 不创建日志。
+
+首次安装可能需要管理员确认、UAC、系统重启或打开新终端。脚本不会绕过 PowerShell 执行策略、企业设备管理、杀毒软件或代理限制；缺少 `winget` 时请使用下面的手工章节。仓库有未提交改动时不会静默 pull 或覆盖。
+
 ## 1. 安装 Git
 
 下载地址：[Git for Windows](https://git-scm.com/download/win) 一般X64处理器选图片这个
@@ -62,7 +135,7 @@ pnpm --version
 
 ![1786954954553](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786954954553.png)
 
-3. 安装 MSVC Build Tools
+## 3. 安装 MSVC Build Tools
 
 下载地址：[Visual Studio C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 
@@ -102,6 +175,42 @@ cl
 
 ![1786955307760](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955307760.png)
 
+### 手工 fallback：不要添加动态 `cl.exe` 路径
+
+一键脚本和现有 Lab CLI 会在需要时通过 `vswhere.exe` 定位 Visual Studio，再调用 `VsDevCmd.bat -arch=x64` 导入 `PATH`、`INCLUDE`、`LIB` 等变量。因此不建议把类似 `14.51.36231` 的版本目录永久写入用户 PATH；Visual Studio 更新后该路径会失效，而且单独加入 `cl.exe` 所在目录并不等于完整 MSVC 环境。
+
+如果学校设备不允许脚本或 `winget`，仍可按下面的手工方式安装并在 Developer Command Prompt 中运行 Lab。只有在明确知道设备策略要求时，才参考以下动态路径截图：
+
+访问`C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC`，找到里面包含`cl.exe`的文件夹，添加path
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/msvc1.png)
+
+比如我这里是：`C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64`，其中版本号`14.51.36231`可能会根据你的安装版本发生改变
+
+在搜索打开编辑环境变量
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path.png)
+
+点击高级 环境变量
+
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path2.png)
+
+插入下面两个路径，第一个路径和你前面找的路径一样，点确定返回（一共有三次确定）
+```
+C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64
+C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin
+```
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path3.png)
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/path4.png)
+
+之后重新打开新的powershell（或者重启电脑），输入cmake，cl就能显示了
+
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/pwsh.png)
+
 ## 4. 安装 VS Code
 
 下载地址：[Visual Studio Code 官方下载页](https://code.visualstudio.com/Download)
@@ -113,9 +222,30 @@ cl
 
 VS Code 是编辑器，不包含 C++ 编译器。即使已经安装 VS Code，仍然需要安装前面的 MSVC Build Tools。
 
-## 5. 验证完整环境
+## 5. (可选)安装make代替pnpm
 
-建议从 **Developer PowerShell for VS 2022** 打开 VS Code 的终端，依次执行：
+1.  **以管理员身份打开 PowerShell**：右键点击“开始”菜单，选择“Windows PowerShell (管理员)”或“终端 (管理员)”。
+2.  **安装 Chocolatey**：复制并粘贴以下命令，按回车执行：
+    ```powershell
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+    ```
+3.  **关闭并重新打开**管理员 PowerShell 窗口。
+4.  **安装 GNU Make**：在管理员 PowerShell 中执行以下命令：
+    ```powershell
+    choco install make
+    ```
+    安装过程中如果提示确认，输入 `y` 并按回车。
+5.  **验证安装**：关闭并重新打开任意 PowerShell 或 CMD 窗口，输入以下命令，如果显示版本信息则说明安装成功：
+    ```powershell
+    make --version
+    ```
+
+![](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/make.png)
+
+
+## 6. 验证完整环境
+
+建议从 **developer Command Prompt for VS** 或者 **Powershell**（需加PATH） 打开 VS Code 的终端，依次执行：
 
 ```powershell
 git --version
@@ -136,7 +266,7 @@ cl
 
 ![1786955350420](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955350420.png)
 
-## 6. 下载仓库
+## 7. 下载仓库
 
 先创建一个放代码仓库的文件夹，再放本实验仓库过来，路径不要包含中文
 
@@ -152,7 +282,7 @@ pnpm install --frozen-lockfile
 
 也可以通过下载zip来放置，但是下载zip不方便同步最新的仓库
 
-## 7. 运行第一个 Program Lab
+## 8. 运行第一个 Program Lab
 
 使用Developer Command Prompt for VS来运行
 
@@ -167,7 +297,13 @@ cd C:\Proj\DSA-Mastery
 先使用环境检查命令：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+```
+
+如果已安装 GNU Make，也可以使用等价命令：
+
+```powershell
+make doctor LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 ![1786955586099](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955586099.png)
@@ -175,37 +311,86 @@ pnpm lab:doctor -- labs/chapter-01/lab-01-06-sequential-list-deduplication
 如果环境检查通过，可以运行公开测试：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication
+pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
+
+使用 Make 时可以运行：
+
+```powershell
+make run LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+```
+
+结果中的 `AC`、`PASS` 和满分会显示为绿色；未通过状态及未满分的实际得分会醒目标出，Project 的待人工评分会显示 `PENDING`。颜色只帮助阅读，不改变判定；如果终端不适合显示颜色，可以在命令末尾加 `--no-color`。没有安装 GNU Make 也不影响使用 `pnpm lab:*` 入口。
 
 ![1786955599809](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955599809.png)
 
 也可以只运行示例测试：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/lab-01-06-sequential-list-deduplication --case 001-sample
+pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --case 001-sample
+```
+
+对应的 Make 命令是：
+
+```powershell
+make run LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication CASE=001-sample
 ```
 
 ![1786955613245](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955613245.png)
 
-## 8. 运行 Project Lab
+## 9. 运行 Project Lab
 
 Project Lab 除了 MSVC，还需要 CMake。可以先检查：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-04/lab-04-02-huffman-coding
+pnpm lab:doctor -- labs/chapter-08/project/P-08-01-avl-tree-rotations
+```
+
+使用 Make 时可以运行：
+
+```powershell
+make doctor LAB=labs/chapter-08/project/P-08-01-avl-tree-rotations
+```
+
+make也可以在对应目录内执行：
+
+```powershell
+PS C:\Proj\DSA-Mastery> cd labs/chapter-08/project/P-08-01-avl-tree-rotations
+PS C:\Proj\DSA-Mastery\labs\chapter-08\project\P-08-01-avl-tree-rotations> make doctor
+PASS 环境检查
+平台：win32/x64 · Node v24.19.0
+
+GCC                  NOT FOUND
+Clang                NOT FOUND
+MSVC                 AVAILABLE   19.51.36256 (>= 19.30.0)
+CMake                AVAILABLE   4.3.1 (>= 3.25.0)
+GNU Make             AVAILABLE   4.4.1 (>= 4.0.0)
+
+GNU Make 为推荐项而非必装依赖；免 Make 入口： pnpm lab:run -- <lab-path>
 ```
 
 然后运行 Project Lab：
 
 ```powershell
-pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding
+pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations
+```
+
+对应的 Make 命令是：
+
+```powershell
+make run LAB=labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 也可以运行指定 task 和测试用例：
 
 ```powershell
-pnpm lab:run -- labs/chapter-04/lab-04-02-huffman-coding --task frequency --case weighted
+pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations --task frequency --case weighted
+```
+
+使用 Make 时可以运行：
+
+```powershell
+make run LAB=labs/chapter-08/project/P-08-01-avl-tree-rotations TASK=frequency CASE=weighted
 ```
 
 ![1786955720690](../../docs/image/WINDOWS_STUDENT_SETUP_GUIDE/1786955720690.png)

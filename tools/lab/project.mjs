@@ -3,6 +3,8 @@ import { LabError } from "./errors.mjs";
 import { judgeProgram, runInteractive } from "./judge.mjs";
 import { refreshExpected } from "./operations.mjs";
 import { runProcess } from "./process.mjs";
+import { cleanTerminalText, createTheme, quoteCommandArg } from "./terminal.mjs";
+import { createMsvcEnvironment } from "./toolchain.mjs";
 
 function programView(lab, task) {
   return {
@@ -26,22 +28,28 @@ function selectedTasks(lab, taskId) {
   return selected;
 }
 
-export async function buildProject(lab, target = "student") {
+export async function buildProject(lab, target = "student", options = {}) {
   if (lab.manifest.type !== "project") throw new LabError("TYPE_UNSUPPORTED", "CMake build 仅支持 project Lab");
   if (!new Set(["student", "solution"]).has(target)) throw new LabError("TARGET_INVALID", "Project target 必须是 student 或 solution");
+  const environment = options.environment ?? (process.platform === "win32"
+    ? await createMsvcEnvironment().catch((error) => {
+      throw new LabError("MSVC_ENV_NOT_FOUND", error.message, error.details);
+    })
+    : undefined);
+  const env = environment?.env;
   const configure = await runProcess("cmake", [
     "--preset",
     target,
     `-DCMAKE_CXX_STANDARD=${cmakeStandardNumber(lab.manifest.toolchain.standard)}`,
     "-DCMAKE_CXX_STANDARD_REQUIRED=ON",
     "-DCMAKE_CXX_EXTENSIONS=OFF",
-  ], { cwd: lab.labRoot, timeMs: 60_000, outputKb: 4096 });
+  ], { cwd: lab.labRoot, env, timeMs: 60_000, outputKb: 4096 });
   if (configure.spawnError) throw new LabError("CMAKE_NOT_FOUND", "无法启动 CMake；Project Lab 需要 CMake >= 3.25");
   if (configure.code !== 0 || configure.timedOut || configure.outputExceeded) {
-    return { ok: false, phase: "configure", target, configure };
+    return { ok: false, phase: "configure", target, configure, environment };
   }
-  const build = await runProcess("cmake", ["--build", "--preset", target, "--config", "Release"], { cwd: lab.labRoot, timeMs: 120_000, outputKb: 8192 });
-  return { ok: build.code === 0 && !build.timedOut && !build.outputExceeded, phase: "build", target, configure, build };
+  const build = await runProcess("cmake", ["--build", "--preset", target, "--config", "Release"], { cwd: lab.labRoot, env, timeMs: 120_000, outputKb: 8192 });
+  return { ok: build.code === 0 && !build.timedOut && !build.outputExceeded, phase: "build", target, configure, build, environment };
 }
 
 export function cmakeStandardNumber(standard) {
@@ -70,6 +78,7 @@ async function scoreCtest(lab, task, target, build) {
     const expression = `^${test.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`;
     const result = await runProcess("ctest", ["--test-dir", binaryDir, "-C", "Release", "-R", expression, "--no-tests=error", "--output-on-failure"], {
       cwd: lab.labRoot,
+      env: build.environment?.env,
       timeMs: 60_000,
       outputKb: 4096,
     });
@@ -192,21 +201,57 @@ export async function verifyProject(lab) {
   return { ok: Object.values(checks).every(Boolean), checks, drift, solution, student };
 }
 
-export function formatProject(result) {
-  const lines = ["TASK                 KIND      RESULT    SCORE"];
+function projectRetry(command, labPath, taskId, caseId) {
+  if (!labPath || !taskId) return undefined;
+  const parts = [command, "--", quoteCommandArg(labPath), "--task", quoteCommandArg(taskId)];
+  if (caseId) parts.push("--case", quoteCommandArg(caseId));
+  return parts.join(" ");
+}
+
+export function formatProject(result, options = {}) {
+  const theme = options.theme ?? createTheme({ color: false });
+  const taskWidth = Math.max(20, ...result.tasks.map((task) => task.id.length));
+  const nestedWidth = Math.max(
+    18,
+    ...result.tasks.flatMap((task) => [
+      ...(task.judge?.cases?.map((item) => item.id.length) ?? []),
+      ...(task.tests?.map((test) => test.name.length) ?? []),
+    ]),
+  );
+  const lines = [`${theme.cell("TASK", taskWidth, theme.muted)} ${theme.cell("KIND", 9, theme.muted)} ${theme.cell("RESULT", 9, theme.muted)} ${theme.muted("SCORE")}`];
   for (const task of result.tasks) {
-    const score = task.kind === "manual" ? `PENDING / ${task.weight}` : `${task.weightedScore}/${task.weight}`;
-    lines.push(`${task.id.padEnd(20)} ${task.kind.padEnd(9)} ${task.status.padEnd(9)} ${score}`);
+    const score = task.kind === "manual" ? `${theme.warning("PENDING")} /${theme.success(task.weight)}` : theme.score(task.weightedScore, task.weight);
+    lines.push(`${theme.cell(task.id, taskWidth)} ${theme.cell(task.kind, 9)} ${theme.cell(task.status, 9, theme.verdict)} ${score}`);
     if (task.judge) {
-      for (const item of task.judge.cases) lines.push(`  ${item.id}: ${item.verdict} ${item.points}/${item.maxPoints}`);
+      for (const item of task.judge.cases) {
+        lines.push(`  ${theme.cell(item.id, nestedWidth)} ${theme.cell(item.verdict, 9, theme.verdict)} ${theme.score(item.points, item.maxPoints)}`);
+        if (item.comparison && !item.comparison.equal) {
+          const difference = item.comparison.difference;
+          const location = difference.kind === "token" ? `第 ${difference.index} 个 token` : `第 ${difference.line} 行第 ${difference.column} 列`;
+          lines.push(`    ${theme.heading("首处差异：")}${location}`, `    ${theme.muted("期望：")} ${JSON.stringify(difference.expected)}`, `    ${theme.muted("实际：")} ${JSON.stringify(difference.actual)}`);
+        }
+        if (item.stderr) lines.push(`    ${theme.heading("stderr")}`, cleanTerminalText(item.stderr).trim().slice(0, 500));
+      }
+      if (task.status === "CE") {
+        const diagnostic = cleanTerminalText(task.judge.compilation?.stderr || task.judge.compilation?.stdout).trim();
+        if (diagnostic) lines.push(`  ${theme.heading("编译诊断")}`, diagnostic);
+      }
     }
     if (task.tests) {
-      for (const test of task.tests) lines.push(`  ${test.name}: ${test.verdict} ${test.points}/${test.maxPoints}`);
+      for (const test of task.tests) {
+        lines.push(`  ${theme.cell(test.name, nestedWidth)} ${theme.cell(test.verdict, 9, theme.verdict)} ${theme.score(test.points, test.maxPoints)}`);
+        if (test.verdict !== "AC" && test.output) lines.push(`    ${theme.heading("CTest output")}`, cleanTerminalText(test.output).trim().slice(0, 1000));
+      }
     }
   }
-  lines.push("".padEnd(46, "-"));
-  lines.push(`Automated: ${result.automatedScore}/${result.automatedMax}`);
-  lines.push(`Manual pending: ${result.manualPending}`);
-  lines.push(`Provisional total: ${result.provisionalTotal}/100`);
+  lines.push(theme.separator(Math.max(56, taskWidth + 37)));
+  lines.push(`${theme.heading("Automated：")} ${theme.score(result.automatedScore, result.automatedMax)}`);
+  lines.push(`${theme.heading("Manual pending：")} ${result.manualPending ? theme.warning(result.manualPending) : theme.success("0")}`);
+  lines.push(`${theme.heading("Provisional total：")} ${theme.score(result.provisionalTotal, result.total)}`);
+  lines.push(`AUTOMATED ${theme.status(result.automatedFull ? "PASS" : "NOT FULL")}${result.manualPending ? ` · ${theme.warning("MANUAL REVIEW PENDING")}` : ""}`);
+  const failedTask = result.tasks.find((task) => task.kind !== "manual" && task.status !== "AC");
+  const failedCase = failedTask?.judge?.cases?.find((item) => item.verdict !== "AC");
+  const retry = projectRetry(options.command ?? "pnpm lab:run", options.labPath, failedTask?.id, failedCase?.id);
+  if (retry) lines.push(`${theme.heading("Retry：")} ${theme.command(retry)}`);
   return lines.join("\n");
 }

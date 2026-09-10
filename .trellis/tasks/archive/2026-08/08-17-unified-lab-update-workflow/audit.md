@@ -49,7 +49,7 @@ T1～T12 的仓库内实现与自动验证已完成，并由独立 Reviewer 在�
 
 ## T9：Project
 
-- Golden Project：`lab-04-02-huffman-coding`。
+- Golden Project：`lab-04-15-huffman-coding`。
 - task：frequency(stdio,30)、codec(CTest,50)、report(manual,20)；依赖拓扑、权重、环均校验。
 - 公共 API 位于 `contracts/huffman.hpp`；CMake Presets + targets + CTest。
 - reference 自动 80/80，manual pending 20；starter 自动 9/80，不误得满分。

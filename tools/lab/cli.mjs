@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import path from "node:path";
 import process from "node:process";
 import { createReport, loadLab } from "./core.mjs";
 import { inspectEnvironment } from "./doctor.mjs";
@@ -7,7 +8,10 @@ import { compileTarget } from "./compiler.mjs";
 import { formatJudge, judgeProgram, runInteractive } from "./judge.mjs";
 import { cleanLab, packStudent, refreshExpected, verifyProgram } from "./operations.mjs";
 import { buildProject, formatProject, interactiveProjectTask, refreshProjectExpected, scoreProject, verifyProject } from "./project.mjs";
-import { createLab } from "./scaffold.mjs";
+import { formatBuild, formatClean, formatDoctor, formatError, formatHelp, formatLocate, formatNew, formatPack, formatRefresh, formatValidate, formatVerify } from "./reporter.mjs";
+import { createTheme } from "./terminal.mjs";
+
+const projectRoot = path.resolve(import.meta.dirname, "../..");
 
 function parseArgs(argv) {
   const [command, ...forwarded] = argv;
@@ -34,13 +38,19 @@ function parseArgs(argv) {
 }
 
 function targetPath(positional) {
-  return positional[0] ?? process.env.INIT_CWD ?? process.cwd();
+  if (positional[0]) return positional[0];
+  const initialDirectory = process.env.INIT_CWD ? path.resolve(process.env.INIT_CWD) : undefined;
+  const projectBoundary = `${projectRoot}${path.sep}`;
+  return initialDirectory && (initialDirectory === projectRoot || initialDirectory.startsWith(projectBoundary))
+    ? initialDirectory
+    : process.cwd();
 }
 
 function validateOptions(parsed) {
   const common = ["json", "no-color"];
   const byCommand = {
     new: [...common, "type", "chapter", "order", "slug"],
+    locate: common,
     doctor: common,
     validate: common,
     build: [...common, "target"],
@@ -58,48 +68,7 @@ function validateOptions(parsed) {
   if (unknown.length) throw new LabError("ARGUMENT_INVALID", `命令 ${parsed.command} 不支持选项：${unknown.map((key) => `--${key}`).join(", ")}`);
   if (parsed.command !== "new" && parsed.positional.length > 1) throw new LabError("ARGUMENT_INVALID", `${parsed.command} 最多接受一个 Lab 路径`);
   if (parsed.command === "new" && parsed.positional.length) throw new LabError("ARGUMENT_INVALID", "new 不接受位置参数");
-}
-
-function humanValidate(report) {
-  console.log(`Lab 校验通过：${report.lab.path}`);
-  console.log(`类型：${report.lab.type} · Schema v${report.lab.schemaVersion}`);
-  if (report.quiz) console.log(`题目：${report.quiz.count} 道 · 总分 ${report.quiz.totalPoints}`);
-  if (report.cases) console.log(`测试：${report.cases} 个 · 总分 100`);
-  if (report.tasks) console.log(`任务：${report.tasks} 个 · 权重 100`);
-}
-
-function humanDoctor(report) {
-  console.log(`环境检查：${report.environment.ok ? "通过" : "未通过"}`);
-  console.log(`平台：${report.environment.platform}/${report.environment.architecture} · Node ${report.environment.node}`);
-  for (const tool of report.environment.tools) {
-    const status = !tool.available ? "未找到" : tool.meetsMinimum ? `可用 ${tool.version}` : `版本过低 ${tool.version}`;
-    console.log(`- ${tool.name}: ${status}${tool.minimum ? `（最低 ${tool.minimum}）` : ""}`);
-  }
-  console.log("GNU Make 为推荐项而非必装依赖；免 Make 入口：pnpm lab:run -- <lab-path>");
-  for (const issue of report.environment.issues) console.log(`! ${issue}`);
-}
-
-function help() {
-  console.log(`DSA Mastery Lab CLI
-
-用法：node tools/lab/cli.mjs <command> [lab-path] [options]
-
-命令：
-  new       生成 quiz、program 或 project Lab
-  doctor    检查当前 Lab 所需环境（只读，不安装软件）
-  validate  校验 manifest、路径、题目、测试和任务依赖
-  build     编译 student 或 solution 目标
-  run       运行公开测试；未满分仍返回 0，适合 make run
-  interactive 连接终端交互运行学生程序
-  score     严格评分；未满分返回 1
-  verify    验证参考实现、标准输出与学生骨架
-  refresh-expected 预览参考输出漂移；加 --write 才覆盖
-  pack      生成不含 solution 的独立学生包
-  clean     只清理当前 Lab 的 .lab-cache
-
-通用选项：--json  --no-color（interactive 直接接管终端，不支持这两项）
-new 选项：--type <type> --chapter <n> --order <n> --slug <slug>
-运行选项：--case <id> --task <id> --target <student|solution> --json --no-color`);
+  if (parsed.command === "locate" && parsed.positional.length !== 1) throw new LabError("ARGUMENT_INVALID", "locate 要求一个 Lab ID，例如 02T3");
 }
 
 function reportJudge(command, lab, judged) {
@@ -125,16 +94,26 @@ async function main() {
   let parsed;
   try {
     parsed = parseArgs(process.argv.slice(2));
+    const theme = createTheme({ stream: process.stdout, noColor: Boolean(parsed.options["no-color"]) });
     if (!parsed.command || ["help", "--help", "-h"].includes(parsed.command)) {
-      help();
+      console.log(formatHelp(theme));
       return EXIT.OK;
     }
     validateOptions(parsed);
     if (parsed.command === "new") {
+      const { createLab } = await import("./scaffold.mjs");
       const created = await createLab(parsed.options);
-      const report = { reportVersion: 1, command: "new", ok: true, lab: { path: created.labRoot, type: created.type } };
+      const report = { reportVersion: 1, command: "new", ok: true, lab: { id: created.labId, path: created.labRoot, relativePath: created.relativeRoot, type: created.type, order: created.order } };
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
-      else console.log(`已创建 ${created.type} Lab：${created.relativeRoot}`);
+      else console.log(formatNew(created, theme));
+      return EXIT.OK;
+    }
+    if (parsed.command === "locate") {
+      const { locateLabById } = await import("./identity.mjs");
+      const located = await locateLabById(projectRoot, parsed.positional[0]);
+      const report = { reportVersion: 1, command: "locate", ok: true, lab: { id: located.id, path: located.labPath, relativePath: located.relativePath, type: located.type, category: located.category } };
+      if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
+      else console.log(formatLocate(report.lab, theme));
       return EXIT.OK;
     }
     const commands = new Set(["doctor", "validate", "build", "run", "interactive", "score", "verify", "refresh-expected", "pack", "clean"]);
@@ -147,7 +126,7 @@ async function main() {
         tasks: lab.tasks?.length,
       });
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
-      else humanValidate(report);
+      else console.log(formatValidate(report, theme));
       return EXIT.OK;
     }
     if (parsed.command === "doctor") {
@@ -155,7 +134,7 @@ async function main() {
       const report = createReport("doctor", lab, { environment });
       report.ok = environment.ok;
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
-      else humanDoctor(report);
+      else console.log(formatDoctor(report, theme));
       return environment.ok ? EXIT.OK : EXIT.TOOL_ERROR;
     }
     if (parsed.command === "build") {
@@ -165,7 +144,7 @@ async function main() {
       const report = createReport("build", lab, { compilation });
       report.ok = compilation.ok;
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
-      else console.log(compilation.ok ? `编译通过：${compilation.executable}` : `编译失败（CE）\n${compilation.stderr || compilation.stdout}`);
+      else console.log(formatBuild(compilation, theme));
       return compilation.ok ? EXIT.OK : EXIT.SCORE_NOT_FULL;
     }
     if (["run", "score"].includes(parsed.command)) {
@@ -178,7 +157,11 @@ async function main() {
         const report = createReport(parsed.command, lab, { result: project });
         report.ok = !project.internalError;
         if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
-        else console.log(formatProject(project));
+        else console.log(formatProject(project, {
+          theme,
+          command: `pnpm lab:${parsed.command}`,
+          labPath: parsed.positional[0] ?? lab.labRoot,
+        }));
         if (project.internalError) return EXIT.TOOL_ERROR;
         return parsed.command === "run" || project.automatedFull ? EXIT.OK : EXIT.SCORE_NOT_FULL;
       }
@@ -186,7 +169,11 @@ async function main() {
       const report = reportJudge(parsed.command, lab, judged);
       report.ok = !judged.cases.some((item) => item.verdict === "IE");
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
-      else console.log(formatJudge(judged));
+      else console.log(formatJudge(judged, {
+        theme,
+        command: `pnpm lab:${parsed.command}`,
+        labPath: parsed.positional[0] ?? lab.labRoot,
+      }));
       if (judged.cases.some((item) => item.verdict === "IE")) return EXIT.TOOL_ERROR;
       return parsed.command === "run" || judged.score === judged.maxScore ? EXIT.OK : EXIT.SCORE_NOT_FULL;
     }
@@ -205,19 +192,7 @@ async function main() {
       const report = createReport("verify", lab, { verification });
       report.ok = verification.ok;
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
-      else {
-        if (lab.manifest.type === "quiz") {
-          console.log(`Quiz：${verification.quiz.count} 道，${verification.quiz.totalPoints} 分；manifest 与题目合同通过。`);
-        } else if (lab.manifest.type === "project") {
-          console.log(`参考实现自动分：${verification.solution.automatedScore}/${verification.solution.automatedMax}`);
-          console.log(`学生骨架自动分：${verification.student.automatedScore}/${verification.student.automatedMax}`);
-          console.log(`人工待评分：${verification.solution.manualPending}`);
-        } else {
-          console.log(`参考实现：${verification.checks.solutionFullScore ? "100/100" : "失败"}`);
-          console.log(`学生骨架：${verification.checks.studentCompiles ? "可编译" : "编译失败"}，${verification.checks.studentNotFullScore ? "未误得满分" : "错误地得到满分"}`);
-          console.log(`标准输出：${verification.checks.expectedStable ? "无漂移" : `有 ${verification.drift.changed} 处漂移`}`);
-        }
-      }
+      else console.log(formatVerify(lab.manifest.type, verification, theme));
       return verification.ok ? EXIT.OK : EXIT.SCORE_NOT_FULL;
     }
     if (parsed.command === "refresh-expected") {
@@ -226,14 +201,7 @@ async function main() {
         : await refreshExpected(lab, Boolean(parsed.options.write));
       const report = createReport("refresh-expected", lab, { refresh });
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
-      else if (!refresh.changed) console.log("标准输出与参考实现一致，无需更新。");
-      else {
-        const changes = refresh.tasks
-          ? refresh.tasks.flatMap((task) => task.refresh.changes.map((change) => ({ ...change, id: `${task.id}/${change.id}` })))
-          : refresh.changes;
-        for (const change of changes) console.log(`${change.id}: ${change.expected}\n${change.diff}`);
-        console.log(parsed.options.write ? `已更新 ${refresh.written} 个 .out 文件。` : "这是预览；确认 diff 后加 --write 才会覆盖 .out。 ");
-      }
+      else console.log(formatRefresh(refresh, { write: Boolean(parsed.options.write), theme }));
       return refresh.changed && !parsed.options.write ? EXIT.SCORE_NOT_FULL : EXIT.OK;
     }
     if (parsed.command === "pack") {
@@ -241,18 +209,18 @@ async function main() {
       const packed = await packStudent(lab);
       const report = createReport("pack", lab, { package: packed });
       if (parsed.options.json) console.log(JSON.stringify(report, null, 2));
-      else console.log(`学生包已生成：${packed.packageRoot}`);
+      else console.log(formatPack(packed, theme));
       return EXIT.OK;
     }
     const cleaned = await cleanLab(lab);
     if (parsed.options.json) console.log(JSON.stringify(createReport("clean", lab, { cleaned }), null, 2));
-    else console.log(`已清理：${cleaned.cache}`);
+    else console.log(formatClean(cleaned, theme));
     return EXIT.OK;
   } catch (rawError) {
     const error = asLabError(rawError);
     const report = { reportVersion: 1, command: parsed?.command ?? null, ok: false, error: { code: error.code, message: error.message, details: error.details } };
     if (parsed?.options?.json) console.log(JSON.stringify(report, null, 2));
-    else console.error(`[${error.code}] ${error.message}`);
+    else console.error(formatError(error, createTheme({ stream: process.stderr, noColor: Boolean(parsed?.options?.["no-color"]) })));
     return EXIT.TOOL_ERROR;
   }
 }

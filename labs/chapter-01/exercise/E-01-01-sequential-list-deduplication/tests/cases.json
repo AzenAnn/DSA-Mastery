@@ -1,0 +1,200 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-single",
+    "input": "tests/002-single.in",
+    "expected": "tests/002-single.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-all-same",
+    "input": "tests/003-all-same.in",
+    "expected": "tests/003-all-same.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "004-no-duplicates",
+    "input": "tests/004-no-duplicates.in",
+    "expected": "tests/004-no-duplicates.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-two-equal",
+    "input": "tests/005-two-equal.in",
+    "expected": "tests/005-two-equal.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "006-two-distinct",
+    "input": "tests/006-two-distinct.in",
+    "expected": "tests/006-two-distinct.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-duplicate-prefix",
+    "input": "tests/007-duplicate-prefix.in",
+    "expected": "tests/007-duplicate-prefix.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "008-duplicate-suffix",
+    "input": "tests/008-duplicate-suffix.in",
+    "expected": "tests/008-duplicate-suffix.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "009-mixed-runs",
+    "input": "tests/009-mixed-runs.in",
+    "expected": "tests/009-mixed-runs.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "010-negative-runs",
+    "input": "tests/010-negative-runs.in",
+    "expected": "tests/010-negative-runs.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "011-zero-crossing",
+    "input": "tests/011-zero-crossing.in",
+    "expected": "tests/011-zero-crossing.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "012-min-max-values",
+    "input": "tests/012-min-max-values.in",
+    "expected": "tests/012-min-max-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "013-long-middle-run",
+    "input": "tests/013-long-middle-run.in",
+    "expected": "tests/013-long-middle-run.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "014-each-value-twice",
+    "input": "tests/014-each-value-twice.in",
+    "expected": "tests/014-each-value-twice.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "015-varied-run-lengths",
+    "input": "tests/015-varied-run-lengths.in",
+    "expected": "tests/015-varied-run-lengths.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "016-min-value-repeated",
+    "input": "tests/016-min-value-repeated.in",
+    "expected": "tests/016-min-value-repeated.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "017-max-value-repeated",
+    "input": "tests/017-max-value-repeated.in",
+    "expected": "tests/017-max-value-repeated.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "018-medium-many-runs",
+    "input": "tests/018-medium-many-runs.in",
+    "expected": "tests/018-medium-many-runs.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-stress-all-same",
+    "input": "tests/019-stress-all-same.in",
+    "expected": "tests/019-stress-all-same.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "020-stress-many-runs",
+    "input": "tests/020-stress-many-runs.in",
+    "expected": "tests/020-stress-many-runs.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  }
+]

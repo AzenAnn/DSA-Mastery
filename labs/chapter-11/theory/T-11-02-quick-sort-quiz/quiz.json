@@ -1,0 +1,192 @@
+[
+  {
+    "id": "ds-drill-quick-sort-001",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-001",
+    "stem": "快速排序的核心思想是？",
+    "options": [
+      "相邻冒泡",
+      "选枢轴 pivot 划分，左边小于等于 pivot、右边大于等于 pivot，再递归",
+      "每次选最小",
+      "分桶"
+    ],
+    "answer": 1,
+    "explanation": "快排核心就一件事：选标杆分两边，标杆已就位，左右递归。"
+  },
+  {
+    "id": "ds-drill-quick-sort-002",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-002",
+    "stem": "快速排序的平均时间复杂度是？",
+    "options": [
+      "O(n)",
+      "O(n log n)",
+      "O(n²)",
+      "O(n^1.5)"
+    ],
+    "answer": 1,
+    "explanation": "平均情况下每次划分较均匀，T(n) = 2T(n/2) + O(n)，O(n log n)。"
+  },
+  {
+    "id": "ds-drill-quick-sort-003",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-003",
+    "stem": "快速排序最坏情况退化为 O(n²) 的原因是？",
+    "options": [
+      "数组元素全相等",
+      "枢轴总是最值，每层只减少一个元素，递归深度达 n",
+      "使用了额外空间",
+      "相邻交换"
+    ],
+    "answer": 1,
+    "explanation": "若数组已有序且选最后一个做 pivot，则左半空、右半 n-1 个，每层减一个元素，深度 n，O(n²)。"
+  },
+  {
+    "id": "ds-drill-quick-sort-004",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-004",
+    "stem": "下列哪种优化能避免快排已有序时的退化？",
+    "options": [
+      "使用稳定排序",
+      "三数取中或随机枢轴",
+      "增加额外空间",
+      "改为非递归"
+    ],
+    "answer": 1,
+    "explanation": "随机枢轴、三数取中都避免「已有序退化」，使划分尽量均匀。"
+  },
+  {
+    "id": "ds-drill-quick-sort-005",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-005",
+    "stem": "关于快速排序的稳定性，下列说法正确的是？",
+    "options": [
+      "稳定，因为原地排序",
+      "稳定，因为递归划分",
+      "不稳定，分区交换时等值元素可能跨过对方交换",
+      "稳定性取决于枢轴选择"
+    ],
+    "answer": 2,
+    "explanation": "分区交换过程中等值元素可能跨过对方交换，相对顺序被打乱，故不稳定。"
+  },
+  {
+    "id": "ds-drill-quick-sort-006",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-006",
+    "stem": "快速排序的额外空间复杂度（平均情况）是？",
+    "options": [
+      "O(1)",
+      "O(log n)（递归栈）",
+      "O(n)",
+      "O(n log n)"
+    ],
+    "answer": 1,
+    "explanation": "快排原地，额外空间主要是递归栈，平均 O(log n)；最坏递归深度 O(n)。"
+  },
+  {
+    "id": "ds-drill-quick-sort-007",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-007",
+    "stem": "partition 函数返回的位置 p 满足什么性质？",
+    "options": [
+      "a[p] 是全局最大值",
+      "a[l..p-1] <= a[p]，a[p+1..r] >= a[p]，a[p] 已就位",
+      "a[p] 是全局最小值",
+      "前半段已排序"
+    ],
+    "answer": 1,
+    "explanation": "分区后 a[p] 处于最终位置，左边都 <= 它，右边都 >= 它。"
+  },
+  {
+    "id": "ds-drill-quick-sort-008",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-008",
+    "stem": "快速排序对 [3,2,1,5,4]（选最后一个 4 为 pivot）第一次 partition 后，pivot 4 的位置是？",
+    "options": [
+      "下标 0",
+      "下标 2",
+      "下标 3",
+      "下标 4"
+    ],
+    "answer": 2,
+    "explanation": "小于等于 4 的有 3,2,1 三个，4 应放在下标 3，得 [3,2,1,4,5]。"
+  },
+  {
+    "id": "ds-drill-quick-sort-009",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-009",
+    "stem": "快排的「小段转插入排序」优化目的是？",
+    "options": [
+      "提高稳定性",
+      "减少小数组递归开销",
+      "降低空间复杂度",
+      "避免退化"
+    ],
+    "answer": 1,
+    "explanation": "子数组长度小于阈值时用插入排序，减少递归调用开销，利用插入排序小段常数小的优势。"
+  },
+  {
+    "id": "ds-drill-quick-sort-010",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "quick sort"
+    ],
+    "targetId": "ds-drill-quick-sort-010",
+    "stem": "快速排序 vs 堆排序，下列说法正确的是？",
+    "options": [
+      "快排最坏 O(n log n)，堆排序最坏 O(n²)",
+      "快排平均更快（缓存友好），但堆排序最坏不退化且原地",
+      "快排稳定，堆排序不稳定",
+      "快排空间 O(n)，堆排序 O(1)"
+    ],
+    "answer": 1,
+    "explanation": "快排缓存友好常数小、平均快，但最坏 O(n²)；堆排序原地且最坏 O(n log n) 不退化。"
+  }
+]

@@ -1,0 +1,13 @@
+chaining
+7
+insert 1
+insert 8
+insert 15
+insert 22
+insert 3
+insert 10
+dump
+find 15
+find 9
+probe 22
+probe 9

@@ -1,0 +1,10 @@
+linear 7
+put 1 10
+put 8 20
+put 15 30
+get 15
+erase 8
+contains 15
+size
+probes 15
+probes 22

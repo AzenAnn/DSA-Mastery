@@ -1,0 +1,10 @@
+chaining 7
+put 1 100
+put 8 800
+put 15 1500
+get 15
+get 9
+erase 8
+contains 8
+size
+probes 15

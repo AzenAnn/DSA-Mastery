@@ -1,0 +1,192 @@
+[
+  {
+    "id": "ds-drill-shell-sort-001",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-001",
+    "stem": "希尔排序的核心思想是？",
+    "options": [
+      "分治递归合并",
+      "先按间隔 gap 分组做插入排序，再逐步缩小 gap 直到 1",
+      "每次选出最小值放前面",
+      "按值域计数"
+    ],
+    "answer": 1,
+    "explanation": "希尔排序先按 gap 分组做插入排序，逐步缩小 gap 到 1，是「先粗排再细排」。"
+  },
+  {
+    "id": "ds-drill-shell-sort-002",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-002",
+    "stem": "希尔排序最后一步 gap=1 时，本质上是什么排序？",
+    "options": [
+      "选择排序",
+      "归并排序",
+      "普通插入排序",
+      "冒泡排序"
+    ],
+    "answer": 2,
+    "explanation": "gap=1 就是普通插入排序，但此时数组已预处理，逆序对少，所以很快。"
+  },
+  {
+    "id": "ds-drill-shell-sort-003",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-003",
+    "stem": "希尔排序为什么比纯插入排序快？",
+    "options": [
+      "用了额外空间",
+      "大步长预处理快速消除远处的逆序对，最后小步插入很轻松",
+      "它是不稳定的",
+      "它采用了分治"
+    ],
+    "answer": 1,
+    "explanation": "先大步消除远处逆序对，再微调，最后那趟插入排序就非常快。"
+  },
+  {
+    "id": "ds-drill-shell-sort-004",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-004",
+    "stem": "关于希尔排序的稳定性，下列说法正确的是？",
+    "options": [
+      "稳定，因为基于插入排序",
+      "稳定，因为 gap 逐次递减",
+      "不稳定，元素可能跨不同 gap 距离移动，破坏相对顺序",
+      "稳定性取决于增量序列"
+    ],
+    "answer": 2,
+    "explanation": "元素可能跨不同 gap 距离移动，破坏原等值元素相对顺序，故不稳定。"
+  },
+  {
+    "id": "ds-drill-shell-sort-005",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-005",
+    "stem": "希尔排序的复杂度取决于什么？",
+    "options": [
+      "数组是否逆序",
+      "增量序列的选择",
+      "是否使用递归",
+      "元素类型"
+    ],
+    "answer": 1,
+    "explanation": "希尔排序复杂度依赖增量序列，不同序列最坏复杂度不同。"
+  },
+  {
+    "id": "ds-drill-shell-sort-006",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-006",
+    "stem": "Shell 原始增量序列（n/2, n/4, …, 1）的最坏时间复杂度是？",
+    "options": [
+      "O(n log n)",
+      "O(n^1.5)",
+      "O(n²)",
+      "O(n)"
+    ],
+    "answer": 2,
+    "explanation": "Shell 原始序列最坏 O(n²)，简单但不够优。"
+  },
+  {
+    "id": "ds-drill-shell-sort-007",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-007",
+    "stem": "Hibbard 增量序列（2^k - 1）的最坏时间复杂度约为？",
+    "options": [
+      "O(n²)",
+      "O(n^1.5)",
+      "O(n log n)",
+      "O(n)"
+    ],
+    "answer": 1,
+    "explanation": "Hibbard 序列最坏 O(n^1.5)，常用且效果不错。"
+  },
+  {
+    "id": "ds-drill-shell-sort-008",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-008",
+    "stem": "下列哪个增量序列最坏复杂度最优？",
+    "options": [
+      "Shell 原始 n/2, n/4, …",
+      "Hibbard 2^k - 1",
+      "Sedgewick",
+      "三者一样"
+    ],
+    "answer": 2,
+    "explanation": "Sedgewick 最坏 O(n^4/3)，比 Shell 的 O(n²) 和 Hibbard 的 O(n^1.5) 更优。"
+  },
+  {
+    "id": "ds-drill-shell-sort-009",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-009",
+    "stem": "希尔排序的空间复杂度是？",
+    "options": [
+      "O(n)",
+      "O(log n)",
+      "O(1)",
+      "O(n²)"
+    ],
+    "answer": 2,
+    "explanation": "希尔排序原地排序，空间 O(1)。"
+  },
+  {
+    "id": "ds-drill-shell-sort-010",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "shell sort"
+    ],
+    "targetId": "ds-drill-shell-sort-010",
+    "stem": "希尔排序分组时，同一 gap 下的子序列是？",
+    "options": [
+      "连续的一段",
+      "间隔为 gap 的元素集合",
+      "随机元素",
+      "前一半和后一半"
+    ],
+    "answer": 1,
+    "explanation": "对固定 gap，数组被拆成间隔为 gap 的若干子序列，每个子序列内部做插入排序。"
+  }
+]

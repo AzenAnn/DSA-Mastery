@@ -1,0 +1,195 @@
+[
+  {
+    "id": "001-sample-yes",
+    "input": "tests/001-sample-yes.in",
+    "expected": "tests/001-sample-yes.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-sample-no",
+    "input": "tests/002-sample-no.in",
+    "expected": "tests/002-sample-no.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "003-empty",
+    "input": "tests/003-empty.in",
+    "expected": "tests/003-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-single",
+    "input": "tests/004-single.in",
+    "expected": "tests/004-single.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-two-same",
+    "input": "tests/005-two-same.in",
+    "expected": "tests/005-two-same.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-two-diff",
+    "input": "tests/006-two-diff.in",
+    "expected": "tests/006-two-diff.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-odd-palindrome",
+    "input": "tests/007-odd-palindrome.in",
+    "expected": "tests/007-odd-palindrome.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-odd-center-mismatch",
+    "input": "tests/008-odd-center-mismatch.in",
+    "expected": "tests/008-odd-center-mismatch.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-even-palindrome",
+    "input": "tests/009-even-palindrome.in",
+    "expected": "tests/009-even-palindrome.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-even-end-mismatch",
+    "input": "tests/010-even-end-mismatch.in",
+    "expected": "tests/010-even-end-mismatch.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-near-center-mismatch",
+    "input": "tests/011-near-center-mismatch.in",
+    "expected": "tests/011-near-center-mismatch.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "012-negative-palindrome",
+    "input": "tests/012-negative-palindrome.in",
+    "expected": "tests/012-negative-palindrome.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-min-max-palindrome",
+    "input": "tests/013-min-max-palindrome.in",
+    "expected": "tests/013-min-max-palindrome.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "014-duplicate-non-palindrome",
+    "input": "tests/014-duplicate-non-palindrome.in",
+    "expected": "tests/014-duplicate-non-palindrome.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "015-all-equal",
+    "input": "tests/015-all-equal.in",
+    "expected": "tests/015-all-equal.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "016-medium-palindrome",
+    "input": "tests/016-medium-palindrome.in",
+    "expected": "tests/016-medium-palindrome.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-medium-mismatch",
+    "input": "tests/017-medium-mismatch.in",
+    "expected": "tests/017-medium-mismatch.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-stress-even-palindrome",
+    "input": "tests/018-stress-even-palindrome.in",
+    "expected": "tests/018-stress-even-palindrome.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  },
+  {
+    "id": "019-stress-odd-palindrome",
+    "input": "tests/019-stress-odd-palindrome.in",
+    "expected": "tests/019-stress-odd-palindrome.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  },
+  {
+    "id": "020-stress-middle-mismatch",
+    "input": "tests/020-stress-middle-mismatch.in",
+    "expected": "tests/020-stress-middle-mismatch.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "special"
+    ]
+  }
+]

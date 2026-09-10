@@ -138,9 +138,9 @@ Demo 允许章节只覆盖其中的核心部分；合并时必须明确 `status:
 | 2 栈与队列 | A | B |
 | 3 字符串与数组 | B | A |
 | 4 树与二叉树 | A | B |
-| 5 图 | B | A |
-| 6 查找 | A | B |
-| 7 排序 | B | A |
+| 5 树的应用 | B | A |
+| 6 图的基础与存储 | A | B |
+| 7 图的遍历与应用 | B | A |
 
 若章节跨度明显不同，可在一个大章中按小节交换“实现负责人”，但最终仍只有一位 Chapter Owner 串联叙事。意见冲突按“可运行证据 → 权威来源 → 最小实验 → 暂记开放问题”的顺序处理，不以合并权限决定知识结论。
 
@@ -211,7 +211,7 @@ LaTeX 适合出版级 PDF，但 Web 组件、交互 Demo、GitHub diff 和学生
 
 ## 8. 网站内容契约
 
-正文放在 `content/chapter-NN-topic/*.md`，Lab 放在 `labs/chapter-NN/lab-NN-MM-topic/README.md`。正文 frontmatter 的当前必填字段是：
+正文放在 `content/chapter-NN-topic/*.md`，Lab 放在 `labs/chapter-NN/<theory|exercise|project>/X-NN-SS-topic/README.md`（`X` 为 `T/E/P`，`SS` 为类型内稳定序号）。旧平铺 Lab 路径不再发布。正文 frontmatter 的当前必填字段是：
 
 ```yaml
 title: "页面标题"

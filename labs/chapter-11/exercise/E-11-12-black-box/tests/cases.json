@@ -1,0 +1,37 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-basic",
+    "input": "tests/002-basic.in",
+    "expected": "tests/002-basic.out",
+    "points": 20,
+    "tags": ["normal"]
+  },
+  {
+    "id": "003-duplicates",
+    "input": "tests/003-duplicates.in",
+    "expected": "tests/003-duplicates.out",
+    "points": 20,
+    "tags": ["normal"]
+  },
+  {
+    "id": "004-negative",
+    "input": "tests/004-negative.in",
+    "expected": "tests/004-negative.out",
+    "points": 20,
+    "tags": ["normal"]
+  },
+  {
+    "id": "005-repeat-u",
+    "input": "tests/005-repeat-u.in",
+    "expected": "tests/005-repeat-u.out",
+    "points": 20,
+    "tags": ["normal"]
+  }
+]

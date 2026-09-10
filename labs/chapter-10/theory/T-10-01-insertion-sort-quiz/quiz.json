@@ -1,0 +1,192 @@
+[
+  {
+    "id": "ds-drill-insertion-sort-001",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-001",
+    "stem": "插入排序的核心思想是？",
+    "options": [
+      "每次把最大的元素冒泡到末尾",
+      "把每个元素插入到已排序前缀的正确位置",
+      "分治递归地排序左右两半再合并",
+      "每次选出未排序区间的最小值放到前面"
+    ],
+    "answer": 1,
+    "explanation": "插入排序把数组看成「有序前缀 + 无序后缀」，每次取一个 key 插入前缀适当位置，对应「打扑克牌摸一张插一张」的直觉。"
+  },
+  {
+    "id": "ds-drill-insertion-sort-002",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-002",
+    "stem": "插入排序对 [3, 1, 2] 排序，第一步（外层 i=1）完成后数组是？",
+    "options": [
+      "[1, 3, 2]",
+      "[1, 2, 3]",
+      "[3, 1, 2]",
+      "[2, 1, 3]"
+    ],
+    "answer": 0,
+    "explanation": "i=1 时 key=1，把 3 右移，1 插到最前，得 [1, 3, 2]。"
+  },
+  {
+    "id": "ds-drill-insertion-sort-003",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-003",
+    "stem": "插入排序最好情况的时间复杂度是？",
+    "options": [
+      "O(n²)",
+      "O(n log n)",
+      "O(n)",
+      "O(1)"
+    ],
+    "answer": 2,
+    "explanation": "数组已有序时每个 key 直接放回原位，内层 while 几乎不执行，整体 O(n)。"
+  },
+  {
+    "id": "ds-drill-insertion-sort-004",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-004",
+    "stem": "插入排序为什么是稳定的？",
+    "options": [
+      "因为使用了额外数组",
+      "因为只有 a[j] > key 时才右移，等于 key 的元素不移动",
+      "因为它是原地排序",
+      "因为它每次选择最小值"
+    ],
+    "answer": 1,
+    "explanation": "只有 a[j] > key 才右移，等于 key 的元素保持不动，相等元素相对顺序不变。"
+  },
+  {
+    "id": "ds-drill-insertion-sort-005",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-005",
+    "stem": "关于插入排序的时间复杂度，下列说法正确的是？",
+    "options": [
+      "对逆序数组的复杂度是 O(n)",
+      "最好情况是 O(n)，逆序（最坏）是 O(n²)",
+      "平均复杂度是 O(n log n)",
+      "对有序数组的复杂度是 O(n²)"
+    ],
+    "answer": 1,
+    "explanation": "最好情况数组已有序，内层 while 几乎不执行，O(n)；逆序是最坏情况，每个 key 都要移到最前面，O(n²)。"
+  },
+  {
+    "id": "ds-drill-insertion-sort-006",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-006",
+    "stem": "插入排序在什么场景下实战价值最高？",
+    "options": [
+      "大规模完全随机数据",
+      "近乎有序的数组",
+      "大规模逆序数据",
+      "数据值域极小"
+    ],
+    "answer": 1,
+    "explanation": "插入排序对近乎有序数组接近 O(n)、常数因子小，TimSort 等在小段或近乎有序段会退回插入排序。"
+  },
+  {
+    "id": "ds-drill-insertion-sort-007",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-007",
+    "stem": "插入排序的外层循环不变式是？",
+    "options": [
+      "前 i 个位置是最小的 i 个元素",
+      "每轮开始前 a[0..i-1] 已有序且包含前 i 个元素的所有值",
+      "每轮结束后最大元素在末尾",
+      "堆顶永远是最大值"
+    ],
+    "answer": 1,
+    "explanation": "循环不变式：每轮开始时 a[0..i-1] 有序，且恰好包含原数组前 i 个元素的所有值。"
+  },
+  {
+    "id": "ds-drill-insertion-sort-008",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-008",
+    "stem": "下列哪种排序和插入排序一样，最好复杂度都是 O(n) 且稳定？",
+    "options": [
+      "选择排序",
+      "快速排序",
+      "冒泡排序",
+      "堆排序"
+    ],
+    "answer": 2,
+    "explanation": "冒泡排序最好 O(n)（早停）、稳定，与插入排序相同；但插入排序移动次数更少。"
+  },
+  {
+    "id": "ds-drill-insertion-sort-009",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-009",
+    "stem": "插入排序通常比冒泡排序快的主要原因是？",
+    "options": [
+      "插入排序稳定而冒泡不稳定",
+      "插入排序移动次数更少，冒泡每次交换要 3 次赋值",
+      "插入排序空间复杂度更低",
+      "插入排序最坏复杂度更优"
+    ],
+    "answer": 1,
+    "explanation": "插入排序只移动必要元素，冒泡每次交换需 3 次赋值，故插入通常更快。"
+  },
+  {
+    "id": "ds-drill-insertion-sort-010",
+    "title": "理论巩固题",
+    "source": "自编理论题",
+    "difficulty": "★★★",
+    "topics": [
+      "insertion sort"
+    ],
+    "targetId": "ds-drill-insertion-sort-010",
+    "stem": "插入排序的空间复杂度是？",
+    "options": [
+      "O(n)",
+      "O(log n)",
+      "O(1)",
+      "O(n²)"
+    ],
+    "answer": 2,
+    "explanation": "插入排序原地排序，只用常数个临时变量（key、j），空间 O(1)。"
+  }
+]

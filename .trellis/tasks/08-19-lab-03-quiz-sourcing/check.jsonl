@@ -1,0 +1,2 @@
+{"file": "labs/chapter-03/lab-03-01-string-basics-quiz/quiz.json", "reason": "pnpm run validate:content 通过；pnpm lab:validate 通过（15 题）"}
+{"file": "labs/chapter-03/lab-03-02-string-matching-quiz/quiz.json", "reason": "pnpm run validate:content 通过；pnpm lab:validate 通过（15 题）"}

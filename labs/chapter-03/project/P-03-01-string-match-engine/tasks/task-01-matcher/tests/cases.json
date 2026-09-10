@@ -1,0 +1,13 @@
+[
+  { "id": "001-sample", "input": "tests/001-sample.in", "expected": "tests/001-sample.out", "points": 10, "tags": ["sample"] },
+  { "id": "002-head", "input": "tests/002-head.in", "expected": "tests/002-head.out", "points": 10, "tags": ["normal"] },
+  { "id": "003-tail", "input": "tests/003-tail.in", "expected": "tests/003-tail.out", "points": 10, "tags": ["normal"] },
+  { "id": "004-overlap", "input": "tests/004-overlap.in", "expected": "tests/004-overlap.out", "points": 10, "tags": ["normal"] },
+  { "id": "005-empty-pattern", "input": "tests/005-empty-pattern.in", "expected": "tests/005-empty-pattern.out", "points": 10, "tags": ["boundary"] },
+  { "id": "006-empty-text", "input": "tests/006-empty-text.in", "expected": "tests/006-empty-text.out", "points": 5, "tags": ["boundary"] },
+  { "id": "007-single-char", "input": "tests/007-single-char.in", "expected": "tests/007-single-char.out", "points": 5, "tags": ["boundary"] },
+  { "id": "008-not-found", "input": "tests/008-not-found.in", "expected": "tests/008-not-found.out", "points": 10, "tags": ["boundary"] },
+  { "id": "009-m-greater-n", "input": "tests/009-m-greater-n.in", "expected": "tests/009-m-greater-n.out", "points": 10, "tags": ["boundary"] },
+  { "id": "010-repeated-regression", "input": "tests/010-repeated-regression.in", "expected": "tests/010-repeated-regression.out", "points": 10, "tags": ["regression"] },
+  { "id": "011-worst-case", "input": "tests/011-worst-case.in", "expected": "tests/011-worst-case.out", "points": 10, "tags": ["stress"] }
+]

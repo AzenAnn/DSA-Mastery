@@ -34,7 +34,7 @@ pnpm test
 ## 提交原则
 
 - 一个 PR 解决一个清楚的问题，避免夹带无关重构。
-- 教材正文放在 `content/chapter-*/`，Lab 放在 `labs/chapter-*/lab-*/`。
+- 教材正文放在 `content/chapter-*/`，Lab 放在 `labs/chapter-*/<theory|exercise|project>/` 对应分类目录。
 - 教材与 Lab 间可使用相对 `.md` 链接；校验器检查源文件，构建器改写课程 URL。不要硬编码 `/DSA-Mastery/`。
 - 用自己的语言和例子解释；引用可追溯，图片和代码许可清楚。
 - AI 生成内容必须由提交者验证，并在 PR 中说明使用与复核方式。

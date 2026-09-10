@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AVL 树 · 旋转实验室</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#171a1f; --panel:#282c34; --panel2:#21252b; --line:#3e4451;
+      --text:#d7dae0; --muted:#8b929f; --cyan:#56b6c2; --yellow:#e5c07b;
+      --green:#98c379; --red:#e06c75; --purple:#c678dd; --blue:#61afef;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0,#212b3a 0,transparent 35%),linear-gradient(145deg,#171a1f,#20252d);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,select,input{font:inherit}
+    .app{width:min(1180px,calc(100% - 28px));margin:22px auto 38px}
+    .hero,.card{border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 95%,transparent);box-shadow:0 18px 50px #090b1066}
+    .hero{position:relative;overflow:hidden;border-radius:22px;padding:25px 27px}
+    .hero::after{content:"⌒";position:absolute;right:26px;top:-22px;font:900 120px/1 ui-monospace;color:#61afef0c;pointer-events:none}
+    .eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}
+    h1{margin:2px 0 5px;color:#f5f7fa;font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15}
+    .hero p{max-width:780px;margin:0;color:var(--muted)}
+    .layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.82fr);gap:16px;margin-top:16px}
+    .card{border-radius:18px;padding:17px}
+    .toolbar,.controls,.legend,.stats{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+    .toolbar{justify-content:space-between;margin-bottom:13px}
+    .toolbar strong{color:#f4f6f9;font-size:1.05rem}
+    button,select,input{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:8px 13px;background:#2c313c;color:#edf1f7;cursor:pointer;touch-action:manipulation}
+    button:hover,select:hover{border-color:var(--cyan)}
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+    button.primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#14202b;border:0;font-weight:850}
+    input[type=text]{min-height:42px;width:190px;text-align:center}
+    .board{background:#1d2128;border:1px solid var(--line);border-radius:16px;padding:clamp(10px,2vw,18px);min-height:290px;position:relative}
+    .board svg{display:block;width:100%;height:auto}
+    .b-node{cursor:pointer}
+    .b-node text{font:800 13px ui-monospace;fill:#fff}
+    .b-node circle{fill:#262b34;stroke:#4b5260;stroke-width:1.5;transition:fill .2s,stroke .2s,filter .2s}
+    .b-node:hover circle{fill:#303a47;stroke:#8390a3}
+    .b-node.new circle{fill:#25502f;stroke:var(--green);stroke-width:2.5;filter:drop-shadow(0 0 8px #98c379aa)}
+    .b-node.imbalanced circle{fill:#4a3038;stroke:var(--red);stroke-width:2.8;filter:drop-shadow(0 0 8px #e06c75aa)}
+    .b-node.rotating circle{fill:#6d5c37;stroke:var(--yellow);stroke-width:2.8;filter:drop-shadow(0 0 10px #e5c07baa)}
+    .b-node.updated circle{fill:#1e4752;stroke:var(--cyan);stroke-width:2.4;filter:drop-shadow(0 0 8px #56b6c288)}
+    .bf-label{font:700 11px ui-monospace;fill:var(--muted)}
+    .b-edge{stroke:#4b5260;stroke-width:1.6}
+    .b-edge.hot{stroke:var(--yellow);stroke-width:2.4;filter:drop-shadow(0 0 5px #e5c07b88)}
+    .legend{margin:12px 2px 3px;color:var(--muted);font-size:.85rem}
+    .key{display:inline-flex;align-items:center;gap:5px}.swatch{width:11px;height:11px;border-radius:3px;background:var(--c)}
+    .controls{border-top:1px solid var(--line);margin-top:13px;padding-top:13px}
+    input[type=range]{flex:1 1 180px;min-height:42px;accent-color:var(--purple);cursor:pointer}
+    .side{display:flex;flex-direction:column;gap:16px}
+    .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem;margin-bottom:8px}
+    .badge{border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--yellow);background:#e5c07b12}
+    .badge.bal{color:var(--green);background:#98c37912}.badge.imb{color:var(--red);background:#e06c7512}
+    .narration{min-height:76px;border-left:4px solid var(--cyan);border-radius:9px;background:#20242b;padding:12px 13px;color:#eef1f5}
+    .inorder{background:#1d2128;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:700 13px ui-monospace;color:var(--green);overflow-wrap:anywhere}
+    .stats{margin-top:12px}.stat{flex:1;min-width:78px;background:#20242b;border-radius:10px;padding:7px 9px}.stat small{display:block;color:var(--muted)}.stat strong{color:#fff}
+    .tip{margin:10px 2px 0;color:var(--muted);font-size:.84rem}
+    .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+    .prstab{border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:#2c313c;color:var(--muted);font-size:12px;cursor:pointer}
+    .prstab:hover{border-color:var(--cyan);color:#fff}
+    .avlbadge{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:999px;background:#20242b;border:1px solid var(--line);font-size:.82rem;color:var(--muted)}
+    .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:860px){.app{width:min(100% - 16px,680px);margin:8px auto 24px}.layout{grid-template-columns:1fr}.hero,.card{border-radius:14px}.hero{padding:20px}.side{display:grid;grid-template-columns:1fr}}
+    @media(max-width:430px){.hero::after{display:none}.legend{gap:8px}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="hero">
+    <div class="eyebrow">Interactive Algorithm Lab</div>
+    <h1>AVL 树 · 旋转实验室</h1>
+    <p>插入后某些结点会失衡（左右子树高度差超过 1）。本演示逐步显示每个结点的平衡因子，标出最低失衡结点，并按 LL / RR / LR / RL 执行旋转恢复。四种形态用一组“三键”就能触发。</p>
+  </header>
+  <section class="layout">
+    <div class="card">
+      <div class="toolbar">
+        <strong>AVL 编辑区</strong>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;align-items:center">
+          <input data-role="key" type="text" aria-label="关键字序列" placeholder="如 3,2,1 触发 LL">
+          <button data-action="insert-seq">插入序列</button>
+        </div>
+      </div>
+      <div class="presets" aria-label="预设序列">
+        预设：
+        <button class="prstab" data-seq="3,2,1">3,2,1 → LL</button>
+        <button class="prstab" data-seq="1,2,3">1,2,3 → RR</button>
+        <button class="prstab" data-seq="3,1,2">3,1,2 → LR</button>
+        <button class="prstab" data-seq="1,3,2">1,3,2 → RL</button>
+        <button class="prstab" data-seq="30,20,10,25,28,27">30,20,10,25,28,27 练习</button>
+      </div>
+      <div class="board">
+        <div id="tree" aria-label="AVL 树可视化"></div>
+      </div>
+      <div class="legend" aria-label="图例">
+        <span class="key"><i class="swatch" style="--c:var(--green)"></i>新插入</span>
+        <span class="key"><i class="swatch" style="--c:var(--red)"></i>失衡结点</span>
+        <span class="key"><i class="swatch" style="--c:var(--yellow)"></i>旋转涉及</span>
+        <span class="key"><i class="swatch" style="--c:var(--cyan)"></i>高度已更新</span>
+      </div>
+      <p class="tip" style="margin-top:30px">提示：点某个失衡结点可手动执行合适的旋转；也可以点任意结点查看。先用四个“三键”预设看清 LL/RR/LR/RL 的差异。</p>
+      <div class="controls" aria-label="播放控制">
+        <button data-action="reset">↺ 清空</button>
+        <button data-action="prev">← 上一步</button>
+        <button class="primary" data-action="play">▶ 播放插入+旋转</button>
+        <button data-action="next">下一步 →</button>
+        <input data-role="timeline" type="range" min="0" value="0" aria-label="时间线进度">
+        <select data-role="speed" aria-label="播放速度">
+          <option value="900">0.5× 慢速</option><option value="600" selected>1× 正常</option><option value="300">2× 快速</option>
+        </select>
+      </div>
+    </div>
+    <aside class="side">
+      <section class="card">
+        <div class="meta"><span id="counter">步骤 0/0</span><span id="status" class="badge">空树</span></div>
+        <div id="narration" class="narration" aria-live="polite">空树。选择预设序列，或输入关键字后点击“插入序列”，观察 AVL 如何用旋转保持平衡。</div>
+        <div class="avlbadge" id="balanceState">平衡：√ 所有 |BF| ≤ 1</div>
+      </section>
+      <section class="card">
+        <div class="meta"><span>中序遍历</span><span>应为严格升序</span></div>
+        <div id="inorder" class="inorder">（空）</div>
+      </section>
+      <section class="card">
+        <div class="meta"><span>AVL 指标</span><span>h = O(log n)</span></div>
+        <div class="stats">
+          <div class="stat"><small>结点数 n</small><strong id="nval">0</strong></div>
+          <div class="stat"><small>树高 h（根=0层）</small><strong id="hval">—</strong></div>
+          <div class="stat"><small>失衡结点</small><strong id="imbCount">0</strong></div>
+        </div>
+        <p class="tip" style="margin:10px 0 0">平衡因子 = 左子树高 − 右子树高。每个结点旁标注的 ±1 <var>BF</var> 恰是判定 LL/RR/LR/RL 的线索。</p>
+      </section>
+    </aside>
+  </section>
+  <div id="live" class="sr" aria-live="assertive"></div>
+</main>
+<script>
+(() => {
+  "use strict";
+  let root=null, frames=[], index=0, timer=null;
+  const $=s=>document.querySelector(s);
+  const ui={tree:$("#tree"),timeline:$("[data-role=timeline]"),speed:$("[data-role=speed]"),key:$("[data-role=key]"),counter:$("#counter"),status:$("#status"),narration:$("#narration"),inorder:$("#inorder"),nval:$("#nval"),hval:$("#hval"),imb:$("#imbCount"),bal:$("#balanceState"),live:$("#live"),play:$("[data-action=play]")};
+
+  function clone(n){ if(!n)return null; return {key:n.key,left:clone(n.left),right:clone(n.right),parent:null}; }
+  function heightOf(n){ if(!n)return -1; return 1+Math.max(heightOf(n.left),heightOf(n.right)); }
+  function bfOf(n){ if(!n)return 0; return heightOf(n.left)-heightOf(n.right); }
+  function inorderArray(r){ const a=[]; (function w(n){ if(!n)return; w(n.left); a.push(n.key); w(n.right); })(r); return a; }
+  function findNode(r,k){ let cur=r; while(cur){ if(k===cur.key)return cur; cur=k<cur.key?cur.left:cur.right; } return null; }
+  function setParent(child,p){ if(child) child.parent=p; }
+
+  // 二叉搜索插入（不调平衡）
+  function bstInsert(r,key){
+    if(!r) return {key,left:null,right:null,parent:null};
+    if(key<r.key){ r.left=bstInsert(r.left,key); r.left.parent=r; }
+    else if(key>r.key){ r.right=bstInsert(r.right,key); r.right.parent=r; }
+    return r;
+  }
+  // 旋转（更新父指针），返回新的子树根
+  function rotateRight(y){
+    const x=y.left, T2=x?x.right:null;
+    // x 提升，y 成为 x 的右孩子，T2 成为 y 的左孩子
+    setParent(x,y.parent);
+    y.left=T2; if(T2) T2.parent=y;
+    x.right=y; y.parent=x;
+    return x;
+  }
+  function rotateLeft(x){
+    const y=x.right, T2=y?y.left:null;
+    setParent(y,x.parent);
+    x.right=T2; if(T2) T2.parent=x;
+    y.left=x; x.parent=y;
+    return y;
+  }
+  // 找到最低失衡结点（从根往下第一个 |BF|>1）
+  function lowestImbalanced(r){
+    if(!r) return null;
+    if(Math.abs(bfOf(r))>1) return r;
+    // 优先深入较矮的一侧？失衡只可能出现在插入路径上的祖先。取较深较高的子树方向更安全。
+    const bl=bfOf(r); if(bl>0) return lowestImbalanced(r.left); else return lowestImbalanced(r.right);
+  }
+  // 一次 AVL 插入（递归平衡），返回新根。附带旋转记录说明。
+  function avlInsert(r,key,rec){
+    if(!r){ const nn={key,left:null,right:null,parent:null}; rec.push({type:"leaf",key,msg:`插入 ${key} 作为新的叶结点。`}); return nn; }
+    if(key<r.key){
+      r.left=avlInsert(r.left,key,rec); r.left.parent=r;
+    } else if(key>r.key){
+      r.right=avlInsert(r.right,key,rec); r.right.parent=r;
+    }
+    const bf=bfOf(r);
+    if(bf>1 && key<r.left.key){
+      // LL：右旋
+      rec.push({type:"rotate",name:"LL",pivot:r.key,child:r.left.key,msg:`结点 ${r.key} 失衡（BF=${bf}），且新值在左孩子的左侧：LL，对它右旋。`});
+      return rotateRight(r);
+    }
+    if(bf<-1 && key>r.right.key){
+      rec.push({type:"rotate",name:"RR",pivot:r.key,child:r.right.key,msg:`结点 ${r.key} 失衡（BF=${bf}），且新值在右孩子的右侧：RR，对它左旋。`});
+      return rotateLeft(r);
+    }
+    if(bf>1 && key>r.left.key){
+      rec.push({type:"rotate",name:"LR",pivot:r.key,child:r.left.key,msg:`结点 ${r.key} 失衡（BF=${bf}），且新值在左孩子的右侧：LR，先对 ${r.left.key} 左旋，再对 ${r.key} 右旋。`});
+      r.left=rotateLeft(r.left); if(r.left) r.left.parent=r;
+      return rotateRight(r);
+    }
+    if(bf<-1 && key<r.right.key){
+      rec.push({type:"rotate",name:"RL",pivot:r.key,child:r.right.key,msg:`结点 ${r.key} 失衡（BF=${bf}），且新值在右孩子的左侧：RL，先对 ${r.right.key} 右旋，再对 ${r.key} 左旋。`});
+      r.right=rotateRight(r.right); if(r.right) r.right.parent=r;
+      return rotateLeft(r);
+    }
+    return r;
+  }
+
+  // 逐键生成帧（每次插入后立刻平衡，记录每步说明与高亮）
+  function buildFrames(keys){
+    const f=[];
+    for(let i=0;i<keys.length;i++){
+      const k=keys[i];
+      const rec=[];
+      root=avlInsert(root,k,rec);
+      // rec 里可能有多条（插入 + 旋转说明）。合并为一条总说明。
+      const msgs=rec.map(r=>r.msg).join(" ");
+      const isRot=rec.some(r=>r.rotate||r.type==="rotate");
+      const mark=(()=>{ if(isRot){ const R=rec.find(r=>r.type==="rotate"); return {new:k,rotate:R?R.name:null,rotPivot:R?R.pivot.key:null}; } return {new:k}; })();
+      f.push({root:clone(root),type:isRot?"rotate":"insert",msg:`【${isRot?"旋转":"插入"}】${msgs}`,marks:mark,seq:keys.slice(0,i+1)});
+    }
+    return f;
+  }
+
+  function draw(frame){
+    const n=inorderArray(frame.root).length;
+    const inOrder=inorderArray(frame.root);
+    const pos={}; inOrder.forEach((k,i)=>pos[k]=i);
+    const depth={}; const bf={};
+    (function rec(t,d){ if(!t)return; depth[t.key]=d; rec(t.left,d+1); rec(t.right,d+1); })(frame.root,0);
+    (function recB(t){ if(!t)return; bf[t.key]=bfOf(t); recB(t.left); recB(t.right); })(frame.root,0);
+    let maxD=0; Object.keys(depth).forEach(k=>maxD=Math.max(maxD,depth[k]));
+    const W=Math.max(520,n*48+80),pad=44,stepY=76,bfY=16;
+    const H=Math.max(150,(maxD+1)*stepY+50);
+    const px=k=>pad+pos[k]*((W-2*pad)/Math.max(1,n-1));
+    const py=d=>40+d*stepY;
+    const NS="http://www.w3.org/2000/svg";
+    const svg=document.createElementNS(NS,"svg"); svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.setAttribute("role","img"); svg.setAttribute("aria-label","AVL 树可视化");
+    const marks=frame.marks||{}; const rotPivot=marks.rotPivot;
+    let frag="";
+    (function rec(t){ if(!t)return; for(const c of [t.left,t.right]){ if(c){ const hot=(rotPivot&&(t.key===rotPivot||c.key===rotPivot)||marks.rotate&&marks.new===t.key||marks.rotate&&marks.new===c.key); frag+=`<line class="b-edge${hot?" hot":""}" x1="${px(t.key)}" y1="${py(depth[t.key])}" x2="${px(c.key)}" y2="${py(depth[c.key])}"/>`; } } rec(t.left); rec(t.right); })(frame.root);
+    (function rec(t){ if(!t)return; const cls=["b-node"];
+      if(marks.new===t.key)cls.push("new");
+      if(Math.abs(bfOf(t))>1)cls.push("imbalanced");
+      if(rotPivot&&t.key===rotPivot)cls.push("rotating");
+      frag+=`<g class="${cls.join(" ")}" data-key="${t.key}" transform="translate(${px(t.key)},${py(depth[t.key])})"><title>结点 ${t.key}，BF=${bfOf(t)}</title><circle r="17"/><text y="5" text-anchor="middle">${t.key}</text><text class="bf-label" x="18" y="${-bfY}">${bfOf(t)>0?"+":""}${bfOf(t)}</text></g>`;
+      rec(t.left); rec(t.right); })(frame.root);
+    svg.innerHTML=frag; ui.tree.replaceChildren(svg);
+    // 指标
+    ui.inorder.textContent=n?inOrder.join("  "):"（空）";
+    ui.nval.textContent=n;
+    ui.hval.textContent=n?maxD:"—";
+    let imb=0; Object.keys(bf).forEach(k=>{ if(Math.abs(bf[k])>1)imb++; });
+    ui.imb.textContent=imb;
+    const balanced=(n?imb===0:true);
+    ui.bal.textContent=balanced?"平衡：√ 所有 |BF| ≤ 1":"失衡：存在 |BF| ≥ 2 的结点，需旋转";
+    ui.bal.style.color=balanced?"var(--green)":"var(--red)";
+  }
+
+  function render(){
+    const frame=frames[index];
+    if(!frame) return;
+    draw(frame);
+    ui.timeline.max=frames.length-1; ui.timeline.value=index;
+    ui.counter.textContent=`步骤 ${index}/${frames.length-1}`;
+    ui.narration.textContent=frame.msg;
+    ui.status.textContent=frame.type==="rotate"?"旋转":frame.type==="insert"?"插入":"空树";
+    ui.status.style.color=frame.type==="rotate"?"var(--yellow)":frame.type==="insert"?"var(--green)":"var(--yellow)";
+    ui.play.textContent=timer?"❚❚ 暂停":"▶ 播放插入";
+  }
+
+  function loadSeq(text,keys){
+    if(keys==null) keys=text.split(/[,\s]+/).map(s=>s.trim()).filter(Boolean).map(Number).filter(x=>!Number.isNaN(x));
+    root=null;
+    frames=buildFrames(keys);
+    index=0; ui.timeline.max=frames.length-1; render();
+    ui.live.textContent=`已载入 ${keys.length} 个关键字，观察插入与旋转。`;
+  }
+  function resetTree(){
+    root=null;
+    frames=[{root:null,type:"empty",msg:"空树。选择预设序列或输入关键字开始。",marks:{},seq:[]}];
+    index=0; ui.timeline.max=frames.length-1; render();
+  }
+  function pause(redraw){ if(timer){clearInterval(timer);timer=null;} if(redraw!==false)render(); }
+  function play(){ if(timer){pause();return;} if(index>=frames.length-1)index=0; timer=setInterval(()=>{if(index>=frames.length-1){pause();return;}index++;render();},Number(ui.speed.value)); render(); }
+
+  $("[data-action=reset]").addEventListener("click",resetTree);
+  $("[data-action=insert-seq]").addEventListener("click",()=>loadSeq(ui.key.value));
+  ui.key.addEventListener("keydown",e=>{if(e.key==="Enter")loadSeq(ui.key.value);});
+  document.querySelectorAll(".prstab").forEach(b=>b.addEventListener("click",()=>{loadSeq(b.dataset.seq);}));
+  $("[data-action=play]").addEventListener("click",play);
+  $("[data-action=prev]").addEventListener("click",()=>{pause(false);index=Math.max(0,index-1);render();});
+  $("[data-action=next]").addEventListener("click",()=>{pause(false);index=Math.min(frames.length-1,index+1);render();});
+  ui.timeline.addEventListener("input",()=>{pause(false);index=Number(ui.timeline.value);render();});
+  ui.speed.addEventListener("change",()=>{if(timer){pause(false);play();}});
+  document.addEventListener("keydown",e=>{if(e.target.matches("input,select,button"))return;if(e.key==="ArrowRight")$("[data-action=next]").click();if(e.key==="ArrowLeft")$("[data-action=prev]").click();if(e.key===" "){e.preventDefault();play();}});
+  resetTree();
+})();
+</script>
+</body>
+</html>

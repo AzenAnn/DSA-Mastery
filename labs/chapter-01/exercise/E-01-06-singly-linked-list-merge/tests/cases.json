@@ -1,0 +1,194 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "exact"
+    }
+  },
+  {
+    "id": "002-one-empty",
+    "input": "tests/002-one-empty.in",
+    "expected": "tests/002-one-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-all-same",
+    "input": "tests/003-all-same.in",
+    "expected": "tests/003-all-same.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "004-separated",
+    "input": "tests/004-separated.in",
+    "expected": "tests/004-separated.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-both-empty",
+    "input": "tests/005-both-empty.in",
+    "expected": "tests/005-both-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "006-left-empty",
+    "input": "tests/006-left-empty.in",
+    "expected": "tests/006-left-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-right-empty",
+    "input": "tests/007-right-empty.in",
+    "expected": "tests/007-right-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-single-single",
+    "input": "tests/008-single-single.in",
+    "expected": "tests/008-single-single.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-interleaved",
+    "input": "tests/009-interleaved.in",
+    "expected": "tests/009-interleaved.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-cross-list-duplicates",
+    "input": "tests/010-cross-list-duplicates.in",
+    "expected": "tests/010-cross-list-duplicates.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "011-negative-values",
+    "input": "tests/011-negative-values.in",
+    "expected": "tests/011-negative-values.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-min-max-values",
+    "input": "tests/012-min-max-values.in",
+    "expected": "tests/012-min-max-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "special"
+    ]
+  },
+  {
+    "id": "013-left-prefix-dominates",
+    "input": "tests/013-left-prefix-dominates.in",
+    "expected": "tests/013-left-prefix-dominates.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-right-prefix-dominates",
+    "input": "tests/014-right-prefix-dominates.in",
+    "expected": "tests/014-right-prefix-dominates.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-uneven-lengths",
+    "input": "tests/015-uneven-lengths.in",
+    "expected": "tests/015-uneven-lengths.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-alternating-runs",
+    "input": "tests/016-alternating-runs.in",
+    "expected": "tests/016-alternating-runs.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "017-medium-duplicates",
+    "input": "tests/017-medium-duplicates.in",
+    "expected": "tests/017-medium-duplicates.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "018-medium-skewed",
+    "input": "tests/018-medium-skewed.in",
+    "expected": "tests/018-medium-skewed.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-stress-one-empty",
+    "input": "tests/019-stress-one-empty.in",
+    "expected": "tests/019-stress-one-empty.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity",
+      "boundary"
+    ]
+  },
+  {
+    "id": "020-stress-interleaved",
+    "input": "tests/020-stress-interleaved.in",
+    "expected": "tests/020-stress-interleaved.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "complexity"
+    ]
+  }
+]

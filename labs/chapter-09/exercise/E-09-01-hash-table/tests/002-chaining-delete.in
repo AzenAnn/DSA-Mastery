@@ -1,0 +1,9 @@
+chaining
+5
+insert 2
+insert 7
+insert 12
+delete 7
+find 7
+probe 12
+dump

@@ -18,7 +18,9 @@
   "commit": null,
   "pr_url": null,
   "subtasks": [],
-  "children": [],
+  "children": [
+    "08-21-chapter3-string-matching-engine-project"
+  ],
   "parent": "08-12-roadmap-chapters-3-7",
   "relatedFiles": [],
   "notes": "",

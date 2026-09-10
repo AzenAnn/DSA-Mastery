@@ -1,0 +1,44 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-single",
+    "input": "tests/002-single.in",
+    "expected": "tests/002-single.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-sorted",
+    "input": "tests/003-sorted.in",
+    "expected": "tests/003-sorted.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-reverse",
+    "input": "tests/004-reverse.in",
+    "expected": "tests/004-reverse.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-duplicates",
+    "input": "tests/005-duplicates.in",
+    "expected": "tests/005-duplicates.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "006-large",
+    "input": "tests/006-large.in",
+    "expected": "tests/006-large.out",
+    "points": 20,
+    "tags": ["normal", "large"]
+  }
+]

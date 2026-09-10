@@ -1,0 +1,202 @@
+[
+  {
+    "id": "001-sample-reachable",
+    "input": "tests/001-sample-reachable.in",
+    "expected": "tests/001-sample-reachable.out",
+    "points": 5,
+    "tags": [
+      "sample",
+      "reachable"
+    ]
+  },
+  {
+    "id": "002-sample-unreachable",
+    "input": "tests/002-sample-unreachable.in",
+    "expected": "tests/002-sample-unreachable.out",
+    "points": 5,
+    "tags": [
+      "sample",
+      "unreachable"
+    ]
+  },
+  {
+    "id": "003-single",
+    "input": "tests/003-single.in",
+    "expected": "tests/003-single.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "single"
+    ]
+  },
+  {
+    "id": "004-zero-barrier",
+    "input": "tests/004-zero-barrier.in",
+    "expected": "tests/004-zero-barrier.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "zero"
+    ]
+  },
+  {
+    "id": "005-early-finish",
+    "input": "tests/005-early-finish.in",
+    "expected": "tests/005-early-finish.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "early-finish"
+    ]
+  },
+  {
+    "id": "006-exact-reach",
+    "input": "tests/006-exact-reach.in",
+    "expected": "tests/006-exact-reach.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "exact"
+    ]
+  },
+  {
+    "id": "007-long-reachable",
+    "input": "tests/007-long-reachable.in",
+    "expected": "tests/007-long-reachable.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "long"
+    ]
+  },
+  {
+    "id": "008-all-zero",
+    "input": "tests/008-all-zero.in",
+    "expected": "tests/008-all-zero.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "zero"
+    ]
+  },
+  {
+    "id": "009-two-reachable",
+    "input": "tests/009-two-reachable.in",
+    "expected": "tests/009-two-reachable.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "reachable"
+    ]
+  },
+  {
+    "id": "010-two-unreachable",
+    "input": "tests/010-two-unreachable.in",
+    "expected": "tests/010-two-unreachable.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "unreachable"
+    ]
+  },
+  {
+    "id": "011-overshoot",
+    "input": "tests/011-overshoot.in",
+    "expected": "tests/011-overshoot.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "overshoot"
+    ]
+  },
+  {
+    "id": "012-large-after-gap",
+    "input": "tests/012-large-after-gap.in",
+    "expected": "tests/012-large-after-gap.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "unreachable"
+    ]
+  },
+  {
+    "id": "013-skip-zero",
+    "input": "tests/013-skip-zero.in",
+    "expected": "tests/013-skip-zero.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "zero"
+    ]
+  },
+  {
+    "id": "014-late-skip",
+    "input": "tests/014-late-skip.in",
+    "expected": "tests/014-late-skip.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "zero"
+    ]
+  },
+  {
+    "id": "015-preserve-max-reach",
+    "input": "tests/015-preserve-max-reach.in",
+    "expected": "tests/015-preserve-max-reach.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "max-reach"
+    ]
+  },
+  {
+    "id": "016-late-barrier",
+    "input": "tests/016-late-barrier.in",
+    "expected": "tests/016-late-barrier.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "unreachable"
+    ]
+  },
+  {
+    "id": "017-alternating-barrier",
+    "input": "tests/017-alternating-barrier.in",
+    "expected": "tests/017-alternating-barrier.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "zero"
+    ]
+  },
+  {
+    "id": "018-large-jump",
+    "input": "tests/018-large-jump.in",
+    "expected": "tests/018-large-jump.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "overshoot"
+    ]
+  },
+  {
+    "id": "019-stress-reachable",
+    "input": "tests/019-stress-reachable.in",
+    "expected": "tests/019-stress-reachable.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "reachable"
+    ]
+  },
+  {
+    "id": "020-stress-unreachable",
+    "input": "tests/020-stress-unreachable.in",
+    "expected": "tests/020-stress-unreachable.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "unreachable"
+    ]
+  }
+]

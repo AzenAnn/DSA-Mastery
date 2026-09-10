@@ -2,22 +2,22 @@
 
 ## 1. Scope / Trigger
 
-新增或修改 `labs/chapter-*/lab-*/README.md`、交互题库 `quiz.json`、Lab 内实现/测试、Lab 索引或实验验收方式时适用。
+新增或修改 `labs/chapter-*/*/*/README.md`、交互题库 `quiz.json`、Lab 内实现/测试、Lab 索引或实验验收方式时适用。
 
 ## 2. Signatures
 
 ```text
-labs/chapter-NN/lab-NN-LL-slug/README.md
-  -> /labs/chapter-NN/lab-NN-LL-slug/
+labs/chapter-NN/<theory|exercise|project>/X-NN-SS-slug/README.md
+  -> /labs/chapter-NN/<theory|exercise|project>/X-NN-SS-slug/
 
-labs/chapter-NN/lab-NN-LL-slug/quiz.json
+labs/chapter-NN/<theory|exercise|project>/X-NN-SS-slug/quiz.json
   -> .vitepress/quiz.data.ts
   -> <QuizSet />
 ```
 
-Lab 由同一个内容索引收集，`kind` 固定为 `lab`；其 `chapter + order` 只在 Lab 集合内唯一。
+Lab 由同一个内容索引收集，`kind` 固定为 `lab`；其 `chapter + order` 只在 Lab 集合内唯一。`labId` 是跨网站、CLI、VS Code 和交流场景的永久身份，`order` 只控制展示顺序。
 
-新式 Lab 的机器接口另见 [Lab v1 机器接口、评分与分发合同](lab-tooling.md)。README-only 旧 Lab 继续兼容；有维护需求时按作者指南渐进迁移，不一次性重写全部历史内容。
+Lab 的机器接口另见 [Lab v1 机器接口、评分与分发合同](lab-tooling.md)。README-only Lab 仍可使用，但必须遵守相同的三级目录、稳定 ID、标题和分类合同。
 
 ## 3. Contracts
 
@@ -26,11 +26,30 @@ Lab 继承教材八个字段，并额外要求：
 | 字段 | 约束 |
 | --- | --- |
 | `lab` | YAML 布尔值 `true`，不能写字符串 `"true"` |
+| `labId` | 规范形式 `CC + T/E/P + SS`，例如 `02T03`；章节和序号至少两位，全仓唯一 |
 | `difficulty` | 非空、面向读者的级别，如“入门”“基础” |
 | `duration` | 非空、可理解的预计时长，如“45～60 分钟” |
 | `labCategory` | README-only Lab 接入分类侧栏时可选；只能是 `theory`、`exercise`、`project`，不得按标题推断 |
 
-网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。有 manifest 的 Lab 不在 frontmatter 重复声明；README-only Lab 只有在对应章节启用分类侧栏时才需要显式 `labCategory`。分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。当前第 1 章启用“本章 Labs”三分类并要求所有 Lab 可分类，其他章节继续使用“相关 Labs”。
+网站分类优先从同目录 `lab.json.type` 派生：`quiz -> theory`、`program -> exercise`、`project -> project`。稳定 ID 标签使用同一映射：`quiz -> T`、`program -> E`、`project -> P`。README-only Lab 由显式 `labCategory` 映射。有 manifest 的 Lab 不在 frontmatter 重复声明类型；分类随统一 ContentIndex 输出，侧栏不得维护第二份 Lab 清单。发布后的 `labId` 不因删除、插入或调整 `order` 而复用或改号。声明 `autoLabChapter` 的课程章节启用“本章 Labs”三分类并要求所有 Lab 可分类；即使集合为空，也显示 Theory/Exercise/Project 与各自空状态。当前 Ch.5 有 5 个正式 Quiz 和 17 个 Program，Theory 与 Exercise 分别显示对应的自动收录入口，Project 继续显示空状态；不得为填满空分类创建占位 Lab。未启用分类的章节继续使用“相关 Labs”。
+
+### 标题与稳定编号
+
+README 的源标题必须由 `labId` 生成，格式固定为 `Lab CC-X-SS：题目名称`。例如 `labId: "01E01"` 对应：
+
+```yaml
+title: "Lab 01-E-01：有序顺序表去重"
+```
+
+```md
+# Lab 01-E-01：有序顺序表去重
+```
+
+- frontmatter `title` 与正文 H1 必须完全一致；`CC`、`X`、`SS` 分别来自 `labId` 的章节、类型标签和类型内序号。
+- 新建 Lab，以及 Agent 或作者整理既有 Lab README 时，必须同步使用稳定标题；禁止从 `order`、迁移前的目录序号或原来的 `Lab NN-OO` 标题推导编号。
+- 所有 Lab 必须位于规范分类目录，旧 Lab URL 不再属于产物合同；禁止创建旧地址兼容页或重定向。
+- 网站侧栏使用紧凑形式 `CCXSS · 题目名称`，例如 `01E01 · 有序顺序表去重`。这是展示格式，不得反向写进 README 标题。
+- 发布后修改题目名称时只改冒号后的文本；`labId` 和冒号前的稳定编号保持不变。
 
 README 至少说明：
 
@@ -41,6 +60,10 @@ README 至少说明：
 - 如果有代码，给出从干净检出开始的精确命令。
 
 完整实现、`src/`、`tests/`、fixtures 和样例放在该 Lab 目录，不复制进多个教材页面。命令不得依赖作者机器的全局包、秘密文件或未说明服务。
+
+### Lab 静态资源
+
+题图、流程图等随 Lab 发布的静态资源放在同一 Lab 目录下的 `assets/` 中，README 使用相对路径引用，例如 `![题图](./assets/example.png)`。不得把 `Downloads`、临时目录或作者机器的绝对路径写入内容；提交前应确认资源进入构建产物对应的 `/labs/<chapter>/<category>/<lab>/assets/` 路径。
 
 ### 个人题库导入清洗
 
@@ -53,9 +76,11 @@ README 至少说明：
 
 题目的考试年份、书目名称、难度、考点和题目标识不属于个人痕迹，可以保留。知识正确性仍通过 `status: draft`、Review Owner 人工核验和 PR 证据管理，不在每道答案中重复展示生成过程。
 
+默认保留可追溯的题源名称和题目标识。若维护者在页面验收中明确要求公开题库不展示这些信息，可以省略 Quiz 的可选 `source`、`targetId` 字段，并移除 `stem` / README 中的来源行；题库仍必须保留稳定唯一的内部 `id`、答案和解析，并在 Trellis task 与 PR 中记录这项展示决定。该例外不代表可以跳过版权确认或知识复核。
+
 ### 交互选择题 Lab
 
-以选择题自测为主体的 Lab 必须复用 `Lab 00-03：复杂度计算自测` 的通用 `<QuizSet />`，不能把 A～D 写成不可选择的静态列表，也不能新建第二套 Quiz 组件。README 只挂载一次 `<QuizSet />`；同目录 `quiz.json` 是题目内容的唯一事实来源。
+以选择题自测为主体的 Lab 必须复用 `00T02`（复杂度计算自测）的通用 `<QuizSet />`，不能把 A～D 写成不可选择的静态列表，也不能新建第二套 Quiz 组件。README 只挂载一次 `<QuizSet />`；同目录 `quiz.json` 是题目内容的唯一事实来源。
 
 每道题的数据契约为：
 
@@ -73,17 +98,30 @@ README 至少说明：
 
 构建期只渲染仓库内受信任 Markdown，并关闭原始 HTML；浏览器组件负责选择、提示、提交、即时反馈、正确答案、题解、重试、答题进度、正确数、当前分/总分和 JSON 派生的折叠答案总览。README 不得再重复 `### 题 N`、静态答案速查或 `::: details 查看答案与解析`，避免同一道题出现两份来源。选项文本不得手写 A～D 前缀，也不得在规范化空白后重复。
 
+#### Quiz 题源选取约定
+
+新增选择题只找题、不编题：题面、选项与答案必须来自可核实出处，优先级为 408 统考真题 > 王道《数据结构》及配套习题 > 严蔚敏/李春葆教材及习题 > 高校公开真题/期末卷 > 可溯源转载/题库；每题至少经两个来源交叉核对题面与答案。
+
+- 同一道题在不同版本中的**选项字母可能不同**（选项重排），核对时以答案内容为准，写入 `quiz.json` 时按选定版本的选项顺序原样保留；
+- 涉及出题年份的题优先选用较新的真题；历年题库复用的题（如自考 02331 部分题目反复出现在不同年份卷中）无法确证单一年份时，不作年份题引用；
+- 找不到合适 4 选 1 题源的知识点不强凑选择题，可保留在教材正文与思考题中；
+- 随题库维护一份出处清单文档（如 `docs/lab-03-quiz-source.md`），记录每题来源与核对链接，与 `quiz.json` 的 `source` 字段互相印证。
+
 ## 4. Validation & Error Matrix
 
 | 条件 | 结果 |
 | --- | --- |
-| 目录编号、chapter、order 不一致 | 内容校验失败 |
+| 分类目录、目录编号、chapter、labId 或 manifest 类型不一致 | 内容校验失败 |
+| `labId` 缺失、重复、非规范形式、章节或类型标签不一致 | 内容校验失败 |
+| 新目录中的稳定编号与 `labId` 或标题不一致 | 内容校验失败 |
+| 新建或整理 Lab 时标题使用 `order`、旧目录序号，或 H1 与 frontmatter title 不一致 | 内容校验/Review blocking；改为 `Lab CC-X-SS：题目名称` |
 | 分类侧栏章节的 README-only Lab 缺 `labCategory`，或值非法 | 内容校验/构建失败 |
 | `lab` 不是布尔值 true | 内容校验失败 |
 | 缺 difficulty/duration | 内容校验失败 |
 | README 没有客观完成标准 | Review blocking |
 | 声称运行成功但 PR 无命令和结果 | Review blocking |
 | 页面未进入 Labs 索引或搜索 | 构建/浏览器测试失败 |
+| README 的静态资源缺失或使用作者机器路径 | 构建产物检查/Review blocking |
 | 个人题库导入后仍有原始页、个人可视化或答案生成声明 | Review blocking；清洗后重新检查 |
 | 删除个人链接后留下空“相关学习资源”标题 | Review blocking；连同空区块删除 |
 | `quiz.json` 缺字段、选项不是四项、答案越界或 id 重复 | `validate:content` 与构建失败 |
@@ -110,7 +148,7 @@ README 至少说明：
 - 有代码的 Lab 执行其 README 命令，PR 记录退出码和关键断言。
 - Playwright 从 Labs 索引实际点击至少一个 Lab；检查标题、时长、状态和无同源错误。
 - Review Owner 从清晰环境独立复现至少一个关键步骤或反例。
-- 个人题库导入任务必须对目标 Lab 运行 `rg -n '查看原始页面|看交互可视化|答案来源说明|答案来源：.*Codex'`，断言没有匹配；再人工确认题目来源名称、题目标识、答案和解析仍在。
+- 个人题库导入任务必须对目标 Lab 运行 `rg -n '查看原始页面|看交互可视化|答案来源说明|答案来源：.*Codex'`，断言没有匹配。默认再人工确认题目来源名称、题目标识、答案和解析仍在；若维护者明确要求隐藏公开来源，则改为断言 `source`、`targetId` 和可见来源行均不存在，同时确认内部 `id`、答案与解析完整。
 - 内容校验必须遍历每个存在 `quiz.json` 的 Lab，检查 JSON、字段、唯一挂载点和静态内容重复；数据 loader 对损坏文件必须让构建失败，不能当成“没有题库”静默跳过。
 - Pages Playwright 至少在一份交互题库中真实完成“选择 → 提交 → 对错反馈 → 题解 → 重试”，并核对四选项数量、答题进度、公式/表格和移动端无横向溢出。
 - Golden Program/Project 还必须通过 `lab:verify`；reference 自动满分、starter 可编译且非满分，构建只写 `.lab-cache/`。

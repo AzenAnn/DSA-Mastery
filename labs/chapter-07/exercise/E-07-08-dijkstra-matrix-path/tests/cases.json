@@ -1,0 +1,74 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-target-source",
+    "input": "tests/002-target-source.in",
+    "expected": "tests/002-target-source.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-unreachable-targets",
+    "input": "tests/003-unreachable-targets.in",
+    "expected": "tests/003-unreachable-targets.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-multi-edges",
+    "input": "tests/004-multi-edges.in",
+    "expected": "tests/004-multi-edges.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-single-vertex",
+    "input": "tests/005-single-vertex.in",
+    "expected": "tests/005-single-vertex.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-direct-vs-detour",
+    "input": "tests/006-direct-vs-detour.in",
+    "expected": "tests/006-direct-vs-detour.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-line-graph",
+    "input": "tests/007-line-graph.in",
+    "expected": "tests/007-line-graph.out",
+    "points": 10,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-dense-large",
+    "input": "tests/008-dense-large.in",
+    "expected": "tests/008-dense-large.out",
+    "points": 20,
+    "tags": [
+      "stress"
+    ]
+  }
+]

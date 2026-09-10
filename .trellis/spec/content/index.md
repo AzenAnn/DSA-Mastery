@@ -7,10 +7,12 @@
 | [lab-tooling.md](lab-tooling.md) | Lab v1 manifest、CLI、Make、判题、Project、学生包与 CI 可执行合同 |
 | [理论文档样式指南](../../../docs/THEORY_DOC_STYLE_GUIDE.md) | 定义、定理、证明、复杂度、行内强调与代码标注作者指南 |
 | [Lab 更新与测试指南](../../../docs/LAB_AUTHORING_GUIDE.md) | Quiz、Program、Project 的 Schema、脚手架、Make、评分、迁移与 Review 作者指南 |
+| [Lab 命令与接口使用指南](../../../docs/LAB_CLI_COMMAND_GUIDE.md) | 学习者与作者使用 pnpm/Make 运行、定位、评分和维护三类 Lab 的完整命令合同 |
 
 内容源边界：
 
 - 教材：`content/chapter-*/*.md`，明确排除 `content/README.md`。
-- Lab：`labs/chapter-*/lab-*/README.md`。
+- Lab：`labs/chapter-*/<theory|exercise|project>/<T|E|P>-CC-SS-*/README.md`。
+- 新建 Lab，或由 Agent/作者整理既有 Lab README 时，必须从 `labId` 生成 `Lab CC-X-SS：题目名称`；不得使用 `order` 或旧目录序号重新编号。
 - 完整程序和测试放在对应 Lab 目录；正文只保留解释所需的关键片段。
 - 理论语义必须按[理论文档 Markdown 合同](../frontend/theory-markdown.md)选择；只做小范围人工迁移，不机械改写知识正文。

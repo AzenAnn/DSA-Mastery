@@ -1,0 +1,8 @@
+insert 5
+remove 99
+find 5
+remove 5
+remove 5
+inorder
+find 5
+height

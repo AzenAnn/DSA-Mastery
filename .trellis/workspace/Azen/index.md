@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 5
-- **Last Active**: 2026-08-17
+- **Total Sessions**: 27
+- **Last Active**: 2026-09-09
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~118 | Active |
+| `journal-1.md` | ~667 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,28 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 27 | 2026-09-09 | 第 4 章树算法交互式演示 | `9ee5578` | `codex/ch04-interactive-tree-demos` |
+| 26 | 2026-09-09 | 4.6 二叉树经典问题定义与复杂度修订 | `3df8149` | `codex/ch04-section-46-clarifications` |
+| 25 | 2026-09-04 | 完成 Ch12 分治与递归整体重构 | `18c0794`, `4939071`, `6662839` | `chapter/ch12-divide-conquer-rebuild` |
+| 24 | 2026-09-02 | Expand Chapter 1 Program Lab tests | `a168091` | `codex/ch1-labs-20-test-cases` |
+| 23 | 2026-09-02 | Ch.1 Graphviz 图示迁移 | `ae0a4c9`, `25c63dc` | `codex/ch1-graphviz-rendering` |
+| 22 | 2026-09-01 | 修复测评行末空格误判 | `269b7a3` | `codex/fix-trailing-space-judge` |
+| 21 | 2026-09-01 | Chapter 14 dynamic programming exercise labs | `1c3aadb` | `codex/chapter-14-dp-labs` |
+| 20 | 2026-09-01 | Labs 三分类目录迁移 | `917b482` | `codex/lab-category-directories` |
+| 19 | 2026-09-01 | 稳定 Lab 文档标题约束 | `5f0a637` | `codex/lab-stable-id` |
+| 18 | 2026-08-31 | Resolve PR 119 CI failures | `ead8db8`, `388cfe0` | `codex/lab-stable-id` |
+| 17 | 2026-08-31 | Normalize all Lab navigation labels | `90a26ca` | `codex/lab-stable-id` |
+| 16 | 2026-08-31 | Lab stable IDs and automatic numbering | `0bbec8e`, `e11f1f9`, `966557a`, `3a8c01e`, `5f0c328` | `codex/lab-stable-id` |
+| 15 | 2026-08-31 | Chapter 14 dynamic programming foundations | `b0e0552` | `Azen-ch14` |
+| 14 | 2026-08-31 | Chapter 1 array-to-linked-list problem-solving article | `84dbb44` | `codex/ch01-array-to-linked-list-problem-solving` |
+| 13 | 2026-08-26 | README 信息架构与视觉改版 | `6456397` | `codex/readme-redesign` |
+| 12 | 2026-08-24 | 第 5 章树结构题库 Lab | `baa23fe` | `codex/chapter05-tree-labs` |
+| 11 | 2026-08-24 | 完成第 5 章树的应用并创建 PR | `a6d8c81` | `chapter05` |
+| 10 | 2026-08-24 | 第 4 章树与二叉树理论题 | `076cd97` | `codex/chapter4-theory-exercises` |
+| 9 | 2026-08-23 | 第 4 章树与二叉树两篇文章重写 | `720d7c8`, `13beb89` | `chapter4` |
+| 8 | 2026-08-21 | 第三章串匹配文本处理引擎工程题 | `6d7e8eb`, `70ecc6a`, `45241de`, `eb7e620`, `a5d370f`, `09b740c`, `c21635b`, `4983274`, `d96a6b6` | `chapter/03-string-array` |
+| 7 | 2026-08-21 | Lab 命令与接口指南 | `cec757f` | `codex/docs-lab-cli-guide` |
+| 6 | 2026-08-20 | Chapter 1 list workload Project Lab | `afca69d` | `lab/ch01-list-workload-project` |
 | 5 | 2026-08-17 | Unified Lab update workflow | `6bf9df6`, `56422aa`, `6ae4ab0`, `c975836`, `732c398` | `codex/unified-lab-update-workflow` |
 | 4 | 2026-08-16 | 前言理论语法展示页 | `39e9cc0`, `b24e18f` | `codex/dsa-mastery-theory-doc-style` |
 | 3 | 2026-08-16 | DSA Mastery 理论文档语法与视觉系统 | `5f7bcd3`, `3ef6fcb` | `codex/dsa-mastery-theory-doc-style` |

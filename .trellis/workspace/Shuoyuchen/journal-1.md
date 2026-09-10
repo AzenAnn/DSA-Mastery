@@ -1,0 +1,128 @@
+# Journal - Shuoyuchen (Part 1)
+
+> AI development session journal
+> Started: 2026-08-21
+
+---
+
+
+
+## Session 1: 清理贪心章节残留引用
+
+**Date**: 2026-08-21
+**Task**: 清理贪心章节残留引用
+**Branch**: `chapter/13-greedy`
+
+### Summary
+
+清理第 13 章已删除的切分性质与复杂度分析残留引用，提交章节注册和教材内容，并完成质量校验。
+
+### Main Changes
+
+- 清理概览、基础、正确性证明和贪心与动态规划页面中的残留引用。
+- 保留必要的 Prim 安全边事实说明，不恢复复杂度分析章节。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `2283638` | (see git log) |
+
+### Testing
+
+- [OK] pnpm run validate
+- [OK] pnpm run build
+- [OK] pnpm run check:site
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 无
+
+
+## Session 2: 新增第 13 章盛最多水的容器 Lab
+
+**Date**: 2026-08-24
+**Task**: 新增第 13 章盛最多水的容器 Lab
+**Branch**: `codex/chapter-13-container-with-most-water`
+
+### Summary
+
+在 codex/chapter-13-container-with-most-water 上新增可自动发现的 C++17 Program Lab，加入 LeetCode 11 题面、题图、学生模板、双指针参考实现和 7 个测试夹具；完成 lab verify、pnpm test、VitePress 构建、站点检查及使用本机 Tabbit Chromium 的 19/19 页面测试。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `3a9f2f5` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 3: 新增 LeetCode 409 最长回文串 Lab
+
+**Date**: 2026-08-28
+**Task**: 新增 LeetCode 409 最长回文串 Lab
+**Branch**: `codex/chapter-13-container-with-most-water`
+
+### Summary
+
+在第 13 章新增 Lab 13-02 最长回文串，包含 C++17 Program Lab、学生模板、参考答案和 7 组测试；补充章节概览入口，并通过内容校验、自动发现、站点构建、站点检查和 Lab verify。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `d6ae380` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 4: 新增 LeetCode 55 跳跃游戏 Lab
+
+**Date**: 2026-08-28
+**Task**: 新增 LeetCode 55 跳跃游戏 Lab
+**Branch**: `codex/chapter-13-container-with-most-water`
+
+### Summary
+
+在第 13 章新增 Lab 13-03 跳跃游戏，包含 C++17 Program Lab、正向贪心参考答案、学生模板和 7 组测试；补充章节概览入口。修正一组错误测试预期后，通过 Lab 验证、内容校验、类型检查、Lint、自动发现、站点构建和站点检查。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `a9c3962` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 5: 扩充第 13 章贪心 Lab 与测试
+
+**Date**: 2026-09-09
+**Task**: 扩充第 13 章贪心 Lab 与测试
+**Branch**: `codex/chapter-13-greedy-labs-tests`
+
+### Summary
+
+新增 LeetCode 455 与 435 两个 Program Lab，将第 13 章五道贪心题各扩充到 20 组测试；五次 lab:verify、章节独立 oracle、pnpm test 与 Make/CLI 检查全部通过。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `f9544c5` | (see git log) |
+| `231aa09` | (see git log) |
+
+### Status
+
+[OK] **Completed**
