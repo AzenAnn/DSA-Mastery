@@ -65,6 +65,8 @@ README 至少说明：
 
 题图、流程图等随 Lab 发布的静态资源放在同一 Lab 目录下的 `assets/` 中，README 使用相对路径引用，例如 `![题图](./assets/example.png)`。不得把 `Downloads`、临时目录或作者机器的绝对路径写入内容；提交前应确认资源进入构建产物对应的 `/labs/<chapter>/<category>/<lab>/assets/` 路径。
 
+`quiz.json` 的 Markdown 同样可以使用 `./assets/...`。由于题库 loader 的 HTML 不经过 Vite 的 Markdown 资源导入，`.vitepress/config.ts` 的 `buildEnd` 根据 ContentIndex 将各 Lab 的 `assets/` 原样复制到该 Lab 的产物路由下；不要依赖 README 中顺便引用同一图片来触发打包，也不要硬编码部署前缀。自动发现测试需覆盖未被 Markdown 引用的嵌套二进制文件，浏览器需检查题图实际加载。
+
 ### 个人题库导入清洗
 
 从维护者个人 Obsidian、题库导出或其他非课程发布稿迁移练习时，只保留读者完成题目所需的题面、选项、题目来源名称、题目标识、正确答案、解析和选项辨析。课程 Lab 必须移除个人版本附带的发布痕迹：

@@ -1,4 +1,6 @@
 import path from "node:path";
+import { existsSync } from "node:fs";
+import { cp } from "node:fs/promises";
 import { tasklist } from "@mdit/plugin-tasklist";
 import { Blocks, BookOpen, FlaskConical } from "@lucide/vue";
 import type MarkdownIt from "markdown-it";
@@ -69,6 +71,16 @@ export default defineConfig({
   base,
   srcDir: ".",
   outDir: "dist/pages",
+  async buildEnd(config) {
+    // Quiz JSON is rendered outside Vite's Markdown asset pipeline; preserve its relative URLs.
+    for (const lab of course.labs) {
+      const assets = path.resolve(config.srcDir, path.dirname(lab.sourcePath), "assets");
+      if (!existsSync(assets)) continue;
+      await cp(assets, path.join(config.outDir, lab.url.replace(/^\//, ""), "assets"), {
+        recursive: true,
+      });
+    }
+  },
   cleanUrls: false,
   appearance: true,
   lastUpdated: false,
