@@ -7,11 +7,11 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "dev": "vitepress dev . --host 127.0.0.1",
+    "dev": "vitepress dev .",
     "dev:vitepress": "pnpm run dev",
     "build": "vitepress build .",
     "build:vitepress": "pnpm run build",
-    "preview": "vitepress preview . --host 127.0.0.1",
+    "preview": "vitepress preview .",
     "preview:vitepress": "pnpm run preview",
     "validate": "pnpm run validate:content && pnpm run typecheck && pnpm run lint",
     "validate:content": "node scripts/validate-content.mjs",

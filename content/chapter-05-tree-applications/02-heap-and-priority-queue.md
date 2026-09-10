@@ -4,8 +4,8 @@ description: "从完全二叉树的数组表示出发，实现堆调整、线性
 order: 2
 chapter: 5
 chapterTitle: "树的应用"
-updated: "2026-08-24"
-contributors: ["Azen"]
+updated: "2026-09-10"
+contributors: ["CzjLUCK&Azen"]
 status: "review"
 ---
 
@@ -24,7 +24,7 @@ status: "review"
 
 ## 5.2.1 堆的定义与数组表示（含父/子下标关系）
 
-### 完全二叉树 + 局部偏序
+### 局部偏序性
 
 ::: definition 定义 · 二叉堆
 <dfn>二叉堆</dfn>是一棵满足完全二叉树形态，并满足堆序性质的二叉树：
@@ -37,11 +37,15 @@ status: "review"
 
 大根堆的根一定是全局最大值：任意节点沿父链接回到根，关键字不会增加。小根堆同理保证根为全局最小值。
 
+笔者要强调的是，堆只能维护最值，不能维护次值等信息。
+
 ::: counterexample 反例 · 堆不是有序数组
 数组 `[90, 70, 80, 10, 60, 30, 50]` 是合法大根堆，但 `70 < 80`，数组前缀并非递减序列。不能在堆数组上使用二分查找，也不能认为第二个元素就是第二大值。
 :::
 
-### 0-based 数组表示
+### 数组表示
+
+二叉堆的节点编号很容易表示，因为这是一颗完全二叉树。
 
 完全二叉树逐层从左到右没有空洞，因此无需保存指针。对数组下标 `i`：
 
@@ -102,22 +106,26 @@ digraph HeapArray {
 在数组末尾插入新值后，只有“新节点—父节点”关系可能违规。若新值大于父值，就交换并继续向上，直到到达根或父值已经不小于它。
 
 ```cpp:line-numbers [max-heap-sift-up.cpp]
-#include <cstddef>
-#include <utility>
-#include <vector>
-
+// 上浮：把下标 index 处的元素逐层与父节点比较交换，恢复“父 >= 子”的大根堆性质
+// 调用前提：除 index 到根的路径外，堆其余部分已满足堆序（例如刚在末尾 push 了新值）
 void siftUp(std::vector<int>& heap, std::size_t index) {
+    // ① 只要还没到达根（index == 0 即根），就继续向上检查
     while (index > 0) {
+        // 完全二叉树中，下标 i 的父节点下标为 (i-1)/2
+        // 必须先判 index > 0 再算 index-1：无符号下标在 0 处减 1 会下溢成巨大值
         const std::size_t parent = (index - 1) / 2;
+        // ② 父值已经不小于当前值 -> 堆序恢复，立即停止
         if (heap[parent] >= heap[index]) break;
+        // ③ 父子交换，当前元素上浮一层；下一轮检查新的父节点
         std::swap(heap[parent], heap[index]);
         index = parent;
     }
 }
 
+// 插入：先放到数组末尾（保持完全二叉树的形状），再上浮修复堆序
 void push(std::vector<int>& heap, int value) {
-    heap.push_back(value);
-    siftUp(heap, heap.size() - 1);
+    heap.push_back(value);              // 新元素暂居末尾，此时只有它到根的路径可能违规
+    siftUp(heap, heap.size() - 1);      // 从末尾（新元素下标）开始上浮
 }
 ```
 
@@ -126,31 +134,36 @@ void push(std::vector<int>& heap, int value) {
 删除堆顶时，先保存根值，再把数组最后一个元素移到根并缩短数组。此时只有根到某个叶节点的路径可能违规。大根堆每一步必须与两个孩子中更大的那个比较；若误选较小孩子，交换后仍可能小于另一个孩子。
 
 ```cpp:line-numbers [max-heap-sift-down.cpp]
-#include <cstddef>
-#include <stdexcept>
-#include <utility>
-#include <vector>
-
+// 下沉：把下标 index 处的元素与两个孩子中较大者比较交换，恢复堆序
+// 调用前提：除 index 到某片叶子的路径外，其余部分已满足堆序
 void siftDown(std::vector<int>& heap, std::size_t index) {
     const std::size_t n = heap.size();
     while (true) {
-        std::size_t best = index;
+        std::size_t best = index;       // best 记录“当前节点与两个孩子”中最大值的下标
+        // 完全二叉树中，下标 i 的左右孩子下标为 2i+1、2i+2
         const std::size_t left = 2 * index + 1;
         const std::size_t right = left + 1;
+        // ① 先与左孩子比（left < n 保证孩子存在，访问无符号下标前必须先判界）
         if (left < n && heap[left] > heap[best]) best = left;
+        // ② 再与右孩子比，且比较对象是 heap[best] 而不是 heap[index]：
+        //    大根堆每一步必须选两个孩子里的较大者，若误选较小者，
+        //    交换后仍可能小于另一个孩子，堆序无法恢复
         if (right < n && heap[right] > heap[best]) best = right;
+        // ③ 两个孩子都不比当前节点大 -> 堆序已恢复，结束
         if (best == index) break;
-        std::swap(heap[index], heap[best]);
-        index = best;
+        std::swap(heap[index], heap[best]);  // 与较强孩子交换，当前元素下沉一层
+        index = best;                        // 继续检查新位置
     }
 }
 
+// 删除堆顶：用末尾元素顶替根，再从根下沉
 int pop(std::vector<int>& heap) {
     if (heap.empty()) throw std::out_of_range("empty heap");
-    const int top = heap.front();
-    heap.front() = heap.back();
-    heap.pop_back();
-    if (!heap.empty()) siftDown(heap, 0);
+    const int top = heap.front();       // ① 先保存堆顶作为返回值
+    heap.front() = heap.back();         // ② 末尾元素移到根，保持完全二叉树形状
+    heap.pop_back();                    //    数组缩短一格
+    if (!heap.empty()) siftDown(heap, 0);  // ③ 新根可能小于孩子，从根下沉；
+                                           //    仅剩一个元素时无需下沉
     return top;
 }
 ```
@@ -179,8 +192,16 @@ int pop(std::vector<int>& heap) {
 
 ```cpp:line-numbers [heapify.cpp]
 // 沿用上一节的 siftDown 与其头文件
+// 自底向上建堆（Heapify）：从最后一个非叶节点开始向根逐个下沉
+// 正确性依据：对下标 i 做下沉时，它的左右子树已经是合法堆，
+//             因此一次下沉即可让 i 的子树也成为合法堆，
+//             自底向上处理保证了“子树先于父节点”这一顺序
 void heapify(std::vector<int>& values) {
-    if (values.size() < 2) return;
+    if (values.size() < 2) return;      // 0 或 1 个元素的数组天然是堆
+    // 完全二叉树中，下标 >= n/2 的节点都是叶子（没有孩子），无需处理，
+    // 故只需对 0 .. n/2-1 这些非叶节点各做一次下沉
+    // 循环条件 i-- > 0：先取用 i 再自减，使 i 依次取 n/2-1, ..., 1, 0
+    // 若写成 i >= 0，i 在 0 之后下溢成 SIZE_MAX，会造成死循环
     for (std::size_t i = values.size() / 2; i-- > 0;) {
         siftDown(values, i);
     }
@@ -214,11 +235,16 @@ $$
 
 ```cpp:line-numbers [heap-sort.cpp]
 // 沿用上面的 heapify；siftDownRange 是 siftDown 的“限定右边界”版本
+// 堆排序过程中数组被切成 [堆区 | 已排序区]：
+//   已排序区是 values[end .. n-1]，堆区是 values[0 .. end-1)
+// 因此下沉时只允许比较下标 < end 的孩子，end 充当堆区右边界
 void siftDownRange(std::vector<int>& values, std::size_t index, std::size_t end) {
     while (true) {
         std::size_t best = index;
         const std::size_t left = 2 * index + 1;
         const std::size_t right = left + 1;
+        // 与 siftDown 相同，只是越界判断改为 end：
+        // end 之后的元素已经到达最终位置，绝不能把它们交换回堆区
         if (left < end && values[left] > values[best]) best = left;
         if (right < end && values[right] > values[best]) best = right;
         if (best == index) return;
@@ -227,11 +253,14 @@ void siftDownRange(std::vector<int>& values, std::size_t index, std::size_t end)
     }
 }
 
+// 升序堆排序：大根堆 + 反复把堆顶交换到当前末尾
 void heapSort(std::vector<int>& values) {
-    heapify(values);
+    heapify(values);                    // ① 先把整个数组建成大根堆
+    // ② 每轮把堆顶（当前最大者）与堆区末尾交换，堆区缩小一格
+    //    end 从 n 递减到 2；end == 1 时只剩一个元素，天然有序
     for (std::size_t end = values.size(); end > 1; --end) {
         std::swap(values[0], values[end - 1]);
-        siftDownRange(values, 0, end - 1);  // 只调整 [0, end-1)
+        siftDownRange(values, 0, end - 1);  // ③ 新堆顶可能小于孩子，只在 [0, end-1) 内下沉
     }
 }
 ```
@@ -267,13 +296,16 @@ C++ 的 `std::priority_queue` 默认是大根优先队列：
 #include <queue>
 #include <vector>
 
+// std::priority_queue 默认是大根堆：堆顶为当前最大元素
 std::priority_queue<int> maxQueue;
 maxQueue.push(7);
 maxQueue.push(2);
 maxQueue.push(9);
-int largest = maxQueue.top();  // 9
-maxQueue.pop();
+int largest = maxQueue.top();  // 9：top() 只读取不删除；pop() 无返回值，两者要分开调用
+maxQueue.pop();                // 删除堆顶 9
 
+// 想要小根堆，必须显式给出全部三个模板参数：
+//   元素类型、底层容器（保持默认 std::vector）、比较器（std::greater 让“小”的排前面）
 std::priority_queue<int, std::vector<int>, std::greater<int>> minQueue;
 minQueue.push(7);
 minQueue.push(2);
@@ -304,14 +336,18 @@ int smallest = minQueue.top(); // 2
 #include <stdexcept>
 #include <vector>
 
+// 求第 k 大：维护一个大小恰为 k 的小根堆 kept
+// 核心不变量：kept 中保存“目前见过的最大的 k 个元素”，堆顶是这 k 个里的最小者
 int kthLargest(const std::vector<int>& values, std::size_t k) {
     if (k == 0 || k > values.size()) throw std::out_of_range("invalid k");
+    // greater 比较器 -> 小根堆，堆顶是当前 Top-K 中最小的那个
     std::priority_queue<int, std::vector<int>, std::greater<int>> kept;
     for (int value : values) {
-        kept.push(value);
-        if (kept.size() > k) kept.pop();
+        kept.push(value);                   // ① 新元素入堆
+        if (kept.size() > k) kept.pop();    // ② 超过 k 个就弹掉最小者：
+                                            //    新元素够大时顶替它，不够大时弹掉的正是新元素
     }
-    return kept.top();
+    return kept.top();  // ③ 堆里剩最大的 k 个，其中最小者即全体的第 k 大
 }
 ```
 
@@ -339,6 +375,26 @@ $$
 ::: example 示例 · 延迟任务队列
 若任务以 `(nextRunTime, sequence)` 排序，小根堆顶就是最早应执行的任务；`sequence` 保证时间相同的任务按到达顺序稳定处理。任务执行后若要周期性重排，更新下一次时间并重新入堆，而不是直接修改堆内键值。
 :::
+
+## 5.2.6 对可合并性的讨论
+
+二叉堆由于节点下标较为固定，难以实现合并。
+
+笔者在此处简单拓展两个算法竞赛中常见的可并堆，以激发读者兴趣。
+
+### 配对堆
+
+配对堆是一个支持插入，查询/删除最小值，合并，修改元素等操作的数据结构，是一种可并堆．有速度快和结构简单的优势，但由于其为基于势能分析的均摊复杂度，无法可持久化．
+
+### 左偏树
+
+对于一棵二叉树，我们定义 **外节点** 为子节点数小于两个的节点，定义一个节点的dis为其到子树中最近的外节点所经过的边的数量．空节点的dis为 0![0](data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)．
+
+左偏树是一棵二叉树，它不仅具有堆的性质，并且是「左偏」的：每个节点左儿子的 dist![\mathrm{dist}](data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7) 都大于等于右儿子的 dis。因此，左偏树每个节点的dis都等于其右儿子的 dis 加一．
+
+需要注意的是，dis 不是深度，**左偏树的深度没有保证**，一条向左的链也符合左偏树的定义．
+
+
 
 ## 配套 Lab
 
