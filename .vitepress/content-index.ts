@@ -244,11 +244,12 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     id: "chapter-06-graph-foundations-storage",
     number: "6",
     title: "图的基础与存储",
-    description: "学习图的基本概念，以及邻接矩阵和邻接表的表示取舍。",
+    description: "学习图的基本概念、存储方式，以及遍历如何计算可达性和连通分量。",
     url: "/learn/outline/chapter-06-graph-foundations-storage/",
     lessonSources: [
       "content/chapter-06-graph-foundations/01-graph-basics.md",
       "content/chapter-06-graph-foundations/02-graph-storage.md",
+      "content/chapter-06-graph-foundations/03-graph-traversal-connectivity.md",
     ],
     autoLabChapter: 6,
   },

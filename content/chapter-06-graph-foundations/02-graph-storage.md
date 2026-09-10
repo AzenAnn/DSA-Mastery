@@ -507,7 +507,7 @@ void addEdge(int u, int v) {
 
 完成概念学习后，可以先进入 [Lab 06-T-02：图的存储结构选择题精练](../../labs/chapter-06/theory/T-06-02-graph-storage-quiz/README.md)巩固表示与复杂度；再完成 [Lab 06-E-02：连通三元组的最小度数](../../labs/chapter-06/exercise/E-06-02-minimum-trio-degree/README.md)，用邻接矩阵判断三个顶点是否两两相邻；最后完成 [Lab 06-E-03：不邻接植花](../../labs/chapter-06/exercise/E-06-03-flower-planting/README.md)，用邻接表枚举真实邻居，并利用最大度数条件构造确定性的选花方案。
 
-下一章继续学习 [7.1 图的遍历：DFS 与 BFS](../chapter-07-graph-traversal/01-dfs-and-bfs.md)，观察同一套遍历逻辑如何在不同图表示上产生不同复杂度。
+接下来学习 [6.3 图的遍历与连通性](./03-graph-traversal-connectivity.md)，把邻接表用于可达性搜索、连通分量标号与强连通分量划分；第 7.1 节再进一步研究 DFS/BFS 的访问顺序、证明和典型应用。
 
 ## 参考资料
 
