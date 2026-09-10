@@ -52,11 +52,20 @@
     "id": "006-scale-wraparound",
     "input": "tests/006-scale-wraparound.in",
     "expected": "tests/006-scale-wraparound.out",
-    "points": 10,
+    "points": 1,
     "tags": [
       "scale",
       "complexity",
       "wraparound"
     ]
-  }
+  },
+  {"id":"007-fill-and-reject","input":"tests/007-fill-and-reject.in","expected":"tests/007-fill-and-reject.out","points":1,"tags":["boundary","error"]},
+  {"id":"008-multi-wrap","input":"tests/008-multi-wrap.in","expected":"tests/008-multi-wrap.out","points":1,"tags":["wraparound","regression"]},
+  {"id":"009-capacity-two","input":"tests/009-capacity-two.in","expected":"tests/009-capacity-two.out","points":1,"tags":["boundary"]},
+  {"id":"010-int64-values","input":"tests/010-int64-values.in","expected":"tests/010-int64-values.out","points":1,"tags":["boundary"]},
+  {"id":"011-empty-repeated","input":"tests/011-empty-repeated.in","expected":"tests/011-empty-repeated.out","points":1,"tags":["error"]},
+  {"id":"012-peek-stability","input":"tests/012-peek-stability.in","expected":"tests/012-peek-stability.out","points":1,"tags":["regression"]},
+  {"id":"013-alternating","input":"tests/013-alternating.in","expected":"tests/013-alternating.out","points":1,"tags":["normal"]},
+  {"id":"014-drain-refill","input":"tests/014-drain-refill.in","expected":"tests/014-drain-refill.out","points":1,"tags":["normal"]},
+  {"id":"015-status-cycle","input":"tests/015-status-cycle.in","expected":"tests/015-status-cycle.out","points":1,"tags":["normal"]}
 ]

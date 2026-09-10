@@ -61,10 +61,18 @@
     "id": "007-scale",
     "input": "tests/007-scale.in",
     "expected": "tests/007-scale.out",
-    "points": 10,
+    "points": 2,
     "tags": [
       "scale",
       "complexity"
     ]
-  }
+  },
+  {"id":"008-interleaved-valid","input":"tests/008-interleaved-valid.in","expected":"tests/008-interleaved-valid.out","points":1,"tags":["normal"]},
+  {"id":"009-invalid-late","input":"tests/009-invalid-late.in","expected":"tests/009-invalid-late.out","points":1,"tags":["regression"]},
+  {"id":"010-immediate-valid","input":"tests/010-immediate-valid.in","expected":"tests/010-immediate-valid.out","points":1,"tags":["normal"]},
+  {"id":"011-negative-reverse","input":"tests/011-negative-reverse.in","expected":"tests/011-negative-reverse.out","points":1,"tags":["normal"]},
+  {"id":"012-small-invalid","input":"tests/012-small-invalid.in","expected":"tests/012-small-invalid.out","points":1,"tags":["boundary"]},
+  {"id":"013-delayed-valid","input":"tests/013-delayed-valid.in","expected":"tests/013-delayed-valid.out","points":1,"tags":["normal"]},
+  {"id":"014-int64-values","input":"tests/014-int64-values.in","expected":"tests/014-int64-values.out","points":1,"tags":["boundary"]},
+  {"id":"015-alternating-valid","input":"tests/015-alternating-valid.in","expected":"tests/015-alternating-valid.out","points":1,"tags":["normal"]}
 ]

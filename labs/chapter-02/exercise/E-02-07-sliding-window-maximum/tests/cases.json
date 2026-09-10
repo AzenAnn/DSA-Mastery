@@ -55,7 +55,14 @@
     "id": "008-scale",
     "input": "tests/008-scale.in",
     "expected": "tests/008-scale.out",
-    "points": 10,
+    "points": 3,
     "tags": ["scale", "complexity"]
-  }
+  },
+  {"id":"009-window-two","input":"tests/009-window-two.in","expected":"tests/009-window-two.out","points":1,"tags":["normal"]},
+  {"id":"010-all-equal","input":"tests/010-all-equal.in","expected":"tests/010-all-equal.out","points":1,"tags":["regression"]},
+  {"id":"011-large-values","input":"tests/011-large-values.in","expected":"tests/011-large-values.out","points":1,"tags":["boundary"]},
+  {"id":"012-negative-decreasing","input":"tests/012-negative-decreasing.in","expected":"tests/012-negative-decreasing.out","points":1,"tags":["normal"]},
+  {"id":"013-window-near-all","input":"tests/013-window-near-all.in","expected":"tests/013-window-near-all.out","points":1,"tags":["boundary"]},
+  {"id":"014-plateaus","input":"tests/014-plateaus.in","expected":"tests/014-plateaus.out","points":1,"tags":["regression"]},
+  {"id":"015-mixed-signs","input":"tests/015-mixed-signs.in","expected":"tests/015-mixed-signs.out","points":1,"tags":["normal"]}
 ]
