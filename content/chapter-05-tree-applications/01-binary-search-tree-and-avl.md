@@ -4,8 +4,8 @@ description: "掌握二叉搜索树的查找、插入与删除，并用 AVL 旋�
 order: 1
 chapter: 5
 chapterTitle: "树的应用"
-updated: "2026-08-24"
-contributors: ["Azen"]
+updated: "2026-09-10"
+contributors: ["CzjLUCK&Azen"]
 status: "review"
 ---
 
@@ -89,22 +89,27 @@ struct Node {
     Node* right{};
 };
 
+// 查找：沿 BST 比较规则向下走，找到返回节点指针，找不到返回 nullptr
 Node* search(Node* root, int key) {
     while (root != nullptr && root->key != key) {
+        // 当前节点不是目标，根据大小关系选择左/右子树继续
         root = key < root->key ? root->left : root->right;
     }
-    return root;
+    return root;  // 命中返回该节点，走到空链接则查找失败
 }
 
+// 插入：先走查找路径，在第一个空链接处创建新节点
+// 使用 Node** 统一处理"接在根上还是接在孩子上"
 bool insert(Node*& root, int key) {
-    Node** link = &root;
+    Node** link = &root;           // link 始终指向"下一个该被填充的指针槽位"
     while (*link != nullptr) {
         if (key == (*link)->key) {
-            return false;  // 本实现拒绝重复键
+            return false;          // 本实现拒绝重复键
         }
+        // 决定往左子树还是右子树走，link 更新为对应指针的地址
         link = key < (*link)->key ? &(*link)->left : &(*link)->right;
     }
-    *link = new Node{key};
+    *link = new Node{key};         // 在空链接处接入新节点
     return true;
 }
 ```
@@ -138,7 +143,62 @@ bool insert(Node*& root, int key) {
 删除双孩子节点时只把前驱或后继的“记录内容”移到目标位置，再在原位置删除替身。直接把替身节点指针覆盖到目标位置，若没有同时重接原左右子树，很容易丢失节点、制造重复所有权或破坏链接。
 :::
 
-## 5.1.2 二叉搜索树的实现、复杂度与退化【C/C++】
+### C++：用唯一所有权实现删除
+
+下面的删除函数使用 `std::unique_ptr` 表达“父节点独占孩子”的所有权。返回值始终是删除后子树的新根，因此叶删除、单孩子顶替和根节点变化都能统一处理。
+
+```cpp:line-numbers [bst-erase.cpp]
+#include <memory>
+
+struct BstNode {
+    explicit BstNode(int value) : key(value) {}
+    int key;
+    std::unique_ptr<BstNode> left;
+    std::unique_ptr<BstNode> right;
+};
+
+// 找到以 root 为根的子树中的最小关键字节点（最左节点）
+const BstNode& minimum(const BstNode& root) {
+    const BstNode* current = &root;
+    while (current->left) {
+        current = current->left.get();  // 一路向左，直到没有左孩子
+    }
+    return *current;
+}
+
+// 删除：返回删除后子树的新根，用 unique_ptr 自动管理内存
+std::unique_ptr<BstNode> erase(std::unique_ptr<BstNode> root, int key) {
+    if (!root) {
+        return nullptr;  // 走到空链接，目标不存在
+    }
+    if (key < root->key) {
+        // 目标在左子树，递归删除后更新左链接
+        root->left = erase(std::move(root->left), key);
+    } else if (key > root->key) {
+        // 目标在右子树，递归删除后更新右链接
+        root->right = erase(std::move(root->right), key);
+    } else {
+        // 找到目标节点，分三种结构情况处理
+        if (!root->left) {
+            // 情况 1/2：没有左孩子，用右孩子顶替（右孩子可为空）
+            return std::move(root->right);
+        }
+        if (!root->right) {
+            // 情况 2：没有右孩子，用左孩子顶替
+            return std::move(root->left);
+        }
+        // 情况 3：有两个孩子，用右子树最小值（后继）替换当前关键字
+        root->key = minimum(*root->right).key;
+        // 再递归删除右子树中那个已经被"复制"上来的后继节点
+        root->right = erase(std::move(root->right), root->key);
+    }
+    return root;
+}
+```
+
+
+
+## 5.1.2 二叉搜索树的复杂度与退化【C/C++】
 
 ### 所有核心操作都受树高控制
 
@@ -180,53 +240,58 @@ digraph DegenerateBst {
 上面的退化树仍完全满足 BST 有序性质，中序序列也正确。问题不是“树错了”，而是有序不变量没有对高度作任何保证。仅检查中序递增，无法证明性能达标。
 :::
 
-### C++：用唯一所有权实现删除
 
-下面的删除函数使用 `std::unique_ptr` 表达“父节点独占孩子”的所有权。返回值始终是删除后子树的新根，因此叶删除、单孩子顶替和根节点变化都能统一处理。
 
-```cpp:line-numbers [bst-erase.cpp]
-#include <memory>
+### 交互式演示 · BST 操作
 
-struct BstNode {
-    explicit BstNode(int value) : key(value) {}
-    int key;
-    std::unique_ptr<BstNode> left;
-    std::unique_ptr<BstNode> right;
-};
+下面的演示可以亲手体验 BST 的插入、查找与删除。尝试依次插入 `1, 2, 3, 4, 5` 观察退化链，再换一组平衡序列如 `8, 3, 10, 1, 6, 14` 对比树高；也可以选中节点后点击删除，观察三种结构情况的处理。
 
-const BstNode& minimum(const BstNode& root) {
-    const BstNode* current = &root;
-    while (current->left) {
-        current = current->left.get();
-    }
-    return *current;
-}
+<script setup>
+import { withBase } from "vitepress";
 
-std::unique_ptr<BstNode> erase(std::unique_ptr<BstNode> root, int key) {
-    if (!root) {
-        return nullptr;
-    }
-    if (key < root->key) {
-        root->left = erase(std::move(root->left), key);
-    } else if (key > root->key) {
-        root->right = erase(std::move(root->right), key);
-    } else {
-        if (!root->left) {
-            return std::move(root->right);
-        }
-        if (!root->right) {
-            return std::move(root->left);
-        }
-        root->key = minimum(*root->right).key;
-        root->right = erase(std::move(root->right), root->key);
-    }
-    return root;
-}
-```
+// 本页两个交互演示的地址统一在此定义
+// （Vue 单文件组件只允许一个 <script setup>，故不能为每个演示各写一个）
+const bstDemoUrl = withBase("/demos/bst-explorer.html");
+const avlDemoUrl = withBase("/demos/avl-lab.html");
+</script>
+
+<iframe
+  :src="bstDemoUrl"
+  title="二叉搜索树 · 插入与删除可视化"
+  class="tree-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 观察重点
+1. 用递增序列插入，看树如何退化成链；
+2. 用同一组关键字的不同插入顺序，对比树高与查找路径长度；
+3. 选中节点删除，观察叶节点、单孩子、双孩子三种情况的处理逻辑。
+::: 
 
 递归深度仍为 $O(h)$。若普通 BST 可能接收恶意有序输入，退化深度还会带来调用栈风险；这正是平衡树要解决的问题。
 
-## 5.1.3 平衡的思想与旋转操作
+
+
+## 5.1.3 对于旋转和非旋转的讨论
+
+笔者认为，常见平衡树分别通过旋转和非旋转两种方式去实现平衡。大学数据结构相关教材中只提及了几类旋转平衡树，故笔者在此处想拓展一些非旋转平衡树，以起到抛砖引玉之效。
+
+
+
+**旋转——用局部旋转修复失衡。** AVL、Splay、Treap 以及红黑树都属于这一类平衡树（AVL和红黑树多见于各种大学教材）。它们的共同点是通过某种约定判断某个子树"歪了"的时候，就通过左旋或右旋把重心拉回来。旋转的优势在于只改常数条链接，$O(1)$ 就能完成一次结构调整。OI-Wiki 上有对旋转的经典总结是：**"旋转操作是多数平衡树能够维持平衡的关键，它能在不改变一棵合法 BST 中序遍历结果的情况下改变局部节点的深度。"** [^oiwiki-rotate]
+
+（旋转平衡树如果不够熟悉，写的时候可能会有绕晕的风险。
+
+**非旋——绕开旋转，用别的方式保持平衡。** 这一类平衡树在算法竞赛中反而更受欢迎，原因很简单：**好写、好调、不容易写挂。**
+
+- **FHQ Treap（非旋 Treap）**：完全取消旋转，只用**分裂（Split）**和**合并（Merge）**两个操作。按关键字把树劈成两半，递归处理完再粘回去。FHQ Treap 在 OI 中普及的一个很重要原因是它天然支持区间操作，这是旋转很难优雅做到的。
+- **替罪羊树（Scapegoat Tree）**：很暴力，不过实际上很优雅，采用暴力重建的方法来代替旋转。一旦某个子树的节点数超过整棵树的 $\alpha$ 倍（通常取 0.7 或 0.8），就**拍扁重建**——把子树里的所有节点拿出来排好序，重新建一棵完全平衡的 BST。 替罪羊树的均摊复杂度仍是 $O(\log n)$，单次重建最坏 $O(n)$，但触发频率被控制得很低，实际运行起来相当快。
+
+此处笔者只是从算法竞赛角度略作拓展，大学课程中还是以 AVL 和 红黑树 为重。
+
+
+
+## 5.1.4 平衡的思想与旋转操作
 
 ### 平衡不是让两边节点数完全相等
 
@@ -290,7 +355,7 @@ digraph RightRotation {
 
 每次旋转后必须自底向上更新受影响节点的高度。右旋时先更新下降的 `y`，再更新上升的 `x`；顺序反过来会读取旧高度。
 
-## 5.1.4 AVL 树：平衡因子、四种失衡与单/双旋转、插入、删除【进阶】
+## 5.1.5 AVL 树：平衡因子、四种失衡与单/双旋转、插入、删除【进阶】
 
 ### 平衡因子与 AVL 不变量
 
@@ -427,7 +492,7 @@ AVL 删除先执行 BST 删除。与插入不同，删除可能让子树高度�
 LL 失衡使用一次**右旋**，RR 失衡使用一次**左旋**。名称表示重路径从失衡根出发走向哪两个方向，不是要执行的旋转方向。
 :::
 
-## 5.1.5 AVL 树的实现与复杂度【C/C++】
+## 5.1.6 AVL 树的实现与复杂度【C/C++】
 
 下面的 C++ 核心实现把高度维护、单旋和双旋统一放在 `rebalance` 中。`insert` 与 `erase` 只负责 BST 语义，返回前都经过同一再平衡出口。
 
@@ -435,35 +500,43 @@ LL 失衡使用一次**右旋**，RR 失衡使用一次**左旋**。名称表示
 #include <algorithm>
 #include <memory>
 
+// AVL 节点：比普通 BST 多一个 height 字段，用于判断失衡
 struct AvlNode {
     explicit AvlNode(int value) : key(value) {}
     int key;
-    int height{0};
+    int height{0};                       // 叶节点高度为 0
     std::unique_ptr<AvlNode> left;
     std::unique_ptr<AvlNode> right;
 };
 
+// 辅助函数：空树高度为 -1，否则取节点记录的高度
 int height(const std::unique_ptr<AvlNode>& node) {
     return node ? node->height : -1;
 }
 
+// 根据左右孩子高度重新计算当前节点高度
 void update(AvlNode& node) {
     node.height = 1 + std::max(height(node.left), height(node.right));
 }
 
+// 平衡因子 = 左子树高度 - 右子树高度
+// AVL 要求平衡因子在 {-1, 0, 1} 范围内
 int balanceFactor(const AvlNode& node) {
     return height(node.left) - height(node.right);
 }
 
+// 右旋：pivot 是当前根的左孩子，右旋后 pivot 上升为新根
+// 中间子树 B 从 pivot 的右侧改挂到原根的左侧
 std::unique_ptr<AvlNode> rotateRight(std::unique_ptr<AvlNode> root) {
-    auto pivot = std::move(root->left);
-    root->left = std::move(pivot->right);
-    update(*root);                  // 先更新下降节点
-    pivot->right = std::move(root);
-    update(*pivot);
-    return pivot;
+    auto pivot = std::move(root->left);     // ① 保存左孩子 pivot
+    root->left = std::move(pivot->right);   // ② pivot 的右子树变成 root 的左子树
+    update(*root);                          // ③ 先更新下降节点 root 的高度
+    pivot->right = std::move(root);         // ④ root 成为 pivot 的右孩子
+    update(*pivot);                         // ⑤ 再更新上升节点 pivot 的高度
+    return pivot;                           // ⑥ 返回新根
 }
 
+// 左旋：与右旋完全对称
 std::unique_ptr<AvlNode> rotateLeft(std::unique_ptr<AvlNode> root) {
     auto pivot = std::move(root->right);
     root->right = std::move(pivot->left);
@@ -473,58 +546,81 @@ std::unique_ptr<AvlNode> rotateLeft(std::unique_ptr<AvlNode> root) {
     return pivot;
 }
 
+// 再平衡：根据平衡因子判断失衡类型，选择单旋或双旋
 std::unique_ptr<AvlNode> rebalance(std::unique_ptr<AvlNode> root) {
-    update(*root);
-    if (balanceFactor(*root) > 1) {
-        if (balanceFactor(*root->left) < 0) {           // LR
-            root->left = rotateLeft(std::move(root->left));
+    update(*root);                          // 先更新当前节点高度
+    if (balanceFactor(*root) > 1) {         // 左子树过高
+        if (balanceFactor(*root->left) < 0) {           // 左孩子右偏 → LR
+            root->left = rotateLeft(std::move(root->left)); // 先左旋左孩子
         }
-        return rotateRight(std::move(root));             // LL
+        return rotateRight(std::move(root));             // LL（或 LR 调整后）右旋
     }
-    if (balanceFactor(*root) < -1) {
-        if (balanceFactor(*root->right) > 0) {           // RL
-            root->right = rotateRight(std::move(root->right));
+    if (balanceFactor(*root) < -1) {        // 右子树过高
+        if (balanceFactor(*root->right) > 0) {           // 右孩子左偏 → RL
+            root->right = rotateRight(std::move(root->right)); // 先右旋右孩子
         }
-        return rotateLeft(std::move(root));              // RR
+        return rotateLeft(std::move(root));              // RR（或 RL 调整后）左旋
     }
-    return root;
+    return root;                            // 平衡，无需旋转
 }
 
+// AVL 插入：先按 BST 规则插入，返回时沿途再平衡
 std::unique_ptr<AvlNode> insert(std::unique_ptr<AvlNode> root, int key) {
     if (!root) {
-        return std::make_unique<AvlNode>(key);
+        return std::make_unique<AvlNode>(key);  // 空位置，创建新节点
     }
     if (key < root->key) {
-        root->left = insert(std::move(root->left), key);
+        root->left = insert(std::move(root->left), key);   // 递归插入左子树
     } else if (key > root->key) {
-        root->right = insert(std::move(root->right), key);
+        root->right = insert(std::move(root->right), key); // 递归插入右子树
     } else {
         return root;                                    // 拒绝重复键
     }
-    return rebalance(std::move(root));
+    return rebalance(std::move(root));                  // 回溯时再平衡
 }
 
+// 找子树最小值（最左节点）
 const AvlNode& minimum(const AvlNode& root) {
     const AvlNode* current = &root;
     while (current->left) current = current->left.get();
     return *current;
 }
 
+// AVL 删除：先按 BST 规则删除，返回时沿途再平衡
 std::unique_ptr<AvlNode> erase(std::unique_ptr<AvlNode> root, int key) {
-    if (!root) return nullptr;
+    if (!root) return nullptr;              // 空树，目标不存在
     if (key < root->key) {
-        root->left = erase(std::move(root->left), key);
+        root->left = erase(std::move(root->left), key);    // 递归删除左子树
     } else if (key > root->key) {
-        root->right = erase(std::move(root->right), key);
+        root->right = erase(std::move(root->right), key);  // 递归删除右子树
     } else {
-        if (!root->left) return std::move(root->right);
-        if (!root->right) return std::move(root->left);
+        // 找到目标，分三种结构情况
+        if (!root->left) return std::move(root->right);    // 用右孩子顶替
+        if (!root->right) return std::move(root->left);    // 用左孩子顶替
+        // 双孩子：用后继替换关键字，再递归删除后继
         root->key = minimum(*root->right).key;
         root->right = erase(std::move(root->right), root->key);
     }
-    return rebalance(std::move(root));
+    return rebalance(std::move(root));      // 回溯时再平衡（删除可能一路传到根）
 }
 ```
+
+### 交互式演示 · AVL 树平衡过程
+
+下面的演示可以观察 AVL 树的插入与再平衡过程。依次插入 `30, 10, 20` 体验 LR 双旋，或插入递增序列观察旋转如何阻止退化。
+
+<iframe
+  :src="avlDemoUrl"
+  title="AVL 树 · 插入与旋转可视化"
+  class="tree-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 观察重点
+1. 依次插入 `30, 10, 20`，观察 LR 双旋的完整过程；
+2. 插入递增序列，观察 AVL 如何通过单旋阻止退化成链；
+3. 注意每次插入后节点高度的更新和平衡因子的变化。
+::: 
 
 ::: complexity 复杂度 · AVL 操作
 AVL 树的最少节点数满足类似斐波那契的递推，因此高度为 $O(\log n)$。查找、插入、删除都只访问一条根到叶路径：
@@ -546,6 +642,204 @@ AVL 树的最少节点数满足类似斐波那契的递推，因此高度为 $O(
 4. 节点数与成功插入、删除记录一致；
 5. 空树、单节点、根删除、连续递增插入和交替插删均不泄漏或重复拥有节点。
 
+
+
+
+## 5.1.7 红黑树
+
+AVL 严格限制左右高度差。红黑树使用较宽松的颜色规则限制最长路径，使更新时通常需要更少旋转。
+
+把所有空孩子视为黑色 NIL 叶结点。一棵红黑树满足：
+
+1. 每个结点非红即黑；
+2. 根结点是黑色；
+3. 所有 NIL 叶结点是黑色；
+4. 红结点的两个孩子都是黑色，不能出现连续红结点；
+5. 从任一结点到其所有后代 NIL 叶结点的路径，都包含相同数量的黑结点。
+
+从某结点到后代 NIL 路径上的黑结点数称为**黑高**。性质 4 保证最长路径至多在每两个黑结点之间插入一个红结点，因此最长路径不会超过最短路径的两倍。
+
+::: definition 定义 · 黑高与红黑树
+一个结点的**黑高**是从该结点到其所有后代 NIL 叶的路径上经过的黑结点数（不含该结点本身）。红黑树通过"所有路径黑高相同"（性质 5）限制树高，又通过"无连续红结点"（性质 4）限制最长与最短路径之比。
+:::
+
+含 $n$ 个内部结点的红黑树高度满足：
+$$
+h\le 2\log_2(n+1).
+$$
+所以查找、插入、删除的最坏时间都是 $O(\log n)$。
+
+::: theorem 定理 · 红黑树高度上界
+性质 4 使最长路径上最多每两个黑结点夹一个红结点，故最长路径 ≤ $2\times$ 最短路径。又由性质 5 所有路径黑高相同为 $bh$，最短路径至少 $bh$ 个黑结点。一棵黑高为 $bh$ 的红黑树至少含 $2^{bh}-1$ 个内部结点，从而 $bh\le\log_2(n+1)$，所以 $h\le2bh\le2\log_2(n+1)$。
+:::
+
+## 红黑树插入的修复思路
+
+新结点按 BST 规则插入并染红。染红不会改变任一路径的黑高；唯一可能破坏的是"红结点不能有红孩子"。若父结点也是红色，观察叔叔结点：
+
+- **叔叔为红色**：把父和叔染黑、祖父染红，再从祖父继续向上检查；
+- **叔叔为黑色，路径成折线**：先旋转父结点，把折线变成直线；
+- **叔叔为黑色，路径成直线**：旋转祖父，并交换父与祖父的颜色。
+
+最后把根染黑。修复可能多次变色，但插入最多做常数次结构旋转。
+
+::: intuition 直觉 · 为什么新结点染红
+插入新结点若染黑，会让经过它那条路径的黑高比别的路径多 1，立刻破坏性质 5，而且这个破坏很难局部修复。染红则只可能破坏性质 4（父也是红），而"连续红"是可以通过变色和旋转在局部消除的。因此染红把问题变成一个更可控的局部约束。
+:::
+
+## 红黑树删除的修复思路
+
+删除红结点不会改变黑高；删除有红孩子的黑结点时，可让红孩子顶替并染黑。困难发生在删除黑色叶位置：某些路径会少一个黑结点，可把这个缺额理解为"额外一重黑色"。
+
+修复时根据兄弟颜色、兄弟孩子颜色决定变色和旋转，把黑色缺额向上移动或在局部消除。完整代码分支较多，但每一步都服务于两件事：恢复相同黑高，避免连续红结点。
+
+::: warning 不要用 AVL 的高度差判断红黑树
+红黑树不要求任意结点左右子树高度差不超过 1。它只通过颜色和黑高限制整体最长路径，因此可能比同关键字集合的 AVL 更高。
+:::
+
+### 完整实现：红黑树（C++）
+
+下面给出一份维护颜色、带哨兵 NIL 的红黑树核心实现。插入和删除的修复逻辑严格按照前文所述的变色与旋转策略实现。
+
+```cpp:line-numbers [red-black-tree.cpp]
+#include <memory>
+
+enum class Color { RED, BLACK };
+
+struct RbNode {
+    int key;
+    Color color{Color::RED};            // 新节点默认染红
+    std::shared_ptr<RbNode> left;
+    std::shared_ptr<RbNode> right;
+    std::weak_ptr<RbNode> parent;       // 需要父指针做向上修复
+};
+
+using NodePtr = std::shared_ptr<RbNode>;
+
+// ---------- 辅助旋转 ----------
+void leftRotate(NodePtr& root, NodePtr x) {
+    NodePtr y = x->right;               // y 是 x 的右孩子
+    x->right = y->left;                 // y 的左子树变成 x 的右子树
+    if (y->left) {
+        y->left->parent = x;
+    }
+    y->parent = x->parent;              // y 接替 x 的位置
+    if (!x->parent.lock()) {
+        root = y;                       // x 原来是根
+    } else if (x == x->parent.lock()->left) {
+        x->parent.lock()->left = y;
+    } else {
+        x->parent.lock()->right = y;
+    }
+    y->left = x;
+    x->parent = y;
+}
+
+void rightRotate(NodePtr& root, NodePtr x) {
+    NodePtr y = x->left;
+    x->left = y->right;
+    if (y->right) {
+        y->right->parent = x;
+    }
+    y->parent = x->parent;
+    if (!x->parent.lock()) {
+        root = y;
+    } else if (x == x->parent.lock()->right) {
+        x->parent.lock()->right = y;
+    } else {
+        x->parent.lock()->left = y;
+    }
+    y->right = x;
+    x->parent = y;
+}
+
+// ---------- 插入修复 ----------
+void insertFixup(NodePtr& root, NodePtr z) {
+    // 只要父节点是红色，就违反了"无连续红节点"的性质
+    while (z->parent.lock() && z->parent.lock()->color == Color::RED) {
+        NodePtr p = z->parent.lock();
+        NodePtr g = p->parent.lock();   // 祖父节点
+        if (p == g->left) {             // 父节点是左孩子
+            NodePtr u = g->right;       // 叔叔节点
+            if (u && u->color == Color::RED) {
+                // 情况 1：叔叔为红，变色后向上继续检查
+                p->color = Color::BLACK;
+                u->color = Color::BLACK;
+                g->color = Color::RED;
+                z = g;
+            } else {
+                // 叔叔为黑
+                if (z == p->right) {
+                    // 情况 2：折线，先左旋父节点拉成直线
+                    z = p;
+                    leftRotate(root, z);
+                    p = z->parent.lock();
+                    g = p->parent.lock();
+                }
+                // 情况 3：直线，右旋祖父并变色
+                p->color = Color::BLACK;
+                g->color = Color::RED;
+                rightRotate(root, g);
+            }
+        } else {
+            // 对称情况：父节点是右孩子
+            NodePtr u = g->left;
+            if (u && u->color == Color::RED) {
+                p->color = Color::BLACK;
+                u->color = Color::BLACK;
+                g->color = Color::RED;
+                z = g;
+            } else {
+                if (z == p->left) {
+                    z = p;
+                    rightRotate(root, z);
+                    p = z->parent.lock();
+                    g = p->parent.lock();
+                }
+                p->color = Color::BLACK;
+                g->color = Color::RED;
+                leftRotate(root, g);
+            }
+        }
+    }
+    root->color = Color::BLACK;         // 根始终为黑
+}
+
+// ---------- 公开插入接口 ----------
+NodePtr rbInsert(NodePtr root, int key) {
+    NodePtr z = std::make_shared<RbNode>();
+    z->key = key;
+
+    NodePtr y;                          // 追踪父节点位置
+    NodePtr x = root;
+    while (x) {
+        y = x;
+        if (key < x->key) {
+            x = x->left;
+        } else {
+            x = x->right;
+        }
+    }
+    z->parent = y;
+    if (!y) {
+        root = z;                       // 空树，z 成为根
+    } else if (key < y->key) {
+        y->left = z;
+    } else {
+        y->right = z;
+    }
+
+    insertFixup(root, z);
+    return root;
+}
+```
+
+::: tip 红黑树实现要点
+- 新节点默认染**红**，这样只可能破坏"无连续红节点"的性质，而不会破坏所有路径黑高相同的性质；
+- 修复时始终关注**叔叔节点**的颜色：叔叔为红则变色上移，叔叔为黑则通过旋转+变色在局部解决；
+- 左旋和右旋的实现与 AVL 基本相同，只是额外维护了 `parent` 指针；
+- 删除修复比插入更复杂，核心思想是把"黑节点 deficit"（双重黑）向上传递或在局部消除。
+::: 
 ## 配套 Lab
 
 | 实验 | 练习内容 |
@@ -580,3 +874,21 @@ BST 用全序关系缩小查找范围，但性能仍由树高决定；AVL 在每
 :::
 
 下一节进入[5.2 堆与优先队列](./02-heap-and-priority-queue.md)：它不维护完整排序，而是用更弱的局部偏序换取高效的最高优先级访问。
+
+<style scoped>
+.tree-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .tree-demo-frame {
+    height: 1100px;
+  }
+}
+</style>
