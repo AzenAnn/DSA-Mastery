@@ -4,8 +4,8 @@ description: "从带权路径长度出发，用贪心与优先队列构造最优
 order: 3
 chapter: 5
 chapterTitle: "树的应用"
-updated: "2026-08-24"
-contributors: ["Azen"]
+updated: "2026-09-10"
+contributors: ["CzjLUCK&Azen"]
 status: "review"
 ---
 
@@ -211,9 +211,10 @@ digraph HuffmanTree {
 #include <utility>
 #include <vector>
 
+// 赫夫曼树节点：内部节点 weight 为左右子权重之和，symbol 用 '\0' 占位
 struct HuffmanNode {
-    long long weight;
-    char symbol{};
+    long long weight;                            // 子树权重（叶子 = 符号频数）
+    char symbol{};                               // 叶子符号；内部节点保持 '\0'
     std::shared_ptr<HuffmanNode> left;
     std::shared_ptr<HuffmanNode> right;
 
@@ -223,47 +224,57 @@ struct HuffmanNode {
         : weight(nodeWeight), symbol(nodeSymbol),
           left(std::move(leftChild)), right(std::move(rightChild)) {}
 
-    bool isLeaf() const { return !left && !right; }
+    bool isLeaf() const { return !left && !right; }  // 赫夫曼树是满二叉树：无孩子即叶
 };
 
 using NodePtr = std::shared_ptr<HuffmanNode>;
 
+// priority_queue 默认是大根堆（“最大的”在顶），
+// 这里反向写比较器，让权重最小的节点位于堆顶
 struct Lighter {
     bool operator()(const NodePtr& a, const NodePtr& b) const {
-        return a->weight > b->weight;  // 小权重位于队首
+        return a->weight > b->weight;  // a 权重大 -> a 更不该在顶 -> 小权重位于队首
     }
 };
 
+// 构造赫夫曼树：每轮合并两个最小权重节点，直至只剩一棵树
 NodePtr buildHuffman(const std::vector<std::pair<char, int>>& frequencies) {
     std::priority_queue<NodePtr, std::vector<NodePtr>, Lighter> queue;
     std::unordered_set<char> symbols;
     for (const auto& [symbol, weight] : frequencies) {
         if (weight <= 0) throw std::invalid_argument("weight must be positive");
-        if (!symbols.insert(symbol).second) {
+        if (!symbols.insert(symbol).second) {      // 符号查重：重复符号无法构造唯一编码
             throw std::invalid_argument("duplicate symbol");
         }
+        // ① 每个符号先建成单节点树入堆
         queue.push(std::make_shared<HuffmanNode>(weight, symbol));
     }
-    if (queue.empty()) return nullptr;
+    if (queue.empty()) return nullptr;   // 空输入没有树可建
 
+    // ② 循环不变量：堆中每棵树的 weight 等于它覆盖符号的频数总和
+    //    每轮弹出两个最小者合并，新节点权重为两者之和——相当于把两个“区间”拼起来
     while (queue.size() > 1) {
         NodePtr left = queue.top(); queue.pop();
         NodePtr right = queue.top(); queue.pop();
         queue.push(std::make_shared<HuffmanNode>(
             left->weight + right->weight, '\0', left, right));
     }
+    // ③ 只剩一棵树，即为带权路径长度（WPL）最小的赫夫曼树
     return queue.top();
 }
 
+// 递归生成码表：从根走到叶，沿路记下 '0'/'1' 即为该符号的码字
 void buildCodes(const NodePtr& node, std::string path,
                 std::unordered_map<char, std::string>& codes) {
-    if (!node) return;
+    if (!node) return;                   // 防御空树
     if (node->isLeaf()) {
+        // 单符号特例：没有任何树边可走，path 为空串；
+        // 约定编码为 "0" 而非空串，否则无法从比特流判断该符号重复了几次
         codes[node->symbol] = path.empty() ? "0" : path;
         return;
     }
-    buildCodes(node->left, path + '0', codes);
-    buildCodes(node->right, path + '1', codes);
+    buildCodes(node->left, path + '0', codes);   // 向左走记 0
+    buildCodes(node->right, path + '1', codes);  // 向右走记 1
 }
 ```
 
