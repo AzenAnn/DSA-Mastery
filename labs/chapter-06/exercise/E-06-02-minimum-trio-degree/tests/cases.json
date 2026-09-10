@@ -3,63 +3,147 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 15,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-no-trio",
     "input": "tests/002-no-trio.in",
     "expected": "tests/002-no-trio.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "003-isolated-trio",
     "input": "tests/003-isolated-trio.in",
     "expected": "tests/003-isolated-trio.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "004-complete-k4",
     "input": "tests/004-complete-k4.in",
     "expected": "tests/004-complete-k4.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "005-multiple-trios",
     "input": "tests/005-multiple-trios.in",
     "expected": "tests/005-multiple-trios.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "006-overlapping-trios",
     "input": "tests/006-overlapping-trios.in",
     "expected": "tests/006-overlapping-trios.out",
-    "points": 10,
-    "tags": ["regression"]
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
   },
   {
     "id": "007-unordered-labels",
     "input": "tests/007-unordered-labels.in",
     "expected": "tests/007-unordered-labels.out",
-    "points": 10,
-    "tags": ["regression"]
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
   },
   {
     "id": "008-two-vertices",
     "input": "tests/008-two-vertices.in",
     "expected": "tests/008-two-vertices.out",
     "points": 5,
-    "tags": ["boundary"]
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "009-max-n-stress",
     "input": "tests/009-max-n-stress.in",
     "expected": "tests/009-max-n-stress.out",
-    "points": 15,
-    "tags": ["stress"]
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "010-empty-four-vertices",
+    "input": "tests/010-empty-four-vertices.in",
+    "expected": "tests/010-empty-four-vertices.out",
+    "points": 5
+  },
+  {
+    "id": "011-three-vertex-path",
+    "input": "tests/011-three-vertex-path.in",
+    "expected": "tests/011-three-vertex-path.out",
+    "points": 5
+  },
+  {
+    "id": "012-bare-triangle",
+    "input": "tests/012-bare-triangle.in",
+    "expected": "tests/012-bare-triangle.out",
+    "points": 5
+  },
+  {
+    "id": "013-triangle-with-leaf",
+    "input": "tests/013-triangle-with-leaf.in",
+    "expected": "tests/013-triangle-with-leaf.out",
+    "points": 5
+  },
+  {
+    "id": "014-complete-k5",
+    "input": "tests/014-complete-k5.in",
+    "expected": "tests/014-complete-k5.out",
+    "points": 5
+  },
+  {
+    "id": "015-two-isolated-triangles",
+    "input": "tests/015-two-isolated-triangles.in",
+    "expected": "tests/015-two-isolated-triangles.out",
+    "points": 5
+  },
+  {
+    "id": "016-triangle-and-path",
+    "input": "tests/016-triangle-and-path.in",
+    "expected": "tests/016-triangle-and-path.out",
+    "points": 5
+  },
+  {
+    "id": "017-k4-with-tail",
+    "input": "tests/017-k4-with-tail.in",
+    "expected": "tests/017-k4-with-tail.out",
+    "points": 5
+  },
+  {
+    "id": "018-sparse-high-label-triangle",
+    "input": "tests/018-sparse-high-label-triangle.in",
+    "expected": "tests/018-sparse-high-label-triangle.out",
+    "points": 5
+  },
+  {
+    "id": "019-triangle-external-shared",
+    "input": "tests/019-triangle-external-shared.in",
+    "expected": "tests/019-triangle-external-shared.out",
+    "points": 5
+  },
+  {
+    "id": "020-two-trios-different-degree",
+    "input": "tests/020-two-trios-different-degree.in",
+    "expected": "tests/020-two-trios-different-degree.out",
+    "points": 5
   }
 ]
