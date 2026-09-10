@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 28
+- **Total Sessions**: 30
 - **Last Active**: 2026-09-10
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~690 | Active |
+| `journal-1.md` | ~752 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,8 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 30 | 2026-09-10 | Ch1 理论大题训练提交 PR #170 | `5923e5c` | `feat/ch01-linear-list-written-theory` |
+| 29 | 2026-09-10 | Ch1 线性表 15 道理论大题与本地预览 | - | `feat/ch01-linear-list-written-theory` |
 | 28 | 2026-09-10 | 栈与队列综合理论 Lab 02T03 | `7f3228c` | `feat/ch02-stack-queue-comprehensive-theory` |
 | 27 | 2026-09-09 | 第 4 章树算法交互式演示 | `9ee5578` | `codex/ch04-interactive-tree-demos` |
 | 26 | 2026-09-09 | 4.6 二叉树经典问题定义与复杂度修订 | `3df8149` | `codex/ch04-section-46-clarifications` |
