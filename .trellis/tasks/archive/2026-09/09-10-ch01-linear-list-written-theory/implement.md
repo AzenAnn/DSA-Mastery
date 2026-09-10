@@ -9,4 +9,7 @@
 
 验收详情见 verification.md。用户于 2026-09-10 验收后要求提交 PR，现已授权提交与推送。
 
+- [x] 同步最新 main、保留两章搜索回归和独立日志，重新通过项目门禁与四组浏览器验收。
+- [x] 提交 5923e5c 并推送，创建 PR #170：https://github.com/AzenAnn/DSA-Mastery/pull/170 。
+
 Codex inline：主会话实施和检查，仅将已有内容盘点和外部题源检索作为只读研究委托。

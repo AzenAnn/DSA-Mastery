@@ -44,3 +44,5 @@
 - PASS：同步后 Pages 子路径最终构建 81.31 秒，`check:site` 检查 385 个 HTML 通过。
 - PASS：重启本地服务后再次运行新 Lab 四组专项浏览器检查，全部通过且无资源或脚本错误；桌面与手机题图截图复核通过。最新预览 PID 为 42148，URL 保持不变。
 - PASS：同步后的完整 Pages 浏览器回归 44/44 通过，耗时 3.2 分钟，包含 Ch1 与 Ch2 新增训练的搜索和侧栏入口。
+
+内容提交为 5923e5c，分支已推送，PR 为 <https://github.com/AzenAnn/DSA-Mastery/pull/170>。任务完成后归档至 `.trellis/tasks/archive/2026-09/09-10-ch01-linear-list-written-theory/`；重新运行任务辅助验证时，从仓库根目录使用该归档路径。PR 等待审阅，未合并。
