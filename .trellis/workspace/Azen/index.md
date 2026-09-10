@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 27
-- **Last Active**: 2026-09-09
+- **Total Sessions**: 28
+- **Last Active**: 2026-09-10
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~667 | Active |
+| `journal-1.md` | ~690 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 28 | 2026-09-10 | 栈与队列综合理论 Lab 02T03 | `7f3228c` | `feat/ch02-stack-queue-comprehensive-theory` |
 | 27 | 2026-09-09 | 第 4 章树算法交互式演示 | `9ee5578` | `codex/ch04-interactive-tree-demos` |
 | 26 | 2026-09-09 | 4.6 二叉树经典问题定义与复杂度修订 | `3df8149` | `codex/ch04-section-46-clarifications` |
 | 25 | 2026-09-04 | 完成 Ch12 分治与递归整体重构 | `18c0794`, `4939071`, `6662839` | `chapter/ch12-divide-conquer-rebuild` |

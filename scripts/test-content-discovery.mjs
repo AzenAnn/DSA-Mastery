@@ -260,6 +260,10 @@ try {
   await mkdir(stableTitleLabDirectory, { recursive: true });
   await mkdir(projectCategoryDirectory, { recursive: true });
   await mkdir(sidebarLabDirectory, { recursive: true });
+  const nestedAssets = path.join(stableTitleLabDirectory, "assets", "nested");
+  await mkdir(nestedAssets, { recursive: true });
+  const assetBytes = Buffer.from([0, 1, 127, 128, 254, 255]);
+  await writeFile(path.join(nestedAssets, "quiz evidence.bin"), assetBytes);
   await writeFile(path.join(lessonDirectory, "00-autodiscovery.md"), lesson, "utf8");
   await writeFile(path.join(labDirectory, "README.md"), lab, "utf8");
   await writeFile(
@@ -273,6 +277,12 @@ try {
   runNpm(["run", "validate:content"]);
   runNpm(["run", "build:vitepress"]);
   runNpm(["run", "check:site"]);
+
+  const copiedAsset = await readFile(path.join(
+    projectRoot, "dist", "pages", "labs", "chapter-99", "theory",
+    "T-99-01-stable-title-fixture", "assets", "nested", "quiz evidence.bin",
+  ));
+  if (!copiedAsset.equals(assetBytes)) throw new Error("Lab assets outside Markdown must be copied unchanged");
 
   const lessonHtml = await readFile(
     path.join(projectRoot, "dist", "pages", "learn", "chapter-99-discovery-fixture", "00-autodiscovery", "index.html"),

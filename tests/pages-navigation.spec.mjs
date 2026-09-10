@@ -250,6 +250,10 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/labs/chapter-01/theory/T-01-05-static-linked-list-quiz/"]').first(),
   ).toBeVisible();
+  await input.fill("栈与队列综合理论题");
+  await expect(
+    results.locator('a[href*="/labs/chapter-02/theory/T-02-03-stack-queue-comprehensive/"]').first(),
+  ).toBeVisible();
   await input.fill("时间与空间复杂度");
   await expect(
     results.locator('a[href*="/learn/chapter-00-introduction/02-time-and-space-complexity/"]').first(),
@@ -1218,13 +1222,16 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await theoryGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
-  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(2);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(3);
   await expect(
     theoryGroup.getByRole("link", { name: "02T01 · 栈选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
     theoryGroup.getByRole("link", { name: "02T02 · 队列选择题精练", exact: true }),
   ).toHaveCount(1);
+  await expect(
+    theoryGroup.getByRole("link", { name: "02T03 · 栈与队列综合理论题", exact: true }),
+  ).toHaveAttribute("href", /\/labs\/chapter-02\/theory\/T-02-03-stack-queue-comprehensive\/$/);
 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
