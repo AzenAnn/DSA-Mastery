@@ -4,7 +4,7 @@ description: "从一张小图出发理解深度优先与广度优先搜索：标
 order: 1
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-09"
+updated: "2026-09-10"
 contributors: ["Qing"]
 status: "draft"
 ---

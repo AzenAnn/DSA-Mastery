@@ -4,7 +4,7 @@ description: "从顶点与边出发，掌握图的分类、度、路径、环、
 order: 1
 chapter: 6
 chapterTitle: "图的基础与存储"
-updated: "2026-09-09"
+updated: "2026-09-10"
 contributors: ["Azen"]
 status: "draft"
 ---

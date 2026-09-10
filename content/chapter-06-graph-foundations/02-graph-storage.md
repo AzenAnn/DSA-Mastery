@@ -4,7 +4,7 @@ description: "掌握邻接矩阵、邻接表与边集数组的实现、复杂度
 order: 2
 chapter: 6
 chapterTitle: "图的基础与存储"
-updated: "2026-09-09"
+updated: "2026-09-10"
 contributors: ["Azen"]
 status: "draft"
 ---
