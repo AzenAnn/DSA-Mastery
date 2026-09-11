@@ -4,8 +4,8 @@ description: "从邻接表出发实现 DFS 与 BFS，用完整遍历计算无向
 order: 3
 chapter: 6
 chapterTitle: "图的基础与存储"
-updated: "2026-09-10"
-contributors: ["walker2398"]
+updated: "2026-09-11"
+contributors: ["walker2398", "Azen"]
 status: "draft"
 ---
 
@@ -404,6 +404,7 @@ Kosaraju 构造转置图并进行两次完整 DFS，时间为 $O(n+m)$，额外�
 ## 实践入口
 
 - [Lab 06-T-03：图的遍历与连通性选择题精练](../../labs/chapter-06/theory/T-06-03-graph-traversal-connectivity/README.md)：检查单源与完整遍历、弱连通、强连通和 Kosaraju；
+- [Lab 06-T-04：图基础综合理论大题训练](../../labs/chapter-06/theory/T-06-04-graph-foundations-written/README.md)：用 12 道书面题强化表示转换、遍历不变量、正确性证明与方法选型；
 - [Lab 07-E-02：连通分量计数](../../labs/chapter-07/exercise/E-07-02-connected-components/README.md)：实现无向图完整遍历和分量标号；
 - [Lab 07-E-05：显式栈 DFS](../../labs/chapter-07/exercise/E-07-05-iterative-dfs/README.md)：处理大规模深图并核对访问顺序；
 - [Lab 05-E-13：动态连通性查询](../../labs/chapter-05/exercise/E-05-13-dynamic-connectivity/README.md)：比较遍历与并查集的适用边界。
