@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-boundary-center-1",
+    "input": "tests/002-boundary-center-1.in",
+    "expected": "tests/002-boundary-center-1.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-boundary-center-2",
+    "input": "tests/003-boundary-center-2.in",
+    "expected": "tests/003-boundary-center-2.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-boundary-center-3",
+    "input": "tests/004-boundary-center-3.in",
+    "expected": "tests/004-boundary-center-3.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-boundary-center-4",
+    "input": "tests/005-boundary-center-4.in",
+    "expected": "tests/005-boundary-center-4.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-boundary-center-5",
+    "input": "tests/006-boundary-center-5.in",
+    "expected": "tests/006-boundary-center-5.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-boundary-center-6",
+    "input": "tests/007-boundary-center-6.in",
+    "expected": "tests/007-boundary-center-6.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-boundary-center-7",
+    "input": "tests/008-boundary-center-7.in",
+    "expected": "tests/008-boundary-center-7.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-boundary-center-8",
+    "input": "tests/009-boundary-center-8.in",
+    "expected": "tests/009-boundary-center-8.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "010-boundary-center-9",
+    "input": "tests/010-boundary-center-9.in",
+    "expected": "tests/010-boundary-center-9.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "011-boundary-center-10",
+    "input": "tests/011-boundary-center-10.in",
+    "expected": "tests/011-boundary-center-10.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "012-boundary-center-11",
+    "input": "tests/012-boundary-center-11.in",
+    "expected": "tests/012-boundary-center-11.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "013-boundary-center-12",
+    "input": "tests/013-boundary-center-12.in",
+    "expected": "tests/013-boundary-center-12.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "014-boundary-center-13",
+    "input": "tests/014-boundary-center-13.in",
+    "expected": "tests/014-boundary-center-13.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "015-boundary-center-14",
+    "input": "tests/015-boundary-center-14.in",
+    "expected": "tests/015-boundary-center-14.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "016-boundary-center-15",
+    "input": "tests/016-boundary-center-15.in",
+    "expected": "tests/016-boundary-center-15.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "017-boundary-center-16",
+    "input": "tests/017-boundary-center-16.in",
+    "expected": "tests/017-boundary-center-16.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "018-stress-center-17",
+    "input": "tests/018-stress-center-17.in",
+    "expected": "tests/018-stress-center-17.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-stress-center-18",
+    "input": "tests/019-stress-center-18.in",
+    "expected": "tests/019-stress-center-18.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-stress-center-19",
+    "input": "tests/020-stress-center-19.in",
+    "expected": "tests/020-stress-center-19.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

@@ -3,6 +3,7 @@ import { mkdir, readFile, readdir, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { catalog as chapter06Exercises, labPath as chapter06LabPath } from "../scripts/chapter-06/catalog.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const artifactRoot = path.join(projectRoot, "dist", "pages");
@@ -2322,6 +2323,66 @@ for (const width of [1440, 390]) {
     });
   }
 }
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"]) {
+    test(`chapter 6 graph exercises and canonical output at ${width}px ${theme}`, async ({ page }, testInfo) => {
+      test.setTimeout(120_000);
+      const failures = monitorPage(page);
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+      await page.addInitScript((mode) => globalThis.localStorage.setItem("vitepress-theme-appearance", mode), theme);
+      await page.goto(`${baseUrl}/learn/outline/chapter-06-graph-foundations-storage/`);
+      if (width === 390) await page.locator(".VPLocalNav .menu").click();
+      const chapter = page.locator('.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-06-graph-foundations-storage/"])');
+      const exercise = chapter.locator(".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)");
+      await expect(exercise).toHaveCount(1);
+      if (await exercise.evaluate((element) => element.classList.contains("collapsed"))) {
+        await exercise.locator(":scope > .item > .caret").click();
+      }
+      const links = exercise.locator(":scope > .items a");
+      await expect(links).toHaveCount(23);
+      for (const item of chapter06Exercises) {
+        const index = item.id - 1, id = String(item.id).padStart(2, "0");
+        await expect(links.nth(index)).toHaveText(`06E${id} · ${item.title}`);
+        await expect(links.nth(index)).toHaveAttribute("href", `${pagesBasePath}/${chapter06LabPath(item)}/`);
+      }
+      await links.nth(3).scrollIntoViewIfNeeded();
+      await page.screenshot({ path: testInfo.outputPath("ch06-sidebar.png") });
+      await links.nth(3).click();
+      await expect(page).toHaveURL(`${baseUrl}/${chapter06LabPath(chapter06Exercises[0])}/`);
+      for (const item of chapter06Exercises) {
+        expect((await page.goto(`${baseUrl}/${chapter06LabPath(item)}/`)).status()).toBe(200);
+        await expect(page.getByRole("heading", { level: 1 })).toHaveText(`Lab 06-E-${String(item.id).padStart(2, "0")}：${item.title}`);
+        await expect(page.locator(".vp-doc")).toContainText("20 组测试");
+        await expect(page.locator(`.vp-doc a[href="${item.sourceUrl}"]`)).toHaveCount(1);
+        await expect(page.getByRole("heading", { level: 2, name: /^正确性说明/ })).toBeVisible();
+        expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.document.documentElement.clientWidth + 1)).toBe(true);
+        if ([9, 18, 23].includes(item.id)) {
+          await page.screenshot({ path: testInfo.outputPath(`ch06-${item.id}.png`) });
+          await page.getByRole("heading", { level: 3, name: /^样例输入/ }).scrollIntoViewIfNeeded();
+          await page.screenshot({ path: testInfo.outputPath(`ch06-${item.id}-sample.png`) });
+        }
+      }
+      expect(failures).toEqual([]);
+    });
+  }
+}
+
+test("chapter 6 graph exercises enter Labs index and search", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/`);
+  const cards = page.locator('a.course-labs-list-card[href*="/labs/chapter-06/exercise/"]');
+  await expect(cards).toHaveCount(23);
+  await cards.last().click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 06-E-23：SCC 凝聚图构造");
+  await page.locator("#local-search button").click();
+  for (const item of chapter06Exercises.filter((entry) => [4, 9, 18, 23].includes(entry.id))) {
+    await page.getByRole("searchbox").fill(item.title);
+    await expect(page.getByRole("listbox").locator(`a[href*="/${chapter06LabPath(item)}/"]`).first()).toBeVisible();
+  }
+  await page.keyboard.press("Escape");
+  expect(failures).toEqual([]);
+});
 
 test("chapter 15 exercises enter Labs index and local search", async ({ page }) => {
   test.setTimeout(90_000);

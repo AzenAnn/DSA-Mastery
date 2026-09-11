@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-boundary-singleton",
+    "input": "tests/002-boundary-singleton.in",
+    "expected": "tests/002-boundary-singleton.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-boundary-empty",
+    "input": "tests/003-boundary-empty.in",
+    "expected": "tests/003-boundary-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-single-forward-edge",
+    "input": "tests/004-single-forward-edge.in",
+    "expected": "tests/004-single-forward-edge.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-regression-reverse-edge",
+    "input": "tests/005-regression-reverse-edge.in",
+    "expected": "tests/005-regression-reverse-edge.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "006-normal-chain",
+    "input": "tests/006-normal-chain.in",
+    "expected": "tests/006-normal-chain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-regression-reverse-chain",
+    "input": "tests/007-regression-reverse-chain.in",
+    "expected": "tests/007-regression-reverse-chain.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "008-normal-cycle",
+    "input": "tests/008-normal-cycle.in",
+    "expected": "tests/008-normal-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-boundary-self-loops",
+    "input": "tests/009-boundary-self-loops.in",
+    "expected": "tests/009-boundary-self-loops.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "010-regression-parallel-edges",
+    "input": "tests/010-regression-parallel-edges.in",
+    "expected": "tests/010-regression-parallel-edges.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "011-two-scc-one-way",
+    "input": "tests/011-two-scc-one-way.in",
+    "expected": "tests/011-two-scc-one-way.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-regression-interleaved-scc",
+    "input": "tests/012-regression-interleaved-scc.in",
+    "expected": "tests/012-regression-interleaved-scc.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "013-regression-dfs-exit-order",
+    "input": "tests/013-regression-dfs-exit-order.in",
+    "expected": "tests/013-regression-dfs-exit-order.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "014-diamond-dag",
+    "input": "tests/014-diamond-dag.in",
+    "expected": "tests/014-diamond-dag.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-disconnected-scc",
+    "input": "tests/015-disconnected-scc.in",
+    "expected": "tests/015-disconnected-scc.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-random-sparse",
+    "input": "tests/016-random-sparse.in",
+    "expected": "tests/016-random-sparse.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-random-dense",
+    "input": "tests/017-random-dense.in",
+    "expected": "tests/017-random-dense.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-stress-long-chain",
+    "input": "tests/018-stress-long-chain.in",
+    "expected": "tests/018-stress-long-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-stress-scc-chain",
+    "input": "tests/019-stress-scc-chain.in",
+    "expected": "tests/019-stress-scc-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-stress-max-edges",
+    "input": "tests/020-stress-max-edges.in",
+    "expected": "tests/020-stress-max-edges.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

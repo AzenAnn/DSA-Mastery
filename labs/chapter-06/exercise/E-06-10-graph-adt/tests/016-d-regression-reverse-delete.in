@@ -1,0 +1,5 @@
+D 2 4
+ADD 0 1
+DEL 1 0
+HAS 0 1
+HAS 1 0

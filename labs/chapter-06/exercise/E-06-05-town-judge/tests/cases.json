@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-boundary-singleton",
+    "input": "tests/002-boundary-singleton.in",
+    "expected": "tests/002-boundary-singleton.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-boundary-empty",
+    "input": "tests/003-boundary-empty.in",
+    "expected": "tests/003-boundary-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-two-people-first-judge",
+    "input": "tests/004-two-people-first-judge.in",
+    "expected": "tests/004-two-people-first-judge.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-two-people-last-judge",
+    "input": "tests/005-two-people-last-judge.in",
+    "expected": "tests/005-two-people-last-judge.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-cycle",
+    "input": "tests/006-cycle.in",
+    "expected": "tests/006-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-mutual-trust",
+    "input": "tests/007-mutual-trust.in",
+    "expected": "tests/007-mutual-trust.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-regression-judge-outgoing",
+    "input": "tests/008-regression-judge-outgoing.in",
+    "expected": "tests/008-regression-judge-outgoing.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "009-missing-one-trust",
+    "input": "tests/009-missing-one-trust.in",
+    "expected": "tests/009-missing-one-trust.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-extra-nonjudge-trust",
+    "input": "tests/010-extra-nonjudge-trust.in",
+    "expected": "tests/010-extra-nonjudge-trust.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-two-popular-people",
+    "input": "tests/011-two-popular-people.in",
+    "expected": "tests/011-two-popular-people.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-disconnected-trust",
+    "input": "tests/012-disconnected-trust.in",
+    "expected": "tests/012-disconnected-trust.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-high-judge-label",
+    "input": "tests/013-high-judge-label.in",
+    "expected": "tests/013-high-judge-label.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-low-judge-label",
+    "input": "tests/014-low-judge-label.in",
+    "expected": "tests/014-low-judge-label.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-middle-judge-label",
+    "input": "tests/015-middle-judge-label.in",
+    "expected": "tests/015-middle-judge-label.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-random-no-judge",
+    "input": "tests/016-random-no-judge.in",
+    "expected": "tests/016-random-no-judge.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-stress-trust-chain",
+    "input": "tests/017-stress-trust-chain.in",
+    "expected": "tests/017-stress-trust-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "018-stress-max-n-judge",
+    "input": "tests/018-stress-max-n-judge.in",
+    "expected": "tests/018-stress-max-n-judge.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-stress-max-m-judge",
+    "input": "tests/019-stress-max-m-judge.in",
+    "expected": "tests/019-stress-max-m-judge.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-stress-max-m-no-judge",
+    "input": "tests/020-stress-max-m-no-judge.in",
+    "expected": "tests/020-stress-max-m-no-judge.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]
