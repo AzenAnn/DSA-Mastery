@@ -816,3 +816,67 @@ User approved the local preview and requested a PR. Committed and pushed 34 Ch4 
 ### Next Steps
 
 - Review PR #173 and GitHub checks before merging; local preview remains on port 4175.
+
+
+## Session 33: Project engineering and expression demo ready for local review
+
+**Date**: 2026-09-11
+**Task**: Project engineering and expression demo ready for local review
+**Branch**: `feat/project-engineering-expression-demo`
+
+### Summary
+
+Implemented Project task isolation, current-result fingerprints, expression demo and VSIX installer. Local review ready; no remote actions.
+
+### Main Changes
+
+- CLI, schemas, existing Project target metadata, 02P04, extension UI/runtime, installation docs and helper, website Task headings, regression tests.
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] pnpm test passed; extension 47 tests and typecheck; Project fault matrix; Golden Labs; isolated VSIX update/reload/rollback; Pages 51 tests.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- Await Azen local review. Preview http://127.0.0.1:4187/DSA-Mastery/; delivery in task local-review.md. Do not push, open PR, tag or release before explicit confirmation.
+
+
+## Session 34: 提交 Project PR 174 并发布插件 0.1.13
+
+**Date**: 2026-09-11
+**Task**: 提交 Project PR 174 并发布插件 0.1.13
+**Branch**: `feat/project-engineering-expression-demo`
+
+### Summary
+
+本地交付后按用户明确授权提交 PR #174 并公开 ext-v0.1.13 测试版；CI 包与标签资产逐文件一致，隔离安装及真实 UI/SQLite 进度验证通过。
+
+### Main Changes
+
+- PR https://github.com/AzenAnn/DSA-Mastery/pull/174 保持 OPEN，Release https://github.com/AzenAnn/DSA-Mastery/releases/tag/ext-v0.1.13 已公开。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `38f3c3a` | (see git log) |
+
+### Testing
+
+- [OK] Linux 扩展 47 tests/typecheck/package 成功；Windows CI VSIX 完整 UI、进度保留、公开资产下载和 SHA256 校验成功。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 维护者审阅 PR #174；新 Project 功能使用同标签源码/CLI，本地预览 http://127.0.0.1:4187/DSA-Mastery/。
