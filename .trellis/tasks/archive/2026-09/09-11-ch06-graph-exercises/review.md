@@ -4,7 +4,7 @@
 
 ## 检阅结论
 
-20 题的算法、题面合同、评分、分发和最终全站浏览器检查均通过，未发现阻塞问题。待完成提交及远端 SHA 核验后更新交付记录。
+20 题的算法、题面合同、评分、分发和最终全站浏览器检查均通过，未发现阻塞问题。代码提交已推送至任务分支，远端 SHA 与本地工作提交一致。
 
 ## 发现与处理
 
@@ -30,7 +30,7 @@
 - [x] `pnpm run test:pages --workers 1`：最终 61 项全站 Chromium 检查全部通过，耗时 6.6 分钟。包含新增 5 项 ch6 测试：四种视口/主题各遍历 20 页，以及 Labs 索引/搜索。
 - [x] 人工查看 1440px 浅色的 06E09、1440px 暗色的 06E23 样例、390px 浅色的 06E18、390px 暗色的 06E09 样例和章节侧栏。标题换行、输入区、元信息和导航均清晰，无遮挡；20 页四种视口/主题均通过页面横向溢出断言。
 - [x] 新增浏览器测试文件单独 ESLint 通过；只调整该测试的定位方式，无站点运行时改动。
-- [ ] 提交前 staged diff 检查和远端分支 SHA 核验。
+- [x] 提交前 `git diff --cached --check` 通过；936 个暂存文件均在任务明确范围，每题恰好 46 个，无编译物。工作提交推送后 `git ls-remote --heads origin lab/ch06-graph-exercises` 返回同一 SHA。
 
 Clang 报告：`.lab-cache/ch06/verify-clang__-all-pack.json`。MSVC 报告：`.lab-cache/ch06/verify-cl-all.json`。运行报告与截图为本机验证产物，未加入产品提交。
 
@@ -81,4 +81,4 @@ Clang 报告：`.lab-cache/ch06/verify-clang__-all-pack.json`。MSVC 报告：`.
 
 ## 提交与推送
 
-质量门禁和截图检阅已完成，将提交 `feat(ch06): add twenty graph exercise labs`，推送 `lab/ch06-graph-exercises` 并记录核对结果；随后按 Azen 身份归档任务并记录会话。
+工作提交：`31ac483a40040e260855d4e2610bd1cd061fc2fc`，`feat(ch06): add twenty graph exercise labs`。已推送 `origin/lab/ch06-graph-exercises`，远端返回该 SHA。本次归档和 Azen 会话记录将作为后续独立提交推送；不合并 main，不触发部署。
