@@ -1,0 +1,7 @@
+add_library(expr_tokenizer STATIC ${LAB_IMPL}/tokenizer.cpp)
+target_include_directories(expr_tokenizer PUBLIC ${PROJECT_SOURCE_DIR}/contracts)
+add_executable(expr_tokenizer_tests tests/tokenizer_tests.cpp)
+target_link_libraries(expr_tokenizer_tests PRIVATE expr_tokenizer)
+foreach(group normal boundary errors)
+  add_test(NAME tokenizer-${group} COMMAND expr_tokenizer_tests ${group})
+endforeach()

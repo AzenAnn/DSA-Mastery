@@ -55,3 +55,12 @@ test("automatic full score with manual weight remains pending instead of passed"
   assert.equal(projectProgressPassed({ automatedFull: true, manualPending: 0, internalError: false }), true);
   assert.equal(projectProgressPassed({ automatedFull: true, manualPending: 0, internalError: true }), false);
 });
+
+test("historical full score cannot override unknown, unassessed or stale current code", () => {
+  const history = { automatedFull: true, manualPending: 0, internalError: false };
+  assert.equal(projectProgressPassed({ ...history, currentUnknown: true }), false);
+  assert.equal(projectProgressPassed({ ...history, current: {
+    tasks: [], automatedScore: 0, automatedMax: 100, manualPending: 0,
+    provisionalTotal: 0, total: 100, automatedFull: false, internalError: false, complete: false,
+  } }), false);
+});

@@ -3,6 +3,8 @@
   "schemaVersion": 1,
   "kind": "ctest",
   "ctest": {
+    "buildTargets": ["linked_list_tests"],
+    "moduleTargets": ["linked_list"],
     "tests": [
       { "name": "linked-contract", "points": 25 },
       { "name": "linked-boundaries", "points": 25 },

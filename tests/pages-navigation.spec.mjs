@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { readFile, readdir, stat } from "node:fs/promises";
+import { mkdir, readFile, readdir, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -1264,11 +1264,12 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
     await expect(link).toHaveAttribute("href", new RegExp(`/labs/chapter-02/${slug}/$`));
   }
 
-  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(3);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(4);
   for (const title of [
     "Lab 02-P-01：可撤销浏览器——栈的综合应用",
     "Lab 02-P-02：超市收银模拟——队列的综合应用",
     "Lab 02-P-03：停车场管理——栈与队列的综合应用",
+    "Lab 02-P-04：表达式求值器",
   ]) {
     await expect(projectGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
@@ -2128,3 +2129,32 @@ test("chapter 4 flatten shows individual writes and supports a predecessor with 
   await expect(frame.locator("#right-sequence .tok")).toHaveText(["A", "B", "C", "D"]);
   expect(failures).toEqual([]);
 });
+
+for (const width of [1280, 390]) {
+  test(`Project example and extension guide preserve Pages links at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    const failures = monitorPage(page);
+    const directory = path.join(projectRoot, ".lab-cache/extension-review/pages");
+    await mkdir(directory, { recursive: true });
+    const projectUrl = `${baseUrl}/labs/chapter-02/project/P-02-04-expression-evaluator/`;
+    for (const [name, url, heading] of [
+      ["guide", `${baseUrl}/learn/chapter-preface/06-vscode-extension-guide/`, "VSCode 插件安装与使用指南"],
+      ["project", projectUrl, "Lab 02-P-04：表达式求值器"],
+    ]) {
+      expect((await page.goto(url)).status()).toBe(200);
+      await expect(page.getByRole("heading", { level: 1 })).toContainText(heading);
+      expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.innerWidth + 1)).toBe(true);
+      await page.screenshot({ path: path.join(directory, `${name}-${width}.png`) });
+    }
+    const links = await page.locator('.vp-doc a[href*="/tasks/"]').evaluateAll((elements) => elements.map((element) => element.href));
+    expect(links).toHaveLength(4);
+    for (const url of links) {
+      expect(url).toContain(`${pagesBasePath}/labs/chapter-02/project/`);
+      expect((await page.goto(url)).status()).toBe(200);
+      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.innerWidth + 1)).toBe(true);
+      await page.screenshot({ path: path.join(directory, `task-${links.indexOf(url) + 1}-${width}.png`) });
+    }
+    expect(failures).toEqual([]);
+  });
+}
