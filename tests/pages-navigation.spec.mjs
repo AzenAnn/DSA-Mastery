@@ -1609,7 +1609,7 @@ for (const width of [1440, 390]) {
   }
 }
 
-test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty Project slot", async ({ page }) => {
+test("chapter 5 exposes five Theory Labs, twenty-seven Exercise Labs, and an empty Project slot", async ({ page }) => {
   const failures = monitorPage(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`${baseUrl}/learn/outline/chapter-05-tree-applications/`);
@@ -1658,10 +1658,10 @@ test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty 
   await expect(exerciseGroup).toHaveClass(/collapsed/);
   await exerciseGroup.locator(":scope > .item > .caret").click();
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
-  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(17);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(27);
   for (const title of [
     "Lab 05-E-01：二叉搜索树的插入与查找",
-    "Lab 05-E-17：B+ 树的范围查询",
+    "Lab 05-E-27：B+ 树的范围查询",
   ]) {
     await expect(exerciseGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
