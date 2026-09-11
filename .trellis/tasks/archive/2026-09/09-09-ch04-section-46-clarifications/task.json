@@ -1,0 +1,28 @@
+{
+  "id": "ch04-section-46-clarifications",
+  "name": "ch04-section-46-clarifications",
+  "title": "修订 4.6 二叉树经典问题的定义与复杂度说明",
+  "description": "澄清 4.6 的两种宽度定义、迭代展开 O(n) 摊还分析、无 parent 的 LCA 与路径范围；代码及桌面/手机页面验证通过。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "content",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-09-09",
+  "completedAt": "2026-09-09",
+  "branch": "codex/ch04-section-46-clarifications",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": "3df8149",
+  "pr_url": "https://github.com/AzenAnn/DSA-Mastery/pull/159",
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "content/chapter-04-tree/06-binary-tree-classic-problems.md"
+  ],
+  "notes": "用户授权提交 PR。实现和验证完成，教材与配图已提交并推送；PR #159 等待独立审阅，未合并。详见 research/review.md。",
+  "meta": {}
+}

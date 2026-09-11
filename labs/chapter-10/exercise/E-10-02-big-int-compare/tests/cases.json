@@ -3,35 +3,185 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-same-length",
     "input": "tests/002-same-length.in",
     "expected": "tests/002-same-length.out",
-    "points": 20,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "003-front-runner",
     "input": "tests/003-front-runner.in",
     "expected": "tests/003-front-runner.out",
-    "points": 20,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "004-huge",
     "input": "tests/004-huge.in",
     "expected": "tests/004-huge.out",
-    "points": 25,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "005-single",
     "input": "tests/005-single.in",
     "expected": "tests/005-single.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-min-n-1",
+    "input": "tests/006-min-n-1.in",
+    "expected": "tests/006-min-n-1.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-two-equal",
+    "input": "tests/007-two-equal.in",
+    "expected": "tests/007-two-equal.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "tie"
+    ]
+  },
+  {
+    "id": "008-nine-vs-ten",
+    "input": "tests/008-nine-vs-ten.in",
+    "expected": "tests/008-nine-vs-ten.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-ninety-nine-vs-hundred",
+    "input": "tests/009-ninety-nine-vs-hundred.in",
+    "expected": "tests/009-ninety-nine-vs-hundred.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "010-max-n-mixed",
+    "input": "tests/010-max-n-mixed.in",
+    "expected": "tests/010-max-n-mixed.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "011-hundred-digits",
+    "input": "tests/011-hundred-digits.in",
+    "expected": "tests/011-hundred-digits.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "012-all-identical",
+    "input": "tests/012-all-identical.in",
+    "expected": "tests/012-all-identical.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "tie"
+    ]
+  },
+  {
+    "id": "013-ascending",
+    "input": "tests/013-ascending.in",
+    "expected": "tests/013-ascending.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "014-descending",
+    "input": "tests/014-descending.in",
+    "expected": "tests/014-descending.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "015-same-length-last-digit",
+    "input": "tests/015-same-length-last-digit.in",
+    "expected": "tests/015-same-length-last-digit.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-max-middle",
+    "input": "tests/016-max-middle.in",
+    "expected": "tests/016-max-middle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-tie-front",
+    "input": "tests/017-tie-front.in",
+    "expected": "tests/017-tie-front.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
+  },
+  {
+    "id": "018-all-single-digit",
+    "input": "tests/018-all-single-digit.in",
+    "expected": "tests/018-all-single-digit.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "tie"
+    ]
+  },
+  {
+    "id": "019-long-prefix-tie",
+    "input": "tests/019-long-prefix-tie.in",
+    "expected": "tests/019-long-prefix-tie.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "tie"
+    ]
+  },
+  {
+    "id": "020-random-15",
+    "input": "tests/020-random-15.in",
+    "expected": "tests/020-random-15.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   }
 ]

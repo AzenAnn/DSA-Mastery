@@ -601,3 +601,371 @@ Expanded 01E01-01E15 to exactly 20 weighted cases each, added boundary/normal/sp
 ### Status
 
 [OK] **Completed**
+
+
+## Session 26: 4.6 二叉树经典问题定义与复杂度修订
+
+**Date**: 2026-09-09
+**Task**: 4.6 二叉树经典问题定义与复杂度修订
+**Branch**: `codex/ch04-section-46-clarifications`
+
+### Summary
+
+从最新 origin/main 建分支，以 Azen 完成 4.6 宽度双定义、flatten 摊还分析、LCA 存储前提与图示、路径范围及标题修订。
+
+### Main Changes
+
+- 更新教材及两张配套 SVG；已按用户授权创建 PR #159，任务已归档。
+
+### Git Commits
+
+- `3df8149` — docs(ch04): 澄清 4.6 宽度定义、展开复杂度与 LCA
+
+### Testing
+
+- [OK] validate、discovery（含最终构建）、Pages 产物审计通过；C++ 6918 树形和 512443 次 LCA 查询、桌面/手机浅暗页面检查通过。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 等待独立 Reviewer 审阅 [PR #159](https://github.com/AzenAnn/DSA-Mastery/pull/159)；任务记录 .trellis/tasks/archive/2026-09/09-09-ch04-section-46-clarifications/research/review.md。
+
+
+## Session 27: 第 4 章树算法交互式演示
+
+**Date**: 2026-09-09
+**Task**: 第 4 章树算法交互式演示
+**Branch**: `codex/ch04-interactive-tree-demos`
+
+### Summary
+
+以 Azen 在最新 main 新建分支，参照 8.1/8.2 完成中序线索化、Morris、孩子兄弟转换与双遍历、先序展开四项演示。实现已验证，用户已授权提交 PR；代码已提交并完成实现任务归档。
+
+### Main Changes
+
+- 新增三份独立 HTML 和共享算法/视图/样式，挂载 4.4/4.5/4.6；提供播放、回退、重置、时间线、案例与模式切换、节点映射和指针快照。
+- 算法测试接入 pnpm test 与 Pages CI；同步演示规范和作者指南。
+
+### Git Commits
+
+- `9ee5578` — feat(ch04): add interactive tree algorithm demonstrations
+
+### Testing
+
+- [OK] pnpm test 全部通过；算法检查涵盖 626 种二叉树和 626 种有序森林。
+- [OK] 根路径新增 19 项、Pages 子路径全站 44 项浏览器测试全部通过；实际桌面/手机浅暗页面已检查。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 等待该分支的 GitHub PR 审阅；复核记录位于 .trellis/tasks/archive/2026-09/09-09-ch04-interactive-tree-demos/review.md，合并由维护者决定。
+
+
+## Session 28: 栈与队列综合理论 Lab 02T03
+
+**Date**: 2026-09-10
+**Task**: 栈与队列综合理论 Lab 02T03
+**Branch**: `feat/ch02-stack-queue-comprehensive-theory`
+
+### Summary
+
+完成 20 道来源核验且去重的选择题、5 道综合大题、题图构建复制与本地预览。按用户后续要求推送内容并创建 [PR #167](https://github.com/AzenAnn/DSA-Mastery/pull/167)，等待知识审核。
+
+### Git Commits
+
+`7f3228c` - feat(ch2): 新增栈与队列综合理论 Lab
+
+### Testing
+
+- [OK] pnpm test; Lab schema validation; exhaustive answers and 584-question dedup; Pages regression; desktop/mobile light/dark browser checks passed.
+
+
+## Session 29: Ch1 线性表 15 道理论大题与本地预览
+
+**Date**: 2026-09-10
+**Task**: Ch1 线性表 15 道理论大题与本地预览
+**Branch**: `feat/ch01-linear-list-written-theory`
+
+### Summary
+
+以 Azen 整理指定线性表笔记，新增 01T06：15 道理论大题、折叠解析、证明和评分要点，来源与排重记录完整。已完成本地预览，等待用户验收后再推送。
+
+### Main Changes
+
+- 新增 README-only Theory Lab、拆链示意图、来源清单、章节入口与导航回归。
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] pnpm test 通过；Pages 子路径构建和 check:site 通过；44 项 Pages 浏览器回归通过；新 Lab 四组浅暗/桌面手机浏览器验收通过。
+- [OK] 独立模型验证 53629 个数组用例与 34034 个链表用例，另覆盖共享尾段；git diff --check 通过。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 用户预览 http://127.0.0.1:4173/DSA-Mastery/labs/chapter-01/theory/T-01-06-linear-list-written/ ，验收前不提交、不推送、不创建 PR。
+
+
+## Session 30: Ch1 理论大题训练提交 PR #170
+
+**Date**: 2026-09-10
+**Task**: Ch1 理论大题训练提交 PR #170
+**Branch**: `feat/ch01-linear-list-written-theory`
+
+### Summary
+
+用户验收本地预览后授权提交 PR。同步 main 已合入的栈与队列 PR #167，保留两章搜索回归和独立日志，提交 15 道线性表理论大题训练并创建 https://github.com/AzenAnn/DSA-Mastery/pull/170 。
+
+### Main Changes
+
+- 新增 01T06、题图、来源与排重记录、章节入口和导航测试；任务归档至 .trellis/tasks/archive/2026-09/09-10-ch01-linear-list-written-theory/。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5923e5c` | (see git log) |
+
+### Testing
+
+- [OK] 同步后 pnpm test、Pages 子路径构建与 check:site、完整 44 项 Pages 回归全部通过；新 Lab 桌面手机浅暗四组检查通过。
+- [OK] 对最新仓库 390 个内容文件排重，53629 个数组用例和 34034 个链表用例通过；仅 1 项既有 Windows 符号链接测试按策略跳过。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- PR #170 等待审阅，未合并；本地预览 http://127.0.0.1:4173/DSA-Mastery/labs/chapter-01/theory/T-01-06-linear-list-written/ 保持运行。
+
+
+## Session 31: Ch4 exercise expansion and renumbering local preview
+
+**Date**: 2026-09-11
+**Task**: Ch4 exercise expansion and renumbering local preview
+**Branch**: `feat/ch04-exercise-expansion-and-order`
+
+### Summary
+
+Preserved 20 existing exercises, added 14 complete Labs with 20 cases each, migrated IDs and VS Code progress, and delivered local preview for approval.
+
+### Main Changes
+
+- 34 Labs ordered; source rows 1-31 plus three preserved supplements; full statements, code, diagrams and tests.
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] 34 lab:verify checks passed; 680 cases; 14 mutants rejected; isolated student pack passed.
+- [OK] pnpm test and Pages build/check passed; all 49 browser scenarios passed (48 initial plus corrected sidebar rerun); extension 44 tests, tsc and build passed.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- Await user review at http://127.0.0.1:4175/DSA-Mastery/ before commit, push or PR.
+
+
+## Session 32: Ch4 exercises PR 173 submitted
+
+**Date**: 2026-09-11
+**Task**: Ch4 exercises PR 173 submitted
+**Branch**: `feat/ch04-exercise-expansion-and-order`
+
+### Summary
+
+User approved the local preview and requested a PR. Committed and pushed 34 Ch4 exercises, archived the Azen task, and opened PR #173 against main.
+
+### Main Changes
+
+- PR: https://github.com/AzenAnn/DSA-Mastery/pull/173; product 7cfb4a8; archive 12b28f9.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `7cfb4a8` | (see git log) |
+
+### Testing
+
+- [OK] Rechecked all 900 original non-README Git blobs unchanged; archived preservation verifier passed; empty-forest case AC 5/5; staged whitespace checks passed.
+- [OK] Existing local evidence: 34 lab verifies, 680 cases, 14 rejected mutants, isolated student pack, pnpm test, Pages build/check, all 49 browser scenarios, and 44 extension tests.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- Review PR #173 and GitHub checks before merging; local preview remains on port 4175.
+
+
+## Session 33: Project engineering and expression demo ready for local review
+
+**Date**: 2026-09-11
+**Task**: Project engineering and expression demo ready for local review
+**Branch**: `feat/project-engineering-expression-demo`
+
+### Summary
+
+Implemented Project task isolation, current-result fingerprints, expression demo and VSIX installer. Local review ready; no remote actions.
+
+### Main Changes
+
+- CLI, schemas, existing Project target metadata, 02P04, extension UI/runtime, installation docs and helper, website Task headings, regression tests.
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] pnpm test passed; extension 47 tests and typecheck; Project fault matrix; Golden Labs; isolated VSIX update/reload/rollback; Pages 51 tests.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- Await Azen local review. Preview http://127.0.0.1:4187/DSA-Mastery/; delivery in task local-review.md. Do not push, open PR, tag or release before explicit confirmation.
+
+
+## Session 34: 提交 Project PR 174 并发布插件 0.1.13
+
+**Date**: 2026-09-11
+**Task**: 提交 Project PR 174 并发布插件 0.1.13
+**Branch**: `feat/project-engineering-expression-demo`
+
+### Summary
+
+本地交付后按用户明确授权提交 PR #174 并公开 ext-v0.1.13 测试版；CI 包与标签资产逐文件一致，隔离安装及真实 UI/SQLite 进度验证通过。
+
+### Main Changes
+
+- PR https://github.com/AzenAnn/DSA-Mastery/pull/174 保持 OPEN，Release https://github.com/AzenAnn/DSA-Mastery/releases/tag/ext-v0.1.13 已公开。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `38f3c3a` | (see git log) |
+
+### Testing
+
+- [OK] Linux 扩展 47 tests/typecheck/package 成功；Windows CI VSIX 完整 UI、进度保留、公开资产下载和 SHA256 校验成功。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 维护者审阅 PR #174；新 Project 功能使用同标签源码/CLI，本地预览 http://127.0.0.1:4187/DSA-Mastery/。
+
+
+## Session 35: Ch15 回溯与搜索练习验收及 PR 准备
+
+**Date**: 2026-09-11
+**Task**: Ch15 回溯与搜索练习验收及 PR 准备
+**Branch**: `feat/ch15-backtracking-exercises`
+
+### Summary
+
+按题单顺序完成21道Program Lab与ch15侧栏、索引和搜索入口；227组独立数据、全题verify、代表题MSVC、pnpm test、Make和学生包验证通过，Pages全部56项测试通过。用户已授权提交PR，代码与任务归档已提交，随后推送feat/ch15-backtracking-exercises并创建面向main的PR。public/diagrams中4项无关变化保留且不提交；无合并或部署。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b9483ab` | (see git log) |
+
+### Status
+
+[OK] **Completed**
+
+
+## Session 36: Ch0 教学改版与完整验收
+
+**Date**: 2026-09-11
+**Task**: Ch0 教学改版与完整验收
+**Branch**: `docs/ch0-teaching-revision`
+
+### Summary
+
+完成两篇入门文章的需求驱动教学改写、练习与第12章纠错同步，验证通过，任务置为 review，保留未提交改动。
+
+### Main Changes
+
+- 0.1 以学生记录需求引出结构与 ADT 契约；0.2 以循环计数、单条件变式、前缀和和峰值空间建立迁移方法。
+- 修正混合递推、归纳失败推论、空间生存期、几何与平方计数、q11 题面和 q19 解析；修复 Graphviz 图注语法指南。
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] pnpm test、validate、root/Pages build 与 check:site 通过；全站 Pages 56/56 通过。
+- [OK] 实际 C++ 计数与边界核验、两文八组桌面/移动浅暗预览及题库提交重试通过；Windows 符号链接测试按既有策略跳过一项。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 维护者审阅当前分支改动后按项目流程提交；任务验收记录位于 .trellis/tasks/09-11-ch0-teaching-revision/verification.md。
+
+
+## Session 37: Ch0 教学改版提交与 PR 准备
+
+**Date**: 2026-09-11
+**Task**: Ch0 教学改版提交与 PR 准备
+**Branch**: `docs/ch0-teaching-revision`
+
+### Summary
+
+用户明确要求提交 PR。已提交教学改版及相关规范，归档 Trellis 任务，准备推送分支并创建面向 main 的 PR。
+
+### Main Changes
+
+- 提交 15 个正文、练习、图示与规范测试文件；原有四项 SVG 变动和 __pycache__ 保留，不纳入提交。
+- 任务归档至 .trellis/tasks/archive/2026-09/09-11-ch0-teaching-revision/，保留完整验证记录与可复跑脚本。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `24cab4d` | (see git log) |
+
+### Testing
+
+- [OK] 沿用已通过的 pnpm test、validate、root/Pages build、check:site、Pages 56/56 与八组视觉验收；产品内容未再修改。
+- [OK] 提交前 git diff --check 通过；git fetch 后 origin/main 与验收基线一致。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 维护者在 PR 中审阅教学节奏、变式梯度与严格推导，等待 GitHub Actions 检查。

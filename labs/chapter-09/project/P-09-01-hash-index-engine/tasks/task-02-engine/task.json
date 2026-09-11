@@ -3,6 +3,8 @@
   "schemaVersion": 1,
   "kind": "ctest",
   "ctest": {
+    "buildTargets": ["hash_index_tests"],
+    "moduleTargets": ["hash_index"],
     "tests": [
       { "name": "engine-chaining", "points": 30 },
       { "name": "engine-open-addressing", "points": 40 },

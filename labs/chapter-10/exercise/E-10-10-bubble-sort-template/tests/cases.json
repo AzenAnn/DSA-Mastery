@@ -3,42 +3,192 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-sorted",
     "input": "tests/002-sorted.in",
     "expected": "tests/002-sorted.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "003-reverse",
     "input": "tests/003-reverse.in",
     "expected": "tests/003-reverse.out",
-    "points": 20,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "004-duplicates",
     "input": "tests/004-duplicates.in",
     "expected": "tests/004-duplicates.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "005-negative",
     "input": "tests/005-negative.in",
     "expected": "tests/005-negative.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "006-single",
     "input": "tests/006-single.in",
     "expected": "tests/006-single.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-n-2-desc",
+    "input": "tests/007-n-2-desc.in",
+    "expected": "tests/007-n-2-desc.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-n-2-equal",
+    "input": "tests/008-n-2-equal.in",
+    "expected": "tests/008-n-2-equal.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "009-all-identical",
+    "input": "tests/009-all-identical.in",
+    "expected": "tests/009-all-identical.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "010-min-value",
+    "input": "tests/010-min-value.in",
+    "expected": "tests/010-min-value.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "negative"
+    ]
+  },
+  {
+    "id": "011-max-value",
+    "input": "tests/011-max-value.in",
+    "expected": "tests/011-max-value.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "012-max-n-asc",
+    "input": "tests/012-max-n-asc.in",
+    "expected": "tests/012-max-n-asc.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "sorted"
+    ]
+  },
+  {
+    "id": "013-max-n-desc",
+    "input": "tests/013-max-n-desc.in",
+    "expected": "tests/013-max-n-desc.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "reverse"
+    ]
+  },
+  {
+    "id": "014-many-dup-small",
+    "input": "tests/014-many-dup-small.in",
+    "expected": "tests/014-many-dup-small.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "015-random-100",
+    "input": "tests/015-random-100.in",
+    "expected": "tests/015-random-100.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "random"
+    ]
+  },
+  {
+    "id": "016-random-1000",
+    "input": "tests/016-random-1000.in",
+    "expected": "tests/016-random-1000.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "random"
+    ]
+  },
+  {
+    "id": "017-negatives-desc",
+    "input": "tests/017-negatives-desc.in",
+    "expected": "tests/017-negatives-desc.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "negative"
+    ]
+  },
+  {
+    "id": "018-two-values",
+    "input": "tests/018-two-values.in",
+    "expected": "tests/018-two-values.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "019-mixed-boundary",
+    "input": "tests/019-mixed-boundary.in",
+    "expected": "tests/019-mixed-boundary.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "negative"
+    ]
+  },
+  {
+    "id": "020-max-n-random",
+    "input": "tests/020-max-n-random.in",
+    "expected": "tests/020-max-n-random.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "random"
+    ]
   }
 ]

@@ -1,56 +1,182 @@
 [
   {
-    "id": "001-sample",
-    "input": "tests/001-sample.in",
-    "expected": "tests/001-sample.out",
-    "points": 20,
     "tags": [
       "sample"
-    ]
+    ],
+    "input": "tests/001-sample.in",
+    "points": 5,
+    "expected": "tests/001-sample.out",
+    "id": "001-sample"
   },
   {
-    "id": "002-repeated",
-    "input": "tests/002-repeated.in",
-    "expected": "tests/002-repeated.out",
-    "points": 20,
     "tags": [
       "boundary"
-    ]
+    ],
+    "input": "tests/002-repeated.in",
+    "points": 5,
+    "expected": "tests/002-repeated.out",
+    "id": "002-repeated"
   },
   {
-    "id": "003-classic",
-    "input": "tests/003-classic.in",
-    "expected": "tests/003-classic.out",
-    "points": 20,
     "tags": [
       "normal"
-    ]
+    ],
+    "input": "tests/003-classic.in",
+    "points": 5,
+    "expected": "tests/003-classic.out",
+    "id": "003-classic"
   },
   {
-    "id": "004-distinct",
+    "tags": [
+      "boundary"
+    ],
     "input": "tests/004-distinct.in",
+    "points": 5,
     "expected": "tests/004-distinct.out",
-    "points": 15,
-    "tags": [
-      "boundary"
-    ]
+    "id": "004-distinct"
   },
   {
-    "id": "005-single",
+    "tags": [
+      "boundary"
+    ],
     "input": "tests/005-single.in",
+    "points": 5,
     "expected": "tests/005-single.out",
-    "points": 15,
-    "tags": [
-      "boundary"
-    ]
+    "id": "005-single"
   },
   {
-    "id": "006-stress",
-    "input": "tests/006-stress.in",
-    "expected": "tests/006-stress.out",
-    "points": 10,
     "tags": [
       "stress"
-    ]
+    ],
+    "input": "tests/006-stress.in",
+    "points": 5,
+    "expected": "tests/006-stress.out",
+    "id": "006-stress"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/007-two-chars-ab.in",
+    "points": 5,
+    "expected": "tests/007-two-chars-ab.out",
+    "id": "007-two-chars-ab"
+  },
+  {
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/008-two-chars-aa.in",
+    "points": 5,
+    "expected": "tests/008-two-chars-aa.out",
+    "id": "008-two-chars-aa"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/009-suffix-prefix.in",
+    "points": 5,
+    "expected": "tests/009-suffix-prefix.out",
+    "id": "009-suffix-prefix"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/010-palindrome.in",
+    "points": 5,
+    "expected": "tests/010-palindrome.out",
+    "id": "010-palindrome"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/011-alternating.in",
+    "points": 5,
+    "expected": "tests/011-alternating.out",
+    "id": "011-alternating"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/012-long-prefix.in",
+    "points": 5,
+    "expected": "tests/012-long-prefix.out",
+    "id": "012-long-prefix"
+  },
+  {
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/013-all-same-long.in",
+    "points": 5,
+    "expected": "tests/013-all-same-long.out",
+    "id": "013-all-same-long"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/014-binary.in",
+    "points": 5,
+    "expected": "tests/014-binary.out",
+    "id": "014-binary"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/015-special-chars.in",
+    "points": 5,
+    "expected": "tests/015-special-chars.out",
+    "id": "015-special-chars"
+  },
+  {
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/016-max-length.in",
+    "points": 5,
+    "expected": "tests/016-max-length.out",
+    "id": "016-max-length"
+  },
+  {
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/017-min-length.in",
+    "points": 5,
+    "expected": "tests/017-min-length.out",
+    "id": "017-min-length"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/018-no-fallback.in",
+    "points": 5,
+    "expected": "tests/018-no-fallback.out",
+    "id": "018-no-fallback"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/019-complex-fallback.in",
+    "points": 5,
+    "expected": "tests/019-complex-fallback.out",
+    "id": "019-complex-fallback"
+  },
+  {
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/020-alternating-tail.in",
+    "points": 5,
+    "expected": "tests/020-alternating-tail.out",
+    "id": "020-alternating-tail"
   }
 ]

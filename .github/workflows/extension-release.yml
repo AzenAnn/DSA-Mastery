@@ -49,24 +49,17 @@ jobs:
         with:
           node-version: 24
 
-      # 扩展是独立 package，不在仓库的 pnpm workspace 里。
-      #
-      # `|| true`：pnpm 11 会因为没批准 esbuild 的 postinstall 而以退出码 1 结束
-      # （ERR_PNPM_IGNORED_BUILDS）。这个脚本我们并不需要 —— esbuild 的可执行文件
-      # 来自平台专属的 optional dependency，不跑 postinstall 也能用。下一步会显式
-      # 验证 esbuild 可执行，所以这里容忍退出码是安全的，不会掩盖真正的安装失败。
+      # The extension owns its lockfile and reviewed allowBuilds configuration.
       - name: Install extension dependencies
-        run: pnpm install --ignore-workspace --frozen-lockfile || true
+        run: pnpm install --frozen-lockfile
 
-      # 上一步容忍了退出码，这里确认依赖真的装好了。
       - name: Verify toolchain is usable
         run: |
           ./node_modules/.bin/esbuild --version
           ./node_modules/.bin/tsc --version
 
-      # 不走 pnpm run —— 它会重新做依赖检查，又被上面那个警告绊住。
       - name: Typecheck
-        run: ./node_modules/.bin/tsc -p tsconfig.json --noEmit
+        run: pnpm run typecheck
 
       - name: Run tests
         run: node --experimental-strip-types --test test/*.test.ts
@@ -87,10 +80,10 @@ jobs:
           echo "版本一致：$manifest_version"
 
       - name: Package .vsix
-        run: pnpm dlx @vscode/vsce@3 package --no-dependencies --allow-missing-repository
+        run: pnpm run package
 
       - name: Show package contents
-        run: pnpm dlx @vscode/vsce@3 ls --no-dependencies
+        run: pnpm exec vsce ls --no-dependencies
 
       # draft: true 是审核门 —— 推 tag 只把 .vsix 构建好并挂成草稿,
       # 草稿只有仓库写权限的人能看到。下载验证过再手动点 Publish 才对外可见。
@@ -115,14 +108,10 @@ jobs:
 
             1. 下载下面的 `.vsix` 文件
             2. VSCode → 扩展面板 → 右上角 `...` → **从 VSIX 安装**
-            3. **完全退出 VSCode 再打开**（不会热加载）
+            3. 按提示执行 **Developer: Reload Window**
             4. 打开 DSA Mastery 仓库根目录，活动栏出现 **DSA Mastery** 图标
 
-            命令行安装也可以：
-
-            ```bash
-            code --install-extension dsa-mastery-labs-*.vsix
-            ```
+            命令行安装请按下方指南传入下载文件的完整实际路径；PowerShell 不会替外部命令展开 `*.vsix`。
 
             ## 需要什么
 

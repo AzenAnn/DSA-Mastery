@@ -3,35 +3,180 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-sorted",
     "input": "tests/002-sorted.in",
     "expected": "tests/002-sorted.out",
-    "points": 20,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "003-reverse",
     "input": "tests/003-reverse.in",
     "expected": "tests/003-reverse.out",
-    "points": 20,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "004-duplicates",
     "input": "tests/004-duplicates.in",
     "expected": "tests/004-duplicates.out",
-    "points": 20,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "005-single",
     "input": "tests/005-single.in",
     "expected": "tests/005-single.out",
-    "points": 20,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-n-two-asc",
+    "input": "tests/006-n-two-asc.in",
+    "expected": "tests/006-n-two-asc.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-n-two-desc",
+    "input": "tests/007-n-two-desc.in",
+    "expected": "tests/007-n-two-desc.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-n-two-eq",
+    "input": "tests/008-n-two-eq.in",
+    "expected": "tests/008-n-two-eq.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-negatives",
+    "input": "tests/009-negatives.in",
+    "expected": "tests/009-negatives.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-extreme-values",
+    "input": "tests/010-extreme-values.in",
+    "expected": "tests/010-extreme-values.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-all-same-large",
+    "input": "tests/011-all-same-large.in",
+    "expected": "tests/011-all-same-large.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "012-reverse-large",
+    "input": "tests/012-reverse-large.in",
+    "expected": "tests/012-reverse-large.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "013-random-small",
+    "input": "tests/013-random-small.in",
+    "expected": "tests/013-random-small.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-random-mid",
+    "input": "tests/014-random-mid.in",
+    "expected": "tests/014-random-mid.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-random-large",
+    "input": "tests/015-random-large.in",
+    "expected": "tests/015-random-large.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-half-sorted",
+    "input": "tests/016-half-sorted.in",
+    "expected": "tests/016-half-sorted.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-two-values",
+    "input": "tests/017-two-values.in",
+    "expected": "tests/017-two-values.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-duplicates-desc",
+    "input": "tests/018-duplicates-desc.in",
+    "expected": "tests/018-duplicates-desc.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-single-min",
+    "input": "tests/019-single-min.in",
+    "expected": "tests/019-single-min.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "020-near-sorted",
+    "input": "tests/020-near-sorted.in",
+    "expected": "tests/020-near-sorted.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   }
 ]

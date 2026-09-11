@@ -4,7 +4,7 @@ description: "建立数据结构的共同语言，学习评价算法时间与空
 order: 0
 chapter: 0
 chapterTitle: "基础"
-updated: "2026-08-10"
+updated: "2026-09-11"
 contributors: ["Azen"]
 status: "draft"
 ---
@@ -15,7 +15,7 @@ status: "draft"
 
 ## 本章定位
 
-本章不急于实现某一种具体数据结构，而是先搭好一张认知地图。你会先从实际数据出发，理解逻辑关系、存储方式和抽象操作；再学习用输入规模、基本操作和增长数量级分析算法。
+本章面向已经会写基本 C++ 结构体、数组、循环和函数的读者。先跟随学生名单的需求变化，理解逻辑关系、存储方式和操作契约；再从小样例计数出发，学习比较算法的时间与空间成本。对数、求和与简单递归会结合执行过程介绍，无须先学主定理。
 
 ## 学习目标
 
@@ -37,15 +37,16 @@ status: "draft"
 
 ## 推荐学习顺序
 
-1. 先学习[数据结构基础概念](./01-data-structure-basics.md)，建立“问题—关系—操作—实现”的共同语言。
-2. 再学习[时间与空间复杂度概论](./02-time-and-space-complexity.md)，掌握比较不同实现的方法。
-3. 然后学习[从内存视角理解复杂度](./03-memory-perspective.md)，从硬件层理解「单次操作代价」这一环。
-4. 阅读后完成配套 Lab，用图示、操作计数和实际运行结果检查自己的理解。
+1. 阅读[数据结构基础概念](./01-data-structure-basics.md)，沿“保存记录 → 位置访问 → 插入 → 按学号查找/删除 → 多种需求”分析方案。
+2. 阅读[时间与空间复杂度概论](./02-time-and-space-complexity.md)，先完成三角循环示范，再补全几何步长推导，最后独立分析累计停止条件；在文中指定位置穿插操作计数实验与选择题。
+3. 用多次区间求和练习“准备成本 + 重复成本”，用简单递归区分调用总数与峰值空间。
+4. 然后阅读[从内存视角理解复杂度](./03-memory-perspective.md)，讨论渐近模型之外的硬件访问成本。主定理与更一般的递推留到[第 12 章](../chapter-12-divide-conquer-recursion/06-recurrence-complexity.md)。
 
 ## 配套 Labs
 
 - [Lab 00-T-01：制作个人 DSA 学习地图](../../labs/chapter-00/theory/T-00-01-learning-map/README.md)
 - [Lab 00-E-01：用操作计数观察增长趋势](../../labs/chapter-00/exercise/E-00-01-operation-counter/README.md)
+- [Lab 00-T-02：复杂度计算自测](../../labs/chapter-00/theory/T-00-02-complexity-quiz/README.md)：19 题按正文主题分组完成，高级递推题可延后。
 
 ## 学习建议
 

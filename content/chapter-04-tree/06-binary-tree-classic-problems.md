@@ -4,12 +4,18 @@ description: "建立二叉树统一分治与递归框架，系统突破统计、
 order: 6
 chapter: 4
 chapterTitle: "树与二叉树"
-updated: "2026-08-24"
-contributors: ["Wanderer0"]
+updated: "2026-09-09"
+contributors: ["Wanderer0", "Azen"]
 status: "draft"
 ---
 
 # 4.6 二叉树的经典问题
+
+<script setup>
+import { withBase } from "vitepress";
+
+const flattenDemoUrl = withBase("/demos/flatten-tree.html");
+</script>
 
 在掌握了二叉树的形态定义、存储结构与遍历机制之后，接下来我们来研究二叉树里面的经典问题。
 
@@ -23,7 +29,7 @@ status: "draft"
 
 完成本节后，你应该能够：
 
-- 熟练写出节点数、叶节点、高度与宽度的分治统计公式；
+- 熟练写出节点数、叶节点与高度的分治统计公式，并区分按节点数和按编号跨度计算的两种宽度；
 - 掌握对称二叉树的双树镜像递归比较，以及完全二叉树的 BFS 连续性判空；
 - 理解平衡二叉树从 $O(n^2)$ 自顶向下优化为 $O(n)$ 自底向上剪枝的精髓；
 - 掌握原地将二叉树展开为先序单链表的前驱拼接技巧；
@@ -32,7 +38,7 @@ status: "draft"
 
 ---
 
-## 4.6.1 统计类：节点数、叶节点、高度与宽度
+## 4.6.1 统计类
 
 统计类问题的核心是**分治策略**：将整棵树的统计指标，分解为左子树的统计指标与右子树的统计指标的代数合并。
 
@@ -68,12 +74,76 @@ int maxDepth(TreeNode* root) {
 }
 ```
 
-### 3. 二叉树的最大宽度（编号性质应用）
+### 3. 二叉树的最大宽度
 
-二叉树的宽度指所有层中节点跨度的最大值。在完全二叉树编号模型下（根为 $0$，左孩子为 $2i+1$，右孩子为 $2i+2$），每一层的宽度等于**该层最右节点的编号减去最左节点的编号加 $1$**。
+::: definition 两种宽度约定
+**经典定义（按节点数）**：一层的宽度是该层实际存在的节点个数，二叉树的最大宽度是各层节点数的最大值，**不计空位**。这也是 [4.3 层序遍历](./03-binary-tree-traversal.md)分析队列空间时使用的宽度。
 
-::: tip 技巧 · 编号归一化防止整数溢出
-在非常深的不平衡树中，编号可能发生指数级增长导致 64 位整数溢出。解决方法是在每层开始时，**将该层所有节点的编号减去该层首个节点的编号（以 $0$ 为基准对齐）**。
+**编号跨度定义（计入中间空位）**：一层的宽度是最左与最右非空节点之间占据的位置数，**计入两端之间的空位，不计两端以外的空位**；整棵树取各层跨度的最大值。[LeetCode 662「二叉树最大宽度」](https://leetcode.com/problems/maximum-width-of-binary-tree/)采用这一约定。
+:::
+
+例如，下面这棵树的第三层只有两个节点，却跨越了四个位置：
+
+```graphviz
+digraph BinaryTreeWidthDefinitions {
+  graph [bgcolor="#ffffff"];
+  node [shape=circle];
+  root [label="A"];
+  left [label="B"];
+  right [label="C"];
+  first [label="D"];
+  gap_left [label="空位", shape=box, style=dashed];
+  gap_right [label="空位", shape=box, style=dashed];
+  last [label="E"];
+  root -> left;
+  root -> right;
+  left -> first;
+  left -> gap_left [style=dashed];
+  right -> gap_right [style=dashed];
+  right -> last;
+  { rank=same; first; gap_left; gap_right; last; }
+}
+```
+<!-- diagram id="binary-tree-width-definitions" caption: "第三层为 D、空位、空位、E：实际节点数为 2，编号跨度为 4" -->
+
+| 计算约定 | 第 1 层 | 第 2 层 | 第 3 层 | 整棵树的最大宽度 |
+| --- | --- | --- | --- | --- |
+| 实际节点数 | 1 | 2 | 2 | 2 |
+| 包含中间空位的跨度 | 1 | 2 | 4 | 4 |
+
+**按经典定义求宽度**，只需在 BFS 每层开始时记录队列长度；队列中仅存放非空节点：
+
+```cpp:line-numbers [max-level-node-count.cpp]
+#include <algorithm>
+#include <cstddef>
+#include <queue>
+
+std::size_t maxLevelNodeCount(TreeNode* root) {
+    if (root == nullptr) return 0;
+
+    std::queue<TreeNode*> q;
+    q.push(root);
+    std::size_t maxWidth = 0;
+    while (!q.empty()) {
+        const std::size_t levelSize = q.size();
+        maxWidth = std::max(maxWidth, levelSize);
+        for (std::size_t i = 0; i < levelSize; ++i) {
+            TreeNode* node = q.front();
+            q.pop();
+            if (node->left != nullptr) q.push(node->left);
+            if (node->right != nullptr) q.push(node->right);
+        }
+    }
+    return maxWidth;
+}
+```
+
+**按编号跨度求宽度**，则需要保留节点之间的空位信息。在完全二叉树编号模型下（根为 $0$，左孩子为 $2i+1$，右孩子为 $2i+2$），每层跨度为**该层最右节点的编号减去最左节点的编号加 $1$**。下面的 `widthOfBinaryTree` 计算的是这一种宽度。
+
+::: tip 技巧 · 每层编号归一化
+深树的绝对编号可能很大。在每层开始时，**将该层所有节点的编号减去该层首个节点的编号（以 $0$ 为基准对齐）**，可以去掉共同偏移，保留编号差。
+
+下例沿用 LeetCode 662 的约束：答案在 32 位有符号整数范围内，中间编号用 `uint64_t` 保存，再转为 `int` 返回。归一化不能缩小真实跨度；若取消答案范围限制，极稀疏树的跨度仍可能超过整数类型范围，需要另行处理。
 :::
 
 ```cpp:line-numbers [width-of-binary-tree.cpp]
@@ -84,7 +154,7 @@ int maxDepth(TreeNode* root) {
 int widthOfBinaryTree(TreeNode* root) {
     if (root == nullptr) return 0;
 
-    // 队列中存储：{节点指针, 满二叉树节点编号}
+    // 队列中存储：{非空节点指针, 保留相对位置的编号}
     std::queue<std::pair<TreeNode*, uint64_t>> q;
     q.push({root, 0});
     uint64_t maxWidth = 0;
@@ -98,7 +168,7 @@ int widthOfBinaryTree(TreeNode* root) {
             auto [node, index] = q.front();
             q.pop();
 
-            // 核心：减去 minIndex 归一化防止指数溢出
+            // 去掉当前层共同的编号偏移，保留节点间距
             uint64_t curIndex = index - minIndex;
             if (i == 0) first = curIndex;
             if (i == size - 1) last = curIndex;
@@ -112,9 +182,13 @@ int widthOfBinaryTree(TreeNode* root) {
 }
 ```
 
+::: complexity 两种 BFS 的复杂度
+设节点总数为 $n$，单层实际节点数的最大值为 $w$。两种方法都只让非空节点入队，每个节点入队、出队各一次，时间复杂度均为 $O(n)$，辅助空间均为 $O(w)$。这里的 $w$ 按经典定义计算，**不是包含空位的编号跨度**。
+:::
+
 ---
 
-## 4.6.2 判断类：相同、对称、完全与平衡
+## 4.6.2 判断类
 
 ### 1. 相同树（Same Tree）与对称树（Symmetric Tree）
 
@@ -281,7 +355,7 @@ private:
 
 ---
 
-## 4.6.3 变换类：翻转二叉树与展开为单链表
+## 4.6.3 变换类
 
 ### 1. 翻转二叉树（Invert / Mirror Binary Tree）
 
@@ -336,12 +410,16 @@ digraph FlattenTree {
 ```
 <!-- diagram id="flatten-tree" caption: "二叉树原地展开为按前序排列的右链" -->
 
-::: property 寻找前驱节点的 O(1) 空间解法
+::: tip 寻找拼接点的原地解法
 对于当前节点 `curr`，若其拥有左子树：
-1. 其左子树在前序遍历中的最后一个节点，正是**左子树中最右下的节点（前驱节点 `predecessor`）**；
-2. 将 `curr->right` 接到 `predecessor->right` 上；
+1. 从 `curr->left` 出发，沿 `right` 指针走到末端，找到拼接点 `pred`；
+2. 将原来的 `curr->right` 接到 `pred->right` 上；
 3. 将 `curr->left` 整体移到 `curr->right`，并将 `curr->left` 置空；
-4. `curr` 顺着新的 `right` 继续向前推进！
+4. `curr` 顺着新的 `right` 继续向前推进。
+:::
+
+::: pitfall 拼接点不一定是左子树先序遍历的最后一个节点
+沿右指针找到的 `pred` 仍可能有左子树。例如左子树根为 `2`，它只有左孩子 `3`：此时 `pred` 是 `2`，但该子树先序遍历的末节点是 `3`。先把原右子树接到 `2->right`，后续处理 `2` 时，算法会把 `3` 插到这棵右子树之前，最终仍保持“根、左子树、右子树”的顺序。
 :::
 
 ```cpp:line-numbers [flatten-binary-tree.cpp]
@@ -349,7 +427,7 @@ void flatten(TreeNode* root) {
     TreeNode* curr = root;
     while (curr != nullptr) {
         if (curr->left != nullptr) {
-            // 找到左子树的最右节点
+            // 从左孩子出发，沿右指针找到拼接点
             TreeNode* pred = curr->left;
             while (pred->right != nullptr) {
                 pred = pred->right;
@@ -364,9 +442,38 @@ void flatten(TreeNode* root) {
 }
 ```
 
+#### 交互式演示：逐条指针重连
+
+让左侧原树保持不变，在右侧依次执行 `pred->right = curr->right`、`curr->right = curr->left` 和 `curr->left = nullptr`。每一步用绿色粗线标出新增边，用红色虚线与叉号标出删除边；节点位置先保持稳定，便于看清连接改变，完成时再排成先序右链。
+
+<iframe
+  :src="flattenDemoUrl"
+  title="二叉树展开 · 看见每一次重连"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 观察什么
+课本示例最终应为 `1 → 2 → 3 → 4 → 5 → 6`，所有 `left` 均为空。切换“拼接点仍有左孩子”，检查为什么 `pred` 不一定是先序最后一个节点；再切换长左链，观察 `pred` 的总移动次数为 **0**。重连中间短暂出现两条指针指向同一节点，是逐条赋值的现场，下一步会清空旧 `left`。
+:::
+
+::: complexity 最坏时间 O(n)，辅助空间 O(1)
+设二叉树有 $n$ 个节点。外层 `curr` 按最终先序顺序访问每个节点一次；内层虽然也有 `while`，但各次寻找 `pred` 的扫描不能简单相乘。
+
+每次搜索都从一个左孩子出发，沿尚未展开的右链前进。这些右链互不重叠；拼接后，后续搜索会进入当前节点各自的左子树，不会从头重扫已经找过的整条右链。因此，所有 `pred = pred->right` 的执行次数合计为 $O(n)$，加上外层遍历，总时间为 $O(n)$。算法只维护几个指针，没有递归栈，辅助空间为 $O(1)$。
+
+特别地，若整棵树是一条只含左孩子的长链，每次 `pred` 初始指向的节点都没有右孩子，内层循环执行 **0 次**，总时间仍为 $O(n)$。若左子树本身是一条右链，也只在首次拼接时扫描该链一次。
+:::
+
+::: pitfall 哪种展开写法会退化为 O(n²)？
+若先递归展开左右子树，再在每层从左子树链头走到链尾以拼接右子树，那么长左链会使已展开的尾链被反复扫描，产生 $1+2+\cdots+(n-2)=\Theta(n^2)$ 次移动。这是另一种“递归展开后找链尾”的实现，不能把它的复杂度套到上面的迭代代码。
+:::
+
 ---
 
-## 4.6.4 路径类：根到叶数字之和与回溯收集
+## 4.6.4 路径类（根到叶）
+
+本小节仅讨论路径端点分别为根和叶子的问题。若路径端点可为树中任意节点，请参见 [4.6.5.2「二叉树中的最大路径和」](#max-path-sum)。
 
 ### 1. 求根节点到叶节点数字之和
 
@@ -456,11 +563,56 @@ digraph RecursiveFramework {
 
 给定节点 $p$ 和 $q$，寻找它们在树中的最近公共祖先。
 
+::: definition 本解法的存储结构与输入前提
+这里使用经典的**二叉链表**：每个 `TreeNode` 含节点值以及 `left`、`right` 两个孩子指针，**不含 `parent` 父指针**。已知根节点 `root`，并保证目标节点 $p$、$q$ 都在树中；代码按节点指针身份比较，不依赖节点值是否相同。
+
+节点也视为自身的祖先。因此，若 $p$ 是 $q$ 的祖先，答案就是 $p$；若 $p=q$，答案也是该节点。
+:::
+
+**为什么从根往下找？** 有父指针且已知深度时，可以先让较深节点向上跳到同一深度，再让两者同步上移，首次相遇处就是 LCA，单次查询时间为 $O(h)$（$h$ 为树高）。但当前节点没有父指针，无法直接从 $p$、$q$ 向上访问父节点。下面通过从根向下递归搜索，再利用递归调用栈把结果逐层返回给父调用，实现自底向上的汇聚。若为此先遍历整棵树建立父节点和深度表，还需计入 $O(n)$ 的预处理时间与空间。
+
 **后序状态汇聚逻辑**：
-- 若当前节点为 `nullptr` 或等于 $p$ 或 $q$，直接返回当前节点；
+- 若当前节点为 `nullptr`，返回空；若当前节点等于 $p$ 或 $q$，直接返回该节点；
 - 递归询问左子树和右子树：
-  - 若左、右子树各返回了一个非空节点 $\Longrightarrow$ 当前节点正是唯一的分割根节点（LCA）；
-  - 若只有一边返回非空 $\Longrightarrow$ 说明 $p$ 和 $q$ 均位于该侧子树中，返回该非空结果。
+  - 左右都返回空：当前子树中没有找到目标，返回空；
+  - 左右各返回非空：两个目标分别位于两侧，当前节点就是 LCA；
+  - 只有一侧返回非空：把这一侧的结果继续向上返回。**它可能是刚找到的一个目标，也可能是该侧已确定的 LCA**，不能据此就断言两个目标都已找到。
+
+例如求下图中 $p=6$、$q=4$ 的 LCA。实线向下表示孩子关系，也是递归搜索的方向；虚线向上表示函数返回值，**不是树中额外存储的父指针**。
+
+```graphviz
+digraph LcaSearchAndReturn {
+  graph [bgcolor="#ffffff", rankdir=TB];
+  node [shape=circle];
+  root [label="3"];
+  split [label="5\nLCA", shape=doublecircle];
+  other [label="1"];
+  p [label="6\np"];
+  middle [label="2"];
+  q [label="4\nq"];
+  root -> split;
+  root -> other;
+  split -> p;
+  split -> middle;
+  middle -> q [label="右孩子"];
+  p -> split [style=dashed, constraint=false, label="返回 6"];
+  q -> middle [style=dashed, constraint=false, label="返回 4"];
+  middle -> split [style=dashed, constraint=false, label="返回 4"];
+  split -> root [style=dashed, constraint=false, label="返回 5"];
+  other -> root [style=dashed, constraint=false, label="返回空"];
+}
+```
+<!-- diagram id="lca-search-and-return" caption: "从根向下搜索，再沿调用栈返回：节点 5 汇合两个目标，根节点 3 继续返回已找到的 LCA" -->
+
+| 当前调用 | 子调用返回情况 | 本次返回 |
+| --- | --- | --- |
+| 节点 6、节点 4 | 命中目标，直接结束当前调用 | 分别返回自身 |
+| 节点 2 | 左侧为空，右侧返回 4 | 返回 4，此时只找到一个目标 |
+| 节点 5 | 左侧返回 6，右侧返回 4 | 返回 5，它是两个目标的 LCA |
+| 节点 1 | 两侧都未找到目标 | 返回空 |
+| 节点 3 | 左侧返回 5，右侧返回空 | 返回 5，沿用左侧已确定的 LCA |
+
+若 $p$ 本身是 $q$ 的祖先，搜索到 $p$ 时即可返回 $p$，不用再进入它的子树寻找 $q$；在两个目标都存在的前提下，$p$ 就是这两者在该子树中的最近公共祖先。上层收到结果后继续按相同规则汇聚。
 
 ```cpp:line-numbers [lowest-common-ancestor.cpp]
 TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
@@ -476,20 +628,73 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 }
 ```
 
+::: complexity 单次查询的最坏开销
+设节点数为 $n$、树高为 $h$。每个节点最多被访问一次，最坏时间复杂度为 $O(n)$；递归调用栈占 $O(h)$ 空间，退化为链时为 $O(n)$。代码只在空节点或命中目标时直接返回，仍可能搜索不含目标的分支（如图中的节点 `1`），因此不能把时间开销仅算成两条祖先链的长度。
+:::
+
+::: pitfall 输入前提不能省略
+若不保证 $p$、$q$ 都在树中，这段代码可能在仅找到其中一个时就返回该节点；它不能据此证明两个目标都存在。此时需要额外验证存在性，或让递归同时返回找到的目标数量。
+:::
+
 ---
 
-### 2. 二叉树中的最大路径和（树形 DP 压轴）
+### 2. 二叉树中的最大路径和（树形 DP 压轴） {#max-path-sum}
 
 路径可以从树中任意节点出发，到达任意节点，路径中至少包含一个节点。求所有可能路径的最大权值和。
 
-::: property 单侧贡献与跨根路径的解耦
-- **函数的返回值（向上汇报）**：当前节点能为父节点提供的**单侧最大贡献值**（只能选左或选右）：
+要求整棵树中所有可能路径的**最大路径和**，很容易想到去遍历每一个节点，然后求出经过该节点的所有路径并取最大值。但是这样操作过于暴力，耗时很长（时间复杂度为 $O(n^2)$），有没有效率更高的算法？
+
+我们前面提到过自底向上的递归逻辑，可用于需要向父节点传递信息的流程。可以这样想：任意一条路径都必然有一个“**最高拐弯节点**“。以某个节点为最高拐弯点时，它能达到的局部最大路径和，正好等于**左子树提供的最大正收益 + 右子树提供的最大正收益 + 节点值本身**。因此我们只需全局维护一个 `maxPath`，遍历回溯到每个节点时顺手结算并比较即可。同时，这个节点本身也是其父节点的孩子，在函数结束时，它还需要向父节点传递自身能提供的**单侧最大延伸贡献**。
+
+要注意的是：**如果一个节点内部的最大贡献路径横跨了其左右子树（如下图中的红色路径），这个贡献是绝对不能直接汇报给父节点的！**
+
+因为树上的“简单路径”绝不能出现分叉。若将这条横跨左右的红色路径（左子树 $\to$ 当前节点 $\to$ 右子树）再连向通往父节点的黑色树枝，就会在当前节点处出现“三叉路口”，这就不是我们想求的路径了。因此，算法必须将“**当前节点就地结算完整路径**”与“**向父节点汇报单侧延伸**”彻底区分开。
+
+```graphviz
+digraph MaxPathSumLocal {
+  rankdir=TB;
+  node [shape=point, width=0.08, color="#2D3748"];
+  edge [arrowhead=none, penwidth=2.5];
+
+  // 全局树骨架（黑色）
+  root [color="#2D3748"];
+  L [color="#2D3748"];
+  R [color="#E53E3E"];
+  root -> L [color="#2D3748"];
+  root -> R [color="#2D3748"];
+
+  // 左子树（黑色分支）
+  L_left [color="#2D3748"];
+  L_mid [color="#2D3748"];
+  L_leaf [color="#2D3748"];
+  L -> L_left [color="#2D3748"];
+  L -> L_mid [color="#2D3748"];
+  L_mid -> L_leaf [color="#2D3748"];
+
+  // 右子树内部：横跨左右子树的红色路径（已成完整路径，不能再连向父节点）
+  R_L [color="#E53E3E"];
+  R_L_leaf [color="#E53E3E"];
+  R_R [color="#E53E3E"];
+  R_R_leaf [color="#E53E3E"];
+
+  R -> R_L [color="#E53E3E"];
+  R_L -> R_L_leaf [color="#E53E3E"];
+  R -> R_R [color="#E53E3E"];
+  R_R -> R_R_leaf [color="#E53E3E"];
+}
+```
+<!-- diagram id="max-path-sum-local" caption: "红色路径横跨了左右子树，若再连向父节点就会发生分叉，故只能向父节点汇报单侧最大贡献" -->
+
+::: property 状态转移与结算公式
+记子树提供的非负贡献为 $\text{leftGain} = \max(0, \text{dfs}(\text{root}\to\text{left}))$ 与 $\text{rightGain} = \max(0, \text{dfs}(\text{root}\to\text{right}))$（若子树收益为负则直接剪枝归零）：
+
+- **局部结算（更新全局答案）**：以当前节点为最高拐弯点的完整路径和
   $$
-  \text{gain}(\text{root}) = \text{root}\to\text{val} + \max(0, \max(\text{leftGain}, \text{rightGain}))
+  \text{currentPathSum} = \text{root}\to\text{val} + \text{leftGain} + \text{rightGain}
   $$
-- **全局答案的更新（局部结算）**：以当前节点作为最高拐弯点的**跨根最大路径和**：
+- **向上汇报（函数返回值）**：为父节点提供的单侧最大延伸贡献
   $$
-  \text{currentMaxPath} = \text{root}\to\text{val} + \max(0, \text{leftGain}) + \max(0, \text{rightGain})
+  \text{gain}(\text{root}) = \text{root}\to\text{val} + \max(\text{leftGain}, \text{rightGain})
   $$
 :::
 
@@ -535,12 +740,31 @@ public:
 
 请尝试回答以下自测问题：
 
-1. 在计算二叉树最大宽度时，为什么不能直接用节点在层中的相对索引相减，而必须使用完全二叉树编号？
+1. 若某层按位置排列为“节点、空位、空位、节点”，两种定义下的该层宽度各是多少？为什么按节点数可直接取 BFS 每层开始时的队列长度，而按跨度必须保留完全二叉树编号信息？
 2. 比较平衡二叉树判定的自顶向下法（$O(n^2)$）与自底向上剪枝法（$O(n)$）的时空开销，并说明剪枝机制。
 3. 在路径总和 II 中，如果不做 `path.pop_back()` 的回溯操作，输出结果会出现什么错误？
-4. 在最近公共祖先（LCA）算法中，如果节点 $p$ 本身就是节点 $q$ 的祖先，算法是如何正确返回 $p$ 的？
+4. 在没有 `parent` 指针的 LCA 算法中，如果节点 $p$ 本身就是节点 $q$ 的祖先，算法是如何正确返回 $p$ 的？为什么最坏时间是 $O(n)$？
 5. 在最大路径和（Max Path Sum）问题中，为什么递归函数返回的值与全局更新的值计算方式不同？
+6. 在迭代展开二叉树的代码中，为什么两层 `while` 的总时间仍为 $O(n)$？把算法换成“先递归展开，再扫描链尾”，长左链会带来什么变化？
 
 ---
 
 至此，第 4 章《树与二叉树》的理论与经典问题已全部建立。在下一章《树的应用》中，我们将探索二叉搜索树（BST）、AVL 平衡树、堆与优先队列、赫夫曼编码以及 B/B+ 树在现代工业系统中的应用。
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1100px;
+  }
+}
+</style>

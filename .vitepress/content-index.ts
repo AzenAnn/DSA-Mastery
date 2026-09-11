@@ -244,11 +244,12 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     id: "chapter-06-graph-foundations-storage",
     number: "6",
     title: "图的基础与存储",
-    description: "学习图的基本概念，以及邻接矩阵和邻接表的表示取舍。",
+    description: "学习图的基本概念、存储方式，以及遍历如何计算可达性和连通分量。",
     url: "/learn/outline/chapter-06-graph-foundations-storage/",
     lessonSources: [
       "content/chapter-06-graph-foundations/01-graph-basics.md",
       "content/chapter-06-graph-foundations/02-graph-storage.md",
+      "content/chapter-06-graph-foundations/03-graph-traversal-connectivity.md",
     ],
     autoLabChapter: 6,
   },
@@ -287,8 +288,8 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "理解多路索引、散列函数、冲突处理和外存查找结构。",
     url: "/learn/outline/chapter-09-hashing-indexes/",
     lessonSources: [
-      "content/chapter-08-search/04-b-tree-and-b-plus-tree.md",
-      "content/chapter-08-search/05-hash-table.md",
+      "content/chapter-09-hashing-indexes/01-b-tree-and-b-plus-tree.md",
+      "content/chapter-09-hashing-indexes/02-hash-table.md",
     ],
     autoLabChapter: 9,
   },
@@ -403,6 +404,26 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     title: "回溯与搜索",
     description: "使用状态空间、选择、撤销与剪枝组织系统搜索。",
     url: "/learn/outline/chapter-15-backtracking-search/",
+    learningObjectives: [
+      "把问题建模为解向量与约束，画出子集树或排列树",
+      "用选择-探索-撤销的回溯模板实现全排列、子集与 N 皇后",
+      "用可行性、限界与对称剪枝收缩搜索树，并辨析回溯与分支限界的取舍",
+    ],
+    focusTitle: "从状态空间到剪枝策略",
+    focusAreas: [
+      "15.1 解向量、状态空间树与回溯模板",
+      "15.2 子集树与排列树：全排列、子集和、N 皇后",
+      "15.3 可行性、限界与对称去重剪枝",
+      "15.4 分支限界：队列式与优先队列式搜索",
+    ],
+    lessonSources: [
+      "content/chapter-15-backtracking-search/00-overview.md",
+      "content/chapter-15-backtracking-search/01-backtracking-framework.md",
+      "content/chapter-15-backtracking-search/02-classic-problems.md",
+      "content/chapter-15-backtracking-search/03-pruning.md",
+      "content/chapter-15-backtracking-search/04-branch-and-bound.md",
+    ],
+    autoLabChapter: 15,
   },
 ];
 

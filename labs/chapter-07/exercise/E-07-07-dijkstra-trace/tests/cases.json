@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ]
@@ -12,7 +12,7 @@
     "id": "002-unreachable",
     "input": "tests/002-unreachable.in",
     "expected": "tests/002-unreachable.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -21,7 +21,7 @@
     "id": "003-zero-weight",
     "input": "tests/003-zero-weight.in",
     "expected": "tests/003-zero-weight.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -30,7 +30,7 @@
     "id": "004-self-loop-multi",
     "input": "tests/004-self-loop-multi.in",
     "expected": "tests/004-self-loop-multi.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -39,7 +39,7 @@
     "id": "005-single-vertex",
     "input": "tests/005-single-vertex.in",
     "expected": "tests/005-single-vertex.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -48,7 +48,7 @@
     "id": "006-tie-order",
     "input": "tests/006-tie-order.in",
     "expected": "tests/006-tie-order.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -57,7 +57,7 @@
     "id": "007-source-at-end",
     "input": "tests/007-source-at-end.in",
     "expected": "tests/007-source-at-end.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -66,9 +66,81 @@
     "id": "008-random-large",
     "input": "tests/008-random-large.in",
     "expected": "tests/008-random-large.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "stress"
     ]
+  },
+  {
+    "id": "009-all-unreachable-except-source",
+    "input": "tests/009-all-unreachable-except-source.in",
+    "expected": "tests/009-all-unreachable-except-source.out",
+    "points": 5
+  },
+  {
+    "id": "010-zero-weight-chain",
+    "input": "tests/010-zero-weight-chain.in",
+    "expected": "tests/010-zero-weight-chain.out",
+    "points": 5
+  },
+  {
+    "id": "011-parallel-improves",
+    "input": "tests/011-parallel-improves.in",
+    "expected": "tests/011-parallel-improves.out",
+    "points": 5
+  },
+  {
+    "id": "012-strict-tie-prev",
+    "input": "tests/012-strict-tie-prev.in",
+    "expected": "tests/012-strict-tie-prev.out",
+    "points": 5
+  },
+  {
+    "id": "013-self-loop-zero",
+    "input": "tests/013-self-loop-zero.in",
+    "expected": "tests/013-self-loop-zero.out",
+    "points": 5
+  },
+  {
+    "id": "014-back-edge",
+    "input": "tests/014-back-edge.in",
+    "expected": "tests/014-back-edge.out",
+    "points": 5
+  },
+  {
+    "id": "015-tie-after-relax",
+    "input": "tests/015-tie-after-relax.in",
+    "expected": "tests/015-tie-after-relax.out",
+    "points": 5
+  },
+  {
+    "id": "016-unreachable-cycle",
+    "input": "tests/016-unreachable-cycle.in",
+    "expected": "tests/016-unreachable-cycle.out",
+    "points": 5
+  },
+  {
+    "id": "017-dense-small",
+    "input": "tests/017-dense-small.in",
+    "expected": "tests/017-dense-small.out",
+    "points": 5
+  },
+  {
+    "id": "018-source-nonzero-ties",
+    "input": "tests/018-source-nonzero-ties.in",
+    "expected": "tests/018-source-nonzero-ties.out",
+    "points": 5
+  },
+  {
+    "id": "019-longer-route-better",
+    "input": "tests/019-longer-route-better.in",
+    "expected": "tests/019-longer-route-better.out",
+    "points": 5
+  },
+  {
+    "id": "020-single-self-loop",
+    "input": "tests/020-single-self-loop.in",
+    "expected": "tests/020-single-self-loop.out",
+    "points": 5
   }
 ]

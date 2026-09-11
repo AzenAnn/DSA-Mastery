@@ -73,10 +73,10 @@ export async function createMsvcEnvironment({ platform = process.platform, env =
     );
   }
   const developerCommand = path.win32.join(installation.installationPath, "Common7", "Tools", "VsDevCmd.bat");
-  const commandLine = `call "${developerCommand}" -arch=x64 >nul && set`;
+  const commandLine = `call "${developerCommand}" -arch=x64 >nul 2>&1 && set`;
   const result = await runner("cmd.exe", ["/d", "/s", "/c", commandLine], {
     env,
-    timeMs: 30_000,
+    timeMs: 60_000,
     outputKb: 4096,
   });
   if (result?.spawnError || result?.code !== 0) {

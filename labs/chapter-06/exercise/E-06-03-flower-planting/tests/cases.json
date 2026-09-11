@@ -3,49 +3,49 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 15,
+    "points": 5,
     "tags": ["sample"]
   },
   {
     "id": "002-isolated-gardens",
     "input": "tests/002-isolated-gardens.in",
     "expected": "tests/002-isolated-gardens.out",
-    "points": 10,
+    "points": 5,
     "tags": ["boundary"]
   },
   {
     "id": "003-reordered-path",
     "input": "tests/003-reordered-path.in",
     "expected": "tests/003-reordered-path.out",
-    "points": 10,
+    "points": 5,
     "tags": ["regression"]
   },
   {
     "id": "004-even-cycle",
     "input": "tests/004-even-cycle.in",
     "expected": "tests/004-even-cycle.out",
-    "points": 10,
+    "points": 5,
     "tags": ["normal"]
   },
   {
     "id": "005-complete-k4",
     "input": "tests/005-complete-k4.in",
     "expected": "tests/005-complete-k4.out",
-    "points": 15,
+    "points": 5,
     "tags": ["boundary", "regression"]
   },
   {
     "id": "006-disconnected",
     "input": "tests/006-disconnected.in",
     "expected": "tests/006-disconnected.out",
-    "points": 10,
+    "points": 5,
     "tags": ["normal"]
   },
   {
     "id": "007-shuffled-star",
     "input": "tests/007-shuffled-star.in",
     "expected": "tests/007-shuffled-star.out",
-    "points": 10,
+    "points": 5,
     "tags": ["regression"]
   },
   {
@@ -59,7 +59,73 @@
     "id": "009-k4-components-stress",
     "input": "tests/009-k4-components-stress.in",
     "expected": "tests/009-k4-components-stress.out",
-    "points": 15,
+    "points": 5,
     "tags": ["stress"]
+  },
+  {
+    "id": "010-single-path",
+    "input": "tests/010-single-path.in",
+    "expected": "tests/010-single-path.out",
+    "points": 5
+  },
+  {
+    "id": "011-reordered-triangle",
+    "input": "tests/011-reordered-triangle.in",
+    "expected": "tests/011-reordered-triangle.out",
+    "points": 5
+  },
+  {
+    "id": "012-k4-reordered",
+    "input": "tests/012-k4-reordered.in",
+    "expected": "tests/012-k4-reordered.out",
+    "points": 5
+  },
+  {
+    "id": "013-odd-cycle",
+    "input": "tests/013-odd-cycle.in",
+    "expected": "tests/013-odd-cycle.out",
+    "points": 5
+  },
+  {
+    "id": "014-all-isolated",
+    "input": "tests/014-all-isolated.in",
+    "expected": "tests/014-all-isolated.out",
+    "points": 5
+  },
+  {
+    "id": "015-cube-graph",
+    "input": "tests/015-cube-graph.in",
+    "expected": "tests/015-cube-graph.out",
+    "points": 5
+  },
+  {
+    "id": "016-three-components",
+    "input": "tests/016-three-components.in",
+    "expected": "tests/016-three-components.out",
+    "points": 5
+  },
+  {
+    "id": "017-degree-three-center",
+    "input": "tests/017-degree-three-center.in",
+    "expected": "tests/017-degree-three-center.out",
+    "points": 5
+  },
+  {
+    "id": "018-chorded-cycle",
+    "input": "tests/018-chorded-cycle.in",
+    "expected": "tests/018-chorded-cycle.out",
+    "points": 5
+  },
+  {
+    "id": "019-k4-plus-isolates",
+    "input": "tests/019-k4-plus-isolates.in",
+    "expected": "tests/019-k4-plus-isolates.out",
+    "points": 5
+  },
+  {
+    "id": "020-shuffled-forest",
+    "input": "tests/020-shuffled-forest.in",
+    "expected": "tests/020-shuffled-forest.out",
+    "points": 5
   }
 ]

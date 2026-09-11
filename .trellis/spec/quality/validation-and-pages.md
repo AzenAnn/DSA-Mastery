@@ -25,7 +25,7 @@ pnpm lab:verify -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplicatio
 pnpm lab:verify -- labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
-`pnpm test` 当前依次执行 `validate`（内容 + `vue-tsc` + lint）、`test:discovery`、最终 `build` 与 `check:site`。涉及 Pages 时，在设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 与 `SITE_URL` 后重新 build/check，再运行 `pnpm run test:pages`。
+`pnpm test` 当前依次执行 `validate`（内容 + `vue-tsc` + lint）、`test:tree-demos`、`test:bootstrap`、`test:lab-tools`、`test:lab-docs`、`test:discovery`、最终 `build` 与 `check:site`。涉及 Pages 时，在设置 `GITHUB_PAGES_BASE_PATH=/DSA-Mastery` 与 `SITE_URL` 后重新 build/check，再运行 `pnpm run test:pages`。
 
 Pages 构建输入/输出：
 
@@ -84,7 +84,7 @@ actions/configure-pages base_path
 - 内容：字段、类型、路径、章一致性、排序、相对文件与站内路由。
 - 依赖：直接导入与 `package.json` 的直接依赖一致；无内置声明的 JavaScript 包具有直接 `@types/*` 依赖，并在冻结锁文件安装后通过 `typecheck`。
 - 自动发现：临时教材和 Lab 在 `try/finally` 内创建，贯穿验证、导航、搜索和 build；另在自动收录章节创建临时 Lab，并证明进入指定分类；对 Ch.5 断言 Theory 恰有 5 个、Exercise 恰有 17 个自动收录入口且两者不显示空态，Project 保留空槽位和固定文案。
-- Lab 路由迁移：静态合同断言 173 个三级地址全部生成、旧平铺地址均不生成；第 1 章分类基线为 5/15/1。Pages 浏览器覆盖四层原生折叠、三色三图标、明暗主题与 390px 无溢出。
+- Lab 路由迁移：静态合同断言 173 个三级地址全部生成、旧平铺地址均不生成；第 1 章分类基线为 6/15/1，Theory 包含 README-only 的 01T06 理论大题训练。Pages 浏览器覆盖四层原生折叠、三色三图标、明暗主题与 390px 无溢出。
 - 产物：期望 HTML、favicon/OG、内部链接、asset、404、恰好一个 base。
 - 浏览器：三段真实点击、搜索教材/Lab、主题持久化、移动目录、代表性公式/代码/表格/任务列表、edit link；前言还需从资源目录进入六篇完整指南，并在 Lab 命令指南的浅/暗主题与 390/1440px 下断言无根页面溢出，同时验证 macOS 指南图片均成功加载。
 - 理论文档：11 种容器、默认/自定义/恶意标题、嵌套 Markdown、搜索内容、mark 边界、独立文件名、代码组去重与 Shiki highlight/focus/diff/warning/error。

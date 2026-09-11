@@ -1,0 +1,2901 @@
+{
+  "articles": [
+    {
+      "source": "content/chapter-04-tree/00-overview.md",
+      "lines": 37
+    },
+    {
+      "source": "content/chapter-04-tree/01-tree-basics.md",
+      "lines": 456
+    },
+    {
+      "source": "content/chapter-04-tree/02-binary-tree.md",
+      "lines": 560
+    },
+    {
+      "source": "content/chapter-04-tree/03-binary-tree-traversal.md",
+      "lines": 608
+    },
+    {
+      "source": "content/chapter-04-tree/04-threaded-binary-tree.md",
+      "lines": 587
+    },
+    {
+      "source": "content/chapter-04-tree/05-trees-and-forests.md",
+      "lines": 349
+    },
+    {
+      "source": "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+      "lines": 546
+    }
+  ],
+  "choice": [
+    {
+      "key": "T01-Q01",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 3,
+      "id": "ch04-15-q01",
+      "title": "2009 年真题第 3 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "树和森林的遍历",
+        "二叉树遍历",
+        "RNL",
+        "遍历方式辨析"
+      ],
+      "stem": "给定二叉树如下图所示。设 N 代表二叉树的根，L 代表根结点的左子树，R 代表根结点的右子树。若遍历后的结点序列是 3，1，7，5，6，2，4，则其遍历方式是(    )。\n\n```text\n1(2(4, 5(6, 7)), 3)\n```",
+      "options": [
+        "LRN",
+        "NRL",
+        "RLN",
+        "RNL"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q02",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 25,
+      "id": "ch04-15-q02",
+      "title": "2009 年真题第 5 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "完全二叉树",
+        "节点计数",
+        "第N层叶子"
+      ],
+      "stem": "已知一棵完全二叉树的第 6 层(设根为第 1 层)有 8 个叶结点，则该完全二叉树的结点个数最多是()。",
+      "options": [
+        "39",
+        "52",
+        "111",
+        "119"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q03",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 46,
+      "id": "ch04-15-q03",
+      "title": "2009 年真题第 6 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "树与森林",
+        "森林转二叉树",
+        "左孩子右兄弟",
+        "关系判断"
+      ],
+      "stem": "将森林转换为对应的二叉树，若在二叉树中，结点 u 是结点 v 的父结点的父结点，则在原来的森林中，u 和 v 可能具有的关系是( )。\n\nI. 父子关系\n\nII. 兄弟关系\n\nIII. u 的父结点与 v 的父结点是兄弟关系",
+      "options": [
+        "只有 II",
+        "I 和 II",
+        "I 和 III",
+        "I、II 和 III"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q04",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 68,
+      "id": "ch04-15-q04",
+      "title": "2010 年真题第 3 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "后序遍历",
+        "线索二叉树",
+        "线索化"
+      ],
+      "stem": "下列线索二叉树的线索描述中（箭头 x→y 表示从 x 的空指针域引出线索），符合后序线索树定义的是( )。\n\n> **结构（文字版）**：四个选项使用同一棵二叉树（节点皆为空圆，题面仅用字母标记 a/b/c/d 用于区分）。\n>\n> - 树形：a 为根，b 是 a 的左孩子，c 是 a 的右孩子，d 是 b 的**右**孩子（叶节点）\n> - 后序遍历序列：d → b → c → a\n> - 共有 **5 个线索位**——b 的左指针、c 的左/右指针、d 的左/右指针；四个选项的差异就在这 5 个线索的指向是否符合后序线索树定义，请根据各选项列出的 5 条虚线线索判断",
+      "options": [
+        "b→a；c→b、d；d→Null、c",
+        "b→Null；c→a、Null；d→b、a",
+        "b→a；c→d、Null；d→a、c",
+        "b→d；c→b、a；d→Null、b"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q05",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 89,
+      "id": "ch04-15-q05",
+      "title": "2010 年真题第 6 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "哈夫曼树与编码",
+        "哈夫曼树",
+        "完全二叉树",
+        "树的性质"
+      ],
+      "stem": "对 n (n≥ 2) 个权值均不相同的字符构成哈夫曼树。下列关于该哈夫曼树的叙述中，错误的是( )。",
+      "options": [
+        "该树一定是一棵完全二叉树",
+        "树中一定没有度为 1 的结点",
+        "树中两个权值最小的结点一定是兄弟结点",
+        "树中任一非叶结点的权值一定不小于下一层任一结点的权值"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q06",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 111,
+      "id": "ch04-15-q06",
+      "title": "2011 年真题第 4 题",
+      "difficulty": "★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "完全二叉树",
+        "叶子数计算",
+        "度数关系"
+      ],
+      "stem": "若一棵完全二叉树有 768 个结点，则该二叉树中叶结点的个数是()",
+      "options": [
+        "257",
+        "258",
+        "384",
+        "385"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q07",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 132,
+      "id": "ch04-15-q07",
+      "title": "2011 年真题第 6 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "树转二叉树",
+        "左孩子右兄弟",
+        "无右孩子节点"
+      ],
+      "stem": "已知一棵有 2011 个结点的树，其叶结点个数为 116，该树对应的二叉树中无右孩子的结点个数是( )。",
+      "options": [
+        "115",
+        "116",
+        "1895",
+        "1896"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q08",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 153,
+      "id": "ch04-15-q08",
+      "title": "2015 年真题第 2 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "二叉树",
+        "卡特兰数",
+        "计数"
+      ],
+      "stem": "先序序列为 a,b,c,d 的不同二叉树的个数是()。",
+      "options": [
+        "13",
+        "14",
+        "15",
+        "16"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q09",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 174,
+      "id": "ch04-15-q09",
+      "title": "2017 年真题第 4 题",
+      "difficulty": "★★",
+      "topics": [
+        "前序遍历",
+        "中序遍历",
+        "二叉树基础（性质+存储）",
+        "二叉树遍历",
+        "先序遍历"
+      ],
+      "stem": "要使一棵非空二叉树的先序序列与中序序列相同，其所有非叶节点须满足的条件是( )。",
+      "options": [
+        "只有左子树",
+        "只有右子树",
+        "结点的度均为 1",
+        "结点的度均为 2"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q10",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 196,
+      "id": "ch04-15-q10",
+      "title": "2017 年真题第 5 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "后序遍历",
+        "二叉树重构",
+        "层次"
+      ],
+      "stem": "已知一棵二叉树的树形如下图所示，其后序序列为 `e, a, c, b, d, g, f`，树中与结点 a 同层的结点是( )。\n\n```text\n1(2(_, 4(6, _)), 3(5(_, 7), _))\n```\n\n> 编号仅为表述方便（按层序遍历自顶向下、自左向右标注），原题节点皆为空圆。结构特征：根有左右两个孩子；左孩子只有右子，且其右子只有左子；右孩子只有左子，且其左子只有右子。共 7 个节点，分布在 4 层（1 / 2 / 2 / 2）。",
+      "options": [
+        "c",
+        "d",
+        "f",
+        "g"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q11",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 217,
+      "id": "ch04-15-q11",
+      "title": "2018 年真题第 4 题",
+      "difficulty": "★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "满二叉树",
+        "叶结点",
+        "结点总数"
+      ],
+      "stem": "设一棵非空完全二叉树 T 的所有叶结点均位于同一层，且每个非叶结点都有 2 个子结点。若 T 有 k 个叶结点，则 T 的结点总数是( )。",
+      "options": [
+        "$2k-1$",
+        "$2k$",
+        "$k^2$",
+        "$2^{k-1}$"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q12",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 238,
+      "id": "ch04-15-q12",
+      "title": "2019 年真题第 2 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "树",
+        "二叉树转换",
+        "后根遍历"
+      ],
+      "stem": "若将一棵树 T 转化为对应的二叉树 BT，则下列对 BT 的遍历中，其遍历序列与 T 的后根遍历序列相同的是( )。",
+      "options": [
+        "先序遍历",
+        "中序遍历",
+        "后序遍历",
+        "按层遍历"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q13",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 259,
+      "id": "ch04-15-q13",
+      "title": "2020 年真题第 3 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "二叉树",
+        "顺序存储",
+        "完全二叉树编号"
+      ],
+      "stem": "对于任意一棵高度为 $5$ 且有 $10$ 个结点的二叉树，若采用顺序存储结构保存，每个结点占 $1$ 个存储单元（仅存放结点的数据信息），则存放该二叉树需要的存储单元数量至少是( )。",
+      "options": [
+        "31",
+        "16",
+        "15",
+        "10"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q14",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 280,
+      "id": "ch04-15-q14",
+      "title": "2022 年真题第 3 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "中序遍历",
+        "二叉树",
+        "相邻结点关系"
+      ],
+      "stem": "若结点 p 与 q 在二叉树 T 的中序遍历序列中相邻，且 p 在 q 之前，则下列 p 与 q 的关系中，不可能的是( )。\n\nI. q 是 p 的双亲\n\nII. q 是 p 的右孩子\n\nIII. q 是 p 的右兄弟\n\nIV. q 是 p 的双亲的双亲",
+      "options": [
+        "仅 I",
+        "仅 III",
+        "仅 II、III",
+        "仅 II、IV"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q15",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 301,
+      "id": "ch04-15-q15",
+      "title": "2022 年真题第 5 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "哈夫曼树与编码",
+        "哈夫曼树",
+        "定长编码",
+        "二叉树性质"
+      ],
+      "stem": "对任意给定的含 n (n > 2) 个字符的有限集 S, 用二叉树表示 S 的哈夫曼编码集和定长编码集，分别得到二叉树 T1 和 T2。下列叙述中，正确的是 ( )。",
+      "options": [
+        "T1 与 T2 的结点数相同",
+        "T1 的高度大于 T2 的高度",
+        "出现频次不同的字符在 T1 中处于不同的层",
+        "出现频次不同的字符在 T2 中处于相同的层"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q16",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 323,
+      "id": "ch04-15-q16",
+      "title": "2023 年真题第 5 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "前序遍历",
+        "后序遍历",
+        "二叉树",
+        "先序遍历",
+        "遍历序列重建"
+      ],
+      "stem": "已知一棵二叉树的树形如下图所示，若其后序遍历为 f, d, b, e, c, a，则其先序序列为( )。\n\n```text\n1(2(4(_, 6), 5), 3)\n```\n\n> **结构（文字版）**（节点按层序由 1 到 6 编号；编号仅为表述方便，原题节点皆为空圆）：根 1 的左孩子是 2、右孩子是 3（叶子）；2 的左孩子是 4、右孩子是 5（叶子）；4 没有左孩子，右孩子是 6（叶子）。",
+      "options": [
+        "a, e, d, f, b, c",
+        "a, c, e, b, d, f",
+        "c, a, b, e, f, d",
+        "d, f, e, b, a, c"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q17",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 346,
+      "id": "ch04-15-q17",
+      "title": "2024 年真题第 3 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "中序遍历",
+        "线索二叉树",
+        "二叉树",
+        "前驱后继"
+      ],
+      "stem": "p、q、v 都是二叉树 T 中的结点，二叉树 T 的中序遍历为 ···, p，v，q，··· ，其中 v 有两个孩子结点，则下列说法正确的是( )。",
+      "options": [
+        "p 没右孩子，q 没左孩子",
+        "p 没右孩子，q 有左孩子",
+        "p 有右孩子，q 没左孩子",
+        "p 有右孩子，q 有左孩子"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q18",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 368,
+      "id": "ch04-15-q18",
+      "title": "2025 年真题第 3 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "二叉树",
+        "顺序存储",
+        "父子下标关系"
+      ],
+      "stem": "若二叉树的节点值均为正整数，采用顺序存储方式保存在数组 R 中，用 -1 表示节点不存在，则下列数组中，不能表示一棵二叉树的是()。",
+      "options": [
+        "`R[] = {20, 15, 40, -1, -1, 35}`",
+        "`R[] = {15, 40, 10, 18, 35, -1, -1}`",
+        "`R[] = {15, 40, 10, -1, -1, -1, 12}`",
+        "`R[] = {17, 20, 35, -1, 18, 45, -1, -1, 19, 27}`"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q19",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 389,
+      "id": "ch04-15-q19",
+      "title": "2025 年真题第 4 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "完全二叉树",
+        "森林转二叉树",
+        "表达式树"
+      ],
+      "stem": "下列关于二叉树及森林的叙述中，正确的是？( )。",
+      "options": [
+        "完全二叉树不存在度为 1 的结点",
+        "任意一个森林可以转换为一棵二叉树。",
+        "二叉树的分支结点个数比叶结点个数少",
+        "链式树的根中保存的是最先计算的运算符"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T01-Q20",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/quiz.json",
+      "line": 410,
+      "id": "ch04-15-q20",
+      "title": "2026 年真题第 4 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "树与森林",
+        "森林转二叉树",
+        "孩子兄弟法",
+        "二叉树高度"
+      ],
+      "stem": "森林 F 中有 5 颗树，其节点个数分别为 2、3、4、5、7，森林中树的次序可以任意，问 F 对应的二叉树最小高度为多少？",
+      "options": [
+        "5",
+        "6",
+        "8",
+        "10"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q01",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 3,
+      "id": "ch04-16-q01",
+      "title": "2011 年真题第 5 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "前序遍历",
+        "后序遍历",
+        "前序后序中序",
+        "单链二叉树",
+        "遍历推树"
+      ],
+      "stem": "若一棵二叉树的前序遍历序列和后序遍历序列分别为 1,2,3,4 和 4,3,2,1，则该二叉树的中序遍历序列不会是()",
+      "options": [
+        "1,2,3,4",
+        "2,3,4,1",
+        "3,2,4,1",
+        "4,3,2,1"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q02",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 26,
+      "id": "ch04-16-q02",
+      "title": "2012 年真题第 3 题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "前序遍历",
+        "后序遍历",
+        "前序+后序",
+        "二叉树重构",
+        "唯一性判断"
+      ],
+      "stem": "若一棵二叉树的前序遍历序列为 a, e, b, d, c，后序遍历序列为 b, c, d, e, a，则根结点的孩子结点( )。",
+      "options": [
+        "只有 e",
+        "有 e、b",
+        "有 e、c",
+        "无法确定"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q03",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 49,
+      "id": "ch04-16-q03",
+      "title": "2017 年真题第 4 题",
+      "difficulty": "★★",
+      "topics": [
+        "前序遍历",
+        "中序遍历",
+        "二叉树基础（性质+存储）",
+        "二叉树遍历",
+        "先序遍历"
+      ],
+      "stem": "要使一棵非空二叉树的先序序列与中序序列相同，其所有非叶节点须满足的条件是( )。",
+      "options": [
+        "只有左子树",
+        "只有右子树",
+        "结点的度均为 1",
+        "结点的度均为 2"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q04",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 71,
+      "id": "ch04-16-q04",
+      "title": "2023 年真题第 5 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "前序遍历",
+        "后序遍历",
+        "二叉树",
+        "先序遍历",
+        "遍历序列重建"
+      ],
+      "stem": "已知一棵二叉树的树形如下图所示，若其后序遍历为 f, d, b, e, c, a，则其先序序列为( )。\n\n```text\n1(2(4(_, 6), 5), 3)\n```\n\n> **结构（文字版）**（节点按层序由 1 到 6 编号；编号仅为表述方便，原题节点皆为空圆）：根 1 的左孩子是 2、右孩子是 3（叶子）；2 的左孩子是 4、右孩子是 5（叶子）；4 没有左孩子，右孩子是 6（叶子）。",
+      "options": [
+        "a, e, d, f, b, c",
+        "a, c, e, b, d, f",
+        "c, a, b, e, f, d",
+        "d, f, e, b, a, c"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q05",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 94,
+      "id": "ch04-16-q05",
+      "title": "巩固题",
+      "difficulty": "★★",
+      "topics": [
+        "前序遍历",
+        "二叉树遍历",
+        "递归"
+      ],
+      "stem": "对下列二叉树进行**前序遍历**，输出序列是( )。\n\n```text\nA(B(D, E(G, _)), C(_, F))\n```",
+      "options": [
+        "A, B, D, E, G, C, F",
+        "D, B, G, E, A, C, F",
+        "D, G, E, B, F, C, A",
+        "A, B, C, D, E, F, G"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q06",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 114,
+      "id": "ch04-16-q06",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "前序遍历",
+        "二叉树遍历",
+        "递归"
+      ],
+      "stem": "对下列二叉树进行**前序遍历**，输出序列是( )。\n\n```text\n1(2(4, 5), 3(6(_, 8), 7))\n```",
+      "options": [
+        "1, 2, 3, 4, 5, 6, 7, 8",
+        "4, 2, 5, 1, 6, 8, 3, 7",
+        "1, 2, 4, 5, 3, 6, 8, 7",
+        "4, 5, 2, 8, 6, 7, 3, 1"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q07",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 134,
+      "id": "ch04-16-q07",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "前序遍历",
+        "非递归",
+        "栈"
+      ],
+      "stem": "用**栈**实现前序遍历的非递归算法：从根开始，每次 pop 出栈顶结点立刻访问它，然后把右孩子先压栈、再把左孩子压栈（保证左孩子下次先出栈），栈空时结束。栈状态约定记为 `[栈底, ..., 栈顶]`（左端为栈底）。对二叉树 `1(2(4, 5), 3(6, 7))` 执行该算法，**第 3 次 pop 操作完成之后、第 4 次 pop 之前**那一刻，栈中元素是( )。",
+      "options": [
+        "[3]",
+        "[3, 5]",
+        "[5, 3]",
+        "[4, 5, 3]"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q08",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 154,
+      "id": "ch04-16-q08",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "前序遍历",
+        "非递归",
+        "算法步骤",
+        "栈"
+      ],
+      "stem": "用一个栈实现二叉树前序非递归遍历，循环体的核心操作顺序如下四种（循环条件统一为\"栈非空\"，初始已 `push(root)`）。其中**正确**的是( )。",
+      "options": [
+        "pop → visit → push(right) → push(left)",
+        "pop → visit → push(left) → push(right)",
+        "pop → push(left) → push(right) → visit",
+        "top(不弹出) → visit → push(left) → push(right)"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q09",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 175,
+      "id": "ch04-16-q09",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "前序遍历",
+        "应用",
+        "复制二叉树",
+        "递归"
+      ],
+      "stem": "要\"复制一棵二叉树\"——递归创建一棵新二叉树，其结构与原树完全相同（每个原结点对应一个新建的结点）。下列遍历顺序中**最适合**直接套用复制算法的是( )。",
+      "options": [
+        "中序遍历",
+        "前序遍历",
+        "后序遍历",
+        "层序遍历"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q10",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 196,
+      "id": "ch04-16-q10",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "前序遍历",
+        "中序遍历",
+        "二叉树构造"
+      ],
+      "stem": "已知一棵二叉树的**前序遍历**为 $A, B, D, E, G, C, F$、**中序遍历**为 $D, B, G, E, A, C, F$。该二叉树**结点 E 的左孩子**是( )。",
+      "options": [
+        "D",
+        "B",
+        "G",
+        "E 没有左孩子"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q11",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 216,
+      "id": "ch04-16-q11",
+      "title": "巩固题",
+      "difficulty": "★★★★★",
+      "topics": [
+        "前序遍历",
+        "综合",
+        "性质判断"
+      ],
+      "stem": "关于二叉树的前序遍历，下列说法**全部正确**的选项是( )。\n\n> ① 前序序列的第一个元素必然是整棵树的根。\n> ② 前序序列与后序序列相同 ⇒ 该二叉树只有一个结点。\n> ③ 树的先根遍历 = 对应二叉树（孩子兄弟法转换后）的前序遍历。\n> ④ 仅知道前序序列就能唯一确定一棵二叉树。",
+      "options": [
+        "①②③④",
+        "①②③",
+        "①③④",
+        "②③④"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T02-Q12",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/quiz.json",
+      "line": 236,
+      "id": "ch04-16-q12",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "前序遍历",
+        "先序遍历",
+        "结点编号",
+        "遍历次序反推",
+        "中序遍历",
+        "层次遍历"
+      ],
+      "stem": "按某种顺序对二叉树的结点进行编号，编号为 $1, 2, \\dots, n$，规定：树中任一结点 $v$，其编号等于 $v$ 的左子树上的最小编号减 1，而 $v$ 的右子树中的最小编号等于 $v$ 的左子树上的最大编号加 1，则说明该二叉树是按（ ）次序编号的。",
+      "options": [
+        "中序遍历",
+        "先序遍历",
+        "后序遍历",
+        "层次遍历"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q01",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 3,
+      "id": "ch04-17-q01",
+      "title": "2017 年真题第 4 题",
+      "difficulty": "★★",
+      "topics": [
+        "前序遍历",
+        "中序遍历",
+        "二叉树基础（性质+存储）",
+        "二叉树遍历",
+        "先序遍历"
+      ],
+      "stem": "要使一棵非空二叉树的先序序列与中序序列相同，其所有非叶节点须满足的条件是( )。",
+      "options": [
+        "只有左子树",
+        "只有右子树",
+        "结点的度均为 1",
+        "结点的度均为 2"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q02",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 25,
+      "id": "ch04-17-q02",
+      "title": "2022 年真题第 3 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "中序遍历",
+        "二叉树",
+        "相邻结点关系"
+      ],
+      "stem": "若结点 p 与 q 在二叉树 T 的中序遍历序列中相邻，且 p 在 q 之前，则下列 p 与 q 的关系中，不可能的是( )。\n\nI. q 是 p 的双亲\n\nII. q 是 p 的右孩子\n\nIII. q 是 p 的右兄弟\n\nIV. q 是 p 的双亲的双亲",
+      "options": [
+        "仅 I",
+        "仅 III",
+        "仅 II、III",
+        "仅 II、IV"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q03",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 46,
+      "id": "ch04-17-q03",
+      "title": "2024 年真题第 3 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "中序遍历",
+        "线索二叉树",
+        "二叉树",
+        "前驱后继"
+      ],
+      "stem": "p、q、v 都是二叉树 T 中的结点，二叉树 T 的中序遍历为 ···, p，v，q，··· ，其中 v 有两个孩子结点，则下列说法正确的是( )。",
+      "options": [
+        "p 没右孩子，q 没左孩子",
+        "p 没右孩子，q 有左孩子",
+        "p 有右孩子，q 没左孩子",
+        "p 有右孩子，q 有左孩子"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q04",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 68,
+      "id": "ch04-17-q04",
+      "title": "巩固题",
+      "difficulty": "★★",
+      "topics": [
+        "中序遍历",
+        "二叉树遍历",
+        "递归"
+      ],
+      "stem": "对下列二叉树进行**中序遍历**，输出序列是( )。\n\n```text\nA(B(D, E(G, _)), C(_, F))\n```",
+      "options": [
+        "D, B, G, E, A, C, F",
+        "A, B, D, E, G, C, F",
+        "D, G, E, B, F, C, A",
+        "A, B, C, D, E, F, G"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q05",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 88,
+      "id": "ch04-17-q05",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "中序遍历",
+        "非递归",
+        "栈",
+        "算法步骤"
+      ],
+      "stem": "用**栈**实现中序遍历的非递归算法：从根开始**一直向左走**直到 NULL（路径上每个结点都压栈）；然后 pop 栈顶并访问、再转向该结点的右子树重复同样过程；栈空且当前结点为 NULL 时结束。下列伪代码**正确**的是( )。",
+      "options": [
+        "`v=root; while(v || !empty){ while(v){push(v); v=v.left;} v=pop(); visit(v); v=v.right; }`",
+        "`push(root); while(!empty){ v=pop(); visit(v); if(v.left)push(v.left); if(v.right)push(v.right); }`",
+        "`v=root; while(v || !empty){ if(v){push(v); v=v.left;} else{ v=pop(); v=v.right; visit(v); } }`",
+        "`push(root); while(!empty){ v=top(); if(v.left)push(v.left); else{ visit(v); v=pop(); v=v.right; } }`"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q06",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 109,
+      "id": "ch04-17-q06",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "中序遍历",
+        "BST",
+        "升序性质"
+      ],
+      "stem": "关于\"**BST（二叉搜索树）的中序遍历必为升序序列**\"这一性质，下列说法**正确**的是( )。",
+      "options": [
+        "这一性质仅对完美BST 成立；非完美 BST 中序可能乱序",
+        "这一性质对任何 BST 都成立，与 BST 的形态无关",
+        "这一性质对完全二叉树都成立，不局限于 BST",
+        "BST 的中序遍历是降序，前序遍历才是升序"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q07",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 129,
+      "id": "ch04-17-q07",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "中序遍历",
+        "二叉树构造",
+        "前序+中序"
+      ],
+      "stem": "已知一棵二叉树的**中序遍历**为 $D, B, G, E, A, C, F$、**前序遍历**为 $A, B, D, E, G, C, F$。该二叉树的**后序遍历**是( )。",
+      "options": [
+        "D, G, E, B, F, C, A",
+        "D, B, G, E, A, C, F",
+        "F, C, A, E, G, B, D",
+        "A, B, D, E, G, C, F"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q08",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 149,
+      "id": "ch04-17-q08",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "中序遍历",
+        "非递归",
+        "栈深度"
+      ],
+      "stem": "用栈实现中序遍历的非递归算法（参见 002 题），对二叉树 `A(B(D, E(G, _)), C(_, F))` 执行该算法，**栈在整个遍历过程中的最大深度**是( )。",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q09",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 169,
+      "id": "ch04-17-q09",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "中序遍历",
+        "线索化",
+        "中序后继"
+      ],
+      "stem": "关于\"**中序线索二叉树**\"与中序遍历的关系，下列说法**正确**的是( )。",
+      "options": [
+        "中序线索二叉树是把二叉树中空指针用\"中序前驱 / 中序后继\"指针替代得到的——左空指针指中序前驱，右空指针指中序后继（中序首结点的左空、末结点的右空保留为空或指向头结点）",
+        "中序线索化要新增 $n$ 个指针字段（每个结点 +1 个）",
+        "在中序线索二叉树中，查找任意结点的中序后继的时间复杂度都是 $O(1)$",
+        "中序线索二叉树等价于把所有结点按中序顺序串成的单链表"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q10",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 189,
+      "id": "ch04-17-q10",
+      "title": "巩固题",
+      "difficulty": "★★★★★",
+      "topics": [
+        "中序遍历",
+        "综合性质"
+      ],
+      "stem": "关于二叉树中序遍历的下列说法，**全部正确**的选项是( )。\n\n> ① 中序遍历的非递归算法需要使用栈。\n> ② BST 的中序遍历**输出严格升序**；反之，任何**键值互异**的二叉树，若其中序输出严格升序，则该二叉树必为 BST。\n> ③ 中序遍历 + 前序遍历可唯一确定一棵二叉树；中序 + 后序也可唯一确定。\n> ④ 中序遍历的第一个输出是整棵树的**最左下**结点（不一定是叶子但一定无左孩）。",
+      "options": [
+        "①②③",
+        "①②③④",
+        "①③④",
+        "②③④"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T03-Q11",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/quiz.json",
+      "line": 208,
+      "id": "ch04-17-q11",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "中序遍历",
+        "遍历次序",
+        "祖先与子孙",
+        "最近公共祖先",
+        "投影性质"
+      ],
+      "stem": "设 $n$、$m$ 为一棵二叉树上的两个结点。按标准画法把该二叉树画在平面上（每个结点的左子树画在其左下方、右子树画在其右下方），则在中序遍历时，$n$ 在 $m$ 前的条件是（ ）。",
+      "options": [
+        "$n$ 在 $m$ 左方",
+        "$n$ 是 $m$ 的祖先",
+        "$n$ 在 $m$ 右方",
+        "$n$ 是 $m$ 的子孙"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q01",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 3,
+      "id": "ch04-18-q01",
+      "title": "2010 年真题第 3 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "后序遍历",
+        "线索二叉树",
+        "线索化"
+      ],
+      "stem": "下列线索二叉树的线索描述中（箭头 x→y 表示从 x 的空指针域引出线索），符合后序线索树定义的是( )。\n\n> **结构（文字版）**：四个选项使用同一棵二叉树（节点皆为空圆，题面仅用字母标记 a/b/c/d 用于区分）。\n>\n> - 树形：a 为根，b 是 a 的左孩子，c 是 a 的右孩子，d 是 b 的**右**孩子（叶节点）\n> - 后序遍历序列：d → b → c → a\n> - 共有 **5 个线索位**——b 的左指针、c 的左/右指针、d 的左/右指针；四个选项的差异就在这 5 个线索的指向是否符合后序线索树定义，请根据各选项列出的 5 条虚线线索判断",
+      "options": [
+        "b→a；c→b、d；d→Null、c",
+        "b→Null；c→a、Null；d→b、a",
+        "b→a；c→d、Null；d→a、c",
+        "b→d；c→b、a；d→Null、b"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q02",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 24,
+      "id": "ch04-18-q02",
+      "title": "2011 年真题第 5 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "前序遍历",
+        "后序遍历",
+        "前序后序中序",
+        "单链二叉树",
+        "遍历推树"
+      ],
+      "stem": "若一棵二叉树的前序遍历序列和后序遍历序列分别为 1,2,3,4 和 4,3,2,1，则该二叉树的中序遍历序列不会是()",
+      "options": [
+        "1,2,3,4",
+        "2,3,4,1",
+        "3,2,4,1",
+        "4,3,2,1"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q03",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 47,
+      "id": "ch04-18-q03",
+      "title": "2012 年真题第 3 题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "前序遍历",
+        "后序遍历",
+        "前序+后序",
+        "二叉树重构",
+        "唯一性判断"
+      ],
+      "stem": "若一棵二叉树的前序遍历序列为 a, e, b, d, c，后序遍历序列为 b, c, d, e, a，则根结点的孩子结点( )。",
+      "options": [
+        "只有 e",
+        "有 e、b",
+        "有 e、c",
+        "无法确定"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q04",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 70,
+      "id": "ch04-18-q04",
+      "title": "2017 年真题第 5 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "后序遍历",
+        "二叉树重构",
+        "层次"
+      ],
+      "stem": "已知一棵二叉树的树形如下图所示，其后序序列为 `e, a, c, b, d, g, f`，树中与结点 a 同层的结点是( )。\n\n```text\n1(2(_, 4(6, _)), 3(5(_, 7), _))\n```\n\n> 编号仅为表述方便（按层序遍历自顶向下、自左向右标注），原题节点皆为空圆。结构特征：根有左右两个孩子；左孩子只有右子，且其右子只有左子；右孩子只有左子，且其左子只有右子。共 7 个节点，分布在 4 层（1 / 2 / 2 / 2）。",
+      "options": [
+        "c",
+        "d",
+        "f",
+        "g"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q05",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 91,
+      "id": "ch04-18-q05",
+      "title": "2020 年真题第 4 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "森林与二叉树的转换",
+        "由遍历序列构造二叉树",
+        "后序遍历",
+        "森林",
+        "二叉树",
+        "遍历转换",
+        "由先序中序构造"
+      ],
+      "stem": "已知森林 $F$ 及与之对应的二叉树 $T$，若 $F$ 的先根遍历序列是 $a, b, c, d, e, f$，中根遍历序列是 $b, a, d, f, e, c$，则 $T$ 的后序遍历序列是( )。",
+      "options": [
+        "b, a, d, f, e, c",
+        "b, d, f, e, c, a",
+        "b, f, e, d, c, a",
+        "f, e, d, c, b, a"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q06",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 115,
+      "id": "ch04-18-q06",
+      "title": "2023 年真题第 5 题",
+      "difficulty": "★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "前序遍历",
+        "后序遍历",
+        "二叉树",
+        "先序遍历",
+        "遍历序列重建"
+      ],
+      "stem": "已知一棵二叉树的树形如下图所示，若其后序遍历为 f, d, b, e, c, a，则其先序序列为( )。\n\n```text\n1(2(4(_, 6), 5), 3)\n```\n\n> **结构（文字版）**（节点按层序由 1 到 6 编号；编号仅为表述方便，原题节点皆为空圆）：根 1 的左孩子是 2、右孩子是 3（叶子）；2 的左孩子是 4、右孩子是 5（叶子）；4 没有左孩子，右孩子是 6（叶子）。",
+      "options": [
+        "a, e, d, f, b, c",
+        "a, c, e, b, d, f",
+        "c, a, b, e, f, d",
+        "d, f, e, b, a, c"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q07",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 138,
+      "id": "ch04-18-q07",
+      "title": "2026 年真题第 3 题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "层序遍历",
+        "后序遍历",
+        "二叉树重建",
+        "中序遍历"
+      ],
+      "stem": "已知二叉树 T 的中序遍历为 b, e, d, f, c, a, g，层序遍历为 a, b, g, c, d, e, f，则其后序遍历序列为（）。",
+      "options": [
+        "c, e, d, f, b, g, a",
+        "c, e, f, d, b, g, a",
+        "e, f, d, c, b, g, a",
+        "e, g, f, d, b, c, a"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q08",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 160,
+      "id": "ch04-18-q08",
+      "title": "巩固题",
+      "difficulty": "★★",
+      "topics": [
+        "后序遍历",
+        "二叉树遍历",
+        "递归"
+      ],
+      "stem": "对下列二叉树进行**后序遍历**，输出序列是( )。\n\n```text\nA(B(D, E(G, _)), C(_, F))\n```",
+      "options": [
+        "D, G, E, B, F, C, A",
+        "D, B, G, E, A, C, F",
+        "A, B, D, E, G, C, F",
+        "A, B, C, D, E, F, G"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q09",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 180,
+      "id": "ch04-18-q09",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "后序遍历",
+        "非递归",
+        "双栈",
+        "算法"
+      ],
+      "stem": "后序遍历的非递归实现有多种方式，下列描述**正确**的是( )。",
+      "options": [
+        "后序非递归与前序非递归本质相同，把\"先压右后压左\"改成\"先压左后压右\"即可",
+        "后序非递归只需 1 个栈、不需要任何标志位",
+        "用双栈法：栈 1 模拟\"NRL\"逆向输出，每出栈一个就压入栈 2；最后栈 2 弹出即后序",
+        "后序遍历可以 $O(n)$ 时间、$O(1)$ 空间完成（不需任何辅助结构）"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q10",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 201,
+      "id": "ch04-18-q10",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "后序遍历",
+        "应用",
+        "二叉树高度"
+      ],
+      "stem": "要求\"递归计算二叉树的高度\"——根的高度等于 $\\max(\\text{左子树高度}, \\text{右子树高度}) + 1$，空树高度为 0。下列遍历顺序中**最适合**直接套用该递归算法的是( )。",
+      "options": [
+        "前序遍历",
+        "后序遍历",
+        "中序遍历",
+        "层序遍历"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q11",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 221,
+      "id": "ch04-18-q11",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "后序遍历",
+        "表达式求值",
+        "后缀表达式"
+      ],
+      "stem": "考虑下面的表达式树（叶子是操作数、内部结点是运算符）：\n\n```text\n+(*(a, b), -(c, d))\n```\n\n该树的**后序遍历**输出（按操作数原文 + 运算符次序）就是它对应的**后缀（逆波兰）表达式**。这棵树的后序遍历是( )。",
+      "options": [
+        "`b, a, *, d, c, -, +`",
+        "`+, *, a, b, -, c, d`",
+        "`a, b, *, c, d, -, +`",
+        "`*, a, b, +, -, c, d`"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q12",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 241,
+      "id": "ch04-18-q12",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "后序遍历",
+        "二叉树构造",
+        "后序+中序"
+      ],
+      "stem": "已知一棵二叉树的**后序遍历**为 $D, G, E, B, F, C, A$、**中序遍历**为 $D, B, G, E, A, C, F$。该二叉树**结点 C 的右孩子**是( )。",
+      "options": [
+        "B",
+        "F",
+        "E",
+        "C 没有右孩子"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q13",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 261,
+      "id": "ch04-18-q13",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "后序遍历",
+        "应用",
+        "删除二叉树"
+      ],
+      "stem": "要写一个递归函数销毁一棵二叉树——递归释放每个结点的内存。下列遍历顺序中**最适合**且**最安全**的是( )。",
+      "options": [
+        "前序遍历",
+        "后序遍历",
+        "中序遍历",
+        "层序遍历"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T04-Q14",
+      "source": "labs/chapter-04/theory/T-04-04-postorder-traversal-quiz/quiz.json",
+      "line": 281,
+      "id": "ch04-18-q14",
+      "title": "巩固题",
+      "difficulty": "★★★★★",
+      "topics": [
+        "后序遍历",
+        "综合性质",
+        "树后根"
+      ],
+      "stem": "关于二叉树的后序遍历，下列说法**正确**的是( )。",
+      "options": [
+        "后序遍历的最后一个输出必是整棵树的根",
+        "树（一般树）的后根遍历 = 对应二叉树（孩子兄弟法转换后）的后序遍历",
+        "二叉树的后序与前序逆序输出相等",
+        "二叉树的后序遍历可由广度优先搜索（BFS）一次扫描直接生成"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T05-Q01",
+      "source": "labs/chapter-04/theory/T-04-05-level-order-traversal-quiz/quiz.json",
+      "line": 3,
+      "id": "ch04-19-q01",
+      "title": "2026 年真题第 3 题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "层序遍历",
+        "后序遍历",
+        "二叉树重建",
+        "中序遍历"
+      ],
+      "stem": "已知二叉树 T 的中序遍历为 b, e, d, f, c, a, g，层序遍历为 a, b, g, c, d, e, f，则其后序遍历序列为（）。",
+      "options": [
+        "c, e, d, f, b, g, a",
+        "c, e, f, d, b, g, a",
+        "e, f, d, c, b, g, a",
+        "e, g, f, d, b, c, a"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T05-Q02",
+      "source": "labs/chapter-04/theory/T-04-05-level-order-traversal-quiz/quiz.json",
+      "line": 25,
+      "id": "ch04-19-q02",
+      "title": "巩固题",
+      "difficulty": "★★",
+      "topics": [
+        "层序遍历",
+        "二叉树遍历",
+        "BFS"
+      ],
+      "stem": "对下列二叉树进行**层序遍历**（即按层从上到下、每层从左到右），输出序列是( )。\n\n```text\nA(B(D, E(G, _)), C(_, F))\n```",
+      "options": [
+        "A, B, D, E, G, C, F",
+        "D, B, G, E, A, C, F",
+        "D, G, E, B, F, C, A",
+        "A, B, C, D, E, F, G"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T05-Q03",
+      "source": "labs/chapter-04/theory/T-04-05-level-order-traversal-quiz/quiz.json",
+      "line": 45,
+      "id": "ch04-19-q03",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "层序遍历",
+        "队列",
+        "BFS实现"
+      ],
+      "stem": "下列伪代码中，**正确**实现二叉树层序遍历的是( )。",
+      "options": [
+        "用队列；出队 v 后 visit(v)，再把 v 的左孩、右孩（非空时）依次入队",
+        "用栈；出栈 v 后 visit(v)，再把 v 的左孩、右孩（非空时）依次入栈",
+        "用队列；出队 v 后先把 v 的右孩、左孩（非空时）依次入队，再 visit(v)",
+        "用队列；出队 v 后 visit(v)，再无条件把 v 的右孩、左孩入队（不判空）"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T05-Q04",
+      "source": "labs/chapter-04/theory/T-04-05-level-order-traversal-quiz/quiz.json",
+      "line": 65,
+      "id": "ch04-19-q04",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "层序遍历",
+        "二叉树宽度",
+        "最大宽度"
+      ],
+      "stem": "对下列二叉树求**最大宽度**（即同一层中结点数最多的那一层的结点数）：\n\n```text\nA(B(D, E(G, _)), C(_, F))\n```",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T05-Q05",
+      "source": "labs/chapter-04/theory/T-04-05-level-order-traversal-quiz/quiz.json",
+      "line": 85,
+      "id": "ch04-19-q05",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "层序遍历",
+        "二叉树高度",
+        "层数"
+      ],
+      "stem": "用**层序遍历**求二叉树高度（高度从根 = 1 算起，参见已有 binary-tree-basics 约定）。下列用层序算高度的算法描述**正确**的是( )。",
+      "options": [
+        "只需把所有结点出队一次，最后的队列长度就是高度",
+        "出队的总结点数就是高度",
+        "把层序按\"层\"分批处理，每处理完一层把高度计数 +1，所有结点处理完后的计数值即高度",
+        "出队顺序中倒数第二个出队的结点的层号 = 高度（最后一个常是空指针标记，要排除）"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T05-Q06",
+      "source": "labs/chapter-04/theory/T-04-05-level-order-traversal-quiz/quiz.json",
+      "line": 105,
+      "id": "ch04-19-q06",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "层序遍历",
+        "每层最右",
+        "右视图"
+      ],
+      "stem": "对下列二叉树输出\"**每层最右结点**\"（即站在树的右侧能看到的每层第一个结点的序列）：\n\n```text\nA(B(D, E(G, _)), C(_, F))\n```",
+      "options": [
+        "A, C, D, G",
+        "A, C, F",
+        "A, C, F, G",
+        "A, B, F, G"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T05-Q07",
+      "source": "labs/chapter-04/theory/T-04-05-level-order-traversal-quiz/quiz.json",
+      "line": 125,
+      "id": "ch04-19-q07",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "层序遍历",
+        "综合",
+        "宽度高度"
+      ],
+      "stem": "对下列二叉树同时求**最大宽度**和**高度**，下列正确的是( )。\n\n```text\n1(2(4(8, _), 5), 3(_, 7(_, 9)))\n```",
+      "options": [
+        "宽度 = 4，高度 = 4",
+        "宽度 = 3，高度 = 4",
+        "宽度 = 4，高度 = 3",
+        "宽度 = 3，高度 = 5"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T05-Q08",
+      "source": "labs/chapter-04/theory/T-04-05-level-order-traversal-quiz/quiz.json",
+      "line": 145,
+      "id": "ch04-19-q08",
+      "title": "巩固题",
+      "difficulty": "★★★★★",
+      "topics": [
+        "层序遍历",
+        "综合",
+        "性质"
+      ],
+      "stem": "关于二叉树的层序遍历，下列说法**正确**的是( )。\n\n> ① 层序遍历可以用队列实现，时间复杂度 $O(n)$、空间复杂度 $O(w)$（$w$ 为最大宽度）。\n> ② **完全二叉树**的层序遍历从左到右依次输出后，可以直接按\"父子下标 $i$ 和 $2i$/$2i+1$\"规律存进数组（小标从 1 开始）。\n> ③ 任何二叉树的层序 + 中序可唯一确定该二叉树。\n> ④ 层序遍历的逆序（每层从右到左，自下而上）等于二叉树的后序遍历。\n\n正确的陈述是( )。",
+      "options": [
+        "①②③④",
+        "①②③",
+        "①②④",
+        "②③④"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q01",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 3,
+      "id": "ch04-20-q01",
+      "title": "2011 年真题第 5 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "前序遍历",
+        "后序遍历",
+        "前序后序中序",
+        "单链二叉树",
+        "遍历推树"
+      ],
+      "stem": "若一棵二叉树的前序遍历序列和后序遍历序列分别为 1,2,3,4 和 4,3,2,1，则该二叉树的中序遍历序列不会是()",
+      "options": [
+        "1,2,3,4",
+        "2,3,4,1",
+        "3,2,4,1",
+        "4,3,2,1"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q02",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 26,
+      "id": "ch04-20-q02",
+      "title": "2012 年真题第 3 题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "前序遍历",
+        "后序遍历",
+        "前序+后序",
+        "二叉树重构",
+        "唯一性判断"
+      ],
+      "stem": "若一棵二叉树的前序遍历序列为 a, e, b, d, c，后序遍历序列为 b, c, d, e, a，则根结点的孩子结点( )。",
+      "options": [
+        "只有 e",
+        "有 e、b",
+        "有 e、c",
+        "无法确定"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q03",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 49,
+      "id": "ch04-20-q03",
+      "title": "2020 年真题第 4 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "森林与二叉树的转换",
+        "由遍历序列构造二叉树",
+        "后序遍历",
+        "森林",
+        "二叉树",
+        "遍历转换",
+        "由先序中序构造"
+      ],
+      "stem": "已知森林 $F$ 及与之对应的二叉树 $T$，若 $F$ 的先根遍历序列是 $a, b, c, d, e, f$，中根遍历序列是 $b, a, d, f, e, c$，则 $T$ 的后序遍历序列是( )。",
+      "options": [
+        "b, a, d, f, e, c",
+        "b, d, f, e, c, a",
+        "b, f, e, d, c, a",
+        "f, e, d, c, b, a"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q04",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 73,
+      "id": "ch04-20-q04",
+      "title": "2021 年真题第 4 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "森林与二叉树的转换",
+        "由遍历序列构造二叉树",
+        "树与森林",
+        "森林",
+        "二叉树转换",
+        "先序中序"
+      ],
+      "stem": "某森林 F 对应的二叉树为 T , 若 T 的先序遍历序列是 a, b, d, c, e, g, f , 中序遍历序列是 b, d, a, e, g, c, f , 则 F 中树的棵数是( )。",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q05",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 96,
+      "id": "ch04-20-q05",
+      "title": "2026 年真题第 3 题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "层序遍历",
+        "后序遍历",
+        "二叉树重建",
+        "中序遍历"
+      ],
+      "stem": "已知二叉树 T 的中序遍历为 b, e, d, f, c, a, g，层序遍历为 a, b, g, c, d, e, f，则其后序遍历序列为（）。",
+      "options": [
+        "c, e, d, f, b, g, a",
+        "c, e, f, d, b, g, a",
+        "e, f, d, c, b, g, a",
+        "e, g, f, d, b, c, a"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q06",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 118,
+      "id": "ch04-20-q06",
+      "title": "巩固题",
+      "difficulty": "★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "前序中序",
+        "根节点定位"
+      ],
+      "stem": "已知一棵二叉树的前序遍历为 **A, B, D, E, C**，中序遍历为 **D, B, E, A, C**。该二叉树**根结点的右孩子**是( )。",
+      "options": [
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q07",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 139,
+      "id": "ch04-20-q07",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "后序中序",
+        "子节点定位"
+      ],
+      "stem": "已知一棵二叉树的后序遍历为 **E, D, B, F, C, A**，中序遍历为 **E, B, D, A, F, C**。求该二叉树**根的左孩子的右孩子**关键字是( )。",
+      "options": [
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q08",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 160,
+      "id": "ch04-20-q08",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "层序中序",
+        "子树根定位"
+      ],
+      "stem": "已知一棵二叉树的层序遍历为 **A, B, C, D, E, F, G**，中序遍历为 **D, B, E, A, F, C, G**。该二叉树**左子树根的左孩子**是( )。",
+      "options": [
+        "A",
+        "B",
+        "D",
+        "E"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q09",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 181,
+      "id": "ch04-20-q09",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "前序中序",
+        "父结点定位"
+      ],
+      "stem": "已知一棵二叉树的前序遍历为 **A, B, D, E, C, F, G**，中序遍历为 **D, B, E, A, F, C, G**。求结点 **E 的父结点**是( )。",
+      "options": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q10",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 202,
+      "id": "ch04-20-q10",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "前序中序",
+        "叶子计数"
+      ],
+      "stem": "已知一棵二叉树的前序遍历为 **A, B, D, C, E, F**，中序遍历为 **D, B, A, E, C, F**。该二叉树的**叶子结点**个数是( )。",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q11",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 223,
+      "id": "ch04-20-q11",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "后序中序",
+        "树高度"
+      ],
+      "stem": "已知一棵二叉树的后序遍历为 **H, D, E, B, F, I, G, C, A**，中序遍历为 **H, D, B, E, A, C, F, G, I**。该二叉树的**高度**是（根高度为 1）( )。",
+      "options": [
+        "3",
+        "4",
+        "5",
+        "9"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q12",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 244,
+      "id": "ch04-20-q12",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "前序后序",
+        "唯一性",
+        "严格二叉树"
+      ],
+      "stem": "关于仅由二叉树的**前序遍历和后序遍历**两个序列重建二叉树，下列描述**正确**的是（**严格二叉树**定义见 001 套首约定：每个非叶结点都恰好有 2 个孩子）( )。",
+      "options": [
+        "任何二叉树都能由前序 + 后序唯一确定",
+        "仅当二叉树高度 ≤ 2 时才能由前序 + 后序唯一确定",
+        "仅当二叉树是严格二叉树时才能由前序 + 后序唯一确定",
+        "二叉树永远不能仅由前序 + 后序唯一确定"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q13",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 266,
+      "id": "ch04-20-q13",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "层序中序",
+        "多步定位"
+      ],
+      "stem": "已知一棵二叉树的层序遍历为 **A, B, C, D, E, F, G, H, I**，中序遍历为 **H, D, B, E, A, F, C, I, G**。该二叉树**右子树根的右孩子**是( )。",
+      "options": [
+        "C",
+        "F",
+        "G",
+        "I"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q14",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 287,
+      "id": "ch04-20-q14",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "反向题",
+        "左斜链",
+        "遍历关系"
+      ],
+      "stem": "一棵高度为 4 的二叉树是**左斜链**（每个非叶结点都只有左孩子、无右孩子）。关于该二叉树前序、中序、后序遍历序列的关系，下列描述**正确**的是( )。",
+      "options": [
+        "前序和中序相同",
+        "前序和后序相同",
+        "中序和后序相同",
+        "前序、中序、后序三者完全相同"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q15",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 309,
+      "id": "ch04-20-q15",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "前序中序",
+        "度数统计"
+      ],
+      "stem": "已知一棵二叉树的前序遍历为 **A, B, C, D, E, F**，中序遍历为 **D, C, B, A, E, F**。该二叉树中**度为 1 的结点**个数是( )。",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q16",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 330,
+      "id": "ch04-20-q16",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "前序中序",
+        "层序遍历输出"
+      ],
+      "stem": "已知一棵二叉树的前序遍历为 **A, B, D, C, E, F**，中序遍历为 **D, B, A, E, C, F**。该二叉树的**层序遍历**结果是( )。",
+      "options": [
+        "A, B, D, C, E, F",
+        "A, B, C, D, E, F",
+        "A, C, B, F, E, D",
+        "A, B, C, D, _, E, F"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q17",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 351,
+      "id": "ch04-20-q17",
+      "title": "巩固题",
+      "difficulty": "★★★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树构造",
+        "综合判断",
+        "性质辨析"
+      ],
+      "stem": "已知一棵二叉树的前序遍历为 **A, B, D, E, C, F, G**，中序遍历为 **D, B, E, A, C, F, G**。下列对该二叉树的描述中，**错误**的是( )。",
+      "options": [
+        "该二叉树的高度为 4",
+        "该二叉树的叶子结点数为 3",
+        "该二叉树的后序遍历序列是 D, E, B, G, F, C, A",
+        "该二叉树是满二叉树"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T06-Q18",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/quiz.json",
+      "line": 372,
+      "id": "ch04-20-q18",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "由遍历序列构造二叉树",
+        "二叉树",
+        "先序遍历",
+        "后序遍历",
+        "单支树",
+        "树的高度"
+      ],
+      "stem": "某二叉树的先序序列和后序序列正好相反，则该二叉树一定是（　）。",
+      "options": [
+        "空树或只有一个结点",
+        "高度等于其结点数",
+        "任意一个结点都无左孩子",
+        "任意一个结点都无右孩子"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q01",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 3,
+      "id": "ch04-21-q01",
+      "title": "2010 年真题第 3 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "后序遍历",
+        "线索二叉树",
+        "线索化"
+      ],
+      "stem": "下列线索二叉树的线索描述中（箭头 x→y 表示从 x 的空指针域引出线索），符合后序线索树定义的是( )。\n\n> **结构（文字版）**：四个选项使用同一棵二叉树（节点皆为空圆，题面仅用字母标记 a/b/c/d 用于区分）。\n>\n> - 树形：a 为根，b 是 a 的左孩子，c 是 a 的右孩子，d 是 b 的**右**孩子（叶节点）\n> - 后序遍历序列：d → b → c → a\n> - 共有 **5 个线索位**——b 的左指针、c 的左/右指针、d 的左/右指针；四个选项的差异就在这 5 个线索的指向是否符合后序线索树定义，请根据各选项列出的 5 条虚线线索判断",
+      "options": [
+        "b→a；c→b、d；d→Null、c",
+        "b→Null；c→a、Null；d→b、a",
+        "b→a；c→d、Null；d→a、c",
+        "b→d；c→b、a；d→Null、b"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q02",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 24,
+      "id": "ch04-21-q02",
+      "title": "2013 年真题第 5 题",
+      "difficulty": "★★★",
+      "topics": [
+        "线索二叉树",
+        "后序线索",
+        "后继"
+      ],
+      "stem": "若 X 是后序线索二叉树中的叶结点，且 X 存在左兄弟结点 Y 。则 X 的右线索指的是( )。",
+      "options": [
+        "X 的父结点",
+        "以 Y 为根的子树的最左下结点",
+        "X 的左兄弟结点 Y",
+        "以 Y 为根的子树的最右下结点"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q03",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 44,
+      "id": "ch04-21-q03",
+      "title": "2014 年真题第 4 题",
+      "difficulty": "★★★",
+      "topics": [
+        "线索二叉树",
+        "中序线索",
+        "前驱",
+        "后继"
+      ],
+      "stem": "若对如下的二叉树进行中序线索化，则结点 x 的左、右线索指向的结点分别是( )。\n\n```text\na(b(d(_, e), x), c)\n```",
+      "options": [
+        "左线索指 e，右线索指 c",
+        "左线索指 e，右线索指 a",
+        "左线索指 b，右线索指 c",
+        "左线索指 b，右线索指 a"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q04",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 65,
+      "id": "ch04-21-q04",
+      "title": "2024 年真题第 3 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "中序遍历",
+        "线索二叉树",
+        "二叉树",
+        "前驱后继"
+      ],
+      "stem": "p、q、v 都是二叉树 T 中的结点，二叉树 T 的中序遍历为 ···, p，v，q，··· ，其中 v 有两个孩子结点，则下列说法正确的是( )。",
+      "options": [
+        "p 没右孩子，q 没左孩子",
+        "p 没右孩子，q 有左孩子",
+        "p 有右孩子，q 没左孩子",
+        "p 有右孩子，q 有左孩子"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q05",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 87,
+      "id": "ch04-21-q05",
+      "title": "巩固题",
+      "difficulty": "★★",
+      "topics": [
+        "线索二叉树",
+        "定义",
+        "前驱后继"
+      ],
+      "stem": "关于**中序线索二叉树**的定义，下列说法**正确**的是( )。",
+      "options": [
+        "把二叉树中空指针改写为\"指向中序前驱 / 中序后继\"的指针——左空指前驱、右空指后继，并用标志位标识",
+        "在二叉树每个结点上新增 2 个指针字段，分别存中序前驱和中序后继",
+        "把二叉树转换为单链表存储，每个结点只保留一个指向中序后继的指针",
+        "在二叉树中保留所有原指针、再额外新建 2 个指针字段（共 4 个）分别存左/右孩、前驱/后继"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q06",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 107,
+      "id": "ch04-21-q06",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "线索二叉树",
+        "中序线索化",
+        "过程",
+        "中序遍历"
+      ],
+      "stem": "对下面这棵二叉树进行**中序线索化**：\n\n```text\nA(B(D, E), C)\n```\n\n中序遍历序列为 $D, B, E, A, C$。下列关于线索化结果的**单条断言**正确的是( )。",
+      "options": [
+        "线索化后，D 的右线索指向中序后继 B",
+        "线索化后，E 的左线索指向 D",
+        "线索化后，C 的左线索指向 B",
+        "线索化后，A 的左指针经线索化后指向 E"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q07",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 128,
+      "id": "ch04-21-q07",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "线索二叉树",
+        "中序线索化",
+        "后继查找",
+        "算法"
+      ],
+      "stem": "在中序线索二叉树中查找指定结点 $v$ 的**中序后继**，下列描述**正确**的是( )。",
+      "options": [
+        "永远是 $v$ 的右孩（如果存在）；右孩不存在则后继不存在",
+        "永远是 $v$ 的父结点",
+        "若 $v$ 的右指针是线索（tag_right = 1），则该线索直接指向后继；否则后继是 $v$ 的右子树的\"最左下\"结点",
+        "总是需要从根开始重新做一次中序遍历找到 $v$ 再取下一个"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q08",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 149,
+      "id": "ch04-21-q08",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "线索二叉树",
+        "线索化",
+        "空指针计数",
+        "二叉树性质"
+      ],
+      "stem": "一棵含 $n$ 个结点的二叉树（$n \\ge 1$）进行**中序线索化**后，**最多**还剩多少个**真正的空指针**（即既不指真子树、也不被填为线索的指针）？",
+      "options": [
+        "0",
+        "2",
+        "$n + 1$",
+        "$n - 1$"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q09",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 170,
+      "id": "ch04-21-q09",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "线索二叉树",
+        "中序线索",
+        "后继查找",
+        "最坏复杂度"
+      ],
+      "stem": "在一棵含 $n$ 个结点的**中序线索二叉树**中，查找指定结点的\"中序后继\"操作，**最坏**时间复杂度是( )。",
+      "options": [
+        "$O(1)$",
+        "$O(\\log n)$",
+        "$O(h)$（$h$ 为树的高度）",
+        "$O(n)$"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q10",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 191,
+      "id": "ch04-21-q10",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "线索二叉树",
+        "线索化",
+        "前序后序",
+        "三种类型对比"
+      ],
+      "stem": "下列对**三种线索化**（前序线索化 / 中序线索化 / 后序线索化）的对比，**错误**的是( )。",
+      "options": [
+        "三种线索化都把\"空指针\"复用为\"指向某遍历下的前驱 / 后继\"——只是遍历方式不同",
+        "前序线索二叉树中找前序后继：若结点有左孩则后继是左孩；若无左孩则后继是右孩或线索（参考前序\"NLR\"语义）",
+        "后序线索二叉树中找后序后继最复杂——可能需要回到父结点找\"父的右孩的最左下\"",
+        "三种线索化中，查找任意结点的\"该遍历下后继\"操作都能在 $O(1)$ 时间内完成——只需直接读对应线索字段"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q11",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 212,
+      "id": "ch04-21-q11",
+      "title": "巩固题",
+      "difficulty": "★★★★★",
+      "topics": [
+        "线索二叉树",
+        "综合",
+        "性质"
+      ],
+      "stem": "关于线索二叉树，下列说法**正确**的是( )。\n\n> ① 线索化把二叉树的 $n + 1$ 个空指针中绝大部分（$n - 1$ 个）填为前驱/后继线索，每个结点的空间增加 2 bit（两个 tag）。\n> ② 中序线索二叉树支持\"不使用栈\"的中序遍历——只需从中序首结点出发沿右链/线索走完即可。\n> ③ 中序线索化后，每个结点的左右指针总数仍是 2，没有新增指针字段。\n> ④ 中序线索化后，\"找父结点\"操作变为 $O(1)$。",
+      "options": [
+        "①②③④",
+        "①②③",
+        "①③④",
+        "②③④"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q12",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 232,
+      "id": "ch04-21-q12",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "线索二叉树",
+        "后序线索树",
+        "遍历",
+        "栈",
+        "后继"
+      ],
+      "stem": "在下列线索二叉树中，（ ）的遍历仍需要栈的支持。",
+      "options": [
+        "前序线索树",
+        "中序线索树",
+        "后序线索树",
+        "所有线索树"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q13",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 254,
+      "id": "ch04-21-q13",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "线索二叉树",
+        "中序线索树",
+        "前驱",
+        "后继",
+        "中序遍历",
+        "二叉树"
+      ],
+      "stem": "若 $X$ 是二叉中序线索树中一个有左孩子的结点，且 $X$ 不为根，则 $X$ 的前驱为（ ）。",
+      "options": [
+        "$X$ 的左子树中最右的结点",
+        "$X$ 的双亲",
+        "$X$ 的右子树中最左的结点",
+        "$X$ 的左子树中最右的叶结点"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T07-Q14",
+      "source": "labs/chapter-04/theory/T-04-07-threaded-binary-tree-quiz/quiz.json",
+      "line": 277,
+      "id": "ch04-21-q14",
+      "title": "巩固题",
+      "difficulty": "★★",
+      "topics": [
+        "线索二叉树",
+        "标志位",
+        "结点结构",
+        "右孩子",
+        "线索"
+      ],
+      "stem": "判断线索二叉树中 `*p` 结点有右孩子结点的条件是（ ）。",
+      "options": [
+        "`p != NULL`",
+        "`p->rtag == 0`",
+        "`p->rchild != NULL`",
+        "`p->rtag == 1`"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q01",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 3,
+      "id": "ch04-22-q01",
+      "title": "2009 年真题第 6 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "树与森林",
+        "森林转二叉树",
+        "左孩子右兄弟",
+        "关系判断"
+      ],
+      "stem": "将森林转换为对应的二叉树，若在二叉树中，结点 u 是结点 v 的父结点的父结点，则在原来的森林中，u 和 v 可能具有的关系是( )。\n\nI. 父子关系\n\nII. 兄弟关系\n\nIII. u 的父结点与 v 的父结点是兄弟关系",
+      "options": [
+        "只有 II",
+        "I 和 II",
+        "I 和 III",
+        "I、II 和 III"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q02",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 25,
+      "id": "ch04-22-q02",
+      "title": "2010 年真题第 5 题",
+      "difficulty": "★★★",
+      "topics": [
+        "树与森林",
+        "树的度",
+        "叶结点",
+        "结点计数"
+      ],
+      "stem": "在一棵度数为 4 的树 T 中，若有 20 个度为 4 的结点，10 个度为 3 的结点，1 个度为 2 的结点，10 个度为 1 的结点，则树 T 的叶结点个数是( )。",
+      "options": [
+        "41",
+        "82",
+        "113",
+        "122"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q03",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 46,
+      "id": "ch04-22-q03",
+      "title": "2014 年真题第 5 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "树与森林",
+        "森林",
+        "二叉树",
+        "孩子兄弟法",
+        "叶子"
+      ],
+      "stem": "将森林 F 转换为对应的二叉树 T，F 中叶子的个数等于( )。",
+      "options": [
+        "T 中叶结点的个数",
+        "T 中度为 1 的结点个数",
+        "T 中左孩子指针为空的结点个数",
+        "T 中右孩子指针为空的结点个数"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q04",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 68,
+      "id": "ch04-22-q04",
+      "title": "2016 年真题第 5 题",
+      "difficulty": "★★",
+      "topics": [
+        "树与森林",
+        "森林",
+        "树性质",
+        "结点边数关系"
+      ],
+      "stem": "若森林 F 有 15 条边、25 个结点，则 F 包含树的个数是( )。",
+      "options": [
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q05",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 89,
+      "id": "ch04-22-q05",
+      "title": "2021 年真题第 4 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "森林与二叉树的转换",
+        "由遍历序列构造二叉树",
+        "树与森林",
+        "森林",
+        "二叉树转换",
+        "先序中序"
+      ],
+      "stem": "某森林 F 对应的二叉树为 T , 若 T 的先序遍历序列是 a, b, d, c, e, g, f , 中序遍历序列是 b, d, a, e, g, c, f , 则 F 中树的棵数是( )。",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q06",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 112,
+      "id": "ch04-22-q06",
+      "title": "2022 年真题第 4 题",
+      "difficulty": "★★★",
+      "topics": [
+        "树与森林",
+        "三叉树",
+        "树高度",
+        "满 m 叉树"
+      ],
+      "stem": "若三叉树 T 中有 244 个结点（叶结点的高度为 1），则 T 的高度至少是 ( )。",
+      "options": [
+        "8",
+        "7",
+        "6",
+        "5"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q07",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 133,
+      "id": "ch04-22-q07",
+      "title": "2026 年真题第 4 题",
+      "difficulty": "★★★★",
+      "topics": [
+        "二叉树基础（性质+存储）",
+        "树与森林",
+        "森林转二叉树",
+        "孩子兄弟法",
+        "二叉树高度"
+      ],
+      "stem": "森林 F 中有 5 颗树，其节点个数分别为 2、3、4、5、7，森林中树的次序可以任意，问 F 对应的二叉树最小高度为多少？",
+      "options": [
+        "5",
+        "6",
+        "8",
+        "10"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q08",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 155,
+      "id": "ch04-22-q08",
+      "title": "巩固题",
+      "difficulty": "★★",
+      "topics": [
+        "树与森林",
+        "树的性质",
+        "边数",
+        "分支数",
+        "结点数"
+      ],
+      "stem": "一棵含 10 个结点的一般树（树根、叶子以及内部结点都任意），其分支数（即边的总条数）为( )。",
+      "options": [
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q09",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 177,
+      "id": "ch04-22-q09",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "树与森林",
+        "树的性质",
+        "度数和",
+        "边数"
+      ],
+      "stem": "一棵含 25 个结点的一般树，所有结点的**度数之和**为( )。",
+      "options": [
+        "23",
+        "24",
+        "25",
+        "49"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q10",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 198,
+      "id": "ch04-22-q10",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "树与森林",
+        "树的性质",
+        "度数和",
+        "度序列",
+        "结点数"
+      ],
+      "stem": "一棵一般树中，含有 1 个度为 4 的结点、2 个度为 3 的结点、2 个度为 2 的结点，其余结点均为叶子（度为 0）。该树共有( )个结点。",
+      "options": [
+        "13",
+        "14",
+        "15",
+        "16"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q11",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 220,
+      "id": "ch04-22-q11",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "树与森林",
+        "树的存储",
+        "双亲表示法",
+        "孩子表示法",
+        "孩子兄弟法"
+      ],
+      "stem": "在树的三种典型存储方式（双亲表示法、孩子表示法、孩子兄弟法）中，**查找指定结点的父结点**的操作时间复杂度最优的是( )。",
+      "options": [
+        "双亲表示法",
+        "孩子表示法",
+        "孩子兄弟法",
+        "三者都是 $O(1)$"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q12",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 242,
+      "id": "ch04-22-q12",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "树与森林",
+        "树的存储",
+        "双亲表示法",
+        "时间复杂度"
+      ],
+      "stem": "用**双亲表示法**存储一棵含 $n$ 个结点的一般树（每个结点存自身数据和父结点下标），查找**指定结点的所有孩子**操作的最坏时间复杂度是( )。",
+      "options": [
+        "$O(1)$",
+        "$O(\\log n)$",
+        "$O(n)$",
+        "$O(n^2)$"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q13",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 263,
+      "id": "ch04-22-q13",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "树与森林",
+        "树的存储",
+        "孩子兄弟法",
+        "二叉链表"
+      ],
+      "stem": "用**孩子兄弟法**存储一棵一般树（每个结点存两个指针 `firstChild` 和 `nextSibling`），下列说法**错误**的是( )。",
+      "options": [
+        "查找指定结点的\"第一个孩子\"时间复杂度是 $O(1)$",
+        "查找指定结点的全部 $k$ 个孩子时间复杂度是 $O(k)$",
+        "查找指定结点的父结点时间复杂度是 $O(1)$",
+        "一棵 $n$ 结点的一般树用孩子兄弟法存储需要 $n$ 个结点对（共 $2n$ 个指针）"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q14",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 284,
+      "id": "ch04-22-q14",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "树与森林",
+        "树的转换",
+        "孩子兄弟法",
+        "二叉树"
+      ],
+      "stem": "将下列一般树 $T$ 用孩子兄弟法转换为对应的二叉树 $B$：\n\n> $T$ 的结构：根 $A$ 有 3 个孩子 $B, C, D$（按从左到右顺序）；$B$ 有 2 个孩子 $E, F$（按从左到右顺序）；$C$ 是叶子；$D$ 有 1 个孩子 $G$。\n\n转换后二叉树 $B$ 中，**结点 $B$ 的右孩子**是( )。",
+      "options": [
+        "$C$",
+        "$D$",
+        "$E$",
+        "$F$"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q15",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 305,
+      "id": "ch04-22-q15",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "树与森林",
+        "树的转换",
+        "孩子兄弟法",
+        "结点数",
+        "根的右子树"
+      ],
+      "stem": "用孩子兄弟法把一棵含 25 个结点的一般树 $T$ 转换为对应的二叉树 $B$。下列说法**正确**的是( )。",
+      "options": [
+        "$B$ 有 25 个结点，且 $B$ 的根没有右子树",
+        "$B$ 有 25 个结点，且 $B$ 的根可能有右子树",
+        "$B$ 有 26 个结点（转换时引入了一个虚根）",
+        "$B$ 有 24 个结点（转换时去掉了原树的某一个结点）"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q16",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 327,
+      "id": "ch04-22-q16",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "树与森林",
+        "森林",
+        "孩子兄弟法",
+        "二叉树转换",
+        "兄弟链"
+      ],
+      "stem": "将下列森林 $F$ 用孩子兄弟法转换为对应的二叉树 $B$：\n\n> $F$ 由 3 棵树组成（按从左到右顺序）：\n> - $T_1$：根 $A$ 有 2 个孩子 $B, C$；\n> - $T_2$：根 $D$ 是叶子；\n> - $T_3$：根 $E$ 有 1 个孩子 $F$。\n\n转换后二叉树 $B$ 中，**结点 $A$ 的右孩子**是( )。",
+      "options": [
+        "$B$",
+        "$C$",
+        "$D$",
+        "$E$"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q17",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 349,
+      "id": "ch04-22-q17",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "树与森林",
+        "树的遍历",
+        "先根遍历",
+        "前序遍历",
+        "对应关系"
+      ],
+      "stem": "一棵一般树 $T$ 的**先根遍历**结果为 $A, B, E, F, C, D, G$。将 $T$ 用孩子兄弟法转换为对应的二叉树 $B$ 后，$B$ 的**前序遍历**结果是( )。",
+      "options": [
+        "$A, B, E, F, C, D, G$",
+        "$A, B, C, D, E, F, G$",
+        "$E, F, B, C, G, D, A$",
+        "$B, E, F, C, D, G, A$"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q18",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 371,
+      "id": "ch04-22-q18",
+      "title": "巩固题",
+      "difficulty": "★★★",
+      "topics": [
+        "树与森林",
+        "树的遍历",
+        "后根遍历",
+        "中序遍历",
+        "对应关系"
+      ],
+      "stem": "一棵一般树 $T$ 的**后根遍历**结果为 $E, F, B, C, G, D, A$。将 $T$ 用孩子兄弟法转换为对应的二叉树 $B$ 后，$B$ 的**中序遍历**结果是( )。",
+      "options": [
+        "$E, F, B, C, G, D, A$",
+        "$A, B, E, F, C, D, G$",
+        "$A, E, F, B, C, G, D$",
+        "$E, F, B, G, D, C, A$"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q19",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 393,
+      "id": "ch04-22-q19",
+      "title": "巩固题",
+      "difficulty": "★★★★",
+      "topics": [
+        "树与森林",
+        "树的遍历",
+        "二叉树反推",
+        "孩子兄弟法",
+        "根的孩子数"
+      ],
+      "stem": "已知一棵一般树 $T$ 用孩子兄弟法转换得到的二叉树 $B$ 的**前序遍历**为 $A, B, E, F, C, G, D$、**中序遍历**为 $F, E, G, C, D, B, A$。\n\n$T$ 中**根 $A$ 的孩子数**是( )。",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "points": 2
+    },
+    {
+      "key": "T08-Q20",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/quiz.json",
+      "line": 415,
+      "id": "ch04-22-q20",
+      "title": "巩固题",
+      "difficulty": "★★★★★",
+      "topics": [
+        "树与森林",
+        "森林",
+        "孩子兄弟法",
+        "二叉树性质",
+        "综合"
+      ],
+      "stem": "森林 $F$ 由 $m$ 棵树组成，共 $n$ 个结点（其中叶子数为 $k$）。将 $F$ 用孩子兄弟法转换为对应的二叉树 $B$ 后，$B$ 中**没有右子树**的结点数为( )。",
+      "options": [
+        "$n - k$",
+        "$n - k + 1$",
+        "$n - k + m$",
+        "$m + k$"
+      ],
+      "points": 2
+    }
+  ],
+  "composite": [
+    {
+      "key": "T01-C01",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/README.md",
+      "line": 47,
+      "prompt": "47: ### 综合题 1｜巩固题\n48: \n49: \n50: **难度**：★★★ · **分值**：12 分\n51: \n52: **考点**：二叉树基础（性质+存储）、二叉树性质、n0=n2+1、完全二叉树、满二叉树、度数和\n53: \n54: > **本套统一约定**（与 kp-binary-tree-basics-001 ~ 017 一致）：\n55: > - **高度定义**：空树高 0；单结点高 1；结点自身高 = $\\max$(左子树高, 右子树高) + 1\n56: > - 节点的度 = 该节点的孩子数（0/1/2 三种）；二叉树中 $n_d$ 表示度为 $d$ 的节点数\n57: > - 二叉树用通行约定：每个节点有\"左孩子指针\"与\"右孩子指针\"两个独立位置，左右孩子位置可区分\n58: \n59: (1) 设二叉树 $T$ 共有 $n = 199$ 个节点，其中度为 1 的节点数 $n_1 = 60$。\n60: \n61:    a. 用\"各结点的度之和 = 边数 = $n - 1$\"（本题约定：结点的度 = 孩子数）这一恒等式，推出 $n_0$、$n_1$、$n_2$ 三者之间的关系式 $n_0 = n_2 + 1$。\n62: \n63:    b. 在 $n=199$、$n_1=60$ 给定下，求 $T$ 的叶节点数 $n_0$ 与度为 2 的节点数 $n_2$。\n64: \n65: (2) 设另有一棵高度为 $h$ 的**完全二叉树** $T'$。\n66: \n67:    a. 写出 $T'$ 的节点数 $n$ 与高度 $h$ 之间的不等式关系（含上下界）。\n68: \n69:    b. 当 $n = 200$ 时求 $T'$ 的高度 $h$。\n70: \n71:    c. 当 $n = 200$ 时分别求 $T'$ 的 $n_0$、$n_1$、$n_2$。\n72: \n73: (3) 设有一棵高度为 $h$ 的**满二叉树** $T''$，写出 $T''$ 的节点数 $n$ 与高度 $h$ 的精确等式，并据此说明 $T''$ 中是否可能出现度为 1 的节点。\n74: ",
+      "answer_line": 75
+    },
+    {
+      "key": "T01-C02",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/README.md",
+      "line": 251,
+      "prompt": "251: ### 综合题 2｜巩固题\n252: \n253: \n254: **难度**：★★★ · **分值**：12 分\n255: \n256: **考点**：二叉树基础（性质+存储）、二叉树、叶节点、递归、二叉链表、算法设计\n257: \n258: 设二叉树以**二叉链表**方式存储，节点定义如下（C 语言）：\n259: \n260: ```c\n261: typedef struct BiTNode {\n262:     int                data;\n263:     struct BiTNode    *lchild;\n264:     struct BiTNode    *rchild;\n265: } BiTNode, *BiTree;\n266: ```\n267: \n268: 请你设计一个算法，给定二叉树根指针 `T`，返回该二叉树中**叶节点**的个数（左孩子指针与右孩子指针**都为空**的节点）。空树的叶节点数约定为 0。\n269: \n270: **约束**：\n271: \n272: - 节点数 $n \\le 1000$\n273: - 时间复杂度：$O(n)$\n274: - 空间复杂度：$O(h)$，其中 $h$ 为树的高度（递归栈）\n275: \n276: **测试覆盖维度**：测试用例除常规情况外还包含以下边界——\n277: \n278: - 空树（应返回 0）\n279: - 单节点（根自身就是叶子，应返回 1）\n280: - 链状树（高度等于节点数，仅末端 1 个叶子）\n281: - 满二叉树（叶子数 $= (n+1)/2$）\n282: - 完全二叉树（叶子集中在最后两层）\n283: - 接近上限 $n = 1000$ 的大规模树（链状形态下递归栈深 ~1000 层）\n284: \n285: 请按以下要求作答：\n286: \n287: (1) 给出算法的基本设计思想。\n288: \n289: (2) 采用 C 语言描述算法，关键之处给出注释。\n290: \n291: (3) 说明算法的时间复杂度与空间复杂度，并给出推导。\n292: ",
+      "answer_line": 293
+    },
+    {
+      "key": "T01-C03",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/README.md",
+      "line": 418,
+      "prompt": "418: ### 综合题 3｜巩固题\n419: \n420: \n421: **难度**：★★ · **分值**：12 分\n422: \n423: **考点**：二叉树基础（性质+存储）、二叉树、最大深度、后序遍历、递归、算法设计\n424: \n425: 二叉树结点定义如下（系统已提供）：\n426: \n427: ```c\n428: typedef struct TreeNode {\n429:     int               val;\n430:     struct TreeNode  *left;\n431:     struct TreeNode  *right;\n432: } TreeNode;\n433: ```\n434: \n435: 请设计算法，给定二叉树根指针 `root`，返回它的**最大深度**——从根结点到最远叶结点的最长路径上的**结点数**。空树的最大深度约定为 0，只有根结点的树最大深度为 1。\n436: \n437: **约束**：\n438: \n439: - 时间复杂度：$O(n)$\n440: - 空间复杂度：$O(h)$，其中 $h$ 为树高（递归栈）\n441: \n442: **测试覆盖维度**：空树（返回 0）、单结点（返回 1）、链状树（深度 = 结点数）、满二叉树、完全二叉树、左右极不平衡的树。\n443: \n444: 请按以下要求作答：\n445: \n446: (1) 给出算法的基本设计思想。\n447: \n448: (2) 采用 C 语言描述算法，关键之处给出注释。\n449: \n450: (3) 说明算法的时间复杂度与空间复杂度，并给出推导。\n451: ",
+      "answer_line": 452
+    },
+    {
+      "key": "T01-C04",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/README.md",
+      "line": 505,
+      "prompt": "505: ### 综合题 4｜巩固题\n506: \n507: \n508: **难度**：★★★ · **分值**：12 分\n509: \n510: **考点**：二叉树基础（性质+存储）、平衡二叉树、自底向上、剪枝、哨兵、递归、算法设计\n511: \n512: 二叉树结点定义如下（系统已提供）：\n513: \n514: ```c\n515: typedef struct TreeNode {\n516:     int               val;\n517:     struct TreeNode  *left;\n518:     struct TreeNode  *right;\n519: } TreeNode;\n520: ```\n521: \n522: 请设计算法判断给定二叉树是否为**平衡二叉树**——即树中**每个**结点的左右子树高度差的绝对值都不超过 1。平衡返回 1，否则返回 0；空树视为平衡。**要求分析时间复杂度，并尽可能高效。**\n523: \n524: **约束**：\n525: \n526: - 时间复杂度：期望 $O(n)$\n527: - 空间复杂度：$O(h)$，其中 $h$ 为树高（递归栈）\n528: \n529: **测试覆盖维度**：空树、单结点、满/完全二叉树（平衡）、链状树（不平衡）、仅在深处才失衡的树（考验剪枝与不重算）、左右子树高度差恰为 1 与恰为 2 的临界树。\n530: \n531: 请按以下要求作答：\n532: \n533: (1) 给出算法的基本设计思想。\n534: \n535: (2) 采用 C 语言描述算法，关键之处给出注释。\n536: \n537: (3) 说明算法的时间复杂度与空间复杂度，并给出推导。\n538: ",
+      "answer_line": 539
+    },
+    {
+      "key": "T01-C05",
+      "source": "labs/chapter-04/theory/T-04-01-binary-tree-basics-quiz/README.md",
+      "line": 611,
+      "prompt": "611: ### 综合题 5｜巩固题\n612: \n613: \n614: **难度**：★★ · **分值**：12 分\n615: \n616: **考点**：二叉树基础（性质+存储）、对称二叉树、镜像、交叉配对、递归、算法设计\n617: \n618: 二叉树结点定义如下（系统已提供）：\n619: \n620: ```c\n621: typedef struct TreeNode {\n622:     int               val;\n623:     struct TreeNode  *left;\n624:     struct TreeNode  *right;\n625: } TreeNode;\n626: ```\n627: \n628: 请设计算法，判断给定二叉树是否**关于根结点左右对称**——沿根结点画一条竖线对折，左右两半应完全重合：不仅结构对称，每个对称位置上的结点值也要相等。对称返回 1，否则返回 0；空树视为对称。\n629: \n630: 例如根 1、左孩子 2(左 3 右 4)、右孩子 2(左 4 右 3) 的树对称；而根 1、左孩子 2(左空 右 3)、右孩子 2(左空 右 3) 不对称（两个 3 都长在右边，折过去对不上）。\n631: \n632: **约束**：时间 $O(n)$，空间 $O(h)$（$h$ 为树高，递归栈）。\n633: \n634: **测试覆盖维度**：空树、单结点、结构对称但值不对称、值对称但结构不对称（一空一非空）、链状树、多层完全对称的树。\n635: \n636: 请按以下要求作答：\n637: \n638: (1) 给出算法的基本设计思想。\n639: \n640: (2) 采用 C 语言描述算法，关键之处给出注释。\n641: \n642: (3) 说明算法的时间复杂度与空间复杂度，并给出推导。\n643: ",
+      "answer_line": 644
+    },
+    {
+      "key": "T02-C01",
+      "source": "labs/chapter-04/theory/T-04-02-preorder-traversal-quiz/README.md",
+      "line": 47,
+      "prompt": "47: ### 综合题 1｜2014 年真题第 41 题\n48: \n49: \n50: **难度**：★★★★ · **分值**：13 分\n51: \n52: **考点**：树与森林、前序遍历、二叉树、WPL、带权路径长度、先序遍历、算法设计\n53: \n54: 二叉树的带权路径长度（WPL）是二叉树中所有叶结点的带权路径长度之和。给定一棵二叉树 T，采用二叉链表存储，结点结构为：\n55: \n56: ```\n57: +--------+--------+--------+\n58: | left   | weight | right  |\n59: +--------+--------+--------+\n60: ```\n61: \n62: 其中叶结点的 weight 域保存该结点的非负权值。设 root 为指向 T 的根结点的指针，请设计求 T 的 WPL 的算法。要求：\n63: \n64: (1) 给出算法的基本设计思想。\n65: \n66: (2) 使用 C 或 C++ 语言，给出二叉树结点的数据类型定义。\n67: \n68: (3) 根据设计思想，采用 C 或 C++ 语言描述算法，关键之处给出注释。\n69: ",
+      "answer_line": 70
+    },
+    {
+      "key": "T03-C01",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/README.md",
+      "line": 47,
+      "prompt": "47: ### 综合题 1｜2017 年真题第 41 题\n48: \n49: \n50: **难度**：★★★★ · **分值**：15 分\n51: \n52: **考点**：树与森林、中序遍历、表达式树、中缀表达式、算法设计\n53: \n54: 请设计一个算法，将给定的表达式树（二叉树）转换为等价的中缀表达式（通过括号反映操作符的计算次序）并输出。例如，下列两棵表达式树作为算法输入时，输出的中缀表达式分别为 `(a+b)*(c*(-d))` 和 `(a*b)+(-(c-d))`。\n55: \n56: **表达式树 1**（中缀：`(a+b)*(c*(-d))`）：\n57: \n58: ```text\n59: *(+(a, b), *(c, -(_, d)))\n60: ```\n61: \n62: **表达式树 2**（中缀：`(a*b)+(-(c-d))`）：\n63: \n64: ```text\n65: +(*(a, b), -(_, -(c, d)))\n66: ```\n67: \n68: > 注：单目运算符 `-`（取负）在树里以左子树为空 `_`、右子树为操作数表示。\n69: \n70: 二叉树结点的定义如下：\n71: \n72: ```c\n73: typedef struct node {\n74:     char data[10];   // 存储操作数或操作符\n75:     struct node *left, *right;\n76: } BTree;\n77: ```\n78: \n79: 要求：\n80: \n81: (1) 给出算法的基本设计思想。\n82: \n83: (2) 根据设计思想，采用 C 或 C++ 语言描述算法，关键之处给出注释。\n84: ",
+      "answer_line": 85
+    },
+    {
+      "key": "T03-C02",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/README.md",
+      "line": 178,
+      "prompt": "178: ### 综合题 2｜2022 年真题第 41 题\n179: \n180: \n181: **难度**：★★★★ · **分值**：13 分\n182: \n183: **考点**：二叉搜索树、中序遍历、顺序存储、算法设计\n184: \n185: 已知非空二叉树 T 的结点值均为正整数，采用顺序存储方式保存，数据结构定义如下：\n186: \n187: ```c\n188: typedef struct {                    // MAX_SIZE 为已定义常量\n189:     Elemtype SqBiTNode[MAX_SIZE];   // 保存二叉树结点值的数组\n190:     int      ElemNum;               // 实际占用的数组元素个数\n191: } SqBiTree;\n192: ```\n193: \n194: T 中不存在的结点在数组 `SqBiTNode` 中用 -1 表示。例如，对于两棵非空二叉树 T₁ 和 T₂：\n195: \n196: **二叉树 T₁**（满足 BST 定义）：\n197: \n198: ```text\n199: 40(25(_, 30(27, _)), 60(_, 80))\n200: ```\n201: \n202: **二叉树 T₂**（不满足 BST 定义）：\n203: \n204: ```text\n205: 40(50(_, 30(_, 35)), 60)\n206: ```\n207: \n208: T₁ 和 T₂ 对应的顺序存储如下（位置从下标 0 起，1-indexed 的层序位置规则：父 i 的左孩子在 2i+1、右孩子在 2i+2）：\n209: \n210: | 数组 | 内容（依次） | ElemNum |\n211: |---|---|---|\n212: | `T₁.SqBiTNode` | `[40, 25, 60, -1, 30, -1, 80, -1, -1, 27]` | 10 |\n213: | `T₂.SqBiTNode` | `[40, 50, 60, -1, 30, -1, -1, -1, -1, -1, 35]` | 11 |\n214: \n215: 请设计一个尽可能高效的算法，判定一棵采用这种方式存储的二叉树是否为二叉搜索树，若是则返回 true，否则返回 false。要求：\n216: \n217: (1) 给出算法的基本设计思想。\n218: \n219: (2) 根据设计思想，采用 C 或 C++ 语言描述算法，关键之处给出注释。\n220: ",
+      "answer_line": 221
+    },
+    {
+      "key": "T03-C03",
+      "source": "labs/chapter-04/theory/T-04-03-inorder-traversal-quiz/README.md",
+      "line": 281,
+      "prompt": "281: ### 综合题 3｜巩固题\n282: \n283: \n284: **难度**：★★★★ · **分值**：15 分\n285: \n286: **考点**：中序遍历、二叉树、非递归、显式栈、算法设计\n287: \n288: 设二叉树 T 以二叉链表存储，结点结构如下：\n289: \n290: ```c\n291: typedef struct BiTNode {\n292:     int             data;\n293:     struct BiTNode *lchild;\n294:     struct BiTNode *rchild;\n295: } BiTNode, *BiTree;\n296: ```\n297: \n298: `T` 指向二叉树的根（空树以 `T == NULL` 表示）。请按下列三项分别完成：\n299: \n300: (1) 给出**非递归**中序遍历算法的基本设计思想（用显式栈模拟递归过程，禁止使用系统递归调用）。\n301: \n302: (2) 采用 C 语言描述该非递归算法，关键之处给出注释。函数把中序遍历得到的各结点 `data` 依次写入 `out[]`，并返回写入个数（即树的结点数）。\n303: \n304: (3) 说明算法的时间复杂度与空间复杂度，并给出推导。\n305: \n306: **函数签名**（与 OJ wrapper 一致）：\n307: \n308: ```c\n309: int inorderTraverse(BiTree T, int out[]);\n310: ```\n311: \n312: **约束**：$0 \\le n \\le 1000$；时间复杂度 $O(n)$；空间复杂度 $O(h)$（$h$ 为树高，对应显式栈最大深度；不计输入与输出数组）。\n313: \n314: **测试覆盖维度**：测试用例除常规情况外，还包含以下边界，WA 时建议逐个排查：\n315: \n316: - **空树**（$n = 0$）：返回 0，不写入 `out`；\n317: - **单节点树**（$n = 1$）：返回 1，`out[0]` = 根的 `data`；\n318: - **左偏链**（每个非叶结点仅有左孩子）：中序结果 = 链尾到链头逆序排列；\n319: - **右偏链**（每个非叶结点仅有右孩子）：中序结果 = 链头到链尾顺序排列；\n320: - **完全二叉树**：中序对应\"中序层次\"，非简单的层序；\n321: - **接近 $n_{\\max} = 1000$ 的中等规模**：验证显式栈深度边界（栈容量声明须够大）。\n322: ",
+      "answer_line": 323
+    },
+    {
+      "key": "T06-C01",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/README.md",
+      "line": 47,
+      "prompt": "47: ### 综合题 1｜巩固题\n48: \n49: \n50: **难度**：★★★★ · **分值**：12 分\n51: \n52: **考点**：由遍历序列构造二叉树、二叉树、遍历序列构造、先序中序、后序遍历、分治、算法设计\n53: \n54: 已知一棵二叉树 $T$ 共 $n$ 个结点，结点值**互不相同**。给定 $T$ 的**先序遍历序列** `preorder[0..n-1]` 和**中序遍历序列** `inorder[0..n-1]`（保证两序列对应同一棵合法二叉树），请设计算法**输出 $T$ 的后序遍历序列** `postorder[0..n-1]`。\n55: \n56: (1) 给出算法的基本设计思想。\n57: \n58: (2) 采用 C 语言描述算法，关键之处给出注释。\n59: \n60: (3) 说明算法的时间复杂度与空间复杂度，并给出推导。\n61: \n62: **数据结构 / 接口约定**（与 OJ wrapper 一致）：\n63: \n64: ```c\n65: /* 输入：先序数组 preorder[0..n-1]、中序数组 inorder[0..n-1]\n66:  * 输出：后序数组 postorder[0..n-1]\n67:  * 不需要显式构造 TreeNode；直接在数组上分治即可。\n68:  */\n69: void postorderFromPreIn(int *preorder, int *inorder, int n, int *postorder);\n70: ```\n71: \n72: **约束**：\n73: \n74: - $1 \\le n \\le 1000$\n75: - 所有结点值为 32 位有符号整数且**两两不同**\n76: - 输入保证 `preorder` 与 `inorder` 对应同一棵合法二叉树（题目不要求做合法性校验）\n77: - 时间复杂度允许 $O(n^2)$（408 大纲范围内的主流写法；解析中讨论 $O(n)$ 优化）\n78: - 空间复杂度（不含输出数组本身）：$O(n)$，主要来自递归栈\n79: \n80: **测试覆盖维度**：测试用例除常规情况外，还包含以下边界，WA 时建议逐个排查：\n81: \n82: - **$n = 1$**：单节点树，后序 = 先序 = 中序\n83: - **左斜链树**：每个非叶节点只有左孩子（如 `pre = 1 2 3 4 5`, `in = 5 4 3 2 1`），后序 = `5 4 3 2 1`\n84: - **右斜链树**：每个非叶节点只有右孩子（如 `pre = 1 2 3 4 5`, `in = 1 2 3 4 5`），后序 = `5 4 3 2 1`\n85: - **完全二叉树**：左右子树同高，验证递归在两侧均推进\n86: - **含负数 / 大跨度整数值**：验证比较是按值不按位置\n87: - **较大规模**（$n$ 接近 $1000$ 的链状树）：验证算法的渐近复杂度未爆 + 递归栈未溢\n88: ",
+      "answer_line": 89
+    },
+    {
+      "key": "T06-C02",
+      "source": "labs/chapter-04/theory/T-04-06-reconstruct-binary-tree-quiz/README.md",
+      "line": 260,
+      "prompt": "260: ### 综合题 2｜巩固题\n261: \n262: \n263: **难度**：★★★ · **分值**：12 分\n264: \n265: **考点**：由遍历序列构造二叉树、二叉树、遍历序列构造、先序中序、唯一性证明、演算\n266: \n267: 已知一棵二叉树 $T$ 共 6 个结点，结点互不相同，其**先序遍历序列**与**中序遍历序列**分别为：\n268: \n269: $$\n270: \\begin{aligned}\n271: \\text{preorder} &= A,\\ B,\\ D,\\ E,\\ C,\\ F \\\\\n272: \\text{inorder}  &= D,\\ B,\\ E,\\ A,\\ F,\\ C\n273: \\end{aligned}\n274: $$\n275: \n276: 请完成以下任务：\n277: \n278: (1) **手工演算**给出递归构造 $T$ 的逐层分块过程：在每一层中，圈出\"当前子树的根\"，写出\"先序对应位置\"与\"中序左/右子段\"，并标出递归到子问题的规模。\n279: \n280: (2) 用 `binary-tree` fence 画出最终的二叉树 $T$，并写出其**后序遍历序列**。\n281: \n282: (3) **证明**：\"先序遍历 + 中序遍历\"为何能**唯一确定**一棵二叉树（且结点值互不相同）。要求给出递归奠基与递归步两段。\n283: \n284: > **本套统一约定**：\n285: > - 二叉树结点高度从 1 起算，空子树高度 0\n286: > - 先序 = 根 → 左子树 → 右子树；中序 = 左子树 → 根 → 右子树；后序 = 左子树 → 右子树 → 根\n287: > - 本题保证两序列对应同一棵合法二叉树且结点值两两不同\n288: > - \"前缀 / 后缀长度\" 与 \"子段范围\" 全程采用闭区间 $[l, r]$ 表述\n289: ",
+      "answer_line": 290
+    },
+    {
+      "key": "T08-C01",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+      "line": 47,
+      "prompt": "47: ### 综合题 1｜2014 年真题第 41 题\n48: \n49: \n50: **难度**：★★★★ · **分值**：13 分\n51: \n52: **考点**：树与森林、前序遍历、二叉树、WPL、带权路径长度、先序遍历、算法设计\n53: \n54: 二叉树的带权路径长度（WPL）是二叉树中所有叶结点的带权路径长度之和。给定一棵二叉树 T，采用二叉链表存储，结点结构为：\n55: \n56: ```\n57: +--------+--------+--------+\n58: | left   | weight | right  |\n59: +--------+--------+--------+\n60: ```\n61: \n62: 其中叶结点的 weight 域保存该结点的非负权值。设 root 为指向 T 的根结点的指针，请设计求 T 的 WPL 的算法。要求：\n63: \n64: (1) 给出算法的基本设计思想。\n65: \n66: (2) 使用 C 或 C++ 语言，给出二叉树结点的数据类型定义。\n67: \n68: (3) 根据设计思想，采用 C 或 C++ 语言描述算法，关键之处给出注释。\n69: ",
+      "answer_line": 70
+    },
+    {
+      "key": "T08-C02",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+      "line": 138,
+      "prompt": "138: ### 综合题 2｜2016 年真题第 42 题\n139: \n140: \n141: **难度**：★★★ · **分值**：8 分\n142: \n143: **考点**：树与森林、k叉树、正则k叉树、叶结点数、数学证明\n144: \n145: 如果一棵非空 k（k ≥ 2）叉树 T 中每个非叶结点都有 k 个孩子，则称 T 为正则 k 叉树。请回答下列问题并给出推导过程。\n146: \n147: (1) 若 T 有 m 个非叶结点，则 T 中的叶结点有多少个？\n148: \n149: (2) 若 T 的高度为 h（单结点的树 h = 1），则 T 的结点数最多为多少个？最少为多少个？\n150: ",
+      "answer_line": 151
+    },
+    {
+      "key": "T08-C03",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+      "line": 205,
+      "prompt": "205: ### 综合题 3｜2017 年真题第 41 题\n206: \n207: \n208: **难度**：★★★★ · **分值**：15 分\n209: \n210: **考点**：树与森林、中序遍历、表达式树、中缀表达式、算法设计\n211: \n212: 请设计一个算法，将给定的表达式树（二叉树）转换为等价的中缀表达式（通过括号反映操作符的计算次序）并输出。例如，下列两棵表达式树作为算法输入时，输出的中缀表达式分别为 `(a+b)*(c*(-d))` 和 `(a*b)+(-(c-d))`。\n213: \n214: **表达式树 1**（中缀：`(a+b)*(c*(-d))`）：\n215: \n216: ```text\n217: *(+(a, b), *(c, -(_, d)))\n218: ```\n219: \n220: **表达式树 2**（中缀：`(a*b)+(-(c-d))`）：\n221: \n222: ```text\n223: +(*(a, b), -(_, -(c, d)))\n224: ```\n225: \n226: > 注：单目运算符 `-`（取负）在树里以左子树为空 `_`、右子树为操作数表示。\n227: \n228: 二叉树结点的定义如下：\n229: \n230: ```c\n231: typedef struct node {\n232:     char data[10];   // 存储操作数或操作符\n233:     struct node *left, *right;\n234: } BTree;\n235: ```\n236: \n237: 要求：\n238: \n239: (1) 给出算法的基本设计思想。\n240: \n241: (2) 根据设计思想，采用 C 或 C++ 语言描述算法，关键之处给出注释。\n242: ",
+      "answer_line": 243
+    },
+    {
+      "key": "T08-C04",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+      "line": 336,
+      "prompt": "336: ### 综合题 4｜2020 年真题第 42 题\n337: \n338: \n339: **难度**：★★★ · **分值**：10 分\n340: \n341: **考点**：哈夫曼树与编码、树与森林、前缀编码、二叉树、译码、数据结构设计\n342: \n343: 任一个字符的编码都不是其它字符编码的前缀，则称这种编码具有前缀特性。现有某字符集（字符个数 ≥ 2）的不等长编码，每个字符的编码均为二进制的 0、1 序列，最长为 L 位，且具有前缀特性。请回答下列问题：\n344: \n345: (1) 哪种数据结构适宜保存上述具有前缀特性的不等长编码？\n346: \n347: (2) 基于你所设计的数据结构，简述从 0/1 串到字符串的译码过程。\n348: \n349: (3) 简述判定某字符集的不等长编码是否具有前缀特性的过程。\n350: ",
+      "answer_line": 351
+    },
+    {
+      "key": "T08-C05",
+      "source": "labs/chapter-04/theory/T-04-08-trees-and-forests-quiz/README.md",
+      "line": 424,
+      "prompt": "424: ### 综合题 5｜巩固题\n425: \n426: \n427: **难度**：★★★ · **分值**：12 分\n428: \n429: **考点**：树与森林、树、孩子兄弟链表、树高、递归、算法设计\n430: \n431: 设树 T 采用孩子兄弟链表存储，结点结构如下：\n432: \n433: ```c\n434: typedef struct CSNode {\n435:     int             data;\n436:     struct CSNode  *firstChild;\n437:     struct CSNode  *nextSibling;\n438: } CSNode;\n439: ```\n440: \n441: `root` 指向 T 的根，约定 `root->nextSibling == NULL`（根没有兄弟），空树以 `root == NULL` 表示。请设计一个时间复杂度 $O(n)$ 的算法，计算 T 的**高度**——即原树中所有结点的最大层数（根所在的层为第 1 层，空树高度为 0）。\n442: \n443: (1) 给出算法的基本设计思想；\n444: \n445: (2) 采用 C 语言描述算法，关键之处给出注释；\n446: \n447: (3) 说明算法的时间复杂度与空间复杂度。\n448: \n449: **函数签名**（与 OJ wrapper 一致）：\n450: \n451: ```c\n452: int treeHeight(CSNode *root);\n453: ```\n454: \n455: **约束**：$1 \\le n \\le 1000$；时间复杂度 $O(n)$；空间复杂度 $O(h)$（不计输入；$h$ 为递归深度）。\n456: \n457: **测试覆盖维度**：测试用例除常规情况外，还包含以下边界，WA 时建议逐个排查：\n458: \n459: - **$n = 1$**：单节点，原树仅一个根，高度 = 1；\n460: - **链状树**：每个非叶节点恰有 1 个孩子，高度 = $n$；\n461: - **扁平树**：根有 $n - 1$ 个孩子且所有孩子都是叶子，高度 = 2；\n462: - **多分叉非平衡树**：某分支深而另一分支浅，验证 `max(子高, 兄弟高)` 取得正确；\n463: - **较大规模**：$n$ 接近 $1000$ 的链状树，验证递归栈未爆。\n464: ",
+      "answer_line": 465
+    }
+  ],
+  "exercise": [
+    {
+      "key": "E01",
+      "source": "labs/chapter-04/exercise/E-04-01-complete-binary-tree-check/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-01：二叉树的完全性检验\"\n3: description: \"利用层序遍历与空节点连续性判定，检验一棵二叉树是否为完全二叉树。\"\n4: order: 9\n5: chapter: 4\n6: labId: \"04E01\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"入门\"\n13: duration: \"20～30 分钟\"\n14: ---\n15: \n16: # Lab 04-E-01：二叉树的完全性检验\n17: \n18: 根据第 4.2.2 节的定义，在一棵**完全二叉树 (Complete Binary Tree)** 中，除了最后一层外，所有层都被完全填满，并且最后一层的所有叶节点都尽可能靠左排列。\n19: \n20: ## 题目\n21: \n22: 给定一棵二叉树的层序序列化输入，判断该二叉树是否为完全二叉树。\n23: \n24: ### 任务要求\n25: 1. 读入二叉树的层序序列化数据并构建二叉树；\n26: 2. 实现函数 `bool isCompleteTree(TreeNode* root)` 进行判定；\n27: 3. 输出 `true` 或 `false`。\n28: \n29: ## 输入格式\n30: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列，空节点使用 `null` 或 `#` 表示。\n31: \n32: ## 输出格式\n33: - 输出一行：`true` 表示是完全二叉树，`false` 表示不是。\n34: \n35: ## 数据范围与限制\n36: | 项目 | 范围 |\n37: | --- | --- |\n38: | 节点数 $n$ | $0 \\le n \\le 10^4$ |\n39: | 节点值 | $-10^4 \\le \\text{val} \\le 10^4$ |\n40: | 时间复杂度要求 | $O(n)$ |\n41: | 额外空间复杂度 | $O(n)$（队列空间） |\n42: \n43: ::: tip 💡 输入提示\n44: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n45: ```cpp\n46: std::vector<std::string> tokens;\n47: std::string token;\n48: while (std::cin >> token) tokens.push_back(token);\n49: ```\n50: :::\n51: \n52: ## 样例\n53: \n54: ### 样例输入 1\n55: ```input\n56: 1 2 3 4 5 6 null\n57: ```\n58: \n59: ### 样例输出 1\n60: ```output\n61: true\n62: ```\n63: \n64: ### 样例输入 2\n65: ```input\n66: 1 2 3 4 5 null 7\n67: ```\n68: \n69: ### 样例输出 2\n70: ```output\n71: false\n72: ```\n73: \n74: ### 样例输入 3\n75: ```input\n76: 1\n77: ```\n78: \n79: ### 样例输出 3\n80: ```output\n81: true\n82: ```\n83: \n84: ### 样例解释与结构对照\n85: \n86: ```text\n87: 样例 1（完全二叉树）：            样例 2（非完全二叉树，存在空洞）：\n88:         1                                1\n89:       /   \\                            /   \\\n90:      2     3                          2     3\n91:     / \\   /                          / \\     \\\n92:    4   5 6                          4   5     7  <-- 节点 6 位置缺失！\n93: 层序遍历：1 2 3 4 5 6 null        层序遍历：1 2 3 4 5 null 7\n94: 所有非空节点连续紧凑排列，无空洞。   在遇到空指针后又出现了非空节点 7。\n95: ```\n96: \n97: ## 如何验证\n98: \n99: ```powershell\n100: # 运行评测\n101: pnpm lab:run -- labs/chapter-04/exercise/E-04-01-complete-binary-tree-check\n102: \n103: # 单用例调试\n104: pnpm lab:run -- labs/chapter-04/exercise/E-04-01-complete-binary-tree-check --case 001-sample\n105: ```\n106: ",
+      "answer_line": 107
+    },
+    {
+      "key": "E02",
+      "source": "labs/chapter-04/exercise/E-04-02-binary-tree-maximum-width/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-02：二叉树的最大宽度\"\n3: description: \"利用完全二叉树的父子编号性质计算二叉树的最大宽度。\"\n4: order: 10\n5: chapter: 4\n6: labId: \"04E02\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"进阶\"\n13: duration: \"25～35 分钟\"\n14: ---\n15: \n16: # Lab 04-E-02：二叉树的最大宽度\n17: \n18: 在第 4.2.3 节中，我们推导了完全二叉树的**父子节点编号性质**：若当前节点编号为 $i$（从 0 开始计数），其左孩子编号为 $2i+1$，右孩子编号为 $2i+2$。\n19: \n20: ## 题目描述\n21: \n22: 给定一棵二叉树，求其所有层中最大的层宽度。每一层的宽度定义为：该层最左端非空节点和最右端非空节点之间的节点数（**包含两个端点节点**以及它们中间的所有空节点）。\n23: \n24: ### 任务要求\n25: 1. 读入二叉树的层序序列化数据并构建二叉树；\n26: 2. 实现函数 `int widthOfBinaryTree(TreeNode* root)` 计算二叉树的最大宽度；\n27: 3. 输出最大宽度的整数值。\n28: \n29: ## 输入格式\n30: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列，空节点使用 `null` 表示。\n31: \n32: ## 输出格式\n33: - 输出一个整数，表示二叉树的最大宽度。\n34: \n35: ::: tip 💡 输入提示\n36: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n37: ```cpp\n38: std::vector<std::string> tokens;\n39: std::string token;\n40: while (std::cin >> token) tokens.push_back(token);\n41: ```\n42: :::\n43: \n44: ## 数据范围与限制\n45: | 项目 | 范围 |\n46: | --- | --- |\n47: | 节点数 $n$ | $1 \\le n \\le 3000$ |\n48: | 节点值 | $-100 \\le \\text{val} \\le 100$ |\n49: | 时间复杂度要求 | $O(n)$ |\n50: | 空间复杂度要求 | $O(n)$ |\n51: \n52: ## 样例\n53: \n54: ### 样例输入 1\n55: ```input\n56: 1 3 2 5 3 null 9\n57: ```\n58: \n59: ### 样例输出 1\n60: ```output\n61: 4\n62: ```\n63: \n64: ### 样例输入 2\n65: ```input\n66: 1 3 2 5 null null 9 6 null 7\n67: ```\n68: \n69: ### 样例输出 2\n70: ```output\n71: 7\n72: ```\n73: \n74: ### 样例输入 3\n75: ```input\n76: 1 2 null 3 null 4 null\n77: ```\n78: \n79: ### 样例输出 3\n80: ```output\n81: 1\n82: ```\n83: \n84: ### 样例解释与编号追踪\n85: \n86: ```text\n87: 样例 1 树结构与层内虚拟编号：\n88:           1          (层 0: 编号 0, 宽度 = 0 - 0 + 1 = 1)\n89:         /   \\\n90:        3     2        (层 1: 编号 0, 1, 宽度 = 1 - 0 + 1 = 2)\n91:       / \\     \\\n92:      5   3     9      (层 2: 编号 0, 1, [2], 3, 宽度 = 3 - 0 + 1 = 4)\n93: \n94: 第 2 层最左节点为 5（编号 0），最右节点为 9（编号 3），跨度包含空位 [2]，总宽度为 4。\n95: ```\n96: \n97: ## 如何验证\n98: \n99: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n100: \n101: ```powershell\n102: # 已进入本 Lab 目录\n103: make doctor\n104: make run\n105: make run CASE=001-sample\n106: make interactive\n107: make score\n108: ```\n109: \n110: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n111: \n112: ```powershell\n113: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-02-binary-tree-maximum-width\n114: pnpm lab:run -- labs/chapter-04/exercise/E-04-02-binary-tree-maximum-width\n115: pnpm lab:run -- labs/chapter-04/exercise/E-04-02-binary-tree-maximum-width --case 001-sample\n116: pnpm lab:score -- labs/chapter-04/exercise/E-04-02-binary-tree-maximum-width\n117: ```\n118: \n119: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n120: ",
+      "answer_line": 121
+    },
+    {
+      "key": "E03",
+      "source": "labs/chapter-04/exercise/E-04-03-binary-tree-preorder-traversal/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-03：二叉树的前序遍历\"\n3: description: \"实现二叉树的前序遍历（根 -> 左 -> 右），掌握递归与显式栈迭代两种经典 DFS 解法。\"\n4: order: 11\n5: chapter: 4\n6: labId: \"04E03\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-24\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"入门\"\n13: duration: \"15～20 分钟\"\n14: ---\n15: \n16: # Lab 04-E-03：二叉树的前序遍历\n17: \n18: ## 实验目的\n19: \n20: 1. 深刻理解二叉树前序遍历（$DLR$：根 $\\to$ 左 $\\to$ 右）的定义与访问时机；\n21: 2. 掌握二叉树递归遍历的极简写法；\n22: 3. 掌握基于显式栈（`std::stack`）消除递归的迭代遍历模板。\n23: \n24: ---\n25: \n26: ## 题目描述\n27: \n28: 给定一棵二叉树的根节点 `root`，请返回其节点值的 **前序遍历** 序列。\n29: \n30: ### 输入格式\n31: \n32: 输入包含一行，为二叉树的层序序列（以空格分隔，`null` 表示空节点）。若输入为空树，则输入为单行 `null` 或空行。\n33: \n34: ### 输出格式\n35: \n36: 输出一行，为二叉树前序遍历得到的节点值序列，以空格分隔。若树为空，则输出空行。\n37: \n38: ::: tip 💡 输入提示\n39: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n40: ```cpp\n41: std::vector<std::string> tokens;\n42: std::string token;\n43: while (std::cin >> token) tokens.push_back(token);\n44: ```\n45: :::\n46: \n47: ---\n48: \n49: ## 样例说明\n50: \n51: ### 样例 1\n52: \n53: **输入**：\n54: ```text\n55: 1 null 2 3\n56: ```\n57: \n58: **输出**：\n59: ```text\n60: 1 2 3\n61: ```\n62: \n63: **图解**：\n64: ```text\n65:   1\n66:    \\\n67:     2\n68:    /\n69:   3\n70: 前序遍历: 根(1) -> 左(空) -> 右(2 -> 左(3)) ==> 1 2 3\n71: ```\n72: \n73: ---\n74: \n75: ### 样例 2\n76: \n77: **输入**：\n78: ```text\n79: null\n80: ```\n81: \n82: **输出**：\n83: ```text\n84: \n85: ```\n86: \n87: **解释**：空树的前序遍历序列为空。\n88: \n89: ---\n90: \n91: ### 样例 3\n92: \n93: **输入**：\n94: ```text\n95: 1 2 3 4 5 6 7\n96: ```\n97: \n98: **输出**：\n99: ```text\n100: 1 2 4 5 3 6 7\n101: ```\n102: \n103: **图解**：\n104: ```text\n105:         1\n106:       /   \\\n107:     2       3\n108:    / \\     / \\\n109:   4   5   6   7\n110: 前序遍历: 1 -> (2 -> 4 -> 5) -> (3 -> 6 -> 7) ==> 1 2 4 5 3 6 7\n111: ```\n112: \n113: ---\n114: \n115: ## 如何验证\n116: \n117: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n118: \n119: ```powershell\n120: # 已进入本 Lab 目录\n121: make doctor\n122: make run\n123: make run CASE=001-sample\n124: make interactive\n125: make score\n126: ```\n127: \n128: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n129: \n130: ```powershell\n131: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-03-binary-tree-preorder-traversal\n132: pnpm lab:run -- labs/chapter-04/exercise/E-04-03-binary-tree-preorder-traversal\n133: pnpm lab:run -- labs/chapter-04/exercise/E-04-03-binary-tree-preorder-traversal --case 001-sample\n134: pnpm lab:score -- labs/chapter-04/exercise/E-04-03-binary-tree-preorder-traversal\n135: ```\n136: \n137: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n138: ",
+      "answer_line": 139
+    },
+    {
+      "key": "E04",
+      "source": "labs/chapter-04/exercise/E-04-04-binary-tree-level-and-zigzag-order/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-04：二叉树的层序与锯齿形遍历\"\n3: description: \"使用队列与双端队列完成二叉树的标准分层输出与锯齿形反转输出。\"\n4: order: 12\n5: chapter: 4\n6: labId: \"04E04\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"入门\"\n13: duration: \"20～30 分钟\"\n14: ---\n15: \n16: # Lab 04-E-04：二叉树的层序与锯齿形遍历\n17: \n18: 在第 4.3.3 节中，我们学习了二叉树的广度优先搜索（BFS）层序遍历。\n19: \n20: ## 题目\n21: \n22: 给定一棵二叉树，分别输出其**标准层序遍历**和**锯齿形层序遍历（之字形）**。\n23: - 标准层序：自顶向下，每层从左向右；\n24: - 锯齿形层序：第 0 层从左向右，第 1 层从右向左，第 2 层从左向右，依次类推交替翻转。\n25: \n26: ## 输入格式\n27: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列。\n28: \n29: ## 输出格式\n30: - 第一段输出 `LEVEL_ORDER:` 后跟标准层序遍历，每层占一行；\n31: - 第二段输出 `ZIGZAG_ORDER:` 后跟锯齿形层序遍历，每层占一行。\n32: \n33: ::: tip 💡 输入提示\n34: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n35: ```cpp\n36: std::vector<std::string> tokens;\n37: std::string token;\n38: while (std::cin >> token) tokens.push_back(token);\n39: ```\n40: :::\n41: \n42: ## 样例\n43: \n44: ### 样例输入 1\n45: ```input\n46: 3 9 20 null null 15 7\n47: ```\n48: \n49: ### 样例输出 1\n50: ```output\n51: LEVEL_ORDER:\n52: 3\n53: 9 20\n54: 15 7\n55: ZIGZAG_ORDER:\n56: 3\n57: 20 9\n58: 15 7\n59: ```\n60: \n61: ### 样例输入 2\n62: ```input\n63: 1 2 3 4 5 6 7\n64: ```\n65: \n66: ### 样例输出 2\n67: ```output\n68: LEVEL_ORDER:\n69: 1\n70: 2 3\n71: 4 5 6 7\n72: ZIGZAG_ORDER:\n73: 1\n74: 3 2\n75: 4 5 6 7\n76: ```\n77: \n78: ### 样例输入 3\n79: ```input\n80: 1\n81: ```\n82: \n83: ### 样例输出 3\n84: ```output\n85: LEVEL_ORDER:\n86: 1\n87: ZIGZAG_ORDER:\n88: 1\n89: ```\n90: \n91: ## 如何验证\n92: \n93: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n94: \n95: ```powershell\n96: # 已进入本 Lab 目录\n97: make doctor\n98: make run\n99: make run CASE=001-sample\n100: make interactive\n101: make score\n102: ```\n103: \n104: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n105: \n106: ```powershell\n107: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-04-binary-tree-level-and-zigzag-order\n108: pnpm lab:run -- labs/chapter-04/exercise/E-04-04-binary-tree-level-and-zigzag-order\n109: pnpm lab:run -- labs/chapter-04/exercise/E-04-04-binary-tree-level-and-zigzag-order --case 001-sample\n110: pnpm lab:score -- labs/chapter-04/exercise/E-04-04-binary-tree-level-and-zigzag-order\n111: ```\n112: \n113: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n114: ",
+      "answer_line": 115
+    },
+    {
+      "key": "E05",
+      "source": "labs/chapter-04/exercise/E-04-05-binary-tree-right-side-view/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-05：二叉树的右视图\"\n3: description: \"利用广度优先搜索或右优先深度优先搜索获取二叉树的右视图。\"\n4: order: 13\n5: chapter: 4\n6: labId: \"04E05\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"入门\"\n13: duration: \"20～30 分钟\"\n14: ---\n15: \n16: # Lab 04-E-05：二叉树的右视图\n17: \n18: 在第 4.3.3 节中，我们掌握了 BFS 层序遍历。本实验考查层序遍历的经典变体——二叉树右视图。\n19: \n20: ## 题目\n21: \n22: 给定一棵二叉树，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值序列。\n23: \n24: ## 输入格式\n25: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列。\n26: \n27: ## 输出格式\n28: - 一行以空格分隔的整数，表示右视图节点值序列。若为空树输出空行。\n29: \n30: ::: tip 💡 输入提示\n31: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n32: ```cpp\n33: std::vector<std::string> tokens;\n34: std::string token;\n35: while (std::cin >> token) tokens.push_back(token);\n36: ```\n37: :::\n38: \n39: ## 样例\n40: \n41: ### 样例输入 1\n42: ```input\n43: 1 2 3 null 5 null 4\n44: ```\n45: \n46: ### 样例输出 1\n47: ```output\n48: 1 3 4\n49: ```\n50: \n51: ### 样例输入 2\n52: ```input\n53: 1 2 3 4 null null null 5\n54: ```\n55: \n56: ### 样例输出 2\n57: ```output\n58: 1 3 4 5\n59: ```\n60: \n61: ### 样例输入 3\n62: ```input\n63: 1 2 null 3 null 4 null\n64: ```\n65: \n66: ### 样例输出 3\n67: ```output\n68: 1 2 3 4\n69: ```\n70: \n71: ### 样例解释\n72: \n73: ```text\n74: 样例 1 树形观测：                 样例 2 树形观测（左侧更深）：\n75:       1   <--- 看到 1                  1   <--- 看到 1\n76:     /   \\                            /   \\\n77:    2     3 <--- 看到 3                2     3 <--- 看到 3\n78:     \\     \\                         /\n79:      5     4 <--- 看到 4            4        <--- 看到 4\n80:                                   /\n81:                                  5         <--- 看到 5\n82: 右视图结果：1 3 4                 右视图结果：1 3 4 5\n83: ```\n84: \n85: ## 如何验证\n86: \n87: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n88: \n89: ```powershell\n90: # 已进入本 Lab 目录\n91: make doctor\n92: make run\n93: make run CASE=001-sample\n94: make interactive\n95: make score\n96: ```\n97: \n98: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n99: \n100: ```powershell\n101: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-05-binary-tree-right-side-view\n102: pnpm lab:run -- labs/chapter-04/exercise/E-04-05-binary-tree-right-side-view\n103: pnpm lab:run -- labs/chapter-04/exercise/E-04-05-binary-tree-right-side-view --case 001-sample\n104: pnpm lab:score -- labs/chapter-04/exercise/E-04-05-binary-tree-right-side-view\n105: ```\n106: \n107: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n108: ",
+      "answer_line": 109
+    },
+    {
+      "key": "E06",
+      "source": "labs/chapter-04/exercise/E-04-06-construct-binary-tree-pre-in/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-06：从前序与中序遍历构造二叉树\"\n3: description: \"通过前序确定根节点与中序划分区间的区间分治思想恢复二叉树。\"\n4: order: 14\n5: chapter: 4\n6: labId: \"04E06\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"进阶\"\n13: duration: \"25～35 分钟\"\n14: ---\n15: \n16: # Lab 04-E-06：从前序与中序遍历构造二叉树\n17: \n18: 在第 4.3.4 节中，我们推导了**唯一确定一棵二叉树的定理**：前序遍历与中序遍历结合，可以唯一重构出二叉树结构。\n19: \n20: ## 题目\n21: \n22: 给定两个整数数组 `preorder` 和 `inorder`，其中 `preorder` 是二叉树的先序遍历，`inorder` 是同一棵树的中序遍历（节点值各不相同），请构造二叉树并分别输出其**后序遍历**与**层序遍历**。\n23: \n24: ## 输入格式\n25: - 第一行：节点总数 $n$；\n26: - 第二行：$n$ 个整数，表示前序遍历；\n27: - 第三行：$n$ 个整数，表示中序遍历。\n28: \n29: ## 输出格式\n30: - 第一行：`POSTORDER:` 后跟空格分隔的后序遍历序列；\n31: - 第二行：`LEVELORDER:` 后跟空格分隔的层序遍历序列。\n32: \n33: ::: tip 💡 输入提示\n34: 先读取节点数量 $N$，再依次流式读入两个遍历序列：\n35: ```cpp\n36: int n;\n37: if (!(std::cin >> n) || n <= 0) return 0;\n38: std::vector<int> seq1(n), seq2(n);\n39: for (int i = 0; i < n; i++) std::cin >> seq1[i];\n40: for (int i = 0; i < n; i++) std::cin >> seq2[i];\n41: ```\n42: :::\n43: \n44: ## 样例\n45: \n46: ### 样例输入 1\n47: ```input\n48: 5\n49: 3 9 20 15 7\n50: 9 3 15 20 7\n51: ```\n52: \n53: ### 样例输出 1\n54: ```output\n55: POSTORDER: 9 15 7 20 3\n56: LEVELORDER: 3 9 20 15 7\n57: ```\n58: \n59: ### 样例输入 2\n60: ```input\n61: 4\n62: 1 2 3 4\n63: 4 3 2 1\n64: ```\n65: \n66: ### 样例输出 2\n67: ```output\n68: POSTORDER: 4 3 2 1\n69: LEVELORDER: 1 2 3 4\n70: ```\n71: \n72: ### 样例输入 3\n73: ```input\n74: 1\n75: 1\n76: 1\n77: ```\n78: \n79: ### 样例输出 3\n80: ```output\n81: POSTORDER: 1\n82: LEVELORDER: 1\n83: ```\n84: \n85: ### 区间分治示意图\n86: \n87: ```text\n88: 前序序列：[ 根节点 |      左子树前序      |      右子树前序      ]\n89:          preL    preL+1 ... preL+Lsize   preL+Lsize+1 ... preR\n90: \n91: 中序序列：[      左子树中序      | 根节点 |      右子树中序      ]\n92:          inL ... inRoot-1         inRoot  inRoot+1 ... inR\n93: \n94: 左子树节点个数 Lsize = inRoot - inL\n95: ```\n96: \n97: ## 如何验证\n98: \n99: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n100: \n101: ```powershell\n102: # 已进入本 Lab 目录\n103: make doctor\n104: make run\n105: make run CASE=001-sample\n106: make interactive\n107: make score\n108: ```\n109: \n110: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n111: \n112: ```powershell\n113: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-06-construct-binary-tree-pre-in\n114: pnpm lab:run -- labs/chapter-04/exercise/E-04-06-construct-binary-tree-pre-in\n115: pnpm lab:run -- labs/chapter-04/exercise/E-04-06-construct-binary-tree-pre-in --case 001-sample\n116: pnpm lab:score -- labs/chapter-04/exercise/E-04-06-construct-binary-tree-pre-in\n117: ```\n118: \n119: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n120: ",
+      "answer_line": 121
+    },
+    {
+      "key": "E07",
+      "source": "labs/chapter-04/exercise/E-04-07-construct-binary-tree-in-post/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-07：从中序与后序遍历构造二叉树\"\n3: description: \"通过后序确定根节点与中序划分区间的镜像分治恢复二叉树。\"\n4: order: 15\n5: chapter: 4\n6: labId: \"04E07\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"进阶\"\n13: duration: \"25～35 分钟\"\n14: ---\n15: \n16: # Lab 04-E-07：从中序与后序遍历构造二叉树\n17: \n18: 在第 4.3.4 节中，我们学习了中序遍历与后序遍历结合重构二叉树的算法原理。\n19: \n20: ## 题目\n21: \n22: 给定两个整数数组 `inorder` 和 `postorder`，其中 `inorder` 是二叉树的中序遍历，`postorder` 是同一棵树的后序遍历（节点值各不相同），请构造二叉树并分别输出其**前序遍历**与**层序遍历**。\n23: \n24: ## 输入格式\n25: - 第一行：节点总数 $n$；\n26: - 第二行：$n$ 个整数，表示中序遍历；\n27: - 第三行：$n$ 个整数，表示后序遍历。\n28: \n29: ## 输出格式\n30: - 第一行：`PREORDER:` 后跟空格分隔的前序遍历序列；\n31: - 第二行：`LEVELORDER:` 后跟空格分隔的层序遍历序列。\n32: \n33: ::: tip 💡 输入提示\n34: 先读取节点数量 $N$，再依次流式读入两个遍历序列：\n35: ```cpp\n36: int n;\n37: if (!(std::cin >> n) || n <= 0) return 0;\n38: std::vector<int> seq1(n), seq2(n);\n39: for (int i = 0; i < n; i++) std::cin >> seq1[i];\n40: for (int i = 0; i < n; i++) std::cin >> seq2[i];\n41: ```\n42: :::\n43: \n44: ## 样例\n45: \n46: ### 样例输入 1\n47: ```input\n48: 5\n49: 9 3 15 20 7\n50: 9 15 7 20 3\n51: ```\n52: \n53: ### 样例输出 1\n54: ```output\n55: PREORDER: 3 9 20 15 7\n56: LEVELORDER: 3 9 20 15 7\n57: ```\n58: \n59: ### 样例输入 2\n60: ```input\n61: 4\n62: 4 3 2 1\n63: 4 3 2 1\n64: ```\n65: \n66: ### 样例输出 2\n67: ```output\n68: PREORDER: 1 2 3 4\n69: LEVELORDER: 1 2 3 4\n70: ```\n71: \n72: ### 样例输入 3\n73: ```input\n74: 1\n75: 1\n76: 1\n77: ```\n78: \n79: ### 样例输出 3\n80: ```output\n81: PREORDER: 1\n82: LEVELORDER: 1\n83: ```\n84: \n85: ## 如何验证\n86: \n87: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n88: \n89: ```powershell\n90: # 已进入本 Lab 目录\n91: make doctor\n92: make run\n93: make run CASE=001-sample\n94: make interactive\n95: make score\n96: ```\n97: \n98: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n99: \n100: ```powershell\n101: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-07-construct-binary-tree-in-post\n102: pnpm lab:run -- labs/chapter-04/exercise/E-04-07-construct-binary-tree-in-post\n103: pnpm lab:run -- labs/chapter-04/exercise/E-04-07-construct-binary-tree-in-post --case 001-sample\n104: pnpm lab:score -- labs/chapter-04/exercise/E-04-07-construct-binary-tree-in-post\n105: ```\n106: \n107: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n108: ",
+      "answer_line": 109
+    },
+    {
+      "key": "E08",
+      "source": "labs/chapter-04/exercise/E-04-08-flatten-binary-tree-to-linked-list/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-08：二叉树展开为链表\"\n3: description: \"通过原地指针变换将二叉树按先序遍历顺序展开为单向右链表。\"\n4: order: 16\n5: chapter: 4\n6: labId: \"04E08\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"进阶\"\n13: duration: \"20～30 分钟\"\n14: ---\n15: \n16: # Lab 04-E-08：二叉树展开为链表\n17: \n18: 在第 4.4 节中，我们学习了线索化二叉树利用空指针重定向的思想。本题是先序遍历的原地指针重组经典题目。\n19: \n20: ## 题目\n21: \n22: 给你二叉树的根节点 `root` ，请你将它展开为一个单链表：\n23: - 展开后的单链表应该同样使用 `TreeNode` ，其中 `right` 子指针指向链表中下一个节点，而 `left` 子指针始终为 `nullptr` 。\n24: - 展开后的单链表应该与二叉树**先序遍历**顺序相同。\n25: - 要求在原树上完成指针调整（原地修改，$O(1)$ 额外空间）。\n26: \n27: ## 输入格式\n28: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列。\n29: \n30: ## 输出格式\n31: - 输出一行展开后单链表的节点值序列，以空格分隔；若为空树输出 `<empty>`。\n32: \n33: ::: tip 💡 输入提示\n34: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n35: ```cpp\n36: std::vector<std::string> tokens;\n37: std::string token;\n38: while (std::cin >> token) tokens.push_back(token);\n39: ```\n40: :::\n41: \n42: ## 样例\n43: \n44: ### 样例输入 1\n45: ```input\n46: 1 2 5 3 4 null 6\n47: ```\n48: \n49: ### 样例输出 1\n50: ```output\n51: 1 2 3 4 5 6\n52: ```\n53: \n54: ### 样例输入 2\n55: ```input\n56: 1 2 null 3 null\n57: ```\n58: \n59: ### 样例输出 2\n60: ```output\n61: 1 2 3\n62: ```\n63: \n64: ### 样例输入 3\n65: ```input\n66: null\n67: ```\n68: \n69: ### 样例输出 3\n70: ```output\n71: <empty>\n72: ```\n73: \n74: ### 原地指针嫁接示意图\n75: \n76: ```text\n77: 原树状态：                  找到左子树最右节点 4：           将 5 嫁接到 4 的右侧并右移：\n78:     1                          1                             1\n79:   /   \\                       /   \\                            \\\n80:  2     5                     2     5                            2\n81: / \\     \\                   / \\     \\                          / \\\n82: 3   4     6                 3   4 --> 5                        3   4\n83:                                        \\                            \\\n84:                                         6                            5\n85:                                                                       \\\n86:                                                                        6\n87: ```\n88: \n89: ## 如何验证\n90: \n91: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n92: \n93: ```powershell\n94: # 已进入本 Lab 目录\n95: make doctor\n96: make run\n97: make run CASE=001-sample\n98: make interactive\n99: make score\n100: ```\n101: \n102: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n103: \n104: ```powershell\n105: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-08-flatten-binary-tree-to-linked-list\n106: pnpm lab:run -- labs/chapter-04/exercise/E-04-08-flatten-binary-tree-to-linked-list\n107: pnpm lab:run -- labs/chapter-04/exercise/E-04-08-flatten-binary-tree-to-linked-list --case 001-sample\n108: pnpm lab:score -- labs/chapter-04/exercise/E-04-08-flatten-binary-tree-to-linked-list\n109: ```\n110: \n111: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n112: ",
+      "answer_line": 113
+    },
+    {
+      "key": "E09",
+      "source": "labs/chapter-04/exercise/E-04-09-symmetric-tree/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-09：对称二叉树判定\"\n3: description: \"通过双树镜像下潜递归比较判定一棵二叉树是否镜像对称。\"\n4: order: 17\n5: chapter: 4\n6: labId: \"04E09\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"入门\"\n13: duration: \"15～25 分钟\"\n14: ---\n15: \n16: # Lab 04-E-09：对称二叉树判定\n17: \n18: 在第 4.6.2 节中，我们讨论了二叉树的“判断类”问题。本题考查经典的双树同步镜像递归比较。\n19: \n20: ## 题目\n21: \n22: 给你一个二叉树的根节点 `root` ，检查它是否轴对称（即是否为自身的镜像）。\n23: \n24: ## 输入格式\n25: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列。\n26: \n27: ## 输出格式\n28: - 一行输出 `true` 或 `false`。\n29: \n30: ::: tip 💡 输入提示\n31: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n32: ```cpp\n33: std::vector<std::string> tokens;\n34: std::string token;\n35: while (std::cin >> token) tokens.push_back(token);\n36: ```\n37: :::\n38: \n39: ## 样例\n40: \n41: ### 样例输入 1\n42: ```input\n43: 1 2 2 3 4 4 3\n44: ```\n45: \n46: ### 样例输出 1\n47: ```output\n48: true\n49: ```\n50: \n51: ### 样例输入 2\n52: ```input\n53: 1 2 2 null 3 null 3\n54: ```\n55: \n56: ### 样例输出 2\n57: ```output\n58: false\n59: ```\n60: \n61: ### 样例输入 3\n62: ```input\n63: 1\n64: ```\n65: \n66: ### 样例输出 3\n67: ```output\n68: true\n69: ```\n70: \n71: ## 如何验证\n72: \n73: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n74: \n75: ```powershell\n76: # 已进入本 Lab 目录\n77: make doctor\n78: make run\n79: make run CASE=001-sample\n80: make interactive\n81: make score\n82: ```\n83: \n84: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n85: \n86: ```powershell\n87: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-09-symmetric-tree\n88: pnpm lab:run -- labs/chapter-04/exercise/E-04-09-symmetric-tree\n89: pnpm lab:run -- labs/chapter-04/exercise/E-04-09-symmetric-tree --case 001-sample\n90: pnpm lab:score -- labs/chapter-04/exercise/E-04-09-symmetric-tree\n91: ```\n92: \n93: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n94: ",
+      "answer_line": 95
+    },
+    {
+      "key": "E10",
+      "source": "labs/chapter-04/exercise/E-04-10-subtree-of-another-tree/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-10：另一棵树的子树\"\n3: description: \"通过双重递归或树结构哈希判定一棵树是否包含另一棵树的全部结构。\"\n4: order: 18\n5: chapter: 4\n6: labId: \"04E10\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"入门\"\n13: duration: \"20～30 分钟\"\n14: ---\n15: \n16: # Lab 04-E-10：另一棵树的子树\n17: \n18: 在第 4.6.2 节中，我们学习了如何判断两棵树是否相同（`isSameTree`）。本题的子树匹配其实就是它的直接进阶：先遍历主树找到起点，再调用 `isSameTree` 逐个比对节点。\n19: \n20: ## 题目\n21: \n22: 给你两棵二叉树 `root` 和 `subRoot` 。检验 `root` 中是否包含和 `subRoot` 具有相同结构和节点值的子树。如果存在，返回 `true` ；否则，返回 `false` 。\n23: \n24: ## 输入格式\n25: - 第一行：主树 `root` 的层序遍历序列；\n26: - 第二行：子树 `subRoot` 的层序遍历序列。\n27: \n28: ## 输出格式\n29: - 输出一行 `true` 或 `false`。\n30: \n31: ::: tip 💡 输入提示\n32: 本题包含两行输入（主树与子树）。需引入 `<sstream>` 按行读取并分词，避免两棵树混杂：\n33: ```cpp\n34: #include <sstream>\n35: \n36: std::string line, token;\n37: std::getline(std::cin, line);\n38: std::stringstream ss(line);\n39: while (ss >> token) tokens.push_back(token);\n40: ```\n41: :::\n42: \n43: ## 样例\n44: \n45: ### 样例输入 1\n46: ```input\n47: 3 4 5 1 2\n48: 4 1 2\n49: ```\n50: \n51: ### 样例输出 1\n52: ```output\n53: true\n54: ```\n55: \n56: ### 样例输入 2\n57: ```input\n58: 3 4 5 1 2 null null null null 0\n59: 4 1 2\n60: ```\n61: \n62: ### 样例输出 2\n63: ```output\n64: false\n65: ```\n66: \n67: ### 样例输入 3\n68: ```input\n69: 1 2 3\n70: 1 2 3\n71: ```\n72: \n73: ### 样例输出 3\n74: ```output\n75: true\n76: ```\n77: \n78: ## 如何验证\n79: \n80: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n81: \n82: ```powershell\n83: # 已进入本 Lab 目录\n84: make doctor\n85: make run\n86: make run CASE=001-sample\n87: make interactive\n88: make score\n89: ```\n90: \n91: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n92: \n93: ```powershell\n94: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-10-subtree-of-another-tree\n95: pnpm lab:run -- labs/chapter-04/exercise/E-04-10-subtree-of-another-tree\n96: pnpm lab:run -- labs/chapter-04/exercise/E-04-10-subtree-of-another-tree --case 001-sample\n97: pnpm lab:score -- labs/chapter-04/exercise/E-04-10-subtree-of-another-tree\n98: ```\n99: \n100: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n101: ",
+      "answer_line": 102
+    },
+    {
+      "key": "E11",
+      "source": "labs/chapter-04/exercise/E-04-11-sum-root-to-leaf-numbers/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-11：求根节点到叶节点数字之和\"\n3: description: \"利用前序遍历与自顶向下数值累乘累加，计算所有根到叶数字的总和。\"\n4: order: 19\n5: chapter: 4\n6: labId: \"04E11\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"入门\"\n13: duration: \"20～30 分钟\"\n14: ---\n15: \n16: # Lab 04-E-11：求根节点到叶节点数字之和\n17: \n18: 在第 4.6.4 节中，我们学习了二叉树的“路径类”问题。\n19: \n20: ## 题目\n21: \n22: 给你一个二叉树的根节点 `root` ，树中每个节点都存放有一个 `0` 到 `9` 之间的数字。\n23: 每条从根节点到叶节点的路径都代表一个数字：\n24: - 例如，从根到叶节点的路径 `1 -> 2 -> 3` 表示数字 `123` 。\n25: 计算从根节点到叶节点生成的**所有数字之和**。\n26: \n27: ## 输入格式\n28: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列。\n29: \n30: ## 输出格式\n31: - 输出一个整数，表示所有路径数字的总和。\n32: \n33: ::: tip 💡 输入提示\n34: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n35: ```cpp\n36: std::vector<std::string> tokens;\n37: std::string token;\n38: while (std::cin >> token) tokens.push_back(token);\n39: ```\n40: :::\n41: \n42: ## 样例\n43: \n44: ### 样例输入 1\n45: ```input\n46: 1 2 3\n47: ```\n48: \n49: ### 样例输出 1\n50: ```output\n51: 25\n52: ```\n53: \n54: ### 样例输入 2\n55: ```input\n56: 4 9 0 5 1\n57: ```\n58: \n59: ### 样例输出 2\n60: ```output\n61: 1026\n62: ```\n63: \n64: ### 样例输入 3\n65: ```input\n66: 9\n67: ```\n68: \n69: ### 样例输出 3\n70: ```output\n71: 9\n72: ```\n73: \n74: ### 样例解释\n75: \n76: 对于样例 2（树形：根 4，左孩子 9 [子节点 5, 1]，右孩子 0）：\n77: - 路径 4->9->5 对应数字 495；\n78: - 路径 4->9->1 对应数字 491；\n79: - 路径 4->0 对应数字 40；\n80: - 总和 = 495 + 491 + 40 = 1026。\n81: \n82: ## 如何验证\n83: \n84: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n85: \n86: ```powershell\n87: # 已进入本 Lab 目录\n88: make doctor\n89: make run\n90: make run CASE=001-sample\n91: make interactive\n92: make score\n93: ```\n94: \n95: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n96: \n97: ```powershell\n98: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-11-sum-root-to-leaf-numbers\n99: pnpm lab:run -- labs/chapter-04/exercise/E-04-11-sum-root-to-leaf-numbers\n100: pnpm lab:run -- labs/chapter-04/exercise/E-04-11-sum-root-to-leaf-numbers --case 001-sample\n101: pnpm lab:score -- labs/chapter-04/exercise/E-04-11-sum-root-to-leaf-numbers\n102: ```\n103: \n104: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n105: ",
+      "answer_line": 106
+    },
+    {
+      "key": "E12",
+      "source": "labs/chapter-04/exercise/E-04-12-path-sum-all-paths/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-12：路径总和 II（收集所有路径）\"\n3: description: \"通过显式回溯收集所有满足目标和的根到叶完整路径。\"\n4: order: 20\n5: chapter: 4\n6: labId: \"04E12\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"进阶\"\n13: duration: \"25～35 分钟\"\n14: ---\n15: \n16: # Lab 04-E-12：路径总和 II（收集所有路径）\n17: \n18: 在第 4.6.4 节中，我们系统学习了树上回溯（Backtracking）与路径收集模型。\n19: \n20: ## 题目\n21: \n22: 给你二叉树的根节点 `root` 和一个整数目标和 `targetSum` ，找出所有**从根节点到叶子节点**路径总和等于给定目标和的路径。如果不存在任何满足条件的路径，输出 `NONE`。\n23: \n24: ## 输入格式\n25: - 第一行：二叉树的层序遍历序列；\n26: - 第二行：一个整数 `targetSum`。\n27: \n28: ## 输出格式\n29: - 每行输出一条符合条件的路径，节点值之间用空格分隔；若无路径输出 `NONE`。\n30: \n31: ::: tip 💡 输入提示\n32: 本题第 1 行为树序列，第 2 行为 `targetSum`。需引入 `<sstream>` 按行切分以防数据混淆：\n33: ```cpp\n34: #include <sstream>\n35: \n36: std::string line, token;\n37: std::getline(std::cin, line);\n38: std::stringstream ss(line);\n39: while (ss >> token) tokens.push_back(token);\n40: int targetSum;\n41: std::cin >> targetSum;\n42: ```\n43: :::\n44: \n45: ## 样例\n46: \n47: ### 样例输入 1\n48: ```input\n49: 5 4 8 11 null 13 4 7 2 null null 5 1\n50: 22\n51: ```\n52: \n53: ### 样例输出 1\n54: ```output\n55: 5 4 11 2\n56: 5 8 4 5\n57: ```\n58: \n59: ### 样例输入 2\n60: ```input\n61: 1 2 3\n62: 5\n63: ```\n64: \n65: ### 样例输出 2\n66: ```output\n67: NONE\n68: ```\n69: \n70: ### 样例输入 3\n71: ```input\n72: 1 2\n73: 3\n74: ```\n75: \n76: ### 样例输出 3\n77: ```output\n78: 1 2\n79: ```\n80: \n81: ## 如何验证\n82: \n83: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n84: \n85: ```powershell\n86: # 已进入本 Lab 目录\n87: make doctor\n88: make run\n89: make run CASE=001-sample\n90: make interactive\n91: make score\n92: ```\n93: \n94: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n95: \n96: ```powershell\n97: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-12-path-sum-all-paths\n98: pnpm lab:run -- labs/chapter-04/exercise/E-04-12-path-sum-all-paths\n99: pnpm lab:run -- labs/chapter-04/exercise/E-04-12-path-sum-all-paths --case 001-sample\n100: pnpm lab:score -- labs/chapter-04/exercise/E-04-12-path-sum-all-paths\n101: ```\n102: \n103: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n104: ",
+      "answer_line": 105
+    },
+    {
+      "key": "E13",
+      "source": "labs/chapter-04/exercise/E-04-13-diameter-of-binary-tree/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-13：二叉树的直径\"\n3: description: \"掌握自底向上后序递归思想，通过单侧深度汇报与全局跨根路径更新计算二叉树直径。\"\n4: order: 21\n5: chapter: 4\n6: labId: \"04E13\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"进阶\"\n13: duration: \"20～30 分钟\"\n14: ---\n15: \n16: # Lab 04-E-13：二叉树的直径\n17: \n18: 在第 4.6.5 节中，我们学习了自底向上的递归汇总思想：二叉树的最长路径必然在某个最高节点处“拐弯”。递归函数只需向上汇报当前节点的**单侧最大深度**，在回溯时顺便计算以当前节点为最高拐弯点的**左深度与右深度之和**，即可在 $O(n)$ 时间内顺手更新出全局最大直径。\n19: \n20: ## 题目\n21: \n22: 给定一棵二叉树，你需要计算它的**直径长度**。一棵二叉树的直径长度是树中任意两个节点之间最长路径的**边数**。这条路径可能穿过也可能不穿过根节点。\n23: \n24: ## 输入格式\n25: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列。\n26: \n27: ## 输出格式\n28: - 输出一个整数，表示二叉树的直径长度（边数）。\n29: \n30: ::: tip 💡 输入提示\n31: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n32: ```cpp\n33: std::vector<std::string> tokens;\n34: std::string token;\n35: while (std::cin >> token) tokens.push_back(token);\n36: ```\n37: :::\n38: \n39: ## 样例\n40: \n41: ### 样例输入 1\n42: ```input\n43: 1 2 3 4 5\n44: ```\n45: \n46: ### 样例输出 1\n47: ```output\n48: 3\n49: ```\n50: \n51: ### 样例输入 2\n52: ```input\n53: 1 2 null 3 4 5 null null 6\n54: ```\n55: \n56: ### 样例输出 2\n57: ```output\n58: 4\n59: ```\n60: \n61: ### 样例输入 3\n62: ```input\n63: 1\n64: ```\n65: \n66: ### 样例输出 3\n67: ```output\n68: 0\n69: ```\n70: \n71: ### 路径不经过根节点的典型结构\n72: \n73: ```text\n74: 样例 2 树形：\n75:          1\n76:         /\n77:        2          <-- 最大直径经过节点 2（边数 = 4），而不穿过根节点 1！\n78:       / \\\n79:      3   4\n80:     /     \\\n81:    5       6\n82: 最长路径为 5 -> 3 -> 2 -> 4 -> 6，经过 4 条边，直径为 4。\n83: ```\n84: \n85: ## 如何验证\n86: \n87: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n88: \n89: ```powershell\n90: # 已进入本 Lab 目录\n91: make doctor\n92: make run\n93: make run CASE=001-sample\n94: make interactive\n95: make score\n96: ```\n97: \n98: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n99: \n100: ```powershell\n101: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-13-diameter-of-binary-tree\n102: pnpm lab:run -- labs/chapter-04/exercise/E-04-13-diameter-of-binary-tree\n103: pnpm lab:run -- labs/chapter-04/exercise/E-04-13-diameter-of-binary-tree --case 001-sample\n104: pnpm lab:score -- labs/chapter-04/exercise/E-04-13-diameter-of-binary-tree\n105: ```\n106: \n107: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n108: ",
+      "answer_line": 109
+    },
+    {
+      "key": "E14",
+      "source": "labs/chapter-04/exercise/E-04-14-lowest-common-ancestor/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-14：二叉树的最近公共祖先\"\n3: description: \"利用后序遍历自底向上汇聚左右子树目标节点状态，求解最近公共祖先 LCA。\"\n4: order: 22\n5: chapter: 4\n6: labId: \"04E14\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"进阶\"\n13: duration: \"25～35 分钟\"\n14: ---\n15: \n16: # Lab 04-E-14：二叉树的最近公共祖先\n17: \n18: 在第 4.6.5 节中，我们探讨了后序遍历状态汇聚的经典代表——最近公共祖先（Lowest Common Ancestor, LCA）。\n19: \n20: ## 题目\n21: \n22: 给定一棵二叉树以及树中的两个指定节点 $p$ 和 $q$，找到它们的**最近公共祖先（Lowest Common Ancestor, LCA）**。\n23: \n24: 最近公共祖先是指：在二叉树中同时为 $p$ 和 $q$ 的祖先、且在树中**深度最深（离两节点最近）**的节点（注：一个节点也可以是其自身的祖先）。\n25: \n26: ## 输入格式\n27: - 第一行：二叉树的层序遍历序列；\n28: - 第二行：两个整数 $p$ 和 $q$。\n29: \n30: ## 输出格式\n31: - 输出一个整数，表示最近公共祖先节点的值。\n32: \n33: ::: tip 💡 输入提示\n34: 本题第 1 行为树序列，第 2 行为节点 `p` 和 `q`。需引入 `<sstream>` 按行切分以防数据混淆：\n35: ```cpp\n36: #include <sstream>\n37: \n38: std::string line, token;\n39: std::getline(std::cin, line);\n40: std::stringstream ss(line);\n41: while (ss >> token) tokens.push_back(token);\n42: int p, q;\n43: std::cin >> p >> q;\n44: ```\n45: :::\n46: \n47: ## 样例\n48: \n49: ### 样例输入 1\n50: ```input\n51: 3 5 1 6 2 0 8 null null 7 4\n52: 5 1\n53: ```\n54: \n55: ### 样例输出 1\n56: ```output\n57: 3\n58: ```\n59: \n60: ### 样例输入 2\n61: ```input\n62: 3 5 1 6 2 0 8 null null 7 4\n63: 5 4\n64: ```\n65: \n66: ### 样例输出 2\n67: ```output\n68: 5\n69: ```\n70: \n71: ### 样例输入 3\n72: ```input\n73: 1 2\n74: 1 2\n75: ```\n76: \n77: ### 样例输出 3\n78: ```output\n79: 1\n80: ```\n81: \n82: ## 如何验证\n83: \n84: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n85: \n86: ```powershell\n87: # 已进入本 Lab 目录\n88: make doctor\n89: make run\n90: make run CASE=001-sample\n91: make interactive\n92: make score\n93: ```\n94: \n95: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n96: \n97: ```powershell\n98: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-14-lowest-common-ancestor\n99: pnpm lab:run -- labs/chapter-04/exercise/E-04-14-lowest-common-ancestor\n100: pnpm lab:run -- labs/chapter-04/exercise/E-04-14-lowest-common-ancestor --case 001-sample\n101: pnpm lab:score -- labs/chapter-04/exercise/E-04-14-lowest-common-ancestor\n102: ```\n103: \n104: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n105: ",
+      "answer_line": 106
+    },
+    {
+      "key": "E15",
+      "source": "labs/chapter-04/exercise/E-04-15-binary-tree-maximum-path-sum/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-15：二叉树中的最大路径和\"\n3: description: \"通过后序遍历与树形动态规划，计算任意两节点间非空路径的最大权值和。\"\n4: order: 23\n5: chapter: 4\n6: labId: \"04E15\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-23\"\n9: contributors: [\"Wanderer0\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"挑战\"\n13: duration: \"30～45 分钟\"\n14: ---\n15: \n16: # Lab 04-E-15：二叉树中的最大路径和\n17: \n18: 作为第 4 章的压轴挑战题，本题综合考查树形动态规划（Tree DP）与后序自底向上状态转移。\n19: \n20: ## 题目\n21: \n22: 二叉树中的**路径**被定义为一条节点序列，序列中每对相邻节点之间都存在一条边。同一个节点在一条路径序列中**至多出现一次**。该路径**至少包含一个**节点，且不一定经过根节点。\n23: **路径和**是路径中各节点值的总和。\n24: 给你一个二叉树的根节点 `root` ，返回其**最大路径和**。\n25: \n26: ## 输入格式\n27: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列。\n28: \n29: ## 输出格式\n30: - 输出一个整数，表示最大路径和。\n31: \n32: ::: tip 💡 输入提示\n33: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n34: ```cpp\n35: std::vector<std::string> tokens;\n36: std::string token;\n37: while (std::cin >> token) tokens.push_back(token);\n38: ```\n39: :::\n40: \n41: ## 样例\n42: \n43: ### 样例输入 1\n44: ```input\n45: 1 2 3\n46: ```\n47: \n48: ### 样例输出 1\n49: ```output\n50: 6\n51: ```\n52: \n53: ### 样例输入 2\n54: ```input\n55: -10 9 20 null null 15 7\n56: ```\n57: \n58: ### 样例输出 2\n59: ```output\n60: 42\n61: ```\n62: \n63: ### 样例输入 3\n64: ```input\n65: -3\n66: ```\n67: \n68: ### 样例输出 3\n69: ```output\n70: -3\n71: ```\n72: \n73: ### 样例解释\n74: \n75: 对于样例 2（树形：根 -10，左 9，右 20 [子节点 15, 7]）：\n76: - 最优路径为 15 -> 20 -> 7；\n77: - 最大路径和 = 15 + 20 + 7 = 42。\n78: - 根节点 -10 由于贡献为负，被优雅地排除在全局最大路径之外。\n79: \n80: ## 如何验证\n81: \n82: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n83: \n84: ```powershell\n85: # 已进入本 Lab 目录\n86: make doctor\n87: make run\n88: make run CASE=001-sample\n89: make interactive\n90: make score\n91: ```\n92: \n93: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n94: \n95: ```powershell\n96: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-15-binary-tree-maximum-path-sum\n97: pnpm lab:run -- labs/chapter-04/exercise/E-04-15-binary-tree-maximum-path-sum\n98: pnpm lab:run -- labs/chapter-04/exercise/E-04-15-binary-tree-maximum-path-sum --case 001-sample\n99: pnpm lab:score -- labs/chapter-04/exercise/E-04-15-binary-tree-maximum-path-sum\n100: ```\n101: \n102: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n103: ",
+      "answer_line": 104
+    },
+    {
+      "key": "E16",
+      "source": "labs/chapter-04/exercise/E-04-16-network-optimal-location/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-16：网络最优选址\"\n3: description: \"利用换根动态规划，高效计算以每个节点为根时的全树距离和。\"\n4: order: 24\n5: chapter: 4\n6: labId: \"04E16\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-25\"\n9: contributors: [\"czjLUCK\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"挑战\"\n13: duration: \"45～60 分钟\"\n14: ---\n15: \n16: # Lab 04-E-16：网络最优选址\n17: \n18: 某物流公司的配送网络是一棵 $n$ 个节点的树，每条边有单位距离运输成本。需要为每个候选配送中心计算：若以该节点为中心，到所有仓库的总运输成本是多少？\n19: \n20: ## 题目\n21: \n22: ### 网络最优选址\n23: \n24: 给定一棵带权树，计算以**每个节点**为配送中心时的总运输成本。\n25: \n26: ### 任务要求\n27: \n28: 1. 从标准输入读入树的节点数和边权信息；\n29: 2. 使用**换根动态规划**在 $O(n)$ 时间内计算出所有答案；\n30: 3. 输出每个节点作为中心时的总运输成本。\n31: \n32: ## 输入格式\n33: \n34: - 第一行：一个整数 $n$（$1 \\le n \\le 10^5$），表示节点数；\n35: - 接下来 $n-1$ 行，每行三个整数 $u\\; v\\; w$，表示节点 $u$ 和 $v$ 之间有一条权值为 $w$ 的边。\n36: \n37: ## 输出格式\n38: \n39: - 输出 $n$ 行，第 $i$ 行（$1 \\le i \\le n$）输出以节点 $i$ 为中心时的总运输成本；\n40: - 每个答案使用**64 位整数**输出。\n41: \n42: ## 数据范围与限制\n43: \n44: | 项目 | 范围 |\n45: | --- | --- |\n46: | 节点数 $n$ | $1 \\le n \\le 10^5$ |\n47: | 边权 $w$ | $1 \\le w \\le 10^4$ |\n48: | 时间复杂度要求 | $O(n)$ |\n49: | 额外空间限制 | $O(n)$ |\n50: \n51: ::: tip 关于答案范围\n52: 总运输成本最大可达 $n \\times (n-1) \\times w_{\\max} \\approx 10^{14}$，超出 32 位整数范围，请使用 `long long`。\n53: :::\n54: \n55: ## 样例\n56: \n57: ### 样例输入 1\n58: \n59: ```input\n60: 3\n61: 1 2 1\n62: 2 3 2\n63: ```\n64: \n65: ### 样例输出 1\n66: \n67: ```output\n68: 4\n69: 3\n70: 5\n71: ```\n72: \n73: ### 样例解释 1\n74: \n75: 树为链 $1-2-3$，边 $(1,2)$ 权值为 1，边 $(2,3)$ 权值为 2：\n76: \n77: | 中心 | 到节点 1 | 到节点 2 | 到节点 3 | 总和 |\n78: | --- | --- | --- | --- | --- |\n79: | 1 | 0 | 1 | 1+2=3 | 4 |\n80: | 2 | 1 | 0 | 2 | 3 |\n81: | 3 | 2+1=3 | 2 | 0 | 5 |\n82: \n83: ### 样例输入 2\n84: \n85: ```input\n86: 1\n87: ```\n88: \n89: ### 样例输出 2\n90: \n91: ```output\n92: 0\n93: ```\n94: \n95: ### 样例解释 2\n96: \n97: 只有一个节点，到自己距离为 0。\n98: \n99: ## 如何验证\n100: \n101: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n102: \n103: ```powershell\n104: # 已进入本 Lab 目录\n105: make doctor\n106: make run\n107: make run CASE=001-sample\n108: make interactive\n109: make score\n110: ```\n111: \n112: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n113: \n114: ```powershell\n115: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-16-network-optimal-location\n116: pnpm lab:run -- labs/chapter-04/exercise/E-04-16-network-optimal-location\n117: pnpm lab:run -- labs/chapter-04/exercise/E-04-16-network-optimal-location --case 001-sample\n118: pnpm lab:score -- labs/chapter-04/exercise/E-04-16-network-optimal-location\n119: ```\n120: \n121: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n122: ",
+      "answer_line": 123
+    },
+    {
+      "key": "E17",
+      "source": "labs/chapter-04/exercise/E-04-17-research-team-formation/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-17：科研团队组建\"\n3: description: \"在树形依赖结构上做背包动态规划，求满足依赖约束的最大价值选择方案。\"\n4: order: 25\n5: chapter: 4\n6: labId: \"04E17\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-25\"\n9: contributors: [\"czjLUCK\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"挑战\"\n13: duration: \"50～70 分钟\"\n14: ---\n15: \n16: # Lab 04-E-17：科研团队组建\n17: \n18: 某研究院有 $n$ 名研究员，形成一棵树形的汇报关系。现在要组建一支 $k$ 人的精英团队，规则是：**如果选了某位研究员，其直属上级也必须入选**（否则无法协调）。每名研究员有一个能力值，求团队能力值总和的最大值。\n19: \n20: ## 题目\n21: \n22: ### 科研团队组建\n23: \n24: 给定一棵有根树（根为 1 号节点），每个节点有一个能力值（可正可负）。需要恰好选择 $k$ 个节点，满足依赖规则：若选了某个节点，则其父节点也必须被选中。求最大能力值总和。\n25: \n26: ### 任务要求\n27: \n28: 1. 从标准输入读入树的结构、节点能力值和团队人数 $k$；\n29: 2. 使用**树形背包动态规划**求解；\n30: 3. 输出最大能力值总和。\n31: \n32: ## 输入格式\n33: \n34: - 第一行：两个整数 $n$ 和 $k$（$1 \\le k \\le n \\le 10^3$）；\n35: - 接下来 $n-1$ 行，每行两个整数 $u\\; v$，表示 $v$ 是 $u$ 的子节点（即 $u$ 是 $v$ 的上级）；\n36: - 最后一行：$n$ 个整数，第 $i$ 个整数表示节点 $i$ 的能力值 $val_i$。\n37: \n38: ## 输出格式\n39: \n40: - 输出一个整数，表示满足条件的 $k$ 人团队的最大能力值总和。\n41: - 若无法组建（如 $k$ 小于最小必需人数），输出 `IMPOSSIBLE`。\n42: \n43: ## 数据范围与限制\n44: \n45: | 项目 | 范围 |\n46: | --- | --- |\n47: | 节点数 $n$ | $1 \\le n \\le 10^3$ |\n48: | 团队人数 $k$ | $1 \\le k \\le n$ |\n49: | 能力值 $val_i$ | $-10^4 \\le val_i \\le 10^4$ |\n50: | 时间复杂度要求 | $O(n \\cdot k^2)$ 或更优 |\n51: | 额外空间限制 | $O(n \\cdot k)$ |\n52: \n53: ::: tip 关于根节点\n54: 树以节点 1 为根。根节点 1 若被选中，不需要满足额外的父节点约束。若根节点 1 的能力值为负，可以选择不包含它——但此时它的子节点都无法被选中。设计 DP 状态时需要考虑这一边界情况。\n55: :::\n56: \n57: ## 样例\n58: \n59: ### 样例输入 1\n60: \n61: ```input\n62: 5 3\n63: 1 2\n64: 1 3\n65: 2 4\n66: 2 5\n67: 10 5 3 2 1\n68: ```\n69: \n70: ### 样例输出 1\n71: \n72: ```output\n73: 18\n74: ```\n75: \n76: ### 样例解释 1\n77: \n78: 树结构：\n79: \n80: ```\n81:       1(10)\n82:      /     \\\n83:    2(5)   3(3)\n84:   /    \\\n85: 4(2)  5(1)\n86: ```\n87: \n88: 选节点 $\\{1, 2, 4\\}$：总和 $= 10 + 5 + 2 = 17$。  \n89: 选节点 $\\{1, 2, 5\\}$：总和 $= 10 + 5 + 1 = 16$。  \n90: 选节点 $\\{1, 3, 2\\}$：总和 $= 10 + 3 + 5 = 18$。  \n91: 选节点 $\\{1, 2, 3\\}$：总和 $= 10 + 5 + 3 = 18$。\n92: \n93: 最大值为 18。\n94: \n95: ### 样例输入 2\n96: \n97: ```input\n98: 3 2\n99: 1 2\n100: 1 3\n101: -5 3 4\n102: ```\n103: \n104: ### 样例输出 2\n105: \n106: ```output\n107: 2\n108: ```\n109: \n110: ### 样例解释 2\n111: \n112: 根节点 1 能力值为 $-5$。若选 1，则最多再选一个子节点，最大总和 $= -5 + 4 = -1$。  \n113: 若不选 1，则无法选任何节点（依赖约束）。  \n114: 但题目要求恰好选 $k=2$ 个节点，所以必须选 1 和其中一个子节点，最大为 $-5 + 4 = -1$？等等...\n115: \n116: 实际上应该选1和2：-5+3=-2，或1和3：-5+4=-1。最大值是-1。但样例输出是2...  \n117: \n118: 让我重新设计样例2。\n119: \n120: ### 样例输入 2（修正）\n121: \n122: ```input\n123: 3 2\n124: 1 2\n125: 1 3\n126: 5 -1 -2\n127: ```\n128: \n129: ### 样例输出 2（修正）\n130: \n131: ```output\n132: 4\n133: ```\n134: \n135: ### 样例解释 2（修正）\n136: \n137: 选节点 $\\{1, 2\\}$：总和 $= 5 + (-1) = 4$。  \n138: 选节点 $\\{1, 3\\}$：总和 $= 5 + (-2) = 3$。  \n139: 最大值为 4。\n140: \n141: ## 如何验证\n142: \n143: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n144: \n145: ```powershell\n146: # 已进入本 Lab 目录\n147: make doctor\n148: make run\n149: make run CASE=001-sample\n150: make interactive\n151: make score\n152: ```\n153: \n154: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n155: \n156: ```powershell\n157: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-17-research-team-formation\n158: pnpm lab:run -- labs/chapter-04/exercise/E-04-17-research-team-formation\n159: pnpm lab:run -- labs/chapter-04/exercise/E-04-17-research-team-formation --case 001-sample\n160: pnpm lab:score -- labs/chapter-04/exercise/E-04-17-research-team-formation\n161: ```\n162: \n163: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n164: ",
+      "answer_line": 165
+    },
+    {
+      "key": "E18",
+      "source": "labs/chapter-04/exercise/E-04-18-communication-base-station/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-18：通信基站选址\"\n3: description: \"利用树的直径性质，求允许中心落在边上时的最小覆盖半径与绝对中心位置。\"\n4: order: 26\n5: chapter: 4\n6: labId: \"04E18\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-25\"\n9: contributors: [\"czjLUCK\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"挑战\"\n13: duration: \"45～60 分钟\"\n14: ---\n15: \n16: # Lab 04-E-18：通信基站选址\n17: \n18: 某区域通信网络是一棵 $n$ 个节点的树，边权为信号传输延迟。现要选址建一个基站，**基站可以建在节点上，也可以建在链路的任意位置**。要求基站到最远节点的传输延迟尽可能小。\n19: \n20: ## 题目\n21: \n22: ### 通信基站选址\n23: \n24: 给定一棵带权树，求最小覆盖半径（使得到所有节点的最大距离最小），以及所有达到该半径的候选位置。由于基站可以建在边上，最优中心可能落在某条边的内部。\n25: \n26: ### 任务要求\n27: \n28: 1. 从标准输入读入树的节点数和边权信息；\n29: 2. 使用**树的直径性质**在 $O(n)$ 时间内求出绝对中心；\n30: 3. 输出最小半径和中心位置。\n31: \n32: ## 输入格式\n33: \n34: - 第一行：一个整数 $n$（$1 \\le n \\le 10^5$），表示节点数；\n35: - 接下来 $n-1$ 行，每行三个整数 $u\\; v\\; w$，表示节点 $u$ 和 $v$ 之间有一条权值为 $w$ 的边。\n36: \n37: ## 输出格式\n38: \n39: - 第一行：最小覆盖半径（保留 2 位小数）；\n40: - 第二行：中心位置描述\n41:   - 若中心落在**节点** $x$ 上，输出 `NODE x`；\n42:   - 若中心落在**边 $(u,v)$ 内部**，距 $u$ 为 $d$，输出 `EDGE u v d`。\n43: \n44: **输出顺序规范**：若中心在边上，保证 $u < v$；$d$ 保留 2 位小数。\n45: \n46: ## 数据范围与限制\n47: \n48: | 项目 | 范围 |\n49: | --- | --- |\n50: | 节点数 $n$ | $1 \\le n \\le 10^5$ |\n51: | 边权 $w$ | $1 \\le w \\le 10^4$ |\n52: | 时间复杂度要求 | $O(n)$ |\n53: | 额外空间限制 | $O(n)$ |\n54: \n55: ::: tip 关于绝对中心\n56: 对于任意一棵树，其**绝对中心**（允许在边上的点）恰好是**直径的中点**。从直径端点 $A$ 出发沿唯一路径走 $D/2$ 距离（$D$ 为直径长度）即可到达。\n57: :::\n58: \n59: ## 样例\n60: \n61: ### 样例输入 1\n62: \n63: ```input\n64: 4\n65: 1 2 1\n66: 2 3 1\n67: 3 4 1\n68: ```\n69: \n70: ### 样例输出 1\n71: \n72: ```output\n73: 1.50\n74: EDGE 2 3 0.50\n75: ```\n76: \n77: ### 样例解释 1\n78: \n79: 树为链 $1-2-3-4$，直径为 $1 \\rightsquigarrow 4$，长度 $D = 3$。  \n80: 直径中点距节点 2 为 $0.5$（在边 $(2,3)$ 上），到四个节点的最远距离均为 $1.5$。\n81: \n82: | 位置 | 到 1 | 到 2 | 到 3 | 到 4 | 最大距离 |\n83: | --- | --- | --- | --- | --- | --- |\n84: | 节点 2 | 1 | 0 | 1 | 2 | 2 |\n85: | 节点 3 | 2 | 1 | 0 | 1 | 2 |\n86: | 边 $(2,3)$ 中点 | 1.5 | 0.5 | 0.5 | 1.5 | **1.5** |\n87: \n88: ### 样例输入 2\n89: \n90: ```input\n91: 3\n92: 1 2 2\n93: 2 3 2\n94: ```\n95: \n96: ### 样例输出 2\n97: \n98: ```output\n99: 2.00\n100: NODE 2\n101: ```\n102: \n103: ### 样例解释 2\n104: \n105: 树为链 $1-2-3$，直径为 $1 \\rightsquigarrow 3$，长度 $D = 4$。直径中点恰好是节点 2。\n106: \n107: ## 如何验证\n108: \n109: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n110: \n111: ```powershell\n112: # 已进入本 Lab 目录\n113: make doctor\n114: make run\n115: make run CASE=001-sample\n116: make interactive\n117: make score\n118: ```\n119: \n120: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n121: \n122: ```powershell\n123: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-18-communication-base-station\n124: pnpm lab:run -- labs/chapter-04/exercise/E-04-18-communication-base-station\n125: pnpm lab:run -- labs/chapter-04/exercise/E-04-18-communication-base-station --case 001-sample\n126: pnpm lab:score -- labs/chapter-04/exercise/E-04-18-communication-base-station\n127: ```\n128: \n129: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n130: ",
+      "answer_line": 131
+    },
+    {
+      "key": "E19",
+      "source": "labs/chapter-04/exercise/E-04-19-longest-zigzag-path/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-19：二叉树的最长之字形路径\"\n3: description: \"通过树形动态规划，计算二叉树中最长边方向交替的向下路径。\"\n4: order: 27\n5: chapter: 4\n6: labId: \"04E19\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-25\"\n9: contributors: [\"czjLUCK\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"挑战\"\n13: duration: \"40～55 分钟\"\n14: ---\n15: \n16: # Lab 04-E-19：二叉树的最长之字形路径\n17: \n18: 二叉树中一条路径被称为**之字形路径（ZigZag Path）**，如果从路径起点开始，相邻两条边的方向严格交替：左 $\\to$ 右 $\\to$ 左 $\\to$ 右 $\\cdots$ 或 右 $\\to$ 左 $\\to$ 右 $\\to$ 左 $\\cdots$。路径只能沿着父子关系向下延伸，不能向上回溯。路径长度以**边数**计算，单个节点构成的路径长度为 0。\n19: \n20: ## 题目\n21: \n22: ### 最长之字形路径\n23: \n24: 给定一棵二叉树，求其中最长的之字形路径长度。\n25: \n26: ### 任务要求\n27: \n28: 1. 从标准输入读入二叉树的层序遍历序列；\n29: 2. 使用**树形动态规划**计算最长之字形路径；\n30: 3. 输出最长之字形路径的边数。\n31: \n32: ## 输入格式\n33: \n34: - 一行以空格分隔的若干个 token，表示二叉树的层序遍历序列；\n35: - `null` 表示空节点。\n36: \n37: ## 输出格式\n38: \n39: - 输出一个整数，表示最长之字形路径的边数。\n40: \n41: ::: tip 💡 输入提示\n42: 使用流分词极简读取；仅在 `token != \"null\"` 时调用 `std::stoi`，防止异常崩溃：\n43: ```cpp\n44: std::vector<std::string> tokens;\n45: std::string token;\n46: while (std::cin >> token) tokens.push_back(token);\n47: ```\n48: :::\n49: \n50: ## 数据范围与限制\n51: \n52: | 项目 | 范围 |\n53: | --- | --- |\n54: | 节点数 $n$ | $0 \\le n \\le 10^5$ |\n55: | 节点值 | 整数，范围不限 |\n56: | 时间复杂度要求 | $O(n)$ |\n57: | 额外空间限制 | $O(h)$，$h$ 为树高 |\n58: \n59: ::: tip 关于空树\n60: 当输入只包含 `null` 或为空时，树为空，输出 0。\n61: :::\n62: \n63: ## 样例\n64: \n65: ### 样例输入 1\n66: \n67: ```input\n68: 1 2 3 null 5 null 6\n69: ```\n70: \n71: ### 样例输出 1\n72: \n73: ```output\n74: 2\n75: ```\n76: \n77: ### 样例解释 1\n78: \n79: 树结构：\n80: \n81: ```\n82:     1\n83:    / \\\n84:   2   3\n85:    \\   \\\n86:     5   6\n87: ```\n88: \n89: - 路径 $1 \\to 2 \\to 5$：边方向为 左 $\\to$ 右，交替，长度 2；\n90: - 路径 $1 \\to 3 \\to 6$：边方向为 右 $\\to$ 右，不交替；\n91: - 最长之字形路径长度为 2。\n92: \n93: ### 样例输入 2\n94: \n95: ```input\n96: 1 2 3 4 5 null null null null 6 7\n97: ```\n98: \n99: ### 样例输出 2\n100: \n101: ```output\n102: 3\n103: ```\n104: \n105: ### 样例解释 2\n106: \n107: 树结构：\n108: \n109: ```\n110:       1\n111:      / \\\n112:     2   3\n113:    / \\\n114:   4   5\n115:      / \\\n116:     6   7\n117: ```\n118: \n119: - 路径 $1 \\to 2 \\to 5 \\to 6$：左 $\\to$ 右 $\\to$ 左，交替，长度 3；\n120: - 路径 $1 \\to 2 \\to 5 \\to 7$：左 $\\to$ 右 $\\to$ 右，不交替；\n121: - 最长之字形路径长度为 3。\n122: \n123: ## 如何验证\n124: \n125: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n126: \n127: ```powershell\n128: # 已进入本 Lab 目录\n129: make doctor\n130: make run\n131: make run CASE=001-sample\n132: make interactive\n133: make score\n134: ```\n135: \n136: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n137: \n138: ```powershell\n139: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-19-longest-zigzag-path\n140: pnpm lab:run -- labs/chapter-04/exercise/E-04-19-longest-zigzag-path\n141: pnpm lab:run -- labs/chapter-04/exercise/E-04-19-longest-zigzag-path --case 001-sample\n142: pnpm lab:score -- labs/chapter-04/exercise/E-04-19-longest-zigzag-path\n143: ```\n144: \n145: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n146: ",
+      "answer_line": 147
+    },
+    {
+      "key": "E20",
+      "source": "labs/chapter-04/exercise/E-04-20-tree-isomorphism/README.md",
+      "line": 16,
+      "prompt": "1: ---\n2: title: \"Lab 04-E-20：树的同构判定\"\n3: description: \"通过求重心与规范编码，判定两棵无根树是否同构。\"\n4: order: 28\n5: chapter: 4\n6: labId: \"04E20\"\n7: chapterTitle: \"树与二叉树\"\n8: updated: \"2026-08-25\"\n9: contributors: [\"czjLUCK\"]\n10: status: \"draft\"\n11: lab: true\n12: difficulty: \"挑战\"\n13: duration: \"55～75 分钟\"\n14: ---\n15: \n16: # Lab 04-E-20：树的同构判定\n17: \n18: 给定两棵无根树，判断它们是否**同构**——即是否存在一种节点重标号方式，使得两棵树的边集完全相同。树中节点仅通过编号区分，同构判断不考虑节点编号，只关心拓扑结构。\n19: \n20: ## 题目\n21: \n22: ### 树的同构判定\n23: \n24: 给定两棵无根树，判断它们是否同构。\n25: \n26: ### 任务要求\n27: \n28: 1. 从标准输入读入两棵树的结构和边信息；\n29: 2. 使用**重心 + 规范编码**的方法判定同构；\n30: 3. 输出判定结果。\n31: \n32: ## 输入格式\n33: \n34: - 第一行：一个整数 $n_1$（$1 \\le n_1 \\le 10^5$），表示第一棵树的节点数；\n35: - 接下来 $n_1 - 1$ 行，每行两个整数 $u\\; v$，表示第一棵树的一条边；\n36: - 接下来一行：一个整数 $n_2$（$1 \\le n_2 \\le 10^5$），表示第二棵树的节点数；\n37: - 接下来 $n_2 - 1$ 行，每行两个整数 $u\\; v$，表示第二棵树的一条边。\n38: \n39: ## 输出格式\n40: \n41: - 若两棵树同构，输出 `ISOMORPHIC`；\n42: - 若不同构，输出 `NON-ISOMORPHIC`。\n43: \n44: ## 数据范围与限制\n45: \n46: | 项目 | 范围 |\n47: | --- | --- |\n48: | 节点数 $n_1, n_2$ | $1 \\le n_1, n_2 \\le 10^5$ |\n49: | 时间复杂度要求 | $O(n \\log n)$ 或更优 |\n50: | 额外空间限制 | $O(n)$ |\n51: \n52: ::: tip 关于编码方式\n53: 本题允许使用**括号串编码**（如 `(())`）或**数值哈希编码**（如整数 ID）来表示子树的规范形式。括号串编码直观易懂但可能占用较大内存；数值哈希编码空间效率更高，但需要处理哈希冲突。题解中给出括号串编码的参考实现，你可根据喜好选择任意一种正确的方式。\n54: :::\n55: \n56: ## 样例\n57: \n58: ### 样例输入 1\n59: \n60: ```input\n61: 3\n62: 1 2\n63: 2 3\n64: 3\n65: 1 2\n66: 1 3\n67: ```\n68: \n69: ### 样例输出 1\n70: \n71: ```output\n72: NON-ISOMORPHIC\n73: ```\n74: \n75: ### 样例解释 1\n76: \n77: 第一棵树是链 $1-2-3$（节点 2 的度为 2，两端度为 1）；  \n78: 第二棵树是星形 $1-2, 1-3$（节点 1 的度为 2，两端度为 1）。  \n79: \n80: 等等，这两棵树实际上是同构的！让我重新设计样例...\n81: \n82: 实际上链 1-2-3 和星形 1-2,1-3 都是 3 个节点的树，且每个节点度数为 (1,2,1)。它们同构。让我换一个不同构的例子。\n83: \n84: ### 样例输入 1（修正）\n85: \n86: ```input\n87: 4\n88: 1 2\n89: 2 3\n90: 3 4\n91: 4\n92: 1 2\n93: 1 3\n94: 1 4\n95: ```\n96: \n97: ### 样例输出 1（修正）\n98: \n99: ```output\n100: NON-ISOMORPHIC\n101: ```\n102: \n103: ### 样例解释 1（修正）\n104: \n105: 第一棵树是链 $1-2-3-4$（最大度数为 2）；  \n106: 第二棵树是星形，节点 1 连接 2,3,4（最大度数为 3）。  \n107: 结构不同，不同构。\n108: \n109: ### 样例输入 2\n110: \n111: ```input\n112: 4\n113: 1 2\n114: 2 3\n115: 2 4\n116: 4\n117: 1 3\n118: 3 2\n119: 3 4\n120: ```\n121: \n122: ### 样例输出 2\n123: \n124: ```output\n125: ISOMORPHIC\n126: ```\n127: \n128: ### 样例解释 2\n129: \n130: 两棵树都是\"一个中心节点度数为 3，三个叶子\"的星形结构，只是节点编号不同，因此同构。\n131: \n132: ## 如何验证\n133: \n134: 先安装 Node.js、pnpm 和支持 C++17 的编译器。GNU Make 是首选入口，但不是强制依赖。\n135: \n136: ```powershell\n137: # 已进入本 Lab 目录\n138: make doctor\n139: make run\n140: make run CASE=001-sample\n141: make interactive\n142: make score\n143: ```\n144: \n145: Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：\n146: \n147: ```powershell\n148: pnpm lab:doctor -- labs/chapter-04/exercise/E-04-20-tree-isomorphism\n149: pnpm lab:run -- labs/chapter-04/exercise/E-04-20-tree-isomorphism\n150: pnpm lab:run -- labs/chapter-04/exercise/E-04-20-tree-isomorphism --case 001-sample\n151: pnpm lab:score -- labs/chapter-04/exercise/E-04-20-tree-isomorphism\n152: ```\n153: \n154: `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。\n155: ",
+      "answer_line": 156
+    }
+  ]
+}

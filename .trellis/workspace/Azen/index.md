@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 25
-- **Last Active**: 2026-09-04
+- **Total Sessions**: 37
+- **Last Active**: 2026-09-11
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~603 | Active |
+| `journal-1.md` | ~971 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,18 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 37 | 2026-09-11 | Ch0 教学改版提交与 PR 准备 | `24cab4d` | `docs/ch0-teaching-revision` |
+| 36 | 2026-09-11 | Ch0 教学改版与完整验收 | - | `docs/ch0-teaching-revision` |
+| 35 | 2026-09-11 | Ch15 回溯与搜索练习验收及 PR 准备 | `b9483ab` | `feat/ch15-backtracking-exercises` |
+| 34 | 2026-09-11 | 提交 Project PR 174 并发布插件 0.1.13 | `38f3c3a` | `feat/project-engineering-expression-demo` |
+| 33 | 2026-09-11 | Project engineering and expression demo ready for local review | - | `feat/project-engineering-expression-demo` |
+| 32 | 2026-09-11 | Ch4 exercises PR 173 submitted | `7cfb4a8` | `feat/ch04-exercise-expansion-and-order` |
+| 31 | 2026-09-11 | Ch4 exercise expansion and renumbering local preview | - | `feat/ch04-exercise-expansion-and-order` |
+| 30 | 2026-09-10 | Ch1 理论大题训练提交 PR #170 | `5923e5c` | `feat/ch01-linear-list-written-theory` |
+| 29 | 2026-09-10 | Ch1 线性表 15 道理论大题与本地预览 | - | `feat/ch01-linear-list-written-theory` |
+| 28 | 2026-09-10 | 栈与队列综合理论 Lab 02T03 | `7f3228c` | `feat/ch02-stack-queue-comprehensive-theory` |
+| 27 | 2026-09-09 | 第 4 章树算法交互式演示 | `9ee5578` | `codex/ch04-interactive-tree-demos` |
+| 26 | 2026-09-09 | 4.6 二叉树经典问题定义与复杂度修订 | `3df8149` | `codex/ch04-section-46-clarifications` |
 | 25 | 2026-09-04 | 完成 Ch12 分治与递归整体重构 | `18c0794`, `4939071`, `6662839` | `chapter/ch12-divide-conquer-rebuild` |
 | 24 | 2026-09-02 | Expand Chapter 1 Program Lab tests | `a168091` | `codex/ch1-labs-20-test-cases` |
 | 23 | 2026-09-02 | Ch.1 Graphviz 图示迁移 | `ae0a4c9`, `25c63dc` | `codex/ch1-graphviz-rendering` |
