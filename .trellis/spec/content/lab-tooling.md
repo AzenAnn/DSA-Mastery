@@ -63,6 +63,7 @@ JSON 报告顶层：
 - 函数题适配 stdio 时，为答案集合明确序列化和排序。整数子集使用“答案数 + 每项长度及元素”，让空子集 `0` 与无答案可区分。保留原题空行输出时，须说明 `tokens` 无法区分空行与无输出，并独立检查参考输出；不得暗改共享比较器。
 - 原题允许任意见证或任意分量编号时，使用固定输出比较的课程改编须在题面明确规范化规则，不能将参考解的一种遍历顺序暗中当作唯一答案。Ch6 的分量按最小顶点编号、凝聚边排序去重，规则见 [Ch6 题源与适配](../../../docs/ch06-exercise-sources.md)。参考解满分还应由独立 oracle 或图性质校验支持，不能只把同一个参考解输出复制成 `.out` 后宣称正确。
 - 比较器与 oracle 写入都先统一 CRLF/LF；`.out` 固定写为 LF。`exact` 还会忽略每行末尾的空格和制表符，并允许一侧缺少一个末尾 LF；除此之外仍逐字符比较，不忽略行首/行内空白、内部换行或额外空行。`tokens` 按空白 token，`float` 对数值 token 使用 `absTol/relTol`。
+- 作者校验脚本解析 README 标题、代码围栏及输入样例前，复用 `normalizeNewlines` 处理 Git 在 Windows 检出时产生的 CRLF；不能只在生成器刚写出的 LF 文件上验证。`.out` 仍由 `.gitattributes` 的 `eol=lf` 保证并独立检查。
 - 判定固定为 `AC|WA|TLE|RE|CE|OLE|IE`；IE 不得伪装成学生 0 分。
 - 人类终端输出固定语义：AC/PASS/满分为 success，WA/CE/RE/IE/未满分实际分为 danger，TLE/OLE/PENDING 为 warning；未满分仍保留 `actual/maximum`，且 maximum 使用 success。颜色只增强文字，不得成为唯一状态信号。
 - Program 人类输出必须有逐 case 表格、PASS/NOT FULL 总结；失败时展示首差异和可复制单 case 重试。Project 必须分开 automated、manual pending、provisional total，并保持 task/case 层级。先 pad 原始单元格再加 ANSI，外部编译/CTest/stderr 正文不得被整块改色。

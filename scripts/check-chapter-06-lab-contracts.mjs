@@ -6,7 +6,7 @@ import path from 'node:path'
 import matter from 'gray-matter'
 import { loadLab } from '../tools/lab/core.mjs'
 import { compileTarget } from '../tools/lab/compiler.mjs'
-import { compareOutput } from '../tools/lab/compare.mjs'
+import { compareOutput, normalizeNewlines } from '../tools/lab/compare.mjs'
 import { packStudent, verifyProgram } from '../tools/lab/operations.mjs'
 import { runProcess } from '../tools/lab/process.mjs'
 import { catalog, labName, labPath } from './chapter-06/catalog.mjs'
@@ -156,7 +156,7 @@ for (const item of catalog.filter((item) => selected.includes(item.id))) {
   const directory = path.join(root, labPath(item)), lab = await loadLab(directory), number = String(item.id).padStart(2, '0')
   assert.equal(lab.labId, `06E${number}`)
   assert.equal(path.basename(directory), labName(item))
-  const readme = read(path.join(directory, 'README.md')), frontmatter = matter(readme).data
+  const readme = normalizeNewlines(read(path.join(directory, 'README.md'))), frontmatter = matter(readme).data
   assert.equal(frontmatter.title, `Lab 06-E-${number}：${item.title}`)
   assert(readme.includes(`# ${frontmatter.title}\n`))
   assert.equal(frontmatter.order, item.id + 4)
@@ -170,7 +170,7 @@ for (const item of catalog.filter((item) => selected.includes(item.id))) {
   assert(sampleInput && sampleOutput, `${lab.labId}: missing sample blocks`)
   let maximumOutputBytes = 0
   for (const testCase of lab.cases) {
-    const input = read(path.join(directory, testCase.input)), expected = read(path.join(directory, testCase.expected))
+    const input = normalizeNewlines(read(path.join(directory, testCase.input))), expected = read(path.join(directory, testCase.expected))
     const data = parseInput(item.id, input), computed = oracle(item.id, data)
     assert.equal(expected.includes('\r'), false, `${lab.labId}/${testCase.id}: expected output must be LF`)
     assert.equal(expected, computed, `${lab.labId}/${testCase.id}: independent oracle mismatch`)

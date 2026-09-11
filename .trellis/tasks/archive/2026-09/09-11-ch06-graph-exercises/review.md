@@ -81,4 +81,18 @@ Clang 报告：`.lab-cache/ch06/verify-clang__-all-pack.json`。MSVC 报告：`.
 
 ## 提交与推送
 
-工作提交：`31ac483a40040e260855d4e2610bd1cd061fc2fc`，`feat(ch06): add twenty graph exercise labs`。已推送 `origin/lab/ch06-graph-exercises`，远端返回该 SHA。任务归档提交为 `d9b2b62b`；Azen 会话 38 已记录在 `.trellis/workspace/Azen/journal-1.md`。归档和会话记录作为后续独立提交推送；不合并 main，不触发部署。
+工作提交：`31ac483a40040e260855d4e2610bd1cd061fc2fc`，`feat(ch06): add twenty graph exercise labs`。已推送 `origin/lab/ch06-graph-exercises`，远端返回该 SHA。任务归档提交为 `d9b2b62b`；Azen 会话 38 已记录在 `.trellis/workspace/Azen/journal-1.md`。初次交付只推送任务分支；后续主分支交付见下节。
+
+## 后续主分支交付
+
+2026-09-12，维护者明确要求“推送至 main”，授权范围扩展为主分支合入。基于最新 `origin/main` (`48664ef5`) 创建集成分支，合入 ch6 的提交 `286402fc`，得到无冲突合并提交 `7fdcd717`；保留 main 新增的 ch2 测试和 ch13 题目。本地 main 的无关暂存提交 `27bae9b6` 未纳入合并。
+
+重新检出触发 Windows CRLF，暴露作者脚本直接匹配 LF 标题/样例的问题。已复用 `tools/lab/compare.mjs` 的 `normalizeNewlines` 处理 README 和 `.in`；`.out` 继续执行原有 LF 严格检查，未改变题目或判题器。实测 README 与输入为 CRLF，预期输出为 LF。
+
+- [x] `pnpm run validate`：内容、类型和 lint 通过；修改后的脚本另经 ESLint 检查。
+- [x] 真实 CRLF 检出环境运行 ch6 合同校验，20 题、400 组全部通过。
+- [x] Pages 前缀 `pnpm build` 和 `pnpm run check:site` 通过：88 篇教材、294 个 Lab、456 个 HTML。
+- [x] `pnpm exec playwright test --grep 'chapter 6 graph' --workers 1`：5 项通过，覆盖 20 页的四种视口/主题及索引/搜索。
+- [x] 合并前远端 main 的 Pages CI (`34617309332`) 成功；ch6 原分支已有完整 61 项浏览器和双编译器证据，算法未改动。
+
+清理本次 build 的已知图形生成副本后，将合并与 CRLF 修复提交一同以普通快进推送交付 main；不强推或改写原有历史。
