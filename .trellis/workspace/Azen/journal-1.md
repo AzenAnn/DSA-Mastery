@@ -969,3 +969,41 @@ Implemented Project task isolation, current-result fingerprints, expression demo
 ### Next Steps
 
 - 维护者在 PR 中审阅教学节奏、变式梯度与严格推导，等待 GitHub Actions 检查。
+
+
+## Session 38: Ch6 图基础 20 道代码题补全与推送
+
+**Date**: 2026-09-12
+**Task**: Ch6 图基础 20 道代码题补全与推送
+**Branch**: `lab/ch06-graph-exercises`
+
+### Summary
+
+新增 06E04-06E23 完整 Lab，含学生骨架、参考解、400 组测试和独立校验；检阅后推送 lab/ch06-graph-exercises，工作提交远端 SHA 已核对。
+
+### Main Changes
+
+- 20 个完整 Program Lab，保留原有 06E01-03，课程侧栏共 23 题。
+- 题源和本地适配清单，确定的多解输出规则，可复现生成器与独立 oracle。
+- 新增 5 项 ch6 页面测试，更新 Lab 合同，检阅报告位于 .trellis/tasks/archive/2026-09/09-11-ch06-graph-exercises/review.md。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `31ac483a` | (see git log) |
+
+### Testing
+
+- [OK] Clang/MSVC：20 个参考解均 100/100，全部 student 可编译且非满分，400 组数据无漂移。
+- [OK] 1000 组随机对拍、3 个仓库外 student pack、原有 ch6 三题回归全部通过。
+- [OK] pnpm test、Pages 前缀 build/check、61 项 Playwright 全部通过；1 项既有 Windows symlink-policy skip。
+- [OK] 桌面/移动端浅暗截图已检阅；CSES 官方访问超时，采用题面明确的本地约束与样例。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 由维护者按 Review Owner 流程检阅并决定合并；本会话未合并或部署。

@@ -81,4 +81,4 @@ Clang 报告：`.lab-cache/ch06/verify-clang__-all-pack.json`。MSVC 报告：`.
 
 ## 提交与推送
 
-工作提交：`31ac483a40040e260855d4e2610bd1cd061fc2fc`，`feat(ch06): add twenty graph exercise labs`。已推送 `origin/lab/ch06-graph-exercises`，远端返回该 SHA。本次归档和 Azen 会话记录将作为后续独立提交推送；不合并 main，不触发部署。
+工作提交：`31ac483a40040e260855d4e2610bd1cd061fc2fc`，`feat(ch06): add twenty graph exercise labs`。已推送 `origin/lab/ch06-graph-exercises`，远端返回该 SHA。任务归档提交为 `d9b2b62b`；Azen 会话 38 已记录在 `.trellis/workspace/Azen/journal-1.md`。归档和会话记录作为后续独立提交推送；不合并 main，不触发部署。

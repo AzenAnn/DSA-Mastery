@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 37
-- **Last Active**: 2026-09-11
+- **Total Sessions**: 38
+- **Last Active**: 2026-09-12
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~971 | Active |
+| `journal-1.md` | ~1009 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 38 | 2026-09-12 | Ch6 图基础 20 道代码题补全与推送 | `31ac483a` | `lab/ch06-graph-exercises` |
 | 37 | 2026-09-11 | Ch0 教学改版提交与 PR 准备 | `24cab4d` | `docs/ch0-teaching-revision` |
 | 36 | 2026-09-11 | Ch0 教学改版与完整验收 | - | `docs/ch0-teaching-revision` |
 | 35 | 2026-09-11 | Ch15 回溯与搜索练习验收及 PR 准备 | `b9483ab` | `feat/ch15-backtracking-exercises` |
