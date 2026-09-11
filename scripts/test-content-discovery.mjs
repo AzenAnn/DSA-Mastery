@@ -447,7 +447,7 @@ try {
     "05T04 · 并查集题精练",
     "05T05 · 堆题精练",
     "05E01 · 二叉搜索树的插入与查找",
-    "05E17 · B+ 树的范围查询",
+    "05E27 · B+ 树的范围查询",
     "暂无工程型 Lab",
   ]) {
     if (!chapterFiveItem.includes(required)) {
@@ -460,7 +460,7 @@ try {
     chapterFiveSidebarEnd < 0 ||
     chapterFiveItemStart < 0 ||
     chapterFiveItemEnd < 0 ||
-    chapterFiveLabLinks.length !== 22 ||
+    chapterFiveLabLinks.length !== 32 ||
     chapterFiveItem.includes("暂无理论型 Lab") ||
     chapterFiveItem.includes("暂无实验型 Lab")
   ) {
