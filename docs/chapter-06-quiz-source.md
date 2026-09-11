@@ -1,7 +1,7 @@
 # 第 6 章选择题来源与核对记录
 
 > 适用题库：`06T01`（图基础）、`06T02`（图的存储）、`06T03`（图的遍历与连通性）
-> 核对日期：2026-09-10
+> 核对日期：2026-09-11
 
 本组题目从教材中的图基本术语、存储复杂度、遍历与连通性内容整理为四选一形式，不作为历年真题标注。题面中的数值和顶点编号仅用于形成可独立作答的等价练习；定义、答案与复杂度结论均按下列至少两类资料交叉核对。
 
@@ -36,6 +36,16 @@
 | 06-02 | 08 | 零权边的存在性表示 | 严蔚敏“网的邻接矩阵” | OpenDSA Graph Implementations |
 | 06-02 | 09 | 边集数组适用场景 | CLRS Kruskal/Bellman-Ford 相关章节 | 王道“最小生成树/最短路径” |
 | 06-02 | 10 | 邻接表与哈希混合索引 | OpenDSA Graph Implementations | CLRS 图的表示 |
+| 06-02 | 11 | 邻接矩阵与距离矩阵对角线 | 严蔚敏“网的邻接矩阵” | CLRS 第 22 章 |
+| 06-02 | 12 | 带权矩阵的度统计 | 严蔚敏“邻接矩阵法” | OpenDSA Graph Implementations |
+| 06-02 | 13 | 单值矩阵与平行边 | 严蔚敏“网的邻接矩阵” | OpenDSA Graph Implementations |
+| 06-02 | 14 | 无向邻接表删除成本 | CLRS 第 22 章 | OpenDSA Graph Implementations |
+| 06-02 | 15 | 排序邻接表的语义 | 严蔚敏“邻接表法” | OpenDSA Graph Traversals |
+| 06-02 | 16 | 无向矩阵三角压缩 | 严蔚敏“邻接矩阵法” | OpenDSA Graph Implementations |
+| 06-02 | 17 | 邻接表转矩阵成本 | CLRS 第 22 章 | OpenDSA Graph Implementations |
+| 06-02 | 18 | 邻接矩阵转表成本 | CLRS 第 22 章 | OpenDSA Graph Implementations |
+| 06-02 | 19 | 转边集时保留自环 | 严蔚敏“邻接表法” | OpenDSA Graph Implementations |
+| 06-02 | 20 | CSR 的静态图选型 | OpenDSA Graph Implementations | CLRS 第 22 章 |
 | 06-03 | 01 | 单源遍历的可达集合 | CLRS 第 22 章 | 严蔚敏“图的遍历” |
 | 06-03 | 02 | 完整遍历与搜索森林 | 严蔚敏“连通分量” | OpenDSA Graph Traversals |
 | 06-03 | 03 | 发现时标记顶点 | CLRS 第 22 章 | OpenDSA Graph Traversals |
