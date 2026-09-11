@@ -12,9 +12,10 @@
 - [x] Run pnpm test, extension tests/typecheck, Pages build/check/desktop/mobile browser tests.
 - [x] Update specs and write verification/local inspection report.
 - [x] Start website preview and prepare local review delivery.
+- [x] After explicit authorization, commit and create PR #174, then publish verified CI-built ext-v0.1.13 prerelease.
 
 ## Validation
 
-Run pnpm test, test:lab-golden, extension test/typecheck/package, CLI validate/build --task/score --task/verify/pack, then Pages build/check/test:pages with PowerShell environment variables. Exact commands/results go in verification.md. Main session implements/checks (inline); research agents read only. Generated outputs stay cache/temp. No daily VS Code profile changes or remote mutation. No user edits reverted.
+Run pnpm test, test:lab-golden, extension test/typecheck/package, CLI validate/build --task/score --task/verify/pack, then Pages build/check/test:pages with PowerShell environment variables. Exact commands/results go in verification.md. Main session implements/checks (inline); research agents read only. Generated outputs stay cache/temp. No daily VS Code profile changes or user edits reverted. Remote operations started only after the user's subsequent explicit PR/release request.
 
-Local review is ready. Task remains in progress until Azen inspects the result; no commit/archive/push/PR/tag/release was performed.
+Local delivery and authorized PR/release are complete. PR #174 remains open; the public prerelease uses tag ext-v0.1.13 at implementation commit 38f3c3a. See release-verification.md for the downloaded CI asset and actual installation verification.

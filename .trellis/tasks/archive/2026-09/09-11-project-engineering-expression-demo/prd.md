@@ -22,7 +22,7 @@ Students implement one system across independently graded Tasks, reuse real modu
 - [x] External student package validates/builds/grades without solution or repository dependencies.
 - [x] Isolated installed extension discovers Project, navigates files/Tasks, grades, shows failures and retries; update/rollback retain progress.
 - [x] Local website URL, VSIX path, inspection steps, design and verification evidence were delivered before remote operations.
-- [ ] Submit a PR and publish the CI-built extension 0.1.13 release after verifying its asset; leave PR merge to the maintainer.
+- [x] Submit a PR and publish the CI-built extension 0.1.13 release after verifying its asset; leave PR merge to the maintainer.
 
 ## Notes
 
