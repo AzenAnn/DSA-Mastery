@@ -849,6 +849,8 @@ NodePtr rbInsert(NodePtr root, int key) {
 | [验证 BST 先序序列](../../labs/chapter-05/exercise/E-05-03-validate-bst-preorder/README.md) | 用区间约束判断序列能否还原为合法 BST |
 | [BST 第 k 小元素](../../labs/chapter-05/exercise/E-05-04-bst-kth-smallest/README.md) | 利用中序有序性，避免全量排序 |
 | [AVL 插入与平衡](../../labs/chapter-05/exercise/E-05-05-avl-tree-insert/README.md) | 四类失衡的识别与单/双旋转实现 |
+| [将二叉搜索树变平衡](../../labs/chapter-05/exercise/E-05-06-balance-bst-rebuild/README.md) | 中序遍历还原有序序列，再二分建树使高度最小 |
+| [祭坛三元组](../../labs/chapter-05/exercise/E-05-07-snuke-festival/README.md) | 有序序列上枚举 + 二分查找统计方案数 |
 
 ## 小结与自测
 
