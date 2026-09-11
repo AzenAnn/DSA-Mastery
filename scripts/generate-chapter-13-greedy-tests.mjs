@@ -9,7 +9,17 @@ const LAB_DIRECTORIES = {
   palindrome: path.join(EXERCISE_ROOT, 'E-13-02-longest-palindrome'),
   jumpGame: path.join(EXERCISE_ROOT, 'E-13-03-jump-game'),
   cookies: path.join(EXERCISE_ROOT, 'E-13-04-assign-cookies'),
-  intervals: path.join(EXERCISE_ROOT, 'E-13-05-non-overlapping-intervals')
+  intervals: path.join(EXERCISE_ROOT, 'E-13-05-non-overlapping-intervals'),
+  flowers: path.join(EXERCISE_ROOT, 'E-13-06-can-place-flowers'),
+  lemonade: path.join(EXERCISE_ROOT, 'E-13-07-lemonade-change'),
+  negations: path.join(EXERCISE_ROOT, 'E-13-08-maximize-sum-after-k-negations'),
+  stock: path.join(EXERCISE_ROOT, 'E-13-09-best-time-to-buy-and-sell-stock'),
+  truck: path.join(EXERCISE_ROOT, 'E-13-10-maximum-units-on-a-truck'),
+  jumpTwo: path.join(EXERCISE_ROOT, 'E-13-11-jump-game-ii'),
+  partitions: path.join(EXERCISE_ROOT, 'E-13-12-partition-labels'),
+  queue: path.join(EXERCISE_ROOT, 'E-13-13-queue-reconstruction-by-height'),
+  candy: path.join(EXERCISE_ROOT, 'E-13-14-candy'),
+  refuel: path.join(EXERCISE_ROOT, 'E-13-15-minimum-number-of-refueling-stops')
 }
 
 function arrayInput(values) {
@@ -95,6 +105,171 @@ function intervalOracle(inputText) {
     lastEnd = end
   }
   return n - kept
+}
+
+function flowerInput(bed, need) {
+  return `${bed.length} ${need}\n${bed.join(' ')}\n`
+}
+
+function lemonadeInput(bills) {
+  return arrayInput(bills)
+}
+
+function negationInput(nums, k) {
+  return `${nums.length} ${k}\n${nums.join(' ')}\n`
+}
+
+function truckInput(types, size) {
+  return `${types.length} ${size}\n${types.map((type) => type.join(' ')).join('\n')}\n`
+}
+
+function queueInput(people) {
+  return `${people.length}\n${people.map((person) => person.join(' ')).join('\n')}\n`
+}
+
+function refuelInput(target, startFuel, stations) {
+  return `${target} ${startFuel} ${stations.length}\n${stations.map((station) => station.join(' ')).join('\n')}\n`
+}
+
+function caseList(inputs, sampleTags = ['sample']) {
+  return inputs.map((input, index) => testCase(
+    `${String(index + 1).padStart(3, '0')}-${index === 0 ? 'sample' : `case-${String(index + 1).padStart(2, '0')}`}`,
+    input,
+    index === 0 ? sampleTags : ['boundary', 'regression']
+  ))
+}
+
+function flowerOracle(inputText) {
+  const values = inputText.trim().split(/\s+/).map(Number)
+  const [n, need] = values
+  const bed = values.slice(2)
+  let planted = 0
+  for (let index = 0; index < n; ++index) {
+    if (bed[index] === 0 && (index === 0 || bed[index - 1] === 0) && (index === n - 1 || bed[index + 1] === 0)) {
+      bed[index] = 1
+      ++planted
+    }
+  }
+  return planted >= need
+}
+
+function lemonadeOracle(inputText) {
+  let fives = 0
+  let tens = 0
+  for (const bill of parseSizedArray(inputText)) {
+    if (bill === 5) ++fives
+    else if (bill === 10) {
+      if (fives-- === 0) return false
+      ++tens
+    } else if (tens > 0 && fives > 0) {
+      --tens
+      --fives
+    } else if (fives >= 3) fives -= 3
+    else return false
+  }
+  return true
+}
+
+function negationOracle(inputText) {
+  const values = inputText.trim().split(/\s+/).map(Number)
+  const [n, k] = values
+  const nums = values.slice(2, n + 2).toSorted((left, right) => left - right)
+  let remaining = k
+  for (let index = 0; index < n && nums[index] < 0 && remaining > 0; ++index, --remaining) nums[index] = -nums[index]
+  const total = nums.reduce((sum, value) => sum + value, 0)
+  return remaining % 2 === 0 ? total : total - 2 * Math.min(...nums)
+}
+
+function stockOracle(inputText) {
+  let minimum = Infinity
+  let best = 0
+  for (const price of parseSizedArray(inputText)) {
+    best = Math.max(best, price - minimum)
+    minimum = Math.min(minimum, price)
+  }
+  return best
+}
+
+function truckOracle(inputText) {
+  const values = inputText.trim().split(/\s+/).map(Number)
+  const [count, size] = values
+  let capacity = size
+  let total = 0
+  const types = Array.from({ length: count }, (_, index) => [values[2 + index * 2], values[3 + index * 2]])
+    .toSorted((left, right) => right[1] - left[1])
+  for (const [boxes, units] of types) {
+    const taken = Math.min(boxes, capacity)
+    total += taken * units
+    capacity -= taken
+  }
+  return total
+}
+
+function jumpTwoOracle(inputText) {
+  const nums = parseSizedArray(inputText)
+  let steps = 0
+  let end = 0
+  let farthest = 0
+  for (let index = 0; index < nums.length - 1; ++index) {
+    farthest = Math.max(farthest, index + nums[index])
+    if (index === end) {
+      ++steps
+      end = farthest
+    }
+  }
+  return steps
+}
+
+function partitionOracle(inputText) {
+  const value = inputText.trim()
+  const last = new Map([...value].map((letter, index) => [letter, index]))
+  const parts = []
+  let start = 0
+  let end = 0
+  for (let index = 0; index < value.length; ++index) {
+    end = Math.max(end, last.get(value[index]))
+    if (index === end) {
+      parts.push(end - start + 1)
+      start = index + 1
+    }
+  }
+  return `${parts.length}\n${parts.join(' ')}`
+}
+
+function queueOracle(inputText) {
+  const values = inputText.trim().split(/\s+/).map(Number)
+  const people = Array.from({ length: values[0] }, (_, index) => [values[index * 2 + 1], values[index * 2 + 2]])
+    .toSorted((left, right) => right[0] - left[0] || left[1] - right[1])
+  const result = []
+  for (const person of people) result.splice(person[1], 0, person)
+  return result.map((person) => person.join(' ')).join('\n')
+}
+
+function candyOracle(inputText) {
+  const ratings = parseSizedArray(inputText)
+  const candies = Array(ratings.length).fill(1)
+  for (let index = 1; index < ratings.length; ++index) if (ratings[index] > ratings[index - 1]) candies[index] = candies[index - 1] + 1
+  for (let index = ratings.length - 2; index >= 0; --index) if (ratings[index] > ratings[index + 1]) candies[index] = Math.max(candies[index], candies[index + 1] + 1)
+  return candies.reduce((sum, amount) => sum + amount, 0)
+}
+
+function refuelOracle(inputText) {
+  const values = inputText.trim().split(/\s+/).map(Number)
+  const [target, startFuel, count] = values
+  const stations = Array.from({ length: count }, (_, index) => [values[index * 2 + 3], values[index * 2 + 4]])
+  let fuel = startFuel
+  let stops = 0
+  const options = []
+  for (const [position, added] of [...stations, [target, 0]]) {
+    while (fuel < position && options.length) {
+      options.sort((left, right) => right - left)
+      fuel += options.shift()
+      ++stops
+    }
+    if (fuel < position) return -1
+    options.push(added)
+  }
+  return stops
 }
 
 function writeCases(labDirectory, cases, oracle) {
@@ -244,10 +419,113 @@ const intervalCases = [
   testCase('020-stress-two-groups', intervalInput(twoIntervalGroups), ['stress', 'touching'])
 ]
 
+const flowerStress = Array(20000).fill(0)
+const flowerCases = caseList([
+  flowerInput([1, 0, 0, 0, 1], 1), flowerInput([1, 0, 0, 0, 1], 2), flowerInput([0], 1), flowerInput([0], 0),
+  flowerInput([1], 0), flowerInput([1], 1), flowerInput([0, 0], 1), flowerInput([0, 0], 2),
+  flowerInput([0, 0, 0], 2), flowerInput([0, 1, 0], 1), flowerInput([0, 1, 0], 0), flowerInput([0, 0, 1, 0, 0], 2),
+  flowerInput([1, 0, 0, 0, 0, 1], 1), flowerInput([0, 0, 0, 0, 0], 3), flowerInput([0, 0, 0, 0, 0], 2), flowerInput([1, 0, 1, 0, 1], 0),
+  flowerInput([1, 0, 1, 0, 0, 0, 1], 1), flowerInput([0, 0, 1, 0, 0, 1, 0], 2), flowerInput(Array(100).fill(0), 50), flowerInput(flowerStress, 10000)
+])
+
+const lemonadeStress = [...Array(75000).fill(5), ...Array(25000).fill(20)]
+const lemonadeCases = caseList([
+  lemonadeInput([5, 5, 5, 10, 20]), lemonadeInput([5, 5, 10, 10, 20]), lemonadeInput([5]), lemonadeInput([10]),
+  lemonadeInput([5, 10]), lemonadeInput([5, 20]), lemonadeInput([5, 5, 5, 20]), lemonadeInput([5, 5, 10, 20]),
+  lemonadeInput([5, 5, 5, 5, 20, 20]), lemonadeInput([5, 5, 5, 10, 20, 20]), lemonadeInput([5, 5, 10, 5, 20]), lemonadeInput([5, 5, 5, 10, 10, 20]),
+  lemonadeInput([5, 5, 5, 20]), lemonadeInput([5, 5, 5, 5, 5, 10, 20]), lemonadeInput([5, 5, 10, 20, 20]), lemonadeInput(Array(100).fill(5)),
+  lemonadeInput([...Array(50).fill(5), ...Array(25).fill(10), ...Array(25).fill(20)]), lemonadeInput([5, 10, 5, 20, 20]), lemonadeInput([...Array(99999).fill(5), 20]), lemonadeInput(lemonadeStress)
+])
+
+const negationStress = Array.from({ length: 10000 }, (_, index) => index % 2 === 0 ? -100 : 99)
+const negationCases = caseList([
+  negationInput([4, 2, 3], 1), negationInput([3, -1, 0, 2], 3), negationInput([2, -3, -1, 5, -4], 2), negationInput([0], 1),
+  negationInput([-1], 1), negationInput([-1], 2), negationInput([1], 1), negationInput([1], 2),
+  negationInput([-2, -3, -1], 2), negationInput([-2, -3, -1], 3), negationInput([-2, -3, -1], 4), negationInput([0, 0, 1], 9999),
+  negationInput([5, 6, 7], 1), negationInput([5, 6, 7], 2), negationInput([-100, 100], 1), negationInput([-100, 100], 10000),
+  negationInput([-5, -4, 3, 2], 3), negationInput([-5, -4, 3, 2], 4), negationInput(Array(100).fill(-100), 10000), negationInput(negationStress, 10000)
+])
+
+const stockStress = Array.from({ length: 100000 }, (_, index) => index + 1)
+const stockCases = caseList([
+  arrayInput([7, 1, 5, 3, 6, 4]), arrayInput([7, 6, 4, 3, 1]), arrayInput([1]), arrayInput([1, 2]),
+  arrayInput([2, 1]), arrayInput([1, 1, 1]), arrayInput([2, 4, 1]), arrayInput([3, 2, 6, 5, 0, 3]),
+  arrayInput([1, 10]), arrayInput([10, 1, 10]), arrayInput([5, 4, 3, 2, 1, 9]), arrayInput([9, 1, 2, 3, 4]),
+  arrayInput([2, 1, 2, 0, 1]), arrayInput([10000, 1, 10000]), arrayInput([10000, 9999]), arrayInput(Array(100).fill(42)),
+  arrayInput([3, 3, 5, 0, 0, 3, 1, 4]), arrayInput([8, 2, 4, 1, 7]), arrayInput(Array.from({ length: 100000 }, (_, index) => 100000 - index)), arrayInput(stockStress)
+])
+
+const truckStressTypes = Array.from({ length: 1000 }, (_, index) => [1000, 1000 - index])
+const truckCases = caseList([
+  truckInput([[1, 3], [2, 2], [3, 1]], 4), truckInput([[5, 10], [2, 5], [4, 7], [3, 9]], 10), truckInput([[1, 1]], 1), truckInput([[1, 1]], 0),
+  truckInput([[5, 10]], 3), truckInput([[2, 5], [2, 5]], 3), truckInput([[3, 1], [1, 100]], 1), truckInput([[3, 1], [1, 100]], 4),
+  truckInput([[1, 1000], [1000, 1]], 1000), truckInput([[1000, 1000]], 1000000), truckInput([[1, 2], [2, 3], [3, 4]], 2), truckInput([[1, 4], [2, 3], [3, 2]], 6),
+  truckInput([[10, 1], [10, 2], [10, 3]], 5), truckInput([[1, 1], [1, 1000]], 1), truckInput([[2, 9], [2, 8], [2, 7]], 5), truckInput([[1000, 1], [1000, 1000]], 1500),
+  truckInput([[3, 6], [4, 5], [5, 4]], 7), truckInput([[7, 3], [1, 9]], 8), truckInput(truckStressTypes, 500000), truckInput(truckStressTypes, 1000000)
+])
+
+const jumpTwoStress = Array(10000).fill(1)
+const jumpTwoCases = caseList([
+  arrayInput([2, 3, 1, 1, 4]), arrayInput([2, 3, 0, 1, 4]), arrayInput([0]), arrayInput([1, 0]),
+  arrayInput([2, 0, 0]), arrayInput([1, 1, 1, 1]), arrayInput([3, 2, 1, 1, 0]), arrayInput([4, 1, 1, 3, 1, 1, 1]),
+  arrayInput([2, 1, 1, 1, 1]), arrayInput([5, 0, 0, 0, 0, 0]), arrayInput([1, 2, 3, 4, 5]), arrayInput([3, 0, 2, 0, 1]),
+  arrayInput([2, 2, 0, 1]), arrayInput([1, 3, 1, 1, 1]), arrayInput([2, 3, 1, 1, 1, 1]), arrayInput([3, 1, 2, 0, 4]),
+  arrayInput([3, 0, 2, 1, 1, 0]), arrayInput([2, 4, 0, 1, 0, 0]), arrayInput(Array(9999).fill(1).concat(0)), arrayInput(jumpTwoStress)
+])
+
+const partitionStress = 'abcdefghijklmnopqrstuvwxyz'.repeat(19) + 'abcdef'
+const partitionCases = caseList([
+  'ababcbacadefegdehijhklij\n', 'eccbbbbdec\n', 'a\n', 'aaaa\n',
+  'abc\n', 'abac\n', 'caedbdedda\n', 'qiejxqfnqceocmy\n',
+  'z\n', 'abcdefghijklmnopqrstuvwxyz\n', 'abcabc\n', 'abccba\n',
+  'abacdefegde\n', 'aabbcc\n', 'abab\n', 'abcdefedcba\n',
+  'zzxyyx\n', 'thequickbrownfoxjumpsoverthelazydog\n', 'a'.repeat(500) + '\n', partitionStress + '\n'
+])
+
+function peopleFromHeights(heights) {
+  return heights.map((height, index) => [height, heights.slice(0, index).filter((previous) => previous >= height).length])
+}
+const queueStress = peopleFromHeights(Array.from({ length: 2000 }, (_, index) => 2000 - index))
+const queueCases = caseList([
+  queueInput([[7, 0], [4, 4], [7, 1], [5, 0], [6, 1], [5, 2]]), queueInput([[6, 0], [5, 0], [4, 0], [3, 2], [2, 2], [1, 4]]), queueInput([[1, 0]]), queueInput([[2, 0], [1, 1]]),
+  queueInput(peopleFromHeights([5, 4, 3, 2, 1])), queueInput(peopleFromHeights([1, 2, 3, 4, 5])), queueInput(peopleFromHeights([5, 5, 5, 5])), queueInput(peopleFromHeights([7, 5, 7, 6, 5, 4])),
+  queueInput(peopleFromHeights([10, 1, 9, 2, 8, 3])), queueInput(peopleFromHeights([3, 1, 3, 2, 2, 1])), queueInput(peopleFromHeights([1000000, 1, 999999])), queueInput(peopleFromHeights([4, 4, 3, 3, 2, 2])),
+  queueInput(peopleFromHeights([8, 7, 7, 6, 5, 5, 4])), queueInput(peopleFromHeights([2, 1, 2, 1, 2])), queueInput(peopleFromHeights([9, 1, 8, 2, 7, 3, 6])), queueInput(peopleFromHeights([1, 1, 1, 1, 1])),
+  queueInput(peopleFromHeights([6, 5, 4, 6, 5, 4])), queueInput(peopleFromHeights([10, 9, 8, 7, 6, 5, 4, 3, 2, 1])), queueInput(peopleFromHeights(Array.from({ length: 200 }, (_, index) => (index * 37) % 101 + 1))), queueInput(queueStress)
+])
+
+const candyStress = Array.from({ length: 50000 }, (_, index) => index)
+const candyCases = caseList([
+  arrayInput([1, 0, 2]), arrayInput([1, 2, 2]), arrayInput([1]), arrayInput([1, 1]),
+  arrayInput([1, 2]), arrayInput([2, 1]), arrayInput([1, 2, 3, 4]), arrayInput([4, 3, 2, 1]),
+  arrayInput([1, 3, 2]), arrayInput([1, 3, 4, 5, 2]), arrayInput([1, 2, 87, 87, 87, 2, 1]), arrayInput([1, 0, 2, 1]),
+  arrayInput([1, 2, 3, 2, 1]), arrayInput([2, 1, 2]), arrayInput([1, 2, 2, 1]), arrayInput([5, 4, 3, 2, 1, 2, 3]),
+  arrayInput([1, 3, 2, 2, 1]), arrayInput(Array(100).fill(42)), arrayInput(Array.from({ length: 50000 }, (_, index) => 50000 - index)), arrayInput(candyStress)
+])
+
+const refuelStressStations = Array.from({ length: 500 }, (_, index) => [(index + 1) * 2, 3])
+const refuelCases = caseList([
+  refuelInput(100, 10, [[10, 60], [20, 30], [30, 30], [60, 40]]), refuelInput(1, 1, []), refuelInput(100, 1, []), refuelInput(100, 100, []),
+  refuelInput(100, 50, [[25, 25], [50, 25]]), refuelInput(100, 25, [[25, 25], [50, 25], [75, 25]]), refuelInput(100, 10, [[11, 100]]), refuelInput(100, 10, [[10, 90]]),
+  refuelInput(100, 10, [[10, 20], [30, 40], [70, 30]]), refuelInput(100, 20, [[10, 10], [20, 80]]), refuelInput(100, 20, [[10, 80], [20, 10]]), refuelInput(100, 25, [[15, 10], [25, 25], [50, 25]]),
+  refuelInput(1000, 100, [[100, 100], [200, 300], [400, 400]]), refuelInput(1000000000, 1, [[1, 999999999]]), refuelInput(1000000000, 500000000, [[500000000, 500000000]]), refuelInput(100, 1, [[1, 1], [2, 98]]),
+  refuelInput(100, 30, [[10, 10], [20, 80], [30, 1]]), refuelInput(100, 30, [[10, 70], [20, 1], [30, 1]]), refuelInput(1000, 2, refuelStressStations), refuelInput(1002, 2, refuelStressStations)
+])
+
 writeCases(LAB_DIRECTORIES.container, containerCases, containerOracle)
 writeCases(LAB_DIRECTORIES.palindrome, palindromeCases, palindromeOracle)
 writeCases(LAB_DIRECTORIES.jumpGame, jumpGameCases, jumpGameOracle)
 writeCases(LAB_DIRECTORIES.cookies, cookieCases, cookieOracle)
 writeCases(LAB_DIRECTORIES.intervals, intervalCases, intervalOracle)
+writeCases(LAB_DIRECTORIES.flowers, flowerCases, flowerOracle)
+writeCases(LAB_DIRECTORIES.lemonade, lemonadeCases, lemonadeOracle)
+writeCases(LAB_DIRECTORIES.negations, negationCases, negationOracle)
+writeCases(LAB_DIRECTORIES.stock, stockCases, stockOracle)
+writeCases(LAB_DIRECTORIES.truck, truckCases, truckOracle)
+writeCases(LAB_DIRECTORIES.jumpTwo, jumpTwoCases, jumpTwoOracle)
+writeCases(LAB_DIRECTORIES.partitions, partitionCases, partitionOracle)
+writeCases(LAB_DIRECTORIES.queue, queueCases, queueOracle)
+writeCases(LAB_DIRECTORIES.candy, candyCases, candyOracle)
+writeCases(LAB_DIRECTORIES.refuel, refuelCases, refuelOracle)
 
-console.log('已生成第 13 章 5 个贪心 Lab 的 100 条确定性测试。')
+console.log('已生成第 13 章 15 个贪心 Lab 的 300 条确定性测试。')
