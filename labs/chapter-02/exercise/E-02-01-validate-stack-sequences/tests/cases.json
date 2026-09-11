@@ -3,7 +3,7 @@
     "id": "001-valid-sample",
     "input": "tests/001-valid-sample.in",
     "expected": "tests/001-valid-sample.out",
-    "points": 20,
+    "points": 10,
     "tags": [
       "sample"
     ],
@@ -73,5 +73,15 @@
   {"id":"012-small-invalid","input":"tests/012-small-invalid.in","expected":"tests/012-small-invalid.out","points":1,"tags":["boundary"]},
   {"id":"013-delayed-valid","input":"tests/013-delayed-valid.in","expected":"tests/013-delayed-valid.out","points":1,"tags":["normal"]},
   {"id":"014-int64-values","input":"tests/014-int64-values.in","expected":"tests/014-int64-values.out","points":1,"tags":["boundary"]},
-  {"id":"015-alternating-valid","input":"tests/015-alternating-valid.in","expected":"tests/015-alternating-valid.out","points":1,"tags":["normal"]}
+  {"id":"015-alternating-valid","input":"tests/015-alternating-valid.in","expected":"tests/015-alternating-valid.out","points":1,"tags":["normal"]},
+  {"id":"016-two-valid-blocks","input":"tests/016-two-valid-blocks.in","expected":"tests/016-two-valid-blocks.out","points":1,"tags":["normal"]},
+  {"id":"017-invalid-after-prefix","input":"tests/017-invalid-after-prefix.in","expected":"tests/017-invalid-after-prefix.out","points":1,"tags":["regression"]},
+  {"id":"018-alternating-valid","input":"tests/018-alternating-valid.in","expected":"tests/018-alternating-valid.out","points":1,"tags":["normal"]},
+  {"id":"019-extreme-values","input":"tests/019-extreme-values.in","expected":"tests/019-extreme-values.out","points":1,"tags":["boundary"]},
+  {"id":"020-invalid-stack-top","input":"tests/020-invalid-stack-top.in","expected":"tests/020-invalid-stack-top.out","points":1,"tags":["regression"]},
+  {"id":"021-blockwise-valid","input":"tests/021-blockwise-valid.in","expected":"tests/021-blockwise-valid.out","points":1,"tags":["normal"]},
+  {"id":"022-invalid-late-top","input":"tests/022-invalid-late-top.in","expected":"tests/022-invalid-late-top.out","points":1,"tags":["regression"]},
+  {"id":"023-negative-valid","input":"tests/023-negative-valid.in","expected":"tests/023-negative-valid.out","points":1,"tags":["normal"]},
+  {"id":"024-three-blocks","input":"tests/024-three-blocks.in","expected":"tests/024-three-blocks.out","points":1,"tags":["normal"]},
+  {"id":"025-invalid-final-block","input":"tests/025-invalid-final-block.in","expected":"tests/025-invalid-final-block.out","points":1,"tags":["regression"]}
 ]

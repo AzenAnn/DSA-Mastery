@@ -3,7 +3,7 @@
     "id": "001-duplicate-minimum",
     "input": "tests/001-duplicate-minimum.in",
     "expected": "tests/001-duplicate-minimum.out",
-    "points": 15,
+    "points": 5,
     "tags": [
       "sample"
     ],
@@ -74,5 +74,15 @@
   {"id":"012-zero-positive","input":"tests/012-zero-positive.in","expected":"tests/012-zero-positive.out","points":1,"tags":["normal"]},
   {"id":"013-minimum-churn","input":"tests/013-minimum-churn.in","expected":"tests/013-minimum-churn.out","points":1,"tags":["regression"]},
   {"id":"014-size-tracking","input":"tests/014-size-tracking.in","expected":"tests/014-size-tracking.out","points":1,"tags":["normal"]},
-  {"id":"015-single-cycle","input":"tests/015-single-cycle.in","expected":"tests/015-single-cycle.out","points":1,"tags":["boundary"]}
+  {"id":"015-single-cycle","input":"tests/015-single-cycle.in","expected":"tests/015-single-cycle.out","points":1,"tags":["boundary"]},
+  {"id":"016-pop-and-min","input":"tests/016-pop-and-min.in","expected":"tests/016-pop-and-min.out","points":1,"tags":["normal"]},
+  {"id":"017-extreme-values","input":"tests/017-extreme-values.in","expected":"tests/017-extreme-values.out","points":1,"tags":["boundary"]},
+  {"id":"018-minimum-restoration","input":"tests/018-minimum-restoration.in","expected":"tests/018-minimum-restoration.out","points":1,"tags":["regression"]},
+  {"id":"019-zero-cycle","input":"tests/019-zero-cycle.in","expected":"tests/019-zero-cycle.out","points":1,"tags":["boundary"]},
+  {"id":"020-empty-and-negative","input":"tests/020-empty-and-negative.in","expected":"tests/020-empty-and-negative.out","points":1,"tags":["boundary","error"]},
+  {"id":"021-duplicate-churn","input":"tests/021-duplicate-churn.in","expected":"tests/021-duplicate-churn.out","points":1,"tags":["regression"]},
+  {"id":"022-transfer-like-sequence","input":"tests/022-transfer-like-sequence.in","expected":"tests/022-transfer-like-sequence.out","points":1,"tags":["normal"]},
+  {"id":"023-size-after-failures","input":"tests/023-size-after-failures.in","expected":"tests/023-size-after-failures.out","points":1,"tags":["error"]},
+  {"id":"024-large-positive","input":"tests/024-large-positive.in","expected":"tests/024-large-positive.out","points":1,"tags":["boundary"]},
+  {"id":"025-long-minimum-chain","input":"tests/025-long-minimum-chain.in","expected":"tests/025-long-minimum-chain.out","points":1,"tags":["normal"]}
 ]
