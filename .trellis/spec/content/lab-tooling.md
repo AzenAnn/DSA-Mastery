@@ -58,8 +58,10 @@ JSON 报告顶层：
 - 所有 manifest 路径均为当前 Lab 内相对路径；拒绝绝对路径、`..`、缺失目标和符号链接逃逸。
 - 任何改变 Lab 目录深度的迁移都必须按“旧文件位置解析目标 → 映射被移动目标 → 从新文件位置重新计算相对路径”处理链接；扫描范围同时包含 `.md` 和 JSON 字符串中的 Markdown（例如 Quiz 题干配图），不能只替换 README。
 - Program 必须有可编译但不满分的 `student`、100 分 `solution`、合计 100 的 cases；stdout 判题、stderr 诊断。
+- `tests/cases.json` 的 `id` 必须满足 `^[a-z0-9][a-z0-9-]*$`，如 `002-u-m-basic`；图类型等大写输入命令不能直接拼入 case ID。生成器应在构造 ID 时转为小写，Windows 改大小写时须同步实际文件名，避免 Linux 读不到 manifest 指向的文件。
 - 枚举题的 `judge.limits.outputKb` 必须覆盖题面允许的最大答案，不能直接沿用 1024 KB 默认值。例如 `15E01` 的 n=9 输出 16,692,480 字节，设为 32768 KB；`15E02` 的 n=20/r=10 设为 8192 KB。需实际运行最大输出用例确认不会 OLE。
 - 函数题适配 stdio 时，为答案集合明确序列化和排序。整数子集使用“答案数 + 每项长度及元素”，让空子集 `0` 与无答案可区分。保留原题空行输出时，须说明 `tokens` 无法区分空行与无输出，并独立检查参考输出；不得暗改共享比较器。
+- 原题允许任意见证或任意分量编号时，使用固定输出比较的课程改编须在题面明确规范化规则，不能将参考解的一种遍历顺序暗中当作唯一答案。Ch6 的分量按最小顶点编号、凝聚边排序去重，规则见 [Ch6 题源与适配](../../../docs/ch06-exercise-sources.md)。参考解满分还应由独立 oracle 或图性质校验支持，不能只把同一个参考解输出复制成 `.out` 后宣称正确。
 - 比较器与 oracle 写入都先统一 CRLF/LF；`.out` 固定写为 LF。`exact` 还会忽略每行末尾的空格和制表符，并允许一侧缺少一个末尾 LF；除此之外仍逐字符比较，不忽略行首/行内空白、内部换行或额外空行。`tokens` 按空白 token，`float` 对数值 token 使用 `absTol/relTol`。
 - 判定固定为 `AC|WA|TLE|RE|CE|OLE|IE`；IE 不得伪装成学生 0 分。
 - 人类终端输出固定语义：AC/PASS/满分为 success，WA/CE/RE/IE/未满分实际分为 danger，TLE/OLE/PENDING 为 warning；未满分仍保留 `actual/maximum`，且 maximum 使用 success。颜色只增强文字，不得成为唯一状态信号。
@@ -93,7 +95,7 @@ JSON 报告顶层：
 | 路径越界或符号链接逃逸 | `PATH_ESCAPE`, exit 2 |
 | 迁移后 `.md` 或 Quiz JSON 中的相对资源链接仍按旧目录深度解析 | `check:site` broken artifact link，发布阻塞 |
 | Quiz 非四选一、ID/答案/points/选项错误 | `QUIZ_INVALID`, exit 2 |
-| cases ID 重复、文件缺失或分值不等于 100 | `CASES_INVALID` / `CASES_POINTS`, exit 2 |
+| cases ID 格式非法或重复、文件缺失或分值不等于 100 | `CASES_INVALID` / `CASES_POINTS`, exit 2 |
 | Project task 重复、缺依赖、环或权重错误 | `TASK_DUPLICATE` / `TASK_DEPENDENCY` / `TASK_CYCLE` / `TASK_WEIGHTS`, exit 2 |
 | Lab Makefile 私自分叉 | `MAKEFILE_DRIFT`, exit 2 |
 | 编译失败 | CE；run=0，strict score=1 |

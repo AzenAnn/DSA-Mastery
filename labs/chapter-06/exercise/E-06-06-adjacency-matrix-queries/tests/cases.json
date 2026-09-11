@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-boundary-minimum",
+    "input": "tests/002-boundary-minimum.in",
+    "expected": "tests/002-boundary-minimum.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-boundary-empty",
+    "input": "tests/003-boundary-empty.in",
+    "expected": "tests/003-boundary-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-single-reversed-edge",
+    "input": "tests/004-single-reversed-edge.in",
+    "expected": "tests/004-single-reversed-edge.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-normal-chain",
+    "input": "tests/005-normal-chain.in",
+    "expected": "tests/005-normal-chain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-regression-cycle",
+    "input": "tests/006-regression-cycle.in",
+    "expected": "tests/006-regression-cycle.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "007-triangle-isolates",
+    "input": "tests/007-triangle-isolates.in",
+    "expected": "tests/007-triangle-isolates.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-regression-interleaved-labels",
+    "input": "tests/008-regression-interleaved-labels.in",
+    "expected": "tests/008-regression-interleaved-labels.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "009-normal-star",
+    "input": "tests/009-normal-star.in",
+    "expected": "tests/009-normal-star.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-two-triangles",
+    "input": "tests/010-two-triangles.in",
+    "expected": "tests/010-two-triangles.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-normal-clique",
+    "input": "tests/011-normal-clique.in",
+    "expected": "tests/011-normal-clique.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-regression-bipartite",
+    "input": "tests/012-regression-bipartite.in",
+    "expected": "tests/012-regression-bipartite.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "013-equal-components",
+    "input": "tests/013-equal-components.in",
+    "expected": "tests/013-equal-components.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-unequal-components",
+    "input": "tests/014-unequal-components.in",
+    "expected": "tests/014-unequal-components.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-boundary-high-labels",
+    "input": "tests/015-boundary-high-labels.in",
+    "expected": "tests/015-boundary-high-labels.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "016-random-sparse",
+    "input": "tests/016-random-sparse.in",
+    "expected": "tests/016-random-sparse.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-random-dense",
+    "input": "tests/017-random-dense.in",
+    "expected": "tests/017-random-dense.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-stress-max-empty",
+    "input": "tests/018-stress-max-empty.in",
+    "expected": "tests/018-stress-max-empty.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-stress-long-chain",
+    "input": "tests/019-stress-long-chain.in",
+    "expected": "tests/019-stress-long-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-stress-max-edges",
+    "input": "tests/020-stress-max-edges.in",
+    "expected": "tests/020-stress-max-edges.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

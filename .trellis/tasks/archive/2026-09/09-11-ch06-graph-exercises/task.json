@@ -1,0 +1,36 @@
+{
+  "id": "ch06-graph-exercises",
+  "name": "ch06-graph-exercises",
+  "title": "Ch6 图基础 20 道代码题补全",
+  "description": "补齐指定的 20 道 ch6 图基础 Program Lab，包含题面、学生骨架、参考解和测试，检阅通过后提交推送。",
+  "status": "completed",
+  "dev_type": "content",
+  "scope": "chapter-06",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-09-11",
+  "completedAt": "2026-09-12",
+  "branch": "lab/ch06-graph-exercises",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": "31ac483a40040e260855d4e2610bd1cd061fc2fc",
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "labs/chapter-06/exercise",
+    "docs/ch06-exercise-sources.md",
+    "scripts/chapter-06",
+    "scripts/check-chapter-06-lab-contracts.mjs",
+    "scripts/generate-chapter-06-labs.mjs",
+    "tests/pages-navigation.spec.mjs",
+    ".trellis/spec/content/lab-tooling.md"
+  ],
+  "notes": "User approved task creation and final plan, including implementation, review and push. Inline implementation and review passed: 20 Labs, 400 fixtures on Clang/MSVC, 1000 random checks, 3 detached packs, pnpm test, Pages build/check and 61 browser tests. Work commit 31ac483a pushed and verified by ls-remote. Main merge/deployment not requested.",
+  "meta": {
+    "branch": "lab/ch06-graph-exercises"
+  }
+}

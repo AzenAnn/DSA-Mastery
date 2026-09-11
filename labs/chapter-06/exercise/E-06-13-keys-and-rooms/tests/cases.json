@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-boundary-one-key-success",
+    "input": "tests/002-boundary-one-key-success.in",
+    "expected": "tests/002-boundary-one-key-success.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-boundary-one-key-wrong-room",
+    "input": "tests/003-boundary-one-key-wrong-room.in",
+    "expected": "tests/003-boundary-one-key-wrong-room.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-regression-self-key",
+    "input": "tests/004-regression-self-key.in",
+    "expected": "tests/004-regression-self-key.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "005-boundary-start-empty",
+    "input": "tests/005-boundary-start-empty.in",
+    "expected": "tests/005-boundary-start-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-self-key-and-path",
+    "input": "tests/006-self-key-and-path.in",
+    "expected": "tests/006-self-key-and-path.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-normal-cycle",
+    "input": "tests/007-normal-cycle.in",
+    "expected": "tests/007-normal-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-regression-unreachable-cycle",
+    "input": "tests/008-regression-unreachable-cycle.in",
+    "expected": "tests/008-regression-unreachable-cycle.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "009-all-keys-in-start",
+    "input": "tests/009-all-keys-in-start.in",
+    "expected": "tests/009-all-keys-in-start.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-regression-shared-keys",
+    "input": "tests/010-regression-shared-keys.in",
+    "expected": "tests/010-regression-shared-keys.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "011-fan-in-only",
+    "input": "tests/011-fan-in-only.in",
+    "expected": "tests/011-fan-in-only.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-reverse-chain",
+    "input": "tests/012-reverse-chain.in",
+    "expected": "tests/012-reverse-chain.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-locked-self-cycle",
+    "input": "tests/013-locked-self-cycle.in",
+    "expected": "tests/013-locked-self-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-random-sparse",
+    "input": "tests/014-random-sparse.in",
+    "expected": "tests/014-random-sparse.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-random-dense",
+    "input": "tests/015-random-dense.in",
+    "expected": "tests/015-random-dense.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-boundary-high-key",
+    "input": "tests/016-boundary-high-key.in",
+    "expected": "tests/016-boundary-high-key.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "017-stress-long-chain",
+    "input": "tests/017-stress-long-chain.in",
+    "expected": "tests/017-stress-long-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "018-stress-max-keys",
+    "input": "tests/018-stress-max-keys.in",
+    "expected": "tests/018-stress-max-keys.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-stress-unreachable-keys",
+    "input": "tests/019-stress-unreachable-keys.in",
+    "expected": "tests/019-stress-unreachable-keys.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-stress-max-room-keys",
+    "input": "tests/020-stress-max-room-keys.in",
+    "expected": "tests/020-stress-max-room-keys.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]
