@@ -423,6 +423,7 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-15-backtracking-search/03-pruning.md",
       "content/chapter-15-backtracking-search/04-branch-and-bound.md",
     ],
+    autoLabChapter: 15,
   },
 ];
 

@@ -2158,3 +2158,179 @@ for (const width of [1280, 390]) {
     expect(failures).toEqual([]);
   });
 }
+
+const chapter15Exercises = [
+  {
+    "slug": "permutations",
+    "title": "全排列问题",
+    "source": "https://www.luogu.com.cn/problem/P1706"
+  },
+  {
+    "slug": "combinations",
+    "title": "组合的输出",
+    "source": "https://www.luogu.com.cn/problem/P1157"
+  },
+  {
+    "slug": "subsets",
+    "title": "子集",
+    "source": "https://leetcode.cn/problems/subsets/"
+  },
+  {
+    "slug": "prime-sum-selection",
+    "title": "选数",
+    "source": "https://www.luogu.com.cn/problem/P1036"
+  },
+  {
+    "slug": "phone-letter-combinations",
+    "title": "电话号码的字母组合",
+    "source": "https://leetcode.cn/problems/letter-combinations-of-a-phone-number/"
+  },
+  {
+    "slug": "maze-paths",
+    "title": "迷宫",
+    "source": "https://www.luogu.com.cn/problem/P1605"
+  },
+  {
+    "slug": "strange-elevator",
+    "title": "奇怪的电梯",
+    "source": "https://www.luogu.com.cn/problem/P1135"
+  },
+  {
+    "slug": "knight-traversal",
+    "title": "马的遍历",
+    "source": "https://www.luogu.com.cn/problem/P1443"
+  },
+  {
+    "slug": "generate-parentheses",
+    "title": "括号生成",
+    "source": "https://leetcode.cn/problems/generate-parentheses/"
+  },
+  {
+    "slug": "combination-sum",
+    "title": "组合总和",
+    "source": "https://leetcode.cn/problems/combination-sum/"
+  },
+  {
+    "slug": "subsets-ii",
+    "title": "子集 II",
+    "source": "https://leetcode.cn/problems/subsets-ii/"
+  },
+  {
+    "slug": "permutations-ii",
+    "title": "全排列 II",
+    "source": "https://leetcode.cn/problems/permutations-ii/"
+  },
+  {
+    "slug": "combination-sum-ii",
+    "title": "组合总和 II",
+    "source": "https://leetcode.cn/problems/combination-sum-ii/"
+  },
+  {
+    "slug": "word-search",
+    "title": "单词搜索",
+    "source": "https://leetcode.cn/problems/word-search/"
+  },
+  {
+    "slug": "palindrome-partitioning",
+    "title": "分割回文串",
+    "source": "https://leetcode.cn/problems/palindrome-partitioning/"
+  },
+  {
+    "slug": "n-queens",
+    "title": "N 皇后",
+    "source": "https://leetcode.cn/problems/n-queens/"
+  },
+  {
+    "slug": "sudoku-solver",
+    "title": "解数独",
+    "source": "https://leetcode.cn/problems/sudoku-solver/"
+  },
+  {
+    "slug": "eight-puzzle",
+    "title": "八数码难题",
+    "source": "https://www.luogu.com.cn/problem/P1379"
+  },
+  {
+    "slug": "sticks",
+    "title": "小木棍",
+    "source": "https://www.luogu.com.cn/problem/P1120"
+  },
+  {
+    "slug": "target-sudoku",
+    "title": "靶形数独",
+    "source": "https://www.luogu.com.cn/problem/P1074"
+  },
+  {
+    "slug": "knight-spirit",
+    "title": "骑士精神",
+    "source": "https://www.luogu.com.cn/problem/P2324"
+  }
+];
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"]) {
+    test(`chapter 15 Exercise sidebar and problem pages at ${width}px ${theme}`, async ({ page }, testInfo) => {
+      test.setTimeout(120_000);
+      const failures = monitorPage(page);
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+      await page.addInitScript((mode) => globalThis.localStorage.setItem("vitepress-theme-appearance", mode), theme);
+      await page.goto(`${baseUrl}/learn/outline/chapter-15-backtracking-search/`);
+      if (width === 390) await page.locator(".VPLocalNav .menu").click();
+      const chapter = page.locator('.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-15-backtracking-search/"])');
+      await expect(chapter).toHaveCount(1);
+      await expect(chapter).not.toContainText("相关 Labs");
+      const labs = chapter.locator(".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)");
+      await expect(labs.locator(".course-lab-category__empty")).toHaveCount(2);
+      for (const [category, label] of [["theory", "暂无理论型 Lab"], ["project", "暂无工程型 Lab"]]) {
+        const group = labs.locator(`.VPSidebarItem:has(> .item > .text > .course-lab-category--${category})`);
+        await expect(group.locator(":scope > .items a")).toHaveCount(0);
+        await expect(group.locator(".course-lab-category__empty")).toHaveText(label);
+      }
+      const exercise = labs.locator(".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)");
+      await expect(exercise).toHaveClass(/collapsed/);
+      await exercise.locator(":scope > .item > .caret").click();
+      const links = exercise.locator(":scope > .items a");
+      await expect(links).toHaveCount(21);
+      for (const [index, row] of chapter15Exercises.entries()) {
+        const id = String(index + 1).padStart(2, "0");
+        await expect(links.nth(index)).toHaveText(`15E${id} · ${row.title}`);
+        await expect(links.nth(index)).toHaveAttribute("href", `${pagesBasePath}/labs/chapter-15/exercise/E-15-${id}-${row.slug}/`);
+      }
+      await links.first().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: testInfo.outputPath("ch15-sidebar.png") });
+      await links.first().click();
+      await expect(page).toHaveURL(`${baseUrl}/labs/chapter-15/exercise/E-15-01-permutations/`);
+      for (const [index, row] of chapter15Exercises.entries()) {
+        const id = String(index + 1).padStart(2, "0");
+        expect((await page.goto(`${baseUrl}/labs/chapter-15/exercise/E-15-${id}-${row.slug}/`)).status()).toBe(200);
+        await expect(page.getByRole("heading", { level: 1 })).toHaveText(`Lab 15-E-${id}：${row.title}`);
+        await expect(page.locator(".vp-doc")).toContainText("数据范围");
+        await expect(page.locator(`.vp-doc a[href="${row.source}"]`)).toHaveCount(1);
+        expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.document.documentElement.clientWidth + 1)).toBe(true);
+        if ([0, 4, 19, 20].includes(index)) await page.screenshot({ path: testInfo.outputPath(`ch15-${id}.png`) });
+      }
+      await page.goto(`${baseUrl}/learn/chapter-15-backtracking-search/01-backtracking-framework/`);
+      if (width === 390) await page.locator(".VPLocalNav .menu").click();
+      await expect(chapter.locator('a[href*="/labs/chapter-15/exercise/E-15-21-knight-spirit/"]')).toHaveCount(1);
+      expect(failures).toEqual([]);
+    });
+  }
+}
+
+test("chapter 15 exercises enter Labs index and local search", async ({ page }) => {
+  test.setTimeout(90_000);
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/`);
+  const cards = page.locator('a.course-labs-list-card[href*="/labs/chapter-15/exercise/"]');
+  await expect(cards).toHaveCount(21);
+  await cards.last().click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 15-E-21：骑士精神");
+  await page.locator("#local-search button").click();
+  for (const [index, row] of chapter15Exercises.entries()) {
+    await page.getByRole("searchbox").fill(row.title);
+    const id = String(index + 1).padStart(2, "0");
+    await expect(page.getByRole("listbox").locator(`a[href*="/labs/chapter-15/exercise/E-15-${id}-${row.slug}/"]`).first()).toBeVisible();
+  }
+  await page.keyboard.press("Escape");
+  expect(failures).toEqual([]);
+});

@@ -1,0 +1,33 @@
+{
+  "id": "ch15-backtracking-exercises",
+  "name": "ch15-backtracking-exercises",
+  "title": "Ch15：新增 21 道回溯与搜索代码题及练习导航",
+  "description": "按用户顺序新增 ch15 的21道回溯与搜索 Program Lab，提供完整题面、骨架、参考实现和测试，启用章节 Exercise 导航。",
+  "status": "review",
+  "dev_type": "fullstack",
+  "scope": "ch15-exercises",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-09-11",
+  "completedAt": null,
+  "branch": "feat/ch15-backtracking-exercises",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "labs/chapter-15",
+    ".vitepress/content-index.ts",
+    "tests/pages-navigation.spec.mjs",
+    "scripts/generate-chapter-15-search-tests.mjs",
+    ".trellis/spec/content/frontmatter-and-routing.md",
+    ".trellis/spec/content/lab-tooling.md"
+  ],
+  "notes": "2026-09-11 已按用户确认的方案完成21道代码题和ch15导航。227组独立测试、21题verify、MSVC代表题、pnpm test及Pages全部56项测试通过。预览端口5173。用户后续明确要求提交PR，已授权提交、推送功能分支并创建PR；无关SVG变化不纳入提交。详见validation.md。",
+  "meta": {}
+}

@@ -1,0 +1,988 @@
+987
+16 a b a b a b a b a b a b a b a b
+14 a b a b a b a b a b a b a bab
+14 a b a b a b a b a b a b aba b
+14 a b a b a b a b a b a bab a b
+12 a b a b a b a b a b a babab
+14 a b a b a b a b a b aba b a b
+12 a b a b a b a b a b aba bab
+12 a b a b a b a b a b ababa b
+14 a b a b a b a b a bab a b a b
+12 a b a b a b a b a bab a bab
+12 a b a b a b a b a bab aba b
+12 a b a b a b a b a babab a b
+10 a b a b a b a b a bababab
+14 a b a b a b a b aba b a b a b
+12 a b a b a b a b aba b a bab
+12 a b a b a b a b aba b aba b
+12 a b a b a b a b aba bab a b
+10 a b a b a b a b aba babab
+12 a b a b a b a b ababa b a b
+10 a b a b a b a b ababa bab
+10 a b a b a b a b abababa b
+14 a b a b a b a bab a b a b a b
+12 a b a b a b a bab a b a bab
+12 a b a b a b a bab a b aba b
+12 a b a b a b a bab a bab a b
+10 a b a b a b a bab a babab
+12 a b a b a b a bab aba b a b
+10 a b a b a b a bab aba bab
+10 a b a b a b a bab ababa b
+12 a b a b a b a babab a b a b
+10 a b a b a b a babab a bab
+10 a b a b a b a babab aba b
+10 a b a b a b a bababab a b
+8 a b a b a b a babababab
+14 a b a b a b aba b a b a b a b
+12 a b a b a b aba b a b a bab
+12 a b a b a b aba b a b aba b
+12 a b a b a b aba b a bab a b
+10 a b a b a b aba b a babab
+12 a b a b a b aba b aba b a b
+10 a b a b a b aba b aba bab
+10 a b a b a b aba b ababa b
+12 a b a b a b aba bab a b a b
+10 a b a b a b aba bab a bab
+10 a b a b a b aba bab aba b
+10 a b a b a b aba babab a b
+8 a b a b a b aba bababab
+12 a b a b a b ababa b a b a b
+10 a b a b a b ababa b a bab
+10 a b a b a b ababa b aba b
+10 a b a b a b ababa bab a b
+8 a b a b a b ababa babab
+10 a b a b a b abababa b a b
+8 a b a b a b abababa bab
+8 a b a b a b ababababa b
+14 a b a b a bab a b a b a b a b
+12 a b a b a bab a b a b a bab
+12 a b a b a bab a b a b aba b
+12 a b a b a bab a b a bab a b
+10 a b a b a bab a b a babab
+12 a b a b a bab a b aba b a b
+10 a b a b a bab a b aba bab
+10 a b a b a bab a b ababa b
+12 a b a b a bab a bab a b a b
+10 a b a b a bab a bab a bab
+10 a b a b a bab a bab aba b
+10 a b a b a bab a babab a b
+8 a b a b a bab a bababab
+12 a b a b a bab aba b a b a b
+10 a b a b a bab aba b a bab
+10 a b a b a bab aba b aba b
+10 a b a b a bab aba bab a b
+8 a b a b a bab aba babab
+10 a b a b a bab ababa b a b
+8 a b a b a bab ababa bab
+8 a b a b a bab abababa b
+12 a b a b a babab a b a b a b
+10 a b a b a babab a b a bab
+10 a b a b a babab a b aba b
+10 a b a b a babab a bab a b
+8 a b a b a babab a babab
+10 a b a b a babab aba b a b
+8 a b a b a babab aba bab
+8 a b a b a babab ababa b
+10 a b a b a bababab a b a b
+8 a b a b a bababab a bab
+8 a b a b a bababab aba b
+8 a b a b a babababab a b
+6 a b a b a bababababab
+14 a b a b aba b a b a b a b a b
+12 a b a b aba b a b a b a bab
+12 a b a b aba b a b a b aba b
+12 a b a b aba b a b a bab a b
+10 a b a b aba b a b a babab
+12 a b a b aba b a b aba b a b
+10 a b a b aba b a b aba bab
+10 a b a b aba b a b ababa b
+12 a b a b aba b a bab a b a b
+10 a b a b aba b a bab a bab
+10 a b a b aba b a bab aba b
+10 a b a b aba b a babab a b
+8 a b a b aba b a bababab
+12 a b a b aba b aba b a b a b
+10 a b a b aba b aba b a bab
+10 a b a b aba b aba b aba b
+10 a b a b aba b aba bab a b
+8 a b a b aba b aba babab
+10 a b a b aba b ababa b a b
+8 a b a b aba b ababa bab
+8 a b a b aba b abababa b
+12 a b a b aba bab a b a b a b
+10 a b a b aba bab a b a bab
+10 a b a b aba bab a b aba b
+10 a b a b aba bab a bab a b
+8 a b a b aba bab a babab
+10 a b a b aba bab aba b a b
+8 a b a b aba bab aba bab
+8 a b a b aba bab ababa b
+10 a b a b aba babab a b a b
+8 a b a b aba babab a bab
+8 a b a b aba babab aba b
+8 a b a b aba bababab a b
+6 a b a b aba babababab
+12 a b a b ababa b a b a b a b
+10 a b a b ababa b a b a bab
+10 a b a b ababa b a b aba b
+10 a b a b ababa b a bab a b
+8 a b a b ababa b a babab
+10 a b a b ababa b aba b a b
+8 a b a b ababa b aba bab
+8 a b a b ababa b ababa b
+10 a b a b ababa bab a b a b
+8 a b a b ababa bab a bab
+8 a b a b ababa bab aba b
+8 a b a b ababa babab a b
+6 a b a b ababa bababab
+10 a b a b abababa b a b a b
+8 a b a b abababa b a bab
+8 a b a b abababa b aba b
+8 a b a b abababa bab a b
+6 a b a b abababa babab
+8 a b a b ababababa b a b
+6 a b a b ababababa bab
+6 a b a b abababababa b
+14 a b a bab a b a b a b a b a b
+12 a b a bab a b a b a b a bab
+12 a b a bab a b a b a b aba b
+12 a b a bab a b a b a bab a b
+10 a b a bab a b a b a babab
+12 a b a bab a b a b aba b a b
+10 a b a bab a b a b aba bab
+10 a b a bab a b a b ababa b
+12 a b a bab a b a bab a b a b
+10 a b a bab a b a bab a bab
+10 a b a bab a b a bab aba b
+10 a b a bab a b a babab a b
+8 a b a bab a b a bababab
+12 a b a bab a b aba b a b a b
+10 a b a bab a b aba b a bab
+10 a b a bab a b aba b aba b
+10 a b a bab a b aba bab a b
+8 a b a bab a b aba babab
+10 a b a bab a b ababa b a b
+8 a b a bab a b ababa bab
+8 a b a bab a b abababa b
+12 a b a bab a bab a b a b a b
+10 a b a bab a bab a b a bab
+10 a b a bab a bab a b aba b
+10 a b a bab a bab a bab a b
+8 a b a bab a bab a babab
+10 a b a bab a bab aba b a b
+8 a b a bab a bab aba bab
+8 a b a bab a bab ababa b
+10 a b a bab a babab a b a b
+8 a b a bab a babab a bab
+8 a b a bab a babab aba b
+8 a b a bab a bababab a b
+6 a b a bab a babababab
+12 a b a bab aba b a b a b a b
+10 a b a bab aba b a b a bab
+10 a b a bab aba b a b aba b
+10 a b a bab aba b a bab a b
+8 a b a bab aba b a babab
+10 a b a bab aba b aba b a b
+8 a b a bab aba b aba bab
+8 a b a bab aba b ababa b
+10 a b a bab aba bab a b a b
+8 a b a bab aba bab a bab
+8 a b a bab aba bab aba b
+8 a b a bab aba babab a b
+6 a b a bab aba bababab
+10 a b a bab ababa b a b a b
+8 a b a bab ababa b a bab
+8 a b a bab ababa b aba b
+8 a b a bab ababa bab a b
+6 a b a bab ababa babab
+8 a b a bab abababa b a b
+6 a b a bab abababa bab
+6 a b a bab ababababa b
+12 a b a babab a b a b a b a b
+10 a b a babab a b a b a bab
+10 a b a babab a b a b aba b
+10 a b a babab a b a bab a b
+8 a b a babab a b a babab
+10 a b a babab a b aba b a b
+8 a b a babab a b aba bab
+8 a b a babab a b ababa b
+10 a b a babab a bab a b a b
+8 a b a babab a bab a bab
+8 a b a babab a bab aba b
+8 a b a babab a babab a b
+6 a b a babab a bababab
+10 a b a babab aba b a b a b
+8 a b a babab aba b a bab
+8 a b a babab aba b aba b
+8 a b a babab aba bab a b
+6 a b a babab aba babab
+8 a b a babab ababa b a b
+6 a b a babab ababa bab
+6 a b a babab abababa b
+10 a b a bababab a b a b a b
+8 a b a bababab a b a bab
+8 a b a bababab a b aba b
+8 a b a bababab a bab a b
+6 a b a bababab a babab
+8 a b a bababab aba b a b
+6 a b a bababab aba bab
+6 a b a bababab ababa b
+8 a b a babababab a b a b
+6 a b a babababab a bab
+6 a b a babababab aba b
+6 a b a bababababab a b
+4 a b a babababababab
+14 a b aba b a b a b a b a b a b
+12 a b aba b a b a b a b a bab
+12 a b aba b a b a b a b aba b
+12 a b aba b a b a b a bab a b
+10 a b aba b a b a b a babab
+12 a b aba b a b a b aba b a b
+10 a b aba b a b a b aba bab
+10 a b aba b a b a b ababa b
+12 a b aba b a b a bab a b a b
+10 a b aba b a b a bab a bab
+10 a b aba b a b a bab aba b
+10 a b aba b a b a babab a b
+8 a b aba b a b a bababab
+12 a b aba b a b aba b a b a b
+10 a b aba b a b aba b a bab
+10 a b aba b a b aba b aba b
+10 a b aba b a b aba bab a b
+8 a b aba b a b aba babab
+10 a b aba b a b ababa b a b
+8 a b aba b a b ababa bab
+8 a b aba b a b abababa b
+12 a b aba b a bab a b a b a b
+10 a b aba b a bab a b a bab
+10 a b aba b a bab a b aba b
+10 a b aba b a bab a bab a b
+8 a b aba b a bab a babab
+10 a b aba b a bab aba b a b
+8 a b aba b a bab aba bab
+8 a b aba b a bab ababa b
+10 a b aba b a babab a b a b
+8 a b aba b a babab a bab
+8 a b aba b a babab aba b
+8 a b aba b a bababab a b
+6 a b aba b a babababab
+12 a b aba b aba b a b a b a b
+10 a b aba b aba b a b a bab
+10 a b aba b aba b a b aba b
+10 a b aba b aba b a bab a b
+8 a b aba b aba b a babab
+10 a b aba b aba b aba b a b
+8 a b aba b aba b aba bab
+8 a b aba b aba b ababa b
+10 a b aba b aba bab a b a b
+8 a b aba b aba bab a bab
+8 a b aba b aba bab aba b
+8 a b aba b aba babab a b
+6 a b aba b aba bababab
+10 a b aba b ababa b a b a b
+8 a b aba b ababa b a bab
+8 a b aba b ababa b aba b
+8 a b aba b ababa bab a b
+6 a b aba b ababa babab
+8 a b aba b abababa b a b
+6 a b aba b abababa bab
+6 a b aba b ababababa b
+12 a b aba bab a b a b a b a b
+10 a b aba bab a b a b a bab
+10 a b aba bab a b a b aba b
+10 a b aba bab a b a bab a b
+8 a b aba bab a b a babab
+10 a b aba bab a b aba b a b
+8 a b aba bab a b aba bab
+8 a b aba bab a b ababa b
+10 a b aba bab a bab a b a b
+8 a b aba bab a bab a bab
+8 a b aba bab a bab aba b
+8 a b aba bab a babab a b
+6 a b aba bab a bababab
+10 a b aba bab aba b a b a b
+8 a b aba bab aba b a bab
+8 a b aba bab aba b aba b
+8 a b aba bab aba bab a b
+6 a b aba bab aba babab
+8 a b aba bab ababa b a b
+6 a b aba bab ababa bab
+6 a b aba bab abababa b
+10 a b aba babab a b a b a b
+8 a b aba babab a b a bab
+8 a b aba babab a b aba b
+8 a b aba babab a bab a b
+6 a b aba babab a babab
+8 a b aba babab aba b a b
+6 a b aba babab aba bab
+6 a b aba babab ababa b
+8 a b aba bababab a b a b
+6 a b aba bababab a bab
+6 a b aba bababab aba b
+6 a b aba babababab a b
+4 a b aba bababababab
+12 a b ababa b a b a b a b a b
+10 a b ababa b a b a b a bab
+10 a b ababa b a b a b aba b
+10 a b ababa b a b a bab a b
+8 a b ababa b a b a babab
+10 a b ababa b a b aba b a b
+8 a b ababa b a b aba bab
+8 a b ababa b a b ababa b
+10 a b ababa b a bab a b a b
+8 a b ababa b a bab a bab
+8 a b ababa b a bab aba b
+8 a b ababa b a babab a b
+6 a b ababa b a bababab
+10 a b ababa b aba b a b a b
+8 a b ababa b aba b a bab
+8 a b ababa b aba b aba b
+8 a b ababa b aba bab a b
+6 a b ababa b aba babab
+8 a b ababa b ababa b a b
+6 a b ababa b ababa bab
+6 a b ababa b abababa b
+10 a b ababa bab a b a b a b
+8 a b ababa bab a b a bab
+8 a b ababa bab a b aba b
+8 a b ababa bab a bab a b
+6 a b ababa bab a babab
+8 a b ababa bab aba b a b
+6 a b ababa bab aba bab
+6 a b ababa bab ababa b
+8 a b ababa babab a b a b
+6 a b ababa babab a bab
+6 a b ababa babab aba b
+6 a b ababa bababab a b
+4 a b ababa babababab
+10 a b abababa b a b a b a b
+8 a b abababa b a b a bab
+8 a b abababa b a b aba b
+8 a b abababa b a bab a b
+6 a b abababa b a babab
+8 a b abababa b aba b a b
+6 a b abababa b aba bab
+6 a b abababa b ababa b
+8 a b abababa bab a b a b
+6 a b abababa bab a bab
+6 a b abababa bab aba b
+6 a b abababa babab a b
+4 a b abababa bababab
+8 a b ababababa b a b a b
+6 a b ababababa b a bab
+6 a b ababababa b aba b
+6 a b ababababa bab a b
+4 a b ababababa babab
+6 a b abababababa b a b
+4 a b abababababa bab
+4 a b ababababababa b
+14 a bab a b a b a b a b a b a b
+12 a bab a b a b a b a b a bab
+12 a bab a b a b a b a b aba b
+12 a bab a b a b a b a bab a b
+10 a bab a b a b a b a babab
+12 a bab a b a b a b aba b a b
+10 a bab a b a b a b aba bab
+10 a bab a b a b a b ababa b
+12 a bab a b a b a bab a b a b
+10 a bab a b a b a bab a bab
+10 a bab a b a b a bab aba b
+10 a bab a b a b a babab a b
+8 a bab a b a b a bababab
+12 a bab a b a b aba b a b a b
+10 a bab a b a b aba b a bab
+10 a bab a b a b aba b aba b
+10 a bab a b a b aba bab a b
+8 a bab a b a b aba babab
+10 a bab a b a b ababa b a b
+8 a bab a b a b ababa bab
+8 a bab a b a b abababa b
+12 a bab a b a bab a b a b a b
+10 a bab a b a bab a b a bab
+10 a bab a b a bab a b aba b
+10 a bab a b a bab a bab a b
+8 a bab a b a bab a babab
+10 a bab a b a bab aba b a b
+8 a bab a b a bab aba bab
+8 a bab a b a bab ababa b
+10 a bab a b a babab a b a b
+8 a bab a b a babab a bab
+8 a bab a b a babab aba b
+8 a bab a b a bababab a b
+6 a bab a b a babababab
+12 a bab a b aba b a b a b a b
+10 a bab a b aba b a b a bab
+10 a bab a b aba b a b aba b
+10 a bab a b aba b a bab a b
+8 a bab a b aba b a babab
+10 a bab a b aba b aba b a b
+8 a bab a b aba b aba bab
+8 a bab a b aba b ababa b
+10 a bab a b aba bab a b a b
+8 a bab a b aba bab a bab
+8 a bab a b aba bab aba b
+8 a bab a b aba babab a b
+6 a bab a b aba bababab
+10 a bab a b ababa b a b a b
+8 a bab a b ababa b a bab
+8 a bab a b ababa b aba b
+8 a bab a b ababa bab a b
+6 a bab a b ababa babab
+8 a bab a b abababa b a b
+6 a bab a b abababa bab
+6 a bab a b ababababa b
+12 a bab a bab a b a b a b a b
+10 a bab a bab a b a b a bab
+10 a bab a bab a b a b aba b
+10 a bab a bab a b a bab a b
+8 a bab a bab a b a babab
+10 a bab a bab a b aba b a b
+8 a bab a bab a b aba bab
+8 a bab a bab a b ababa b
+10 a bab a bab a bab a b a b
+8 a bab a bab a bab a bab
+8 a bab a bab a bab aba b
+8 a bab a bab a babab a b
+6 a bab a bab a bababab
+10 a bab a bab aba b a b a b
+8 a bab a bab aba b a bab
+8 a bab a bab aba b aba b
+8 a bab a bab aba bab a b
+6 a bab a bab aba babab
+8 a bab a bab ababa b a b
+6 a bab a bab ababa bab
+6 a bab a bab abababa b
+10 a bab a babab a b a b a b
+8 a bab a babab a b a bab
+8 a bab a babab a b aba b
+8 a bab a babab a bab a b
+6 a bab a babab a babab
+8 a bab a babab aba b a b
+6 a bab a babab aba bab
+6 a bab a babab ababa b
+8 a bab a bababab a b a b
+6 a bab a bababab a bab
+6 a bab a bababab aba b
+6 a bab a babababab a b
+4 a bab a bababababab
+12 a bab aba b a b a b a b a b
+10 a bab aba b a b a b a bab
+10 a bab aba b a b a b aba b
+10 a bab aba b a b a bab a b
+8 a bab aba b a b a babab
+10 a bab aba b a b aba b a b
+8 a bab aba b a b aba bab
+8 a bab aba b a b ababa b
+10 a bab aba b a bab a b a b
+8 a bab aba b a bab a bab
+8 a bab aba b a bab aba b
+8 a bab aba b a babab a b
+6 a bab aba b a bababab
+10 a bab aba b aba b a b a b
+8 a bab aba b aba b a bab
+8 a bab aba b aba b aba b
+8 a bab aba b aba bab a b
+6 a bab aba b aba babab
+8 a bab aba b ababa b a b
+6 a bab aba b ababa bab
+6 a bab aba b abababa b
+10 a bab aba bab a b a b a b
+8 a bab aba bab a b a bab
+8 a bab aba bab a b aba b
+8 a bab aba bab a bab a b
+6 a bab aba bab a babab
+8 a bab aba bab aba b a b
+6 a bab aba bab aba bab
+6 a bab aba bab ababa b
+8 a bab aba babab a b a b
+6 a bab aba babab a bab
+6 a bab aba babab aba b
+6 a bab aba bababab a b
+4 a bab aba babababab
+10 a bab ababa b a b a b a b
+8 a bab ababa b a b a bab
+8 a bab ababa b a b aba b
+8 a bab ababa b a bab a b
+6 a bab ababa b a babab
+8 a bab ababa b aba b a b
+6 a bab ababa b aba bab
+6 a bab ababa b ababa b
+8 a bab ababa bab a b a b
+6 a bab ababa bab a bab
+6 a bab ababa bab aba b
+6 a bab ababa babab a b
+4 a bab ababa bababab
+8 a bab abababa b a b a b
+6 a bab abababa b a bab
+6 a bab abababa b aba b
+6 a bab abababa bab a b
+4 a bab abababa babab
+6 a bab ababababa b a b
+4 a bab ababababa bab
+4 a bab abababababa b
+12 a babab a b a b a b a b a b
+10 a babab a b a b a b a bab
+10 a babab a b a b a b aba b
+10 a babab a b a b a bab a b
+8 a babab a b a b a babab
+10 a babab a b a b aba b a b
+8 a babab a b a b aba bab
+8 a babab a b a b ababa b
+10 a babab a b a bab a b a b
+8 a babab a b a bab a bab
+8 a babab a b a bab aba b
+8 a babab a b a babab a b
+6 a babab a b a bababab
+10 a babab a b aba b a b a b
+8 a babab a b aba b a bab
+8 a babab a b aba b aba b
+8 a babab a b aba bab a b
+6 a babab a b aba babab
+8 a babab a b ababa b a b
+6 a babab a b ababa bab
+6 a babab a b abababa b
+10 a babab a bab a b a b a b
+8 a babab a bab a b a bab
+8 a babab a bab a b aba b
+8 a babab a bab a bab a b
+6 a babab a bab a babab
+8 a babab a bab aba b a b
+6 a babab a bab aba bab
+6 a babab a bab ababa b
+8 a babab a babab a b a b
+6 a babab a babab a bab
+6 a babab a babab aba b
+6 a babab a bababab a b
+4 a babab a babababab
+10 a babab aba b a b a b a b
+8 a babab aba b a b a bab
+8 a babab aba b a b aba b
+8 a babab aba b a bab a b
+6 a babab aba b a babab
+8 a babab aba b aba b a b
+6 a babab aba b aba bab
+6 a babab aba b ababa b
+8 a babab aba bab a b a b
+6 a babab aba bab a bab
+6 a babab aba bab aba b
+6 a babab aba babab a b
+4 a babab aba bababab
+8 a babab ababa b a b a b
+6 a babab ababa b a bab
+6 a babab ababa b aba b
+6 a babab ababa bab a b
+4 a babab ababa babab
+6 a babab abababa b a b
+4 a babab abababa bab
+4 a babab ababababa b
+10 a bababab a b a b a b a b
+8 a bababab a b a b a bab
+8 a bababab a b a b aba b
+8 a bababab a b a bab a b
+6 a bababab a b a babab
+8 a bababab a b aba b a b
+6 a bababab a b aba bab
+6 a bababab a b ababa b
+8 a bababab a bab a b a b
+6 a bababab a bab a bab
+6 a bababab a bab aba b
+6 a bababab a babab a b
+4 a bababab a bababab
+8 a bababab aba b a b a b
+6 a bababab aba b a bab
+6 a bababab aba b aba b
+6 a bababab aba bab a b
+4 a bababab aba babab
+6 a bababab ababa b a b
+4 a bababab ababa bab
+4 a bababab abababa b
+8 a babababab a b a b a b
+6 a babababab a b a bab
+6 a babababab a b aba b
+6 a babababab a bab a b
+4 a babababab a babab
+6 a babababab aba b a b
+4 a babababab aba bab
+4 a babababab ababa b
+6 a bababababab a b a b
+4 a bababababab a bab
+4 a bababababab aba b
+4 a babababababab a b
+2 a bababababababab
+14 aba b a b a b a b a b a b a b
+12 aba b a b a b a b a b a bab
+12 aba b a b a b a b a b aba b
+12 aba b a b a b a b a bab a b
+10 aba b a b a b a b a babab
+12 aba b a b a b a b aba b a b
+10 aba b a b a b a b aba bab
+10 aba b a b a b a b ababa b
+12 aba b a b a b a bab a b a b
+10 aba b a b a b a bab a bab
+10 aba b a b a b a bab aba b
+10 aba b a b a b a babab a b
+8 aba b a b a b a bababab
+12 aba b a b a b aba b a b a b
+10 aba b a b a b aba b a bab
+10 aba b a b a b aba b aba b
+10 aba b a b a b aba bab a b
+8 aba b a b a b aba babab
+10 aba b a b a b ababa b a b
+8 aba b a b a b ababa bab
+8 aba b a b a b abababa b
+12 aba b a b a bab a b a b a b
+10 aba b a b a bab a b a bab
+10 aba b a b a bab a b aba b
+10 aba b a b a bab a bab a b
+8 aba b a b a bab a babab
+10 aba b a b a bab aba b a b
+8 aba b a b a bab aba bab
+8 aba b a b a bab ababa b
+10 aba b a b a babab a b a b
+8 aba b a b a babab a bab
+8 aba b a b a babab aba b
+8 aba b a b a bababab a b
+6 aba b a b a babababab
+12 aba b a b aba b a b a b a b
+10 aba b a b aba b a b a bab
+10 aba b a b aba b a b aba b
+10 aba b a b aba b a bab a b
+8 aba b a b aba b a babab
+10 aba b a b aba b aba b a b
+8 aba b a b aba b aba bab
+8 aba b a b aba b ababa b
+10 aba b a b aba bab a b a b
+8 aba b a b aba bab a bab
+8 aba b a b aba bab aba b
+8 aba b a b aba babab a b
+6 aba b a b aba bababab
+10 aba b a b ababa b a b a b
+8 aba b a b ababa b a bab
+8 aba b a b ababa b aba b
+8 aba b a b ababa bab a b
+6 aba b a b ababa babab
+8 aba b a b abababa b a b
+6 aba b a b abababa bab
+6 aba b a b ababababa b
+12 aba b a bab a b a b a b a b
+10 aba b a bab a b a b a bab
+10 aba b a bab a b a b aba b
+10 aba b a bab a b a bab a b
+8 aba b a bab a b a babab
+10 aba b a bab a b aba b a b
+8 aba b a bab a b aba bab
+8 aba b a bab a b ababa b
+10 aba b a bab a bab a b a b
+8 aba b a bab a bab a bab
+8 aba b a bab a bab aba b
+8 aba b a bab a babab a b
+6 aba b a bab a bababab
+10 aba b a bab aba b a b a b
+8 aba b a bab aba b a bab
+8 aba b a bab aba b aba b
+8 aba b a bab aba bab a b
+6 aba b a bab aba babab
+8 aba b a bab ababa b a b
+6 aba b a bab ababa bab
+6 aba b a bab abababa b
+10 aba b a babab a b a b a b
+8 aba b a babab a b a bab
+8 aba b a babab a b aba b
+8 aba b a babab a bab a b
+6 aba b a babab a babab
+8 aba b a babab aba b a b
+6 aba b a babab aba bab
+6 aba b a babab ababa b
+8 aba b a bababab a b a b
+6 aba b a bababab a bab
+6 aba b a bababab aba b
+6 aba b a babababab a b
+4 aba b a bababababab
+12 aba b aba b a b a b a b a b
+10 aba b aba b a b a b a bab
+10 aba b aba b a b a b aba b
+10 aba b aba b a b a bab a b
+8 aba b aba b a b a babab
+10 aba b aba b a b aba b a b
+8 aba b aba b a b aba bab
+8 aba b aba b a b ababa b
+10 aba b aba b a bab a b a b
+8 aba b aba b a bab a bab
+8 aba b aba b a bab aba b
+8 aba b aba b a babab a b
+6 aba b aba b a bababab
+10 aba b aba b aba b a b a b
+8 aba b aba b aba b a bab
+8 aba b aba b aba b aba b
+8 aba b aba b aba bab a b
+6 aba b aba b aba babab
+8 aba b aba b ababa b a b
+6 aba b aba b ababa bab
+6 aba b aba b abababa b
+10 aba b aba bab a b a b a b
+8 aba b aba bab a b a bab
+8 aba b aba bab a b aba b
+8 aba b aba bab a bab a b
+6 aba b aba bab a babab
+8 aba b aba bab aba b a b
+6 aba b aba bab aba bab
+6 aba b aba bab ababa b
+8 aba b aba babab a b a b
+6 aba b aba babab a bab
+6 aba b aba babab aba b
+6 aba b aba bababab a b
+4 aba b aba babababab
+10 aba b ababa b a b a b a b
+8 aba b ababa b a b a bab
+8 aba b ababa b a b aba b
+8 aba b ababa b a bab a b
+6 aba b ababa b a babab
+8 aba b ababa b aba b a b
+6 aba b ababa b aba bab
+6 aba b ababa b ababa b
+8 aba b ababa bab a b a b
+6 aba b ababa bab a bab
+6 aba b ababa bab aba b
+6 aba b ababa babab a b
+4 aba b ababa bababab
+8 aba b abababa b a b a b
+6 aba b abababa b a bab
+6 aba b abababa b aba b
+6 aba b abababa bab a b
+4 aba b abababa babab
+6 aba b ababababa b a b
+4 aba b ababababa bab
+4 aba b abababababa b
+12 aba bab a b a b a b a b a b
+10 aba bab a b a b a b a bab
+10 aba bab a b a b a b aba b
+10 aba bab a b a b a bab a b
+8 aba bab a b a b a babab
+10 aba bab a b a b aba b a b
+8 aba bab a b a b aba bab
+8 aba bab a b a b ababa b
+10 aba bab a b a bab a b a b
+8 aba bab a b a bab a bab
+8 aba bab a b a bab aba b
+8 aba bab a b a babab a b
+6 aba bab a b a bababab
+10 aba bab a b aba b a b a b
+8 aba bab a b aba b a bab
+8 aba bab a b aba b aba b
+8 aba bab a b aba bab a b
+6 aba bab a b aba babab
+8 aba bab a b ababa b a b
+6 aba bab a b ababa bab
+6 aba bab a b abababa b
+10 aba bab a bab a b a b a b
+8 aba bab a bab a b a bab
+8 aba bab a bab a b aba b
+8 aba bab a bab a bab a b
+6 aba bab a bab a babab
+8 aba bab a bab aba b a b
+6 aba bab a bab aba bab
+6 aba bab a bab ababa b
+8 aba bab a babab a b a b
+6 aba bab a babab a bab
+6 aba bab a babab aba b
+6 aba bab a bababab a b
+4 aba bab a babababab
+10 aba bab aba b a b a b a b
+8 aba bab aba b a b a bab
+8 aba bab aba b a b aba b
+8 aba bab aba b a bab a b
+6 aba bab aba b a babab
+8 aba bab aba b aba b a b
+6 aba bab aba b aba bab
+6 aba bab aba b ababa b
+8 aba bab aba bab a b a b
+6 aba bab aba bab a bab
+6 aba bab aba bab aba b
+6 aba bab aba babab a b
+4 aba bab aba bababab
+8 aba bab ababa b a b a b
+6 aba bab ababa b a bab
+6 aba bab ababa b aba b
+6 aba bab ababa bab a b
+4 aba bab ababa babab
+6 aba bab abababa b a b
+4 aba bab abababa bab
+4 aba bab ababababa b
+10 aba babab a b a b a b a b
+8 aba babab a b a b a bab
+8 aba babab a b a b aba b
+8 aba babab a b a bab a b
+6 aba babab a b a babab
+8 aba babab a b aba b a b
+6 aba babab a b aba bab
+6 aba babab a b ababa b
+8 aba babab a bab a b a b
+6 aba babab a bab a bab
+6 aba babab a bab aba b
+6 aba babab a babab a b
+4 aba babab a bababab
+8 aba babab aba b a b a b
+6 aba babab aba b a bab
+6 aba babab aba b aba b
+6 aba babab aba bab a b
+4 aba babab aba babab
+6 aba babab ababa b a b
+4 aba babab ababa bab
+4 aba babab abababa b
+8 aba bababab a b a b a b
+6 aba bababab a b a bab
+6 aba bababab a b aba b
+6 aba bababab a bab a b
+4 aba bababab a babab
+6 aba bababab aba b a b
+4 aba bababab aba bab
+4 aba bababab ababa b
+6 aba babababab a b a b
+4 aba babababab a bab
+4 aba babababab aba b
+4 aba bababababab a b
+2 aba babababababab
+12 ababa b a b a b a b a b a b
+10 ababa b a b a b a b a bab
+10 ababa b a b a b a b aba b
+10 ababa b a b a b a bab a b
+8 ababa b a b a b a babab
+10 ababa b a b a b aba b a b
+8 ababa b a b a b aba bab
+8 ababa b a b a b ababa b
+10 ababa b a b a bab a b a b
+8 ababa b a b a bab a bab
+8 ababa b a b a bab aba b
+8 ababa b a b a babab a b
+6 ababa b a b a bababab
+10 ababa b a b aba b a b a b
+8 ababa b a b aba b a bab
+8 ababa b a b aba b aba b
+8 ababa b a b aba bab a b
+6 ababa b a b aba babab
+8 ababa b a b ababa b a b
+6 ababa b a b ababa bab
+6 ababa b a b abababa b
+10 ababa b a bab a b a b a b
+8 ababa b a bab a b a bab
+8 ababa b a bab a b aba b
+8 ababa b a bab a bab a b
+6 ababa b a bab a babab
+8 ababa b a bab aba b a b
+6 ababa b a bab aba bab
+6 ababa b a bab ababa b
+8 ababa b a babab a b a b
+6 ababa b a babab a bab
+6 ababa b a babab aba b
+6 ababa b a bababab a b
+4 ababa b a babababab
+10 ababa b aba b a b a b a b
+8 ababa b aba b a b a bab
+8 ababa b aba b a b aba b
+8 ababa b aba b a bab a b
+6 ababa b aba b a babab
+8 ababa b aba b aba b a b
+6 ababa b aba b aba bab
+6 ababa b aba b ababa b
+8 ababa b aba bab a b a b
+6 ababa b aba bab a bab
+6 ababa b aba bab aba b
+6 ababa b aba babab a b
+4 ababa b aba bababab
+8 ababa b ababa b a b a b
+6 ababa b ababa b a bab
+6 ababa b ababa b aba b
+6 ababa b ababa bab a b
+4 ababa b ababa babab
+6 ababa b abababa b a b
+4 ababa b abababa bab
+4 ababa b ababababa b
+10 ababa bab a b a b a b a b
+8 ababa bab a b a b a bab
+8 ababa bab a b a b aba b
+8 ababa bab a b a bab a b
+6 ababa bab a b a babab
+8 ababa bab a b aba b a b
+6 ababa bab a b aba bab
+6 ababa bab a b ababa b
+8 ababa bab a bab a b a b
+6 ababa bab a bab a bab
+6 ababa bab a bab aba b
+6 ababa bab a babab a b
+4 ababa bab a bababab
+8 ababa bab aba b a b a b
+6 ababa bab aba b a bab
+6 ababa bab aba b aba b
+6 ababa bab aba bab a b
+4 ababa bab aba babab
+6 ababa bab ababa b a b
+4 ababa bab ababa bab
+4 ababa bab abababa b
+8 ababa babab a b a b a b
+6 ababa babab a b a bab
+6 ababa babab a b aba b
+6 ababa babab a bab a b
+4 ababa babab a babab
+6 ababa babab aba b a b
+4 ababa babab aba bab
+4 ababa babab ababa b
+6 ababa bababab a b a b
+4 ababa bababab a bab
+4 ababa bababab aba b
+4 ababa babababab a b
+2 ababa bababababab
+10 abababa b a b a b a b a b
+8 abababa b a b a b a bab
+8 abababa b a b a b aba b
+8 abababa b a b a bab a b
+6 abababa b a b a babab
+8 abababa b a b aba b a b
+6 abababa b a b aba bab
+6 abababa b a b ababa b
+8 abababa b a bab a b a b
+6 abababa b a bab a bab
+6 abababa b a bab aba b
+6 abababa b a babab a b
+4 abababa b a bababab
+8 abababa b aba b a b a b
+6 abababa b aba b a bab
+6 abababa b aba b aba b
+6 abababa b aba bab a b
+4 abababa b aba babab
+6 abababa b ababa b a b
+4 abababa b ababa bab
+4 abababa b abababa b
+8 abababa bab a b a b a b
+6 abababa bab a b a bab
+6 abababa bab a b aba b
+6 abababa bab a bab a b
+4 abababa bab a babab
+6 abababa bab aba b a b
+4 abababa bab aba bab
+4 abababa bab ababa b
+6 abababa babab a b a b
+4 abababa babab a bab
+4 abababa babab aba b
+4 abababa bababab a b
+2 abababa babababab
+8 ababababa b a b a b a b
+6 ababababa b a b a bab
+6 ababababa b a b aba b
+6 ababababa b a bab a b
+4 ababababa b a babab
+6 ababababa b aba b a b
+4 ababababa b aba bab
+4 ababababa b ababa b
+6 ababababa bab a b a b
+4 ababababa bab a bab
+4 ababababa bab aba b
+4 ababababa babab a b
+2 ababababa bababab
+6 abababababa b a b a b
+4 abababababa b a bab
+4 abababababa b aba b
+4 abababababa bab a b
+2 abababababa babab
+4 ababababababa b a b
+2 ababababababa bab
+2 abababababababa b
