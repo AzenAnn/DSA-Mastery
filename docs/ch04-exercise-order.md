@@ -55,7 +55,7 @@ VS Code 的 `ch04Migration.ts` 保存旧新映射：完整新布局扫描通过�
 
 ## 验证证据
 
-任务目录：`.trellis/tasks/09-11-ch04-exercise-expansion-and-order/`。
+任务目录：`.trellis/tasks/archive/2026-09/09-11-ch04-exercise-expansion-and-order/`。
 
 - `mapping.json`、`migrate-layout.mjs --verify`：完整映射及 20 道旧题内容摘要比对。
 - `generate-tests.mjs`：固定种子结构生成与独立 oracle；坡度使用 BigInt，合并按根路径地址并集判定。

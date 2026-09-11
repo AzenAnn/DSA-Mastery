@@ -27,9 +27,9 @@ Implementation owner and checker: Azen, Codex inline. Read-only researchers revi
 ## Reproduction
 
 ```powershell
-node .trellis/tasks/09-11-ch04-exercise-expansion-and-order/migrate-layout.mjs --verify
-node .trellis/tasks/09-11-ch04-exercise-expansion-and-order/verify-labs.mjs
-node .trellis/tasks/09-11-ch04-exercise-expansion-and-order/mutation-check.mjs
+node .trellis/tasks/archive/2026-09/09-11-ch04-exercise-expansion-and-order/migrate-layout.mjs --verify
+node .trellis/tasks/archive/2026-09/09-11-ch04-exercise-expansion-and-order/verify-labs.mjs
+node .trellis/tasks/archive/2026-09/09-11-ch04-exercise-expansion-and-order/mutation-check.mjs
 pnpm test
 $env:GITHUB_PAGES_BASE_PATH='/DSA-Mastery'
 $env:SITE_URL='https://azenann.github.io'
