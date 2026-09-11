@@ -1,0 +1,14 @@
+digraph G {
+  graph [bgcolor="white", pad=0.25, nodesep=0.35, ranksep=0.5];
+  node [shape=circle, fontname="Arial", style=filled, fillcolor="#e8f3ed", color="#24634a", fontcolor="#153c2e"];
+  edge [arrowsize=0.7, color="#24634a"];
+  subgraph cluster_forest { label="Forest: roots [4, 1, 6]"; fontname="Arial"; color="#ccd7d0";
+    a4 [label="4"]; a1 [label="1"]; a6 [label="6"]; a5 [label="5"]; a2 [label="2"]; a3 [label="3"];
+    {rank=same; a4 a1 a6;} a4 -> a1 -> a6 [style=invis]; a4 -> a5; a1 -> {a2 a3};
+  }
+  subgraph cluster_binary { label="Left child / right sibling"; fontname="Arial"; color="#ccd7d0";
+    b4 [label="4"]; b1 [label="1"]; b6 [label="6"]; b5 [label="5"]; b2 [label="2"]; b3 [label="3"];
+    {rank=same; b4 b1 b6;} b4 -> b1 -> b6 [style=dashed, color="#91563a"];
+    b4 -> b5; b1 -> b2; {rank=same; b2 b3;} b2 -> b3 [style=dashed, color="#91563a"];
+  }
+}

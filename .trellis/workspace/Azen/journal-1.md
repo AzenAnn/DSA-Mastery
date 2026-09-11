@@ -750,3 +750,69 @@ Expanded 01E01-01E15 to exactly 20 weighted cases each, added boundary/normal/sp
 ### Next Steps
 
 - PR #170 等待审阅，未合并；本地预览 http://127.0.0.1:4173/DSA-Mastery/labs/chapter-01/theory/T-01-06-linear-list-written/ 保持运行。
+
+
+## Session 31: Ch4 exercise expansion and renumbering local preview
+
+**Date**: 2026-09-11
+**Task**: Ch4 exercise expansion and renumbering local preview
+**Branch**: `feat/ch04-exercise-expansion-and-order`
+
+### Summary
+
+Preserved 20 existing exercises, added 14 complete Labs with 20 cases each, migrated IDs and VS Code progress, and delivered local preview for approval.
+
+### Main Changes
+
+- 34 Labs ordered; source rows 1-31 plus three preserved supplements; full statements, code, diagrams and tests.
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] 34 lab:verify checks passed; 680 cases; 14 mutants rejected; isolated student pack passed.
+- [OK] pnpm test and Pages build/check passed; all 49 browser scenarios passed (48 initial plus corrected sidebar rerun); extension 44 tests, tsc and build passed.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- Await user review at http://127.0.0.1:4175/DSA-Mastery/ before commit, push or PR.
+
+
+## Session 32: Ch4 exercises PR 173 submitted
+
+**Date**: 2026-09-11
+**Task**: Ch4 exercises PR 173 submitted
+**Branch**: `feat/ch04-exercise-expansion-and-order`
+
+### Summary
+
+User approved the local preview and requested a PR. Committed and pushed 34 Ch4 exercises, archived the Azen task, and opened PR #173 against main.
+
+### Main Changes
+
+- PR: https://github.com/AzenAnn/DSA-Mastery/pull/173; product 7cfb4a8; archive 12b28f9.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `7cfb4a8` | (see git log) |
+
+### Testing
+
+- [OK] Rechecked all 900 original non-README Git blobs unchanged; archived preservation verifier passed; empty-forest case AC 5/5; staged whitespace checks passed.
+- [OK] Existing local evidence: 34 lab verifies, 680 cases, 14 rejected mutants, isolated student pack, pnpm test, Pages build/check, all 49 browser scenarios, and 44 extension tests.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- Review PR #173 and GitHub checks before merging; local preview remains on port 4175.

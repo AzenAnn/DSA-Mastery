@@ -1,26 +1,18 @@
 import assert from "node:assert/strict";
-import { execFile as execFileCallback } from "node:child_process";
 import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { promisify } from "node:util";
+import { build } from "esbuild";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const execFile = promisify(execFileCallback);
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 async function loadLabIndex(): Promise<typeof import("../src/labIndex.ts")> {
   const buildRoot = await mkdtemp(path.join(tmpdir(), "dsa-lab-index-build-"));
   const bundlePath = path.join(buildRoot, "labIndex.cjs");
   try {
-    await execFile(path.join(packageRoot, "node_modules", "esbuild", "bin", "esbuild"), [
-      "src/labIndex.ts",
-      "--bundle",
-      "--platform=node",
-      "--format=cjs",
-      `--outfile=${bundlePath}`,
-    ], { cwd: packageRoot });
+    await build({ entryPoints: [path.join(packageRoot, "src/labIndex.ts")], bundle: true, platform: "node", format: "cjs", outfile: bundlePath });
     return await import(pathToFileURL(bundlePath).href) as typeof import("../src/labIndex.ts");
   } finally {
     // The imported CommonJS bundle is self-contained; its temporary directory can be removed
@@ -249,14 +241,30 @@ test("discovers all real Project labs in the repository", async () => {
     .flatMap((chapter) => chapter.labs)
     .filter((lab) => lab.type === "project");
 
-  assert.deepEqual(projects.map((lab) => lab.id), ["01P01", "03P01", "03P02", "08P01", "09P01"]);
+  assert.deepEqual(projects.map((lab) => lab.id), ["01P01", "03P01", "03P02", "08P01", "09P01", "10P01"]);
   assert.deepEqual(projects.map((lab) => lab.relativePath), [
     "labs/chapter-01/project/P-01-01-list-workload-analyzer",
     "labs/chapter-03/project/P-03-01-string-match-engine",
     "labs/chapter-03/project/P-03-02-sparse-matrix-library",
     "labs/chapter-08/project/P-08-01-avl-tree-rotations",
     "labs/chapter-09/project/P-09-01-hash-index-engine",
+    "labs/chapter-10/project/P-10-01-sort-workload-analyzer",
   ]);
+});
+
+test("discovers 34 renumbered Ch4 exercises with legacy aliases in final order", async () => {
+  const { discoverProgramLabs } = await loadLabIndex();
+  const { CH04_RENUMBERING, ch04IdAliases } = await import("../src/ch04Migration.ts");
+  const exercises = (await discoverProgramLabs(path.resolve(packageRoot, "../..")))
+    .flatMap((chapter) => chapter.labs).filter((lab) => lab.chapter === 4 && lab.type === "program");
+  assert.deepEqual(exercises.map((lab) => lab.id), Array.from({ length: 34 }, (_, i) => `04E${String(i + 1).padStart(2, "0")}`));
+  assert.equal(ch04IdAliases(exercises, []).length, 20);
+  for (const [old, next, slug] of CH04_RENUMBERING) {
+    const lab = exercises[next - 1];
+    assert(lab.legacyNames.includes(`E-04-${String(old).padStart(2, "0")}-${slug}`));
+    assert(lab.legacyNames.includes(`lab-04-${String(old + 8).padStart(2, "0")}-${slug}`));
+    assert.equal(lab.order, next + 8);
+  }
 });
 
 test("prefers the categorized lab when a transition checkout contains its old flat copy", async () => {
