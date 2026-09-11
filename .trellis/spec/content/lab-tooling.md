@@ -58,6 +58,8 @@ JSON 报告顶层：
 - 所有 manifest 路径均为当前 Lab 内相对路径；拒绝绝对路径、`..`、缺失目标和符号链接逃逸。
 - 任何改变 Lab 目录深度的迁移都必须按“旧文件位置解析目标 → 映射被移动目标 → 从新文件位置重新计算相对路径”处理链接；扫描范围同时包含 `.md` 和 JSON 字符串中的 Markdown（例如 Quiz 题干配图），不能只替换 README。
 - Program 必须有可编译但不满分的 `student`、100 分 `solution`、合计 100 的 cases；stdout 判题、stderr 诊断。
+- 枚举题的 `judge.limits.outputKb` 必须覆盖题面允许的最大答案，不能直接沿用 1024 KB 默认值。例如 `15E01` 的 n=9 输出 16,692,480 字节，设为 32768 KB；`15E02` 的 n=20/r=10 设为 8192 KB。需实际运行最大输出用例确认不会 OLE。
+- 函数题适配 stdio 时，为答案集合明确序列化和排序。整数子集使用“答案数 + 每项长度及元素”，让空子集 `0` 与无答案可区分。保留原题空行输出时，须说明 `tokens` 无法区分空行与无输出，并独立检查参考输出；不得暗改共享比较器。
 - 比较器与 oracle 写入都先统一 CRLF/LF；`.out` 固定写为 LF。`exact` 还会忽略每行末尾的空格和制表符，并允许一侧缺少一个末尾 LF；除此之外仍逐字符比较，不忽略行首/行内空白、内部换行或额外空行。`tokens` 按空白 token，`float` 对数值 token 使用 `absTol/relTol`。
 - 判定固定为 `AC|WA|TLE|RE|CE|OLE|IE`；IE 不得伪装成学生 0 分。
 - 人类终端输出固定语义：AC/PASS/满分为 success，WA/CE/RE/IE/未满分实际分为 danger，TLE/OLE/PENDING 为 warning；未满分仍保留 `actual/maximum`，且 maximum 使用 success。颜色只增强文字，不得成为唯一状态信号。

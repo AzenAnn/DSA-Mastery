@@ -1,0 +1,82 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 13,
+    "tags": [
+      "sample",
+      "independent-oracle"
+    ]
+  },
+  {
+    "id": "002-coverage",
+    "input": "tests/002-coverage.in",
+    "expected": "tests/002-coverage.out",
+    "points": 13,
+    "tags": [
+      "boundary",
+      "independent-oracle"
+    ]
+  },
+  {
+    "id": "003-coverage",
+    "input": "tests/003-coverage.in",
+    "expected": "tests/003-coverage.out",
+    "points": 13,
+    "tags": [
+      "boundary",
+      "independent-oracle"
+    ]
+  },
+  {
+    "id": "004-coverage",
+    "input": "tests/004-coverage.in",
+    "expected": "tests/004-coverage.out",
+    "points": 13,
+    "tags": [
+      "boundary",
+      "independent-oracle"
+    ]
+  },
+  {
+    "id": "005-coverage",
+    "input": "tests/005-coverage.in",
+    "expected": "tests/005-coverage.out",
+    "points": 12,
+    "tags": [
+      "boundary",
+      "independent-oracle"
+    ]
+  },
+  {
+    "id": "006-coverage",
+    "input": "tests/006-coverage.in",
+    "expected": "tests/006-coverage.out",
+    "points": 12,
+    "tags": [
+      "boundary",
+      "independent-oracle"
+    ]
+  },
+  {
+    "id": "007-coverage",
+    "input": "tests/007-coverage.in",
+    "expected": "tests/007-coverage.out",
+    "points": 12,
+    "tags": [
+      "boundary",
+      "independent-oracle"
+    ]
+  },
+  {
+    "id": "008-coverage",
+    "input": "tests/008-coverage.in",
+    "expected": "tests/008-coverage.out",
+    "points": 12,
+    "tags": [
+      "boundary",
+      "independent-oracle"
+    ]
+  }
+]
