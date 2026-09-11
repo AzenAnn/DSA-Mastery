@@ -880,3 +880,24 @@ Implemented Project task isolation, current-result fingerprints, expression demo
 ### Next Steps
 
 - 维护者审阅 PR #174；新 Project 功能使用同标签源码/CLI，本地预览 http://127.0.0.1:4187/DSA-Mastery/。
+
+
+## Session 35: Ch15 回溯与搜索练习验收及 PR 准备
+
+**Date**: 2026-09-11
+**Task**: Ch15 回溯与搜索练习验收及 PR 准备
+**Branch**: `feat/ch15-backtracking-exercises`
+
+### Summary
+
+按题单顺序完成21道Program Lab与ch15侧栏、索引和搜索入口；227组独立数据、全题verify、代表题MSVC、pnpm test、Make和学生包验证通过，Pages全部56项测试通过。用户已授权提交PR，代码与任务归档已提交，随后推送feat/ch15-backtracking-exercises并创建面向main的PR。public/diagrams中4项无关变化保留且不提交；无合并或部署。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b9483ab` | (see git log) |
+
+### Status
+
+[OK] **Completed**
