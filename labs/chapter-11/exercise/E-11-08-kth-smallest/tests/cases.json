@@ -3,42 +3,183 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-min",
     "input": "tests/002-min.in",
     "expected": "tests/002-min.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "003-max",
     "input": "tests/003-max.in",
     "expected": "tests/003-max.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "004-duplicates",
     "input": "tests/004-duplicates.in",
     "expected": "tests/004-duplicates.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "005-negatives",
     "input": "tests/005-negatives.in",
     "expected": "tests/005-negatives.out",
-    "points": 15,
-    "tags": ["normal", "boundary"]
+    "points": 5,
+    "tags": [
+      "normal",
+      "boundary"
+    ]
   },
   {
     "id": "006-large",
     "input": "tests/006-large.in",
     "expected": "tests/006-large.out",
-    "points": 20,
-    "tags": ["large"]
+    "points": 5,
+    "tags": [
+      "large"
+    ]
+  },
+  {
+    "id": "007-n2-k1",
+    "input": "tests/007-n2-k1.in",
+    "expected": "tests/007-n2-k1.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-n2-k2",
+    "input": "tests/008-n2-k2.in",
+    "expected": "tests/008-n2-k2.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-all-same",
+    "input": "tests/009-all-same.in",
+    "expected": "tests/009-all-same.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "010-extreme-min",
+    "input": "tests/010-extreme-min.in",
+    "expected": "tests/010-extreme-min.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "011-extreme-max",
+    "input": "tests/011-extreme-max.in",
+    "expected": "tests/011-extreme-max.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "012-negative-duplicates",
+    "input": "tests/012-negative-duplicates.in",
+    "expected": "tests/012-negative-duplicates.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "special"
+    ]
+  },
+  {
+    "id": "013-random-100",
+    "input": "tests/013-random-100.in",
+    "expected": "tests/013-random-100.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-k1-1000",
+    "input": "tests/014-k1-1000.in",
+    "expected": "tests/014-k1-1000.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-kn-1000",
+    "input": "tests/015-kn-1000.in",
+    "expected": "tests/015-kn-1000.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-ascending",
+    "input": "tests/016-ascending.in",
+    "expected": "tests/016-ascending.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "017-descending",
+    "input": "tests/017-descending.in",
+    "expected": "tests/017-descending.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "018-dup-edge",
+    "input": "tests/018-dup-edge.in",
+    "expected": "tests/018-dup-edge.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "019-random-10000",
+    "input": "tests/019-random-10000.in",
+    "expected": "tests/019-random-10000.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "020-large-100000",
+    "input": "tests/020-large-100000.in",
+    "expected": "tests/020-large-100000.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "large"
+    ]
   }
 ]
