@@ -1,7 +1,7 @@
 import { copyFile, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import * as vscode from "vscode";
-import type { CaseResult, ProjectScoreResult, ScoreResult, Verdict } from "./cli";
+import type { CaseResult, ProjectCurrentState, ProjectScoreResult, ScoreResult, Verdict } from "./cli";
 import { studentSourcePath, type LabEntry, type ProjectLab, type ProgramLab } from "./labIndex";
 import type { QuizQuestion } from "./quiz";
 import { backfillEvents } from "./stats";
@@ -155,6 +155,7 @@ function snapshotId(when: Date): string {
 export class ProgressTracker {
   private store: ProgressStore;
   private projectStore: ProjectStore;
+  private currentProjects = new Map<string, ProjectCurrentState>();
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this.store = this.load();
@@ -269,7 +270,22 @@ export class ProgressTracker {
   }
 
   getProject(labId: string): ProjectProgress | undefined {
-    return this.projectStore.projects[labId];
+    const stored = this.projectStore.projects[labId];
+    const current = this.currentProjects.get(labId);
+    if (!current) return stored ? { ...stored, currentUnknown: true } : undefined;
+    return { ...stored, submissionCount: stored?.submissionCount ?? 0,
+      automatedScore: current.automatedScore, automatedMax: current.automatedMax,
+      manualPending: current.manualPending, provisionalTotal: current.provisionalTotal,
+      total: current.total, automatedFull: current.automatedFull, internalError: current.internalError,
+      current, currentUnknown: false };
+  }
+
+  setProjectCurrent(labId: string, current: ProjectCurrentState): void {
+    this.currentProjects.set(labId, current);
+  }
+
+  invalidateProjectCurrent(labId: string): void {
+    this.currentProjects.delete(labId);
   }
 
   async recordQuizAnswer(
@@ -327,7 +343,7 @@ export class ProgressTracker {
     return labs.filter((lab) => {
       if (lab.type === "quiz") return this.store.quizzes[lab.id]?.passed;
       if (lab.type === "project") {
-        const project = this.projectStore.projects[lab.id];
+        const project = this.getProject(lab.id);
         return project ? projectProgressPassed(project) : false;
       }
       return this.store.labs[lab.id]?.passed;
@@ -419,14 +435,16 @@ export class ProgressTracker {
     };
 
     progress.submissionCount += 1;
-    progress.automatedScore = result.automatedScore;
-    progress.automatedMax = result.automatedMax;
-    progress.manualPending = result.manualPending;
-    progress.provisionalTotal = result.provisionalTotal;
-    progress.total = result.total;
-    progress.automatedFull = result.automatedFull;
-    progress.internalError = result.internalError;
-    progress.lastSubmission = summarizeProjectSubmission(result, at);
+    const aggregate = result.current ?? result;
+    progress.automatedScore = aggregate.automatedScore;
+    progress.automatedMax = aggregate.automatedMax;
+    progress.manualPending = aggregate.manualPending;
+    progress.provisionalTotal = aggregate.provisionalTotal;
+    progress.total = aggregate.total;
+    progress.automatedFull = aggregate.automatedFull;
+    progress.internalError = aggregate.internalError;
+    progress.lastSubmission = summarizeProjectSubmission({ ...result, ...aggregate, tasks: result.tasks }, at);
+    if (result.current) this.setProjectCurrent(lab.id, result.current);
 
     this.projectStore.projects[lab.id] = progress;
     this.appendEvent({ at, kind: "submit", labName: lab.id, labType: "project" });
@@ -435,7 +453,7 @@ export class ProgressTracker {
     }
 
     await Promise.all([this.persist(), this.persistProjects()]);
-    return progress;
+    return this.getProject(lab.id)!;
   }
 
   /** 把当前 student 源码复制到快照目录，返回相对 globalStorage 的路径。 */
@@ -469,6 +487,7 @@ export class ProgressTracker {
   }
 
   async resetAll(): Promise<void> {
+    this.currentProjects.clear();
     this.store = { ...emptyStore(), appliedMigrations: this.store.appliedMigrations };
     this.projectStore = emptyProjectStore();
     await Promise.all([this.persist(), this.persistProjects()]);

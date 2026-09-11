@@ -3,6 +3,8 @@
   "schemaVersion": 1,
   "kind": "ctest",
   "ctest": {
+    "buildTargets": ["avl_tests"],
+    "moduleTargets": ["avl_tree"],
     "tests": [
       { "name": "avl-insert-rotations", "points": 40 },
       { "name": "avl-delete-rebalance", "points": 35 },

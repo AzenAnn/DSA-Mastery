@@ -3,6 +3,8 @@
   "schemaVersion": 1,
   "kind": "ctest",
   "ctest": {
+    "buildTargets": ["shell_tests"],
+    "moduleTargets": ["shell_sort"],
     "tests": [
       { "name": "shell-correctness", "points": 35 },
       { "name": "shell-hibbard-gaps", "points": 30 },

@@ -149,6 +149,11 @@ jobs:
           pnpm run test:lab-golden
           pnpm run test:lab-make
 
+      - name: Verify Project dependency isolation and fresh student package
+        env:
+          CXX: ${{ matrix.cxx }}
+        run: node --test tests/project-engineering.test.mjs
+
       - name: Confirm Lab builds do not modify tracked sources
         shell: bash
         run: |

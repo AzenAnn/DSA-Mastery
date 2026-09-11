@@ -5,6 +5,7 @@ import { refreshExpected } from "./operations.mjs";
 import { runProcess } from "./process.mjs";
 import { cleanTerminalText, createTheme, quoteCommandArg } from "./terminal.mjs";
 import { createMsvcEnvironment } from "./toolchain.mjs";
+import { currentProject, dependencyClosure, projectInputs, readProjectState, withProjectLock, writeProjectState } from "./project-state.mjs";
 
 function programView(lab, task) {
   return {
@@ -28,9 +29,10 @@ function selectedTasks(lab, taskId) {
   return selected;
 }
 
-export async function buildProject(lab, target = "student", options = {}) {
+async function configureProject(lab, target, options = {}) {
   if (lab.manifest.type !== "project") throw new LabError("TYPE_UNSUPPORTED", "CMake build 仅支持 project Lab");
   if (!new Set(["student", "solution"]).has(target)) throw new LabError("TARGET_INVALID", "Project target 必须是 student 或 solution");
+  if (target === "solution" && lab.manifest.distribution === "student") throw new LabError("SOLUTION_UNAVAILABLE", "学生分发包不包含参考实现");
   const environment = options.environment ?? (process.platform === "win32"
     ? await createMsvcEnvironment().catch((error) => {
       throw new LabError("MSVC_ENV_NOT_FOUND", error.message, error.details);
@@ -48,8 +50,53 @@ export async function buildProject(lab, target = "student", options = {}) {
   if (configure.code !== 0 || configure.timedOut || configure.outputExceeded) {
     return { ok: false, phase: "configure", target, configure, environment };
   }
-  const build = await runProcess("cmake", ["--build", "--preset", target, "--config", "Release"], { cwd: lab.labRoot, env, timeMs: 120_000, outputKb: 8192 });
-  return { ok: build.code === 0 && !build.timedOut && !build.outputExceeded, phase: "build", target, configure, build, environment };
+  return { ok: true, phase: "configure", target, configure, environment };
+}
+
+async function buildTargets(lab, configured, targets) {
+  if (!configured.ok) return { ...configured, scope: "project" };
+  const args = ["--build", "--preset", configured.target, "--config", "Release"];
+  // Restored/copied source may retain an older mtime; never grade stale binaries.
+  if (!configured.cleaned) {
+    args.push("--clean-first");
+    configured.cleaned = true;
+  }
+  if (targets?.length) args.push("--target", ...targets);
+  const build = await runProcess("cmake", args, { cwd: lab.labRoot, env: configured.environment?.env, timeMs: 120_000, outputKb: 8192 });
+  return { ...configured, ok: !build.spawnError && build.code === 0 && !build.timedOut && !build.outputExceeded,
+    phase: "build", build, targets, scope: targets?.length ? "task" : "project",
+    legacyBuild: !targets?.length };
+}
+
+function publicBuild(build) {
+  const report = { ...build };
+  delete report.environment;
+  delete report.cleaned;
+  return report;
+}
+
+async function buildTask(lab, task, configured, modules) {
+  if (!configured.ok) return { ...configured, scope: "project", relatedTasks: lab.tasks.filter((item) => item.kind === "ctest").map((item) => item.id) };
+  // Probe implementation targets, not upstream tests: WA is never a build gate.
+  for (const dependency of dependencyClosure(lab, task, (item) => item.buildDependsOn ?? [])) {
+    const targets = dependency.config.ctest?.moduleTargets;
+    if (!targets) continue;
+    if (!modules.has(dependency.id)) modules.set(dependency.id, await buildTargets(lab, configured, targets));
+    const built = modules.get(dependency.id);
+    if (!built.ok) return { ...built, blockedBy: [dependency.id], relatedTasks: [dependency.id, task.id] };
+  }
+  return { ...await buildTargets(lab, configured, task.config.ctest.buildTargets), relatedTasks: [task.id, ...(task.buildDependsOn ?? [])] };
+}
+
+export async function buildProject(lab, target = "student", options = {}) {
+  return withProjectLock(lab, async () => {
+    const tasks = selectedTasks(lab, options.taskId);
+    const configured = await configureProject(lab, target, options);
+    if (!options.taskId) return publicBuild(await buildTargets(lab, configured));
+    const [task] = tasks;
+    if (task.kind !== "ctest") throw new LabError("TYPE_UNSUPPORTED", "Project build --task 需要 CTest task；stdio 请使用 run --task");
+    return publicBuild(await buildTask(lab, task, configured, new Map()));
+  });
 }
 
 export function cmakeStandardNumber(standard) {
@@ -63,13 +110,14 @@ async function scoreCtest(lab, task, target, build) {
     return {
       id: task.id,
       kind: task.kind,
-      status: "CE",
+      status: build.blockedBy?.length ? "BLOCKED" : build.build?.spawnError ? "IE" : "CE",
       score: 0,
       maxScore: 100,
       weight: task.weight,
       weightedScore: 0,
       tests: [],
-      build,
+      build: publicBuild(build),
+      blockedBy: build.blockedBy,
     };
   }
   const binaryDir = path.join(lab.labRoot, ".lab-cache", "cmake", target);
@@ -95,6 +143,7 @@ async function scoreCtest(lab, task, target, build) {
     weight: task.weight,
     weightedScore: score * task.weight / 100,
     tests,
+    build: publicBuild(build),
   };
 }
 
@@ -107,11 +156,19 @@ export function classifyCtestExecution(result) {
 }
 
 export async function scoreProject(lab, options = {}) {
+  return withProjectLock(lab, () => scoreProjectUnlocked(lab, options));
+}
+
+async function scoreProjectUnlocked(lab, options) {
   if (lab.manifest.type !== "project") throw new LabError("TYPE_UNSUPPORTED", "Project 评分仅支持 project Lab");
   const target = options.target ?? "student";
   const tasks = selectedTasks(lab, options.taskId);
-  let cmakeBuild;
-  if (tasks.some((task) => task.kind === "ctest")) cmakeBuild = await buildProject(lab, target);
+  if (!["student", "solution"].includes(target)) throw new LabError("TARGET_INVALID", "Project target 必须是 student 或 solution");
+  if (options.caseId && (tasks.length !== 1 || tasks[0].kind !== "stdio")) throw new LabError("ARGUMENT_INVALID", "Project --case 必须同时选择一个 stdio --task");
+  const before = await projectInputs(lab, target);
+  let configured;
+  if (tasks.some((task) => task.kind === "ctest")) configured = await configureProject(lab, target, options);
+  const modules = new Map();
   const results = [];
   for (const task of tasks) {
     if (task.kind === "manual") {
@@ -129,7 +186,7 @@ export async function scoreProject(lab, options = {}) {
         judge: judged,
       });
     } else {
-      results.push(await scoreCtest(lab, task, target, cmakeBuild));
+      results.push(await scoreCtest(lab, task, target, await buildTask(lab, task, configured, modules)));
     }
   }
   const automated = results.filter((task) => task.kind !== "manual");
@@ -138,6 +195,20 @@ export async function scoreProject(lab, options = {}) {
   const automatedMax = automated.reduce((total, task) => total + task.weight, 0);
   const manualPending = manual.reduce((total, task) => total + task.weight, 0);
   const internalError = projectHasInternalError(results);
+  const after = await projectInputs(lab, target);
+  const at = new Date().toISOString();
+  const state = await readProjectState(lab, target);
+  for (const result of results) {
+    result.inputFingerprint = before[result.id].fingerprint;
+    result.changedDuringRun = before[result.id].fingerprint !== after[result.id].fingerprint;
+    result.assessedAt = at;
+    if (result.kind !== "manual" && !options.caseId) {
+      state.tasks[result.id] = { at, fingerprint: before[result.id].fingerprint, changedDuringRun: result.changedDuringRun,
+        bestScore: Math.max(state.tasks[result.id]?.bestScore ?? 0, result.weightedScore), result };
+    }
+  }
+  await writeProjectState(lab, target, state);
+  const current = currentProject(lab, state, after);
   return {
     target,
     tasks: results,
@@ -146,8 +217,11 @@ export async function scoreProject(lab, options = {}) {
     manualPending,
     provisionalTotal: automatedScore,
     total: 100,
-    automatedFull: automatedScore === automatedMax,
+    automatedFull: automated.length > 0 && automated.every((task) => task.status === "AC" && !task.changedDuringRun),
     internalError,
+    selectedTaskId: options.taskId,
+    partial: Boolean(options.caseId),
+    current,
   };
 }
 
@@ -195,6 +269,7 @@ export async function verifyProject(lab) {
   const checks = {
     solutionAutomatedFull: solution.automatedFull,
     studentNotFull: !student.automatedFull,
+    studentCompiles: student.tasks.every((task) => !["CE", "BLOCKED", "IE"].includes(task.status)),
     weightsTotal100: solution.automatedMax + solution.manualPending === 100,
     expectedStable: drift.changed === 0,
   };
@@ -243,12 +318,24 @@ export function formatProject(result, options = {}) {
         if (test.verdict !== "AC" && test.output) lines.push(`    ${theme.heading("CTest output")}`, cleanTerminalText(test.output).trim().slice(0, 1000));
       }
     }
+    if (task.build && !task.build.ok) {
+      lines.push(`  ${theme.heading(`CMake ${task.build.phase} (${task.build.scope ?? "task"})`)}`);
+      if (task.blockedBy?.length) lines.push(`  BLOCKED BY: ${task.blockedBy.join(", ")}`);
+      const diagnostic = task.build.build ?? task.build.configure;
+      lines.push(cleanTerminalText(`${diagnostic?.stdout ?? ""}\n${diagnostic?.stderr ?? ""}`).trim());
+    }
+    if (task.build?.legacyBuild) lines.push("  Legacy whole-project build: add ctest.buildTargets for task isolation.");
+    if (task.changedDuringRun) lines.push("  STALE: inputs changed during assessment; retry required.");
   }
   lines.push(theme.separator(Math.max(56, taskWidth + 37)));
   lines.push(`${theme.heading("Automated：")} ${theme.score(result.automatedScore, result.automatedMax)}`);
   lines.push(`${theme.heading("Manual pending：")} ${result.manualPending ? theme.warning(result.manualPending) : theme.success("0")}`);
   lines.push(`${theme.heading("Provisional total：")} ${theme.score(result.provisionalTotal, result.total)}`);
   lines.push(`AUTOMATED ${theme.status(result.automatedFull ? "PASS" : "NOT FULL")}${result.manualPending ? ` · ${theme.warning("MANUAL REVIEW PENDING")}` : ""}`);
+  if (result.current) {
+    lines.push(`CURRENT PROJECT: ${result.current.automatedScore}/${result.current.automatedMax} · ${result.current.complete ? "COMPLETE" : "INCOMPLETE"}`);
+    for (const task of result.current.tasks) lines.push(`  ${task.id}: ${task.status} ${task.weightedScore}/${task.weight}${task.status === "STALE" ? ` (historical ${task.historicalScore}/${task.weight})` : ""}`);
+  }
   const failedTask = result.tasks.find((task) => task.kind !== "manual" && task.status !== "AC");
   const failedCase = failedTask?.judge?.cases?.find((item) => item.verdict !== "AC");
   const retry = projectRetry(options.command ?? "pnpm lab:run", options.labPath, failedTask?.id, failedCase?.id);

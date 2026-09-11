@@ -1,0 +1,7 @@
+add_library(expr_postfix STATIC ${LAB_IMPL}/postfix.cpp)
+target_link_libraries(expr_postfix PUBLIC expr_stack expr_tokenizer)
+add_executable(expr_postfix_tests tests/postfix_tests.cpp)
+target_link_libraries(expr_postfix_tests PRIVATE expr_postfix)
+foreach(group precedence boundary errors)
+  add_test(NAME postfix-${group} COMMAND expr_postfix_tests ${group})
+endforeach()

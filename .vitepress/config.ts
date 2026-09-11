@@ -170,7 +170,7 @@ export default defineConfig({
           : virtualSources.get(renderedPath);
         if (!relativePath) return;
 
-        if (state.env?.dsaSearchIndex !== true) {
+        if (state.env?.dsaSearchIndex !== true && sourceRoutes.has(virtualSources.get(renderedPath) ?? relativePath)) {
           const firstH1 = state.tokens.findIndex(
             (token) => token.type === "heading_open" && token.tag === "h1",
           );

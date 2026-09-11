@@ -58,6 +58,10 @@ export interface ProjectTask {
   weight: number;
   kind: ProjectTaskKind;
   dependsOn: string[];
+  buildDependsOn?: string[];
+  buildTargets?: string[];
+  moduleTargets?: string[];
+  readmePath?: string;
   /** stdio task 的 targets.student.sources；其它 task 为空。 */
   studentSources: string[];
   cases?: LoadedTestCase[];
@@ -78,6 +82,7 @@ export interface ProjectLab extends LabBase {
   buildSystem: "cmake";
   tasks: ProjectTask[];
   studentFiles: ProjectStudentFile[];
+  supportFiles?: string[];
 }
 
 export type LabEntry = ProgramLab | QuizLab | ProjectLab;
@@ -246,6 +251,7 @@ interface RawProjectTaskEntry {
   weight?: unknown;
   kind?: unknown;
   dependsOn?: unknown;
+  buildDependsOn?: unknown;
 }
 
 interface RawTaskManifest {
@@ -253,7 +259,7 @@ interface RawTaskManifest {
   kind?: unknown;
   targets?: { student?: { sources?: unknown } };
   judge?: { kind?: unknown; cases?: unknown };
-  ctest?: { tests?: unknown };
+  ctest?: { tests?: unknown; buildTargets?: unknown; moduleTargets?: unknown };
   checklist?: unknown;
 }
 
@@ -372,8 +378,11 @@ async function loadProjectLab(
 
     const dependsOn = rawEntry.dependsOn === undefined ? [] : stringArray(rawEntry.dependsOn);
     if (!dependsOn || new Set(dependsOn).size !== dependsOn.length) return undefined;
+    const buildDependsOn = rawEntry.buildDependsOn === undefined ? undefined : stringArray(rawEntry.buildDependsOn);
+    if (rawEntry.buildDependsOn !== undefined && (!buildDependsOn || new Set(buildDependsOn).size !== buildDependsOn.length)) return undefined;
     let studentSources: string[] = [];
-    const projectTask: ProjectTask = { id, relativePath: relativePath.split(path.sep).join("/"), weight, kind, dependsOn, studentSources };
+    const projectTask: ProjectTask = { id, relativePath: relativePath.split(path.sep).join("/"), weight, kind, dependsOn, buildDependsOn, studentSources };
+    if (await isWithinRealDirectory(labPath, path.join(taskPath, "README.md"))) projectTask.readmePath = `${projectTask.relativePath}/README.md`;
 
     if (kind === "stdio") {
       studentSources = stringArray(taskManifest.targets?.student?.sources) ?? [];
@@ -406,6 +415,13 @@ async function loadProjectLab(
       }
       if (ctestTests.reduce((sum, test) => sum + test.points, 0) !== 100) return undefined;
       projectTask.ctestTests = ctestTests;
+      for (const key of ["buildTargets", "moduleTargets"] as const) {
+        const targets = taskManifest.ctest?.[key];
+        if (targets === undefined) continue;
+        const names = stringArray(targets);
+        if (!names?.length || new Set(names).size !== names.length || names.some((name) => !/^[a-zA-Z0-9_][a-zA-Z0-9_.+-]*$/.test(name))) return undefined;
+        projectTask[key] = names;
+      }
     } else {
       const checklist = stringArray(taskManifest.checklist);
       if (!checklist || checklist.length === 0 || checklist.some((item) => item.trim().length === 0)) return undefined;
@@ -417,7 +433,7 @@ async function loadProjectLab(
 
   if (totalWeight !== 100) return undefined;
   for (const task of tasks) {
-    if (task.dependsOn.some((dependency) => !taskIds.has(dependency) || dependency === task.id)) return undefined;
+    if ([...task.dependsOn, ...(task.buildDependsOn ?? [])].some((dependency) => !taskIds.has(dependency) || dependency === task.id)) return undefined;
   }
   const visiting = new Set<string>();
   const visited = new Set<string>();
@@ -426,7 +442,8 @@ async function loadProjectLab(
     if (visiting.has(id)) return true;
     if (visited.has(id)) return false;
     visiting.add(id);
-    for (const dependency of byId.get(id)?.dependsOn ?? []) {
+    const task = byId.get(id)!;
+    for (const dependency of new Set([...task.dependsOn, ...(task.buildDependsOn ?? [])])) {
       if (hasCycle(dependency)) return true;
     }
     visiting.delete(id);
@@ -441,7 +458,19 @@ async function loadProjectLab(
     buildSystem: "cmake",
     tasks,
     studentFiles: studentFiles.sort((left, right) => left.relativePath.localeCompare(right.relativePath)),
+    supportFiles: (await collectProjectFiles(labPath)).filter((file) => !file.split("/").includes("student")),
   };
+}
+
+export async function collectProjectFiles(labPath: string, current = labPath): Promise<string[]> {
+  const files: string[] = [];
+  for (const entry of await readdir(current, { withFileTypes: true })) {
+    if (["solution", ".lab-cache", "node_modules", ".git"].includes(entry.name)) continue;
+    const absolute = path.join(current, entry.name);
+    if (entry.isDirectory()) files.push(...await collectProjectFiles(labPath, absolute));
+    else if (entry.isFile()) files.push(path.relative(labPath, absolute).split(path.sep).join("/"));
+  }
+  return files.sort();
 }
 
 function buildLab(

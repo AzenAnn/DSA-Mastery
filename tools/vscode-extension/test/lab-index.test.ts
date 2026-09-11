@@ -241,9 +241,10 @@ test("discovers all real Project labs in the repository", async () => {
     .flatMap((chapter) => chapter.labs)
     .filter((lab) => lab.type === "project");
 
-  assert.deepEqual(projects.map((lab) => lab.id), ["01P01", "03P01", "03P02", "08P01", "09P01", "10P01"]);
+  assert.deepEqual(projects.map((lab) => lab.id), ["01P01", "02P04", "03P01", "03P02", "08P01", "09P01", "10P01"]);
   assert.deepEqual(projects.map((lab) => lab.relativePath), [
     "labs/chapter-01/project/P-01-01-list-workload-analyzer",
+    "labs/chapter-02/project/P-02-04-expression-evaluator",
     "labs/chapter-03/project/P-03-01-string-match-engine",
     "labs/chapter-03/project/P-03-02-sparse-matrix-library",
     "labs/chapter-08/project/P-08-01-avl-tree-rotations",
