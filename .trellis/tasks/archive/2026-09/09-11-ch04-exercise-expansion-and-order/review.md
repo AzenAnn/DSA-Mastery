@@ -26,6 +26,8 @@ Implementation owner and checker: Azen, Codex inline. Read-only researchers revi
 
 ## Reproduction
 
+Submission follow-up: the user approved PR submission after this preview. Product commit 7cfb4a8 and archive commit 12b28f9 were pushed; PR https://github.com/AzenAnn/DSA-Mastery/pull/173 is open against main. The 900 original non-README Git blobs were also compared in the staging area with no differences. The empty-forest trailing blank line was removed and that case rechecked at AC 5/5.
+
 ```powershell
 node .trellis/tasks/archive/2026-09/09-11-ch04-exercise-expansion-and-order/migrate-layout.mjs --verify
 node .trellis/tasks/archive/2026-09/09-11-ch04-exercise-expansion-and-order/verify-labs.mjs
