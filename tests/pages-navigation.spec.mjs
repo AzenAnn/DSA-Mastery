@@ -637,6 +637,8 @@ test("theory syntax and code workbench stay accessible at desktop and mobile wid
     await expect(page.locator(".vp-doc dfn").first()).toHaveText("抽象数据类型");
     await expect(page.locator(".vp-doc .dsa-code-title")).toContainText("student-list-interface.cpp");
     await expect(page.locator(".vp-doc .vp-code-group")).toBeVisible();
+    await expect(page.locator(".vp-doc .vpd-diagram-caption")).toHaveCount(3);
+    await expect(page.locator(".vp-doc .vpd-diagram-caption").first()).toContainText("地址的数值次序不决定名单次序");
     const overflow = await page.evaluate(() =>
       globalThis.document.documentElement.scrollWidth - globalThis.window.innerWidth,
     );
@@ -649,6 +651,10 @@ test("theory syntax and code workbench stay accessible at desktop and mobile wid
   expect(lightContrast.text).toBeGreaterThanOrEqual(4.5);
   expect(lightContrast.rail).toBeGreaterThanOrEqual(3);
 
+  const interfaceDetails = page.locator(".vp-doc details:has(.dsa-code-title)");
+  await interfaceDetails.locator("summary").focus();
+  await page.keyboard.press("Enter");
+  await expect(interfaceDetails).toHaveAttribute("open", "");
   const copyButton = page.locator(".dsa-code-block--titled > button.copy").first();
   await copyButton.focus();
   await expect(copyButton).toBeFocused();
