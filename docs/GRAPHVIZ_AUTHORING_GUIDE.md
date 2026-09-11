@@ -14,7 +14,7 @@ digraph BinaryTree {
   A -> C [label="右"];
 }
 ```
-<!-- diagram id="binary-tree-example" caption: "一棵带左右语义的二叉树" -->
+<!-- diagram id="binary-tree-example" caption="一棵带左右语义的二叉树" -->
 ````
 
 `digraph` 表示有向图，边使用 `->`；`graph` 表示无向图，边使用 `--`。节点 ID 使用稳定的 ASCII 名称，展示文字通过 `label` 编写。带权边可写成 `[label="7"]`。
@@ -30,7 +30,7 @@ digraph BinaryTree {
 
 ## Caption 与 ID
 
-每个正式教材图都应使用唯一的 `diagram id` 和一句中文 caption。插件当前按完整的 fenced info string 匹配类型，因此代码块只写 `graphviz`，不要追加 `[filename]`；ID 只使用 ASCII、短且能表达页面语义。修改 DOT 内容时保留 ID，插件会按内容哈希更新缓存。Caption 说明读者要观察的关系，不写 Kroki 或缓存实现细节。
+每个正式教材图都应使用唯一的 `diagram id` 和一句中文 caption。注释紧跟图围栏，写作 `caption="图注"`，不能写成 `caption: "图注"`；当前插件只识别前一种属性语法，后一种会静默丢失图注。插件按完整的 fenced info string 匹配类型，因此代码块只写 `graphviz`，不要追加 `[filename]`；ID 只使用 ASCII、短且能表达页面语义。修改 DOT 内容时保留 ID，插件会按内容哈希更新缓存。Caption 说明读者要观察的关系，不写 Kroki 或缓存实现细节。
 
 ## 本地预览与构建
 
