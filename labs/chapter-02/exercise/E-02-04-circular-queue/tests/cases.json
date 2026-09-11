@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 10,
     "tags": [
       "sample"
     ],
@@ -67,5 +67,15 @@
   {"id":"012-peek-stability","input":"tests/012-peek-stability.in","expected":"tests/012-peek-stability.out","points":1,"tags":["regression"]},
   {"id":"013-alternating","input":"tests/013-alternating.in","expected":"tests/013-alternating.out","points":1,"tags":["normal"]},
   {"id":"014-drain-refill","input":"tests/014-drain-refill.in","expected":"tests/014-drain-refill.out","points":1,"tags":["normal"]},
-  {"id":"015-status-cycle","input":"tests/015-status-cycle.in","expected":"tests/015-status-cycle.out","points":1,"tags":["normal"]}
+  {"id":"015-status-cycle","input":"tests/015-status-cycle.in","expected":"tests/015-status-cycle.out","points":1,"tags":["normal"]},
+  {"id":"016-extreme-values","input":"tests/016-extreme-values.in","expected":"tests/016-extreme-values.out","points":1,"tags":["boundary"]},
+  {"id":"017-double-wrap","input":"tests/017-double-wrap.in","expected":"tests/017-double-wrap.out","points":1,"tags":["regression"]},
+  {"id":"018-repeated-peeks","input":"tests/018-repeated-peeks.in","expected":"tests/018-repeated-peeks.out","points":1,"tags":["normal"]},
+  {"id":"019-capacity-three","input":"tests/019-capacity-three.in","expected":"tests/019-capacity-three.out","points":1,"tags":["boundary"]},
+  {"id":"020-drain-and-fill","input":"tests/020-drain-and-fill.in","expected":"tests/020-drain-and-fill.out","points":1,"tags":["normal"]},
+  {"id":"021-failed-enqueues","input":"tests/021-failed-enqueues.in","expected":"tests/021-failed-enqueues.out","points":1,"tags":["error"]},
+  {"id":"022-negative-cycle","input":"tests/022-negative-cycle.in","expected":"tests/022-negative-cycle.out","points":1,"tags":["normal"]},
+  {"id":"023-empty-status","input":"tests/023-empty-status.in","expected":"tests/023-empty-status.out","points":1,"tags":["boundary"]},
+  {"id":"024-reuse-after-wrap","input":"tests/024-reuse-after-wrap.in","expected":"tests/024-reuse-after-wrap.out","points":1,"tags":["regression"]},
+  {"id":"025-large-values","input":"tests/025-large-values.in","expected":"tests/025-large-values.out","points":1,"tags":["boundary"]}
 ]

@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 15,
+    "points": 5,
     "tags": ["sample"],
     "compare": {
       "mode": "exact"
@@ -64,5 +64,15 @@
   {"id":"012-negative-decreasing","input":"tests/012-negative-decreasing.in","expected":"tests/012-negative-decreasing.out","points":1,"tags":["normal"]},
   {"id":"013-window-near-all","input":"tests/013-window-near-all.in","expected":"tests/013-window-near-all.out","points":1,"tags":["boundary"]},
   {"id":"014-plateaus","input":"tests/014-plateaus.in","expected":"tests/014-plateaus.out","points":1,"tags":["regression"]},
-  {"id":"015-mixed-signs","input":"tests/015-mixed-signs.in","expected":"tests/015-mixed-signs.out","points":1,"tags":["normal"]}
+  {"id":"015-mixed-signs","input":"tests/015-mixed-signs.in","expected":"tests/015-mixed-signs.out","points":1,"tags":["normal"]},
+  {"id":"016-window-two","input":"tests/016-window-two.in","expected":"tests/016-window-two.out","points":1,"tags":["normal"]},
+  {"id":"017-window-near-all","input":"tests/017-window-near-all.in","expected":"tests/017-window-near-all.out","points":1,"tags":["boundary"]},
+  {"id":"018-extreme-values","input":"tests/018-extreme-values.in","expected":"tests/018-extreme-values.out","points":1,"tags":["boundary"]},
+  {"id":"019-alternating-peaks","input":"tests/019-alternating-peaks.in","expected":"tests/019-alternating-peaks.out","points":1,"tags":["regression"]},
+  {"id":"020-negative-plateaus","input":"tests/020-negative-plateaus.in","expected":"tests/020-negative-plateaus.out","points":1,"tags":["normal"]},
+  {"id":"021-single-element","input":"tests/021-single-element.in","expected":"tests/021-single-element.out","points":1,"tags":["boundary"]},
+  {"id":"022-wide-mixed","input":"tests/022-wide-mixed.in","expected":"tests/022-wide-mixed.out","points":1,"tags":["normal"]},
+  {"id":"023-repeated-maxima","input":"tests/023-repeated-maxima.in","expected":"tests/023-repeated-maxima.out","points":1,"tags":["regression"]},
+  {"id":"024-large-range","input":"tests/024-large-range.in","expected":"tests/024-large-range.out","points":1,"tags":["boundary"]},
+  {"id":"025-decreasing-window","input":"tests/025-decreasing-window.in","expected":"tests/025-decreasing-window.out","points":1,"tags":["normal"]}
 ]

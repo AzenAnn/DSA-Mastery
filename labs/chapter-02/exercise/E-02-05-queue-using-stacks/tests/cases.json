@@ -3,7 +3,7 @@
     "id": "001-lazy-transfer",
     "input": "tests/001-lazy-transfer.in",
     "expected": "tests/001-lazy-transfer.out",
-    "points": 20,
+    "points": 10,
     "tags": [
       "sample"
     ],
@@ -68,5 +68,15 @@
   {"id":"012-transfer-chain","input":"tests/012-transfer-chain.in","expected":"tests/012-transfer-chain.out","points":1,"tags":["regression"]},
   {"id":"013-size-empty","input":"tests/013-size-empty.in","expected":"tests/013-size-empty.out","points":1,"tags":["normal"]},
   {"id":"014-int64-values","input":"tests/014-int64-values.in","expected":"tests/014-int64-values.out","points":1,"tags":["boundary"]},
-  {"id":"015-alternating","input":"tests/015-alternating.in","expected":"tests/015-alternating.out","points":1,"tags":["normal"]}
+  {"id":"015-alternating","input":"tests/015-alternating.in","expected":"tests/015-alternating.out","points":1,"tags":["normal"]},
+  {"id":"016-extreme-values","input":"tests/016-extreme-values.in","expected":"tests/016-extreme-values.out","points":1,"tags":["boundary"]},
+  {"id":"017-front-before-transfer","input":"tests/017-front-before-transfer.in","expected":"tests/017-front-before-transfer.out","points":1,"tags":["normal"]},
+  {"id":"018-multiple-drains","input":"tests/018-multiple-drains.in","expected":"tests/018-multiple-drains.out","points":1,"tags":["regression"]},
+  {"id":"019-negative-cycle","input":"tests/019-negative-cycle.in","expected":"tests/019-negative-cycle.out","points":1,"tags":["normal"]},
+  {"id":"020-empty-recovery","input":"tests/020-empty-recovery.in","expected":"tests/020-empty-recovery.out","points":1,"tags":["boundary","error"]},
+  {"id":"021-size-tracking","input":"tests/021-size-tracking.in","expected":"tests/021-size-tracking.out","points":1,"tags":["normal"]},
+  {"id":"022-interleaved-transfers","input":"tests/022-interleaved-transfers.in","expected":"tests/022-interleaved-transfers.out","points":1,"tags":["regression"]},
+  {"id":"023-singleton-repeated","input":"tests/023-singleton-repeated.in","expected":"tests/023-singleton-repeated.out","points":1,"tags":["boundary"]},
+  {"id":"024-large-values","input":"tests/024-large-values.in","expected":"tests/024-large-values.out","points":1,"tags":["boundary"]},
+  {"id":"025-front-stability","input":"tests/025-front-stability.in","expected":"tests/025-front-stability.out","points":1,"tags":["regression"]}
 ]
