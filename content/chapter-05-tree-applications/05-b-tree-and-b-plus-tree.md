@@ -101,7 +101,7 @@ digraph BTreeSearchBranch {
 
 页内可以二分定位分支，沿途每层只读取一个孩子页。
 
-下面给出节点结构与查找的最小骨架。分裂、借位与合并的完整实现留给配套实验 [B 树的插入](../../labs/chapter-05/exercise/E-05-16-btree-insertion/README.md)：
+下面给出节点结构与查找的最小骨架。分裂、借位与合并的完整实现留给配套实验 [B 树的插入](../../labs/chapter-05/exercise/E-05-26-btree-insertion/README.md)：
 
 ```cpp:line-numbers [b-tree-search.cpp]
 #include <memory>
@@ -416,8 +416,8 @@ B+ 树的内部节点负责“快速到达起点”，叶链负责“从起点�
 
 | 实验 | 练习内容 |
 | --- | --- |
-| [B 树的插入](../../labs/chapter-05/exercise/E-05-16-btree-insertion/README.md) | 实现自顶向下分裂，与本节手算过程对照 |
-| [B+ 树的范围查询](../../labs/chapter-05/exercise/E-05-17-bplus-range-query/README.md) | 定位起点叶节点后沿叶链连续扫描 |
+| [B 树的插入](../../labs/chapter-05/exercise/E-05-26-btree-insertion/README.md) | 实现自顶向下分裂，与本节手算过程对照 |
+| [B+ 树的范围查询](../../labs/chapter-05/exercise/E-05-27-bplus-range-query/README.md) | 定位起点叶节点后沿叶链连续扫描 |
 
 ## 小结与自测
 

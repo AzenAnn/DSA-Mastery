@@ -407,7 +407,7 @@ Kosaraju 构造转置图并进行两次完整 DFS，时间为 $O(n+m)$，额外�
 - [Lab 06-T-04：图基础综合理论大题训练](../../labs/chapter-06/theory/T-06-04-graph-foundations-written/README.md)：用 12 道书面题强化表示转换、遍历不变量、正确性证明与方法选型；
 - [Lab 07-E-02：连通分量计数](../../labs/chapter-07/exercise/E-07-02-connected-components/README.md)：实现无向图完整遍历和分量标号；
 - [Lab 07-E-05：显式栈 DFS](../../labs/chapter-07/exercise/E-07-05-iterative-dfs/README.md)：处理大规模深图并核对访问顺序；
-- [Lab 05-E-13：动态连通性查询](../../labs/chapter-05/exercise/E-05-13-dynamic-connectivity/README.md)：比较遍历与并查集的适用边界。
+- [Lab 05-E-19：动态连通性查询](../../labs/chapter-05/exercise/E-05-19-dynamic-connectivity/README.md)：比较遍历与并查集的适用边界。
 
 ## 参考资料
 

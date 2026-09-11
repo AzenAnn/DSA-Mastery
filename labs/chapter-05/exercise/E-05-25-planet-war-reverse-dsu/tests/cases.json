@@ -1,0 +1,242 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-destroy-one",
+    "input": "tests/002-destroy-one.in",
+    "expected": "tests/002-destroy-one.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-destroy-all",
+    "input": "tests/003-destroy-all.in",
+    "expected": "tests/003-destroy-all.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-no-edge",
+    "input": "tests/004-no-edge.in",
+    "expected": "tests/004-no-edge.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-destroy-isolate",
+    "input": "tests/005-destroy-isolate.in",
+    "expected": "tests/005-destroy-isolate.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-random-00",
+    "input": "tests/006-random-00.in",
+    "expected": "tests/006-random-00.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-random-01",
+    "input": "tests/007-random-01.in",
+    "expected": "tests/007-random-01.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-random-02",
+    "input": "tests/008-random-02.in",
+    "expected": "tests/008-random-02.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-random-03",
+    "input": "tests/009-random-03.in",
+    "expected": "tests/009-random-03.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-random-04",
+    "input": "tests/010-random-04.in",
+    "expected": "tests/010-random-04.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-random-05",
+    "input": "tests/011-random-05.in",
+    "expected": "tests/011-random-05.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-random-06",
+    "input": "tests/012-random-06.in",
+    "expected": "tests/012-random-06.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-random-07",
+    "input": "tests/013-random-07.in",
+    "expected": "tests/013-random-07.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-random-08",
+    "input": "tests/014-random-08.in",
+    "expected": "tests/014-random-08.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-random-09",
+    "input": "tests/015-random-09.in",
+    "expected": "tests/015-random-09.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-random-10",
+    "input": "tests/016-random-10.in",
+    "expected": "tests/016-random-10.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-stress-destroy-all",
+    "input": "tests/017-stress-destroy-all.in",
+    "expected": "tests/017-stress-destroy-all.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-stress-random",
+    "input": "tests/018-stress-random.in",
+    "expected": "tests/018-stress-random.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-stress-star",
+    "input": "tests/019-stress-star.in",
+    "expected": "tests/019-stress-star.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-stress-partial",
+    "input": "tests/020-stress-partial.in",
+    "expected": "tests/020-stress-partial.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]
