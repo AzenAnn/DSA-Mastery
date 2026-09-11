@@ -1,0 +1,242 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-both-empty",
+    "input": "tests/002-both-empty.in",
+    "expected": "tests/002-both-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-equal-single",
+    "input": "tests/003-equal-single.in",
+    "expected": "tests/003-equal-single.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-first-empty",
+    "input": "tests/004-first-empty.in",
+    "expected": "tests/004-first-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-second-empty",
+    "input": "tests/005-second-empty.in",
+    "expected": "tests/005-second-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-different-single",
+    "input": "tests/006-different-single.in",
+    "expected": "tests/006-different-single.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-same-leaves-different-shape",
+    "input": "tests/007-same-leaves-different-shape.in",
+    "expected": "tests/007-same-leaves-different-shape.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-reversed-leaves",
+    "input": "tests/008-reversed-leaves.in",
+    "expected": "tests/008-reversed-leaves.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-duplicate-leaf-count",
+    "input": "tests/009-duplicate-leaf-count.in",
+    "expected": "tests/009-duplicate-leaf-count.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-same-root-different-leaves",
+    "input": "tests/010-same-root-different-leaves.in",
+    "expected": "tests/010-same-root-different-leaves.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-negative-leaves",
+    "input": "tests/011-negative-leaves.in",
+    "expected": "tests/011-negative-leaves.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-zero-leaves",
+    "input": "tests/012-zero-leaves.in",
+    "expected": "tests/012-zero-leaves.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-unequal-leaf-counts",
+    "input": "tests/013-unequal-leaf-counts.in",
+    "expected": "tests/013-unequal-leaf-counts.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-opposite-chains",
+    "input": "tests/014-opposite-chains.in",
+    "expected": "tests/014-opposite-chains.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-mixed-overlap",
+    "input": "tests/015-mixed-overlap.in",
+    "expected": "tests/015-mixed-overlap.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-sum-boundary",
+    "input": "tests/016-sum-boundary.in",
+    "expected": "tests/016-sum-boundary.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-positive-negative-cancel",
+    "input": "tests/017-positive-negative-cancel.in",
+    "expected": "tests/017-positive-negative-cancel.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-deep-shapes",
+    "input": "tests/018-deep-shapes.in",
+    "expected": "tests/018-deep-shapes.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-wide-boundary",
+    "input": "tests/019-wide-boundary.in",
+    "expected": "tests/019-wide-boundary.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-random-boundary",
+    "input": "tests/020-random-boundary.in",
+    "expected": "tests/020-random-boundary.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]

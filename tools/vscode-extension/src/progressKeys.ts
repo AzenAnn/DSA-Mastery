@@ -9,14 +9,14 @@ export function remapRecordKeys<T>(
   aliases: readonly LabKeyAlias[],
   merge: (stable: T, legacy: T) => T,
 ): { records: Record<string, T>; changed: boolean } {
-  const records = { ...source };
+  const byName = new Map(aliases.filter((alias) => alias.id !== alias.name).map((alias) => [alias.name, alias.id]));
+  const records = Object.fromEntries(Object.entries(source).filter(([key]) => !byName.has(key))) as Record<string, T>;
   let changed = false;
-  for (const alias of aliases) {
-    if (alias.id === alias.name || records[alias.name] === undefined) continue;
-    records[alias.id] = records[alias.id] === undefined
-      ? records[alias.name]
-      : merge(records[alias.id], records[alias.name]);
-    delete records[alias.name];
+  for (const [name, id] of byName) {
+    if (source[name] === undefined) continue;
+    records[id] = records[id] === undefined
+      ? source[name]
+      : merge(records[id], source[name]);
     changed = true;
   }
   return { records, changed };

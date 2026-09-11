@@ -63,6 +63,12 @@ ProjectScoreResult {
 
 ## 4. Validation & Error Matrix
 
+### Ch4 Explicit Renumbering
+
+`ch04Migration.ts` 保存 2026-09-11 明确授权的 20 个旧新编号映射。必须在扫描确认完整新布局后执行一次，标记 `ch04-exercise-order-2026-09-11` 与主进度一起持久化。迁移从原始记录同时生成结果，不能逐条原地搬移重叠键；随后才合并旧目录与平铺目录别名。备份写入成功前不能更改状态，历史 snapshot 路径保持原样。`load()`、后续别名合并与 `resetAll()` 必须保留 appliedMigrations，防止新成绩被再次迁移。旧布局或部分扫描不触发；旧扩展与新扩展同时写同一 globalState 不属于本次兼容范围。
+
+相关回归为 `ch04-migration.test.ts`：20 个交叉 ID、旧布局拒绝、备份失败、别名合并、快照/事件完整、重启幂等与重置后保留迁移标志。
+
 | 条件 | 行为 |
 | --- | --- |
 | 分类目录不存在 | 跳过该分类，继续扫描其它分类 |

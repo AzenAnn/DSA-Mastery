@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { parseQuizQuestions, type QuizQuestion } from "./quiz";
 import { readStableLabId } from "./labIdentity";
+import { ch04LegacyNames } from "./ch04Migration";
 
 /**
  * 一道可作答 lab 的静态信息，来自 lab.json 与 README frontmatter。
@@ -471,7 +472,7 @@ function buildBase(
   return {
     id: readStableLabId(front.labId, labDir),
     name: labDir,
-    legacyNames,
+    legacyNames: [...new Set([...legacyNames, ...ch04LegacyNames(labDir)])],
     labPath,
     relativePath: path.relative(repoRoot, labPath).split(path.sep).join("/"),
     title: typeof front.title === "string" ? front.title : labDir,

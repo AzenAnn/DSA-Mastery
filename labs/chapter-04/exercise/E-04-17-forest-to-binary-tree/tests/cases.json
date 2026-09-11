@@ -1,0 +1,242 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "002-empty",
+    "input": "tests/002-empty.in",
+    "expected": "tests/002-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "003-single",
+    "input": "tests/003-single.in",
+    "expected": "tests/003-single.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "004-two-nodes",
+    "input": "tests/004-two-nodes.in",
+    "expected": "tests/004-two-nodes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "005-isolated-roots",
+    "input": "tests/005-isolated-roots.in",
+    "expected": "tests/005-isolated-roots.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "006-later-tree-larger",
+    "input": "tests/006-later-tree-larger.in",
+    "expected": "tests/006-later-tree-larger.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "007-many-roots",
+    "input": "tests/007-many-roots.in",
+    "expected": "tests/007-many-roots.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "008-short-chain",
+    "input": "tests/008-short-chain.in",
+    "expected": "tests/008-short-chain.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "009-deep-boundary",
+    "input": "tests/009-deep-boundary.in",
+    "expected": "tests/009-deep-boundary.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "010-ternary-tree",
+    "input": "tests/010-ternary-tree.in",
+    "expected": "tests/010-ternary-tree.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "011-unequal-components",
+    "input": "tests/011-unequal-components.in",
+    "expected": "tests/011-unequal-components.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "012-deep-branch-3",
+    "input": "tests/012-deep-branch-3.in",
+    "expected": "tests/012-deep-branch-3.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "013-deep-branch-4",
+    "input": "tests/013-deep-branch-4.in",
+    "expected": "tests/013-deep-branch-4.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "014-mixed-siblings",
+    "input": "tests/014-mixed-siblings.in",
+    "expected": "tests/014-mixed-siblings.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "015-comb",
+    "input": "tests/015-comb.in",
+    "expected": "tests/015-comb.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "016-permuted-root",
+    "input": "tests/016-permuted-root.in",
+    "expected": "tests/016-permuted-root.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "017-permuted-forest",
+    "input": "tests/017-permuted-forest.in",
+    "expected": "tests/017-permuted-forest.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "018-random-small",
+    "input": "tests/018-random-small.in",
+    "expected": "tests/018-random-small.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "019-random-medium",
+    "input": "tests/019-random-medium.in",
+    "expected": "tests/019-random-medium.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  },
+  {
+    "id": "020-random-boundary",
+    "input": "tests/020-random-boundary.in",
+    "expected": "tests/020-random-boundary.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ],
+    "compare": {
+      "mode": "tokens"
+    }
+  }
+]

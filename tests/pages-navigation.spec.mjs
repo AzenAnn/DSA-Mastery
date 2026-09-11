@@ -1368,6 +1368,240 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   expect(failures).toEqual([]);
 });
 
+const ch04Exercises = [
+  {
+    "number": 1,
+    "slug": "lcrs-leaf-count",
+    "isNew": true
+  },
+  {
+    "number": 2,
+    "slug": "lcrs-tree-height",
+    "isNew": true
+  },
+  {
+    "number": 3,
+    "slug": "complete-binary-tree-check",
+    "isNew": false
+  },
+  {
+    "number": 4,
+    "slug": "binary-tree-minimum-depth",
+    "isNew": true
+  },
+  {
+    "number": 5,
+    "slug": "merge-binary-trees",
+    "isNew": true
+  },
+  {
+    "number": 6,
+    "slug": "sum-of-left-leaves",
+    "isNew": true
+  },
+  {
+    "number": 7,
+    "slug": "binary-tree-preorder-traversal",
+    "isNew": false
+  },
+  {
+    "number": 8,
+    "slug": "binary-tree-inorder-iterative",
+    "isNew": true
+  },
+  {
+    "number": 9,
+    "slug": "binary-tree-level-and-zigzag-order",
+    "isNew": false
+  },
+  {
+    "number": 10,
+    "slug": "binary-tree-right-side-view",
+    "isNew": false
+  },
+  {
+    "number": 11,
+    "slug": "binary-tree-level-averages",
+    "isNew": true
+  },
+  {
+    "number": 12,
+    "slug": "leaf-similar-trees",
+    "isNew": true
+  },
+  {
+    "number": 13,
+    "slug": "construct-binary-tree-pre-in",
+    "isNew": false
+  },
+  {
+    "number": 14,
+    "slug": "construct-binary-tree-in-post",
+    "isNew": false
+  },
+  {
+    "number": 15,
+    "slug": "create-inorder-thread",
+    "isNew": true
+  },
+  {
+    "number": 16,
+    "slug": "threaded-inorder-successor",
+    "isNew": true
+  },
+  {
+    "number": 17,
+    "slug": "forest-to-binary-tree",
+    "isNew": true
+  },
+  {
+    "number": 18,
+    "slug": "binary-tree-to-forest",
+    "isNew": true
+  },
+  {
+    "number": 19,
+    "slug": "general-tree-postorder",
+    "isNew": true
+  },
+  {
+    "number": 20,
+    "slug": "binary-tree-maximum-width",
+    "isNew": false
+  },
+  {
+    "number": 21,
+    "slug": "symmetric-tree",
+    "isNew": false
+  },
+  {
+    "number": 22,
+    "slug": "flatten-binary-tree-to-linked-list",
+    "isNew": false
+  },
+  {
+    "number": 23,
+    "slug": "path-sum-all-paths",
+    "isNew": false
+  },
+  {
+    "number": 24,
+    "slug": "binary-tree-tilt",
+    "isNew": true
+  },
+  {
+    "number": 25,
+    "slug": "lowest-common-ancestor",
+    "isNew": false
+  },
+  {
+    "number": 26,
+    "slug": "diameter-of-binary-tree",
+    "isNew": false
+  },
+  {
+    "number": 27,
+    "slug": "longest-zigzag-path",
+    "isNew": false
+  },
+  {
+    "number": 28,
+    "slug": "research-team-formation",
+    "isNew": false
+  },
+  {
+    "number": 29,
+    "slug": "network-optimal-location",
+    "isNew": false
+  },
+  {
+    "number": 30,
+    "slug": "communication-base-station",
+    "isNew": false
+  },
+  {
+    "number": 31,
+    "slug": "tree-isomorphism",
+    "isNew": false
+  },
+  {
+    "number": 32,
+    "slug": "subtree-of-another-tree",
+    "isNew": false
+  },
+  {
+    "number": 33,
+    "slug": "sum-root-to-leaf-numbers",
+    "isNew": false
+  },
+  {
+    "number": 34,
+    "slug": "binary-tree-maximum-path-sum",
+    "isNew": false
+  }
+];
+
+test("chapter 4 preserves all old problems and follows the 31-row order with three supplements", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/learn/outline/chapter-04-tree-binary-tree/`);
+  const group = page.locator('.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-04-tree-binary-tree/"])');
+  const exercise = group.locator(".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)");
+  await expect(exercise).toHaveCount(1);
+  if (await exercise.evaluate(element => element.classList.contains("collapsed"))) {
+    await exercise.locator(":scope > .item > .caret").click();
+  }
+  const links = exercise.locator(":scope > .items a");
+  await expect(links).toHaveCount(34);
+  for (const [index, row] of ch04Exercises.entries()) {
+    const id = String(row.number).padStart(2, "0");
+    await expect(links.nth(index)).toContainText(`04E${id} ·`);
+    await expect(links.nth(index)).toHaveAttribute("href", `${pagesBasePath}/labs/chapter-04/exercise/E-04-${id}-${row.slug}/`);
+  }
+  await links.nth(14).click();
+  await expect(page.locator("h1")).toContainText("Lab 04-E-15：中序线索化");
+  await page.locator("#local-search button").click();
+  await page.getByRole("searchbox").fill("叶子相似的树");
+  await expect(page.getByRole("listbox").locator('a[href*="E-04-12-leaf-similar-trees"]').first()).toBeVisible();
+  expect(failures).toEqual([]);
+});
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"]) {
+    test(`chapter 4 new exercise statements, solutions and diagrams at ${width}px ${theme}`, async ({ page }, testInfo) => {
+      test.setTimeout(120_000);
+      const failures = monitorPage(page);
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+      await page.addInitScript(value => globalThis.localStorage.setItem("vitepress-theme-appearance", value), theme);
+      for (const row of ch04Exercises.filter(item => item.isNew)) {
+        const id = String(row.number).padStart(2, "0");
+        await page.goto(`${baseUrl}/labs/chapter-04/exercise/E-04-${id}-${row.slug}/`);
+        await expect(page.locator("h1")).toContainText(`Lab 04-E-${id}`);
+        await expect(page.locator(".vp-doc")).not.toContainText("请在发布前");
+        await expect(page.locator(".vp-doc h3").filter({ hasText: /^样例 [123]/ })).toHaveCount(3);
+        await page.locator(".vp-doc summary").filter({ hasText: "参考思路、正确性与复杂度" }).click();
+        await expect(page.locator(".vp-doc details .language-cpp")).toBeVisible();
+        const pictures = page.locator(".vp-doc img");
+        for (const picture of await pictures.all()) {
+          await expect(picture).toBeVisible();
+          await expect.poll(() => picture.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+        }
+        const layout = await page.evaluate(() => ({
+          width: globalThis.document.documentElement.clientWidth,
+          scroll: globalThis.document.documentElement.scrollWidth,
+          dark: globalThis.document.documentElement.classList.contains("dark"),
+        }));
+        expect(layout.scroll).toBeLessThanOrEqual(layout.width);
+        expect(layout.dark).toBe(theme === "dark");
+        if ([15, 17].includes(row.number)) {
+          await page.locator(".vp-doc img").scrollIntoViewIfNeeded();
+          await page.screenshot({ path: testInfo.outputPath(`ch04-E${id}-${width}-${theme}.png`) });
+        }
+      }
+      expect(failures).toEqual([]);
+    });
+  }
+}
+
 test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty Project slot", async ({ page }) => {
   const failures = monitorPage(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
