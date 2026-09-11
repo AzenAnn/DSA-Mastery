@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 35
+- **Total Sessions**: 37
 - **Last Active**: 2026-09-11
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~903 | Active |
+| `journal-1.md` | ~971 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,8 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 37 | 2026-09-11 | Ch0 教学改版提交与 PR 准备 | `24cab4d` | `docs/ch0-teaching-revision` |
+| 36 | 2026-09-11 | Ch0 教学改版与完整验收 | - | `docs/ch0-teaching-revision` |
 | 35 | 2026-09-11 | Ch15 回溯与搜索练习验收及 PR 准备 | `b9483ab` | `feat/ch15-backtracking-exercises` |
 | 34 | 2026-09-11 | 提交 Project PR 174 并发布插件 0.1.13 | `38f3c3a` | `feat/project-engineering-expression-demo` |
 | 33 | 2026-09-11 | Project engineering and expression demo ready for local review | - | `feat/project-engineering-expression-demo` |

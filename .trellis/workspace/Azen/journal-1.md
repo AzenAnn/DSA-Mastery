@@ -901,3 +901,71 @@ Implemented Project task isolation, current-result fingerprints, expression demo
 ### Status
 
 [OK] **Completed**
+
+
+## Session 36: Ch0 教学改版与完整验收
+
+**Date**: 2026-09-11
+**Task**: Ch0 教学改版与完整验收
+**Branch**: `docs/ch0-teaching-revision`
+
+### Summary
+
+完成两篇入门文章的需求驱动教学改写、练习与第12章纠错同步，验证通过，任务置为 review，保留未提交改动。
+
+### Main Changes
+
+- 0.1 以学生记录需求引出结构与 ADT 契约；0.2 以循环计数、单条件变式、前缀和和峰值空间建立迁移方法。
+- 修正混合递推、归纳失败推论、空间生存期、几何与平方计数、q11 题面和 q19 解析；修复 Graphviz 图注语法指南。
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] pnpm test、validate、root/Pages build 与 check:site 通过；全站 Pages 56/56 通过。
+- [OK] 实际 C++ 计数与边界核验、两文八组桌面/移动浅暗预览及题库提交重试通过；Windows 符号链接测试按既有策略跳过一项。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 维护者审阅当前分支改动后按项目流程提交；任务验收记录位于 .trellis/tasks/09-11-ch0-teaching-revision/verification.md。
+
+
+## Session 37: Ch0 教学改版提交与 PR 准备
+
+**Date**: 2026-09-11
+**Task**: Ch0 教学改版提交与 PR 准备
+**Branch**: `docs/ch0-teaching-revision`
+
+### Summary
+
+用户明确要求提交 PR。已提交教学改版及相关规范，归档 Trellis 任务，准备推送分支并创建面向 main 的 PR。
+
+### Main Changes
+
+- 提交 15 个正文、练习、图示与规范测试文件；原有四项 SVG 变动和 __pycache__ 保留，不纳入提交。
+- 任务归档至 .trellis/tasks/archive/2026-09/09-11-ch0-teaching-revision/，保留完整验证记录与可复跑脚本。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `24cab4d` | (see git log) |
+
+### Testing
+
+- [OK] 沿用已通过的 pnpm test、validate、root/Pages build、check:site、Pages 56/56 与八组视觉验收；产品内容未再修改。
+- [OK] 提交前 git diff --check 通过；git fetch 后 origin/main 与验收基线一致。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 维护者在 PR 中审阅教学节奏、变式梯度与严格推导，等待 GitHub Actions 检查。
