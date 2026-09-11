@@ -1,7 +1,7 @@
 # 第 6 章选择题来源与核对记录
 
-> 适用题库：`06T01`（图基础）、`06T02`（图的存储）、`06T03`（图的遍历与连通性）、`06T04`（图论综合）
-> 核对日期：2026-09-11
+> 适用题库：`06T01`（图基础）、`06T02`（图的存储）、`06T03`（图的遍历与连通性）
+> 核对日期：2026-09-10
 
 本组题目从教材中的图基本术语、存储复杂度、遍历与连通性内容整理为四选一形式，不作为历年真题标注。题面中的数值和顶点编号仅用于形成可独立作答的等价练习；定义、答案与复杂度结论均按下列至少两类资料交叉核对。
 
@@ -48,16 +48,6 @@
 | 06-03 | 10 | Kosaraju 两轮顺序 | CLRS 第 22 章 | OpenDSA Graph Traversals |
 | 06-03 | 11 | Kosaraju 复杂度 | CLRS 第 22 章 | OpenDSA Graph Traversals |
 | 06-03 | 12 | 遍历与并查集选型 | CLRS 并查集 | OpenDSA Graph Traversals |
-| 06-04 | 01 | 简单图度序列 | 严蔚敏“图的基本术语” | OpenDSA Graph Terminology |
-| 06-04 | 02 | 简单有向图最大边数 | 王道“简单图” | OpenDSA Graph Terminology |
-| 06-04 | 03 | 自环与邻接矩阵对角线 | 严蔚敏“邻接矩阵法” | OpenDSA Graph Implementations |
-| 06-04 | 04 | 点对查询的表示选型 | CLRS 第 22 章 | OpenDSA Graph Implementations |
-| 06-04 | 05 | 零权边的存在性表示 | 严蔚敏“网的邻接矩阵” | OpenDSA Graph Implementations |
-| 06-04 | 06 | BFS 最少边数路径 | CLRS 第 22 章 | OpenDSA Graph Traversals |
-| 06-04 | 07 | DFS/BFS 的可达集合 | CLRS 第 22 章 | OpenDSA Graph Traversals |
-| 06-04 | 08 | 完整遍历与连通分量 | 严蔚敏“连通分量” | OpenDSA Graph Traversals |
-| 06-04 | 09 | 单源可达与强连通 | 严蔚敏“强连通图” | CLRS 第 22 章 |
-| 06-04 | 10 | 只增边动态连通性 | CLRS 并查集 | OpenDSA Graph Traversals |
 
 ## 人工复核提醒
 
