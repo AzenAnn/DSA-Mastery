@@ -43,6 +43,7 @@ actions/configure-pages base_path
 - 源码直接导入的运行时包必须是 `package.json` 的直接依赖；无内置 TypeScript 声明的包还必须直接声明对应 `@types/*`。锁文件中存在传递依赖不代表当前包可以直接使用，且不得以本机 `node_modules` 中的残留链接作为通过依据。
 - 内容校验与 VitePress 收集器是独立防线，但共享同一字段/路径契约；禁止一个接受、另一个拒绝。
 - workflow 使用 Node 24、全局 `pages` concurrency group；PR 执行全部 build/test 但不 deploy，只有 `main` push 和 `workflow_dispatch` 可部署。
+- 网站 build job 为完整 discovery、构建、产物审计和浏览器测试预留 30 分钟；2026-09-12 的 ch5/ch6 发布在旧 15 分钟上限被强制取消。先核对 Actions annotation 和失败步骤，不能把 job 超时当成测试断言失败，也不能通过跳过浏览器门禁发布。
 - `actions/configure-pages` 是部署 base 的来源；旧 `NEXT_PUBLIC_*`、RSC patch 和 artifact 修补已删除，不得重新引入。
 - 上传目录固定为 `dist/pages`；生成目录不进 Git。
 - Playwright 必须服务最终静态产物，并挂载在 `/DSA-Mastery/`，不能只测开发服务器；仓库配置的全部用例必须全绿。
