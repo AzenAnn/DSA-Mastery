@@ -3,42 +3,184 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-insufficient",
     "input": "tests/002-insufficient.in",
     "expected": "tests/002-insufficient.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "003-all-distinct",
     "input": "tests/003-all-distinct.in",
     "expected": "tests/003-all-distinct.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "004-all-same",
     "input": "tests/004-all-same.in",
     "expected": "tests/004-all-same.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "005-negatives",
     "input": "tests/005-negatives.in",
     "expected": "tests/005-negatives.out",
-    "points": 15,
-    "tags": ["normal", "boundary"]
+    "points": 5,
+    "tags": [
+      "normal",
+      "boundary"
+    ]
   },
   {
     "id": "006-larger",
     "input": "tests/006-larger.in",
     "expected": "tests/006-larger.out",
-    "points": 20,
-    "tags": ["normal", "large"]
+    "points": 5,
+    "tags": [
+      "normal",
+      "large"
+    ]
+  },
+  {
+    "id": "007-k1",
+    "input": "tests/007-k1.in",
+    "expected": "tests/007-k1.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-exact-distinct-count",
+    "input": "tests/008-exact-distinct-count.in",
+    "expected": "tests/008-exact-distinct-count.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-exceeds-by-one",
+    "input": "tests/009-exceeds-by-one.in",
+    "expected": "tests/009-exceeds-by-one.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "010-single-k1",
+    "input": "tests/010-single-k1.in",
+    "expected": "tests/010-single-k1.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "011-single-k2",
+    "input": "tests/011-single-k2.in",
+    "expected": "tests/011-single-k2.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "012-two-values-k2",
+    "input": "tests/012-two-values-k2.in",
+    "expected": "tests/012-two-values-k2.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "013-extreme-values",
+    "input": "tests/013-extreme-values.in",
+    "expected": "tests/013-extreme-values.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "014-all-distinct-negatives",
+    "input": "tests/014-all-distinct-negatives.in",
+    "expected": "tests/014-all-distinct-negatives.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "special"
+    ]
+  },
+  {
+    "id": "015-random-100",
+    "input": "tests/015-random-100.in",
+    "expected": "tests/015-random-100.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-random-1000",
+    "input": "tests/016-random-1000.in",
+    "expected": "tests/016-random-1000.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-few-distinct-no-result",
+    "input": "tests/017-few-distinct-no-result.in",
+    "expected": "tests/017-few-distinct-no-result.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "018-random-5000",
+    "input": "tests/018-random-5000.in",
+    "expected": "tests/018-random-5000.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-random-10000",
+    "input": "tests/019-random-10000.in",
+    "expected": "tests/019-random-10000.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "large"
+    ]
+  },
+  {
+    "id": "020-k-greater-than-n",
+    "input": "tests/020-k-greater-than-n.in",
+    "expected": "tests/020-k-greater-than-n.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
   }
 ]

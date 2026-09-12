@@ -2174,6 +2174,27 @@ body.project-body {
   font-size: 0.82em;
 }
 
+.project-page { letter-spacing: 0; }
+.project-current-overview h2 { margin: 0 0 10px; font-size: 20px; }
+.project-current-overview { padding-bottom: 18px; border-bottom: 1px solid var(--dsa-border); }
+.project-table-scroll { max-width: 100%; overflow-x: auto; margin: 12px 0; }
+.project-current-table { width: 100%; min-width: 450px; border-collapse: collapse; font-size: 12px; }
+.project-current-table th, .project-current-table td { padding: 9px 7px; text-align: left; border-bottom: 1px solid var(--dsa-border); white-space: nowrap; }
+.project-page .project-current-table button[data-task-submit] { white-space: nowrap; min-width: 76px; }
+.project-current-table tr[data-status="STALE"] td:nth-child(2), .project-current-table tr[data-status="BLOCKED"] td:nth-child(2) { color: var(--dsa-warning); }
+.project-current-table tr[data-status="AC"] td:nth-child(2) { color: var(--dsa-success); }
+.project-task-nav, .project-support-files, .project-task-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+.project-task-nav a { padding: 6px 0; margin-right: 14px; border-bottom: 2px solid var(--vscode-focusBorder); }
+.project-page button[data-task-submit], .project-page button[data-project-readme], .project-page button[data-project-report], .project-page button[data-project-refresh] { color: var(--vscode-button-foreground); background: var(--vscode-button-background); border: 1px solid transparent; border-radius: 4px; padding: 6px 10px; cursor: pointer; font: inherit; white-space: normal; overflow-wrap: anywhere; }
+.project-page button:disabled { opacity: 0.55; cursor: wait; }
+.project-readme { margin: 16px 0; border-bottom: 1px solid var(--dsa-border); padding-bottom: 14px; }
+.project-readme > summary { cursor: pointer; font-size: 16px; font-weight: 600; }
+.project-build-targets { font-size: 12px; color: var(--dsa-muted); overflow-wrap: anywhere; }
+.project-support-files .project-file-button { width: auto; max-width: 100%; }
+.project-task-card { scroll-margin-top: 16px; border-radius: 6px; }
+.project-page pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.project-page .lab-header h1 { font-size: 24px; overflow-wrap: anywhere; letter-spacing: 0; }
+
 .project-result-checklist {
   color: var(--dsa-muted);
   font-size: 0.82em;

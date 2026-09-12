@@ -3,42 +3,183 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "003-duplicates",
     "input": "tests/003-duplicates.in",
     "expected": "tests/003-duplicates.out",
-    "points": 20,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "004-mixed",
     "input": "tests/004-mixed.in",
     "expected": "tests/004-mixed.out",
-    "points": 20,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "005-large",
     "input": "tests/005-large.in",
     "expected": "tests/005-large.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "006-update-stress",
     "input": "tests/006-update-stress.in",
     "expected": "tests/006-update-stress.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-q-one",
+    "input": "tests/007-q-one.in",
+    "expected": "tests/007-q-one.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-all-equal",
+    "input": "tests/008-all-equal.in",
+    "expected": "tests/008-all-equal.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "tie"
+    ]
+  },
+  {
+    "id": "009-boundary-x",
+    "input": "tests/009-boundary-x.in",
+    "expected": "tests/009-boundary-x.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "010-min-max-values",
+    "input": "tests/010-min-max-values.in",
+    "expected": "tests/010-min-max-values.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "tie"
+    ]
+  },
+  {
+    "id": "011-update-noop",
+    "input": "tests/011-update-noop.in",
+    "expected": "tests/011-update-noop.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "012-random-small",
+    "input": "tests/012-random-small.in",
+    "expected": "tests/012-random-small.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-random-medium",
+    "input": "tests/013-random-medium.in",
+    "expected": "tests/013-random-medium.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-random-large",
+    "input": "tests/014-random-large.in",
+    "expected": "tests/014-random-large.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-query-heavy",
+    "input": "tests/015-query-heavy.in",
+    "expected": "tests/015-query-heavy.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-update-heavy",
+    "input": "tests/016-update-heavy.in",
+    "expected": "tests/016-update-heavy.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-max-q",
+    "input": "tests/017-max-q.in",
+    "expected": "tests/017-max-q.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "018-ascending-init",
+    "input": "tests/018-ascending-init.in",
+    "expected": "tests/018-ascending-init.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "019-descending-init",
+    "input": "tests/019-descending-init.in",
+    "expected": "tests/019-descending-init.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "020-duplicates-stress",
+    "input": "tests/020-duplicates-stress.in",
+    "expected": "tests/020-duplicates-stress.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
   }
 ]

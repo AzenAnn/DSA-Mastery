@@ -19,7 +19,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     permissions:
       contents: read
       pages: read
@@ -56,6 +56,9 @@ jobs:
 
       - name: Test Lab schemas, scaffolding, comparators, and process limits
         run: pnpm run test:lab-tools
+
+      - name: Verify tree visualization algorithms and replay snapshots
+        run: pnpm run test:tree-demos
 
       - name: Validate Lab author-guide examples and entry points
         run: pnpm run test:lab-docs
@@ -145,6 +148,11 @@ jobs:
           pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
           pnpm run test:lab-golden
           pnpm run test:lab-make
+
+      - name: Verify Project dependency isolation and fresh student package
+        env:
+          CXX: ${{ matrix.cxx }}
+        run: node --test tests/project-engineering.test.mjs
 
       - name: Confirm Lab builds do not modify tracked sources
         shell: bash

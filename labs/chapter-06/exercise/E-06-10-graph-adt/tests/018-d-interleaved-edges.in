@@ -1,0 +1,8 @@
+D 5 7
+ADD 0 4
+ADD 1 4
+ADD 4 2
+DEL 0 4
+HAS 1 4
+HAS 4 2
+ADD 0 4

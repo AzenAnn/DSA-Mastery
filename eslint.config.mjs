@@ -43,6 +43,10 @@ const eslintConfig = defineConfig([
       globals: globals.node,
     },
   },
+  {
+    files: ["public/demos/tree-*.mjs"],
+    languageOptions: { globals: globals.browser },
+  },
 ]);
 
 export default eslintConfig;

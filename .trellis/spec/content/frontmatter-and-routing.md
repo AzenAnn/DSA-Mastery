@@ -56,6 +56,8 @@ content/:chapter/:page.md -> learn/:chapter/:page/index.md
 | `contributors` | 非空字符串数组；记录实际写作或审阅者 |
 | `status` | `draft`、`review`、`published` 之一 |
 
+作者使用单行数组书写贡献者，例如 `contributors: ["Azen"]`。独立内容校验器采用受限 frontmatter 解析，不支持 YAML 多行列表；VitePress 能解析不代表 `validate:content` 也能接受。
+
 状态含义：
 
 - `draft`：仍可能缺模块，但不能伪装成完整内容。

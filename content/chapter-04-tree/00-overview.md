@@ -4,7 +4,7 @@ description: "从一般树的概念出发，掌握二叉树的性质、遍历、
 order: 0
 chapter: 4
 chapterTitle: "树与二叉树"
-updated: "2026-08-24"
+updated: "2026-09-11"
 contributors: ["Azen"]
 status: "draft"
 ---
@@ -35,3 +35,17 @@ status: "draft"
 - [4.4 线索二叉树](./04-threaded-binary-tree.md)：空链域复用、中序线索化与前驱/后继。
 - [4.5 树、森林与二叉树](./05-trees-and-forests.md)：孩子兄弟表示法与遍历的等价对应。
 - [4.6 二叉树的经典问题](./06-binary-tree-classic-problems.md)：统计、判断、变换、路径与树形 DP。
+
+## 代码训练路线
+
+本章共 34 道代码题，每题 20 个测试点。按知识点完成以下训练，再进入综合应用：
+
+| 知识点 | 题号 | 训练入口 |
+| --- | --- | --- |
+| 一般树与孩子兄弟表示 | 04E01～04E02 | [叶子统计](../../labs/chapter-04/exercise/E-04-01-lcrs-leaf-count/README.md)、[树的高度](../../labs/chapter-04/exercise/E-04-02-lcrs-tree-height/README.md) |
+| 二叉树性质与基础计算 | 04E03～04E06 | [完全性检验](../../labs/chapter-04/exercise/E-04-03-complete-binary-tree-check/README.md)、[合并二叉树](../../labs/chapter-04/exercise/E-04-05-merge-binary-trees/README.md) |
+| 遍历及重建 | 04E07～04E14 | [迭代中序](../../labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative/README.md)、[层平均值](../../labs/chapter-04/exercise/E-04-11-binary-tree-level-averages/README.md)、[叶子相似](../../labs/chapter-04/exercise/E-04-12-leaf-similar-trees/README.md) |
+| 中序线索树 | 04E15～04E16 | [中序线索化](../../labs/chapter-04/exercise/E-04-15-create-inorder-thread/README.md)、[后继与遍历](../../labs/chapter-04/exercise/E-04-16-threaded-inorder-successor/README.md) |
+| 森林转换与一般树遍历 | 04E17～04E19 | [森林转二叉树](../../labs/chapter-04/exercise/E-04-17-forest-to-binary-tree/README.md)、[二叉树转森林](../../labs/chapter-04/exercise/E-04-18-binary-tree-to-forest/README.md)、[后根遍历](../../labs/chapter-04/exercise/E-04-19-general-tree-postorder/README.md) |
+| 综合应用 | 04E20～04E31 | [最大宽度](../../labs/chapter-04/exercise/E-04-20-binary-tree-maximum-width/README.md)、[坡度](../../labs/chapter-04/exercise/E-04-24-binary-tree-tilt/README.md)、[树的同构](../../labs/chapter-04/exercise/E-04-31-tree-isomorphism/README.md) |
+| 补充练习 | 04E32～04E34 | [另一棵树的子树](../../labs/chapter-04/exercise/E-04-32-subtree-of-another-tree/README.md)、[根到叶数字之和](../../labs/chapter-04/exercise/E-04-33-sum-root-to-leaf-numbers/README.md)、[最大路径和](../../labs/chapter-04/exercise/E-04-34-binary-tree-maximum-path-sum/README.md) |

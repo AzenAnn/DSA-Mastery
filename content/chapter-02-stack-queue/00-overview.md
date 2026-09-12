@@ -4,7 +4,7 @@ description: "学习受限线性结构的后进先出与先进先出语义，以
 order: 0
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-21"
+updated: "2026-09-10"
 contributors: ["Azen", "Jeff", "walker2398", "qzmqzm123"]
 status: "draft"
 ---
@@ -40,11 +40,18 @@ status: "draft"
 1. 先学习[栈](./01-stack.md)，建立“后进先出 + 表尾操作”的模型，再完成[Lab 02-T-01：栈选择题精练](../../labs/chapter-02/theory/T-02-01-stack-quiz/README.md)检查基础概念。
 2. 再学习[队列](./02-queue.md)，重点理解循环队列判空判满的边界约定，再完成[Lab 02-T-02：队列选择题精练](../../labs/chapter-02/theory/T-02-02-queue-quiz/README.md)检查公式应用与实现取舍。
 3. 完成基础实现练习：先做栈序列与最小栈，再做队列窗口、循环结构和用栈实现队列。
+1. 先学习[栈](./01-stack.md)，建立“后进先出 + 表尾操作”的模型，再完成[Lab 02-T-01：栈选择题精练](../../labs/chapter-02/theory/T-02-01-stack-quiz/README.md)检查基础概念。
+2. 再学习[队列](./02-queue.md)，重点理解循环队列判空判满的边界约定，再完成[Lab 02-T-02：队列选择题精练](../../labs/chapter-02/theory/T-02-02-queue-quiz/README.md)检查公式应用与实现取舍。
+3. 完成基础实现练习：先做栈序列与最小栈，再做队列窗口、循环结构和用栈实现队列。
 4. 接着学习[应用](./03-applications.md)，完成逆波兰表达式求值、中缀转后缀、单调栈与逐层扩散练习。
 5. 最后依次完成可撤销浏览器、超市收银模拟与停车场管理三个综合 Lab。
 
 ## 配套 Labs
 
+| 实践主题 | 对应 Lab | 验收重点 |
+| --- | --- | --- |
+| 栈的概念、边界与复杂度 | [Lab 02-T-01：栈选择题精练](../../labs/chapter-02/theory/T-02-01-stack-quiz/README.md) | 独立判断出栈序列、空满条件、括号匹配与基本操作复杂度 |
+| 队列的语义、边界与实现取舍 | [Lab 02-T-02：队列选择题精练](../../labs/chapter-02/theory/T-02-02-queue-quiz/README.md) | 推导循环下标与长度，辨析链队列边界、复杂度和工程选型 |
 | 实践主题 | 对应 Lab | 验收重点 |
 | --- | --- | --- |
 | 栈的概念、边界与复杂度 | [Lab 02-T-01：栈选择题精练](../../labs/chapter-02/theory/T-02-01-stack-quiz/README.md) | 独立判断出栈序列、空满条件、括号匹配与基本操作复杂度 |
@@ -55,6 +62,9 @@ status: "draft"
 | 表达式与匹配 | [Lab 02-E-09：括号匹配](../../labs/chapter-02/exercise/E-02-09-bracket-matching/README.md)、[Lab 02-E-10：逆波兰表达式求值](../../labs/chapter-02/exercise/E-02-10-rpn-evaluation/README.md)、[Lab 02-E-11：中缀表达式转后缀](../../labs/chapter-02/exercise/E-02-11-infix-to-postfix/README.md) | 检验嵌套匹配、操作数顺序、优先级和括号边界 |
 | 单调栈与逐层扩散 | [Lab 02-E-12：下一个更大元素](../../labs/chapter-02/exercise/E-02-12-next-greater-element/README.md)、[Lab 02-E-13：下一个更小元素](../../labs/chapter-02/exercise/E-02-13-next-smaller-element/README.md)、[Lab 02-E-14：农夫抓牛](../../labs/chapter-02/exercise/E-02-14-farmer-cow-bfs/README.md)、[Lab 02-E-20：股票价格跨度](../../labs/chapter-02/exercise/E-02-20-stock-span/README.md) | 维护单调候选，并用 FIFO 保证按层最短路径 |
 | 队列与栈应用 | [Lab 02-E-15：Josephus 出列顺序](../../labs/chapter-02/exercise/E-02-15-josephus-order/README.md)、[Lab 02-E-16：队列生成二进制数](../../labs/chapter-02/exercise/E-02-16-binary-number-queue/README.md)、[Lab 02-E-17：双端队列回文检查](../../labs/chapter-02/exercise/E-02-17-palindrome-deque/README.md)、[Lab 02-E-18：反转队列前 K 个元素](../../labs/chapter-02/exercise/E-02-18-reverse-first-k-queue/README.md)、[Lab 02-E-19：仅用辅助栈排序](../../labs/chapter-02/exercise/E-02-19-stack-sorting/README.md) | 练习循环调度、FIFO 生成、双端访问和辅助结构协作 |
+| 栈、导航历史与 Undo/Redo | [Lab 02-P-01：可撤销浏览器](../../labs/chapter-02/project/P-02-01-undoable-browser/README.md) | 用完整页面状态协调后退、前进和页面级命令历史 |
+| FIFO、多队列与离散时间 | [Lab 02-P-02：超市收银模拟](../../labs/chapter-02/project/P-02-02-supermarket-checkout/README.md) | 统一时间口径，验证等待、逗留、忙碌率和队列峰值 |
+| 栈与队列联动 | [Lab 02-P-03：停车场管理](../../labs/chapter-02/project/P-02-03-parking-lot-management/README.md) | 完成倒车、便道补位、中间删除与统计 |
 | 栈、导航历史与 Undo/Redo | [Lab 02-P-01：可撤销浏览器](../../labs/chapter-02/project/P-02-01-undoable-browser/README.md) | 用完整页面状态协调后退、前进和页面级命令历史 |
 | FIFO、多队列与离散时间 | [Lab 02-P-02：超市收银模拟](../../labs/chapter-02/project/P-02-02-supermarket-checkout/README.md) | 统一时间口径，验证等待、逗留、忙碌率和队列峰值 |
 | 栈与队列联动 | [Lab 02-P-03：停车场管理](../../labs/chapter-02/project/P-02-03-parking-lot-management/README.md) | 完成倒车、便道补位、中间删除与统计 |

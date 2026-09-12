@@ -2,10 +2,10 @@
   "name": "dsa-mastery-labs",
   "displayName": "DSA Mastery Labs",
   "description": "在 VSCode 中浏览、作答与提交 DSA Mastery 的代码题、项目题与选择题",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "private": true,
   "publisher": "dsa-mastery",
-  "license": "SEE LICENSE IN ../../README.md",
+  "license": "UNLICENSED",
   "engines": {
     "vscode": "^1.90.0",
     "node": ">=22.13.0"
@@ -18,6 +18,15 @@
   "activationEvents": [
     "workspaceContains:labs/index.md"
   ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "可浏览题面和选择题；执行仓库内测评脚本和学生代码前必须信任工作区。",
+      "restrictedConfigurations": [
+        "dsaMastery.nodePath"
+      ]
+    }
+  },
   "contributes": {
     "viewsContainers": {
       "activitybar": [
@@ -139,7 +148,7 @@
     "watch": "node build.mjs --watch",
     "test": "node --experimental-strip-types --test test/*.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "package": "node build.mjs && vsce package --no-dependencies --allow-missing-repository"
+    "package": "node build.mjs && vsce package --no-dependencies --allow-missing-repository --skip-license"
   },
   "dependencies": {
     "gray-matter": "4.0.3",
@@ -151,6 +160,7 @@
     "@types/markdown-it": "^14.1.2",
     "@types/node": "22.19.19",
     "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "3.9.2",
     "esbuild": "0.25.0",
     "typescript": "5.9.3"
   },

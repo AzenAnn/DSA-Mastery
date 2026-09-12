@@ -17,7 +17,7 @@
 
 - `.vitepress/config.ts` 是唯一注册入口，调用 `.vitepress/markdown/theory.ts` 导出的 `installTheoryMarkdown()`。
 - 理论块必须输出 `.dsa-theory-block`、`.dsa-theory-block--<type>` 与 `data-theory-kind="<type>"`；标题包含 `.dsa-theory-block__title` 和对屏幕阅读器隐藏的 `.dsa-theory-block__code`。
-- 自定义标题按纯文本调用 Markdown-it 的 `escapeHtml`，不得在标题中执行 HTML 或内联 Markdown。
+- 自定义标题经 Markdown-it 内联渲染（与 VitePress 原生容器一致），`$…$` 行内公式与行内代码生效；渲染标题时必须临时关闭 `html` 选项，原始 HTML 只能转义为纯文本，不得执行。
 - 理论容器是静态 HTML，不引入运行时 Vue 组件，确保 SSR、本地搜索和无 JavaScript 阅读仍保留正文。
 - 普通 fenced code 的 `[filename]` 输出 `.dsa-code-title`；`code-group` 内同一字段只由原生 tab 展示，禁止重复标题。
 - 文件名增强必须包装 VitePress 已安装的 fence renderer，不能替换 Shiki 的 `pre/code`、复制、行号或注解生成。
@@ -38,7 +38,7 @@
 
 ## 6. 必须验证的行为
 
-- discovery fixture 覆盖 11 种类型、默认/自定义/恶意标题、嵌套列表/表格/链接/公式/代码、搜索锚点和未解析 `:::`。
+- discovery fixture 覆盖 11 种类型、默认/自定义/恶意/含公式标题、嵌套列表/表格/链接/公式/代码、搜索锚点和未解析 `:::`。
 - mark fixture 同时覆盖普通文本、行内代码、fenced code 和 `$a == b$`。
 - fenced code fixture 覆盖独立文件名、代码组去重、行号、highlight、focus、diff、warning、error。
 - 真实 Chapter 0 页面必须覆盖定义/直觉/性质/证明/复杂度/易错点、独立文件名与代码组。

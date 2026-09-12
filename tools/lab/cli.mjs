@@ -10,6 +10,7 @@ import { cleanLab, packStudent, refreshExpected, verifyProgram } from "./operati
 import { buildProject, formatProject, interactiveProjectTask, refreshProjectExpected, scoreProject, verifyProject } from "./project.mjs";
 import { formatBuild, formatClean, formatDoctor, formatError, formatHelp, formatLocate, formatNew, formatPack, formatRefresh, formatValidate, formatVerify } from "./reporter.mjs";
 import { createTheme } from "./terminal.mjs";
+import { projectStatus } from "./project-state.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "../..");
 
@@ -53,7 +54,8 @@ function validateOptions(parsed) {
     locate: common,
     doctor: common,
     validate: common,
-    build: [...common, "target"],
+    build: [...common, "target", "task"],
+    "project-status": [...common, "target", "dirty-files"],
     run: [...common, "target", "case", "task"],
     interactive: ["target", "task"],
     score: [...common, "target", "case", "task"],
@@ -116,9 +118,15 @@ async function main() {
       else console.log(formatLocate(report.lab, theme));
       return EXIT.OK;
     }
-    const commands = new Set(["doctor", "validate", "build", "run", "interactive", "score", "verify", "refresh-expected", "pack", "clean"]);
+    const commands = new Set(["doctor", "validate", "build", "run", "interactive", "score", "verify", "refresh-expected", "pack", "clean", "project-status"]);
     if (!commands.has(parsed.command)) throw new LabError("COMMAND_UNKNOWN", `未知命令：${parsed.command}`);
     const lab = await loadLab(targetPath(parsed.positional));
+    if (parsed.command === "project-status") {
+      const result = await projectStatus(lab, parsed.options.target ?? "student", parsed.options["dirty-files"] ? JSON.parse(parsed.options["dirty-files"]) : []);
+      if (parsed.options.json) console.log(JSON.stringify(createReport(parsed.command, lab, { result }), null, 2));
+      else console.log(formatProject({ ...result, current: result }, { theme }));
+      return EXIT.OK;
+    }
     if (parsed.command === "validate") {
       const report = createReport("validate", lab, {
         quiz: lab.quizResult,
@@ -139,7 +147,7 @@ async function main() {
     }
     if (parsed.command === "build") {
       const compilation = lab.manifest.type === "project"
-        ? await buildProject(lab, parsed.options.target ?? "student")
+        ? await buildProject(lab, parsed.options.target ?? "student", { taskId: parsed.options.task })
         : await compileTarget(lab, parsed.options.target ?? "student");
       const report = createReport("build", lab, { compilation });
       report.ok = compilation.ok;

@@ -1,0 +1,30 @@
+{
+  "id": "ch04-teaching-audit",
+  "name": "ch04-teaching-audit",
+  "title": "Ch4 全量教学有效性审查（只读）",
+  "description": "",
+  "status": "completed",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-09-05",
+  "completedAt": "2026-09-05",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "report.md",
+    "coverage.csv",
+    "acceptance.md"
+  ],
+  "notes": "只读教学审查完成；报告report.md，211行覆盖表coverage.csv；原教学文件无变动。未进入开发实施。",
+  "meta": {}
+}

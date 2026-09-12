@@ -3,6 +3,8 @@
   "schemaVersion": 1,
   "kind": "ctest",
   "ctest": {
+    "buildTargets": ["sequential_list_tests"],
+    "moduleTargets": ["sequential_list"],
     "tests": [
       { "name": "sequential-contract", "points": 30 },
       { "name": "sequential-boundaries", "points": 25 },

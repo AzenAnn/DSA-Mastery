@@ -4,8 +4,8 @@ description: "用双亲数组维护集合划分，掌握路径压缩、按秩合
 order: 4
 chapter: 5
 chapterTitle: "树的应用"
-updated: "2026-08-24"
-contributors: ["Azen"]
+updated: "2026-09-10"
+contributors: ["CzjLUCK&Azen"]
 status: "review"
 ---
 
@@ -111,9 +111,11 @@ $$
 ```cpp:line-numbers [dsu-basic-find.cpp]
 #include <vector>
 
+// Find：沿父链接一路向上，直到某个节点的父节点是它自己——那即是根
+// 根就是该连通分量的代表元；本版本只读不改，不改变树的形状
 int findRoot(const std::vector<int>& parent, int x) {
-    while (parent[x] != x) {
-        x = parent[x];
+    while (parent[x] != x) {   // parent[x] == x 即到达根
+        x = parent[x];         // 上跳一层
     }
     return x;
 }
@@ -127,12 +129,13 @@ int findRoot(const std::vector<int>& parent, int x) {
 
 ```cpp:line-numbers [dsu-basic-union.cpp]
 // 沿用上面的 findRoot
+// Union：把 b 所在集合并入 a 所在集合
 bool unite(std::vector<int>& parent, int a, int b) {
-    int rootA = findRoot(parent, a);
-    int rootB = findRoot(parent, b);
-    if (rootA == rootB) return false;
-    parent[rootB] = rootA;
-    return true;
+    int rootA = findRoot(parent, a);   // ① 必须先找到两端的“根”
+    int rootB = findRoot(parent, b);   //    直接挂任意节点会撕掉子树或制造环
+    if (rootA == rootB) return false;  // ② 同根 -> 本来就同组，划分没有变化
+    parent[rootB] = rootA;             // ③ 把一个根挂到另一个根下面
+    return true;                       //    返回 true 表示发生了一次有效合并
 }
 ```
 
@@ -187,8 +190,12 @@ digraph PathCompression {
 
 ```cpp:line-numbers [path-compression.cpp]
 // DisjointSetUnion 的成员函数片段，parent_ 为成员数组
+// Find + 路径压缩（递归版）：
+//   返回值不变（仍是根），副作用是把 x 到根路径上的每个节点直接挂到根下
 int find(int x) {
     if (parent_[x] != x) {
+        // 递归先找到根，再“回填”：赋值号左边的 parent_[x] 被改写为根
+        // 一行同时完成“查根”和“压缩”，是最短写法
         parent_[x] = find(parent_[x]);
     }
     return parent_[x];
@@ -203,13 +210,14 @@ int find(int x) {
 
 ```cpp:line-numbers [union-by-size.cpp]
 // 同为成员函数片段，需要 <utility> 提供 std::swap
+// Union + 按大小合并：让小集合的根挂到大集合的根下
 bool unite(int a, int b) {
-    a = find(a);
+    a = find(a);                       // ① 合并永远发生在“根”与“根”之间
     b = find(b);
-    if (a == b) return false;
-    if (size_[a] < size_[b]) std::swap(a, b);
-    parent_[b] = a;
-    size_[a] += size_[b];
+    if (a == b) return false;          // ② 同根则无事发生
+    if (size_[a] < size_[b]) std::swap(a, b);  // ③ 保证 a 是大树根、b 是小树根
+    parent_[b] = a;                    //    小根挂大根：节点深度至多 O(log n) 增长
+    size_[a] += size_[b];              // ④ 只有根节点的 size 有意义，新根累计两个集合大小
     return true;
 }
 ```
@@ -230,18 +238,23 @@ bool unite(int a, int b) {
 #include <utility>
 #include <vector>
 
+// 完整并查集：路径压缩 + 按大小合并，单次操作均摊近似 O(alpha(n))
 class DisjointSetUnion {
 public:
     explicit DisjointSetUnion(int n)
         : parent_(checkedSize(n)), size_(checkedSize(n), 1), sets_(n) {
+        // 初始时每个元素自成一个集合：i 的父节点是 i 自己，集合大小为 1
         std::iota(parent_.begin(), parent_.end(), 0);
     }
 
+    // Find（迭代 + 两遍路径压缩）：
+    //   第一遍循环只负责找到根；第二遍把 x 沿途的每个节点直接指向根。
+    //   用迭代而非递归，避免极端长链下递归栈溢出
     int find(int x) {
         check(x);
         int root = x;
-        while (parent_[root] != root) root = parent_[root];
-        while (parent_[x] != x) {
+        while (parent_[root] != root) root = parent_[root];  // ① 先找到根
+        while (parent_[x] != x) {           // ② 压缩：沿途节点全部改指根
             int next = parent_[x];
             parent_[x] = root;
             x = next;
@@ -249,36 +262,40 @@ public:
         return root;
     }
 
+    // Union：按大小合并；返回 false 表示两端本来就连通
     bool unite(int a, int b) {
-        a = find(a);
+        a = find(a);                        // ① 先定位两个根（find 顺带完成路径压缩）
         b = find(b);
         if (a == b) return false;
-        if (size_[a] < size_[b]) std::swap(a, b);
-        parent_[b] = a;
-        size_[a] += size_[b];
-        --sets_;
+        if (size_[a] < size_[b]) std::swap(a, b);  // ② 保证 a 是大树根
+        parent_[b] = a;                     // ③ 小根挂大根
+        size_[a] += size_[b];               // ④ 新根大小累加
+        --sets_;                            // ⑤ 有效合并使连通分量数减 1
         return true;
     }
 
-    bool connected(int a, int b) { return find(a) == find(b); }
-    int componentSize(int x) { return size_[find(x)]; }
+    // 便捷查询接口
+    bool connected(int a, int b) { return find(a) == find(b); }  // 同根即连通
+    int componentSize(int x) { return size_[find(x)]; }  // 只有根的 size 有定义，先 find
     int setCount() const { return sets_; }
 
 private:
+    // 防御负数规模：int 直接转 size_t 会变成天文数字，必须先检查
     static std::size_t checkedSize(int n) {
         if (n < 0) throw std::invalid_argument("negative size");
         return static_cast<std::size_t>(n);
     }
 
+    // 防御越界元素编号：越界访问会让 parent_ 读到未定义位置
     void check(int x) const {
         if (x < 0 || x >= static_cast<int>(parent_.size())) {
             throw std::out_of_range("element out of range");
         }
     }
 
-    std::vector<int> parent_;
-    std::vector<int> size_;
-    int sets_;
+    std::vector<int> parent_;   // 父节点数组；parent_[i] == i 表示 i 是根
+    std::vector<int> size_;     // 仅根节点的值有效：该集合的元素个数
+    int sets_;                  // 当前连通分量总数
 };
 ```
 
@@ -294,9 +311,13 @@ $$
 常见简写为每次操作摊还 $O(\alpha(n))$。$\alpha$ 是反阿克曼函数，在现实规模下增长极慢，但这是一组操作序列的**摊还上界**，不是声称每次 `Find` 都严格常数时间，也不是任意朴素实现都自动拥有该界。
 :::
 
-## 5.4.4 实现【C/C++】与应用【拓展】（动态连通性、Kruskal）
+## 5.4.4 应用与拓展
+
+接下来笔者将介绍并查集在图论方面的应用，以及并查集的一些拓展。
 
 ### 增量动态连通性
+
+并查集可以用来快速维护图的连通性，并且同时得到图的连通分量。
 
 无向图开始时没有边，每加入一条边 `(u,v)` 就执行 `unite(u,v)`；询问两点是否连通时执行 `connected(u,v)`。并查集不保存具体路径，只保存连通分量划分，因此比每次从头 DFS/BFS 更适合“只加边、频繁问连通”的场景。
 
@@ -306,56 +327,37 @@ $$
 - 前两次合并后有 `{0,1}`、`{2}`、`{3,4}` 三个分量；
 - 加入 `(1,4)` 后变成 `{0,1,3,4}` 与 `{2}`；
 - `connected(0,3)` 为真，`connected(0,2)` 为假，`setCount()` 为 2。
-:::
+  :::
 
-若需要删除边，删除一条非树边可能不影响连通，删除桥却会拆分集合。普通 DSU 无法逆向拆树；需要离线倒序、可回滚并查集、分治时间线或动态树等更强方法。
-
-### Kruskal 最小生成树
-
-Kruskal 按边权从小到大考虑无向边。若两端已在同一集合，加边会形成环，跳过；否则选中该边并合并分量。
-
-```cpp:line-numbers [kruskal-with-dsu.cpp]
-#include <algorithm>
-#include <stdexcept>
-#include <vector>
-// DisjointSetUnion 见上一节的完整实现
-
-struct Edge { int u; int v; int weight; };
-
-long long kruskal(int vertexCount, std::vector<Edge> edges) {
-    std::sort(edges.begin(), edges.end(),
-              [](const Edge& a, const Edge& b) { return a.weight < b.weight; });
-    DisjointSetUnion dsu(vertexCount);
-    long long total = 0;
-    int chosen = 0;
-    for (const Edge& edge : edges) {
-        if (dsu.unite(edge.u, edge.v)) {
-            total += edge.weight;
-            if (++chosen == vertexCount - 1) break;
-        }
-    }
-    if (vertexCount > 0 && chosen != vertexCount - 1) {
-        throw std::runtime_error("graph is disconnected");
-    }
-    return total;
-}
-```
-
-排序主导复杂度，为 $O(E\log E)$；并查集处理所有边的总成本接近线性。并查集只负责判环和合并，Kruskal 的最优性仍来自最小生成树的切分性质，不能用“DSU 很快”代替正确性证明。
-
-### 能力边界
-
-| 需求 | 普通 DSU 是否适合 | 原因 |
-| --- | --- | --- |
-| 只加边并查询连通 | 适合 | 合并与查询高效 |
-| 返回两点之间的实际路径 | 不适合 | 父数组是代表森林，不是原图路径 |
-| 删除边后保持在线连通查询 | 不直接支持 | 集合可能需要拆分 |
-| 统计每个连通分量大小 | 适合 | 根维护 `size` |
-| 判断有向图强连通分量 | 不适合 | 方向信息被集合划分丢失 |
-
-::: pitfall 易错点 · DSU 父边不是业务图边
+::: pitfall 易错点 · DSU 父边不是原图的边
 路径压缩会把节点直接连到代表根，这条父链接可能根本不是原图中的边。因此不能沿 `parent` 输出网络路径、MST 边或证明距离。
 :::
+
+
+
+### 带删除并查集
+
+作为拓展内容
+
+普通的并查集无法支持删除操作，是因为删除一个节点的时候，不可避免地会将以它为根的子树上所有节点都删除．为了解决这一问题，在带删除操作的并查集中，可以通过建立虚点的方法保证所有实际存储数据的节点总是叶子节点．为此，需要在初始化时，就为每个数据节点都建立一个虚点，并将数据节点的父节点设置为该虚点．由于每次合并两个集合时，都只会将两个集合的树根连接，所以，从始至终只有虚点会有子节点．这就保证了删除一个节点时，不会误删其他节点．
+
+注意，删除单个节点后，需要重新为该节点建立一个虚点作为其父节点；否则，无法正确执行后续的合并和删除操作．
+
+### 带权并查集
+
+我们还可以在并查集的边上定义某种权值和这种权值在路径压缩时产生的运算，从而解决更多的问题．
+
+为了维护并查集中的边权，需要将边权下放到子节点中存储．因此，每个节点存储的都是它到它的父节点之间的边权．只有当一个节点的父节点发生变化时，才需要相应地调整边权．一般情形中，这可能发生在路径压缩和合并两个节点时．例如，如果边权是当前节点与父节点之间的距离，那么，在路径压缩时，每次将当前节点的父节点替换为根节点，都需要将父节点到根节点的距离加到当前节点存储的边权上；类似地，在合并两个节点所在集合时，需要计算两个根节点之间新连接的边的权值．
+
+### 可撤销并查集
+
+笔者先要说明一点，删除操作与撤销操作是不同的。撤销是对操作序列反向进行，比直接删除有着更好的性质。
+
+对于可撤销并查集，我们记录每一步合并的两个DSU树根是什么，撤销的时候直接拆开就行。
+
+需要着重强调的是，这种并查集是不允许路径压缩的 ！！！ 路径压缩会导致无法撤销。只能使用按秩合并的方法优化复杂度 ！！！
+
+
 
 ## 配套 Lab
 
@@ -363,10 +365,14 @@ long long kruskal(int vertexCount, std::vector<Edge> edges) {
 
 | 实验 | 练习内容 |
 | --- | --- |
-| [并查集实现](../../labs/chapter-05/exercise/E-05-12-disjoint-set-union/README.md) | 路径压缩与按大小合并的完整实现 |
-| [动态连通性查询](../../labs/chapter-05/exercise/E-05-13-dynamic-connectivity/README.md) | 增量加边与连通性询问 |
-| [食物链](../../labs/chapter-05/exercise/E-05-14-food-chain-dsu/README.md) | 带权并查集：用相对关系维护多类别约束 |
-| [银河英雄传说](../../labs/chapter-05/exercise/E-05-15-galaxy-heroes-dsu/README.md) | 带权并查集：在压缩路径时同步维护距离 |
+| [并查集实现](../../labs/chapter-05/exercise/E-05-18-disjoint-set-union/README.md) | 路径压缩与按大小合并的完整实现 |
+| [动态连通性查询](../../labs/chapter-05/exercise/E-05-19-dynamic-connectivity/README.md) | 增量加边与连通性询问 |
+| [食物链](../../labs/chapter-05/exercise/E-05-20-food-chain-dsu/README.md) | 带权并查集：用相对关系维护多类别约束 |
+| [银河英雄传说](../../labs/chapter-05/exercise/E-05-21-galaxy-heroes-dsu/README.md) | 带权并查集：在压缩路径时同步维护距离 |
+| [亲戚](../../labs/chapter-05/exercise/E-05-22-relatives-dsu/README.md) | 关系传递的朴素应用，路径压缩与按大小合并 |
+| [冗余连接](../../labs/chapter-05/exercise/E-05-23-redundant-connection/README.md) | 找到使树成环的最后一条边 |
+| [关押罪犯](../../labs/chapter-05/exercise/E-05-24-prison-enemy-dsu/README.md) | 扩展域并查集：把“必须分开”化为“属于同一对立域” |
+| [星球大战](../../labs/chapter-05/exercise/E-05-25-planet-war-reverse-dsu/README.md) | 倒序处理删除操作，转化为逐个加边的并查集 |
 
 ## 小结与自测
 

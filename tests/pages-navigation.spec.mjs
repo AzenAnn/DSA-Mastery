@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { readFile, readdir, stat } from "node:fs/promises";
+import { mkdir, readFile, readdir, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { catalog as chapter06Exercises, labPath as chapter06LabPath } from "../scripts/chapter-06/catalog.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const artifactRoot = path.join(projectRoot, "dist", "pages");
@@ -15,6 +16,7 @@ const mimeTypes = new Map([
   [".css", "text/css; charset=utf-8"],
   [".html", "text/html; charset=utf-8"],
   [".js", "text/javascript; charset=utf-8"],
+  [".mjs", "text/javascript; charset=utf-8"],
   [".json", "application/json; charset=utf-8"],
   [".png", "image/png"],
   [".svg", "image/svg+xml"],
@@ -22,6 +24,13 @@ const mimeTypes = new Map([
   [".woff2", "font/woff2"],
   [".xml", "application/xml; charset=utf-8"],
 ]);
+
+const treeDemoCases = [
+  { id: "threading", lesson: "04-threaded-binary-tree", file: "threaded-tree.html", title: "中序线索化 · 指针如何连起来", output: ["D", "B", "E", "A", "C"] },
+  { id: "morris", lesson: "04-threaded-binary-tree", file: "threaded-tree.html?mode=morris", title: "Morris 遍历 · 临时回边的建立与恢复", output: ["D", "B", "E", "A", "C"] },
+  { id: "forest", lesson: "05-trees-and-forests", file: "tree-forest-traversal.html", title: "树与二叉树 · 转换与同步遍历", output: ["B", "E", "C", "D", "A"] },
+  { id: "flatten", lesson: "06-binary-tree-classic-problems", file: "flatten-tree.html", title: "二叉树展开 · 看见每一次重连", output: ["1", "2", "3", "4", "5", "6"] },
+];
 
 let server;
 let baseUrl;
@@ -242,6 +251,14 @@ test("local Chinese search finds lessons and Labs", async ({ page }) => {
   await expect(
     results.locator('a[href*="/labs/chapter-01/theory/T-01-05-static-linked-list-quiz/"]').first(),
   ).toBeVisible();
+  await input.fill("线性表理论大题训练");
+  await expect(
+    results.locator('a[href*="/labs/chapter-01/theory/T-01-06-linear-list-written/"]').first(),
+  ).toBeVisible();
+  await input.fill("栈与队列综合理论题");
+  await expect(
+    results.locator('a[href*="/labs/chapter-02/theory/T-02-03-stack-queue-comprehensive/"]').first(),
+  ).toBeVisible();
   await input.fill("时间与空间复杂度");
   await expect(
     results.locator('a[href*="/learn/chapter-00-introduction/02-time-and-space-complexity/"]').first(),
@@ -329,8 +346,8 @@ test("curriculum exposes every Part and the required search, sorting, and algori
 
   await page.goto(`${baseUrl}/learn/chapter-08-search/02-binary-search-tree/`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.2 二叉排序树");
-  await page.goto(`${baseUrl}/learn/chapter-08-search/04-b-tree-and-b-plus-tree/`);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("8.4 B 树与 B+ 树");
+  await page.goto(`${baseUrl}/learn/chapter-09-hashing-indexes/01-b-tree-and-b-plus-tree/`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("9.1 B 树与 B+ 树");
   await page.goto(`${baseUrl}/labs/chapter-09/exercise/E-09-01-hash-table/`);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("散列表");
   expect(failures).toEqual([]);
@@ -621,6 +638,8 @@ test("theory syntax and code workbench stay accessible at desktop and mobile wid
     await expect(page.locator(".vp-doc dfn").first()).toHaveText("抽象数据类型");
     await expect(page.locator(".vp-doc .dsa-code-title")).toContainText("student-list-interface.cpp");
     await expect(page.locator(".vp-doc .vp-code-group")).toBeVisible();
+    await expect(page.locator(".vp-doc .vpd-diagram-caption")).toHaveCount(3);
+    await expect(page.locator(".vp-doc .vpd-diagram-caption").first()).toContainText("地址的数值次序不决定名单次序");
     const overflow = await page.evaluate(() =>
       globalThis.document.documentElement.scrollWidth - globalThis.window.innerWidth,
     );
@@ -633,6 +652,10 @@ test("theory syntax and code workbench stay accessible at desktop and mobile wid
   expect(lightContrast.text).toBeGreaterThanOrEqual(4.5);
   expect(lightContrast.rail).toBeGreaterThanOrEqual(3);
 
+  const interfaceDetails = page.locator(".vp-doc details:has(.dsa-code-title)");
+  await interfaceDetails.locator("summary").focus();
+  await page.keyboard.press("Enter");
+  await expect(interfaceDetails).toHaveAttribute("open", "");
   const copyButton = page.locator(".dsa-code-block--titled > button.copy").first();
   await copyButton.focus();
   await expect(copyButton).toBeFocused();
@@ -1100,7 +1123,10 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   await theoryGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
-  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(5);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(6);
+  await expect(
+    theoryGroup.getByRole("link", { name: "01T06 · 线性表理论大题训练", exact: true }),
+  ).toHaveAttribute("href", /\/labs\/chapter-01\/theory\/T-01-06-linear-list-written\/$/);
 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
@@ -1210,13 +1236,16 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await theoryGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
-  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(2);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(3);
   await expect(
     theoryGroup.getByRole("link", { name: "02T01 · 栈选择题精练", exact: true }),
   ).toHaveCount(1);
   await expect(
     theoryGroup.getByRole("link", { name: "02T02 · 队列选择题精练", exact: true }),
   ).toHaveCount(1);
+  await expect(
+    theoryGroup.getByRole("link", { name: "02T03 · 栈与队列综合理论题", exact: true }),
+  ).toHaveAttribute("href", /\/labs\/chapter-02\/theory\/T-02-03-stack-queue-comprehensive\/$/);
 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
@@ -1242,11 +1271,12 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
     await expect(link).toHaveAttribute("href", new RegExp(`/labs/chapter-02/${slug}/$`));
   }
 
-  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(3);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(4);
   for (const title of [
-    "Lab 02-P-01：可撤销浏览器——栈的超级大综合",
-    "Lab 02-P-02：超市收银模拟——队列的大综合",
-    "Lab 02-P-03：停车场管理——栈与队列的大综合",
+    "Lab 02-P-01：可撤销浏览器——栈的综合应用",
+    "Lab 02-P-02：超市收银模拟——队列的综合应用",
+    "Lab 02-P-03：停车场管理——栈与队列的综合应用",
+    "Lab 02-P-04：表达式求值器",
   ]) {
     await expect(projectGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
@@ -1346,7 +1376,241 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   expect(failures).toEqual([]);
 });
 
-test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty Project slot", async ({ page }) => {
+const ch04Exercises = [
+  {
+    "number": 1,
+    "slug": "lcrs-leaf-count",
+    "isNew": true
+  },
+  {
+    "number": 2,
+    "slug": "lcrs-tree-height",
+    "isNew": true
+  },
+  {
+    "number": 3,
+    "slug": "complete-binary-tree-check",
+    "isNew": false
+  },
+  {
+    "number": 4,
+    "slug": "binary-tree-minimum-depth",
+    "isNew": true
+  },
+  {
+    "number": 5,
+    "slug": "merge-binary-trees",
+    "isNew": true
+  },
+  {
+    "number": 6,
+    "slug": "sum-of-left-leaves",
+    "isNew": true
+  },
+  {
+    "number": 7,
+    "slug": "binary-tree-preorder-traversal",
+    "isNew": false
+  },
+  {
+    "number": 8,
+    "slug": "binary-tree-inorder-iterative",
+    "isNew": true
+  },
+  {
+    "number": 9,
+    "slug": "binary-tree-level-and-zigzag-order",
+    "isNew": false
+  },
+  {
+    "number": 10,
+    "slug": "binary-tree-right-side-view",
+    "isNew": false
+  },
+  {
+    "number": 11,
+    "slug": "binary-tree-level-averages",
+    "isNew": true
+  },
+  {
+    "number": 12,
+    "slug": "leaf-similar-trees",
+    "isNew": true
+  },
+  {
+    "number": 13,
+    "slug": "construct-binary-tree-pre-in",
+    "isNew": false
+  },
+  {
+    "number": 14,
+    "slug": "construct-binary-tree-in-post",
+    "isNew": false
+  },
+  {
+    "number": 15,
+    "slug": "create-inorder-thread",
+    "isNew": true
+  },
+  {
+    "number": 16,
+    "slug": "threaded-inorder-successor",
+    "isNew": true
+  },
+  {
+    "number": 17,
+    "slug": "forest-to-binary-tree",
+    "isNew": true
+  },
+  {
+    "number": 18,
+    "slug": "binary-tree-to-forest",
+    "isNew": true
+  },
+  {
+    "number": 19,
+    "slug": "general-tree-postorder",
+    "isNew": true
+  },
+  {
+    "number": 20,
+    "slug": "binary-tree-maximum-width",
+    "isNew": false
+  },
+  {
+    "number": 21,
+    "slug": "symmetric-tree",
+    "isNew": false
+  },
+  {
+    "number": 22,
+    "slug": "flatten-binary-tree-to-linked-list",
+    "isNew": false
+  },
+  {
+    "number": 23,
+    "slug": "path-sum-all-paths",
+    "isNew": false
+  },
+  {
+    "number": 24,
+    "slug": "binary-tree-tilt",
+    "isNew": true
+  },
+  {
+    "number": 25,
+    "slug": "lowest-common-ancestor",
+    "isNew": false
+  },
+  {
+    "number": 26,
+    "slug": "diameter-of-binary-tree",
+    "isNew": false
+  },
+  {
+    "number": 27,
+    "slug": "longest-zigzag-path",
+    "isNew": false
+  },
+  {
+    "number": 28,
+    "slug": "research-team-formation",
+    "isNew": false
+  },
+  {
+    "number": 29,
+    "slug": "network-optimal-location",
+    "isNew": false
+  },
+  {
+    "number": 30,
+    "slug": "communication-base-station",
+    "isNew": false
+  },
+  {
+    "number": 31,
+    "slug": "tree-isomorphism",
+    "isNew": false
+  },
+  {
+    "number": 32,
+    "slug": "subtree-of-another-tree",
+    "isNew": false
+  },
+  {
+    "number": 33,
+    "slug": "sum-root-to-leaf-numbers",
+    "isNew": false
+  },
+  {
+    "number": 34,
+    "slug": "binary-tree-maximum-path-sum",
+    "isNew": false
+  }
+];
+
+test("chapter 4 preserves all old problems and follows the 31-row order with three supplements", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/learn/outline/chapter-04-tree-binary-tree/`);
+  const group = page.locator('.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-04-tree-binary-tree/"])');
+  const exercise = group.locator(".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)");
+  await expect(exercise).toHaveCount(1);
+  if (await exercise.evaluate(element => element.classList.contains("collapsed"))) {
+    await exercise.locator(":scope > .item > .caret").click();
+  }
+  const links = exercise.locator(":scope > .items a");
+  await expect(links).toHaveCount(34);
+  for (const [index, row] of ch04Exercises.entries()) {
+    const id = String(row.number).padStart(2, "0");
+    await expect(links.nth(index)).toContainText(`04E${id} ·`);
+    await expect(links.nth(index)).toHaveAttribute("href", `${pagesBasePath}/labs/chapter-04/exercise/E-04-${id}-${row.slug}/`);
+  }
+  await links.nth(14).click();
+  await expect(page.locator("h1")).toContainText("Lab 04-E-15：中序线索化");
+  await page.locator("#local-search button").click();
+  await page.getByRole("searchbox").fill("叶子相似的树");
+  await expect(page.getByRole("listbox").locator('a[href*="E-04-12-leaf-similar-trees"]').first()).toBeVisible();
+  expect(failures).toEqual([]);
+});
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"]) {
+    test(`chapter 4 new exercise statements, solutions and diagrams at ${width}px ${theme}`, async ({ page }, testInfo) => {
+      test.setTimeout(120_000);
+      const failures = monitorPage(page);
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+      await page.addInitScript(value => globalThis.localStorage.setItem("vitepress-theme-appearance", value), theme);
+      for (const row of ch04Exercises.filter(item => item.isNew)) {
+        const id = String(row.number).padStart(2, "0");
+        await page.goto(`${baseUrl}/labs/chapter-04/exercise/E-04-${id}-${row.slug}/`);
+        await expect(page.locator("h1")).toContainText(`Lab 04-E-${id}`);
+        await expect(page.locator(".vp-doc")).not.toContainText("请在发布前");
+        await expect(page.locator(".vp-doc h3").filter({ hasText: /^样例 [123]/ })).toHaveCount(3);
+        await page.locator(".vp-doc summary").filter({ hasText: "参考思路、正确性与复杂度" }).click();
+        await expect(page.locator(".vp-doc details .language-cpp")).toBeVisible();
+        const pictures = page.locator(".vp-doc img");
+        for (const picture of await pictures.all()) {
+          await expect(picture).toBeVisible();
+          await expect.poll(() => picture.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+        }
+        const layout = await page.evaluate(() => ({
+          width: globalThis.document.documentElement.clientWidth,
+          scroll: globalThis.document.documentElement.scrollWidth,
+          dark: globalThis.document.documentElement.classList.contains("dark"),
+        }));
+        expect(layout.scroll).toBeLessThanOrEqual(layout.width);
+        expect(layout.dark).toBe(theme === "dark");
+        if ([15, 17].includes(row.number)) {
+          await page.locator(".vp-doc img").scrollIntoViewIfNeeded();
+          await page.screenshot({ path: testInfo.outputPath(`ch04-E${id}-${width}-${theme}.png`) });
+        }
+      }
+      expect(failures).toEqual([]);
+    });
+  }
+}
+
+test("chapter 5 exposes five Theory Labs, twenty-seven Exercise Labs, and an empty Project slot", async ({ page }) => {
   const failures = monitorPage(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`${baseUrl}/learn/outline/chapter-05-tree-applications/`);
@@ -1395,10 +1659,10 @@ test("chapter 5 exposes five Theory Labs, seventeen Exercise Labs, and an empty 
   await expect(exerciseGroup).toHaveClass(/collapsed/);
   await exerciseGroup.locator(":scope > .item > .caret").click();
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
-  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(17);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(27);
   for (const title of [
     "Lab 05-E-01：二叉搜索树的插入与查找",
-    "Lab 05-E-17：B+ 树的范围查询",
+    "Lab 05-E-27：B+ 树的范围查询",
   ]) {
     await expect(exerciseGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
@@ -1704,5 +1968,436 @@ test("chapter 8 balanced tree theory quiz exposes all 14 questions", async ({ pa
   await expect(page.locator(".vp-doc")).not.toContainText(
     /查看原始页面|看交互可视化|答案来源说明|答案来源：Codex/,
   );
+  expect(failures).toEqual([]);
+});
+
+async function openTreeDemo(page, demo) {
+  await page.goto(`${baseUrl}/learn/chapter-04-tree/${demo.lesson}/`);
+  const iframe = page.locator(`iframe[title="${demo.title}"]`);
+  await expect(iframe).toHaveAttribute("src", `${pagesBasePath}/demos/${demo.file}`);
+  await iframe.scrollIntoViewIfNeeded();
+  const frame = iframe.contentFrame();
+  await expect(frame.locator("#demo")).toHaveAttribute("data-step", "0");
+  return frame;
+}
+
+async function finishTreeDemo(frame) {
+  const timeline = frame.getByRole("slider", { name: "时间线进度" });
+  await timeline.fill(await timeline.getAttribute("max"));
+  await expect(frame.locator("#demo")).toHaveAttribute("data-phase", "done");
+}
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"]) {
+    for (const demo of treeDemoCases) {
+      test(`chapter 4 ${demo.id} iframe supports replay at ${width}px in ${theme}`, async ({ page }) => {
+        const failures = monitorPage(page);
+        await page.setViewportSize({ width, height: 900 });
+        await page.emulateMedia({ colorScheme: theme, reducedMotion: "reduce" });
+        await page.addInitScript(value => globalThis.localStorage.setItem("vitepress-theme-appearance", value), theme);
+        const frame = await openTreeDemo(page, demo);
+        await expect(page.locator("html")).toHaveClass(theme === "dark" ? /dark/ : /^(?!.*\bdark\b)/);
+        const progress = frame.locator("#demo");
+        const play = frame.locator("[data-action=play]");
+        await expect(play).toHaveAttribute("aria-pressed", "false");
+        await expect(frame.locator("[data-action=prev]")).toBeDisabled();
+        await frame.getByRole("button", { name: "下一步 →", exact: true }).click();
+        await expect(progress).toHaveAttribute("data-step", "1");
+        await frame.getByRole("button", { name: "← 上一步", exact: true }).click();
+        await expect(progress).toHaveAttribute("data-step", "0");
+        await finishTreeDemo(frame);
+        await expect(frame.locator("#right-sequence .tok")).toHaveText(demo.output);
+        await expect(frame.locator("[data-action=next]")).toBeDisabled();
+        if (demo.id === "forest" || demo.id === "flatten") {
+          await expect(frame.locator("#left-sequence .tok")).toHaveText(demo.output);
+          const id = demo.id === "forest" ? "C" : "2";
+          const node = frame.locator(`#left-tree [data-node="${id}"]`);
+          await node.focus();
+          await node.press("Enter");
+          await expect(node).toBeFocused();
+          await expect(frame.locator(`[data-node="${id}"][aria-pressed=true]`)).toHaveCount(2);
+          await expect(frame.locator("#inspector")).toContainText(id);
+        }
+        expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.innerWidth + 1)).toBe(true);
+        expect(await frame.locator("body").evaluate(element => element.ownerDocument.documentElement.scrollWidth <= element.ownerDocument.defaultView.innerWidth + 1)).toBe(true);
+        await frame.getByRole("combobox", { name: "播放速度" }).selectOption("350");
+        await play.click();
+        await expect(progress).toHaveAttribute("data-step", "0");
+        await expect(play).toHaveAttribute("aria-pressed", "true");
+        await expect(progress).not.toHaveAttribute("data-step", "0");
+        await play.click();
+        const pausedStep = await progress.getAttribute("data-step");
+        await page.waitForTimeout(450); // Exceeds one tick: pause must cancel the live timer.
+        await expect(progress).toHaveAttribute("data-step", pausedStep);
+        await play.click();
+        await frame.getByRole("combobox", { name: "选择树形" }).selectOption("single");
+        await expect(progress).toHaveAttribute("data-step", "0");
+        await expect(play).toHaveAttribute("aria-pressed", "false");
+        await page.waitForTimeout(450); // Changing the case must also cancel the previous timer.
+        await expect(progress).toHaveAttribute("data-step", "0");
+        await finishTreeDemo(frame);
+        await expect(frame.locator("#right-sequence .tok")).toHaveText(["A"]);
+        await frame.getByRole("combobox", { name: "选择树形" }).selectOption("empty");
+        await finishTreeDemo(frame);
+        await expect(frame.locator("#right-tree [data-node]")).toHaveCount(0);
+        await expect(frame.locator("#right-tree")).toContainText("空结构");
+        await frame.getByRole("button", { name: "↺ 重置", exact: true }).click();
+        await expect(progress).toHaveAttribute("data-step", "0");
+        expect(failures).toEqual([]);
+      });
+    }
+  }
+}
+
+test("chapter 4 threading and Morris distinguish permanent and temporary links", async ({ page }) => {
+  const failures = monitorPage(page);
+  const frame = await openTreeDemo(page, treeDemoCases[0]);
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#right-tree .edge.predecessor")).toHaveCount(2);
+  await expect(frame.locator("#right-tree .edge.successor")).toHaveCount(2);
+  await expect(frame.locator('#table tbody tr:has([data-select="D"])')).toHaveText(/Dnull1B1/);
+  await frame.locator("[data-action=play]").click();
+  await frame.getByRole("combobox", { name: "选择算法" }).selectOption("morris");
+  await expect(frame.locator("#demo")).toHaveAttribute("data-step", "0");
+  await expect(frame.locator("[data-action=play]")).toHaveAttribute("aria-pressed", "false");
+  const initialPointers = await frame.locator("#table").textContent();
+  const timeline = frame.getByRole("slider", { name: "时间线进度" });
+  for (let i = 0; i <= Number(await timeline.getAttribute("max")); i++) {
+    await timeline.fill(String(i));
+    if (await frame.locator("#demo").getAttribute("data-phase") === "create") break;
+  }
+  await expect(frame.locator("#right-tree .edge.temporary")).not.toHaveCount(0);
+  await expect(frame.locator("#right-tree .edge.temporary").first()).toHaveAttribute("d", / C /);
+  for (let i = Number(await timeline.inputValue()); i <= Number(await timeline.getAttribute("max")); i++) {
+    await timeline.fill(String(i));
+    if (await frame.locator("#demo").getAttribute("data-phase") === "remove") break;
+  }
+  await expect(frame.locator("#right-tree .edge.removed").first()).toHaveAttribute("d", / C /);
+  await expect(frame.locator("#right-tree .removed-cross")).not.toHaveCount(0);
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#right-tree .edge.temporary")).toHaveCount(0);
+  await expect(frame.locator("#table")).toHaveText(initialPointers);
+  expect(failures).toEqual([]);
+});
+
+test("chapter 4 forest conversion preserves identity and both traversal correspondences", async ({ page }) => {
+  const failures = monitorPage(page);
+  const frame = await openTreeDemo(page, treeDemoCases[2]);
+  const timeline = frame.getByRole("slider", { name: "时间线进度" });
+  await timeline.fill("1");
+  await expect(frame.locator("#right-tree .edge.sibling")).toHaveCount(2);
+  await timeline.fill("2");
+  await expect(frame.locator("#right-tree .removed-cross")).toHaveCount(2);
+  await frame.getByRole("combobox", { name: "选择树形" }).selectOption("forest");
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#left-sequence .tok")).toHaveText(["D", "E", "B", "C", "A", "G", "F", "H"]);
+  await expect(frame.locator("#right-sequence .tok")).toHaveText(["D", "E", "B", "C", "A", "G", "F", "H"]);
+  await frame.locator("[data-action=play]").click();
+  await frame.getByRole("combobox", { name: "选择算法" }).selectOption("preorder");
+  await expect(frame.locator("[data-action=play]")).toHaveAttribute("aria-pressed", "false");
+  await expect(frame.locator("#demo")).toHaveAttribute("data-step", "0");
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#left-sequence .tok")).toHaveText(["A", "B", "D", "E", "C", "F", "G", "H"]);
+  await expect(frame.locator("#right-sequence .tok")).toHaveText(["A", "B", "D", "E", "C", "F", "G", "H"]);
+  await frame.locator('#right-tree [data-node="F"]').click();
+  await expect(frame.locator('[data-node="F"][aria-pressed=true]')).toHaveCount(2);
+  await expect(frame.locator("#inspector")).toContainText("left → G");
+  await expect(frame.locator("#inspector")).toContainText("right → H");
+  expect(failures).toEqual([]);
+});
+
+test("chapter 4 flatten shows individual writes and supports a predecessor with a left child", async ({ page }) => {
+  const failures = monitorPage(page);
+  const frame = await openTreeDemo(page, treeDemoCases[3]);
+  const timeline = frame.getByRole("slider", { name: "时间线进度" });
+  await frame.getByRole("combobox", { name: "选择树形" }).selectOption("nested");
+  for (let i = 0; i <= Number(await timeline.getAttribute("max")); i++) {
+    await timeline.fill(String(i));
+    if (await frame.locator("#demo").getAttribute("data-phase") === "promote") break;
+  }
+  const left = frame.locator('#right-tree .edge[data-from="1"][data-to="2"][data-slot="left"]');
+  const right = frame.locator('#right-tree .edge[data-from="1"][data-to="2"][data-slot="right"]');
+  await expect(left).toHaveCount(1);
+  await expect(right).toHaveClass(/added/);
+  expect(await left.getAttribute("d")).not.toBe(await right.getAttribute("d"));
+  await expect(frame.locator('#right-tree .edge.removed[data-from="1"][data-to="5"]')).toHaveCount(1);
+  await frame.locator("[data-action=next]").click();
+  await expect(frame.locator("#demo")).toHaveAttribute("data-phase", "clear");
+  await expect(frame.locator('#right-tree .edge.removed[data-from="1"][data-to="2"]')).toHaveCount(1);
+  await frame.locator("[data-action=prev]").click();
+  await expect(frame.locator("#demo")).toHaveAttribute("data-phase", "promote");
+  await expect(left).not.toHaveClass(/removed/);
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#right-sequence .tok")).toHaveText(["1", "2", "3", "4", "7", "5", "6"]);
+  await expect(frame.locator("#right-tree .edge[data-slot=left]")).toHaveCount(0);
+  await frame.getByRole("combobox", { name: "选择树形" }).selectOption("left");
+  await finishTreeDemo(frame);
+  await expect(frame.locator("#metrics")).toContainText("pred 总移动：0 次");
+  await expect(frame.locator("#right-sequence .tok")).toHaveText(["A", "B", "C", "D"]);
+  expect(failures).toEqual([]);
+});
+
+for (const width of [1280, 390]) {
+  test(`Project example and extension guide preserve Pages links at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    const failures = monitorPage(page);
+    const directory = path.join(projectRoot, ".lab-cache/extension-review/pages");
+    await mkdir(directory, { recursive: true });
+    const projectUrl = `${baseUrl}/labs/chapter-02/project/P-02-04-expression-evaluator/`;
+    for (const [name, url, heading] of [
+      ["guide", `${baseUrl}/learn/chapter-preface/06-vscode-extension-guide/`, "VSCode 插件安装与使用指南"],
+      ["project", projectUrl, "Lab 02-P-04：表达式求值器"],
+    ]) {
+      expect((await page.goto(url)).status()).toBe(200);
+      await expect(page.getByRole("heading", { level: 1 })).toContainText(heading);
+      expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.innerWidth + 1)).toBe(true);
+      await page.screenshot({ path: path.join(directory, `${name}-${width}.png`) });
+    }
+    const links = await page.locator('.vp-doc a[href*="/tasks/"]').evaluateAll((elements) => elements.map((element) => element.href));
+    expect(links).toHaveLength(4);
+    for (const url of links) {
+      expect(url).toContain(`${pagesBasePath}/labs/chapter-02/project/`);
+      expect((await page.goto(url)).status()).toBe(200);
+      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.innerWidth + 1)).toBe(true);
+      await page.screenshot({ path: path.join(directory, `task-${links.indexOf(url) + 1}-${width}.png`) });
+    }
+    expect(failures).toEqual([]);
+  });
+}
+
+const chapter15Exercises = [
+  {
+    "slug": "permutations",
+    "title": "全排列问题",
+    "source": "https://www.luogu.com.cn/problem/P1706"
+  },
+  {
+    "slug": "combinations",
+    "title": "组合的输出",
+    "source": "https://www.luogu.com.cn/problem/P1157"
+  },
+  {
+    "slug": "subsets",
+    "title": "子集",
+    "source": "https://leetcode.cn/problems/subsets/"
+  },
+  {
+    "slug": "prime-sum-selection",
+    "title": "选数",
+    "source": "https://www.luogu.com.cn/problem/P1036"
+  },
+  {
+    "slug": "phone-letter-combinations",
+    "title": "电话号码的字母组合",
+    "source": "https://leetcode.cn/problems/letter-combinations-of-a-phone-number/"
+  },
+  {
+    "slug": "maze-paths",
+    "title": "迷宫",
+    "source": "https://www.luogu.com.cn/problem/P1605"
+  },
+  {
+    "slug": "strange-elevator",
+    "title": "奇怪的电梯",
+    "source": "https://www.luogu.com.cn/problem/P1135"
+  },
+  {
+    "slug": "knight-traversal",
+    "title": "马的遍历",
+    "source": "https://www.luogu.com.cn/problem/P1443"
+  },
+  {
+    "slug": "generate-parentheses",
+    "title": "括号生成",
+    "source": "https://leetcode.cn/problems/generate-parentheses/"
+  },
+  {
+    "slug": "combination-sum",
+    "title": "组合总和",
+    "source": "https://leetcode.cn/problems/combination-sum/"
+  },
+  {
+    "slug": "subsets-ii",
+    "title": "子集 II",
+    "source": "https://leetcode.cn/problems/subsets-ii/"
+  },
+  {
+    "slug": "permutations-ii",
+    "title": "全排列 II",
+    "source": "https://leetcode.cn/problems/permutations-ii/"
+  },
+  {
+    "slug": "combination-sum-ii",
+    "title": "组合总和 II",
+    "source": "https://leetcode.cn/problems/combination-sum-ii/"
+  },
+  {
+    "slug": "word-search",
+    "title": "单词搜索",
+    "source": "https://leetcode.cn/problems/word-search/"
+  },
+  {
+    "slug": "palindrome-partitioning",
+    "title": "分割回文串",
+    "source": "https://leetcode.cn/problems/palindrome-partitioning/"
+  },
+  {
+    "slug": "n-queens",
+    "title": "N 皇后",
+    "source": "https://leetcode.cn/problems/n-queens/"
+  },
+  {
+    "slug": "sudoku-solver",
+    "title": "解数独",
+    "source": "https://leetcode.cn/problems/sudoku-solver/"
+  },
+  {
+    "slug": "eight-puzzle",
+    "title": "八数码难题",
+    "source": "https://www.luogu.com.cn/problem/P1379"
+  },
+  {
+    "slug": "sticks",
+    "title": "小木棍",
+    "source": "https://www.luogu.com.cn/problem/P1120"
+  },
+  {
+    "slug": "target-sudoku",
+    "title": "靶形数独",
+    "source": "https://www.luogu.com.cn/problem/P1074"
+  },
+  {
+    "slug": "knight-spirit",
+    "title": "骑士精神",
+    "source": "https://www.luogu.com.cn/problem/P2324"
+  }
+];
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"]) {
+    test(`chapter 15 Exercise sidebar and problem pages at ${width}px ${theme}`, async ({ page }, testInfo) => {
+      test.setTimeout(120_000);
+      const failures = monitorPage(page);
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+      await page.addInitScript((mode) => globalThis.localStorage.setItem("vitepress-theme-appearance", mode), theme);
+      await page.goto(`${baseUrl}/learn/outline/chapter-15-backtracking-search/`);
+      if (width === 390) await page.locator(".VPLocalNav .menu").click();
+      const chapter = page.locator('.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-15-backtracking-search/"])');
+      await expect(chapter).toHaveCount(1);
+      await expect(chapter).not.toContainText("相关 Labs");
+      const labs = chapter.locator(".VPSidebarItem:has(> .item > .text > .course-lab-nav__title)");
+      await expect(labs.locator(".course-lab-category__empty")).toHaveCount(2);
+      for (const [category, label] of [["theory", "暂无理论型 Lab"], ["project", "暂无工程型 Lab"]]) {
+        const group = labs.locator(`.VPSidebarItem:has(> .item > .text > .course-lab-category--${category})`);
+        await expect(group.locator(":scope > .items a")).toHaveCount(0);
+        await expect(group.locator(".course-lab-category__empty")).toHaveText(label);
+      }
+      const exercise = labs.locator(".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)");
+      await expect(exercise).toHaveClass(/collapsed/);
+      await exercise.locator(":scope > .item > .caret").click();
+      const links = exercise.locator(":scope > .items a");
+      await expect(links).toHaveCount(21);
+      for (const [index, row] of chapter15Exercises.entries()) {
+        const id = String(index + 1).padStart(2, "0");
+        await expect(links.nth(index)).toHaveText(`15E${id} · ${row.title}`);
+        await expect(links.nth(index)).toHaveAttribute("href", `${pagesBasePath}/labs/chapter-15/exercise/E-15-${id}-${row.slug}/`);
+      }
+      await links.first().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: testInfo.outputPath("ch15-sidebar.png") });
+      await links.first().click();
+      await expect(page).toHaveURL(`${baseUrl}/labs/chapter-15/exercise/E-15-01-permutations/`);
+      for (const [index, row] of chapter15Exercises.entries()) {
+        const id = String(index + 1).padStart(2, "0");
+        expect((await page.goto(`${baseUrl}/labs/chapter-15/exercise/E-15-${id}-${row.slug}/`)).status()).toBe(200);
+        await expect(page.getByRole("heading", { level: 1 })).toHaveText(`Lab 15-E-${id}：${row.title}`);
+        await expect(page.locator(".vp-doc")).toContainText("数据范围");
+        await expect(page.locator(`.vp-doc a[href="${row.source}"]`)).toHaveCount(1);
+        expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.document.documentElement.clientWidth + 1)).toBe(true);
+        if ([0, 4, 19, 20].includes(index)) await page.screenshot({ path: testInfo.outputPath(`ch15-${id}.png`) });
+      }
+      await page.goto(`${baseUrl}/learn/chapter-15-backtracking-search/01-backtracking-framework/`);
+      if (width === 390) await page.locator(".VPLocalNav .menu").click();
+      await expect(chapter.locator('a[href*="/labs/chapter-15/exercise/E-15-21-knight-spirit/"]')).toHaveCount(1);
+      expect(failures).toEqual([]);
+    });
+  }
+}
+
+for (const width of [1440, 390]) {
+  for (const theme of ["light", "dark"]) {
+    test(`chapter 6 graph exercises and canonical output at ${width}px ${theme}`, async ({ page }, testInfo) => {
+      test.setTimeout(120_000);
+      const failures = monitorPage(page);
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+      await page.addInitScript((mode) => globalThis.localStorage.setItem("vitepress-theme-appearance", mode), theme);
+      await page.goto(`${baseUrl}/learn/outline/chapter-06-graph-foundations-storage/`);
+      if (width === 390) await page.locator(".VPLocalNav .menu").click();
+      const chapter = page.locator('.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-06-graph-foundations-storage/"])');
+      const exercise = chapter.locator(".VPSidebarItem:has(> .item > .text > .course-lab-category--exercise)");
+      await expect(exercise).toHaveCount(1);
+      if (await exercise.evaluate((element) => element.classList.contains("collapsed"))) {
+        await exercise.locator(":scope > .item > .caret").click();
+      }
+      const links = exercise.locator(":scope > .items a");
+      await expect(links).toHaveCount(23);
+      for (const item of chapter06Exercises) {
+        const index = item.id - 1, id = String(item.id).padStart(2, "0");
+        await expect(links.nth(index)).toHaveText(`06E${id} · ${item.title}`);
+        await expect(links.nth(index)).toHaveAttribute("href", `${pagesBasePath}/${chapter06LabPath(item)}/`);
+      }
+      await links.nth(3).scrollIntoViewIfNeeded();
+      await page.screenshot({ path: testInfo.outputPath("ch06-sidebar.png") });
+      await links.nth(3).click();
+      await expect(page).toHaveURL(`${baseUrl}/${chapter06LabPath(chapter06Exercises[0])}/`);
+      for (const item of chapter06Exercises) {
+        expect((await page.goto(`${baseUrl}/${chapter06LabPath(item)}/`)).status()).toBe(200);
+        await expect(page.getByRole("heading", { level: 1 })).toHaveText(`Lab 06-E-${String(item.id).padStart(2, "0")}：${item.title}`);
+        await expect(page.locator(".vp-doc")).toContainText("20 组测试");
+        await expect(page.locator(`.vp-doc a[href="${item.sourceUrl}"]`)).toHaveCount(1);
+        await expect(page.getByRole("heading", { level: 2, name: /^正确性说明/ })).toBeVisible();
+        expect(await page.evaluate(() => globalThis.document.documentElement.scrollWidth <= globalThis.document.documentElement.clientWidth + 1)).toBe(true);
+        if ([9, 18, 23].includes(item.id)) {
+          await page.screenshot({ path: testInfo.outputPath(`ch06-${item.id}.png`) });
+          await page.getByRole("heading", { level: 3, name: /^样例输入/ }).scrollIntoViewIfNeeded();
+          await page.screenshot({ path: testInfo.outputPath(`ch06-${item.id}-sample.png`) });
+        }
+      }
+      expect(failures).toEqual([]);
+    });
+  }
+}
+
+test("chapter 6 graph exercises enter Labs index and search", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/`);
+  const cards = page.locator('a.course-labs-list-card[href*="/labs/chapter-06/exercise/"]');
+  await expect(cards).toHaveCount(23);
+  await cards.last().click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 06-E-23：SCC 凝聚图构造");
+  await page.locator("#local-search button").click();
+  for (const item of chapter06Exercises.filter((entry) => [4, 9, 18, 23].includes(entry.id))) {
+    await page.getByRole("searchbox").fill(item.title);
+    await expect(page.getByRole("listbox").locator(`a[href*="/${chapter06LabPath(item)}/"]`).first()).toBeVisible();
+  }
+  await page.keyboard.press("Escape");
+  expect(failures).toEqual([]);
+});
+
+test("chapter 15 exercises enter Labs index and local search", async ({ page }) => {
+  test.setTimeout(90_000);
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/`);
+  const cards = page.locator('a.course-labs-list-card[href*="/labs/chapter-15/exercise/"]');
+  await expect(cards).toHaveCount(21);
+  await cards.last().click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 15-E-21：骑士精神");
+  await page.locator("#local-search button").click();
+  for (const [index, row] of chapter15Exercises.entries()) {
+    await page.getByRole("searchbox").fill(row.title);
+    const id = String(index + 1).padStart(2, "0");
+    await expect(page.getByRole("listbox").locator(`a[href*="/labs/chapter-15/exercise/E-15-${id}-${row.slug}/"]`).first()).toBeVisible();
+  }
+  await page.keyboard.press("Escape");
   expect(failures).toEqual([]);
 });

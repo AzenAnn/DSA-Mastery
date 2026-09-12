@@ -27,7 +27,8 @@
     "expected": "tests/003-negative-duplicates.out",
     "points": 8,
     "tags": [
-      "normal"
+      "normal",
+      "numeric-boundary"
     ]
   },
   {

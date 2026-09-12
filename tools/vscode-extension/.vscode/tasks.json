@@ -3,13 +3,13 @@
   "tasks": [
     {
       "label": "compile",
-      "type": "shell",
-      "command": "./node_modules/.bin/tsc",
-      "args": ["-p", "tsconfig.json"],
+      "type": "process",
+      "command": "node",
+      "args": ["build.mjs"],
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": "$tsc",
+      "problemMatcher": [],
       "presentation": {
         "reveal": "silent",
         "clear": true
@@ -21,9 +21,9 @@
     },
     {
       "label": "watch",
-      "type": "shell",
-      "command": "./node_modules/.bin/tsc",
-      "args": ["-p", "tsconfig.json", "--watch"],
+      "type": "process",
+      "command": "node",
+      "args": ["build.mjs", "--watch"],
       "options": {
         "cwd": "${workspaceFolder}"
       },

@@ -4,8 +4,8 @@ description: "理解多路平衡搜索树如何减少外存 I/O，并掌握 B �
 order: 5
 chapter: 5
 chapterTitle: "树的应用"
-updated: "2026-08-24"
-contributors: ["Azen"]
+updated: "2026-09-10"
+contributors: ["CzjLUCK&Azen"]
 status: "review"
 ---
 
@@ -101,12 +101,13 @@ digraph BTreeSearchBranch {
 
 页内可以二分定位分支，沿途每层只读取一个孩子页。
 
-下面给出节点结构与查找的最小骨架。分裂、借位与合并的完整实现留给配套实验 [B 树的插入](../../labs/chapter-05/exercise/E-05-16-btree-insertion/README.md)：
+下面给出节点结构与查找的最小骨架。分裂、借位与合并的完整实现留给配套实验 [B 树的插入](../../labs/chapter-05/exercise/E-05-26-btree-insertion/README.md)：
 
 ```cpp:line-numbers [b-tree-search.cpp]
 #include <memory>
 #include <vector>
 
+// B 树节点：一个节点对应一个外存页
 struct BTreeNode {
     explicit BTreeNode(bool leaf) : isLeaf(leaf) {}
 
@@ -114,12 +115,15 @@ struct BTreeNode {
     std::vector<int> keys;                              // 至多 2t-1 个，严格递增
     std::vector<std::unique_ptr<BTreeNode>> children;   // 内部节点为 keys.size()+1 个
 
+    // 满节点 = 含 2t-1 个关键字，达到容量上界，必须先分裂才能继续插入
     bool isFull(int t) const {
         return static_cast<int>(keys.size()) == 2 * t - 1;
     }
 };
 
-// 找到第一个不小于 target 的关键字下标；页内可改用二分
+// 页内定位：找到第一个不小于 target 的关键字下标（线性版；页内可改用二分）
+// 返回值 i 满足 keys[i-1] < target <= keys[i]，
+// 因此第 i 个孩子覆盖的区间恰是 keys[i-1] 与 keys[i] 之间的开区间
 int lowerBoundIndex(const BTreeNode& node, int target) {
     int i = 0;
     while (i < static_cast<int>(node.keys.size()) && node.keys[i] < target) {
@@ -128,16 +132,20 @@ int lowerBoundIndex(const BTreeNode& node, int target) {
     return i;
 }
 
+// B 树查找：自根向下逐页定位，每层只读取一个孩子页
 const BTreeNode* search(const BTreeNode* node, int target) {
     while (node != nullptr) {
-        const int i = lowerBoundIndex(*node, target);
+        const int i = lowerBoundIndex(*node, target);   // ① 先在当前页内定位分支
+        // ② 命中：B 树的关键字也“住在”内部节点，可以在这里提前结束
         if (i < static_cast<int>(node->keys.size()) && node->keys[i] == target) {
-            return node;                    // 命中，B 树可在内部节点提前结束
+            return node;
         }
+        // ③ 未命中且已是叶 -> 整棵树都没有 target
         if (node->isLeaf) {
-            return nullptr;                 // 落到叶仍未命中
+            return nullptr;
         }
-        node = node->children[i].get();     // 下降一层，对应一次页读取
+        // ④ 下降到第 i 个孩子页：在外存视角下等价于一次页读取
+        node = node->children[i].get();
     }
     return nullptr;
 }
@@ -408,8 +416,8 @@ B+ 树的内部节点负责“快速到达起点”，叶链负责“从起点�
 
 | 实验 | 练习内容 |
 | --- | --- |
-| [B 树的插入](../../labs/chapter-05/exercise/E-05-16-btree-insertion/README.md) | 实现自顶向下分裂，与本节手算过程对照 |
-| [B+ 树的范围查询](../../labs/chapter-05/exercise/E-05-17-bplus-range-query/README.md) | 定位起点叶节点后沿叶链连续扫描 |
+| [B 树的插入](../../labs/chapter-05/exercise/E-05-26-btree-insertion/README.md) | 实现自顶向下分裂，与本节手算过程对照 |
+| [B+ 树的范围查询](../../labs/chapter-05/exercise/E-05-27-bplus-range-query/README.md) | 定位起点叶节点后沿叶链连续扫描 |
 
 ## 小结与自测
 
