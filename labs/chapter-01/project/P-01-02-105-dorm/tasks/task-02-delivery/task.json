@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1, "kind": "ctest",
+  "ctest": {
+    "buildTargets": ["dorm_delivery_tests"], "moduleTargets": ["dorm_delivery"],
+    "tests": [
+      { "name": "delivery-costs", "points": 15 },
+      { "name": "delivery-success", "points": 20 },
+      { "name": "delivery-failure", "points": 25 },
+      { "name": "delivery-ranking", "points": 20 },
+      { "name": "delivery-simulation", "points": 20 }
+    ]
+  }
+}

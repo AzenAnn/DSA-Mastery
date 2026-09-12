@@ -1,0 +1,7 @@
+add_library(dorm_delivery STATIC ${LAB_IMPL}/delivery.cpp ${PROJECT_SOURCE_DIR}/src/delivery_support.cpp)
+target_link_libraries(dorm_delivery PUBLIC dorm_students)
+add_executable(dorm_delivery_tests tests/delivery_tests.cpp)
+target_link_libraries(dorm_delivery_tests PRIVATE dorm_delivery)
+foreach(group costs success failure ranking simulation)
+  add_test(NAME delivery-${group} COMMAND dorm_delivery_tests ${group})
+endforeach()

@@ -1,0 +1,31 @@
+{
+  "id": "ch01-105-dorm",
+  "name": "ch01-105-dorm",
+  "title": "105 栋的热心同学 Project Lab",
+  "description": "Build the guided Ch1 dormitory Project Lab for review before feature-branch publication.",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": "lab01",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-09-12",
+  "completedAt": null,
+  "branch": "lab/ch01-105-dorm",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "labs/chapter-01/project/P-01-02-105-dorm",
+    "content/chapter-01-linear-list/00-overview.md",
+    "tests/pages-navigation.spec.mjs",
+    ".trellis/spec/quality/validation-and-pages.md"
+  ],
+  "notes": "Implementation and local verification complete. User explicitly approved committing and pushing lab/ch01-105-dorm without merging into main. Publication in progress; learner testing instructions prepared. Main and learner remain untouched.",
+  "meta": {}
+}

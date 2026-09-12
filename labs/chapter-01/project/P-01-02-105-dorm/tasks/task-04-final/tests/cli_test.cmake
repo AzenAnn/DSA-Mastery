@@ -1,0 +1,13 @@
+foreach(case sample boundaries)
+  execute_process(COMMAND "${CLI}" INPUT_FILE "${CASES}/${case}.in"
+    OUTPUT_VARIABLE actual ERROR_VARIABLE errors RESULT_VARIABLE result TIMEOUT 10)
+  if(NOT result EQUAL 0)
+    message(FATAL_ERROR "${case}: CLI exit=${result}: ${errors}")
+  endif()
+  file(READ "${CASES}/${case}.out" expected)
+  string(REPLACE "\r\n" "\n" actual "${actual}")
+  string(REPLACE "\r\n" "\n" expected "${expected}")
+  if(NOT actual STREQUAL expected)
+    message(FATAL_ERROR "${case}: expected:\n${expected}\nactual:\n${actual}")
+  endif()
+endforeach()

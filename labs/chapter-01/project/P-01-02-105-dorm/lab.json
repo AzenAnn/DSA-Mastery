@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../schemas/lab.schema.json",
+  "schemaVersion": 1,
+  "type": "project",
+  "language": "cpp",
+  "toolchain": { "standard": "c++17", "profile": "course-default" },
+  "buildSystem": "cmake",
+  "tasks": [
+    { "id": "students", "path": "tasks/task-01-students", "kind": "ctest", "weight": 30, "dependsOn": [], "buildDependsOn": [] },
+    { "id": "delivery", "path": "tasks/task-02-delivery", "kind": "ctest", "weight": 25, "dependsOn": ["students"], "buildDependsOn": ["students"] },
+    { "id": "pending", "path": "tasks/task-03-pending", "kind": "ctest", "weight": 30, "dependsOn": ["delivery"], "buildDependsOn": ["students", "delivery"] },
+    { "id": "final", "path": "tasks/task-04-final", "kind": "ctest", "weight": 15, "dependsOn": ["pending"], "buildDependsOn": ["students", "delivery", "pending"] }
+  ]
+}

@@ -41,6 +41,36 @@ test.use({
   permissions: ["clipboard-read", "clipboard-write"],
 });
 
+test("105 dorm project links its four guided tasks on desktop and mobile", async ({ page }) => {
+  const failures = monitorPage(page);
+  const labRoute = "/labs/chapter-01/project/P-01-02-105-dorm/";
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(baseUrl + labRoute);
+    await expect(page.locator("h1")).toHaveText("Lab 01-P-02：105 栋的热心同学");
+    await expect(page.locator(".vp-doc")).toContainText("3 * (f - 1) + 1");
+    await expect(page.locator(".vp-doc")).toContainText("SUMMARY 3 2 32 0");
+    expect(await page.evaluate(() =>
+      globalThis.document.documentElement.scrollWidth > globalThis.document.documentElement.clientWidth + 1)).toBe(false);
+    const tasks = page.locator('.vp-doc a[href*="/tasks/task-"]');
+    await expect(tasks).toHaveCount(4);
+    const links = await tasks.evaluateAll((elements) => elements.map((element) => element.href));
+    for (const link of links) {
+      await page.goto(link);
+      await expect(page.locator("h1")).toContainText("Task");
+      await expect(page.locator(".vp-doc")).toContainText("本关交付");
+      await expect(page.locator(".vp-doc")).toContainText("完成清单");
+      expect(await page.evaluate(() =>
+        globalThis.document.documentElement.scrollWidth > globalThis.document.documentElement.clientWidth + 1)).toBe(false);
+    }
+    await page.goto(baseUrl + labRoute);
+    const evidence = path.join(projectRoot, ".lab-cache", "dorm105-review");
+    await mkdir(evidence, { recursive: true });
+    await page.screenshot({ path: path.join(evidence, "lab-" + width + ".png") });
+  }
+  expect(failures).toEqual([]);
+});
+
 // 与 .vitepress/content-index.ts 的扫描规则保持一致，从仓库内容推导首页统计数字
 const chapterDirectoryPattern = /^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/;
 const labDirectoryPattern = /^[TEP]-\d{2}-\d{2,}-[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -1132,7 +1162,10 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
   await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(15);
-  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(1);
+  await expect(projectGroup.locator(":scope > .items a")).toHaveCount(2);
+  await expect(
+    projectGroup.getByRole("link", { name: "01P02 · 105 栋的热心同学", exact: true }),
+  ).toHaveAttribute("href", /\/labs\/chapter-01\/project\/P-01-02-105-dorm\/$/);
 
   await projectGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");

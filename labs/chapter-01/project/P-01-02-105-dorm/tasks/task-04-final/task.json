@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1, "kind": "ctest",
+  "ctest": {
+    "buildTargets": ["dorm_final_tests", "dorm105_cli"], "moduleTargets": ["dorm_final"],
+    "tests": [
+      { "name": "final-guards", "points": 25 },
+      { "name": "final-summary", "points": 20 },
+      { "name": "final-flow", "points": 25 },
+      { "name": "final-input", "points": 15 },
+      { "name": "final-cli", "points": 15 }
+    ]
+  }
+}

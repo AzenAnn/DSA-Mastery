@@ -1,0 +1,7 @@
+add_library(dorm_pending STATIC ${LAB_IMPL}/pending_list.cpp ${PROJECT_SOURCE_DIR}/src/pending_support.cpp)
+target_link_libraries(dorm_pending PUBLIC dorm_delivery)
+add_executable(dorm_pending_tests tests/pending_tests.cpp)
+target_link_libraries(dorm_pending_tests PRIVATE dorm_pending)
+foreach(group edit errors process patterns model)
+  add_test(NAME pending-${group} COMMAND dorm_pending_tests ${group})
+endforeach()

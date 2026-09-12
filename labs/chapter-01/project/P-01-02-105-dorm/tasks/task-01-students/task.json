@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1, "kind": "ctest",
+  "ctest": {
+    "buildTargets": ["dorm_students_tests"], "moduleTargets": ["dorm_students"],
+    "tests": [
+      { "name": "students-empty", "points": 10 },
+      { "name": "students-crud", "points": 20 },
+      { "name": "students-names", "points": 15 },
+      { "name": "students-compact", "points": 25 },
+      { "name": "students-capacity", "points": 15 },
+      { "name": "students-model", "points": 15 }
+    ]
+  }
+}

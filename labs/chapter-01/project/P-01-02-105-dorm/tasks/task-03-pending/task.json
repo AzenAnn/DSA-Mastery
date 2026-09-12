@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1, "kind": "ctest",
+  "ctest": {
+    "buildTargets": ["dorm_pending_tests"], "moduleTargets": ["dorm_pending"],
+    "tests": [
+      { "name": "pending-edit", "points": 20 },
+      { "name": "pending-errors", "points": 15 },
+      { "name": "pending-process", "points": 20 },
+      { "name": "pending-patterns", "points": 25 },
+      { "name": "pending-model", "points": 20 }
+    ]
+  }
+}
