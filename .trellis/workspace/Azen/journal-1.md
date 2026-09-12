@@ -1007,3 +1007,24 @@ Implemented Project task isolation, current-result fingerprints, expression demo
 ### Next Steps
 
 - 由维护者按 Review Owner 流程检阅并决定合并；本会话未合并或部署。
+
+
+## Session 39: Statistics profile and extension 0.1.14 release preparation
+
+**Date**: 2026-09-12
+**Task**: Statistics profile and extension 0.1.14 release preparation
+**Branch**: `feat/vscode-stats-profile`
+
+### Summary
+
+Implemented solved-only eight-rank statistics profile. Verified 93 extension tests,47 browser layouts,four native VS Code themes and full repository pnpm test. User authorized main push and GitHub VSIX prerelease0.1.14; local package validated and tag CI publication follows.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c1fa9b23` | (see git log) |
+
+### Status
+
+[OK] **Completed**
