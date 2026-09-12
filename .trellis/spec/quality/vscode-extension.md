@@ -134,3 +134,15 @@ await progress.recordProjectSubmission(lab, result);
 ```
 
 学生文件入口来自扫描到的 `student/` 白名单，保存范围还包含当前工程相关输入；评分和聚合由 CLI 负责，历史以 stable `labId` 独立持久化。
+
+## 8. Statistics Profile And Rank
+
+`StatsPanel` 只读取既有事件及按题型生成的章节完成数，交给纯函数 `renderStatsDocument({ events, bars, now? }, { cspSource, styleUri, nonce })`。样式合同见 [统计 WebView](../frontend/visual-responsive.md)。不得为了 Rank 改变持久化、活动采集或提交逻辑。
+
+- `getRankProgress(countActivity(events).labsPassed)` 是唯一 Rank 输入，沿用当前事件日志中不同 `labName` 的通过数；不能传 `passes`、`submissions` 或章节当前完成数。保留既有事件上限，不在 UI 层创建第二份终身统计。
+- `rank.ts` 集中定义 Trainee/Pupil/Specialist/Expert/Candidate Master/Master/Grandmaster/Legendary，起点分别为 0/10/30/60/100/150/200/250。`getNextRank` 返回下一配置或 undefined。
+- 进度为 `(solved - rank.minSolved) / (next.minSolved - rank.minSolved) * 100`；14 solved 是 Pupil、20%、距离 Specialist 16 题。新等级从 0% 开始；Legendary 为 100%、无 nextRank、显示 MAX RANK。
+- 非有限/负数输入按零处理，非负有限小数取整；重复提交与同一 Lab 的重复通过不影响 Rank。热图和趋势仍统计原始事件次数，Project 当前完成仍使用 `projectProgressPassed`，不能以历史 Rank 反推章节当前通过。
+- 历史事件可能包含无效日期：总计和 Rank 保留原有计数，只有热图、年份和趋势过滤无法解析的时间；渲染器不能因空日期映射崩溃，也不能改写持久化记录。
+- 现有面板只有命令触发快照刷新；不能把重开面板/恢复本地视图状态当作一次新晋级事件。没有可靠 before/after 数据时省略可选 Rank Up 通知。
+- `rank.test.ts` 覆盖所有门槛相邻值、最高等级、非法输入和重复活动不升级。`stats-panel-ui.test.ts` 对实际渲染文档断言 Rank、计数、日期、CSP、转义及宿主 Project 完成判断；浏览器验收不能以源码正则替代。

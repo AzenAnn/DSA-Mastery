@@ -26,6 +26,8 @@ node tools/lab/cli.mjs score <lab-path> --json
 | `tree.ts` | 侧边栏 TreeDataProvider（章节 → 题目） |
 | `panel.ts` | 题目面板 webview 的生命周期、学生文件保存与提交流程 |
 | `panelHtml.ts` | 面板 HTML 渲染（题面外壳、task/case/CTest 层级、结果表） |
+| `statsPanel.ts` / `statsView.ts` | 做题统计宿主与纯 HTML/SVG 渲染：Rank、四项计数、活动热图、累计通过趋势和章节进度 |
+| `rank.ts` | 基于不同已解决题目数的八级 Rank 及等级内进度 |
 | `markdown.ts` | README 渲染：切除题解、重写图片 URI、KaTeX |
 | `doctor.ts` | 环境检测与平台化安装指引 |
 
@@ -36,6 +38,8 @@ node tools/lab/cli.mjs score <lab-path> --json
 **通知不能 await。** `vscode.window.showXxxMessage()` 要等用户点击或通知自动消失才 resolve。如果在提交流程里 `await` 它，`submitting` 锁会迟迟不释放，第二次点提交就没反应。只有真正需要用户答复的对话框（比如环境检测的「打开指南 / 忽略」）才该 await。
 
 **历史与当前有效状态分开。** Program 保留曾经通过的历史；Project 通过 CLI 的 `project-status` 获取指纹与当前结果，源码、测试、配置或未保存改动会使相关结果失效，历史摘要保留。仅当前自动结果全通过且无 manual 时完成。
+
+**Rank 只使用去重后的解决题数。** 统计页沿用事件日志中的不同通过 Lab 数计算 Rank；重复提交或重复通过同一题不会晋级。累计通过趋势仍按事件次数计数，章节完成度仍读取各题型的现有当前状态。统计页通过原有查看命令刷新，年份和指标选择保留在 WebView 本地状态中。
 
 **进度主键只能用 `labId`。** `name` 是当前目录名，只用于资源定位和旧版本迁移。首次读取新版题库时，扩展会把旧目录键、Quiz 键和活动记录迁移到稳定 ID，并在迁移前保留 `globalState` 备份；历史快照继续按记录中的 `snapshot` 路径读取，不批量搬动用户文件。
 

@@ -119,10 +119,13 @@ renderPanelHtml
 
 ### 统计看板 WebView 补充合同
 
-统计页与做题页共享 `.lab-page` 的语义令牌，但职责和结构独立：
+统计页沿用 `.lab-page` 根结构，使用独立的 `--stats-*` 主题令牌；不得将统计样式扩散到做题页：
 
-- 根结构固定为 `body.stats-body > main.lab-page.stats-page`；信息顺序为总览指标、活动热图、累计通过趋势、章节分布。不得加入章节导航、题目列表、结果 inspector 或底部动作栏。
-- 活动热图的提交/通过分段按钮与年份选择由 WebView 本地显隐驱动；所有年份和指标可预渲染，切换时同步 `hidden`、`.active` 和 `aria-pressed`，不因切换回扩展取数。
-- 热图的固定宽度只能在 `.heatmap-scroll` 内横向滚动；趋势图和章节行使用 `min-width: 0`/流式宽度，统计页根节点不得横向滚动。统计 HTML 必须声明 `viewport`。
-- 统计事件日志是追加型数据源：`submit` 与 `pass` 明确分开记录，代码题每次提交可产生两类事件，选择题每次答题记录提交且仅在首次完成时记录通过；版本迁移须保留原有题目进度并为可回填的代码题历史生成事件。
-- 图表颜色、空状态和控件状态使用 VS Code 主题变量及显式 fallback；浅色主题为主，暗色主题至少保持文字、图例、网格线、控件焦点和图表可读。热力图在 `body.vscode-dark` 与 `body.vscode-high-contrast` 下应覆盖独立的 `--stats-*` 色阶，低强度格子不能与背景混淆，并可用 `--stats-cell-outline` 为小尺寸图形提供边界。
+- 根结构为 `body.stats-body > main.lab-page.stats-page`，依次为标题与 Rank、四项指标、活动热图、累计通过趋势、章节进度。保留英文 Micro Labels；不加入章节导航、结果 inspector 或底部动作栏。
+- 暗色优先，但继承 VS Code 当前主题；中性背景、统一图表 accent，Rank 单独使用语义色。Light、Dark、High Contrast、High Contrast Light 均验收，正文至少 4.5:1、大号 Rank 至少 3:1；等级同时用文字表达。`--stats-heat-0` 为中性零活动，1-4 为 accent 色阶，`--stats-cell-outline` 支持高对比主题。
+- 主内容最大宽度 1360px，边距按宽度采用 40/24/16px。章节进度在 >900px 时双列、窄屏单列，条高 6px；仅 KPI 使用轻表面，页面分区以留白和弱分隔线组织。固定字号，不按 viewport 缩放文字；长 Rank 与章节标题可换行。
+- 活动指标与年份选择通过 WebView 本地显隐，同步 `hidden`、`.active`、`aria-pressed`；通过 `acquireVsCodeApi().getState()/setState()` 保留 `{ year, metric }`。只有现有命令负责重新读取统计数据。
+- 日期按本地日历分桶；悬停/焦点详情只展示已有的提交/通过事件，不推断每日首次解决数。每张热图仅一个 roving tab stop，上下键移动一天、左右键移动一周、Home/End 到首尾。今天有文字/轮廓状态；窄屏初始横向定位今天或该年最近活动，滚动只发生在 `.heatmap-scroll`，不得带动页面纵向跳转。
+- 趋势图统计累计通过事件，单位为“次”，与去重解决题数不同。日期间隔使用本地日期转日序数，避免将休息期压缩；ResizeObserver 按容器重算 SVG 坐标，保持 240px/窄屏 200px 高度、2px 线条、8% 填充与整数刻度。零/单日记录显示紧凑空状态。
+- WebView 保持严格 CSP：样式为外部 `panel.css`，脚本带 nonce；动态进度采用 SVG 属性，不能添加 inline style 或 `unsafe-inline`。`statsView.ts` 纯渲染器与 `StatsPanel` 宿主适配分离，便于验证真实生成 HTML。
+- Rank、数据口径和 Project 完成判断见 [扩展进度合同](../quality/vscode-extension.md)。运行 `node scripts/verify-extension-stats-ui.mjs` 验证真实 HTML 的四主题、320-2560px、放大文字、减少动画、键盘/悬停、控件持久化和 CSP；证据输出到忽略的 `.lab-cache/stats-profile/`，生产页不提供假数据入口。

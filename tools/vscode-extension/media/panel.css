@@ -103,85 +103,228 @@ button:disabled {
 
 /* ---------- 统计面板 ---------- */
 
-/* 统计页只复用 WebView 的语义 token,不复用做题页的动作栏或 inspector。 */
+/* Statistics use their own theme tokens so Lab and Project surfaces stay independent. */
 .stats-page {
-  --stats-chart-empty: color-mix(in srgb, var(--dsa-text, var(--vscode-foreground)) 9%, var(--dsa-surface, var(--vscode-editor-background)));
-  --stats-submit-1: color-mix(in srgb, var(--vscode-charts-orange, #ff6b35) 24%, var(--dsa-surface, var(--vscode-editor-background)));
-  --stats-submit-2: color-mix(in srgb, var(--vscode-charts-orange, #ff6b35) 44%, var(--dsa-surface, var(--vscode-editor-background)));
-  --stats-submit-3: color-mix(in srgb, var(--vscode-charts-orange, #ff6b35) 66%, var(--dsa-surface, var(--vscode-editor-background)));
-  --stats-submit-4: color-mix(in srgb, var(--vscode-charts-orange, #ff6b35) 84%, var(--dsa-surface, var(--vscode-editor-background)));
-  --stats-pass-1: color-mix(in srgb, var(--dsa-accent, #5e6de6) 22%, var(--dsa-surface, var(--vscode-editor-background)));
-  --stats-pass-2: color-mix(in srgb, var(--dsa-accent, #5e6de6) 42%, var(--dsa-surface, var(--vscode-editor-background)));
-  --stats-pass-3: color-mix(in srgb, var(--dsa-accent, #5e6de6) 64%, var(--dsa-surface, var(--vscode-editor-background)));
-  --stats-pass-4: var(--dsa-accent, #5e6de6);
-  --stats-cell-outline: transparent;
+  --stats-bg: var(--vscode-editor-background, #1e1e1e);
+  --stats-text: var(--vscode-editor-foreground, var(--vscode-foreground, #e3e3e3));
+  --stats-muted: var(--vscode-descriptionForeground, #a6a6a6);
+  --stats-surface: color-mix(in srgb, var(--stats-text) 3%, var(--stats-bg));
+  --stats-hover: color-mix(in srgb, var(--stats-text) 7%, var(--stats-bg));
+  --stats-border: var(--vscode-panel-border, color-mix(in srgb, var(--stats-text) 12%, var(--stats-bg)));
+  --stats-accent: var(--vscode-textLink-foreground, var(--vscode-charts-blue, #4f9cff));
+  --stats-focus: var(--vscode-focusBorder, var(--stats-accent));
+  --stats-chart-empty: color-mix(in srgb, var(--stats-text) 12%, var(--stats-bg));
+  --stats-heat-0: var(--stats-chart-empty);
+  --stats-heat-1: color-mix(in srgb, var(--stats-accent) 32%, var(--stats-bg));
+  --stats-heat-2: color-mix(in srgb, var(--stats-accent) 52%, var(--stats-bg));
+  --stats-heat-3: color-mix(in srgb, var(--stats-accent) 74%, var(--stats-bg));
+  --stats-heat-4: var(--stats-accent);
+  --stats-cell-outline: color-mix(in srgb, var(--stats-text) 12%, transparent);
+  --rank-trainee: #a6adb7;
+  --rank-pupil: #6bc98a;
+  --rank-specialist: #56c5d0;
+  --rank-expert: #6aaeff;
+  --rank-candidate-master: #bc99ff;
+  --rank-master: #efae70;
+  --rank-grandmaster: #f18383;
+  --rank-legendary: #ff9292;
   min-width: 0;
 }
 
-/* 深色 WebView 需要更强的热力图层级,避免低强度格子沉入背景。 */
-body.vscode-dark .stats-page,
-body.vscode-high-contrast .stats-page {
-  --stats-chart-empty: color-mix(in srgb, var(--vscode-foreground, #d4d4d4) 20%, var(--vscode-editor-background, #1e1e1e));
-  --stats-submit-1: color-mix(in srgb, var(--vscode-charts-orange, #ff9d5c) 38%, var(--vscode-editor-background, #1e1e1e));
-  --stats-submit-2: color-mix(in srgb, var(--vscode-charts-orange, #ff9d5c) 54%, var(--vscode-editor-background, #1e1e1e));
-  --stats-submit-3: color-mix(in srgb, var(--vscode-charts-orange, #ff9d5c) 72%, var(--vscode-editor-background, #1e1e1e));
-  --stats-submit-4: color-mix(in srgb, var(--vscode-charts-orange, #ffb37a) 92%, var(--vscode-editor-background, #1e1e1e));
-  --stats-pass-1: color-mix(in srgb, var(--vscode-textLink-foreground, #8290ff) 36%, var(--vscode-editor-background, #1e1e1e));
-  --stats-pass-2: color-mix(in srgb, var(--vscode-textLink-foreground, #8290ff) 52%, var(--vscode-editor-background, #1e1e1e));
-  --stats-pass-3: color-mix(in srgb, var(--vscode-textLink-foreground, #9da8ff) 70%, var(--vscode-editor-background, #1e1e1e));
-  --stats-pass-4: color-mix(in srgb, var(--vscode-textLink-foreground, #b8c0ff) 90%, var(--vscode-editor-background, #1e1e1e));
-  --stats-cell-outline: color-mix(in srgb, var(--vscode-foreground, #d4d4d4) 18%, transparent);
+body.vscode-light .stats-page,
+body.vscode-high-contrast-light .stats-page {
+  --stats-bg: var(--vscode-editor-background, #ffffff);
+  --stats-text: var(--vscode-editor-foreground, var(--vscode-foreground, #242424));
+  --stats-muted: var(--vscode-descriptionForeground, #606060);
+  --stats-accent: var(--vscode-textLink-foreground, var(--vscode-charts-blue, #1767b3));
+  --stats-heat-1: color-mix(in srgb, var(--stats-accent) 24%, var(--stats-bg));
+  --stats-heat-2: color-mix(in srgb, var(--stats-accent) 46%, var(--stats-bg));
+  --stats-heat-3: color-mix(in srgb, var(--stats-accent) 72%, var(--stats-bg));
+  --rank-trainee: #626973;
+  --rank-pupil: #23763c;
+  --rank-specialist: #167582;
+  --rank-expert: #276ab6;
+  --rank-candidate-master: #8651bc;
+  --rank-master: #a15c17;
+  --rank-grandmaster: #bd3d42;
+  --rank-legendary: #a22335;
 }
 
-body.vscode-high-contrast .stats-page {
-  --stats-cell-outline: var(--vscode-contrastBorder, var(--vscode-focusBorder, #ffffff));
+body.vscode-high-contrast .stats-page,
+body.vscode-high-contrast-light .stats-page {
+  --stats-border: var(--vscode-contrastBorder, var(--stats-text));
+  --stats-muted: var(--stats-text);
+  --stats-cell-outline: var(--stats-border);
 }
 
 body.stats-body {
   min-height: 100vh;
+  margin: 0;
+  padding: 0 40px;
+  background: var(--vscode-editor-background, #1e1e1e);
+  font-family: var(--vscode-font-family, system-ui, sans-serif);
+  font-size: var(--vscode-font-size, 13px);
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+body.stats-body.vscode-light,
+body.stats-body.vscode-high-contrast-light {
+  background: var(--vscode-editor-background, #ffffff);
 }
 
 .lab-page.stats-page {
-  padding-bottom: 48px;
+  max-width: 1360px;
+  padding-bottom: 64px;
+  color: var(--stats-text);
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.stats-page * {
+  letter-spacing: 0;
 }
 
 .lab-page.stats-page .stats-header {
-  padding: clamp(24px, 4vw, 44px) 0 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr);
+  align-items: center;
+  gap: 32px;
+  padding: 40px 0 32px;
+}
+
+.stats-page .stats-heading {
+  min-width: 0;
 }
 
 .stats-page .stats-eyebrow {
   display: block;
-  margin-bottom: 5px;
-  color: var(--dsa-muted, var(--vscode-descriptionForeground));
-  font-family: var(--vscode-editor-font-family);
-  font-size: 0.68em;
-  font-weight: 650;
-  letter-spacing: 0.09em;
-  line-height: 1.3;
+  margin-bottom: 8px;
+  color: var(--stats-muted);
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.4;
   text-transform: uppercase;
 }
 
 .lab-page.stats-page .stats-header h1 {
-  max-width: 42rem;
-  font-size: clamp(1.45rem, 3vw, 1.9rem);
+  max-width: 100%;
+  margin: 0;
+  font-size: 28px;
   font-weight: 650;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   line-height: 1.25;
 }
 
 .stats-page .stats-subtitle {
   margin: 8px 0 0;
-  color: var(--dsa-muted, var(--vscode-descriptionForeground));
-  font-size: 0.86em;
+  color: var(--stats-muted);
+  font-size: 13px;
   line-height: 1.6;
+}
+
+.stats-page .rank-overview {
+  --rank-color: var(--rank-trainee);
+  justify-self: end;
+  width: 100%;
+  max-width: 440px;
+  min-width: 0;
+  color: var(--rank-color);
+}
+
+.stats-page .rank-overview[data-rank="pupil"] { --rank-color: var(--rank-pupil); }
+.stats-page .rank-overview[data-rank="specialist"] { --rank-color: var(--rank-specialist); }
+.stats-page .rank-overview[data-rank="expert"] { --rank-color: var(--rank-expert); }
+.stats-page .rank-overview[data-rank="candidate-master"] { --rank-color: var(--rank-candidate-master); }
+.stats-page .rank-overview[data-rank="master"] { --rank-color: var(--rank-master); }
+.stats-page .rank-overview[data-rank="grandmaster"] { --rank-color: var(--rank-grandmaster); }
+.stats-page .rank-overview[data-rank="legendary"] { --rank-color: var(--rank-legendary); }
+
+.stats-page .rank-heading {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  min-width: 0;
+}
+
+.stats-page .rank-title {
+  min-width: 0;
+  margin: 0;
+  font-size: 32px;
+  font-weight: 650;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.stats-page .rank-meaning {
+  margin: 0;
+  color: var(--stats-muted);
+  font-size: 12px;
+}
+
+.stats-page .rank-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin: 12px 0;
+  color: var(--stats-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-page .rank-summary strong {
+  color: var(--stats-text);
+  font-weight: 600;
+}
+
+.stats-page .rank-progress {
+  display: block;
+  width: 100%;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+}
+
+.stats-page .rank-track {
+  fill: var(--stats-chart-empty);
+}
+
+.stats-page .rank-fill {
+  fill: var(--rank-color);
+}
+
+.stats-page .rank-footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  min-width: 0;
+  margin: 8px 0 0;
+  color: var(--stats-muted);
+  font-size: 12px;
+}
+
+.stats-page .rank-caption {
+  min-width: 0;
+  margin: 0;
+}
+
+.stats-page .rank-range {
+  min-width: 0;
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-variant-numeric: tabular-nums;
 }
 
 .stats-page .stat-cards {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
-  margin: 0 0 18px;
+  margin: 0 0 40px;
   padding: 0;
 }
 
@@ -189,42 +332,47 @@ body.stats-body {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  gap: 6px;
-  padding: 16px 18px;
-  border: 1px solid var(--dsa-border, var(--vscode-panel-border));
-  border-radius: var(--dsa-radius, 10px);
-  background: var(--dsa-surface-raised, var(--vscode-editorWidget-background, var(--vscode-editor-background)));
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid var(--stats-border);
+  border-radius: 8px;
+  background: var(--stats-surface);
+  transition: border-color 150ms ease-out, background-color 150ms ease-out;
+}
+
+.stats-page .stat-card:hover {
+  border-color: color-mix(in srgb, var(--stats-text) 24%, var(--stats-bg));
+  background: var(--stats-hover);
 }
 
 .stats-page .stat-value {
   order: 1;
   margin: 0;
-  color: var(--dsa-text, var(--vscode-foreground));
-  font-family: var(--vscode-editor-font-family);
-  font-size: clamp(1.45rem, 3vw, 1.85rem);
+  color: var(--stats-text);
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: 32px;
   font-weight: 650;
-  line-height: 1.1;
+  line-height: 1.2;
   font-variant-numeric: tabular-nums;
 }
 
 .stats-page .stat-label {
   order: 2;
   margin: 0;
-  color: var(--dsa-muted, var(--vscode-descriptionForeground));
-  font-size: 0.75em;
-  letter-spacing: 0.02em;
+  color: var(--stats-muted);
+  font-size: 12px;
   line-height: 1.4;
 }
 
 .stats-page .stats-block {
   min-width: 0;
-  margin: 0 0 18px;
-  padding: clamp(18px, 2.5vw, 26px);
-  border: 1px solid var(--dsa-border, var(--vscode-panel-border));
-  border-radius: var(--dsa-radius, 10px);
-  background: var(--dsa-surface, var(--vscode-editor-background));
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  margin: 0 0 32px;
+  padding: 0;
+}
+
+.stats-page .stats-block + .stats-block {
+  padding-top: 32px;
+  border-top: 1px solid var(--stats-border);
 }
 
 .stats-page .stats-block:last-of-type {
@@ -235,9 +383,10 @@ body.stats-body {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 16px;
   min-width: 0;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .stats-page .stats-section-heading {
@@ -250,10 +399,9 @@ body.stats-body {
 
 .stats-page .stats-section-heading h2 {
   margin: 0;
-  color: var(--dsa-text, var(--vscode-foreground));
-  font-size: 1em;
+  color: var(--stats-text);
+  font-size: 16px;
   font-weight: 650;
-  letter-spacing: 0.01em;
   line-height: 1.35;
 }
 
@@ -270,70 +418,106 @@ body.stats-body {
   display: inline-flex;
   flex: 0 1 auto;
   padding: 2px;
-  border: 1px solid var(--dsa-border, var(--vscode-panel-border));
-  border-radius: 8px;
-  background: var(--dsa-surface-muted, var(--vscode-textBlockQuote-background, var(--vscode-editor-background)));
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid var(--stats-border);
+  border-radius: 6px;
+  background: var(--stats-surface);
 }
 
 .stats-page .heatmap-toggle button {
-  min-height: 30px;
-  padding: 5px 12px;
-  border: 0;
-  border-radius: 6px;
+  min-width: 0;
+  min-height: 28px;
+  padding: 4px 12px;
+  border: 1px solid transparent;
+  border-radius: 4px;
   background: transparent;
-  color: var(--dsa-muted, var(--vscode-descriptionForeground));
+  color: var(--stats-muted);
   font: inherit;
-  font-size: 0.78em;
-  line-height: 1.3;
+  font-size: 12px;
+  line-height: 1.4;
   cursor: pointer;
-  transition: background-color var(--dsa-transition, 180ms ease-out), color var(--dsa-transition, 180ms ease-out), opacity var(--dsa-transition, 180ms ease-out);
+  transition: background-color 150ms ease-out, color 150ms ease-out;
 }
 
 .stats-page .heatmap-toggle button:hover:not(.active) {
-  color: var(--dsa-text, var(--vscode-foreground));
+  background: var(--stats-hover);
+  color: var(--stats-text);
 }
 
 .stats-page .heatmap-toggle button.active {
-  background: var(--dsa-surface-raised, var(--vscode-editorWidget-background, var(--vscode-editor-background)));
-  color: var(--dsa-text, var(--vscode-foreground));
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+  border-color: var(--stats-border);
+  background: var(--stats-bg);
+  color: var(--stats-text);
 }
 
 .stats-page #year-select {
   min-height: 34px;
+  min-width: 84px;
   max-width: 100%;
-  padding: 5px 9px;
-  border: 1px solid var(--dsa-border, var(--vscode-dropdown-border, var(--vscode-panel-border)));
-  border-radius: 7px;
-  background: var(--vscode-dropdown-background, var(--dsa-surface-raised, var(--vscode-editor-background)));
-  color: var(--vscode-dropdown-foreground, var(--dsa-text, var(--vscode-foreground)));
+  padding: 4px 8px;
+  border: 1px solid var(--vscode-dropdown-border, var(--stats-border));
+  border-radius: 6px;
+  background: var(--vscode-dropdown-background, var(--stats-surface));
+  color: var(--vscode-dropdown-foreground, var(--stats-text));
   font: inherit;
-  font-size: 0.78em;
+  font-size: 12px;
 }
 
 .stats-page .heatmap-toggle button:focus-visible,
 .stats-page #year-select:focus-visible {
-  outline: 2px solid var(--dsa-focus, var(--vscode-focusBorder));
+  outline: 2px solid var(--stats-focus);
   outline-offset: 2px;
 }
 
 .stats-page .heatmap-scroll {
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
   overflow-x: auto;
-  padding-bottom: 5px;
+  padding: 4px 0 8px;
   overscroll-behavior-inline: contain;
   scrollbar-gutter: stable;
 }
 
 .stats-page .heatmap-scroll svg {
   display: block;
+  max-width: none;
 }
 
 .stats-page .heatmap-scroll rect,
 .stats-page .heatmap-legend rect {
   stroke: var(--stats-cell-outline);
-  stroke-width: 0.35;
+  stroke-width: 0.5;
   vector-effect: non-scaling-stroke;
+}
+
+.stats-page .heatmap-cell {
+  cursor: default;
+}
+
+.stats-page .heatmap-cell.is-today {
+  stroke: var(--stats-text);
+  stroke-width: 1;
+  outline: 1px solid var(--stats-text);
+  outline-offset: 1px;
+}
+
+.stats-page .heatmap-cell:hover,
+.stats-page .heatmap-cell:focus-visible {
+  stroke: var(--stats-focus);
+  stroke-width: 2;
+  outline: 2px solid var(--stats-focus);
+  outline-offset: 2px;
+}
+
+.stats-page .heatmap-detail {
+  min-height: 36px;
+  margin: 8px 0 0;
+  color: var(--stats-text);
+  font-size: 12px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
 }
 
 .stats-page .heatmap-legend {
@@ -342,9 +526,9 @@ body.stats-body {
   flex-wrap: wrap;
   gap: 8px 12px;
   min-width: 0;
-  margin-top: 12px;
-  color: var(--dsa-muted, var(--vscode-descriptionForeground));
-  font-size: 0.72em;
+  margin-top: 8px;
+  color: var(--stats-muted);
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -355,14 +539,13 @@ body.stats-body {
 .stats-page .legend-scale {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
   margin-left: auto;
 }
 
 .stats-page .cal-label {
-  fill: var(--dsa-muted, var(--vscode-descriptionForeground));
-  font-size: 9px;
-  opacity: 0.85;
+  fill: var(--stats-muted);
+  font-size: 10px;
 }
 
 .stats-page .trend-wrap {
@@ -375,71 +558,132 @@ body.stats-body {
   display: block;
   width: 100%;
   min-width: 0;
-  height: auto;
+  height: 240px;
 }
 
 .stats-page .trend .axis {
-  fill: var(--dsa-muted, var(--vscode-descriptionForeground));
-  font-size: 10px;
-  opacity: 0.8;
+  fill: var(--stats-muted);
+  font-size: 11px;
 }
 
 .stats-page .trend .grid {
-  stroke: var(--dsa-text, var(--vscode-foreground));
-  stroke-opacity: 0.1;
+  stroke: var(--stats-text);
+  stroke-opacity: 0.08;
   stroke-width: 1;
 }
 
+.stats-page .trend-area {
+  fill: var(--stats-accent);
+  fill-opacity: 0.08;
+}
+
+.stats-page .trend-line {
+  fill: none;
+  stroke: var(--stats-accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
 .stats-page .trend-dot {
-  fill: var(--dsa-surface, var(--vscode-editor-background));
-  stroke: var(--dsa-accent, #5e6de6);
+  fill: var(--stats-bg);
+  stroke: var(--stats-accent);
   stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.stats-page .trend-empty {
+  display: flex;
+  align-items: center;
+  min-height: 104px;
+  padding: 16px 0;
+  color: var(--stats-muted);
+  font-size: 13px;
 }
 
 .stats-page .chapter-bars {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 40px;
   min-width: 0;
 }
 
 .stats-page .chapter-row {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(120px, 1.4fr) auto;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: start;
+  gap: 8px 12px;
+  min-width: 0;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--stats-border);
+  font-size: 13px;
+}
+
+.stats-page .chapter-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-column: 1 / -1;
+  align-items: baseline;
   gap: 12px;
   min-width: 0;
-  font-size: 0.8em;
+}
+
+.stats-page .chapter-number,
+.stats-page .chapter-percent {
+  color: var(--stats-muted);
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 .stats-page .chapter-name {
   min-width: 0;
-  overflow: hidden;
-  color: var(--dsa-text, var(--vscode-foreground));
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: var(--stats-text);
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .stats-page .chapter-bar {
   display: block;
+  grid-column: 1 / -1;
   width: 100%;
   min-width: 0;
-  height: 8px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+}
+
+.stats-page .chapter-footer {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  min-width: 0;
 }
 
 .stats-page .chapter-count {
-  min-width: 3.25em;
-  color: var(--dsa-muted, var(--vscode-descriptionForeground));
-  text-align: right;
-  font-family: var(--vscode-editor-font-family);
+  min-width: 0;
+  color: var(--stats-muted);
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
+}
+
+.stats-page .chapter-complete {
+  align-self: baseline;
+  color: var(--stats-muted);
+  font-size: 12px;
 }
 
 .stats-page .stats-empty {
   margin: 0;
-  color: var(--dsa-muted, var(--vscode-descriptionForeground));
-  font-size: 0.8em;
-  line-height: 1.7;
+  color: var(--stats-muted);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .result:not(:empty) {
@@ -1689,9 +1933,40 @@ body.program-body {
   border-left-color: var(--dsa-danger);
 }
 
+@media (max-width: 1100px) {
+  body.stats-body {
+    padding-inline: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .stats-page .chapter-bars {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 720px) {
+  body.stats-body {
+    padding-inline: 16px;
+  }
+
+  .lab-page.stats-page .stats-header {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding-top: 24px;
+  }
+
+  .stats-page .rank-overview {
+    justify-self: start;
+  }
+
   .stats-page .stat-cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 32px;
+  }
+
+  .stats-page .stat-card {
+    padding: 16px;
   }
 
   .stats-page .stats-head {
@@ -1707,6 +1982,10 @@ body.program-body {
 
   .stats-page .legend-scale {
     margin-left: 0;
+  }
+
+  .stats-page .trend {
+    height: 200px;
   }
 
   .program-page {
@@ -1763,39 +2042,8 @@ body.program-body {
 }
 
 @media (max-width: 460px) {
-  .stats-page .stat-cards {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .stats-page .stats-block {
-    padding: 18px 16px;
-  }
-
-  .stats-page .stats-controls,
-  .stats-page .heatmap-toggle {
-    width: 100%;
-  }
-
   .stats-page .heatmap-toggle button {
     flex: 1 1 0;
-  }
-
-  .stats-page .chapter-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    row-gap: 5px;
-  }
-
-  .stats-page .chapter-name {
-    grid-column: 1 / -1;
-  }
-
-  .stats-page .chapter-bar {
-    grid-column: 1;
-  }
-
-  .stats-page .chapter-count {
-    grid-column: 2;
-    grid-row: 2;
   }
 
   .program-page {
@@ -1828,12 +2076,42 @@ body.program-body {
   }
 }
 
+@media (max-width: 320px) {
+  .stats-page .stat-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stats-page .heatmap-toggle {
+    width: 100%;
+  }
+}
+
+body.vscode-high-contrast .stats-page .stat-card:hover,
+body.vscode-high-contrast-light .stats-page .stat-card:hover {
+  border-color: var(--stats-border);
+}
+
+body.vscode-high-contrast .stats-page .heatmap-cell,
+body.vscode-high-contrast-light .stats-page .heatmap-cell,
+body.vscode-high-contrast .stats-page .heatmap-legend rect,
+body.vscode-high-contrast-light .stats-page .heatmap-legend rect {
+  stroke-width: 0.75;
+}
+
+body.vscode-high-contrast .stats-page .heatmap-cell.is-today,
+body.vscode-high-contrast-light .stats-page .heatmap-cell.is-today,
+body.vscode-high-contrast .stats-page .heatmap-cell:focus-visible,
+body.vscode-high-contrast-light .stats-page .heatmap-cell:focus-visible {
+  stroke-width: 2;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lab-button,
   .lab-page .course-button,
   .inspector-toggle,
   .inspector-toggle-glyph,
   .inspector-tab,
+  .stats-page .stat-card,
   .stats-page .heatmap-toggle button,
   .quiz-page .course-quiz-option {
     transition: none;
