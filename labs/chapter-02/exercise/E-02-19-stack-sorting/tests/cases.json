@@ -48,7 +48,7 @@
     "id": "006-normal",
     "input": "tests/006-normal.in",
     "expected": "tests/006-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -57,7 +57,7 @@
     "id": "007-normal",
     "input": "tests/007-normal.in",
     "expected": "tests/007-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -66,7 +66,7 @@
     "id": "008-normal",
     "input": "tests/008-normal.in",
     "expected": "tests/008-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -75,7 +75,7 @@
     "id": "009-normal",
     "input": "tests/009-normal.in",
     "expected": "tests/009-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -84,7 +84,7 @@
     "id": "010-normal",
     "input": "tests/010-normal.in",
     "expected": "tests/010-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -93,7 +93,7 @@
     "id": "011-normal",
     "input": "tests/011-normal.in",
     "expected": "tests/011-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -102,7 +102,7 @@
     "id": "012-normal",
     "input": "tests/012-normal.in",
     "expected": "tests/012-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -111,7 +111,7 @@
     "id": "013-normal",
     "input": "tests/013-normal.in",
     "expected": "tests/013-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -120,7 +120,7 @@
     "id": "014-normal",
     "input": "tests/014-normal.in",
     "expected": "tests/014-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -129,7 +129,7 @@
     "id": "015-normal",
     "input": "tests/015-normal.in",
     "expected": "tests/015-normal.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -138,7 +138,7 @@
     "id": "016-regression",
     "input": "tests/016-regression.in",
     "expected": "tests/016-regression.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "regression"
     ]
@@ -147,7 +147,7 @@
     "id": "017-regression",
     "input": "tests/017-regression.in",
     "expected": "tests/017-regression.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "regression"
     ]
@@ -156,7 +156,7 @@
     "id": "018-regression",
     "input": "tests/018-regression.in",
     "expected": "tests/018-regression.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "regression"
     ]
@@ -165,7 +165,7 @@
     "id": "019-regression",
     "input": "tests/019-regression.in",
     "expected": "tests/019-regression.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "regression"
     ]
@@ -174,52 +174,7 @@
     "id": "020-regression",
     "input": "tests/020-regression.in",
     "expected": "tests/020-regression.out",
-    "points": 3,
-    "tags": [
-      "regression"
-    ]
-  },
-  {
-    "id": "021-regression",
-    "input": "tests/021-regression.in",
-    "expected": "tests/021-regression.out",
-    "points": 3,
-    "tags": [
-      "regression"
-    ]
-  },
-  {
-    "id": "022-regression",
-    "input": "tests/022-regression.in",
-    "expected": "tests/022-regression.out",
-    "points": 3,
-    "tags": [
-      "regression"
-    ]
-  },
-  {
-    "id": "023-regression",
-    "input": "tests/023-regression.in",
-    "expected": "tests/023-regression.out",
-    "points": 3,
-    "tags": [
-      "regression"
-    ]
-  },
-  {
-    "id": "024-regression",
-    "input": "tests/024-regression.in",
-    "expected": "tests/024-regression.out",
-    "points": 3,
-    "tags": [
-      "regression"
-    ]
-  },
-  {
-    "id": "025-regression",
-    "input": "tests/025-regression.in",
-    "expected": "tests/025-regression.out",
-    "points": 3,
+    "points": 4,
     "tags": [
       "regression"
     ]

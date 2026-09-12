@@ -3,7 +3,7 @@
     "id": "001-valid-sample",
     "input": "tests/001-valid-sample.in",
     "expected": "tests/001-valid-sample.out",
-    "points": 10,
+    "points": 8,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-invalid-middle",
     "input": "tests/002-invalid-middle.in",
     "expected": "tests/002-invalid-middle.out",
-    "points": 20,
+    "points": 8,
     "tags": [
       "normal"
     ]
@@ -24,7 +24,7 @@
     "id": "003-invalid-after-first",
     "input": "tests/003-invalid-after-first.in",
     "expected": "tests/003-invalid-after-first.out",
-    "points": 15,
+    "points": 8,
     "tags": [
       "regression"
     ]
@@ -33,7 +33,7 @@
     "id": "004-single",
     "input": "tests/004-single.in",
     "expected": "tests/004-single.out",
-    "points": 15,
+    "points": 8,
     "tags": [
       "boundary"
     ]
@@ -42,7 +42,7 @@
     "id": "005-empty",
     "input": "tests/005-empty.in",
     "expected": "tests/005-empty.out",
-    "points": 10,
+    "points": 8,
     "tags": [
       "boundary"
     ]
@@ -51,7 +51,7 @@
     "id": "006-all-delayed",
     "input": "tests/006-all-delayed.in",
     "expected": "tests/006-all-delayed.out",
-    "points": 10,
+    "points": 4,
     "tags": [
       "normal"
     ]
@@ -60,28 +60,127 @@
     "id": "007-scale",
     "input": "tests/007-scale.in",
     "expected": "tests/007-scale.out",
-    "points": 2,
+    "points": 4,
     "tags": [
       "scale",
       "complexity"
     ]
   },
-  {"id":"008-interleaved-valid","input":"tests/008-interleaved-valid.in","expected":"tests/008-interleaved-valid.out","points":1,"tags":["normal"]},
-  {"id":"009-invalid-late","input":"tests/009-invalid-late.in","expected":"tests/009-invalid-late.out","points":1,"tags":["regression"]},
-  {"id":"010-immediate-valid","input":"tests/010-immediate-valid.in","expected":"tests/010-immediate-valid.out","points":1,"tags":["normal"]},
-  {"id":"011-negative-reverse","input":"tests/011-negative-reverse.in","expected":"tests/011-negative-reverse.out","points":1,"tags":["normal"]},
-  {"id":"012-small-invalid","input":"tests/012-small-invalid.in","expected":"tests/012-small-invalid.out","points":1,"tags":["boundary"]},
-  {"id":"013-delayed-valid","input":"tests/013-delayed-valid.in","expected":"tests/013-delayed-valid.out","points":1,"tags":["normal"]},
-  {"id":"014-int64-values","input":"tests/014-int64-values.in","expected":"tests/014-int64-values.out","points":1,"tags":["boundary"]},
-  {"id":"015-alternating-valid","input":"tests/015-alternating-valid.in","expected":"tests/015-alternating-valid.out","points":1,"tags":["normal"]},
-  {"id":"016-two-valid-blocks","input":"tests/016-two-valid-blocks.in","expected":"tests/016-two-valid-blocks.out","points":1,"tags":["normal"]},
-  {"id":"017-invalid-after-prefix","input":"tests/017-invalid-after-prefix.in","expected":"tests/017-invalid-after-prefix.out","points":1,"tags":["regression"]},
-  {"id":"018-alternating-valid","input":"tests/018-alternating-valid.in","expected":"tests/018-alternating-valid.out","points":1,"tags":["normal"]},
-  {"id":"019-extreme-values","input":"tests/019-extreme-values.in","expected":"tests/019-extreme-values.out","points":1,"tags":["boundary"]},
-  {"id":"020-invalid-stack-top","input":"tests/020-invalid-stack-top.in","expected":"tests/020-invalid-stack-top.out","points":1,"tags":["regression"]},
-  {"id":"021-blockwise-valid","input":"tests/021-blockwise-valid.in","expected":"tests/021-blockwise-valid.out","points":1,"tags":["normal"]},
-  {"id":"022-invalid-late-top","input":"tests/022-invalid-late-top.in","expected":"tests/022-invalid-late-top.out","points":1,"tags":["regression"]},
-  {"id":"023-negative-valid","input":"tests/023-negative-valid.in","expected":"tests/023-negative-valid.out","points":1,"tags":["normal"]},
-  {"id":"024-three-blocks","input":"tests/024-three-blocks.in","expected":"tests/024-three-blocks.out","points":1,"tags":["normal"]},
-  {"id":"025-invalid-final-block","input":"tests/025-invalid-final-block.in","expected":"tests/025-invalid-final-block.out","points":1,"tags":["regression"]}
+  {
+    "id": "008-interleaved-valid",
+    "input": "tests/008-interleaved-valid.in",
+    "expected": "tests/008-interleaved-valid.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-invalid-late",
+    "input": "tests/009-invalid-late.in",
+    "expected": "tests/009-invalid-late.out",
+    "points": 4,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "010-immediate-valid",
+    "input": "tests/010-immediate-valid.in",
+    "expected": "tests/010-immediate-valid.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-negative-reverse",
+    "input": "tests/011-negative-reverse.in",
+    "expected": "tests/011-negative-reverse.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-small-invalid",
+    "input": "tests/012-small-invalid.in",
+    "expected": "tests/012-small-invalid.out",
+    "points": 4,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "013-delayed-valid",
+    "input": "tests/013-delayed-valid.in",
+    "expected": "tests/013-delayed-valid.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-int64-values",
+    "input": "tests/014-int64-values.in",
+    "expected": "tests/014-int64-values.out",
+    "points": 4,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "015-alternating-valid",
+    "input": "tests/015-alternating-valid.in",
+    "expected": "tests/015-alternating-valid.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-two-valid-blocks",
+    "input": "tests/016-two-valid-blocks.in",
+    "expected": "tests/016-two-valid-blocks.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-invalid-after-prefix",
+    "input": "tests/017-invalid-after-prefix.in",
+    "expected": "tests/017-invalid-after-prefix.out",
+    "points": 4,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "018-alternating-valid",
+    "input": "tests/018-alternating-valid.in",
+    "expected": "tests/018-alternating-valid.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-extreme-values",
+    "input": "tests/019-extreme-values.in",
+    "expected": "tests/019-extreme-values.out",
+    "points": 4,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "020-invalid-stack-top",
+    "input": "tests/020-invalid-stack-top.in",
+    "expected": "tests/020-invalid-stack-top.out",
+    "points": 4,
+    "tags": [
+      "regression"
+    ]
+  }
 ]

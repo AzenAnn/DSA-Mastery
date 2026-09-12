@@ -65,7 +65,7 @@ pnpm lab:run -- labs/chapter-02/exercise/E-02-09-bracket-matching
 pnpm lab:score -- labs/chapter-02/exercise/E-02-09-bracket-matching
 ```
 
-- [ ] 全部 25 个公开测试通过。
+- [ ] 全部 20 个公开测试通过。
 - [ ] 能解释所选结构为何满足 LIFO/FIFO/单调候选的题意。
 - [ ] 能说明最坏或摊还时间复杂度。
 
