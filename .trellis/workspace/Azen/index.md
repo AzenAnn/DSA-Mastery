@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 38
+- **Total Sessions**: 40
 - **Last Active**: 2026-09-12
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~1009 | Active |
+| `journal-1.md` | ~1078 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,8 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 40 | 2026-09-12 | 105 栋 Project Lab 功能分支发布 | `ad649e7b` | `lab/ch01-105-dorm` |
+| 39 | 2026-09-12 | 105 栋 Project Lab 构建完成，等待检阅 | - | `lab/ch01-105-dorm` |
 | 38 | 2026-09-12 | Ch6 图基础 20 道代码题补全与推送 | `31ac483a` | `lab/ch06-graph-exercises` |
 | 37 | 2026-09-11 | Ch0 教学改版提交与 PR 准备 | `24cab4d` | `docs/ch0-teaching-revision` |
 | 36 | 2026-09-11 | Ch0 教学改版与完整验收 | - | `docs/ch0-teaching-revision` |

@@ -1007,3 +1007,72 @@ Implemented Project task isolation, current-result fingerprints, expression demo
 ### Next Steps
 
 - 由维护者按 Review Owner 流程检阅并决定合并；本会话未合并或部署。
+
+
+## Session 39: 105 栋 Project Lab 构建完成，等待检阅
+
+**Date**: 2026-09-12
+**Task**: 105 栋 Project Lab 构建完成，等待检阅
+**Branch**: `lab/ch01-105-dorm`
+
+### Summary
+
+完成 01P02 四关 Project、启发式学生骨架、参考实现和测试。按用户要求等待检阅后再推功能分支并引导 learner 测试。
+
+### Main Changes
+
+- 新增 46 个 Lab 文件，17 个带中文提示的学生函数，四关真实复用前序模块。
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] MSVC 与 Windows Clang 各通过 21 组参考测试；参考 100/100，starter 3/100 且全部可编译。
+- [OK] 独立学生包、单任务隔离、pnpm test、Make 一致性和 62 项浏览器回归通过。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 用户检阅 .trellis/tasks/09-12-ch01-105-dorm/review.md 和本地 4182 预览。
+- 确认后仅推送 lab/ch01-105-dorm，再从 learner 的 Az-learn 创建测试分支。
+
+
+## Session 40: 105 栋 Project Lab 功能分支发布
+
+**Date**: 2026-09-12
+**Task**: 105 栋 Project Lab 功能分支发布
+**Branch**: `lab/ch01-105-dorm`
+
+### Summary
+
+按用户授权推送 lab/ch01-105-dorm，未合并 main。完成任务归档并整理 learner 独立测试分支步骤。
+
+### Main Changes
+
+- 发布 01P02 四关 Lab、章节入口和测试，代码提交 ad649e7b。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `ad649e7b` | (see git log) |
+
+### Testing
+
+- [OK] 沿用已完成的全仓验证和 62 项浏览器回归；发布前 git diff --cached --check 通过。
+- [OK] 远端功能分支 SHA 与代码提交一致，远端 main 仍为 acfddf5d。
+- [OK] learner 只读确认：Az-learn 工作区干净，origin 推送地址 disabled://push。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 在 learner 从 Az-learn 新建 test/ch01-105-dorm，合入 origin/lab/ch01-105-dorm 后运行 students 任务。
+- 完整检阅与测试说明见 .trellis/tasks/archive/2026-09/09-12-ch01-105-dorm/review.md。
