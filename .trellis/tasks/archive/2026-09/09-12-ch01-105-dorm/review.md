@@ -8,7 +8,7 @@
 - 四关：学生表 30 分、帮送结算 25 分、待送链表 30 分、整合 15 分。
 - 学生只改四个 `student/*.cpp`，合计 17 个带递进提示的函数；无需编写菜单、输入解析或测试框架。
 - 已有完整参考实现、21 个测试组、两个命令行样例、独立学生包支持。
-- 用户已明确授权推送 `lab/ch01-105-dorm`，不合并到 `main`；正在执行提交与发布，learner 尚未修改。
+- 用户已明确授权推送 `lab/ch01-105-dorm`，不合并到 `main`。2026-09-12 已提交并推送代码提交 `ad649e7b`，远端分支 SHA 验证一致；远端 `main` 仍为 `acfddf5d`，learner 尚未修改。
 
 ## 已完成验证
 
@@ -42,9 +42,9 @@
 
 ## 远端发布与 learner 步骤
 
-只提交本次 Lab、章节入口、相关浏览器断言和 Trellis 记录，推送 `lab/ch01-105-dorm`，不合并 main，不触发正式部署。
+已推送本次 Lab、章节入口、相关浏览器断言与 Trellis 记录到 `lab/ch01-105-dorm`。未合并 main，未创建 PR 或发起正式部署。
 
-learner 在 `C:\Users\28962\Desktop\DSA-Mastery-learner`，origin 指向同一仓库且推送被禁用。发布后先检查并保存其未提交做题改动，再执行：
+learner 在 `C:\Users\28962\Desktop\DSA-Mastery-learner`，origin 指向同一仓库且推送被禁用。发布时只读确认当前为 `Az-learn`、工作区干净、尚无 `test/ch01-105-dorm` 分支。开始测试前检查并保存其未提交做题改动，再执行：
 
 ~~~powershell
 git fetch origin

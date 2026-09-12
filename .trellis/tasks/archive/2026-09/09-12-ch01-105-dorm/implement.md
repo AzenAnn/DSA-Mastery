@@ -10,7 +10,7 @@ The user approved implementation and has now explicitly authorized publishing `l
 - [x] Write statements, samples, review notes and learner instructions.
 - [x] Verify metadata, Make, reference/starter, single tasks, external student pack and website integration (62 browser tests passed).
 - [x] Review diff and record actual evidence for user inspection.
-- [ ] Commit/push the approved feature branch and provide learner testing steps without altering Az-learn.
+- [x] Commit/push the approved feature branch and prepare learner testing steps without altering Az-learn. Work commit: `ad649e7b`; remote publication verified on 2026-09-12.
 
 ## Verification
 
