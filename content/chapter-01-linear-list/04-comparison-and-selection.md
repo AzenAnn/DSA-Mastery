@@ -168,7 +168,7 @@ digraph CacheLocalityComparison {
 
 #### 顺序表：预留容量与扩容碎片
 
-动态顺序表通常满足 `size \le capacity`：
+动态顺序表通常满足 $\text{size} \le \text{capacity}$：
 
 $$
 \text{reserved bytes}
