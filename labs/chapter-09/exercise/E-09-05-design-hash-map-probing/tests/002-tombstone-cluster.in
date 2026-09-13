@@ -1,0 +1,186 @@
+100 185
+put 0 10
+put 100 11
+put 200 12
+put 300 13
+put 400 14
+put 500 15
+put 600 16
+put 700 17
+put 800 18
+put 900 19
+put 1000 20
+put 1100 21
+put 1200 22
+put 1300 23
+put 1400 24
+put 1500 25
+put 1600 26
+put 1700 27
+put 1800 28
+put 1900 29
+put 2000 30
+put 2100 31
+put 2200 32
+put 2300 33
+put 2400 34
+put 2500 35
+put 2600 36
+put 2700 37
+put 2800 38
+put 2900 39
+put 3000 40
+put 3100 41
+put 3200 42
+put 3300 43
+put 3400 44
+put 3500 45
+put 3600 46
+put 3700 47
+put 3800 48
+put 3900 49
+put 4000 50
+put 4100 51
+put 4200 52
+put 4300 53
+put 4400 54
+put 4500 55
+put 4600 56
+put 4700 57
+put 4800 58
+put 4900 59
+put 5000 60
+put 5100 61
+put 5200 62
+put 5300 63
+put 5400 64
+put 5500 65
+put 5600 66
+put 5700 67
+put 5800 68
+put 5900 69
+put 6000 70
+put 6100 71
+put 6200 72
+put 6300 73
+put 6400 74
+get 6400
+remove 200
+remove 300
+remove 400
+remove 500
+remove 600
+remove 700
+remove 800
+remove 900
+remove 1000
+remove 1100
+remove 1200
+remove 1300
+remove 1400
+remove 1500
+remove 1600
+remove 1700
+remove 1800
+remove 1900
+remove 2000
+remove 2100
+remove 2200
+remove 2300
+remove 2400
+remove 2500
+remove 2600
+remove 2700
+remove 2800
+remove 2900
+remove 3000
+remove 3100
+remove 3200
+remove 3300
+remove 3400
+remove 3500
+remove 3600
+remove 3700
+remove 3800
+remove 3900
+remove 4000
+remove 4100
+remove 4200
+get 4300
+get 4400
+get 4500
+get 4600
+get 4700
+get 4800
+get 4900
+get 5000
+get 5100
+get 5200
+get 5300
+get 5400
+get 5500
+get 5600
+get 5700
+get 5800
+get 5900
+get 6000
+get 6100
+get 6200
+get 6300
+get 6400
+get 200
+get 300
+get 400
+get 500
+get 600
+get 700
+get 800
+get 900
+get 1000
+get 1100
+get 1200
+get 1300
+get 1400
+get 1500
+get 1600
+get 1700
+get 1800
+get 1900
+get 2000
+get 2100
+get 2200
+get 2300
+get 2400
+get 2500
+get 2600
+get 2700
+get 2800
+get 2900
+get 3000
+get 3100
+get 3200
+get 3300
+get 3400
+get 3500
+get 3600
+get 3700
+get 3800
+get 3900
+get 4000
+get 4100
+get 4200
+get 0
+get 100
+get 6500
+get 7
+put 200 999
+get 200
+get 300
+put 300 888
+get 300
+remove 0
+get 100
+get 0
+put 0 111
+get 0
+get 99

@@ -329,6 +329,12 @@ $$
 
 先做 [Lab 08-T-02：二叉排序树理论题精练](../../labs/chapter-08/theory/T-08-02-bst-theory-quiz/README.md)，用 12 道选择题检查插入构造与查找路径判别；再完成 [Lab 08-E-01：BST 增删查与边界测试](../../labs/chapter-08/exercise/E-08-01-bst-operations/README.md)，用中序遍历验证每次修改后的不变量，并比较随机插入与有序插入的树高。
 
+围绕 BST 性质的进阶编程练习（改编自公开题库）：
+
+- [Lab 08-E-05：有序数组转平衡 BST](../../labs/chapter-08/exercise/E-08-05-sorted-array-to-bst/README.md)——判定树构造，呼应"BST 与折半查找的关系"；
+- [Lab 08-E-06：验证二叉搜索树](../../labs/chapter-08/exercise/E-08-06-validate-bst/README.md)——用上下界递归校验不变量，注意相等值非法；
+- [Lab 08-E-07：二叉搜索树的最近公共祖先](../../labs/chapter-08/exercise/E-08-07-bst-lca/README.md)——利用有序性沿查找路径收敛，无需普通树的搜索。
+
 ## 小结
 
 BST 把"有序数组里的折半方向"变成了可动态修改的左右链接。它的所有核心操作都沿树高进行；灵活性来自链接，风险也来自树形。只要高度不受约束，`O(log n)` 就只能是平均期待，而不是最坏承诺。

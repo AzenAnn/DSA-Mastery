@@ -1,0 +1,45 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-tombstone-cluster",
+    "input": "tests/002-tombstone-cluster.in",
+    "expected": "tests/002-tombstone-cluster.out",
+    "points": 20,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-reuse-tombstone",
+    "input": "tests/003-reuse-tombstone.in",
+    "expected": "tests/003-reuse-tombstone.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-miss-heavy",
+    "input": "tests/004-miss-heavy.in",
+    "expected": "tests/004-miss-heavy.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "005-near-full",
+    "input": "tests/005-near-full.in",
+    "expected": "tests/005-near-full.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "006-stress-2e5",
+    "input": "tests/006-stress-2e5.in",
+    "expected": "tests/006-stress-2e5.out",
+    "points": 15,
+    "tags": ["stress"],
+    "timeMs": 2000
+  }
+]

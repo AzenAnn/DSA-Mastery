@@ -1,0 +1,45 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-all-same",
+    "input": "tests/002-all-same.in",
+    "expected": "tests/002-all-same.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-all-distinct",
+    "input": "tests/003-all-distinct.in",
+    "expected": "tests/003-all-distinct.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "004-first-last-repeat",
+    "input": "tests/004-first-last-repeat.in",
+    "expected": "tests/004-first-last-repeat.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-stress-sum5e5",
+    "input": "tests/005-stress-sum5e5.in",
+    "expected": "tests/005-stress-sum5e5.out",
+    "points": 25,
+    "tags": ["stress"],
+    "timeMs": 2000
+  },
+  {
+    "id": "006-normal-mixed",
+    "input": "tests/006-normal-mixed.in",
+    "expected": "tests/006-normal-mixed.out",
+    "points": 10,
+    "tags": ["normal"]
+  }
+]

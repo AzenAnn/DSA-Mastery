@@ -1,0 +1,45 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-boundary-extremes",
+    "input": "tests/002-boundary-extremes.in",
+    "expected": "tests/002-boundary-extremes.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-normal-both-sides",
+    "input": "tests/003-normal-both-sides.in",
+    "expected": "tests/003-normal-both-sides.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "004-same-pair-repeat",
+    "input": "tests/004-same-pair-repeat.in",
+    "expected": "tests/004-same-pair-repeat.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-chain-degenerate",
+    "input": "tests/005-chain-degenerate.in",
+    "expected": "tests/005-chain-degenerate.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "006-stress-random",
+    "input": "tests/006-stress-random.in",
+    "expected": "tests/006-stress-random.out",
+    "points": 25,
+    "tags": ["stress"],
+    "timeMs": 2000
+  }
+]

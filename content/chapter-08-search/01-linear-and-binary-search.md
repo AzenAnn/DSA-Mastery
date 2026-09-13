@@ -295,6 +295,12 @@ $2^4=16$，所以 $\lfloor\log_2 16\rfloor+1=5$。最多比较 **5** 次，而�
 
 完成 [Lab 08-T-01：查找理论选择题精练](../../labs/chapter-08/theory/T-08-01-search-theory-quiz/README.md)，用 15 道选择题检验顺序查找、分块查找与折半查找的前提条件、比较次数与判定树形态。
 
+本节的编程练习来自公开题库（洛谷、LeetCode），按课程输入输出协议改编：
+
+- [Lab 08-E-02：折半查找首次出现位置](../../labs/chapter-08/exercise/E-08-02-binary-search-first-index/README.md)——在非递减序列上实现左边界折半，重复值必须返回首次出现下标；
+- [Lab 08-E-03：折半查找首末位置](../../labs/chapter-08/exercise/E-08-03-binary-search-positions/README.md)——首末位置对应 lower_bound/upper_bound 两类边界更新；
+- [Lab 08-E-04：数对计数 A−B=C](../../labs/chapter-08/exercise/E-08-04-count-diff-pairs/README.md)——排序后二分计数，散列表解法将在 9.2 节展开。
+
 <style scoped>
 .search-demo-frame {
   display: block;

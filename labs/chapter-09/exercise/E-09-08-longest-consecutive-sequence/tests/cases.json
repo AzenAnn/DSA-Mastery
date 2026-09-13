@@ -1,0 +1,45 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-all-same",
+    "input": "tests/002-all-same.in",
+    "expected": "tests/002-all-same.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-negative-cross-zero",
+    "input": "tests/003-negative-cross-zero.in",
+    "expected": "tests/003-negative-cross-zero.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-dup-split-segments",
+    "input": "tests/004-dup-split-segments.in",
+    "expected": "tests/004-dup-split-segments.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "005-single-element",
+    "input": "tests/005-single-element.in",
+    "expected": "tests/005-single-element.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "006-stress-2e5",
+    "input": "tests/006-stress-2e5.in",
+    "expected": "tests/006-stress-2e5.out",
+    "points": 25,
+    "tags": ["stress"],
+    "timeMs": 2000
+  }
+]
