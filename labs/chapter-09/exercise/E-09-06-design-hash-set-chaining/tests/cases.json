@@ -1,0 +1,45 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-heavy-collision",
+    "input": "tests/002-heavy-collision.in",
+    "expected": "tests/002-heavy-collision.out",
+    "points": 20,
+    "tags": ["stress"]
+  },
+  {
+    "id": "003-remove-then-contains",
+    "input": "tests/003-remove-then-contains.in",
+    "expected": "tests/003-remove-then-contains.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-set-semantics",
+    "input": "tests/004-set-semantics.in",
+    "expected": "tests/004-set-semantics.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-boundary-b3",
+    "input": "tests/005-boundary-b3.in",
+    "expected": "tests/005-boundary-b3.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "006-stress-2e5",
+    "input": "tests/006-stress-2e5.in",
+    "expected": "tests/006-stress-2e5.out",
+    "points": 15,
+    "tags": ["stress"],
+    "timeMs": 2000
+  }
+]

@@ -1,0 +1,12 @@
+16 11
+put 1 10
+put 2 20
+put 2 99
+get 1
+get 2
+get 3
+remove 2
+get 2
+put 3 30
+get 3
+get 2

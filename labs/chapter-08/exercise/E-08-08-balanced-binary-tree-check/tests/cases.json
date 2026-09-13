@@ -1,0 +1,52 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-empty-tree",
+    "input": "tests/002-empty-tree.in",
+    "expected": "tests/002-empty-tree.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-single-node",
+    "input": "tests/003-single-node.in",
+    "expected": "tests/003-single-node.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-chain-degenerate",
+    "input": "tests/004-chain-degenerate.in",
+    "expected": "tests/004-chain-degenerate.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-deep-imbalance",
+    "input": "tests/005-deep-imbalance.in",
+    "expected": "tests/005-deep-imbalance.out",
+    "points": 15,
+    "tags": ["normal"]
+  },
+  {
+    "id": "006-fib-balanced",
+    "input": "tests/006-fib-balanced.in",
+    "expected": "tests/006-fib-balanced.out",
+    "points": 10,
+    "tags": ["normal"]
+  },
+  {
+    "id": "007-stress-random",
+    "input": "tests/007-stress-random.in",
+    "expected": "tests/007-stress-random.out",
+    "points": 20,
+    "tags": ["stress"],
+    "timeMs": 2000
+  }
+]

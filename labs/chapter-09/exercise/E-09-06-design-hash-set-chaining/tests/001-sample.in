@@ -1,0 +1,13 @@
+7 12
+add 1
+add 2
+add 1
+contains 1
+contains 3
+remove 2
+contains 2
+remove 5
+add 1000000
+contains 1000000
+remove 1
+contains 1
