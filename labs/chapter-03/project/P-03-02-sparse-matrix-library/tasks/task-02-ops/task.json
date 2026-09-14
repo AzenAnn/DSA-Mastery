@@ -3,6 +3,8 @@
   "schemaVersion": 1,
   "kind": "ctest",
   "ctest": {
+    "buildTargets": ["ops_tests"],
+    "moduleTargets": ["sparse_ops"],
     "tests": [
       { "name": "ops-transpose", "points": 30 },
       { "name": "ops-add", "points": 25 },

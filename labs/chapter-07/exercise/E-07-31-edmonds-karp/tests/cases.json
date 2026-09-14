@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-no-edges",
+    "input": "tests/002-no-edges.in",
+    "expected": "tests/002-no-edges.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-zero-capacity",
+    "input": "tests/003-zero-capacity.in",
+    "expected": "tests/003-zero-capacity.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-parallel-edges",
+    "input": "tests/004-parallel-edges.in",
+    "expected": "tests/004-parallel-edges.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "005-opposite-input-edges",
+    "input": "tests/005-opposite-input-edges.in",
+    "expected": "tests/005-opposite-input-edges.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "006-reverse-residual-required",
+    "input": "tests/006-reverse-residual-required.in",
+    "expected": "tests/006-reverse-residual-required.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "007-large-flow",
+    "input": "tests/007-large-flow.in",
+    "expected": "tests/007-large-flow.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "008-non-default-terminals",
+    "input": "tests/008-non-default-terminals.in",
+    "expected": "tests/008-non-default-terminals.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "009-seeded-network-0",
+    "input": "tests/009-seeded-network-0.in",
+    "expected": "tests/009-seeded-network-0.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-seeded-network-1",
+    "input": "tests/010-seeded-network-1.in",
+    "expected": "tests/010-seeded-network-1.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-seeded-network-2",
+    "input": "tests/011-seeded-network-2.in",
+    "expected": "tests/011-seeded-network-2.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-seeded-network-3",
+    "input": "tests/012-seeded-network-3.in",
+    "expected": "tests/012-seeded-network-3.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-seeded-network-4",
+    "input": "tests/013-seeded-network-4.in",
+    "expected": "tests/013-seeded-network-4.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-seeded-network-5",
+    "input": "tests/014-seeded-network-5.in",
+    "expected": "tests/014-seeded-network-5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-seeded-network-6",
+    "input": "tests/015-seeded-network-6.in",
+    "expected": "tests/015-seeded-network-6.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-seeded-network-7",
+    "input": "tests/016-seeded-network-7.in",
+    "expected": "tests/016-seeded-network-7.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-seeded-network-8",
+    "input": "tests/017-seeded-network-8.in",
+    "expected": "tests/017-seeded-network-8.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-long-chain",
+    "input": "tests/018-long-chain.in",
+    "expected": "tests/018-long-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-many-channels",
+    "input": "tests/019-many-channels.in",
+    "expected": "tests/019-many-channels.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-dense-forward",
+    "input": "tests/020-dense-forward.in",
+    "expected": "tests/020-dense-forward.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

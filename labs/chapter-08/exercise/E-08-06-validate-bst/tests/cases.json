@@ -1,0 +1,53 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 20,
+    "tags": ["sample"]
+  },
+  {
+    "id": "002-deep-violation",
+    "input": "tests/002-deep-violation.in",
+    "expected": "tests/002-deep-violation.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "003-equal-values",
+    "input": "tests/003-equal-values.in",
+    "expected": "tests/003-equal-values.out",
+    "points": 15,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "004-empty-tree",
+    "input": "tests/004-empty-tree.in",
+    "expected": "tests/004-empty-tree.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "005-single-chain",
+    "input": "tests/005-single-chain.in",
+    "expected": "tests/005-single-chain.out",
+    "points": 10,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "006-stress-legal",
+    "input": "tests/006-stress-legal.in",
+    "expected": "tests/006-stress-legal.out",
+    "points": 15,
+    "tags": ["stress"],
+    "timeMs": 2000
+  },
+  {
+    "id": "007-stress-illegal",
+    "input": "tests/007-stress-illegal.in",
+    "expected": "tests/007-stress-illegal.out",
+    "points": 15,
+    "tags": ["stress"],
+    "timeMs": 2000
+  }
+]

@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ]
@@ -12,7 +12,7 @@
     "id": "002-two-equal-paths",
     "input": "tests/002-two-equal-paths.in",
     "expected": "tests/002-two-equal-paths.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -21,7 +21,7 @@
     "id": "003-longer-detour-better",
     "input": "tests/003-longer-detour-better.in",
     "expected": "tests/003-longer-detour-better.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -30,7 +30,7 @@
     "id": "004-multi-edges",
     "input": "tests/004-multi-edges.in",
     "expected": "tests/004-multi-edges.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -39,7 +39,7 @@
     "id": "005-line",
     "input": "tests/005-line.in",
     "expected": "tests/005-line.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -48,7 +48,7 @@
     "id": "006-equal-sum-tie",
     "input": "tests/006-equal-sum-tie.in",
     "expected": "tests/006-equal-sum-tie.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -57,7 +57,7 @@
     "id": "007-star",
     "input": "tests/007-star.in",
     "expected": "tests/007-star.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -84,11 +84,71 @@
     "id": "010-long-long-path-count",
     "input": "tests/010-long-long-path-count.in",
     "expected": "tests/010-long-long-path-count.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "numeric-boundary",
       "parallel-edges",
       "regression"
     ]
+  },
+  {
+    "id": "011-direct-path-best-rescue",
+    "input": "tests/011-direct-path-best-rescue.in",
+    "expected": "tests/011-direct-path-best-rescue.out",
+    "points": 5
+  },
+  {
+    "id": "012-equal-distance-different-rescue",
+    "input": "tests/012-equal-distance-different-rescue.in",
+    "expected": "tests/012-equal-distance-different-rescue.out",
+    "points": 5
+  },
+  {
+    "id": "013-three-equal-paths",
+    "input": "tests/013-three-equal-paths.in",
+    "expected": "tests/013-three-equal-paths.out",
+    "points": 5
+  },
+  {
+    "id": "014-shorter-overwrites-count",
+    "input": "tests/014-shorter-overwrites-count.in",
+    "expected": "tests/014-shorter-overwrites-count.out",
+    "points": 5
+  },
+  {
+    "id": "015-parallel-shortest-count",
+    "input": "tests/015-parallel-shortest-count.in",
+    "expected": "tests/015-parallel-shortest-count.out",
+    "points": 5
+  },
+  {
+    "id": "016-source-nonzero",
+    "input": "tests/016-source-nonzero.in",
+    "expected": "tests/016-source-nonzero.out",
+    "points": 5
+  },
+  {
+    "id": "017-self-loop-ignored",
+    "input": "tests/017-self-loop-ignored.in",
+    "expected": "tests/017-self-loop-ignored.out",
+    "points": 5
+  },
+  {
+    "id": "018-line-max-sum",
+    "input": "tests/018-line-max-sum.in",
+    "expected": "tests/018-line-max-sum.out",
+    "points": 5
+  },
+  {
+    "id": "019-diamond-with-tail",
+    "input": "tests/019-diamond-with-tail.in",
+    "expected": "tests/019-diamond-with-tail.out",
+    "points": 5
+  },
+  {
+    "id": "020-equal-parallel-detours",
+    "input": "tests/020-equal-parallel-detours.in",
+    "expected": "tests/020-equal-parallel-detours.out",
+    "points": 5
   }
 ]

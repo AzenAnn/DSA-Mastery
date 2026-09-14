@@ -45,6 +45,26 @@ status: "draft"
 
 完成 [Lab 13-E-05：无重叠区间](../../labs/chapter-13/exercise/E-13-05-non-overlapping-intervals/README.md)，按结束时间完成区间调度，从最多保留区间数推导最少删除数。
 
+完成 [Lab 13-E-06：种花问题](../../labs/chapter-13/exercise/E-13-06-can-place-flowers/README.md)，在局部可行时立即种植，并检查相邻约束。
+
+完成 [Lab 13-E-07：柠檬水找零](../../labs/chapter-13/exercise/E-13-07-lemonade-change/README.md)，维护零钱计数，并在 20 元找零时优先保留 5 元零钱。
+
+完成 [Lab 13-E-08：K 次取反后最大化的数组和](../../labs/chapter-13/exercise/E-13-08-maximize-sum-after-k-negations/README.md)，通过排序与剩余次数奇偶性最大化总和。
+
+完成 [Lab 13-E-09：买卖股票的最佳时机](../../labs/chapter-13/exercise/E-13-09-best-time-to-buy-and-sell-stock/README.md)，维护历史最低价格并在线更新单次交易收益。
+
+完成 [Lab 13-E-10：卡车上的最大单元数](../../labs/chapter-13/exercise/E-13-10-maximum-units-on-a-truck/README.md)，按每箱单元数排序完成容量受限的装载。
+
+完成 [Lab 13-E-11：跳跃游戏 II](../../labs/chapter-13/exercise/E-13-11-jump-game-ii/README.md)，按可达区间分层扩展，求到终点的最少跳数。
+
+完成 [Lab 13-E-12：划分字母区间](../../labs/chapter-13/exercise/E-13-12-partition-labels/README.md)，用字符末次出现位置闭合尽可能多的片段。
+
+完成 [Lab 13-E-13：根据身高重建队列](../../labs/chapter-13/exercise/E-13-13-queue-reconstruction-by-height/README.md)，按身高排序并在第 k 位插入。
+
+完成 [Lab 13-E-14：分发糖果](../../labs/chapter-13/exercise/E-13-14-candy/README.md)，通过双向扫描同时满足左右相邻约束。
+
+完成 [Lab 13-E-15：最低加油次数](../../labs/chapter-13/exercise/E-13-15-minimum-number-of-refueling-stops/README.md)，在燃料不足时从已过站点选择最大油量。
+
 ::: intuition 直觉 · 先做眼前最好的选择
 
 贪心算法像是在每个路口都选择当前看起来最好的方向。真正困难的地方不是“如何选择”，而是证明这一步选择不会破坏最终的最优解。

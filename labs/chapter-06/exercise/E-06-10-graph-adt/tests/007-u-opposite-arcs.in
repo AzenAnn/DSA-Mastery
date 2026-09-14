@@ -1,0 +1,6 @@
+U 2 5
+ADD 0 1
+ADD 1 0
+DEL 0 1
+HAS 1 0
+ADD 0 1

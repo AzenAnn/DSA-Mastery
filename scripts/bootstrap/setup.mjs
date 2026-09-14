@@ -629,6 +629,15 @@ async function detectVSCode(context) {
   const direct = await commandAvailable(context, "code", ["--version"]);
   if (direct) return { found: true, inPath: true };
 
+  if (context.platform === "darwin") {
+    for (const application of ["/Applications/Visual Studio Code.app", path.join(os.homedir(), "Applications/Visual Studio Code.app")]) {
+      const binDir = path.join(application, "Contents/Resources/app/bin");
+      if (!(await pathExists(path.join(binDir, "code")))) continue;
+      context.env.PATH = prependPath(context.env.PATH, [binDir], ":");
+      if (await commandAvailable(context, "code", ["--version"])) return { found: true, inPath: false, path: binDir };
+    }
+  }
+
   if (context.platform !== "win32") return { found: false };
 
   // Try where.exe against the live process PATH (may have entries lost by refresh)

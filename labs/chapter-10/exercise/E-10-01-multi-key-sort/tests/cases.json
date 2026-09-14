@@ -3,35 +3,190 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-tie-total",
     "input": "tests/002-tie-total.in",
     "expected": "tests/002-tie-total.out",
-    "points": 20,
-    "tags": ["normal", "tie"]
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
   },
   {
     "id": "003-tie-chinese",
     "input": "tests/003-tie-chinese.in",
     "expected": "tests/003-tie-chinese.out",
-    "points": 25,
-    "tags": ["normal", "tie"]
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
   },
   {
     "id": "004-less-than-five",
     "input": "tests/004-less-than-five.in",
     "expected": "tests/004-less-than-five.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "005-full-score",
     "input": "tests/005-full-score.in",
     "expected": "tests/005-full-score.out",
-    "points": 20,
-    "tags": ["boundary", "tie"]
+    "points": 5,
+    "tags": [
+      "boundary",
+      "tie"
+    ]
+  },
+  {
+    "id": "006-min-n",
+    "input": "tests/006-min-n.in",
+    "expected": "tests/006-min-n.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "007-two-tie",
+    "input": "tests/007-two-tie.in",
+    "expected": "tests/007-two-tie.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "tie"
+    ]
+  },
+  {
+    "id": "008-max-n",
+    "input": "tests/008-max-n.in",
+    "expected": "tests/008-max-n.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-all-zero",
+    "input": "tests/009-all-zero.in",
+    "expected": "tests/009-all-zero.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "tie"
+    ]
+  },
+  {
+    "id": "010-all-full",
+    "input": "tests/010-all-full.in",
+    "expected": "tests/010-all-full.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "tie"
+    ]
+  },
+  {
+    "id": "011-tie-total",
+    "input": "tests/011-tie-total.in",
+    "expected": "tests/011-tie-total.out",
+    "points": 5,
+    "tags": [
+      "tie",
+      "normal"
+    ]
+  },
+  {
+    "id": "012-all-identical",
+    "input": "tests/012-all-identical.in",
+    "expected": "tests/012-all-identical.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "tie"
+    ]
+  },
+  {
+    "id": "013-exactly-five",
+    "input": "tests/013-exactly-five.in",
+    "expected": "tests/013-exactly-five.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "014-six-students",
+    "input": "tests/014-six-students.in",
+    "expected": "tests/014-six-students.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "015-random-100",
+    "input": "tests/015-random-100.in",
+    "expected": "tests/015-random-100.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-descending",
+    "input": "tests/016-descending.in",
+    "expected": "tests/016-descending.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "017-tie-total-chinese",
+    "input": "tests/017-tie-total-chinese.in",
+    "expected": "tests/017-tie-total-chinese.out",
+    "points": 5,
+    "tags": [
+      "tie"
+    ]
+  },
+  {
+    "id": "018-many-dup-50",
+    "input": "tests/018-many-dup-50.in",
+    "expected": "tests/018-many-dup-50.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
+  },
+  {
+    "id": "019-random-20",
+    "input": "tests/019-random-20.in",
+    "expected": "tests/019-random-20.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "020-max-dup",
+    "input": "tests/020-max-dup.in",
+    "expected": "tests/020-max-dup.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "tie"
+    ]
   }
 ]

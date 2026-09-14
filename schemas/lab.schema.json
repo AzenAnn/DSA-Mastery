@@ -124,7 +124,14 @@
         "path": { "type": "string", "minLength": 1 },
         "weight": { "type": "integer", "minimum": 1, "maximum": 100 },
         "kind": { "enum": ["stdio", "ctest", "manual"] },
+        "buildDependsOn": {
+          "description": "Actual source dependencies; never requires upstream tests to pass. CMake owns linking.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+        },
         "dependsOn": {
+          "description": "Educational ordering. Legacy invalidation fallback when buildDependsOn is absent; not a score gate.",
           "type": "array",
           "uniqueItems": true,
           "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }

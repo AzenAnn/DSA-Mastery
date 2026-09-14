@@ -1,19 +1,21 @@
 ---
 title: "Lab 07-E-07：Dijkstra 逐轮推演"
 description: "用朴素 O(n²) Dijkstra 复现考研手推表：每轮选出距离最小的未确定顶点，输出最终距离、前驱与确定顺序。"
-order: 10
+order: 116
 chapter: 7
 labId: "07E07"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-28"
-contributors: ["Jeff"]
+updated: "2026-09-14"
+contributors: ["Jeff", "Azen"]
 status: "draft"
 lab: true
-difficulty: "基础"
+difficulty: "入门"
 duration: "60～75 分钟"
 ---
 
 # Lab 07-E-07：Dijkstra 逐轮推演
+
+> 题集 T16 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 

@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../schemas/lab.schema.json",
+  "schemaVersion": 1,
+  "type": "program",
+  "language": "cpp",
+  "toolchain": {
+    "standard": "c++17",
+    "profile": "course-default"
+  },
+  "targets": {
+    "student": {
+      "sources": [
+        "student/main.cpp",
+        "support/runner.cpp"
+      ],
+      "includeDirs": [
+        "support"
+      ]
+    },
+    "solution": {
+      "sources": [
+        "solution/main.cpp",
+        "support/runner.cpp"
+      ],
+      "includeDirs": [
+        "support"
+      ]
+    }
+  },
+  "judge": {
+    "kind": "stdio",
+    "cases": "tests/cases.json",
+    "compare": {
+      "mode": "float",
+      "absTol": 0.000001,
+      "relTol": 1e-12
+    },
+    "limits": {
+      "timeMs": 2000,
+      "outputKb": 1024
+    }
+  }
+}

@@ -1,12 +1,12 @@
 ---
 title: "Lab 07-E-02：连通分量计数"
 description: "用 DFS 统计无向图的连通分量个数，并输出每个顶点所属分量的编号。"
-order: 5
+order: 191
 chapter: 7
 labId: "07E02"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-29"
-contributors: ["Qing"]
+updated: "2026-09-14"
+contributors: ["Qing", "Azen"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -14,6 +14,8 @@ duration: "30～45 分钟"
 ---
 
 # Lab 07-E-02：连通分量计数
+
+> 补充练习：保留原有稳定编号，安排在 T01–T30 后；[全章题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 > 题目来源：参考 [LeetCode 323：无向图中连通分量的数目](https://leetcode.cn/problems/number-of-connected-components-in-an-undirected-graph/)进行课程化改编。原题只返回分量数量；本 Lab 使用标准输入输出，并额外输出每个顶点的分量编号。
 

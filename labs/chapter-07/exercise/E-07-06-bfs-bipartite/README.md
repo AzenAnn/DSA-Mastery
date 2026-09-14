@@ -1,19 +1,21 @@
 ---
 title: "Lab 07-E-06：BFS 二分图判定"
 description: "用 BFS 黑白染色判定无向图是否为二分图，冲突时输出首次发现的冲突边。"
-order: 9
+order: 126
 chapter: 7
 labId: "07E06"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-29"
-contributors: ["Qing"]
+updated: "2026-09-14"
+contributors: ["Qing", "Azen"]
 status: "draft"
 lab: true
-difficulty: "进阶"
+difficulty: "基础"
 duration: "60～90 分钟"
 ---
 
 # Lab 07-E-06：BFS 二分图判定
+
+> 题集 T26 · 规划节 7.6；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 > 题目来源：改编自 [LeetCode 785：判断二分图](https://leetcode.cn/problems/is-graph-bipartite/)。原题接收邻接表并只返回布尔值；本 Lab 改用无向边集输入，并额外输出一组确定的染色或首次发现的冲突边。
 

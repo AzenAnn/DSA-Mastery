@@ -301,7 +301,19 @@ const demoUrl = withBase("/demos/hash-lab.html");
 
 ## 配套 Lab
 
-完成 [Lab 09-E-01：散列表实现与冲突统计](../../labs/chapter-09/exercise/E-09-01-hash-table/README.md)，比较链地址与线性探测，并用不同装填因子测量成功、失败 ASL；进阶做 [Lab 09-P-01：散列索引引擎——冲突策略与再散列大综合](../../labs/chapter-09/project/P-09-01-hash-index-engine/README.md)。
+完成 [Lab 09-E-01：散列表实现与冲突统计](../../labs/chapter-09/exercise/E-09-01-hash-table/README.md)，比较链地址与线性探测，并用不同装填因子测量成功、失败 ASL。
+
+散列专题编程练习（改编自洛谷、LeetCode、牛客等公开题库）：
+
+- [Lab 09-E-02：去重保首次](../../labs/chapter-09/exercise/E-09-02-hash-dedup-keep-first/README.md)——散列入门：判断"是否出现过"，直接定址是散列的特例；
+- [Lab 09-E-03：点名状态机](../../labs/chapter-09/exercise/E-09-03-roll-call-status/README.md)——存在性查询加命中标记的三态输出；
+- [Lab 09-E-04：学生信息查询](../../labs/chapter-09/exercise/E-09-04-student-record-lookup/README.md)——字符串学号做键，讨论直接定址的空间开销与越界陷阱；
+- [Lab 09-E-05：设计哈希映射·线性探测](../../labs/chapter-09/exercise/E-09-05-design-hash-map-probing/README.md)——开放定址 + 墓碑删除，删除聚集区中间键是关键用例；
+- [Lab 09-E-06：设计哈希集合·链地址](../../labs/chapter-09/exercise/E-09-06-design-hash-set-chaining/README.md)——压小桶数制造冲突，与开放定址对照；
+- [Lab 09-E-07：字符串哈希计数](../../labs/chapter-09/exercise/E-09-07-string-hash-count/README.md)——把非整数关键字映射成地址的散列函数设计；
+- [Lab 09-E-08：最长连续序列](../../labs/chapter-09/exercise/E-09-08-longest-consecutive-sequence/README.md)——散列表与有序结构的取舍。
+
+进阶做 [Lab 09-P-01：散列索引引擎——冲突策略与再散列大综合](../../labs/chapter-09/project/P-09-01-hash-index-engine/README.md)。
 
 ## 小结
 

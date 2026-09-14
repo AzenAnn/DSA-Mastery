@@ -311,9 +311,9 @@ void buildCodes(const NodePtr& node, std::string path,
 
 | 实验 | 练习内容 |
 | --- | --- |
-| [哈夫曼编码](../../labs/chapter-05/exercise/E-05-09-huffman-coding/README.md) | 构造赫夫曼树、生成码表并完成编码与解码 |
-| [最优合并问题](../../labs/chapter-05/exercise/E-05-10-optimal-merge/README.md) | 同一贪心策略在合并代价最小化上的应用 |
-| [k 叉哈夫曼树](../../labs/chapter-05/exercise/E-05-11-k-ary-huffman/README.md) | 推广到 $k$ 路合并，注意补虚节点的条件 |
+| [哈夫曼编码](../../labs/chapter-05/exercise/E-05-15-huffman-coding/README.md) | 构造赫夫曼树、生成码表并完成编码与解码 |
+| [最优合并问题](../../labs/chapter-05/exercise/E-05-16-optimal-merge/README.md) | 同一贪心策略在合并代价最小化上的应用 |
+| [k 叉哈夫曼树](../../labs/chapter-05/exercise/E-05-17-k-ary-huffman/README.md) | 推广到 $k$ 路合并，注意补虚节点的条件 |
 
 ## 小结与自测
 

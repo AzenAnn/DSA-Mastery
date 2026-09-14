@@ -3,6 +3,8 @@
   "schemaVersion": 1,
   "kind": "ctest",
   "ctest": {
+    "buildTargets": ["selection_bubble_tests"],
+    "moduleTargets": ["selection_sort", "bubble_sort"],
     "tests": [
       { "name": "selection-correctness", "points": 20 },
       { "name": "selection-instability", "points": 15 },

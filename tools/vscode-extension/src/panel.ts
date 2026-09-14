@@ -2,12 +2,12 @@ import { mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import * as vscode from "vscode";
-import { CliError, scoreLab, scoreProject, type ProjectScoreResult, type ScoreResult } from "./cli";
+import { CliError, readProjectCurrent, scoreLab, scoreProject, type ProjectScoreResult, type ScoreResult } from "./cli";
 import type { EnvironmentGuard } from "./doctor";
-import { loadTestCases, studentSourcePath, type LabEntry, type ProjectLab } from "./labIndex";
+import { collectProjectFiles, loadTestCases, studentSourcePath, type LabEntry, type ProjectLab } from "./labIndex";
 import { renderMarkdownFragment, renderReadme } from "./markdown";
 import type { ProgressTracker } from "./progress";
-import { renderPanelHtml, renderProjectPanelHtml, renderProjectResultHtml, renderQuizFeedbackHtml, renderQuizPanelHtml, renderResultHtml, type PanelNav, type QuizQuestionView } from "./panelHtml";
+import { renderCurrentDetails, renderPanelHtml, renderProjectCurrentHtml, renderProjectHeader, renderProjectPanelHtml, renderProjectResultHtml, renderQuizFeedbackHtml, renderQuizPanelHtml, renderResultHtml, type PanelNav, type QuizQuestionView } from "./panelHtml";
 
 type LoadedCase = Awaited<ReturnType<typeof loadTestCases>>[number];
 
@@ -24,6 +24,7 @@ interface PanelDeps {
 /** 题目面板：单例 webview，切换题目时复用同一个面板。 */
 export class LabPanel {
   private static current: LabPanel | undefined;
+  private static running = new Set<string>();
 
   private readonly panel: vscode.WebviewPanel;
   private readonly disposables: vscode.Disposable[] = [];
@@ -32,6 +33,8 @@ export class LabPanel {
   /** quiz 题目的渲染结果，提交后回填反馈区时复用。 */
   private quizViews: QuizQuestionView[] = [];
   private submitting = false;
+  private loadVersion = 0;
+  private disposed = false;
 
   private constructor(private readonly deps: PanelDeps) {
     this.panel = vscode.window.createWebviewPanel(
@@ -58,6 +61,10 @@ export class LabPanel {
 
   static async show(lab: LabEntry, deps: PanelDeps): Promise<void> {
     if (!LabPanel.current) LabPanel.current = new LabPanel(deps);
+    if (LabPanel.current.submitting) {
+      void vscode.window.showInformationMessage("当前测评完成后再切换题目。");
+      return;
+    }
     await LabPanel.current.load(lab);
     LabPanel.current.panel.reveal(vscode.ViewColumn.One);
   }
@@ -67,15 +74,24 @@ export class LabPanel {
     return LabPanel.current?.lab;
   }
 
-  static async submitActive(): Promise<void> {
-    await LabPanel.current?.submit();
+  static async submitActive(taskId?: string): Promise<void> {
+    await LabPanel.current?.submit(taskId);
+  }
+
+  static refreshCurrent(labId: string): void {
+    const panel = LabPanel.current;
+    if (!panel || panel.disposed || panel.submitting || panel.lab?.id !== labId || panel.lab.type !== "project") return;
+    const progress = panel.deps.progress.getProject(labId);
+    void panel.panel.webview.postMessage({ type: "projectCurrent", html: renderProjectCurrentHtml(progress?.current), headerHtml: renderProjectHeader(panel.lab, progress), detailsHtml: progress?.current ? renderCurrentDetails(progress.current) : undefined });
   }
 
   private async load(lab: LabEntry): Promise<void> {
+    const version = ++this.loadVersion;
     this.lab = lab;
     this.panel.title = lab.title;
 
     const readme = await renderReadme(lab, this.panel.webview);
+    if (version !== this.loadVersion || this.disposed) return;
     this.cases = [];
     this.quizViews = [];
 
@@ -101,6 +117,13 @@ export class LabPanel {
     }
 
     if (lab.type === "project") {
+      if (vscode.workspace.isTrusted) {
+        try {
+          const current = await readProjectCurrent(this.deps.repoRoot, lab.relativePath, projectDirtyFiles(lab));
+          this.deps.progress.setProjectCurrent(lab.id, current);
+        } catch { this.deps.progress.invalidateProjectCurrent(lab.id); }
+      }
+      if (version !== this.loadVersion || this.disposed) return;
       this.panel.webview.html = renderProjectPanelHtml({
         webview: this.panel.webview,
         extensionPath: this.deps.context.extensionPath,
@@ -113,6 +136,7 @@ export class LabPanel {
     }
 
     this.cases = await loadTestCases(lab);
+    if (version !== this.loadVersion || this.disposed) return;
     this.panel.webview.html = renderPanelHtml({
       webview: this.panel.webview,
       extensionPath: this.deps.context.extensionPath,
@@ -142,10 +166,24 @@ export class LabPanel {
     return { prev: at(-1), next: at(1) };
   }
 
-  private async handleMessage(message: { type: string; questionId?: string; selected?: number; labName?: string; filePath?: string }): Promise<void> {
+  private async handleMessage(message: { type: string; questionId?: string; selected?: number; labName?: string; filePath?: string; taskId?: string }): Promise<void> {
     switch (message.type) {
       case "submit":
-        await this.submit();
+        await this.submit(message.taskId);
+        return;
+      case "refreshProject":
+        if (this.lab.type === "project" && !this.submitting) await this.load(this.lab);
+        return;
+      case "openProjectReadme":
+        if (this.lab.type === "project" && this.lab.tasks.some((task) => task.readmePath === message.filePath)) {
+          await vscode.commands.executeCommand("markdown.showPreviewToSide", vscode.Uri.file(path.join(this.lab.labPath, message.filePath!)));
+        }
+        return;
+      case "openProjectReport":
+        if (this.lab.type === "project") {
+          const document = await vscode.workspace.openTextDocument(path.join(this.lab.labPath, ".lab-cache", "project-results-student.json"));
+          await vscode.window.showTextDocument(document, vscode.ViewColumn.Beside);
+        }
         return;
       case "navigate":
         await this.navigate(message.labName);
@@ -204,6 +242,11 @@ export class LabPanel {
   private async openSource(filePath?: string): Promise<void> {
     let sourcePath: string;
     if (this.lab.type === "project") {
+      if (filePath && (await collectProjectFiles(this.lab.labPath)).includes(filePath)) {
+        const document = await vscode.workspace.openTextDocument(path.join(this.lab.labPath, filePath));
+        await vscode.window.showTextDocument(document, vscode.ViewColumn.Beside);
+        return;
+      }
       let studentFile = filePath
         ? this.lab.studentFiles.find((file) => file.relativePath === filePath)
         : undefined;
@@ -242,44 +285,59 @@ export class LabPanel {
    *
    * 提交是状态唯一的写入时机 —— 只改代码不提交不会影响任何进度显示。
    */
-  private async submit(): Promise<void> {
-    if (this.lab.type === "quiz") {
+  private async submit(taskId?: string): Promise<void> {
+    const lab = this.lab;
+    const version = this.loadVersion;
+    if (lab.type === "quiz") {
       void vscode.window.showInformationMessage("选择题请在题目中逐题作答。");
       return;
     }
-    if (this.submitting) return;
+    if (this.submitting || LabPanel.running.has(lab.labPath)) return;
+    if (taskId && (lab.type !== "project" || !lab.tasks.some((task) => task.id === taskId && task.kind !== "manual"))) return;
     this.submitting = true;
+    LabPanel.running.add(lab.labPath);
+    const post = (message: object) => {
+      if (!this.disposed && this.loadVersion === version && this.lab.id === lab.id) void this.panel.webview.postMessage(message);
+    };
     void this.panel.webview.postMessage({ type: "submitting" });
 
     try {
       // 先保存未落盘的改动，否则判的是旧代码。
-      if (this.lab.type === "program") {
-        const sourcePath = studentSourcePath(this.lab);
+      if (lab.type === "program") {
+        const sourcePath = studentSourcePath(lab);
         const open = vscode.workspace.textDocuments.find((doc) => comparablePath(doc.fileName) === comparablePath(sourcePath));
-        if (open?.isDirty) await open.save();
-      } else if (this.lab.type === "project") {
-        await this.saveProjectFiles(this.lab);
+        if (open?.isDirty && !(await open.save())) throw new CliError(`保存失败：${sourcePath}`, "SAVE_FAILED");
+      } else if (lab.type === "project") {
+        await this.saveProjectFiles(lab);
       }
 
-      if (!(await this.deps.guard.ensureReady(this.lab))) {
-        void this.panel.webview.postMessage({ type: this.lab.type === "project" ? "projectSubmitAborted" : "submitAborted" });
+      if (!(await this.deps.guard.ensureReady(lab))) {
+        post({ type: lab.type === "project" ? "projectSubmitAborted" : "submitAborted" });
         return;
       }
 
-      if (this.lab.type === "project") {
-        const result = await scoreProject(this.deps.repoRoot, this.lab.relativePath);
-        const progress = await this.deps.progress.recordProjectSubmission(this.lab, result);
-        void this.panel.webview.postMessage({
+      if (lab.type === "project") {
+        await this.saveProjectFiles(lab);
+        const result = await scoreProject(this.deps.repoRoot, lab.relativePath, taskId);
+        try {
+          result.current = await readProjectCurrent(this.deps.repoRoot, lab.relativePath, projectDirtyFiles(lab));
+        } catch (error) {
+          if (!(error instanceof CliError) || error.code !== "COMMAND_UNKNOWN") throw error;
+        }
+        const progress = await this.deps.progress.recordProjectSubmission(lab, result);
+        post({
           type: "projectResult",
           html: renderProjectResultHtml(result, progress),
+          currentHtml: renderProjectCurrentHtml(result.current),
+          headerHtml: renderProjectHeader(lab, progress),
         });
         this.deps.onSubmitted();
-        void this.notifyProject(result);
+        void this.notifyProject(result, lab.title);
       } else {
-        const result = await scoreLab(this.deps.repoRoot, this.lab.relativePath);
-        const progress = await this.deps.progress.recordSubmission(this.lab, result);
+        const result = await scoreLab(this.deps.repoRoot, lab.relativePath);
+        const progress = await this.deps.progress.recordSubmission(lab, result);
 
-        void this.panel.webview.postMessage({
+        post({
           type: "result",
           html: renderResultHtml(result, progress),
         });
@@ -290,19 +348,23 @@ export class LabPanel {
       }
     } catch (error) {
       const message = error instanceof CliError ? error.message : String(error);
-      void this.panel.webview.postMessage({ type: this.lab.type === "project" ? "projectSubmitFailed" : "submitFailed", message });
+      post({ type: lab.type === "project" ? "projectSubmitFailed" : "submitFailed", message });
       void vscode.window.showErrorMessage(`提交失败：${message}`);
     } finally {
       this.submitting = false;
+      LabPanel.running.delete(lab.labPath);
     }
   }
 
   private async saveProjectFiles(lab: ProjectLab): Promise<void> {
-    const allowed = new Set(lab.studentFiles.map((file) => comparablePath(file.absolutePath)));
+    const allowed = new Set((await collectProjectFiles(lab.labPath)).map((file) => comparablePath(path.join(lab.labPath, file))));
     const dirtyDocuments = vscode.workspace.textDocuments.filter((document) =>
       document.isDirty && allowed.has(comparablePath(document.fileName)),
     );
-    await Promise.all(dirtyDocuments.map((document) => document.save()));
+    for (const document of dirtyDocuments) {
+      if (!(await document.save())) throw new CliError(`保存失败：${document.fileName}。本次测评已取消。`, "SAVE_FAILED");
+    }
+    if (vscode.workspace.textDocuments.some((document) => document.isDirty && allowed.has(comparablePath(document.fileName)))) throw new CliError("保存期间 Project 输入再次变化，请完成编辑后重试。", "INPUT_CHANGED");
   }
 
   /** 判题结果通知。WA 时提供并排查看完整输出的入口。 */
@@ -323,24 +385,31 @@ export class LabPanel {
     if (choice && failed) await this.openDiff(failed.id);
   }
 
-  private async notifyProject(result: ProjectScoreResult): Promise<void> {
+  private async notifyProject(result: ProjectScoreResult, title: string): Promise<void> {
+    const current = result.current ?? result;
     if (result.internalError) {
       await vscode.window.showErrorMessage("Project 判题遇到内部错误，请查看任务级结果后重试。");
       return;
     }
-    if (result.automatedFull && result.manualPending > 0) {
+    if (current.automatedFull && current.manualPending > 0) {
       await vscode.window.showInformationMessage(
-        `自动判题通过：${this.lab.title}（${result.automatedScore}/${result.automatedMax}），待人工评审 ${result.manualPending} 分。`,
+        `自动判题通过：${title}（${current.automatedScore}/${current.automatedMax}），待人工评审 ${current.manualPending} 分。`,
       );
       return;
     }
-    if (result.automatedFull) {
-      await vscode.window.showInformationMessage(`通过：${this.lab.title}（${result.provisionalTotal}/${result.total}）`);
+    if (current.automatedFull) {
+      await vscode.window.showInformationMessage(`通过：${title}（${current.provisionalTotal}/${current.total}）`);
       return;
     }
     const failed = result.tasks.find((task) => task.kind !== "manual" && task.status !== "AC");
+    if (!failed && result.selectedTaskId) {
+      await vscode.window.showInformationMessage(
+        `${result.selectedTaskId} 测评通过；当前工程自动分 ${current.automatedScore}/${current.automatedMax}，尚未全部完成。`,
+      );
+      return;
+    }
     await vscode.window.showWarningMessage(
-      `自动判题未满：${failed ? `${failed.id} ${failed.status}` : "请查看任务结果"}（${result.automatedScore}/${result.automatedMax}）`,
+      `自动判题未满：${failed ? `${failed.id} ${failed.status}` : "请查看任务结果"}（当前工程 ${current.automatedScore}/${current.automatedMax}）`,
     );
   }
 
@@ -410,10 +479,17 @@ export class LabPanel {
   }
 
   private dispose(): void {
+    this.disposed = true;
+    this.loadVersion += 1;
     LabPanel.current = undefined;
     for (const item of this.disposables) item.dispose();
     this.panel.dispose();
   }
+}
+
+export function projectDirtyFiles(lab: ProjectLab): string[] {
+  return vscode.workspace.textDocuments.filter((document) => document.isDirty).map((document) => path.relative(lab.labPath, document.fileName).split(path.sep).join("/"))
+    .filter((file) => file && !file.startsWith("../") && !path.isAbsolute(file) && !file.split("/").some((part) => ["solution", ".lab-cache", ".git", "node_modules"].includes(part)));
 }
 
 function comparablePath(filePath: string): string {

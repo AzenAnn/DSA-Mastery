@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1, "kind": "ctest",
+  "ctest": {
+    "buildTargets": ["expr_stack_tests"], "moduleTargets": ["expr_stack"],
+    "tests": [ { "name": "stack-lifo", "points": 40 }, { "name": "stack-capacity", "points": 40 }, { "name": "stack-empty", "points": 20 } ]
+  }
+}

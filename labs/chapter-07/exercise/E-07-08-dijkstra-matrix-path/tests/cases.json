@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "sample"
     ]
@@ -12,7 +12,7 @@
     "id": "002-target-source",
     "input": "tests/002-target-source.in",
     "expected": "tests/002-target-source.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -21,7 +21,7 @@
     "id": "003-unreachable-targets",
     "input": "tests/003-unreachable-targets.in",
     "expected": "tests/003-unreachable-targets.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -30,7 +30,7 @@
     "id": "004-multi-edges",
     "input": "tests/004-multi-edges.in",
     "expected": "tests/004-multi-edges.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -39,7 +39,7 @@
     "id": "005-single-vertex",
     "input": "tests/005-single-vertex.in",
     "expected": "tests/005-single-vertex.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -48,7 +48,7 @@
     "id": "006-direct-vs-detour",
     "input": "tests/006-direct-vs-detour.in",
     "expected": "tests/006-direct-vs-detour.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -57,7 +57,7 @@
     "id": "007-line-graph",
     "input": "tests/007-line-graph.in",
     "expected": "tests/007-line-graph.out",
-    "points": 10,
+    "points": 5,
     "tags": [
       "normal"
     ]
@@ -66,9 +66,81 @@
     "id": "008-dense-large",
     "input": "tests/008-dense-large.in",
     "expected": "tests/008-dense-large.out",
-    "points": 20,
+    "points": 5,
     "tags": [
       "stress"
     ]
+  },
+  {
+    "id": "009-all-unreachable-except-source",
+    "input": "tests/009-all-unreachable-except-source.in",
+    "expected": "tests/009-all-unreachable-except-source.out",
+    "points": 5
+  },
+  {
+    "id": "010-zero-weight-path",
+    "input": "tests/010-zero-weight-path.in",
+    "expected": "tests/010-zero-weight-path.out",
+    "points": 5
+  },
+  {
+    "id": "011-parallel-choose-minimum",
+    "input": "tests/011-parallel-choose-minimum.in",
+    "expected": "tests/011-parallel-choose-minimum.out",
+    "points": 5
+  },
+  {
+    "id": "012-self-loop-ignored",
+    "input": "tests/012-self-loop-ignored.in",
+    "expected": "tests/012-self-loop-ignored.out",
+    "points": 5
+  },
+  {
+    "id": "013-tie-path-strict-update",
+    "input": "tests/013-tie-path-strict-update.in",
+    "expected": "tests/013-tie-path-strict-update.out",
+    "points": 5
+  },
+  {
+    "id": "014-source-nonzero",
+    "input": "tests/014-source-nonzero.in",
+    "expected": "tests/014-source-nonzero.out",
+    "points": 5
+  },
+  {
+    "id": "015-unreachable-query-mix",
+    "input": "tests/015-unreachable-query-mix.in",
+    "expected": "tests/015-unreachable-query-mix.out",
+    "points": 5
+  },
+  {
+    "id": "016-detour-beats-direct",
+    "input": "tests/016-detour-beats-direct.in",
+    "expected": "tests/016-detour-beats-direct.out",
+    "points": 5
+  },
+  {
+    "id": "017-dense-small-queries",
+    "input": "tests/017-dense-small-queries.in",
+    "expected": "tests/017-dense-small-queries.out",
+    "points": 5
+  },
+  {
+    "id": "018-query-repetition",
+    "input": "tests/018-query-repetition.in",
+    "expected": "tests/018-query-repetition.out",
+    "points": 5
+  },
+  {
+    "id": "019-single-vertex-many-query",
+    "input": "tests/019-single-vertex-many-query.in",
+    "expected": "tests/019-single-vertex-many-query.out",
+    "points": 5
+  },
+  {
+    "id": "020-zero-parallel-edge",
+    "input": "tests/020-zero-parallel-edge.in",
+    "expected": "tests/020-zero-parallel-edge.out",
+    "points": 5
   }
 ]

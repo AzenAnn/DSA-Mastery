@@ -1,12 +1,12 @@
 ---
 title: "Lab 07-E-04：最小生成树"
 description: "实现 Kruskal 算法求无向图的最小生成树，输出边权之和，并正确处理多重边与自环。"
-order: 7
+order: 112
 chapter: 7
 labId: "07E04"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-29"
-contributors: ["Fishman"]
+updated: "2026-09-14"
+contributors: ["Fishman", "Azen"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -14,6 +14,8 @@ duration: "120～150 分钟"
 ---
 
 # Lab 07-E-04：最小生成树
+
+> 题集 T12 · 规划节 7.3；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 > 题目来源：参考 [GeeksforGeeks 的经典 Kruskal 练习](https://www.geeksforgeeks.org/dsa/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/)与 [LeetCode 1135：最低成本联通所有城市](https://leetcode.cn/problems/connecting-cities-with-minimum-cost/)进行课程化改编。本 Lab 使用从 `0` 开始的顶点编号、保证图连通，并采用独立输入输出与测试。
 
