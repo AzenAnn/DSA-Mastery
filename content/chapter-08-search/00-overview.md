@@ -74,9 +74,17 @@ status: "draft"
 - [Lab 08-T-02：二叉排序树理论题精练](../../labs/chapter-08/theory/T-08-02-bst-theory-quiz/README.md)
 - [Lab 08-T-03：平衡查找树理论题精练](../../labs/chapter-08/theory/T-08-03-balanced-tree-quiz/README.md)
 - [Lab 08-E-01：BST 增删查与边界测试](../../labs/chapter-08/exercise/E-08-01-bst-operations/README.md)
+- [Lab 08-E-02：折半查找首次出现位置](../../labs/chapter-08/exercise/E-08-02-binary-search-first-index/README.md)
+- [Lab 08-E-03：折半查找首末位置](../../labs/chapter-08/exercise/E-08-03-binary-search-positions/README.md)
+- [Lab 08-E-04：数对计数 A−B=C](../../labs/chapter-08/exercise/E-08-04-count-diff-pairs/README.md)
+- [Lab 08-E-05：有序数组转平衡 BST](../../labs/chapter-08/exercise/E-08-05-sorted-array-to-bst/README.md)
+- [Lab 08-E-06：验证二叉搜索树](../../labs/chapter-08/exercise/E-08-06-validate-bst/README.md)
+- [Lab 08-E-07：二叉搜索树的最近公共祖先](../../labs/chapter-08/exercise/E-08-07-bst-lca/README.md)
+- [Lab 08-E-08：平衡二叉树判断](../../labs/chapter-08/exercise/E-08-08-balanced-binary-tree-check/README.md)
+- [Lab 08-E-09：【模板】普通平衡树](../../labs/chapter-08/exercise/E-08-09-balanced-tree-template/README.md)
 - [Lab 08-P-01：自平衡查找树——AVL 旋转维护与退化对比](../../labs/chapter-08/project/P-08-01-avl-tree-rotations/README.md)
 
-散列与索引相关的 Lab（09-01～09-03）见第 9 章各页的配套 Lab。
+散列与索引相关的 Lab 见第 9 章各页的配套 Lab。
 
 ## 选型时先问什么
 
