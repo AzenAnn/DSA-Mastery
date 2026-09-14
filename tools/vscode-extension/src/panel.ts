@@ -32,6 +32,8 @@ export class LabPanel {
   /** quiz 题目的渲染结果，提交后回填反馈区时复用。 */
   private quizViews: QuizQuestionView[] = [];
   private submitting = false;
+  private quizBatchInProgress = false;
+  private readonly pendingQuizAnswers = new Set<string>();
 
   private constructor(private readonly deps: PanelDeps) {
     this.panel = vscode.window.createWebviewPanel(
@@ -69,6 +71,17 @@ export class LabPanel {
 
   static async submitActive(): Promise<void> {
     await LabPanel.current?.submit();
+  }
+
+  /** 请求当前 Quiz 面板提交已选答案；尚未显示目标 Quiz 时仅打开它，不伪造提交。 */
+  static async submitQuiz(lab: LabEntry, deps: PanelDeps): Promise<void> {
+    const current = LabPanel.current;
+    if (!current || current.lab?.type !== "quiz" || current.lab.id !== lab.id) {
+      await LabPanel.show(lab, deps);
+      return;
+    }
+    current.panel.reveal(vscode.ViewColumn.One);
+    void current.panel.webview.postMessage({ type: "submitQuiz" });
   }
 
   private async load(lab: LabEntry): Promise<void> {
@@ -142,7 +155,14 @@ export class LabPanel {
     return { prev: at(-1), next: at(1) };
   }
 
-  private async handleMessage(message: { type: string; questionId?: string; selected?: number; labName?: string; filePath?: string }): Promise<void> {
+  private async handleMessage(message: {
+    type: string;
+    questionId?: string;
+    selected?: number;
+    answers?: unknown;
+    labName?: string;
+    filePath?: string;
+  }): Promise<void> {
     switch (message.type) {
       case "submit":
         await this.submit();
@@ -162,33 +182,74 @@ export class LabPanel {
       case "quizAnswer":
         await this.answerQuiz(message.questionId, message.selected);
         return;
+      case "quizAnswers":
+        await this.answerQuizBatch(message.answers);
+        return;
       default:
         return;
     }
   }
 
+  /** 批量消息来自 WebView，逐项校验后复用单题提交路径，避免绕过进度和反馈更新。 */
+  private async answerQuizBatch(answers: unknown): Promise<void> {
+    if (this.lab.type !== "quiz" || !Array.isArray(answers) || this.quizBatchInProgress) return;
+
+    this.quizBatchInProgress = true;
+    try {
+      const questions = new Map(this.lab.quizQuestions.map((question) => [question.id, question]));
+      const seen = new Set<string>();
+      for (const answer of answers) {
+        if (!answer || typeof answer !== "object") continue;
+        const { questionId, selected } = answer as { questionId?: unknown; selected?: unknown };
+        if (
+          typeof questionId !== "string" ||
+          typeof selected !== "number" ||
+          !Number.isInteger(selected) ||
+          seen.has(questionId)
+        ) {
+          continue;
+        }
+        const question = questions.get(questionId);
+        if (!question || selected < 0 || selected >= question.options.length) continue;
+
+        seen.add(questionId);
+        await this.answerQuiz(questionId, selected);
+      }
+    } finally {
+      this.quizBatchInProgress = false;
+      void this.panel.webview.postMessage({ type: "quizBatchComplete" });
+    }
+  }
+
   private async answerQuiz(questionId?: string, selected?: number): Promise<void> {
     if (this.lab.type !== "quiz" || !questionId || selected === undefined || !Number.isInteger(selected)) return;
-    const progress = await this.deps.progress.recordQuizAnswer(
-      this.lab.id,
-      this.lab.quizQuestions ?? [],
-      questionId,
-      selected,
-    );
-    const state = progress.answers[questionId];
-    const question = this.quizViews.find((item) => item.id === questionId);
-    void this.panel.webview.postMessage({
-      type: "quizResult",
-      questionId,
-      // 带上 answer：前端要靠它给正确项标 is-answer。
-      state: {
-        ...state,
-        answer: question?.answer,
-        html: question ? renderQuizFeedbackHtml(question, selected) : "",
-      },
-      completed: progress.passed,
-    });
-    this.deps.onSubmitted();
+    if (this.pendingQuizAnswers.has(questionId)) return;
+
+    this.pendingQuizAnswers.add(questionId);
+    try {
+      const progress = await this.deps.progress.recordQuizAnswer(
+        this.lab.id,
+        this.lab.quizQuestions ?? [],
+        questionId,
+        selected,
+      );
+      const state = progress.answers[questionId];
+      const question = this.quizViews.find((item) => item.id === questionId);
+      void this.panel.webview.postMessage({
+        type: "quizResult",
+        questionId,
+        // 带上 answer：前端要靠它给正确项标 is-answer。
+        state: {
+          ...state,
+          answer: question?.answer,
+          html: question ? renderQuizFeedbackHtml(question, selected) : "",
+        },
+        completed: progress.passed,
+      });
+      this.deps.onSubmitted();
+    } finally {
+      this.pendingQuizAnswers.delete(questionId);
+    }
   }
 
   /** 切到相邻题目。复用同一个面板,不新开 webview。 */

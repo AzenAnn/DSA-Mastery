@@ -119,3 +119,77 @@ await progress.recordProjectSubmission(lab, result);
 ```
 
 学生文件入口来自扫描到的 `student/` 白名单，评分和聚合由既有 CLI 负责，状态以 stable `labId` 独立持久化。
+
+## 8. Quiz 侧边栏一键测评契约
+
+### 1. Scope / Trigger
+
+当修改 Quiz 树节点后的 `dsaMastery.submit` 播放按钮，或修改 Quiz WebView 与扩展宿主的提交消息时适用。该入口不能像 Program/Project 一样先调用 `LabPanel.show()`：当前未提交的单选值只存在于 WebView DOM，重渲染会丢失它们。
+
+### 2. Signatures
+
+```ts
+LabPanel.submitQuiz(lab: LabEntry, deps: PanelDeps): Promise<void>;
+
+// 宿主 → 当前 Quiz WebView
+{ type: "submitQuiz" }
+
+// Quiz WebView → 宿主
+{ type: "quizAnswers", answers: Array<{ questionId: string; selected: number }> }
+
+// 宿主 → Quiz WebView（同一批处理结束）
+{ type: "quizBatchComplete" }
+```
+
+### 3. Contracts
+
+- `dsaMastery.submit` 对 Quiz 调用 `LabPanel.submitQuiz()`；Program 和 Project 继续走 `show()` 后 `submitActive()` 的既有判题流程。
+- 仅当单例面板正在显示相同 `lab.id` 的 Quiz 时，`submitQuiz()` 可以向 WebView 发送 `{ type: "submitQuiz" }`；该分支不得调用 `load()` 或替换 `webview.html`。
+- WebView 只收集 `input:checked:not(:disabled)`，并以 `quizAnswers` 批量回传。未选择题不应产生记录，已锁定题目不应再次进入批次。
+- 宿主把 WebView 消息当成不可信输入：只接受存在的 question ID、整数选项索引和该题选项范围内的值；同一批次中的 ID 去重。
+- WebView 在发出批次后保持 `quizBatchInFlight`，直至宿主发回 `quizBatchComplete`；它还必须为单题和批量入口共用每题 pending 集合，直至相应 `quizResult` 回填。宿主同时保持 `quizBatchInProgress` 及每题 pending 集合。两层锁必须阻止结果反馈回填前的连续点击重复写入进度。
+- 每个合法项必须复用现有单题 `answerQuiz()` / `ProgressTracker.recordQuizAnswer()` 路径，以保持反馈、进度、完成徽章和树装饰一致。
+- 当前面板不是目标题目时，只加载并显示目标 Quiz；不向错误的 WebView 发送提交请求，也不伪造提交。
+
+### 4. Validation & Error Matrix
+
+| 条件 | 行为 |
+| --- | --- |
+| 当前面板是同一 Quiz | 不重载 WebView，发送 `submitQuiz` |
+| 当前面板不存在、不是 Quiz 或 Quiz ID 不同 | 仅打开目标题目，不提交 |
+| 批量消息为空 | 不写入进度 |
+| 题目 ID 不存在、重复，或选项非整数/越界 | 忽略该项，继续处理其它合法项 |
+| radio 未选择或已 disabled | WebView 不把该题发送给宿主 |
+| 同一批处理尚未收到 `quizBatchComplete` | WebView 忽略重复的 `submitQuiz` 请求 |
+| 单题或批次正在写入 | WebView 与宿主都忽略重叠的批次或同题提交 |
+
+### 5. Good / Base / Bad Cases
+
+- Good：在当前 Quiz 中先选多题但不点“提交本题”，点击树节点播放按钮后，每题仍保留选择并显示既有正确/错误反馈。
+- Base：点击尚未打开的 Quiz 播放按钮时，扩展只打开该 Quiz，用户可继续选择答案。
+- Bad：Quiz 分支先执行 `LabPanel.show()` 再调用通用 `submitActive()`；这会重建 WebView、丢弃临时选择且只显示“逐题作答”的提示。
+
+### 6. Tests Required
+
+- UI 契约测试必须断言 `submitQuiz`/`quizBatchComplete` 宿主消息、`quizAnswers` 回传、`input:checked:not(:disabled)` 过滤、两侧批次锁、Quiz 分支不调用 `load()`、宿主去重并顺序复用 `answerQuiz()`。
+- 运行 `node --experimental-strip-types --test test/*.test.ts`、`tsc -p tsconfig.json --noEmit` 和 `node build.mjs`，以及本仓库要求的相关质量门禁。
+
+### 7. Wrong vs Correct
+
+#### Wrong
+
+```ts
+await LabPanel.show(lab, panelDeps);
+await LabPanel.submitActive();
+```
+
+#### Correct
+
+```ts
+if (lab.type === "quiz") {
+  await LabPanel.submitQuiz(lab, panelDeps);
+  return;
+}
+await LabPanel.show(lab, panelDeps);
+await LabPanel.submitActive();
+```

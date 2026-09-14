@@ -68,6 +68,8 @@ ${questionHtml}
 <script nonce="${cspNonce}">
 const api = acquireVsCodeApi(); const answers = ${answers};
 const questions = ${JSON.stringify(questions.map((q) => ({ id: q.id, points: q.points })))};
+let quizBatchInFlight = false;
+const pendingQuizQuestions = new Set();
 function updateSummary() {
   const answered = questions.filter(q => answers[q.id] !== undefined).length;
   const correct = questions.filter(q => answers[q.id] && answers[q.id].correct).length;
@@ -101,12 +103,31 @@ function refreshQuestion(id, state) {
   if (box) markSubmitted(box, state);
 }
 
-document.querySelectorAll('.course-quiz-submit').forEach(button => button.addEventListener('click', () => {
-  const box = button.closest('[data-question]');
+function submitQuizAnswer(box) {
   const input = box.querySelector('input:checked');
-  if (!input) return;
-  api.postMessage({ type: 'quizAnswer', questionId: box.dataset.question, selected: Number(input.value) });
+  const questionId = box.dataset.question;
+  if (!input || !questionId || quizBatchInFlight || pendingQuizQuestions.has(questionId)) return;
+  pendingQuizQuestions.add(questionId);
+  api.postMessage({ type: 'quizAnswer', questionId, selected: Number(input.value) });
+}
+
+document.querySelectorAll('.course-quiz-submit').forEach(button => button.addEventListener('click', () => {
+  submitQuizAnswer(button.closest('[data-question]'));
 }));
+
+function submitSelectedQuizAnswers() {
+  if (quizBatchInFlight) return;
+  const selectedAnswers = Array.from(document.querySelectorAll('[data-question]')).flatMap(box => {
+    const input = box.querySelector('input:checked:not(:disabled)');
+    const questionId = box.dataset.question;
+    if (!input || !questionId || pendingQuizQuestions.has(questionId)) return [];
+    return [{ questionId, selected: Number(input.value) }];
+  });
+  if (selectedAnswers.length === 0) return;
+  selectedAnswers.forEach(({ questionId }) => pendingQuizQuestions.add(questionId));
+  quizBatchInFlight = true;
+  api.postMessage({ type: 'quizAnswers', answers: selectedAnswers });
+}
 
 document.querySelectorAll('.course-quiz-retry').forEach(button => button.addEventListener('click', () => {
   const box = button.closest('[data-question]');
@@ -123,7 +144,27 @@ document.querySelectorAll('.course-quiz-retry').forEach(button => button.addEven
   if (hintSlot) hintSlot.hidden = false;
   box.querySelector('.course-quiz-feedback').hidden = true;
 }));
-window.addEventListener('message', event => { if (event.data.type === 'quizResult') { answers[event.data.questionId] = event.data.state; refreshQuestion(event.data.questionId, event.data.state); updateSummary(); if (event.data.completed) { document.getElementById('quiz-badge').textContent = '已完成'; document.getElementById('quiz-badge').className = 'badge passed'; } } });
+window.addEventListener('message', event => {
+  const message = event.data;
+  if (message.type === 'submitQuiz') {
+    submitSelectedQuizAnswers();
+    return;
+  }
+  if (message.type === 'quizBatchComplete') {
+    quizBatchInFlight = false;
+    return;
+  }
+  if (message.type === 'quizResult') {
+    pendingQuizQuestions.delete(message.questionId);
+    answers[message.questionId] = message.state;
+    refreshQuestion(message.questionId, message.state);
+    updateSummary();
+    if (message.completed) {
+      document.getElementById('quiz-badge').textContent = '已完成';
+      document.getElementById('quiz-badge').className = 'badge passed';
+    }
+  }
+});
 Object.entries(answers).forEach(([id, state]) => refreshQuestion(id, state)); updateSummary();
 </script></body></html>`;
 }
