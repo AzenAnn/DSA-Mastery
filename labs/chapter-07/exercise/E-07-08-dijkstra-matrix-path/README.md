@@ -1,12 +1,12 @@
 ---
 title: "Lab 07-E-08：朴素 Dijkstra 与路径还原"
 description: "用邻接矩阵实现考研教材标准的 O(n²) Dijkstra，回答多个目标的距离与完整路径查询。"
-order: 11
+order: 117
 chapter: 7
 labId: "07E08"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-28"
-contributors: ["Jeff"]
+updated: "2026-09-14"
+contributors: ["Jeff", "Azen"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -14,6 +14,8 @@ duration: "75～90 分钟"
 ---
 
 # Lab 07-E-08：朴素 Dijkstra 与路径还原
+
+> 题集 T17 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 

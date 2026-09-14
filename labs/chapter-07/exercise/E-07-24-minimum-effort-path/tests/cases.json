@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-singleton",
+    "input": "tests/002-singleton.in",
+    "expected": "tests/002-singleton.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-flat",
+    "input": "tests/003-flat.in",
+    "expected": "tests/003-flat.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-single-row",
+    "input": "tests/004-single-row.in",
+    "expected": "tests/004-single-row.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-single-column",
+    "input": "tests/005-single-column.in",
+    "expected": "tests/005-single-column.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-detour-beats-direct",
+    "input": "tests/006-detour-beats-direct.in",
+    "expected": "tests/006-detour-beats-direct.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "007-bottleneck-not-sum",
+    "input": "tests/007-bottleneck-not-sum.in",
+    "expected": "tests/007-bottleneck-not-sum.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "008-max-height-gap",
+    "input": "tests/008-max-height-gap.in",
+    "expected": "tests/008-max-height-gap.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-seeded-grid-0",
+    "input": "tests/009-seeded-grid-0.in",
+    "expected": "tests/009-seeded-grid-0.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-seeded-grid-1",
+    "input": "tests/010-seeded-grid-1.in",
+    "expected": "tests/010-seeded-grid-1.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-seeded-grid-2",
+    "input": "tests/011-seeded-grid-2.in",
+    "expected": "tests/011-seeded-grid-2.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-seeded-grid-3",
+    "input": "tests/012-seeded-grid-3.in",
+    "expected": "tests/012-seeded-grid-3.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-seeded-grid-4",
+    "input": "tests/013-seeded-grid-4.in",
+    "expected": "tests/013-seeded-grid-4.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-seeded-grid-5",
+    "input": "tests/014-seeded-grid-5.in",
+    "expected": "tests/014-seeded-grid-5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-seeded-grid-6",
+    "input": "tests/015-seeded-grid-6.in",
+    "expected": "tests/015-seeded-grid-6.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-seeded-grid-7",
+    "input": "tests/016-seeded-grid-7.in",
+    "expected": "tests/016-seeded-grid-7.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-seeded-grid-8",
+    "input": "tests/017-seeded-grid-8.in",
+    "expected": "tests/017-seeded-grid-8.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-max-grid",
+    "input": "tests/018-max-grid.in",
+    "expected": "tests/018-max-grid.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-checkerboard",
+    "input": "tests/019-checkerboard.in",
+    "expected": "tests/019-checkerboard.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-long-corridor",
+    "input": "tests/020-long-corridor.in",
+    "expected": "tests/020-long-corridor.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

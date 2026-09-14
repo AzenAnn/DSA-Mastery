@@ -1,14 +1,37 @@
 #include <algorithm>
+#include <cstddef>
 #include <iostream>
+#include <utility>
 #include <vector>
 
 void dfs(int u, const std::vector<std::vector<int>>& graph,
          std::vector<bool>& visited, std::vector<int>& d, std::vector<int>& f,
-         int& timer) {
+         int& timer, int depth = 0) {
     visited[u] = true;
     d[u] = ++timer;
+    // Windows 原生工具链的默认栈较小。递归较深时用等价栈帧完成子树，
+    // 保留进入/退出事件顺序，时间戳与无限栈递归完全一致。
+    if (depth == 256) {
+        std::vector<std::pair<int, std::size_t>> frames{{u, 0}};
+        while (!frames.empty()) {
+            int vertex = frames.back().first;
+            auto& next = frames.back().second;
+            if (next == graph[vertex].size()) {
+                f[vertex] = ++timer;
+                frames.pop_back();
+            } else {
+                int neighbor = graph[vertex][next++];
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    d[neighbor] = ++timer;
+                    frames.push_back({neighbor, 0});
+                }
+            }
+        }
+        return;
+    }
     for (int v : graph[u]) {
-        if (!visited[v]) dfs(v, graph, visited, d, f, timer);
+        if (!visited[v]) dfs(v, graph, visited, d, f, timer, depth + 1);
     }
     f[u] = ++timer;
 }

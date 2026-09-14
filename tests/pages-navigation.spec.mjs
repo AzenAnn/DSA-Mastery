@@ -232,6 +232,31 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   expect(failures).toEqual([]);
 });
 
+test("chapter 7 new exercises preserve order and remain reachable from Labs", async ({ page }) => {
+  const failures = monitorPage(page);
+  await page.goto(`${baseUrl}/labs/`);
+  await page.locator("a.course-labs-list-card").filter({ hasText: "Lab 07-E-27：启发式函数有效性判定" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 07-E-27：启发式函数有效性判定");
+  await expect(page.locator(".vp-doc")).toContainText("YES NO");
+  await expect(page.locator(".vp-doc")).toContainText("不可达");
+  const links = page.locator('.VPSidebar a[href*="/labs/chapter-07/exercise/"]');
+  await expect(links).toHaveCount(32);
+  const ids = [1, 5, 13, 14, 15, 16, 17, 18, 19, 20, 21, 4, 22, 23, 24,
+    7, 8, 9, 11, 12, 10, 25, 26, 27, 28, 6, 29, 30, 31, 32, 2, 3];
+  for (const [index, id] of ids.entries()) {
+    await expect(links.nth(index)).toContainText(`07E${String(id).padStart(2, "0")} ·`);
+  }
+  await page.locator(".vp-doc").getByRole("link", { name: "A* 寻路可视化", exact: true }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-07-graph-applications/04-astar-visualization/`);
+  await page.locator(".vp-doc").getByRole("link", { name: /T25 · 07E28/ }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 07-E-28：八数码问题（A*）");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator(".vp-doc")).toContainText("123804765");
+  const overflow = await page.locator("html").evaluate((element) => element.scrollWidth > element.clientWidth + 1);
+  expect(overflow).toBe(false);
+  expect(failures).toEqual([]);
+});
+
 test("local Chinese search finds lessons and Labs", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/`);

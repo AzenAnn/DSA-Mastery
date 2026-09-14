@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-singleton",
+    "input": "tests/002-singleton.in",
+    "expected": "tests/002-singleton.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-disconnected",
+    "input": "tests/003-disconnected.in",
+    "expected": "tests/003-disconnected.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-parallel-cheaper-later",
+    "input": "tests/004-parallel-cheaper-later.in",
+    "expected": "tests/004-parallel-cheaper-later.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "005-zero-cost",
+    "input": "tests/005-zero-cost.in",
+    "expected": "tests/005-zero-cost.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "006-cycle-cheapest",
+    "input": "tests/006-cycle-cheapest.in",
+    "expected": "tests/006-cycle-cheapest.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "007-large-total",
+    "input": "tests/007-large-total.in",
+    "expected": "tests/007-large-total.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "008-seeded-weighted-0",
+    "input": "tests/008-seeded-weighted-0.in",
+    "expected": "tests/008-seeded-weighted-0.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-seeded-weighted-1",
+    "input": "tests/009-seeded-weighted-1.in",
+    "expected": "tests/009-seeded-weighted-1.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-seeded-weighted-2",
+    "input": "tests/010-seeded-weighted-2.in",
+    "expected": "tests/010-seeded-weighted-2.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-seeded-weighted-3",
+    "input": "tests/011-seeded-weighted-3.in",
+    "expected": "tests/011-seeded-weighted-3.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-seeded-weighted-4",
+    "input": "tests/012-seeded-weighted-4.in",
+    "expected": "tests/012-seeded-weighted-4.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-seeded-weighted-5",
+    "input": "tests/013-seeded-weighted-5.in",
+    "expected": "tests/013-seeded-weighted-5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-seeded-weighted-6",
+    "input": "tests/014-seeded-weighted-6.in",
+    "expected": "tests/014-seeded-weighted-6.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-seeded-weighted-7",
+    "input": "tests/015-seeded-weighted-7.in",
+    "expected": "tests/015-seeded-weighted-7.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-seeded-weighted-8",
+    "input": "tests/016-seeded-weighted-8.in",
+    "expected": "tests/016-seeded-weighted-8.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-seeded-weighted-9",
+    "input": "tests/017-seeded-weighted-9.in",
+    "expected": "tests/017-seeded-weighted-9.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-long-chain",
+    "input": "tests/018-long-chain.in",
+    "expected": "tests/018-long-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-dense-equal",
+    "input": "tests/019-dense-equal.in",
+    "expected": "tests/019-dense-equal.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-isolated-last",
+    "input": "tests/020-isolated-last.in",
+    "expected": "tests/020-isolated-last.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

@@ -1,19 +1,21 @@
 ---
 title: "Lab 07-E-09：网络延迟时间"
 description: "LeetCode 743：求单源最短路径的最大值——信号传遍全网所需时间，不可达时输出 -1。"
-order: 12
+order: 118
 chapter: 7
 labId: "07E09"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-28"
-contributors: ["Jeff"]
+updated: "2026-09-14"
+contributors: ["Jeff", "Azen"]
 status: "draft"
 lab: true
-difficulty: "中等"
+difficulty: "基础"
 duration: "75～90 分钟"
 ---
 
 # Lab 07-E-09：网络延迟时间
+
+> 题集 T18 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 

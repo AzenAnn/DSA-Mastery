@@ -1,12 +1,12 @@
 ---
 title: "Lab 07-E-03：有向图环检测"
 description: "用三色标记的 DFS 判断有向图是否含环，区分指向当前递归栈与已完成顶点的边。"
-order: 6
+order: 192
 chapter: 7
 labId: "07E03"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-29"
-contributors: ["Qing"]
+updated: "2026-09-14"
+contributors: ["Qing", "Azen"]
 status: "draft"
 lab: true
 difficulty: "进阶"
@@ -14,6 +14,8 @@ duration: "60～90 分钟"
 ---
 
 # Lab 07-E-03：有向图环检测
+
+> 补充练习：保留原有稳定编号，安排在 T01–T30 后；[全章题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 > 题目来源：参考 [LeetCode 207：课程表](https://leetcode.cn/problems/course-schedule/)进行课程化改编。原题的先修关系 `[a, b]` 表示有向边 `b → a`，并在**无环、可以完成课程**时返回 `true`；本 Lab 直接输入边 `u → v`，并在**存在有向环**时输出 `YES`，判定语义相反。
 
