@@ -104,3 +104,24 @@
 ### Status
 
 [OK] **Completed**
+
+
+## Session 5: 修复选择题一键测评
+
+**Date**: 2026-09-14
+**Task**: 修复选择题一键测评
+**Branch**: `codex/fix-choice-one-click-submit`
+
+### Summary
+
+修复 VS Code 扩展侧边栏 Quiz 播放按钮：同题 WebView 批量提交已选答案、保持反馈与进度链路，并为批量/单题提交加入去重锁。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `22046908` | (see git log) |
+
+### Status
+
+[OK] **Completed**
