@@ -1,0 +1,5 @@
+{"file": ".trellis/spec/content/labs.md", "reason": "稳定身份、题面结构与代码题交付合同"}
+{"file": ".trellis/spec/content/lab-tooling.md", "reason": "C++17、manifest、评分、starter 与静态期望"}
+{"file": ".trellis/spec/content/ch07-graph-exercises.md", "reason": "Ch7 顺序和图算法边界、独立测试"}
+{"file": ".trellis/spec/content/frontmatter-and-routing.md", "reason": "教学页面与链接的发布合同"}
+{"file": ".trellis/spec/quality/validation-and-pages.md", "reason": "完整 pnpm 门禁、最终产物和 Pages 浏览器验证"}

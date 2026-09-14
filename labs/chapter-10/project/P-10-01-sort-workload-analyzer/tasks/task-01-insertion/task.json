@@ -3,6 +3,8 @@
   "schemaVersion": 1,
   "kind": "ctest",
   "ctest": {
+    "buildTargets": ["insertion_tests"],
+    "moduleTargets": ["insertion_sort"],
     "tests": [
       { "name": "insertion-correctness", "points": 40 },
       { "name": "insertion-stability", "points": 30 },

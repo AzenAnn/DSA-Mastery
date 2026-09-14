@@ -1,11 +1,12 @@
 import { copyFile, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import * as vscode from "vscode";
-import type { CaseResult, ProjectScoreResult, ScoreResult, Verdict } from "./cli";
+import type { CaseResult, ProjectCurrentState, ProjectScoreResult, ScoreResult, Verdict } from "./cli";
 import { studentSourcePath, type LabEntry, type ProjectLab, type ProgramLab } from "./labIndex";
 import type { QuizQuestion } from "./quiz";
 import { backfillEvents } from "./stats";
 import { remapEventKeys, remapRecordKeys } from "./progressKeys";
+import { CH04_MIGRATION, ch04IdAliases } from "./ch04Migration";
 import { mergeLabProgress, mergeQuizProgress } from "./progressMerge";
 import {
   projectProgressPassed,
@@ -94,6 +95,7 @@ export interface QuizProgress {
 
 interface ProgressStore {
   schemaVersion: number;
+  appliedMigrations: string[];
   labs: Record<string, LabProgress>;
   quizzes: Record<string, QuizProgress>;
   /** 追加型活动日志,按时间升序。只增不改,唯一的裁剪是超过 EVENT_LIMIT 时丢最老的。 */
@@ -106,7 +108,7 @@ interface ProjectStore {
 }
 
 function emptyStore(): ProgressStore {
-  return { schemaVersion: SCHEMA_VERSION, labs: {}, quizzes: {}, events: [] };
+  return { schemaVersion: SCHEMA_VERSION, appliedMigrations: [], labs: {}, quizzes: {}, events: [] };
 }
 
 function emptyProjectStore(): ProjectStore {
@@ -127,6 +129,7 @@ function migrateV1ToV2(raw: ProgressStore): ProgressStore {
 
   return {
     schemaVersion: EVENT_SCHEMA_VERSION,
+    appliedMigrations: raw.appliedMigrations ?? [],
     labs,
     quizzes: raw.quizzes ?? {},
     events: events.slice(-EVENT_LIMIT),
@@ -152,6 +155,7 @@ function snapshotId(when: Date): string {
 export class ProgressTracker {
   private store: ProgressStore;
   private projectStore: ProjectStore;
+  private currentProjects = new Map<string, ProjectCurrentState>();
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this.store = this.load();
@@ -165,6 +169,7 @@ export class ProgressTracker {
     if (raw.schemaVersion === SCHEMA_VERSION || raw.schemaVersion === EVENT_SCHEMA_VERSION) {
       return {
         schemaVersion: raw.schemaVersion,
+        appliedMigrations: raw.appliedMigrations ?? [],
         labs: raw.labs ?? {},
         quizzes: raw.quizzes ?? {},
         events: raw.events ?? [],
@@ -207,25 +212,31 @@ export class ProgressTracker {
    * 旧源码快照不移动，HistoryEntry.snapshot 继续指向原来的文件。
    */
   async migrateLabKeys(labs: readonly LabEntry[]): Promise<void> {
+    const idAliases = ch04IdAliases(labs, this.store.appliedMigrations);
+    const renumbered = remapRecordKeys(this.store.labs, idAliases, mergeLabProgress);
+    const renumberedEvents = remapEventKeys(this.store.events, idAliases);
     const aliases = labs.flatMap((lab) =>
       [lab.name, ...lab.legacyNames].map((name) => ({ id: lab.id, name })),
     );
-    const program = remapRecordKeys(this.store.labs, aliases, mergeLabProgress);
+    const program = remapRecordKeys(renumbered.records, aliases, mergeLabProgress);
     const quiz = remapRecordKeys(this.store.quizzes, aliases, mergeQuizProgress);
     const project = remapRecordKeys(this.projectStore.projects, aliases, mergeProjectProgress);
-    const activity = remapEventKeys(this.store.events, aliases);
-    const changed = program.changed || quiz.changed || project.changed || activity.changed || this.store.schemaVersion !== SCHEMA_VERSION;
+    const activity = remapEventKeys(renumberedEvents.events, aliases);
+    const changed = idAliases.length > 0 || program.changed || quiz.changed || project.changed || activity.changed || this.store.schemaVersion !== SCHEMA_VERSION;
     if (!changed) return;
 
     await this.context.globalState.update(`${STATE_KEY}.backup.v${this.store.schemaVersion}.${Date.now()}`, this.store);
-    this.store = {
+    const nextStore: ProgressStore = {
       schemaVersion: SCHEMA_VERSION,
+      appliedMigrations: idAliases.length > 0 ? [...this.store.appliedMigrations, CH04_MIGRATION] : this.store.appliedMigrations,
       labs: program.records,
       quizzes: quiz.records,
       events: activity.events,
     };
+    await this.context.globalState.update(STATE_KEY, nextStore);
+    this.store = nextStore;
     this.projectStore = { schemaVersion: 1, projects: project.records };
-    await Promise.all([this.persist(), this.persistProjects()]);
+    await this.persistProjects();
   }
 
   /**
@@ -259,7 +270,22 @@ export class ProgressTracker {
   }
 
   getProject(labId: string): ProjectProgress | undefined {
-    return this.projectStore.projects[labId];
+    const stored = this.projectStore.projects[labId];
+    const current = this.currentProjects.get(labId);
+    if (!current) return stored ? { ...stored, currentUnknown: true } : undefined;
+    return { ...stored, submissionCount: stored?.submissionCount ?? 0,
+      automatedScore: current.automatedScore, automatedMax: current.automatedMax,
+      manualPending: current.manualPending, provisionalTotal: current.provisionalTotal,
+      total: current.total, automatedFull: current.automatedFull, internalError: current.internalError,
+      current, currentUnknown: false };
+  }
+
+  setProjectCurrent(labId: string, current: ProjectCurrentState): void {
+    this.currentProjects.set(labId, current);
+  }
+
+  invalidateProjectCurrent(labId: string): void {
+    this.currentProjects.delete(labId);
   }
 
   async recordQuizAnswer(
@@ -317,7 +343,7 @@ export class ProgressTracker {
     return labs.filter((lab) => {
       if (lab.type === "quiz") return this.store.quizzes[lab.id]?.passed;
       if (lab.type === "project") {
-        const project = this.projectStore.projects[lab.id];
+        const project = this.getProject(lab.id);
         return project ? projectProgressPassed(project) : false;
       }
       return this.store.labs[lab.id]?.passed;
@@ -409,14 +435,16 @@ export class ProgressTracker {
     };
 
     progress.submissionCount += 1;
-    progress.automatedScore = result.automatedScore;
-    progress.automatedMax = result.automatedMax;
-    progress.manualPending = result.manualPending;
-    progress.provisionalTotal = result.provisionalTotal;
-    progress.total = result.total;
-    progress.automatedFull = result.automatedFull;
-    progress.internalError = result.internalError;
-    progress.lastSubmission = summarizeProjectSubmission(result, at);
+    const aggregate = result.current ?? result;
+    progress.automatedScore = aggregate.automatedScore;
+    progress.automatedMax = aggregate.automatedMax;
+    progress.manualPending = aggregate.manualPending;
+    progress.provisionalTotal = aggregate.provisionalTotal;
+    progress.total = aggregate.total;
+    progress.automatedFull = aggregate.automatedFull;
+    progress.internalError = aggregate.internalError;
+    progress.lastSubmission = summarizeProjectSubmission({ ...result, ...aggregate, tasks: result.tasks }, at);
+    if (result.current) this.setProjectCurrent(lab.id, result.current);
 
     this.projectStore.projects[lab.id] = progress;
     this.appendEvent({ at, kind: "submit", labName: lab.id, labType: "project" });
@@ -425,7 +453,7 @@ export class ProgressTracker {
     }
 
     await Promise.all([this.persist(), this.persistProjects()]);
-    return progress;
+    return this.getProject(lab.id)!;
   }
 
   /** 把当前 student 源码复制到快照目录，返回相对 globalStorage 的路径。 */
@@ -459,7 +487,8 @@ export class ProgressTracker {
   }
 
   async resetAll(): Promise<void> {
-    this.store = emptyStore();
+    this.currentProjects.clear();
+    this.store = { ...emptyStore(), appliedMigrations: this.store.appliedMigrations };
     this.projectStore = emptyProjectStore();
     await Promise.all([this.persist(), this.persistProjects()]);
     await rm(this.submissionsRoot(), { recursive: true, force: true });

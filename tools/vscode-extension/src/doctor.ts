@@ -42,12 +42,12 @@ export async function reportEnvironmentIssues(
  * 一遍没有必要。检查失败时返回 false 阻止提交，并给出平台化的安装指引。
  */
 export class EnvironmentGuard {
-  private verified = false;
+  private verified = new Set<string>();
 
   constructor(private readonly repoRoot: string) {}
 
   async ensureReady(lab: LabEntry): Promise<boolean> {
-    if (this.verified) return true;
+    if (this.verified.has(lab.type)) return true;
 
     let environment: DoctorResult;
     try {
@@ -66,14 +66,15 @@ export class EnvironmentGuard {
       return false;
     }
 
-    this.verified = true;
+    this.verified.add(lab.type);
     return true;
   }
 
   /** 手动重跑检查，并把完整结果显示出来。 */
   async inspect(lab: LabEntry): Promise<void> {
     const environment = await runDoctor(this.repoRoot, lab.relativePath);
-    this.verified = environment.ok;
+    if (environment.ok) this.verified.add(lab.type);
+    else this.verified.delete(lab.type);
 
     if (environment.ok) {
       const compilers = environment.tools

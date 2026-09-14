@@ -365,10 +365,14 @@ $$
 
 | 实验 | 练习内容 |
 | --- | --- |
-| [并查集实现](../../labs/chapter-05/exercise/E-05-12-disjoint-set-union/README.md) | 路径压缩与按大小合并的完整实现 |
-| [动态连通性查询](../../labs/chapter-05/exercise/E-05-13-dynamic-connectivity/README.md) | 增量加边与连通性询问 |
-| [食物链](../../labs/chapter-05/exercise/E-05-14-food-chain-dsu/README.md) | 带权并查集：用相对关系维护多类别约束 |
-| [银河英雄传说](../../labs/chapter-05/exercise/E-05-15-galaxy-heroes-dsu/README.md) | 带权并查集：在压缩路径时同步维护距离 |
+| [并查集实现](../../labs/chapter-05/exercise/E-05-18-disjoint-set-union/README.md) | 路径压缩与按大小合并的完整实现 |
+| [动态连通性查询](../../labs/chapter-05/exercise/E-05-19-dynamic-connectivity/README.md) | 增量加边与连通性询问 |
+| [食物链](../../labs/chapter-05/exercise/E-05-20-food-chain-dsu/README.md) | 带权并查集：用相对关系维护多类别约束 |
+| [银河英雄传说](../../labs/chapter-05/exercise/E-05-21-galaxy-heroes-dsu/README.md) | 带权并查集：在压缩路径时同步维护距离 |
+| [亲戚](../../labs/chapter-05/exercise/E-05-22-relatives-dsu/README.md) | 关系传递的朴素应用，路径压缩与按大小合并 |
+| [冗余连接](../../labs/chapter-05/exercise/E-05-23-redundant-connection/README.md) | 找到使树成环的最后一条边 |
+| [关押罪犯](../../labs/chapter-05/exercise/E-05-24-prison-enemy-dsu/README.md) | 扩展域并查集：把“必须分开”化为“属于同一对立域” |
+| [星球大战](../../labs/chapter-05/exercise/E-05-25-planet-war-reverse-dsu/README.md) | 倒序处理删除操作，转化为逐个加边的并查集 |
 
 ## 小结与自测
 

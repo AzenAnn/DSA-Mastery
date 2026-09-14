@@ -1,0 +1,485 @@
+[
+  {
+    "command": "validate",
+    "exitCode": 0,
+    "report": {
+      "reportVersion": 1,
+      "command": "validate",
+      "ok": true,
+      "lab": {
+        "id": "04E16",
+        "path": "C:\\Users\\28962\\AppData\\Local\\Temp\\dsa-ch04-student-pack-3TnXay",
+        "type": "program",
+        "schemaVersion": 1
+      },
+      "cases": 20
+    }
+  },
+  {
+    "command": "build",
+    "exitCode": 0,
+    "report": {
+      "reportVersion": 1,
+      "command": "build",
+      "ok": true,
+      "lab": {
+        "id": "04E16",
+        "path": "C:\\Users\\28962\\AppData\\Local\\Temp\\dsa-ch04-student-pack-3TnXay",
+        "type": "program",
+        "schemaVersion": 1
+      },
+      "compilation": {
+        "ok": true,
+        "compiler": {
+          "command": "g++",
+          "family": "gnu"
+        },
+        "command": "g++",
+        "args": [
+          "-std=c++17",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-I",
+          "C:\\Users\\28962\\AppData\\Local\\Temp\\dsa-ch04-student-pack-3TnXay\\support",
+          "C:\\Users\\28962\\AppData\\Local\\Temp\\dsa-ch04-student-pack-3TnXay\\student\\main.cpp",
+          "C:\\Users\\28962\\AppData\\Local\\Temp\\dsa-ch04-student-pack-3TnXay\\support\\runner.cpp",
+          "-o",
+          "C:\\Users\\28962\\AppData\\Local\\Temp\\dsa-ch04-student-pack-3TnXay\\.lab-cache\\bin\\student.exe"
+        ],
+        "executable": "C:\\Users\\28962\\AppData\\Local\\Temp\\dsa-ch04-student-pack-3TnXay\\.lab-cache\\bin\\student.exe",
+        "stdout": "",
+        "stderr": "",
+        "durationMs": 1296.4064
+      }
+    }
+  },
+  {
+    "command": "score",
+    "exitCode": 1,
+    "report": {
+      "reportVersion": 1,
+      "command": "score",
+      "ok": true,
+      "lab": {
+        "id": "04E16",
+        "path": "C:\\Users\\28962\\AppData\\Local\\Temp\\dsa-ch04-student-pack-3TnXay",
+        "type": "program",
+        "schemaVersion": 1
+      },
+      "result": {
+        "target": "student",
+        "verdict": "WA",
+        "score": 5,
+        "maxScore": 100,
+        "cases": [
+          {
+            "id": "001-sample",
+            "tags": [
+              "sample"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 315.4242999999999,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "1",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "002-empty",
+            "tags": [
+              "boundary"
+            ],
+            "verdict": "AC",
+            "points": 5,
+            "maxPoints": 5,
+            "durationMs": 36.53729999999996,
+            "stderr": "",
+            "comparison": {
+              "equal": true
+            }
+          },
+          {
+            "id": "003-single-negative",
+            "tags": [
+              "boundary"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 24.116899999999987,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "1",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "004-only-left",
+            "tags": [
+              "boundary"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 23.973600000000033,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "2",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "005-only-right",
+            "tags": [
+              "boundary"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 23.60459999999989,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "2",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "006-four-nodes",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 21.912700000000086,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "2",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "007-left-chain",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 22.99389999999994,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "4",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "008-right-chain",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 23.874399999999923,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "1",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "009-zigzag",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 23.004599999999982,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "5",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "010-deep-right-left",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 22.07179999999994,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "5",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "011-duplicate-values",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 25.719900000000052,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "15",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "012-zeros",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 23.766200000000026,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "2",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "013-negative-values",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 23.137100000000146,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "20",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "014-cancellation",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 24.280899999999974,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "34",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "015-noninteger-averages",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 22.567299999999932,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "3",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "016-sparse-random",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 22.7034000000001,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "41",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "017-wide-random",
+            "tags": [
+              "regression"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 26.513200000000097,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "110",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "018-deep-boundary",
+            "tags": [
+              "stress"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 48.75359999999978,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "4185",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "019-wide-boundary",
+            "tags": [
+              "stress"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 49.746200000000044,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "3337",
+                "actual": "0"
+              }
+            }
+          },
+          {
+            "id": "020-mixed-boundary",
+            "tags": [
+              "stress"
+            ],
+            "verdict": "WA",
+            "points": 0,
+            "maxPoints": 5,
+            "durationMs": 67.48379999999997,
+            "stderr": "",
+            "comparison": {
+              "equal": false,
+              "difference": {
+                "kind": "token",
+                "index": 1,
+                "expected": "422",
+                "actual": "0"
+              }
+            }
+          }
+        ],
+        "compilation": {
+          "ok": true,
+          "compiler": {
+            "command": "g++",
+            "family": "gnu"
+          },
+          "durationMs": 922.3773000000001,
+          "stdout": "",
+          "stderr": ""
+        }
+      }
+    }
+  }
+]

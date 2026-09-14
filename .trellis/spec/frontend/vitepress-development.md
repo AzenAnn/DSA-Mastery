@@ -121,6 +121,7 @@ createBuildTimeDiagramsPlugin({
 
 - 图源只能写在 Markdown 的纯 ```` ```graphviz ```` fenced block 中；插件按完整 info string 匹配，不支持 `[filename]` 后缀。
 - `diagram id` 只能使用稳定 ASCII 标识；caption 描述教学关系。SVG 缓存位于 `public/diagrams/`，最终资产位于 `dist/pages/diagrams/`。
+- 紧跟围栏的注释使用 `<!-- diagram id="stable-id" caption="中文图注" -->`。插件 1.3.1 不识别 `caption:`；验收必须同时检查图片加载和 `.vpd-diagram-caption` 可见，不能仅检查源文件注释存在。
 - `KROKI_SERVER_URL` 可选；未设置时使用 `https://kroki.io`。`publicPath` 必须包含规范化 Pages base。
 - DOT 若固定使用深色文字或边线，画布必须使用不透明浅色背景（当前基线为 `bgcolor="#ffffff"`）；禁止同时使用透明画布与固定深色文字，否则暗色主题会让表格外标签失去对比度。只有在全部节点、边和文字都经过浅/暗主题实测可读时才能使用透明画布。
 

@@ -402,9 +402,13 @@ $$
 
 | 实验 | 练习内容 |
 | --- | --- |
-| [最小堆实现](../../labs/chapter-05/exercise/E-05-06-min-heap-implementation/README.md) | 上浮、下沉、插入与删除堆顶的完整实现 |
-| [数据流中位数](../../labs/chapter-05/exercise/E-05-07-median-in-data-stream/README.md) | 用大根堆与小根堆对顶维护动态中位数 |
-| [任务调度器](../../labs/chapter-05/exercise/E-05-08-task-scheduler/README.md) | 用优先队列按优先级与到达序号调度任务 |
+| [最小堆实现](../../labs/chapter-05/exercise/E-05-08-min-heap-implementation/README.md) | 上浮、下沉、插入与删除堆顶的完整实现 |
+| [数据流中位数](../../labs/chapter-05/exercise/E-05-09-median-in-data-stream/README.md) | 用大根堆与小根堆对顶维护动态中位数 |
+| [任务调度器](../../labs/chapter-05/exercise/E-05-10-task-scheduler/README.md) | 用优先队列按优先级与到达序号调度任务 |
+| [前 K 个高频元素](../../labs/chapter-05/exercise/E-05-11-top-k-frequent/README.md) | 哈希计数配合大小为 k 的小根堆 |
+| [吃苹果](../../labs/chapter-05/exercise/E-05-12-eat-apples/README.md) | 按到期日组织的最小堆，逐日贪心 |
+| [可以到达的最远建筑](../../labs/chapter-05/exercise/E-05-13-furthest-building/README.md) | 梯子分配的最优性与堆反悔贪心 |
+| [蚯蚓](../../labs/chapter-05/exercise/E-05-14-earthworms/README.md) | 三个单调队列配合偏移量的惰性堆 |
 
 ## 小结与自测
 

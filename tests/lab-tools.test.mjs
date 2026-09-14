@@ -19,7 +19,7 @@ import {
 import { runProcess } from "../tools/lab/process.mjs";
 import { createLab, THIN_MAKEFILE } from "../tools/lab/scaffold.mjs";
 import { cleanLab, packStudent, previewDiff, refreshExpected } from "../tools/lab/operations.mjs";
-import { classifyCtestExecution, cmakeStandardNumber, projectHasInternalError } from "../tools/lab/project.mjs";
+import { classifyCtestExecution, cmakeStandardNumber, projectHasInternalError, scoreProject } from "../tools/lab/project.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 
@@ -142,6 +142,49 @@ test("project validation rejects bad total weights and missing dependencies", as
   t.after(() => Promise.all([rm(weights, { recursive: true, force: true }), rm(dependency, { recursive: true, force: true })]));
   await assert.rejects(loadLab(weights), (error) => error.code === "TASK_WEIGHTS");
   await assert.rejects(loadLab(dependency), (error) => error.code === "TASK_DEPENDENCY");
+});
+
+test("Project build metadata remains optional and rejects invalid targets and build dependency cycles", async (t) => {
+  const task = { schemaVersion: 1, kind: "ctest", ctest: { tests: [{ name: "unit", points: 100 }] } };
+  const manifest = { schemaVersion: 1, type: "project", language: "cpp", toolchain: { standard: "c++17" }, buildSystem: "cmake",
+    tasks: [{ id: "module", path: "tasks/module", kind: "ctest", weight: 100, dependsOn: [] }] };
+  const root = await fixture(manifest, { "Makefile": THIN_MAKEFILE, "tasks/module/task.json": JSON.stringify(task) });
+  t.after(() => rm(root, { recursive: true, force: true }));
+  assert.equal((await loadLab(root)).tasks[0].config.ctest.buildTargets, undefined);
+  for (const buildTargets of [[], ["--all"], ["one", "one"], ["path/target"]]) {
+    await writeFile(path.join(root, "tasks/module/task.json"), JSON.stringify({ ...task, ctest: { ...task.ctest, buildTargets } }));
+    await assert.rejects(loadLab(root), { code: "SCHEMA_INVALID" });
+  }
+  await writeFile(path.join(root, "tasks/module/task.json"), JSON.stringify(task));
+  manifest.tasks[0].buildDependsOn = ["missing"];
+  await writeFile(path.join(root, "lab.json"), JSON.stringify(manifest));
+  await assert.rejects(loadLab(root), { code: "TASK_DEPENDENCY" });
+  manifest.tasks[0].buildDependsOn = ["module"];
+  await writeFile(path.join(root, "lab.json"), JSON.stringify(manifest));
+  await assert.rejects(loadLab(root), { code: "TASK_CYCLE" });
+});
+
+test("single stdio case feedback cannot replace a full Task grade or complete a manual Project", async (t) => {
+  const root = await fixture({ schemaVersion: 1, type: "project", language: "cpp", toolchain: { standard: "c++17" }, buildSystem: "cmake",
+    tasks: [{ id: "code", path: "code", kind: "stdio", weight: 90, dependsOn: [] }, { id: "report", path: "report", kind: "manual", weight: 10, dependsOn: ["code"] }] }, {
+    "Makefile": THIN_MAKEFILE,
+    "code/task.json": JSON.stringify({ schemaVersion: 1, kind: "stdio", targets: { student: { sources: ["student/main.cpp"] }, solution: { sources: ["student/main.cpp"] } }, judge: { kind: "stdio", cases: "tests/cases.json" } }),
+    "code/student/main.cpp": "#include <iostream>\nint main(){std::cout << 1;}",
+    "code/tests/input.in": "", "code/tests/one.out": "1", "code/tests/two.out": "2",
+    "code/tests/cases.json": JSON.stringify([{ id: "one", input: "tests/input.in", expected: "tests/one.out", points: 50 }, { id: "two", input: "tests/input.in", expected: "tests/two.out", points: 50 }]),
+    "report/task.json": JSON.stringify({ schemaVersion: 1, kind: "manual", checklist: ["review"] }),
+  });
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const lab = await loadLab(root);
+  const whole = await scoreProject(lab);
+  assert.equal(whole.current.automatedScore, 45);
+  const partial = await scoreProject(lab, { taskId: "code", caseId: "one" });
+  assert.equal(partial.automatedFull, true);
+  assert.equal(partial.partial, true);
+  assert.equal(partial.current.automatedScore, 45);
+  assert.equal(partial.current.tasks[0].status, "WA");
+  assert.equal(partial.current.complete, false);
+  assert.equal(partial.current.manualPending, 10);
 });
 
 test("executable labs reject a forked thin Makefile", async (t) => {

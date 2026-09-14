@@ -1,6 +1,6 @@
 import path from "node:path";
 import * as vscode from "vscode";
-import type { ProjectScoreResult, ScoreResult } from "./cli";
+import type { ProjectCurrentState, ProjectCurrentTask, ProjectScoreResult, ScoreResult } from "./cli";
 import type { LoadedTestCase, ProjectLab, ProjectTask, ProgramLab, QuizLab } from "./labIndex";
 import type { LabProgress } from "./progress";
 import type { QuizProgress } from "./progress";
@@ -420,7 +420,7 @@ interface ProjectPanelOptions {
 export function renderProjectPanelHtml(options: ProjectPanelOptions): string {
   const { webview, extensionPath, lab, readmeHtml, progress, nav } = options;
   const cspNonce = nonce();
-  const initialInspectorOpen = Boolean(progress?.lastSubmission);
+  const initialInspectorOpen = Boolean(progress?.lastSubmission || progress?.current);
   const styleUri = webview.asWebviewUri(
     vscode.Uri.file(path.join(extensionPath, "media", "panel.css")),
   );
@@ -430,7 +430,9 @@ export function renderProjectPanelHtml(options: ProjectPanelOptions): string {
   const taskHtml = lab.tasks
     .map((task) => renderProjectTask(task, lab.studentFiles.filter((file) => file.taskId === task.id)))
     .join("\n");
-  const resultHtml = progress?.lastSubmission
+  const resultHtml = progress?.current
+    ? renderCurrentDetails(progress.current)
+    : progress?.lastSubmission
     ? renderStoredProjectResult(progress.lastSubmission)
     : '<p class="inspector-empty">提交后，Project 的自动判题结果会按 task、case 和 CTest 展示在这里。</p>';
 
@@ -447,10 +449,13 @@ export function renderProjectPanelHtml(options: ProjectPanelOptions): string {
 <body class="project-body">
 <div class="lab-page project-page">
 <div class="project-scroll-region">
-${renderProjectHeader(lab, progress)}
+<div id="project-header">${renderProjectHeader(lab, progress)}</div>
 <div class="lab-workspace project-workspace${initialInspectorOpen ? "" : " is-inspector-collapsed"}">
   <main class="lab-reading-surface" aria-label="Project 题面与任务">
-    <article class="readme">${readmeHtml}</article>
+    <div id="project-current">${renderProjectCurrentHtml(progress?.current)}</div>
+    <nav class="project-task-nav" aria-label="Task 导航">${lab.tasks.map((task) => `<a href="#project-task-${escapeHtml(task.id)}">${escapeHtml(task.id)}</a>`).join("")}</nav>
+    <details class="project-readme"><summary>项目题面</summary><article class="readme">${readmeHtml}</article></details>
+    <div class="project-support-files">${(lab.supportFiles ?? []).filter((file) => file === "CMakeLists.txt" || file === "CMakePresets.json" || file === "lab.json" || file.startsWith("contracts/")).map((file) => `<button class="project-file-button" data-project-file="${escapeHtml(file)}" type="button">${escapeHtml(file)}</button>`).join("")}</div>
     <section class="project-task-overview" aria-labelledby="project-task-title">
       <div class="project-section-heading"><span class="project-eyebrow">PROJECT TASK GRAPH</span><h2 id="project-task-title">任务与学生文件</h2></div>
       ${taskHtml}
@@ -472,6 +477,21 @@ const inspectorToggle = document.getElementById("project-inspector-toggle");
 const actionbar = document.querySelector(".lab-actionbar");
 const projectPage = document.querySelector(".project-page");
 const readingSurface = document.querySelector(".lab-reading-surface");
+let busy = false;
+function setBusy(value) {
+  busy = value;
+  submitButton.disabled = value;
+  document.querySelectorAll("[data-task-submit]").forEach(button => { button.disabled = value; });
+  submitButton.textContent = value ? "测评中…" : "测评整个 Project";
+}
+document.addEventListener("click", event => {
+  const submit = event.target.closest("[data-task-submit]");
+  if (submit && !busy) vscodeApi.postMessage({ type: "submit", taskId: submit.dataset.taskSubmit });
+  const readme = event.target.closest("[data-project-readme]");
+  if (readme) vscodeApi.postMessage({ type: "openProjectReadme", filePath: readme.dataset.projectReadme });
+  if (event.target.closest("[data-project-refresh]") && !busy) vscodeApi.postMessage({ type: "refreshProject" });
+  if (event.target.closest("[data-project-report]")) vscodeApi.postMessage({ type: "openProjectReport" });
+});
 
 function syncActionbarLayout() {
   if (!actionbar || !projectPage || !readingSurface) return;
@@ -524,24 +544,34 @@ for (const id of ["nav-prev", "nav-next"]) {
 window.addEventListener("message", event => {
   const message = event.data;
   if (message.type === "submitting") {
+    setBusy(true);
     setInspectorOpen(true);
     submitButton.disabled = true;
     submitButton.textContent = "判题中…";
     result.innerHTML = '<p class="pending">正在保存学生文件，并运行 Project 的自动任务…</p>';
   } else if (message.type === "projectResult") {
+    setBusy(false);
     setInspectorOpen(true);
     submitButton.disabled = false;
     submitButton.textContent = "提交 Project";
     result.innerHTML = message.html;
+    if (message.currentHtml) document.getElementById("project-current").innerHTML = message.currentHtml;
+    if (message.headerHtml) document.getElementById("project-header").innerHTML = message.headerHtml;
     result.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
   } else if (message.type === "projectSubmitFailed") {
+    setBusy(false);
     setInspectorOpen(true);
     submitButton.disabled = false;
     submitButton.textContent = "提交 Project";
-    result.innerHTML = '<p class="error">提交失败：' + message.message + '</p>';
+    result.textContent = '提交失败：' + message.message;
   } else if (message.type === "projectSubmitAborted") {
+    setBusy(false);
     submitButton.disabled = false;
     submitButton.textContent = "提交 Project";
+  } else if (message.type === "projectCurrent" && !busy) {
+    document.getElementById("project-current").innerHTML = message.html;
+    document.getElementById("project-header").innerHTML = message.headerHtml;
+    result.innerHTML = message.detailsHtml || '<p>结果状态已更新，查看当前任务表。</p>';
   }
 });
 setInspectorOpen(${initialInspectorOpen});
@@ -550,14 +580,16 @@ setInspectorOpen(${initialInspectorOpen});
 </html>`;
 }
 
-function renderProjectHeader(lab: ProjectLab, progress: ProjectProgress | undefined): string {
+export function renderProjectHeader(lab: ProjectLab, progress: ProjectProgress | undefined): string {
   const meta = [
     lab.difficulty && `难度 ${escapeHtml(lab.difficulty)}`,
     lab.duration && `预计 ${escapeHtml(lab.duration)}`,
     `题号 ${escapeHtml(lab.id)}`,
     `第 ${lab.chapter} 章 · ${escapeHtml(lab.chapterTitle)}`,
   ].filter(Boolean).join(" · ");
-  const badge = !progress || progress.submissionCount === 0
+  const badge = progress?.currentUnknown
+    ? '<span class="badge attempted">历史记录 · 当前代码待测评</span>'
+    : !progress || (progress.submissionCount === 0 && !progress.current)
     ? '<span class="badge fresh">Project · 未提交</span>'
     : progress.internalError
       ? '<span class="badge attempted">评测内部错误</span>'
@@ -589,9 +621,11 @@ function renderProjectTask(task: ProjectTask, files: ProjectLab["studentFiles"])
     details = `<div class="project-manual"><span class="project-pending">PENDING · 待人工</span><ul>${checklist.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>`;
   }
 
-  return `<article class="project-task-card project-task-${task.kind}">
+  return `<article id="project-task-${escapeHtml(task.id)}" class="project-task-card project-task-${task.kind}">
   <header class="project-task-header"><div><span class="project-task-id">${escapeHtml(task.id)}</span><span class="project-task-kind">${kindLabel}</span></div><strong>${formatNumber(task.weight)} 分</strong></header>
   <dl class="project-task-meta"><div><dt>路径</dt><dd><code>${escapeHtml(task.relativePath)}</code></dd></div><div><dt>依赖</dt><dd>${dependencies}</dd></div></dl>
+  <p class="project-build-targets">源码依赖：${escapeHtml((task.buildDependsOn ?? []).join(", ") || (task.buildDependsOn ? "无" : "旧配置未显式声明"))} · 构建目标：${escapeHtml(task.buildTargets?.join(", ") ?? (task.kind === "ctest" ? "旧配置整工程构建" : task.kind))}</p>
+  <div class="project-task-actions">${task.readmePath ? `<button type="button" data-project-readme="${escapeHtml(task.readmePath)}">打开任务题面</button>` : ""}${task.kind !== "manual" ? `<button type="button" data-task-submit="${escapeHtml(task.id)}">测评 ${escapeHtml(task.id)}</button>` : ""}<button type="button" class="project-file-button" data-project-file="${escapeHtml(task.relativePath)}/task.json">task.json</button></div>
   <div class="project-task-files"><h4>学生文件</h4>${fileHtml}</div>
   ${details}
 </article>`;
@@ -612,7 +646,7 @@ function renderProjectToolbar(nav: PanelNav): string {
   const next = nav.next
     ? `<button id="nav-next" class="lab-button lab-button-secondary lab-button-nav" type="button" data-target="${escapeHtml(nav.next.name)}" title="${escapeHtml(nav.next.title)}">下一题</button>`
     : '<button id="nav-next" class="lab-button lab-button-secondary lab-button-nav" type="button" disabled title="已经是最后一题">下一题</button>';
-  return `<nav class="lab-actionbar" aria-label="Project 操作"><div class="lab-actionbar-main"><button id="submit" class="lab-button lab-button-primary" type="button">提交 Project</button><button id="open-source" class="lab-button lab-button-secondary" type="button">选择学生文件</button></div><div class="lab-actionbar-nav">${prev}${next}</div></nav>`;
+  return `<nav class="lab-actionbar" aria-label="Project 操作"><div class="lab-actionbar-main"><button id="submit" class="lab-button lab-button-primary" type="button">测评整个 Project</button><button id="open-source" class="lab-button lab-button-secondary" type="button">选择学生文件</button></div><div class="lab-actionbar-nav">${prev}${next}</div></nav>`;
 }
 
 function renderProjectResultTask(task: ProjectTaskSubmissionSummary): string {
@@ -645,11 +679,11 @@ function renderProjectResultTask(task: ProjectTaskSubmissionSummary): string {
     const build = task.buildFailed
       ? `<p class="project-build-status">构建失败（${task.buildPhase === "configure" ? "配置" : "编译"}），CTest 未运行。</p>`
       : "";
-    nested = `${build}${rows ? `<table class="cases-table project-result-table"><thead><tr><th>CTest</th><th>结果</th><th>耗时</th><th>得分</th></tr></thead><tbody>${rows}</tbody></table>` : ""}`;
+    nested = `${build}${task.blockedBy?.length ? `<p>依赖构建阻塞：${escapeHtml(task.blockedBy.join(", "))}</p>` : ""}${task.diagnostic ? `<pre class="diagnostic project-diagnostic">${escapeHtml(task.diagnostic)}</pre>` : ""}${rows ? `<table class="cases-table project-result-table"><thead><tr><th>CTest</th><th>结果</th><th>耗时</th><th>得分</th></tr></thead><tbody>${rows}</tbody></table>` : ""}`;
   } else {
     nested = `<ul class="project-result-checklist">${(task.checklist ?? []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
   }
-  return `<section class="project-task-result"><div class="project-task-result-heading"><code>${escapeHtml(task.id)}</code>${score}</div>${nested}</section>`;
+  return `<section class="project-task-result"><div class="project-task-result-heading"><code>${escapeHtml(task.id)}</code>${score}</div>${task.kind !== "manual" ? `<button type="button" data-task-submit="${escapeHtml(task.id)}">重新测评 ${escapeHtml(task.id)}</button>` : ""}${task.status === "STALE" ? `<p>以下为历史诊断（${escapeHtml(task.previousStatus ?? "未记录")}），当前输入需要重新测评。</p>` : ""}${nested}</section>`;
 }
 
 function renderProjectResultSummary(
@@ -670,11 +704,31 @@ function renderProjectResultSummary(
 }
 
 function renderStoredProjectResult(summary: ProjectSubmissionSummary): string {
-  return renderProjectResultSummary(summary, undefined);
+  return `<p>历史提交摘要，尚未确认当前代码。</p>${renderProjectResultSummary({ ...summary, automatedFull: false }, undefined)}`;
+}
+
+function currentTaskSummary(task: ProjectCurrentTask): ProjectTaskSubmissionSummary {
+  const build = task.build?.build ?? task.build?.configure;
+  return { ...task, cases: task.judge?.cases,
+    buildFailed: task.build ? !task.build.ok : undefined, buildPhase: task.build?.phase,
+    diagnostic: task.judge ? (task.judge.compilation.stderr || task.judge.compilation.stdout)
+      : task.build && !task.build.ok ? `${build?.stdout ?? ""}\n${build?.stderr ?? ""}` : undefined };
+}
+
+export function renderCurrentDetails(current: ProjectCurrentState): string {
+  return `<button type="button" data-project-report>打开完整测评记录</button>${current.tasks.map((task) => renderProjectResultTask(currentTaskSummary(task))).join("")}`;
+}
+
+export function renderProjectCurrentHtml(current?: ProjectCurrentState): string {
+  if (!current) return '<p class="project-current-unknown">当前代码尚未核验。<button type="button" data-project-refresh>刷新状态</button></p>';
+  const statusLabels: Record<string, string> = { AC: "通过", WA: "测试失败", CE: "编译错误", BLOCKED: "依赖阻塞", UNASSESSED: "未测评", STALE: "需要重测", PENDING: "待人工", IE: "工具错误", TLE: "超时", RE: "运行错误", OLE: "输出超限" };
+  const heading = current.complete ? "Project 完成" : current.automatedFull && current.manualPending ? "自动通过 · 待人工" : "当前工程未完成";
+  return `<section class="project-current-overview"><h2>${heading}</h2><p>当前有效自动分 <strong>${formatNumber(current.automatedScore)}/${formatNumber(current.automatedMax)}</strong> · 人工待评 ${formatNumber(current.manualPending)}</p><div class="project-table-scroll"><table class="project-current-table"><thead><tr><th>Task</th><th>当前状态</th><th>有效分</th><th>最近历史分</th><th>操作</th></tr></thead><tbody>${current.tasks.map((task) => `<tr data-current-task="${escapeHtml(task.id)}" data-status="${task.status}"><td><a href="#project-task-${escapeHtml(task.id)}">${escapeHtml(task.id)}</a></td><td>${statusLabels[task.status] ?? task.status}${task.unsaved ? " · 未保存" : ""}</td><td>${formatNumber(task.weightedScore)}/${task.weight}</td><td>${task.historicalScore === undefined ? "未记录" : `${formatNumber(task.historicalScore)}/${task.weight}`}</td><td>${task.kind === "manual" ? "PENDING" : `<button type="button" data-task-submit="${escapeHtml(task.id)}">${["STALE", "WA", "CE", "BLOCKED"].includes(task.status) ? "重新测评" : "测评"}</button>`}</td></tr>`).join("")}</tbody></table></div><button type="button" data-project-refresh>刷新状态</button></section>`;
 }
 
 /** 一次 Project 提交的完整嵌套结果。 */
 export function renderProjectResultHtml(result: ProjectScoreResult, progress: ProjectProgress): string {
+  if (result.current) return `<p>本次测评：${escapeHtml(result.selectedTaskId ?? "整个 Project")} · 第 ${progress.submissionCount} 次提交</p>${renderCurrentDetails(result.current)}`;
   return renderProjectResultSummary({ ...result, at: new Date().toISOString(), tasks: result.tasks.map((task) => {
     if (task.kind === "manual") return { ...task, checklist: [...task.checklist] };
     if (task.kind === "stdio") return {

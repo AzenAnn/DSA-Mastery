@@ -1,10 +1,10 @@
-import { access } from "node:fs/promises";
+import { access, rm } from "node:fs/promises";
 import path from "node:path";
 import * as vscode from "vscode";
-import { CliError } from "./cli";
+import { CliError, readProjectCurrent } from "./cli";
 import { EnvironmentGuard } from "./doctor";
 import type { LabEntry } from "./labIndex";
-import { LabPanel } from "./panel";
+import { LabPanel, projectDirtyFiles } from "./panel";
 import { ProgressTracker, type HistoryEntry } from "./progress";
 import { StatsPanel } from "./statsPanel";
 import { LabTreeProvider, type TreeNode } from "./tree";
@@ -77,7 +77,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       await LabPanel.show(lab, panelDeps);
     }),
 
-    vscode.commands.registerCommand("dsaMastery.submit", async (argument?: unknown) => {
+    vscode.commands.registerCommand("dsaMastery.submit", async (argument?: unknown, taskId?: string) => {
       const lab = await resolveLab(argument);
       if (!lab) {
         await vscode.window.showWarningMessage("没有可提交的题目。请先打开一道题。");
@@ -85,7 +85,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       }
       // 统一走面板提交，保证结果有地方显示。
       await LabPanel.show(lab, panelDeps);
-      await LabPanel.submitActive();
+      if (LabPanel.activeLab()?.id === lab.id) await LabPanel.submitActive(taskId);
     }),
 
     vscode.commands.registerCommand("dsaMastery.refreshTree", async () => {
@@ -125,12 +125,52 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       );
       if (choice !== "清空") return;
       await progress.resetAll();
+      for (const lab of tree.allLabs().filter((entry) => entry.type === "project")) {
+        await rm(path.join(lab.labPath, ".lab-cache", "project-results-student.json"), { force: true });
+      }
       tree.refreshDecorations();
       await vscode.window.showInformationMessage("做题进度已清空。");
     }),
   );
 
   await tree.refresh();
+  const revisions = new Map<string, number>();
+  const timers = new Map<string, ReturnType<typeof setTimeout>>();
+  const refreshProject = (lab: LabEntry) => {
+    if (lab.type !== "project") return;
+    const revision = (revisions.get(lab.id) ?? 0) + 1;
+    revisions.set(lab.id, revision);
+    progress.invalidateProjectCurrent(lab.id);
+    tree.refreshDecorations();
+    LabPanel.refreshCurrent(lab.id);
+    clearTimeout(timers.get(lab.id));
+    timers.set(lab.id, setTimeout(async () => {
+      timers.delete(lab.id);
+      if (!vscode.workspace.isTrusted) return;
+      try {
+        const current = await readProjectCurrent(repoRoot, lab.relativePath, projectDirtyFiles(lab));
+        if (revisions.get(lab.id) !== revision) return;
+        progress.setProjectCurrent(lab.id, current);
+        tree.refreshDecorations();
+        LabPanel.refreshCurrent(lab.id);
+      } catch { /* Keep historical results, but never count an unchecked current pass. */ }
+    }, 250));
+  };
+  const changed = (uri: vscode.Uri) => {
+    const relative = path.relative(repoRoot, uri.fsPath).split(path.sep).join("/");
+    if (relative.split("/").some((part) => ["solution", "node_modules", ".git"].includes(part))) return;
+    if (relative.includes("/.lab-cache/") && !relative.endsWith("/project-results-student.json")) return;
+    for (const lab of tree.allLabs()) {
+      if (isWithinDirectory(lab.labPath, uri.fsPath) || relative.startsWith("tools/lab/") || relative.startsWith("schemas/")) refreshProject(lab);
+    }
+  };
+  const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(repoRoot, "**/*"));
+  context.subscriptions.push(watcher, watcher.onDidChange(changed), watcher.onDidCreate(changed), watcher.onDidDelete(changed),
+    vscode.workspace.onDidChangeTextDocument((event) => changed(event.document.uri)),
+    vscode.workspace.onDidSaveTextDocument((document) => changed(document.uri)),
+    vscode.workspace.onDidGrantWorkspaceTrust(() => tree.allLabs().forEach(refreshProject)),
+    { dispose: () => { for (const timer of timers.values()) clearTimeout(timer); } });
+  tree.allLabs().forEach(refreshProject);
 }
 
 /** 列出某题的提交历史，可打开任一次提交的源码快照，或与当前代码对比。 */

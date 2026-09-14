@@ -1,0 +1,21 @@
+digraph AlternatingSplit {
+  graph [rankdir=LR, bgcolor="white", pad=0.16, nodesep=0.22, ranksep=0.16, dpi=160];
+  node [shape=box, fontname="Arial", fontsize=12, width=0.36, height=0.32, margin="0.06,0.06", color="#71808b", style=filled, fillcolor="#f5f7f9"];
+  edge [color="#65727c", arrowsize=0.7];
+  C [fillcolor="#e8edf3"];
+  ca1 [label="a1", fillcolor="#e3f2e9"];
+  cb1 [label="b1", fillcolor="#e4edfa"];
+  ca2 [label="a2", fillcolor="#e3f2e9"];
+  cb2 [label="b2", fillcolor="#e4edfa"];
+  ca3 [label="a3", fillcolor="#e3f2e9"];
+  cb3 [label="b3", fillcolor="#e4edfa"];
+  C -> ca1 -> cb1 -> ca2 -> cb2 -> ca3 -> cb3;
+  A [fillcolor="#cce8d7"];
+  a1 [fillcolor="#e3f2e9"]; a2 [fillcolor="#e3f2e9"]; a3 [fillcolor="#e3f2e9"];
+  A -> a1 -> a2 -> a3;
+  B [fillcolor="#ccdff9"];
+  b3 [fillcolor="#e4edfa"]; b2 [fillcolor="#e4edfa"]; b1 [fillcolor="#e4edfa"];
+  B -> b3 -> b2 -> b1;
+  { rank=same; C; A; B; }
+  C -> A -> B [style=invis];
+}

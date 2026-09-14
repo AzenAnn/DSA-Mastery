@@ -1,0 +1,20 @@
+8 19
+put 3 30
+put 11 31
+put 19 32
+get 19
+remove 3
+remove 11
+get 19
+get 11
+put 3 33
+get 3
+get 11
+put 27 34
+get 27
+remove 19
+get 19
+put 3 35
+get 3
+get 5
+get 7

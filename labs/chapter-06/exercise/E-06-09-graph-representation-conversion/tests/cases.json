@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-u-m-basic",
+    "input": "tests/002-u-m-basic.in",
+    "expected": "tests/002-u-m-basic.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "003-u-l-basic",
+    "input": "tests/003-u-l-basic.in",
+    "expected": "tests/003-u-l-basic.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-u-e-empty",
+    "input": "tests/004-u-e-empty.in",
+    "expected": "tests/004-u-e-empty.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-u-m-empty",
+    "input": "tests/005-u-m-empty.in",
+    "expected": "tests/005-u-m-empty.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-u-l-empty",
+    "input": "tests/006-u-l-empty.in",
+    "expected": "tests/006-u-l-empty.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-u-e-cycle",
+    "input": "tests/007-u-e-cycle.in",
+    "expected": "tests/007-u-e-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-u-m-cycle",
+    "input": "tests/008-u-m-cycle.in",
+    "expected": "tests/008-u-m-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-u-l-cycle",
+    "input": "tests/009-u-l-cycle.in",
+    "expected": "tests/009-u-l-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-d-e-basic",
+    "input": "tests/010-d-e-basic.in",
+    "expected": "tests/010-d-e-basic.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-d-m-basic",
+    "input": "tests/011-d-m-basic.in",
+    "expected": "tests/011-d-m-basic.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-d-l-basic",
+    "input": "tests/012-d-l-basic.in",
+    "expected": "tests/012-d-l-basic.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-d-e-empty",
+    "input": "tests/013-d-e-empty.in",
+    "expected": "tests/013-d-e-empty.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-d-m-empty",
+    "input": "tests/014-d-m-empty.in",
+    "expected": "tests/014-d-m-empty.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-d-l-empty",
+    "input": "tests/015-d-l-empty.in",
+    "expected": "tests/015-d-l-empty.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-d-e-cycle",
+    "input": "tests/016-d-e-cycle.in",
+    "expected": "tests/016-d-e-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-d-m-cycle",
+    "input": "tests/017-d-m-cycle.in",
+    "expected": "tests/017-d-m-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-d-l-cycle",
+    "input": "tests/018-d-l-cycle.in",
+    "expected": "tests/018-d-l-cycle.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-stress-u-m-complete",
+    "input": "tests/019-stress-u-m-complete.in",
+    "expected": "tests/019-stress-u-m-complete.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-stress-d-l-complete",
+    "input": "tests/020-stress-d-l-complete.in",
+    "expected": "tests/020-stress-d-l-complete.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

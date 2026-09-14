@@ -4,7 +4,7 @@ description: "通过交互式网格理解 A* 如何结合实际代价与启发�
 order: 4
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-09"
+updated: "2026-09-14"
 contributors: ["Azen"]
 status: "draft"
 ---
@@ -77,3 +77,12 @@ $$
   }
 }
 </style>
+
+
+## 代码题练习
+
+按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
+
+- [T23 · 07E26 · A* 网格寻路](../../labs/chapter-07/exercise/E-07-26-astar-grid/README.md)
+- [T24 · 07E27 · 启发式函数有效性判定](../../labs/chapter-07/exercise/E-07-27-heuristic-validation/README.md)
+- [T25 · 07E28 · 八数码问题（A*）](../../labs/chapter-07/exercise/E-07-28-eight-puzzle/README.md)

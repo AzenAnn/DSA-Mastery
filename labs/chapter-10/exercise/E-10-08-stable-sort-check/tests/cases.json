@@ -3,35 +3,188 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-sorted",
     "input": "tests/002-sorted.in",
     "expected": "tests/002-sorted.out",
-    "points": 20,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "003-reverse",
     "input": "tests/003-reverse.in",
     "expected": "tests/003-reverse.out",
-    "points": 20,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "004-stable-equal",
     "input": "tests/004-stable-equal.in",
     "expected": "tests/004-stable-equal.out",
-    "points": 20,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "005-single",
     "input": "tests/005-single.in",
     "expected": "tests/005-single.out",
-    "points": 20,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-n2-equal",
+    "input": "tests/006-n2-equal.in",
+    "expected": "tests/006-n2-equal.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "tie"
+    ]
+  },
+  {
+    "id": "007-n2-diff",
+    "input": "tests/007-n2-diff.in",
+    "expected": "tests/007-n2-diff.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-max-n-36",
+    "input": "tests/008-max-n-36.in",
+    "expected": "tests/008-max-n-36.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "009-all-same-value",
+    "input": "tests/009-all-same-value.in",
+    "expected": "tests/009-all-same-value.out",
+    "points": 5,
+    "tags": [
+      "special",
+      "tie"
+    ]
+  },
+  {
+    "id": "010-classic-unstable",
+    "input": "tests/010-classic-unstable.in",
+    "expected": "tests/010-classic-unstable.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
+  },
+  {
+    "id": "011-all-distinct",
+    "input": "tests/011-all-distinct.in",
+    "expected": "tests/011-all-distinct.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "012-many-duplicates",
+    "input": "tests/012-many-duplicates.in",
+    "expected": "tests/012-many-duplicates.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
+  },
+  {
+    "id": "013-value-boundary",
+    "input": "tests/013-value-boundary.in",
+    "expected": "tests/013-value-boundary.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "tie"
+    ]
+  },
+  {
+    "id": "014-single-suit-distinct",
+    "input": "tests/014-single-suit-distinct.in",
+    "expected": "tests/014-single-suit-distinct.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "015-two-values-alternating",
+    "input": "tests/015-two-values-alternating.in",
+    "expected": "tests/015-two-values-alternating.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
+  },
+  {
+    "id": "016-descending-distinct",
+    "input": "tests/016-descending-distinct.in",
+    "expected": "tests/016-descending-distinct.out",
+    "points": 5,
+    "tags": [
+      "special"
+    ]
+  },
+  {
+    "id": "017-random-20",
+    "input": "tests/017-random-20.in",
+    "expected": "tests/017-random-20.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-random-36",
+    "input": "tests/018-random-36.in",
+    "expected": "tests/018-random-36.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-equal-pair-at-end",
+    "input": "tests/019-equal-pair-at-end.in",
+    "expected": "tests/019-equal-pair-at-end.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
+  },
+  {
+    "id": "020-grouped-equal",
+    "input": "tests/020-grouped-equal.in",
+    "expected": "tests/020-grouped-equal.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "tie"
+    ]
   }
 ]

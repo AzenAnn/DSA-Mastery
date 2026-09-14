@@ -236,7 +236,7 @@ function assertAcyclic(tasks) {
     if (state.get(id) === "visiting") throw new LabError("TASK_CYCLE", `Project task 存在循环依赖：${[...chain, id].join(" -> ")}`);
     state.set(id, "visiting");
     const task = byId.get(id);
-    for (const dependency of task.dependsOn ?? []) visit(dependency, [...chain, id]);
+    for (const dependency of new Set([...(task.dependsOn ?? []), ...(task.buildDependsOn ?? [])])) visit(dependency, [...chain, id]);
     state.set(id, "done");
     ordered.push(task);
   }
@@ -263,7 +263,7 @@ async function validateProject(labRoot, manifest) {
   const tasks = [];
   for (const [index, raw] of manifest.tasks.entries()) {
     const task = requireRecord(raw, `tasks[${index}]`);
-    assertKnownKeys(task, new Set(["id", "path", "weight", "kind", "dependsOn"]), `tasks[${index}]`);
+    assertKnownKeys(task, new Set(["id", "path", "weight", "kind", "dependsOn", "buildDependsOn"]), `tasks[${index}]`);
     const id = requireString(task.id, `tasks[${index}].id`);
     if (!/^[a-z][a-z0-9-]*$/.test(id)) throw new LabError("SCHEMA_INVALID", `tasks[${index}].id 格式无效：${id}`);
     if (ids.has(id)) throw new LabError("TASK_DUPLICATE", `Project task id 重复：${id}`);
@@ -276,11 +276,17 @@ async function validateProject(labRoot, manifest) {
     if (!Array.isArray(dependsOn) || dependsOn.some((item) => typeof item !== "string" || !item.trim())) {
       throw new LabError("SCHEMA_INVALID", `tasks[${index}].dependsOn 必须是字符串数组`);
     }
+    if (task.buildDependsOn !== undefined && (!Array.isArray(task.buildDependsOn) || task.buildDependsOn.some((item) => typeof item !== "string" || !/^[a-z][a-z0-9-]*$/.test(item)))) {
+      throw new LabError("SCHEMA_INVALID", `tasks[${index}].buildDependsOn 必须是 task ID 数组`);
+    }
+    for (const dependencies of [dependsOn, task.buildDependsOn ?? []]) {
+      if (new Set(dependencies).size !== dependencies.length) throw new LabError("TASK_DUPLICATE", `${id} 的依赖重复`);
+    }
     tasks.push({ ...task, taskPath, dependsOn });
   }
   if (totalWeight !== 100) throw new LabError("TASK_WEIGHTS", `Project task 权重必须合计 100，当前为 ${totalWeight}`);
   for (const task of tasks) {
-    for (const dependency of task.dependsOn) {
+    for (const dependency of new Set([...task.dependsOn, ...(task.buildDependsOn ?? [])])) {
       if (!ids.has(dependency)) throw new LabError("TASK_DEPENDENCY", `${task.id} 依赖不存在的 task：${dependency}`);
       if (dependency === task.id) throw new LabError("TASK_CYCLE", `${task.id} 不能依赖自身`);
     }
@@ -307,7 +313,12 @@ async function validateProject(labRoot, manifest) {
       task.cases = await loadCases(task.taskPath, requireString(judge.cases, `${task.id}.judge.cases`));
     } else if (task.kind === "ctest") {
       const ctest = requireRecord(config.ctest, `${task.id}.ctest`);
-      assertKnownKeys(ctest, new Set(["tests"]), `${task.id}.ctest`);
+      assertKnownKeys(ctest, new Set(["tests", "buildTargets", "moduleTargets"]), `${task.id}.ctest`);
+      for (const key of ["buildTargets", "moduleTargets"]) {
+        if (ctest[key] !== undefined && (!Array.isArray(ctest[key]) || ctest[key].length === 0 || ctest[key].some((name) => typeof name !== "string" || !/^[a-zA-Z0-9_][a-zA-Z0-9_.+-]*$/.test(name)) || new Set(ctest[key]).size !== ctest[key].length)) {
+          throw new LabError("SCHEMA_INVALID", `${task.id}.ctest.${key} 必须是非空、无重复的 CMake target 数组`);
+        }
+      }
       if (!Array.isArray(ctest.tests) || ctest.tests.length === 0) throw new LabError("SCHEMA_INVALID", `${task.id}.ctest.tests 必须是非空数组`);
       const names = new Set();
       let points = 0;

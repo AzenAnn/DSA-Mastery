@@ -7,9 +7,11 @@
       "request": "launch",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}",
+        "--user-data-dir=${workspaceFolder}/.lab-cache/debug-user-data",
+        "--extensions-dir=${workspaceFolder}/.lab-cache/debug-extensions",
         "${workspaceFolder}/../.."
       ],
-      "outFiles": ["${workspaceFolder}/out/**/*.js"],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "compile"
     }
   ]

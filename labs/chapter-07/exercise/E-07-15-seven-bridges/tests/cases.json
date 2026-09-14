@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-singleton-empty",
+    "input": "tests/002-singleton-empty.in",
+    "expected": "tests/002-singleton-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-many-isolated",
+    "input": "tests/003-many-isolated.in",
+    "expected": "tests/003-many-isolated.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-isolated-zero",
+    "input": "tests/004-isolated-zero.in",
+    "expected": "tests/004-isolated-zero.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "005-two-disconnected-cycles",
+    "input": "tests/005-two-disconnected-cycles.in",
+    "expected": "tests/005-two-disconnected-cycles.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "006-two-odd",
+    "input": "tests/006-two-odd.in",
+    "expected": "tests/006-two-odd.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "007-four-odd",
+    "input": "tests/007-four-odd.in",
+    "expected": "tests/007-four-odd.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "008-seven-bridges",
+    "input": "tests/008-seven-bridges.in",
+    "expected": "tests/008-seven-bridges.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "009-self-loop",
+    "input": "tests/009-self-loop.in",
+    "expected": "tests/009-self-loop.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "010-parallel-bridges",
+    "input": "tests/010-parallel-bridges.in",
+    "expected": "tests/010-parallel-bridges.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "011-bridge-must-be-spliced",
+    "input": "tests/011-bridge-must-be-spliced.in",
+    "expected": "tests/011-bridge-must-be-spliced.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "012-disconnected-loops",
+    "input": "tests/012-disconnected-loops.in",
+    "expected": "tests/012-disconnected-loops.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "013-seeded-walk-0",
+    "input": "tests/013-seeded-walk-0.in",
+    "expected": "tests/013-seeded-walk-0.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-seeded-walk-1",
+    "input": "tests/014-seeded-walk-1.in",
+    "expected": "tests/014-seeded-walk-1.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-seeded-walk-2",
+    "input": "tests/015-seeded-walk-2.in",
+    "expected": "tests/015-seeded-walk-2.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-seeded-walk-3",
+    "input": "tests/016-seeded-walk-3.in",
+    "expected": "tests/016-seeded-walk-3.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-seeded-walk-4",
+    "input": "tests/017-seeded-walk-4.in",
+    "expected": "tests/017-seeded-walk-4.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-long-chain",
+    "input": "tests/018-long-chain.in",
+    "expected": "tests/018-long-chain.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-many-parallel",
+    "input": "tests/019-many-parallel.in",
+    "expected": "tests/019-many-parallel.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-max-vertices-isolated",
+    "input": "tests/020-max-vertices-isolated.in",
+    "expected": "tests/020-max-vertices-isolated.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]
