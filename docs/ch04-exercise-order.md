@@ -1,6 +1,6 @@
 # Ch4 代码题编号与来源清单
 
-2026-09-11，依据维护者提供的 `ch4题集.md` 重排。原文共 31 项，其中 17 道旧题、14 道新增题；原有 20 道题中有 3 道未在表中出现。为遵守“保留原有 20 题”，这 3 道题依原编号顺序追加为 04E32～04E34。正文中的 31 项顺序未改变。
+2026-09-11，依据维护者提供的 `ch4题集.md` 重排。全清单共 31 项，其中 17 道旧题、14 道新增题，顺序与正文保持一致。
 
 | 新编号 | 原编号 | 题目 | 小节 |
 | --- | --- | --- | --- |
@@ -35,13 +35,10 @@
 | 04E29 | 04E16 | [网络最优选址](../labs/chapter-04/exercise/E-04-29-network-optimal-location/README.md) | 4.6 |
 | 04E30 | 04E18 | [通信基站选址](../labs/chapter-04/exercise/E-04-30-communication-base-station/README.md) | 4.6 |
 | 04E31 | 04E20 | [树的同构判定](../labs/chapter-04/exercise/E-04-31-tree-isomorphism/README.md) | 4.6 |
-| 04E32 | 04E10 | [另一棵树的子树](../labs/chapter-04/exercise/E-04-32-subtree-of-another-tree/README.md) | 补充 |
-| 04E33 | 04E11 | [根到叶数字之和](../labs/chapter-04/exercise/E-04-33-sum-root-to-leaf-numbers/README.md) | 补充 |
-| 04E34 | 04E15 | [二叉树最大路径和](../labs/chapter-04/exercise/E-04-34-binary-tree-maximum-path-sum/README.md) | 补充 |
 
 ## 保留与扩充
 
-20 个旧目录整体迁移。原 `student/`、`solution/`、`lab.json`、`Makefile`、测试文件均保持原内容，只改 README 的编号、展示顺序和命令路径。旧层序题继续保留层序与锯齿形两段输出。全章 34×20=680 个测试点，其中旧 400 点、新 280 点。
+旧目录迁移与重排后，全章共 31 题。原 `student/`、`solution/`、`lab.json`、`Makefile`、测试文件均保持原内容，只改 README 的编号、展示顺序和命令路径。旧层序题继续保留层序与锯齿形两段输出。全章 31×20=620 个测试点，其中旧 340 点、新 280 点。
 
 14 个新 Lab 使用自包含 `support/`、`student/main.cpp` 与 `solution/main.cpp`，每题 20 点、每点 5 分。输入保证合法，编号为唯一节点身份；一般树高度按边数，最小深度按节点数。线索化检查整张指针/标签表，线索遍历使用常数辅助空间，森林转换保留有序结构。一般树、线索和森林题包含 PNG 图及 DOT 源。
 

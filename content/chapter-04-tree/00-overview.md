@@ -38,7 +38,7 @@ status: "draft"
 
 ## 代码训练路线
 
-本章共 34 道代码题，每题 20 个测试点。按知识点完成以下训练，再进入综合应用：
+本章共 31 道代码题，每题 20 个测试点。按知识点完成以下训练，再进入综合应用：
 
 | 知识点 | 题号 | 训练入口 |
 | --- | --- | --- |
@@ -48,4 +48,3 @@ status: "draft"
 | 中序线索树 | 04E15～04E16 | [中序线索化](../../labs/chapter-04/exercise/E-04-15-create-inorder-thread/README.md)、[后继与遍历](../../labs/chapter-04/exercise/E-04-16-threaded-inorder-successor/README.md) |
 | 森林转换与一般树遍历 | 04E17～04E19 | [森林转二叉树](../../labs/chapter-04/exercise/E-04-17-forest-to-binary-tree/README.md)、[二叉树转森林](../../labs/chapter-04/exercise/E-04-18-binary-tree-to-forest/README.md)、[后根遍历](../../labs/chapter-04/exercise/E-04-19-general-tree-postorder/README.md) |
 | 综合应用 | 04E20～04E31 | [最大宽度](../../labs/chapter-04/exercise/E-04-20-binary-tree-maximum-width/README.md)、[坡度](../../labs/chapter-04/exercise/E-04-24-binary-tree-tilt/README.md)、[树的同构](../../labs/chapter-04/exercise/E-04-31-tree-isomorphism/README.md) |
-| 补充练习 | 04E32～04E34 | [另一棵树的子树](../../labs/chapter-04/exercise/E-04-32-subtree-of-another-tree/README.md)、[根到叶数字之和](../../labs/chapter-04/exercise/E-04-33-sum-root-to-leaf-numbers/README.md)、[最大路径和](../../labs/chapter-04/exercise/E-04-34-binary-tree-maximum-path-sum/README.md) |
