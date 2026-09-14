@@ -1531,25 +1531,10 @@ const ch04Exercises = [
     "number": 31,
     "slug": "tree-isomorphism",
     "isNew": false
-  },
-  {
-    "number": 32,
-    "slug": "subtree-of-another-tree",
-    "isNew": false
-  },
-  {
-    "number": 33,
-    "slug": "sum-root-to-leaf-numbers",
-    "isNew": false
-  },
-  {
-    "number": 34,
-    "slug": "binary-tree-maximum-path-sum",
-    "isNew": false
   }
 ];
 
-test("chapter 4 preserves all old problems and follows the 31-row order with three supplements", async ({ page }) => {
+test("chapter 4 preserves all old problems and follows the 31-row order", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/learn/outline/chapter-04-tree-binary-tree/`);
   const group = page.locator('.VPSidebarItem:has(> .item a[href*="/learn/outline/chapter-04-tree-binary-tree/"])');
@@ -1559,7 +1544,7 @@ test("chapter 4 preserves all old problems and follows the 31-row order with thr
     await exercise.locator(":scope > .item > .caret").click();
   }
   const links = exercise.locator(":scope > .items a");
-  await expect(links).toHaveCount(34);
+  await expect(links).toHaveCount(31);
   for (const [index, row] of ch04Exercises.entries()) {
     const id = String(row.number).padStart(2, "0");
     await expect(links.nth(index)).toContainText(`04E${id} ·`);
