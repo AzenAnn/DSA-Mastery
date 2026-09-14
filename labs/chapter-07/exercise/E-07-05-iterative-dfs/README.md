@@ -1,19 +1,21 @@
 ---
 title: "Lab 07-E-05：显式栈 DFS"
 description: "用显式栈实现与递归升序一致的 DFS 访问顺序，在百万级深图上避免递归爆栈。"
-order: 8
+order: 102
 chapter: 7
 labId: "07E05"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-29"
-contributors: ["Qing"]
+updated: "2026-09-14"
+contributors: ["Qing", "Azen"]
 status: "draft"
 lab: true
-difficulty: "基础～进阶"
+difficulty: "入门"
 duration: "60～90 分钟"
 ---
 
 # Lab 07-E-05：显式栈 DFS
+
+> 题集 T02 · 规划节 7.1；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 > 题目来源：课程经典显式栈 DFS 练习，没有直接对应的 LeetCode 原题。本 Lab 特别要求用“顶点 + 下一个邻居下标”的栈帧严格模拟递归，而不是只保证访问到相同的顶点集合。
 

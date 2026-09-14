@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-singleton",
+    "input": "tests/002-singleton.in",
+    "expected": "tests/002-singleton.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-negative-quadrants",
+    "input": "tests/003-negative-quadrants.in",
+    "expected": "tests/003-negative-quadrants.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "004-coordinate-extremes",
+    "input": "tests/004-coordinate-extremes.in",
+    "expected": "tests/004-coordinate-extremes.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-square-ties",
+    "input": "tests/005-square-ties.in",
+    "expected": "tests/005-square-ties.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "006-collinear",
+    "input": "tests/006-collinear.in",
+    "expected": "tests/006-collinear.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-diagonal",
+    "input": "tests/007-diagonal.in",
+    "expected": "tests/007-diagonal.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-seeded-points-0",
+    "input": "tests/008-seeded-points-0.in",
+    "expected": "tests/008-seeded-points-0.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-seeded-points-1",
+    "input": "tests/009-seeded-points-1.in",
+    "expected": "tests/009-seeded-points-1.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-seeded-points-2",
+    "input": "tests/010-seeded-points-2.in",
+    "expected": "tests/010-seeded-points-2.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-seeded-points-3",
+    "input": "tests/011-seeded-points-3.in",
+    "expected": "tests/011-seeded-points-3.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-seeded-points-4",
+    "input": "tests/012-seeded-points-4.in",
+    "expected": "tests/012-seeded-points-4.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-seeded-points-5",
+    "input": "tests/013-seeded-points-5.in",
+    "expected": "tests/013-seeded-points-5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-seeded-points-6",
+    "input": "tests/014-seeded-points-6.in",
+    "expected": "tests/014-seeded-points-6.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-seeded-points-7",
+    "input": "tests/015-seeded-points-7.in",
+    "expected": "tests/015-seeded-points-7.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-seeded-points-8",
+    "input": "tests/016-seeded-points-8.in",
+    "expected": "tests/016-seeded-points-8.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-seeded-points-9",
+    "input": "tests/017-seeded-points-9.in",
+    "expected": "tests/017-seeded-points-9.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-max-points",
+    "input": "tests/018-max-points.in",
+    "expected": "tests/018-max-points.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-grid",
+    "input": "tests/019-grid.in",
+    "expected": "tests/019-grid.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-two-clusters",
+    "input": "tests/020-two-clusters.in",
+    "expected": "tests/020-two-clusters.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

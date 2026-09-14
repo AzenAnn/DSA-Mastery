@@ -37,9 +37,10 @@
     "test:lab-tools": "node --test tests/lab-tools.test.mjs tests/lab-terminal.test.mjs tests/project-state.test.mjs",
     "test:project-engineering": "node --test tests/project-engineering.test.mjs",
     "test:lab-docs": "node scripts/validate-lab-docs.mjs",
+    "test:ch07": "node --test tests/ch07-exercises.test.mjs",
     "test:lab-golden": "node scripts/verify-golden-labs.mjs",
     "test:lab-make": "node scripts/verify-make-consistency.mjs",
-    "test": "pnpm run validate && pnpm run test:tree-demos && pnpm run test:bootstrap && pnpm run test:lab-tools && pnpm run test:lab-docs && pnpm run test:discovery && pnpm run build && pnpm run check:site",
+    "test": "pnpm run validate && pnpm run test:tree-demos && pnpm run test:bootstrap && pnpm run test:lab-tools && pnpm run test:lab-docs && pnpm run test:ch07 && pnpm run test:discovery && pnpm run build && pnpm run check:site",
     "test:pages": "playwright test",
     "lint": "eslint \".vitepress/**/*.{ts,vue}\" \"scripts/**/*.mjs\" \"tools/lab/**/*.mjs\" \"tests/**/*.mjs\" \"public/demos/tree-*.mjs\" playwright.config.mjs eslint.config.mjs"
   },

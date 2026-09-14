@@ -1028,3 +1028,35 @@ Implemented solved-only eight-rank statistics profile. Verified 93 extension tes
 ### Status
 
 [OK] **Completed**
+
+
+## Session 40: Ch7 三十题清单落地与测试完善
+
+**Date**: 2026-09-14
+**Task**: Ch7 三十题清单落地与测试完善
+**Branch**: `codex/ch07-program-exercises`
+
+### Summary
+
+Azen：新增20题和400个独立核验测试，保留稳定ID及两道补充题，全章32题640测试与站点门禁通过，待审阅。
+
+### Main Changes
+
+- 新增20个C++17 Program，正式学习清单、题源和图算法规范；修复DFS深链栈溢出。
+
+### Git Commits
+
+`865a6005` — feat(ch07): complete graph exercises and test coverage
+
+### Testing
+
+- [OK] 32个lab:verify全部通过；20题独立oracle和错误变体检出；MSVC抽查3题通过。
+- [OK] pnpm test通过；根路径Ch7浏览器通过；Pages构建检查通过，Playwright 62/62。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 用户追加授权后已提交、推送并创建 [PR #190](https://github.com/AzenAnn/DSA-Mastery/pull/190)，目标 main；维护者审阅 draft 内容及受限题源后决定合并。新7.2/7.6理论文章上传后按映射更新链接。

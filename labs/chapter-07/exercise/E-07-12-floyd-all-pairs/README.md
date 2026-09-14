@@ -1,19 +1,21 @@
 ---
 title: "Lab 07-E-12：Floyd 全源最短路径"
 description: "用三重循环预计算任意点对的最短距离，用后继矩阵还原路径，回答多点对查询。"
-order: 15
+order: 120
 chapter: 7
 labId: "07E12"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-28"
-contributors: ["Jeff"]
+updated: "2026-09-14"
+contributors: ["Jeff", "Azen"]
 status: "draft"
 lab: true
-difficulty: "进阶"
+difficulty: "基础"
 duration: "90～120 分钟"
 ---
 
 # Lab 07-E-12：Floyd 全源最短路径
+
+> 题集 T20 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 

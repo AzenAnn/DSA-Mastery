@@ -1,19 +1,21 @@
 ---
 title: "Lab 07-E-11：Bellman-Ford 与负环"
 description: "用 n-1 轮全边松弛处理负权单源最短路，再用第 n 轮检测从源点可达的负环。"
-order: 14
+order: 119
 chapter: 7
 labId: "07E11"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-28"
-contributors: ["Jeff"]
+updated: "2026-09-14"
+contributors: ["Jeff", "Azen"]
 status: "draft"
 lab: true
-difficulty: "进阶"
+difficulty: "基础"
 duration: "90～120 分钟"
 ---
 
 # Lab 07-E-11：Bellman-Ford 与负环
+
+> 题集 T19 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 

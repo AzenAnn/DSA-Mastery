@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-already-goal",
+    "input": "tests/002-already-goal.in",
+    "expected": "tests/002-already-goal.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-leading-zero",
+    "input": "tests/003-leading-zero.in",
+    "expected": "tests/003-leading-zero.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "004-opposite-parity",
+    "input": "tests/004-opposite-parity.in",
+    "expected": "tests/004-opposite-parity.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "005-usual-goal-is-not-this-goal",
+    "input": "tests/005-usual-goal-is-not-this-goal.in",
+    "expected": "tests/005-usual-goal-is-not-this-goal.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "006-optimal-distance-2",
+    "input": "tests/006-optimal-distance-2.in",
+    "expected": "tests/006-optimal-distance-2.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-optimal-distance-3",
+    "input": "tests/007-optimal-distance-3.in",
+    "expected": "tests/007-optimal-distance-3.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-optimal-distance-4",
+    "input": "tests/008-optimal-distance-4.in",
+    "expected": "tests/008-optimal-distance-4.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-optimal-distance-5",
+    "input": "tests/009-optimal-distance-5.in",
+    "expected": "tests/009-optimal-distance-5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-optimal-distance-6",
+    "input": "tests/010-optimal-distance-6.in",
+    "expected": "tests/010-optimal-distance-6.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-optimal-distance-7",
+    "input": "tests/011-optimal-distance-7.in",
+    "expected": "tests/011-optimal-distance-7.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-optimal-distance-8",
+    "input": "tests/012-optimal-distance-8.in",
+    "expected": "tests/012-optimal-distance-8.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-optimal-distance-9",
+    "input": "tests/013-optimal-distance-9.in",
+    "expected": "tests/013-optimal-distance-9.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-optimal-distance-10",
+    "input": "tests/014-optimal-distance-10.in",
+    "expected": "tests/014-optimal-distance-10.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-optimal-distance-11",
+    "input": "tests/015-optimal-distance-11.in",
+    "expected": "tests/015-optimal-distance-11.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-optimal-distance-12",
+    "input": "tests/016-optimal-distance-12.in",
+    "expected": "tests/016-optimal-distance-12.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-optimal-distance-13",
+    "input": "tests/017-optimal-distance-13.in",
+    "expected": "tests/017-optimal-distance-13.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-optimal-distance-14",
+    "input": "tests/018-optimal-distance-14.in",
+    "expected": "tests/018-optimal-distance-14.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-optimal-distance-15",
+    "input": "tests/019-optimal-distance-15.in",
+    "expected": "tests/019-optimal-distance-15.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-maximum-distance",
+    "input": "tests/020-maximum-distance.in",
+    "expected": "tests/020-maximum-distance.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

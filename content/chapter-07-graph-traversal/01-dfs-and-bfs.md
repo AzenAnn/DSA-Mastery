@@ -4,8 +4,8 @@ description: "从一张小图出发理解深度优先与广度优先搜索：标
 order: 1
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-10"
-contributors: ["Qing"]
+updated: "2026-09-14"
+contributors: ["Qing", "Azen"]
 status: "draft"
 ---
 
@@ -444,3 +444,25 @@ void bfs(int start, const std::vector<std::vector<int>>& graph,
 6. 显式栈 DFS 的"逆序入栈"和"入栈时标记"各自解决什么问题？去掉其中一个，示例顺序会怎么变？
 7. 递归 DFS 在 $n=10^6$ 的链状图上可能发生什么？换成显式栈后，时间复杂度和渐近空间复杂度是否改变？为什么显式栈通常能容纳更深的遍历，但仍可能因内存不足而失败？
 
+
+
+## 代码题练习
+
+按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
+
+- [T01 · 07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md)
+- [T02 · 07E05 · 显式栈 DFS](../../labs/chapter-07/exercise/E-07-05-iterative-dfs/README.md)
+- [T03 · 07E13 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-13-dfs-edge-classification/README.md)
+- [T04 · 07E14 · 欧拉回路判定](../../labs/chapter-07/exercise/E-07-14-eulerian-classification/README.md)
+- [T05 · 07E15 · 哥尼斯堡七桥问题](../../labs/chapter-07/exercise/E-07-15-seven-bridges/README.md)
+- [T06 · 07E16 · 课程表](../../labs/chapter-07/exercise/E-07-16-course-schedule/README.md)
+- [T07 · 07E17 · 课程表 II](../../labs/chapter-07/exercise/E-07-17-course-schedule-ii/README.md)
+- [T08 · 07E18 · 找到最终的安全状态](../../labs/chapter-07/exercise/E-07-18-eventual-safe-states/README.md)
+- [T09 · 07E19 · 最大食物链计数](../../labs/chapter-07/exercise/E-07-19-food-chain-count/README.md)
+- [T10 · 07E20 · 并行课程 III](../../labs/chapter-07/exercise/E-07-20-parallel-courses/README.md)
+- [T11 · 07E21 · 关键路径分析（AOE 网）](../../labs/chapter-07/exercise/E-07-21-critical-path/README.md)
+- [T26 · 07E06 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-06-bfs-bipartite/README.md)
+- [T27 · 07E29 · 二分图最大匹配（匈牙利）](../../labs/chapter-07/exercise/E-07-29-bipartite-matching/README.md)
+- [T28 · 07E30 · 飞行员配对方案](../../labs/chapter-07/exercise/E-07-30-pilot-pairing/README.md)
+- [T29 · 07E31 · 最大流（Edmonds-Karp）](../../labs/chapter-07/exercise/E-07-31-edmonds-karp/README.md)
+- [T30 · 07E32 · 最小费用最大流](../../labs/chapter-07/exercise/E-07-32-min-cost-max-flow/README.md)
