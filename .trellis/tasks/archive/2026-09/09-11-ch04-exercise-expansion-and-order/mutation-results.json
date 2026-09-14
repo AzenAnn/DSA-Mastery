@@ -1,0 +1,239 @@
+[
+  {
+    "number": 1,
+    "description": "mistakes siblings for children",
+    "rejected": [
+      "001-sample",
+      "005-three-siblings",
+      "006-small-star",
+      "007-wide-boundary",
+      "010-ternary-tree",
+      "011-deep-branch-2",
+      "012-deep-branch-3",
+      "013-deep-branch-4",
+      "014-mixed-siblings",
+      "015-comb",
+      "016-permuted-root",
+      "017-permuted-star",
+      "018-random-small",
+      "019-random-medium",
+      "020-random-boundary"
+    ]
+  },
+  {
+    "number": 2,
+    "description": "counts nodes instead of edges",
+    "rejected": [
+      "001-sample",
+      "003-single",
+      "004-two-nodes",
+      "005-three-siblings",
+      "006-small-star",
+      "007-wide-boundary",
+      "008-short-chain",
+      "009-deep-boundary",
+      "010-ternary-tree",
+      "011-deep-branch-2",
+      "012-deep-branch-3",
+      "013-deep-branch-4",
+      "014-mixed-siblings",
+      "015-comb",
+      "016-permuted-root",
+      "017-permuted-star",
+      "018-random-small",
+      "019-random-medium",
+      "020-random-boundary"
+    ]
+  },
+  {
+    "number": 4,
+    "description": "accepts missing child as leaf",
+    "rejected": [
+      "004-only-left",
+      "005-only-right",
+      "007-left-chain",
+      "008-right-chain",
+      "009-zigzag",
+      "015-noninteger-averages",
+      "018-deep-boundary"
+    ]
+  },
+  {
+    "number": 5,
+    "description": "drops nonoverlapping subtrees",
+    "rejected": [
+      "001-sample",
+      "004-first-empty",
+      "005-second-empty",
+      "007-same-leaves-different-shape",
+      "009-duplicate-leaf-count",
+      "013-unequal-leaf-counts",
+      "014-opposite-chains",
+      "015-mixed-overlap",
+      "018-deep-shapes",
+      "020-random-boundary"
+    ]
+  },
+  {
+    "number": 6,
+    "description": "adds internal left children",
+    "rejected": [
+      "007-left-chain",
+      "010-deep-right-left",
+      "011-duplicate-values",
+      "013-negative-values",
+      "014-cancellation",
+      "015-noninteger-averages",
+      "016-sparse-random",
+      "017-wide-random",
+      "019-wide-boundary",
+      "020-mixed-boundary"
+    ]
+  },
+  {
+    "number": 8,
+    "description": "sorts arbitrary tree values",
+    "rejected": [
+      "001-sample",
+      "004-only-left",
+      "006-two-leaves",
+      "007-left-chain",
+      "008-right-chain",
+      "009-zigzag",
+      "010-deep-right-left",
+      "013-negative-values",
+      "014-cancellation",
+      "015-noninteger-averages",
+      "016-sparse-random",
+      "017-wide-random",
+      "020-mixed-boundary"
+    ]
+  },
+  {
+    "number": 11,
+    "description": "uses integer division",
+    "rejected": [
+      "001-sample",
+      "006-two-leaves",
+      "013-negative-values",
+      "015-noninteger-averages",
+      "016-sparse-random",
+      "017-wide-random",
+      "020-mixed-boundary"
+    ]
+  },
+  {
+    "number": 12,
+    "description": "accepts matching prefix with different lengths",
+    "rejected": [
+      "004-first-empty",
+      "005-second-empty",
+      "009-duplicate-leaf-count"
+    ]
+  },
+  {
+    "number": 15,
+    "description": "forgets last successor tag",
+    "rejected": [
+      "001-sample",
+      "003-single-negative",
+      "004-only-left",
+      "005-only-right",
+      "006-four-nodes",
+      "007-left-chain",
+      "008-right-chain",
+      "009-zigzag",
+      "010-deep-right-left",
+      "011-duplicate-values",
+      "012-zeros",
+      "013-negative-values",
+      "014-cancellation",
+      "015-noninteger-averages",
+      "016-sparse-random",
+      "017-wide-random",
+      "018-deep-boundary",
+      "019-wide-boundary",
+      "020-mixed-boundary"
+    ]
+  },
+  {
+    "number": 16,
+    "description": "uses right child as successor",
+    "rejected": [
+      "009-zigzag",
+      "010-deep-right-left",
+      "011-duplicate-values",
+      "012-zeros",
+      "013-negative-values",
+      "014-cancellation",
+      "015-noninteger-averages",
+      "016-sparse-random",
+      "017-wide-random",
+      "019-wide-boundary",
+      "020-mixed-boundary"
+    ]
+  },
+  {
+    "number": 17,
+    "description": "omits forest root chain",
+    "rejected": [
+      "001-sample",
+      "005-isolated-roots",
+      "006-later-tree-larger",
+      "007-many-roots",
+      "011-unequal-components",
+      "017-permuted-forest"
+    ]
+  },
+  {
+    "number": 18,
+    "description": "keeps only first forest root",
+    "rejected": [
+      "001-sample",
+      "005-isolated-roots",
+      "006-later-tree-larger",
+      "007-many-roots",
+      "011-unequal-components",
+      "017-permuted-forest"
+    ]
+  },
+  {
+    "number": 19,
+    "description": "visits first child only",
+    "rejected": [
+      "001-sample",
+      "005-three-siblings",
+      "006-small-star",
+      "007-wide-boundary",
+      "010-ternary-tree",
+      "011-deep-branch-2",
+      "012-deep-branch-3",
+      "013-deep-branch-4",
+      "014-mixed-siblings",
+      "015-comb",
+      "016-permuted-root",
+      "017-permuted-star",
+      "018-random-small",
+      "019-random-medium",
+      "020-random-boundary"
+    ]
+  },
+  {
+    "number": 24,
+    "description": "returns root value instead of subtree sum",
+    "rejected": [
+      "001-sample",
+      "007-left-chain",
+      "008-right-chain",
+      "009-zigzag",
+      "010-deep-right-left",
+      "013-negative-values",
+      "015-noninteger-averages",
+      "016-sparse-random",
+      "017-wide-random",
+      "018-deep-boundary",
+      "019-wide-boundary",
+      "020-mixed-boundary"
+    ]
+  }
+]

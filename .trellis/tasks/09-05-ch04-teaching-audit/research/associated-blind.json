@@ -1,0 +1,302 @@
+[
+  {
+    "key": "X01-Q01",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q01",
+    "stem": "已知森林 $F$ 及与之对应的二叉树 $T$，若 $F$ 的先根遍历序列是 $a, b, c, d, e, f$，中根遍历序列是 $b, a, d, f, e, c$，则 $T$ 的后序遍历序列是( )。",
+    "options": [
+      "b, a, d, f, e, c",
+      "b, d, f, e, c, a",
+      "b, f, e, d, c, a",
+      "f, e, d, c, b, a"
+    ]
+  },
+  {
+    "key": "X01-Q02",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q02",
+    "stem": "某森林 F 对应的二叉树为 T , 若 T 的先序遍历序列是 a, b, d, c, e, g, f , 中序遍历序列是 b, d, a, e, g, c, f , 则 F 中树的棵数是( )。",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "key": "X01-Q03",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q03",
+    "stem": "将森林 $F$ 用**孩子兄弟法**转换为二叉树 $B$，下列说法**正确**的是( )。",
+    "options": [
+      "$F$ 中各树根用“下一兄弟”指针串成兄弟链，即 $B$ 中从根开始的右指针链",
+      "$F$ 中每棵树根都成为 $B$ 中的左孩——共有多个左孩",
+      "转换前必须先把森林合并成一棵树（加一个虚根），否则不能转换",
+      "森林到二叉树的转换是不可逆的——无法从转换后的二叉树恢复原森林"
+    ]
+  },
+  {
+    "key": "X01-Q04",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q04",
+    "stem": "将下列二叉树**逆转换**为森林（视作孩子兄弟法的结果）：\n\n```text\nA(B(D, E), C(_, F))\n```\n\n转换后森林共有( )棵树。",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "key": "X01-Q05",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q05",
+    "stem": "一片森林 $F$ 共 $n$ 个结点（含 $m$ 棵树），用孩子兄弟法转换为二叉树 $B$。下列**结点数 / 边数 / 叶子数**关系**正确**的是( )。",
+    "options": [
+      "$|V(B)| = n + m - 1$（转换后多出 $m - 1$ 个虚结点）",
+      "$|V(B)| = n$，$|E(B)| = |E(F)| = n - m$（边数不变）",
+      "$|V(B)| = n$，$|E(B)| = n - 1$（因 $B$ 是单棵二叉树有 $n - 1$ 条边）",
+      "$|V(B)| = n$，且 $B$ 的叶子数总是等于 $F$ 中的叶子数"
+    ]
+  },
+  {
+    "key": "X01-Q06",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q06",
+    "stem": "森林 $F$ 用孩子兄弟法转换为二叉树 $B$。已知 $F$ 的**先根遍历**结果为 $A, B, E, F, C, D, G, H, I$。下列说法**正确**的是( )。",
+    "options": [
+      "$B$ 的中序遍历 = $F$ 的先根遍历 = $A, B, E, F, C, D, G, H, I$",
+      "$B$ 的后序遍历 = $F$ 的先根遍历 = $A, B, E, F, C, D, G, H, I$",
+      "$B$ 的前序遍历 = $F$ 的先根遍历 = $A, B, E, F, C, D, G, H, I$",
+      "$B$ 的层序遍历 = $F$ 的先根遍历 = $A, B, E, F, C, D, G, H, I$"
+    ]
+  },
+  {
+    "key": "X01-Q07",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q07",
+    "stem": "关于森林 $F$ 与其孩子兄弟法转换得到的二叉树 $B$，下列说法**正确**的是( )。\n\n> ① 转换前后结点总数相等。\n> ② $F$ 的先根遍历 = $B$ 的前序遍历。\n> ③ $F$ 的后根遍历 = $B$ 的后序遍历。\n> ④ 若 $F$ 含 $m$ 棵树（$m \\ge 2$），则 $B$ 的根**总是**没有右子树。",
+    "options": [
+      "①②③④",
+      "①②",
+      "①②③",
+      "①②④"
+    ]
+  },
+  {
+    "key": "X01-Q08",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q08",
+    "stem": "森林 $F$ 用孩子兄弟法转换为二叉树 $B$。下列哪个量**恰好等于**森林 $F$ 中的**叶子结点数**？",
+    "options": [
+      "$B$ 中**左指针为空**的结点数",
+      "$B$ 中**度为 0**（左右指针都为空）的结点数",
+      "$B$ 中**度为 2**（左右指针都非空）的结点数",
+      "$B$ 中**右指针为空**的结点数"
+    ]
+  },
+  {
+    "key": "X01-Q09",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q09",
+    "stem": "已知森林 $F$ 对应的二叉树为 $T$，且 $T$ 是一棵二叉排序树，其后序序列为\n\n$$1,\\ 3,\\ 4,\\ 2,\\ 7,\\ 9,\\ 8,\\ 10,\\ 6,\\ 5$$\n\n那么关于森林 $F$，下列说法**错误**的是（ ）。",
+    "options": [
+      "$F$ 中有 3 棵树",
+      "$F$ 中第一棵树的后根遍历是升序序列",
+      "$F$ 的度为 2",
+      "$F$ 的先根遍历是 5, 2, 1, 3, 4, 6, 10, 8, 7, 9"
+    ]
+  },
+  {
+    "key": "X01-Q10",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q10",
+    "stem": "设 $X$ 是树 $T$ 中的一个非根结点，$B$ 是 $T$ 所对应的二叉树。在 $B$ 中，$X$ 是其双亲结点的右孩子，则下列结论中正确的是（ ）。",
+    "options": [
+      "在树 $T$ 中，$X$ 是其双亲结点的第一个孩子",
+      "在树 $T$ 中，$X$ 一定无右边兄弟",
+      "在树 $T$ 中，$X$ 一定是叶结点",
+      "在树 $T$ 中，$X$ 一定有左边兄弟"
+    ]
+  },
+  {
+    "key": "X01-Q11",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q11",
+    "stem": "设森林 $F$ 中有 4 棵树，第 1、2、3、4 棵树的结点数分别为 $a$、$b$、$c$ 和 $d$。与森林 $F$ 对应的二叉树的根结点的左子树上的结点数是（ ）。",
+    "options": [
+      "$a$",
+      "$b+c+d$",
+      "$a-1$",
+      "$a+b+c$"
+    ]
+  },
+  {
+    "key": "X01-Q12",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q12",
+    "stem": "设森林 $F$ 对应的二叉树是一棵具有 16 个结点的完全二叉树，则森林 $F$ 中树的数目和结点最多的树的结点数分别是（ ）。",
+    "options": [
+      "2 和 8",
+      "2 和 9",
+      "4 和 8",
+      "4 和 9"
+    ]
+  },
+  {
+    "key": "X01-Q13",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q13",
+    "stem": "利用二叉链表存储森林时，根结点的右指针是（ ）。",
+    "options": [
+      "指向最左兄弟",
+      "指向最右兄弟",
+      "一定为空",
+      "不一定为空"
+    ]
+  },
+  {
+    "key": "X01-Q14",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q14",
+    "stem": "在森林的二叉树表示中，结点 $M$ 和结点 $N$ 是同一父结点的左儿子和右儿子，则在该森林中（ ）。",
+    "options": [
+      "$M$ 和 $N$ 有同一双亲",
+      "$M$ 和 $N$ 可能无公共祖先",
+      "$M$ 是 $N$ 的儿子",
+      "$M$ 是 $N$ 的左兄弟"
+    ]
+  },
+  {
+    "key": "X01-Q15",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q15",
+    "stem": "森林 $T=(T_1, T_2, \\dots, T_m)$ 转化为二叉树 $BT$ 的过程为：若 $m=0$，则 $BT$ 为空；若 $m \\neq 0$，则（ ）。",
+    "options": [
+      "将中间子树 $T_{mid}$（$mid = \\lfloor (1+m)/2 \\rfloor$）的根作为 $BT$ 的根；将 $(T_1, \\dots, T_{mid-1})$ 转换为 $BT$ 的左子树；将 $(T_{mid+1}, \\dots, T_m)$ 转换为 $BT$ 的右子树",
+      "将子树 $T_1$ 的根作为 $BT$ 的根；将 $T_1$ 的子树森林转换成 $BT$ 的左子树；将 $(T_2, T_3, \\dots, T_m)$ 转换成 $BT$ 的右子树",
+      "将子树 $T_1$ 的根作为 $BT$ 的根；将 $T_1$ 的左子树森林转换成 $BT$ 的左子树；将 $T_1$ 的右子树森林转换为 $BT$ 的右子树；其他以此类推",
+      "将森林 $T$ 的根作为 $BT$ 的根；将 $(T_1, T_2, \\dots, T_m)$ 转化为该根下的结点，得到一棵树，然后将这棵树再转化为二叉树 $BT$"
+    ]
+  },
+  {
+    "key": "X01-Q16",
+    "source": "labs/chapter-05/theory/T-05-01-forest-binary-tree-conversion-quiz/quiz.json",
+    "id": "ch05-01-q16",
+    "stem": "设森林 $F$ 对应的二叉树为 $B$，它有 $m$ 个结点，$B$ 的根为 $p$，$p$ 的右子树结点数为 $n$，则森林 $F$ 中第一棵树的结点数是（ ）。",
+    "options": [
+      "$m-n$",
+      "$m-n-1$",
+      "条件不足，无法确定",
+      "$n+1$"
+    ]
+  },
+  {
+    "key": "X02-Q01",
+    "source": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/quiz.json",
+    "id": "ch05-02-q01",
+    "stem": "给定二叉树如下图所示。设 N 代表二叉树的根，L 代表根结点的左子树，R 代表根结点的右子树。若遍历后的结点序列是 3，1，7，5，6，2，4，则其遍历方式是(    )。\n\n```text\n1(2(4, 5(6, 7)), 3)\n```",
+    "options": [
+      "LRN",
+      "NRL",
+      "RLN",
+      "RNL"
+    ]
+  },
+  {
+    "key": "X02-Q02",
+    "source": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/quiz.json",
+    "id": "ch05-02-q02",
+    "stem": "一般树（非二叉）的遍历方式有\"**先根遍历**、**后根遍历**、**层序遍历**\"三种。下列说法**正确**的是( )。",
+    "options": [
+      "一般树没有\"中根遍历\"概念——因为非二叉树不分左右，无法定义\"中间访问根\"",
+      "一般树的中根遍历就是先访问中间的孩子、再访问根、再访问其他孩子",
+      "一般树的先根遍历 = 对应二叉树（孩子兄弟法转换后）的中序遍历",
+      "一般树的后根遍历 = 对应二叉树的后序遍历"
+    ]
+  },
+  {
+    "key": "X02-Q03",
+    "source": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/quiz.json",
+    "id": "ch05-02-q03",
+    "stem": "下列关于\"一般树遍历与对应二叉树（孩子兄弟法转换后）遍历的对应关系\"**正确**的是( )。",
+    "options": [
+      "先根 = 中序、后根 = 后序",
+      "先根 = 前序、后根 = 中序",
+      "先根 = 后序、后根 = 前序",
+      "先根 = 前序、后根 = 后序"
+    ]
+  },
+  {
+    "key": "X02-Q04",
+    "source": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/quiz.json",
+    "id": "ch05-02-q04",
+    "stem": "一般树 $T$ 的结构如下：\n\n> 根 $A$ 有 3 个孩子 $B, C, D$（从左到右顺序）；\n> $B$ 有 2 个孩子 $E, F$；\n> $C$ 是叶子；\n> $D$ 有 1 个孩子 $G$。\n\n该树的**先根遍历、后根遍历、层序遍历**结果依次是( )。",
+    "options": [
+      "先根 $A, B, E, F, C, D, G$；后根 $E, F, B, C, G, D, A$；层序 $A, B, C, D, E, F, G$",
+      "先根 $A, B, C, D, E, F, G$；后根 $E, F, G, B, C, D, A$；层序 $A, B, C, D, E, F, G$",
+      "先根 $A, B, E, F, C, D, G$；后根 $E, F, G, B, C, D, A$；层序 $E, F, G, B, C, D, A$",
+      "先根 $A, B, E, F, D, G, C$；后根 $E, F, B, G, D, C, A$；层序 $A, B, C, D, E, F, G$"
+    ]
+  },
+  {
+    "key": "X02-Q05",
+    "source": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/quiz.json",
+    "id": "ch05-02-q05",
+    "stem": "关于一般树的遍历，下列说法**正确**的是( )。\n\n> ① 一般树的先根遍历首结点必是整棵树根。\n> ② 一般树的后根遍历末结点必是整棵树根。\n> ③ 一般树没有\"中根遍历\"概念，因为非二叉树不分左右。\n> ④ 一般树的层序遍历可以用队列实现，与二叉树的层序实现思路一致（只是每个结点入队它的所有孩子，而不只是两个）。",
+    "options": [
+      "①②",
+      "①②③",
+      "②③④",
+      "①②③④"
+    ]
+  },
+  {
+    "key": "X02-Q06",
+    "source": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/quiz.json",
+    "id": "ch05-02-q06",
+    "stem": "设结点 $X$ 和 $Y$ 是二叉树中任意的两个结点。在该二叉树的**先序**遍历序列中 $X$ 在 $Y$ 之前，而在其**后序**遍历序列中 $X$ 在 $Y$ 之后，则 $X$ 和 $Y$ 的关系是（ ）。",
+    "options": [
+      "$X$ 是 $Y$ 的祖先",
+      "$X$ 是 $Y$ 的后裔",
+      "$X$ 是 $Y$ 的左兄弟",
+      "$X$ 是 $Y$ 的右兄弟"
+    ]
+  },
+  {
+    "key": "X02-Q07",
+    "source": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/quiz.json",
+    "id": "ch05-02-q07",
+    "stem": "在二叉树的前序序列、中序序列和后序序列中，所有**叶结点**的先后顺序（ ）。",
+    "options": [
+      "都不相同",
+      "完全相同",
+      "前序和中序相同，而与后序不同",
+      "中序和后序相同，而与前序不同"
+    ]
+  },
+  {
+    "key": "X02-Q08",
+    "source": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/quiz.json",
+    "id": "ch05-02-q08",
+    "stem": "对二叉树的结点从 1 开始进行连续编号，要求每个结点的编号**大于**其左、右孩子的编号，同一结点的左、右孩子中，其**左孩子的编号小于右孩子的编号**。可采用（ ）次序的遍历实现这种编号。",
+    "options": [
+      "先序遍历",
+      "中序遍历",
+      "后序遍历",
+      "层次遍历"
+    ]
+  },
+  {
+    "key": "X02-Q09",
+    "source": "labs/chapter-05/theory/T-05-02-tree-forest-traversal-quiz/quiz.json",
+    "id": "ch05-02-q09",
+    "stem": "若二叉树中结点的**先序**序列是 $\\dots a \\dots b \\dots$，**中序**序列是 $\\dots b \\dots a \\dots$，则（ ）。",
+    "options": [
+      "结点 $a$ 和结点 $b$ 分别在某结点的左子树和右子树中",
+      "结点 $b$ 在结点 $a$ 的右子树中",
+      "结点 $a$ 和结点 $b$ 分别在某结点的两棵非空子树中",
+      "结点 $b$ 在结点 $a$ 的左子树中"
+    ]
+  }
+]

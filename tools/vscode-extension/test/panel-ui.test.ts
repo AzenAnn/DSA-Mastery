@@ -93,6 +93,8 @@ test("quiz sidebar submit batches selected unanswered answers without reloading 
   assert.match(panel, /new Set<string>/);
   assert.match(panel, /private quizBatchInProgress = false/);
   assert.match(panel, /private readonly pendingQuizAnswers = new Set<string>/);
+  assert.match(panel, /LabPanel\.current\.submitting \|\| LabPanel\.current\.quizBatchInProgress/);
+  assert.match(panel, /!labName \|\| this\.submitting \|\| this\.quizBatchInProgress/);
   assert.match(panel, /await this\.answerQuiz\(questionId, selected\)/);
   assert.match(extension, /if \(lab\.type === "quiz"\)[\s\S]*?LabPanel\.submitQuiz/);
 });

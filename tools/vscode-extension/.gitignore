@@ -3,4 +3,3 @@ out/
 dist/
 *.vsix
 *.tsbuildinfo
-pnpm-workspace.yaml

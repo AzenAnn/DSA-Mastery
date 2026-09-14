@@ -25,6 +25,21 @@ function containerTitle(token: MarkdownToken, name: string, fallback: string): s
   return rawTitle || fallback;
 }
 
+type InlineRenderEnv = Parameters<MarkdownIt["renderInline"]>[1];
+
+function renderTheoryTitle(md: MarkdownIt, title: string, env: InlineRenderEnv): string {
+  // VitePress enables raw HTML site-wide, but theory titles keep the
+  // escape-only contract: html_inline is disabled for the title parse, while
+  // MathJax and inline code still render like the container body.
+  const htmlOption = md.options.html;
+  md.options.html = false;
+  try {
+    return md.renderInline(title, env);
+  } finally {
+    md.options.html = htmlOption;
+  }
+}
+
 function extractFenceTitle(info: string): string | undefined {
   const match = info.match(/\[([^\r\n]*)\]/);
   const title = match?.[1]?.trim();
@@ -79,13 +94,14 @@ export function installTheoryMarkdown(md: MarkdownIt): void {
   for (const definition of theoryContainers) {
     md.use(container, {
       name: definition.name,
-      openRender(tokens, index) {
+      openRender(tokens, index, _options, env) {
         const token = tokens[index];
-        const title = md.utils.escapeHtml(
-          containerTitle(token, definition.name, definition.label),
-        );
+        const title = containerTitle(token, definition.name, definition.label);
         const attrs = md.renderer.renderAttrs(token);
-        return `<div class="dsa-theory-block dsa-theory-block--${definition.name}" data-theory-kind="${definition.name}"${attrs}>\n<p class="dsa-theory-block__title"><span class="dsa-theory-block__code" aria-hidden="true">${definition.code}</span><span>${title}</span></p>\n`;
+        const renderedTitle = renderTheoryTitle(md, title, {
+          references: env?.references,
+        });
+        return `<div class="dsa-theory-block dsa-theory-block--${definition.name}" data-theory-kind="${definition.name}"${attrs}>\n<p class="dsa-theory-block__title"><span class="dsa-theory-block__code" aria-hidden="true">${definition.code}</span><span>${renderedTitle}</span></p>\n`;
       },
       closeRender() {
         return "</div>\n";

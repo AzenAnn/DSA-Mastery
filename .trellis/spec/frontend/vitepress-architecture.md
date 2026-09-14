@@ -57,6 +57,7 @@ outDir                         -> dist/pages
 - Node `fs`、`path`、frontmatter 解析和文件遍历只在 config/data loader 构建期执行，不能进入浏览器 bundle。
 - `base` 从 `GITHUB_PAGES_BASE_PATH` 规范化：空值为 `/`；非空值首尾各一个斜杠。
 - 源码 URL 不含 base；Vue 链接使用 `withBase`。相对 `.md` 内容链接先由 validator 检查，再由 config 的 Markdown transform 按 `sourceUrlMap` 改写成 route。
+- Markdown 的首个 H1 仅在 `sourceUrlMap` 收录的课程/Lab 首页且非搜索索引渲染时移除，由 DocumentHeader 替代；Project Task 等未收录的子页面必须保留原 H1 和回到项目的相对链接。
 - 首页 `index.md`、Labs `labs/index.md` 和 404 是站点页面；课程页仍由 rewrites 生成。
 - 课程总目录使用 `/learn/`，Part 与章节框架使用 `/learn/parts/:part/`、`/learn/outline/:chapter/`。旧教材 URL 的兼容策略由既有 route map 维护；Lab 自 2026-09-01 起只发布 `/labs/:chapter/:category/:lab/` 新地址，旧平铺地址明确失效，不生成重定向或兼容副本。
 - 静态产物只写 `dist/pages`，不提交 Git。

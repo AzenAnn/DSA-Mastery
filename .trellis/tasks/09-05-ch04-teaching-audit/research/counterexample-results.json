@@ -1,0 +1,129 @@
+[
+  {
+    "name": "E01-hash-null",
+    "lab": "E01",
+    "expected": "false",
+    "timeout_seconds": 3,
+    "rerun_dialogs_disabled": {
+      "exit": 3,
+      "hex_exit": "0x3",
+      "actual": "",
+      "stderr": "libc++abi: terminating due to uncaught exception of type std::invalid_argument: stoi: no conversion\n"
+    }
+  },
+  {
+    "name": "E02-width-2pow64",
+    "lab": "E02",
+    "expected": "18446744073709551616",
+    "exit": 0,
+    "actual": "9223372036854775808\n",
+    "stderr": "",
+    "input_file": ".trellis/tasks/09-05-ch04-teaching-audit/research/counterexamples/E02-width-2pow64.in"
+  },
+  {
+    "name": "E11-ten-digits",
+    "lab": "E11",
+    "expected": "9999999999",
+    "exit": 0,
+    "actual": "1410065407\n",
+    "stderr": "",
+    "input_file": ".trellis/tasks/09-05-ch04-teaching-audit/research/counterexamples/E11-ten-digits.in"
+  },
+  {
+    "name": "E10-trailing-space",
+    "lab": "E10",
+    "expected": "true",
+    "exit": 0,
+    "actual": "false\n",
+    "stderr": "",
+    "input_file": ".trellis/tasks/09-05-ch04-teaching-audit/research/counterexamples/E10-trailing-space.in"
+  },
+  {
+    "name": "E12-trailing-space",
+    "lab": "E12",
+    "expected": "1 2",
+    "exit": 0,
+    "actual": "",
+    "stderr": "",
+    "input_file": ".trellis/tasks/09-05-ch04-teaching-audit/research/counterexamples/E12-trailing-space.in"
+  },
+  {
+    "name": "E14-trailing-space",
+    "lab": "E14",
+    "expected": "1",
+    "exit": 0,
+    "actual": "",
+    "stderr": "",
+    "input_file": ".trellis/tasks/09-05-ch04-teaching-audit/research/counterexamples/E14-trailing-space.in"
+  },
+  {
+    "name": "E18-asymmetric-edge",
+    "lab": "E18",
+    "expected": "2.00\nEDGE 1 2 2.00",
+    "exit": 0,
+    "actual": "2.00\nEDGE 1 2 1.00\n",
+    "stderr": "",
+    "input_file": ".trellis/tasks/09-05-ch04-teaching-audit/research/counterexamples/E18-asymmetric-edge.in"
+  },
+  {
+    "name": "E16-chain-100000",
+    "lab": "E16",
+    "expected": "n个距离和；端点4999950000",
+    "timeout_seconds": 3,
+    "rerun_dialogs_disabled": {
+      "exit": 3221225477,
+      "hex_exit": "0xc0000005",
+      "actual": "",
+      "stderr": ""
+    }
+  },
+  {
+    "name": "E19-chain-100000",
+    "lab": "E19",
+    "expected": "1",
+    "timeout_seconds": 3,
+    "rerun_dialogs_disabled": {
+      "exit": 3221225477,
+      "hex_exit": "0xc0000005",
+      "actual": "",
+      "stderr": ""
+    }
+  },
+  {
+    "name": "E20-chain-100000",
+    "lab": "E20",
+    "expected": "ISOMORPHIC",
+    "timeout_seconds": 3,
+    "rerun_dialogs_disabled": {
+      "exit": 3221225477,
+      "hex_exit": "0xc0000005",
+      "actual": "",
+      "stderr": ""
+    }
+  },
+  {
+    "name": "E16-web-code-compile",
+    "exit": 1,
+    "compiler_error": "C:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E16-readme-code.cpp:25:44: error: expected ')'\n   25 |     function<void(int, int)> dfs1 = [&](int%20u,%20int%20p) {\n      |                                            ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E16-readme-code.cpp:25:40: note: to match this '('\n   25 |     function<void(int, int)> dfs1 = [&](int%20u,%20int%20p) {\n      |                                        ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E16-readme-code.cpp:26:12: error: use of undeclared identifier 'u'\n   26 |         sz[u] = 1;\n      |            ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E16-readme-code.cpp:27:32: error: use of undeclared identifier 'u'\n   27 |         for (auto [v, w] : adj[u]) {\n      |  "
+  },
+  {
+    "name": "E17-web-code-compile",
+    "exit": 1,
+    "compiler_error": "C:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E17-readme-code.cpp:25:38: error: expected ')'\n   25 |     function<void(int)> dfs = [&](int%20u) {\n      |                                      ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E17-readme-code.cpp:25:34: note: to match this '('\n   25 |     function<void(int)> dfs = [&](int%20u) {\n      |                                  ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E17-readme-code.cpp:26:12: error: use of undeclared identifier 'u'\n   26 |         dp[u][1] = val[u];\n      |            ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E17-readme-code.cpp:26:24: error: use of undeclared identifier 'u'\n   26 |         dp[u][1] = val[u];\n      |                        ^\nC:\\Users\\28962\\Desktop\\d"
+  },
+  {
+    "name": "E18-web-code-compile",
+    "exit": 1,
+    "compiler_error": "C:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E18-readme-code.cpp:26:23: error: expected ')'\n   26 |     auto bfs = [&](int%20src,%20vector%3Cll%3E&%20dist,%20vector%3Cint%3E&%20parent,%20vector%3Cint%3E&%20pw) {\n      |                       ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E18-readme-code.cpp:26:19: note: to match this '('\n   26 |     auto bfs = [&](int%20src,%20vector%3Cll%3E&%20dist,%20vector%3Cint%3E&%20parent,%20vector%3Cint%3E&%20pw) {\n      |                   ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E18-readme-code.cpp:27:9: error: use of undeclared identifier 'dist'; did you mean 'list'?\n   27 |         dist.assign(n + 1, -1);\n      |         ^~~~\n      |         list\nC:/llvm-mingw-20250730-msvcrt-x86_64/include/c++/v1/list:687:7: note: 'list' declared "
+  },
+  {
+    "name": "E19-web-code-compile",
+    "exit": 1,
+    "compiler_error": "C:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E19-readme-code.cpp:52:59: error: expected ')'\n   52 |     function<pair<int,int>(TreeNode*)> dfs = [&](TreeNode*%20u) -> pair<int,int> {\n      |                                                           ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E19-readme-code.cpp:52:49: note: to match this '('\n   52 |     function<pair<int,int>(TreeNode*)> dfs = [&](TreeNode*%20u) -> pair<int,int> {\n      |                                                 ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E19-readme-code.cpp:53:14: error: use of undeclared identifier 'u'\n   53 |         if (!u) return {-1, -1};\n      |              ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E19-readme-code.cpp:54:29: error: use o"
+  },
+  {
+    "name": "E20-web-code-compile",
+    "exit": 1,
+    "compiler_error": "C:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E20-readme-code.cpp:16:43: error: expected ')'\n   16 |     function<void(int, int)> dfs = [&](int%20u,%20int%20p) {\n      |                                           ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E20-readme-code.cpp:16:39: note: to match this '('\n   16 |     function<void(int, int)> dfs = [&](int%20u,%20int%20p) {\n      |                                       ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E20-readme-code.cpp:17:12: error: use of undeclared identifier 'u'\n   17 |         sz[u] = 1;\n      |            ^\nC:\\Users\\28962\\Desktop\\dsa-lab\\.trellis\\tasks\\09-05-ch04-teaching-audit\\research\\E20-readme-code.cpp:18:26: error: use of undeclared identifier 'u'\n   18 |         for (int v : adj[u]) {\n      |            "
+  }
+]

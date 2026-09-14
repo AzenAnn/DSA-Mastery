@@ -1,0 +1,45 @@
+{
+  "id": "ch04-interactive-tree-demos",
+  "name": "ch04-interactive-tree-demos",
+  "title": "第 4 章树算法交互式演示",
+  "description": "参考 8.1/8.2 的独立 HTML 演示，为中序线索化、Morris、树与二叉树遍历等价及先序展开提供逐步交互。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "frontend",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-09-09",
+  "completedAt": "2026-09-09",
+  "branch": "codex/ch04-interactive-tree-demos",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": "9ee5578",
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "public/demos/threaded-tree.html",
+    "public/demos/tree-forest-traversal.html",
+    "public/demos/flatten-tree.html",
+    "public/demos/tree-algorithms.mjs",
+    "public/demos/tree-demo.mjs",
+    "public/demos/tree-demo.css",
+    "content/chapter-04-tree/04-threaded-binary-tree.md",
+    "content/chapter-04-tree/05-trees-and-forests.md",
+    "content/chapter-04-tree/06-binary-tree-classic-problems.md",
+    "tests/tree-demos.test.mjs",
+    "tests/pages-navigation.spec.mjs"
+  ],
+  "notes": "四项可视化及验证全部完成，含可选 Morris。pnpm test、根路径 19 项和 Pages 全站 44 项浏览器检查通过；review.md 留存结果。用户已授权提交 PR，实现任务归档；外部审阅与合并状态以该分支 GitHub PR 为准。",
+  "meta": {
+    "verification": {
+      "root": "pnpm test + 19 Playwright cases passed",
+      "pages": "build + check:site + 44 Playwright cases passed",
+      "algorithm_shapes": 626,
+      "ordered_forests": 626
+    }
+  }
+}

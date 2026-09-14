@@ -1,47 +1,182 @@
 [
   {
-    "id": "001-sample",
-    "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
+    "points": 5,
+    "input": "tests/001-sample.in",
     "tags": [
       "sample"
-    ]
+    ],
+    "id": "001-sample"
   },
   {
-    "id": "002-ascii",
-    "input": "tests/002-ascii.in",
     "expected": "tests/002-ascii.out",
-    "points": 20,
+    "points": 5,
+    "input": "tests/002-ascii.in",
     "tags": [
       "normal"
-    ]
+    ],
+    "id": "002-ascii"
   },
   {
-    "id": "003-mixed",
-    "input": "tests/003-mixed.in",
     "expected": "tests/003-mixed.out",
-    "points": 20,
+    "points": 5,
+    "input": "tests/003-mixed.in",
     "tags": [
       "normal"
-    ]
+    ],
+    "id": "003-mixed"
   },
   {
-    "id": "004-emoji",
-    "input": "tests/004-emoji.in",
     "expected": "tests/004-emoji.out",
-    "points": 20,
+    "points": 5,
+    "input": "tests/004-emoji.in",
     "tags": [
       "boundary"
-    ]
+    ],
+    "id": "004-emoji"
   },
   {
-    "id": "005-empty",
-    "input": "tests/005-empty.in",
     "expected": "tests/005-empty.out",
-    "points": 20,
+    "points": 5,
+    "input": "tests/005-empty.in",
     "tags": [
       "boundary"
-    ]
+    ],
+    "id": "005-empty"
+  },
+  {
+    "expected": "tests/006-all-ascii-long.out",
+    "points": 5,
+    "input": "tests/006-all-ascii-long.in",
+    "tags": [
+      "normal"
+    ],
+    "id": "006-all-ascii-long"
+  },
+  {
+    "expected": "tests/007-all-2byte.out",
+    "points": 5,
+    "input": "tests/007-all-2byte.in",
+    "tags": [
+      "normal"
+    ],
+    "id": "007-all-2byte"
+  },
+  {
+    "expected": "tests/008-all-3byte.out",
+    "points": 5,
+    "input": "tests/008-all-3byte.in",
+    "tags": [
+      "normal"
+    ],
+    "id": "008-all-3byte"
+  },
+  {
+    "expected": "tests/009-all-emoji.out",
+    "points": 5,
+    "input": "tests/009-all-emoji.in",
+    "tags": [
+      "normal"
+    ],
+    "id": "009-all-emoji"
+  },
+  {
+    "expected": "tests/010-mixed-12.out",
+    "points": 5,
+    "input": "tests/010-mixed-12.in",
+    "tags": [
+      "normal"
+    ],
+    "id": "010-mixed-12"
+  },
+  {
+    "expected": "tests/011-mixed-14.out",
+    "points": 5,
+    "input": "tests/011-mixed-14.in",
+    "tags": [
+      "normal"
+    ],
+    "id": "011-mixed-14"
+  },
+  {
+    "expected": "tests/012-mixed-24.out",
+    "points": 5,
+    "input": "tests/012-mixed-24.in",
+    "tags": [
+      "normal"
+    ],
+    "id": "012-mixed-24"
+  },
+  {
+    "expected": "tests/013-mixed-all.out",
+    "points": 5,
+    "input": "tests/013-mixed-all.in",
+    "tags": [
+      "normal"
+    ],
+    "id": "013-mixed-all"
+  },
+  {
+    "expected": "tests/014-long-ascii.out",
+    "points": 5,
+    "input": "tests/014-long-ascii.in",
+    "tags": [
+      "stress"
+    ],
+    "id": "014-long-ascii"
+  },
+  {
+    "expected": "tests/015-long-chinese.out",
+    "points": 5,
+    "input": "tests/015-long-chinese.in",
+    "tags": [
+      "stress"
+    ],
+    "id": "015-long-chinese"
+  },
+  {
+    "expected": "tests/016-long-emoji.out",
+    "points": 5,
+    "input": "tests/016-long-emoji.in",
+    "tags": [
+      "stress"
+    ],
+    "id": "016-long-emoji"
+  },
+  {
+    "expected": "tests/017-max-bytes.out",
+    "points": 5,
+    "input": "tests/017-max-bytes.in",
+    "tags": [
+      "stress"
+    ],
+    "id": "017-max-bytes"
+  },
+  {
+    "expected": "tests/018-single-ascii.out",
+    "points": 5,
+    "input": "tests/018-single-ascii.in",
+    "tags": [
+      "boundary"
+    ],
+    "id": "018-single-ascii"
+  },
+  {
+    "expected": "tests/019-single-chinese.out",
+    "points": 5,
+    "input": "tests/019-single-chinese.in",
+    "tags": [
+      "boundary"
+    ],
+    "id": "019-single-chinese"
+  },
+  {
+    "expected": "tests/020-single-emoji.out",
+    "points": 5,
+    "input": "tests/020-single-emoji.in",
+    "tags": [
+      "boundary"
+    ],
+    "id": "020-single-emoji"
   }
 ]

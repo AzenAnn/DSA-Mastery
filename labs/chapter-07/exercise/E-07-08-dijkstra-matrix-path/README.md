@@ -1,12 +1,12 @@
 ---
 title: "Lab 07-E-08：朴素 Dijkstra 与路径还原"
 description: "用邻接矩阵实现考研教材标准的 O(n²) Dijkstra，回答多个目标的距离与完整路径查询。"
-order: 11
+order: 117
 chapter: 7
 labId: "07E08"
 chapterTitle: "图的遍历与应用"
-updated: "2026-08-28"
-contributors: ["Jeff"]
+updated: "2026-09-14"
+contributors: ["Jeff", "Azen"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -14,6 +14,8 @@ duration: "75～90 分钟"
 ---
 
 # Lab 07-E-08：朴素 Dijkstra 与路径还原
+
+> 题集 T17 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 
@@ -24,7 +26,7 @@ duration: "75～90 分钟"
 
 ## 前置知识
 
-完成 [Lab 07-10](../E-07-07-dijkstra-trace/README.md)（手推推演）后再来。你需要理解：为什么稠密图（$m \approx n^2$）上朴素版 $O(n^2)$ 反而优于堆版 $O((n+m)\log n)$——答案是堆版在稠密图上入堆记录数是 $O(n^2)$ 量级，每次还要付 $\log$ 的代价。
+完成 [Lab 07-E-07：Dijkstra 逐轮推演](../E-07-07-dijkstra-trace/README.md)后再来。你需要理解：在稠密图（$m \approx n^2$）上，朴素版的 $O(n^2)$ 为什么可能优于堆版的 $O((n+m)\log n)$。原因是堆版可能产生 $O(n^2)$ 条堆记录，并且每次入堆、出堆还要付出对数时间。
 
 ## 输入格式
 
@@ -85,7 +87,7 @@ duration: "75～90 分钟"
 ## 任务
 
 1. 读入边表，构造邻接矩阵：`adj[u][v] = min(adj[u][v], w)`，自环（`u == v`）直接忽略；无边用无穷大标记；
-2. 跑一遍朴素 Dijkstra（与 Lab 07-10 相同的选点与平手规则），维护 `dist` 与 `prev`；
+2. 跑一遍朴素 Dijkstra（与 Lab 07-E-07 相同：每轮选择未确定且 `dist` 最小的顶点，并列时选编号最小者），维护 `dist` 与 `prev`；
 3. 对每个查询目标：沿 `prev` 从目标回溯到源点，收集顶点后反转输出；
 4. 回溯前必须先判不可达（`dist[t]` 为无穷），避免无效回溯甚至死循环。
 

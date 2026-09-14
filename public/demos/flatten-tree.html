@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>二叉树展开 · 先序右链可视化</title>
+  <link rel="stylesheet" href="./tree-demo.css">
+</head>
+<body data-demo="flatten">
+<main class="app">
+  <header class="hero">
+    <div class="eyebrow">Interactive Algorithm Lab</div>
+    <h1>二叉树展开 · 看见每一次重连</h1>
+    <p>保留原树作对照，跟随 curr 和 pred 逐条修改指针。绿色粗线表示新增，红色虚线与叉号表示删除，最后得到所有 left 为空的先序右链。</p>
+  </header>
+  <div id="demo"></div>
+  <noscript>请启用 JavaScript 操作演示。展开算法及复杂度说明也可在教材正文中阅读。</noscript>
+</main>
+<script type="module" src="./tree-demo.mjs"></script>
+</body>
+</html>

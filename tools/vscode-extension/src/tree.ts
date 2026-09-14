@@ -202,6 +202,8 @@ function projectStateIcon(state: ProjectProgress | undefined): vscode.ThemeIcon 
 }
 
 function describeProjectState(state: ProjectProgress | undefined): string {
+  if (state?.currentUnknown) return "当前代码待核验 · 历史已保留";
+  if (state?.current?.tasks.some((task) => task.status === "STALE")) return `${formatScore(state.automatedScore)}/${formatScore(state.automatedMax)} · 需要重测`;
   if (!state || state.submissionCount === 0) return "";
   if (state.internalError) return "评测内部错误";
   if (projectProgressPassed(state)) return `${formatScore(state.automatedScore)}/${formatScore(state.automatedMax)}`;

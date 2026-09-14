@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1, "kind": "ctest",
+  "ctest": {
+    "buildTargets": ["expr_tokenizer_tests"], "moduleTargets": ["expr_tokenizer"],
+    "tests": [ { "name": "tokenizer-normal", "points": 40 }, { "name": "tokenizer-boundary", "points": 30 }, { "name": "tokenizer-errors", "points": 30 } ]
+  }
+}

@@ -75,11 +75,20 @@ async function probeTool(name, command, args, minimum, options = {}) {
 export async function inspectHost({ platform = process.platform, architecture = process.arch, env = process.env, runner = runCommand, nodeCommand = process.execPath } = {}) {
   let msvcEnvironment;
   let msvcError;
+  let msvcFallbackPath;
   if (platform === "win32") {
     try {
       msvcEnvironment = await createMsvcEnvironment({ platform, env, runner });
     } catch (error) {
       msvcError = error;
+      // Fallback: probe vswhere directly even when VsDevCmd init fails
+      try {
+        const { findVisualStudioInstallation } = await import("../../tools/lab/toolchain.mjs");
+        const found = await findVisualStudioInstallation({ platform, env, runner });
+        if (found?.installationPath) {
+          msvcFallbackPath = found.installationPath;
+        }
+      } catch { /* ignore fallback probe errors */ }
     }
   }
   const tools = await Promise.all([
@@ -110,10 +119,11 @@ export async function inspectHost({ platform = process.platform, architecture = 
     runtimeReady: Boolean(node?.meetsMinimum && pnpm?.meetsMinimum),
     msvc: {
       initialized: Boolean(msvcEnvironment),
-      installationPath: msvcEnvironment?.installationPath,
+      installationPath: msvcEnvironment?.installationPath ?? msvcFallbackPath,
       developerCommand: msvcEnvironment?.developerCommand,
       environment: msvcEnvironment?.env,
       error: msvcError?.message,
+      fallbackDetected: Boolean(msvcFallbackPath),
     },
   };
 }

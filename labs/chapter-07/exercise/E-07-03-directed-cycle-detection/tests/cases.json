@@ -1,58 +1,182 @@
 [
   {
+    "expected": "tests/001-sample.out",
+    "points": 5,
     "id": "001-sample",
     "input": "tests/001-sample.in",
-    "expected": "tests/001-sample.out",
-    "points": 15,
-    "tags": ["sample"]
+    "tags": [
+      "sample"
+    ]
   },
   {
+    "expected": "tests/002-cross-edge-dag.out",
+    "points": 5,
     "id": "002-cross-edge-dag",
     "input": "tests/002-cross-edge-dag.in",
-    "expected": "tests/002-cross-edge-dag.out",
-    "points": 15,
-    "tags": ["normal"]
+    "tags": [
+      "normal"
+    ]
   },
   {
+    "expected": "tests/003-single-vertex.out",
+    "points": 5,
     "id": "003-single-vertex",
     "input": "tests/003-single-vertex.in",
-    "expected": "tests/003-single-vertex.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "tags": [
+      "boundary"
+    ]
   },
   {
+    "expected": "tests/004-self-loop.out",
+    "points": 5,
     "id": "004-self-loop",
     "input": "tests/004-self-loop.in",
-    "expected": "tests/004-self-loop.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "tags": [
+      "boundary"
+    ]
   },
   {
+    "expected": "tests/005-multi-component-cycle.out",
+    "points": 5,
     "id": "005-multi-component-cycle",
     "input": "tests/005-multi-component-cycle.in",
-    "expected": "tests/005-multi-component-cycle.out",
-    "points": 15,
-    "tags": ["normal"]
+    "tags": [
+      "normal"
+    ]
   },
   {
+    "expected": "tests/006-long-dag.out",
+    "points": 5,
     "id": "006-long-dag",
     "input": "tests/006-long-dag.in",
-    "expected": "tests/006-long-dag.out",
-    "points": 10,
-    "tags": ["normal"]
+    "tags": [
+      "normal"
+    ]
   },
   {
+    "expected": "tests/007-stress.out",
+    "points": 5,
     "id": "007-stress",
     "input": "tests/007-stress.in",
-    "expected": "tests/007-stress.out",
-    "points": 10,
-    "tags": ["stress"]
+    "tags": [
+      "stress"
+    ]
   },
   {
+    "expected": "tests/008-forward-edge-dag.out",
+    "points": 5,
     "id": "008-forward-edge-dag",
     "input": "tests/008-forward-edge-dag.in",
-    "expected": "tests/008-forward-edge-dag.out",
-    "points": 10,
-    "tags": ["regression"]
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "expected": "tests/009-small-cycle-3.out",
+    "points": 5,
+    "id": "009-small-cycle-3",
+    "input": "tests/009-small-cycle-3.in",
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "expected": "tests/010-large-cycle.out",
+    "points": 5,
+    "id": "010-large-cycle",
+    "input": "tests/010-large-cycle.in",
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "expected": "tests/011-multiple-cycles.out",
+    "points": 5,
+    "id": "011-multiple-cycles",
+    "input": "tests/011-multiple-cycles.in",
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "expected": "tests/012-dense-dag.out",
+    "points": 5,
+    "id": "012-dense-dag",
+    "input": "tests/012-dense-dag.in",
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "expected": "tests/013-sparse-dag.out",
+    "points": 5,
+    "id": "013-sparse-dag",
+    "input": "tests/013-sparse-dag.in",
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "expected": "tests/014-binary-tree-dag.out",
+    "points": 5,
+    "id": "014-binary-tree-dag",
+    "input": "tests/014-binary-tree-dag.in",
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "expected": "tests/015-self-loop-only.out",
+    "points": 5,
+    "id": "015-self-loop-only",
+    "input": "tests/015-self-loop-only.in",
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "expected": "tests/016-long-dag-2.out",
+    "points": 5,
+    "id": "016-long-dag-2",
+    "input": "tests/016-long-dag-2.in",
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "expected": "tests/017-back-edge-deep.out",
+    "points": 5,
+    "id": "017-back-edge-deep",
+    "input": "tests/017-back-edge-deep.in",
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "expected": "tests/018-cross-edge-cycle.out",
+    "points": 5,
+    "id": "018-cross-edge-cycle",
+    "input": "tests/018-cross-edge-cycle.in",
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "expected": "tests/019-complete-dag.out",
+    "points": 5,
+    "id": "019-complete-dag",
+    "input": "tests/019-complete-dag.in",
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "expected": "tests/020-max-stress.out",
+    "points": 5,
+    "id": "020-max-stress",
+    "input": "tests/020-max-stress.in",
+    "tags": [
+      "stress"
+    ]
   }
 ]

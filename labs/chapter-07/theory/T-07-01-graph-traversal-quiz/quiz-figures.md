@@ -1,5 +1,5 @@
 ---
-title: "Lab 07-01 题库配图源（构建专用）"
+title: "Lab 07-T-01 题库配图源（构建专用）"
 search: false
 head:
   - - meta

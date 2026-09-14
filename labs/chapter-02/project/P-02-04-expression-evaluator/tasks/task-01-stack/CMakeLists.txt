@@ -1,0 +1,7 @@
+add_library(expr_stack STATIC ${LAB_IMPL}/stack.cpp)
+target_include_directories(expr_stack PUBLIC ${PROJECT_SOURCE_DIR}/contracts)
+add_executable(expr_stack_tests tests/stack_tests.cpp)
+target_link_libraries(expr_stack_tests PRIVATE expr_stack)
+foreach(group lifo capacity empty)
+  add_test(NAME stack-${group} COMMAND expr_stack_tests ${group})
+endforeach()

@@ -1,51 +1,182 @@
 [
   {
+    "tags": [
+      "sample"
+    ],
     "id": "001-sample",
     "input": "tests/001-sample.in",
-    "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "expected": "tests/001-sample.out"
   },
   {
+    "tags": [
+      "normal"
+    ],
     "id": "002-connected",
     "input": "tests/002-connected.in",
-    "expected": "tests/002-connected.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5,
+    "expected": "tests/002-connected.out"
   },
   {
+    "tags": [
+      "boundary"
+    ],
     "id": "003-isolated",
     "input": "tests/003-isolated.in",
-    "expected": "tests/003-isolated.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "expected": "tests/003-isolated.out"
   },
   {
+    "tags": [
+      "normal"
+    ],
     "id": "004-mixed",
     "input": "tests/004-mixed.in",
-    "expected": "tests/004-mixed.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "expected": "tests/004-mixed.out"
   },
   {
+    "tags": [
+      "normal"
+    ],
     "id": "005-chain",
     "input": "tests/005-chain.in",
-    "expected": "tests/005-chain.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5,
+    "expected": "tests/005-chain.out"
   },
   {
+    "tags": [
+      "normal"
+    ],
     "id": "006-star",
     "input": "tests/006-star.in",
-    "expected": "tests/006-star.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5,
+    "expected": "tests/006-star.out"
   },
   {
+    "tags": [
+      "stress"
+    ],
     "id": "007-stress",
     "input": "tests/007-stress.in",
-    "expected": "tests/007-stress.out",
-    "points": 20,
-    "tags": ["stress"]
+    "points": 5,
+    "expected": "tests/007-stress.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "008-two-components",
+    "input": "tests/008-two-components.in",
+    "points": 5,
+    "expected": "tests/008-two-components.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "009-many-components",
+    "input": "tests/009-many-components.in",
+    "points": 5,
+    "expected": "tests/009-many-components.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "010-binary-tree",
+    "input": "tests/010-binary-tree.in",
+    "points": 5,
+    "expected": "tests/010-binary-tree.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "011-complete",
+    "input": "tests/011-complete.in",
+    "points": 5,
+    "expected": "tests/011-complete.out"
+  },
+  {
+    "tags": [
+      "stress"
+    ],
+    "id": "012-dense",
+    "input": "tests/012-dense.in",
+    "points": 5,
+    "expected": "tests/012-dense.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "013-sparse",
+    "input": "tests/013-sparse.in",
+    "points": 5,
+    "expected": "tests/013-sparse.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "014-path",
+    "input": "tests/014-path.in",
+    "points": 5,
+    "expected": "tests/014-path.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "015-ring",
+    "input": "tests/015-ring.in",
+    "points": 5,
+    "expected": "tests/015-ring.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "016-tree",
+    "input": "tests/016-tree.in",
+    "points": 5,
+    "expected": "tests/016-tree.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "017-star",
+    "input": "tests/017-star.in",
+    "points": 5,
+    "expected": "tests/017-star.out"
+  },
+  {
+    "tags": [
+      "stress"
+    ],
+    "id": "018-max-vertices",
+    "input": "tests/018-max-vertices.in",
+    "points": 5,
+    "expected": "tests/018-max-vertices.out"
+  },
+  {
+    "tags": [
+      "stress"
+    ],
+    "id": "019-max-edges",
+    "input": "tests/019-max-edges.in",
+    "points": 5,
+    "expected": "tests/019-max-edges.out"
+  },
+  {
+    "tags": [
+      "normal"
+    ],
+    "id": "020-mixed-sizes",
+    "input": "tests/020-mixed-sizes.in",
+    "points": 5,
+    "expected": "tests/020-mixed-sizes.out"
   }
 ]

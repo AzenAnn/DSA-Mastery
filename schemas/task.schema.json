@@ -22,6 +22,16 @@
       "type": "object",
       "required": ["tests"],
       "properties": {
+        "buildTargets": {
+          "description": "CMake targets required by this task's tests; omitted means legacy whole-project build.",
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-zA-Z0-9_][a-zA-Z0-9_.+-]*$" }
+        },
+        "moduleTargets": {
+          "description": "Implementation-only targets used to diagnose source dependency build failures.",
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-zA-Z0-9_][a-zA-Z0-9_.+-]*$" }
+        },
         "tests": {
           "type": "array",
           "minItems": 1,

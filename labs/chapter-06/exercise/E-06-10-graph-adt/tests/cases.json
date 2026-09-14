@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-u-boundary-empty",
+    "input": "tests/002-u-boundary-empty.in",
+    "expected": "tests/002-u-boundary-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-u-missing-query",
+    "input": "tests/003-u-missing-query.in",
+    "expected": "tests/003-u-missing-query.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "004-u-missing-delete",
+    "input": "tests/004-u-missing-delete.in",
+    "expected": "tests/004-u-missing-delete.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "005-u-regression-duplicate-add",
+    "input": "tests/005-u-regression-duplicate-add.in",
+    "expected": "tests/005-u-regression-duplicate-add.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "006-u-regression-reverse-delete",
+    "input": "tests/006-u-regression-reverse-delete.in",
+    "expected": "tests/006-u-regression-reverse-delete.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "007-u-opposite-arcs",
+    "input": "tests/007-u-opposite-arcs.in",
+    "expected": "tests/007-u-opposite-arcs.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-u-interleaved-edges",
+    "input": "tests/008-u-interleaved-edges.in",
+    "expected": "tests/008-u-interleaved-edges.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-u-random-operations",
+    "input": "tests/009-u-random-operations.in",
+    "expected": "tests/009-u-random-operations.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-u-stress-max-operations",
+    "input": "tests/010-u-stress-max-operations.in",
+    "expected": "tests/010-u-stress-max-operations.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "011-d-sample",
+    "input": "tests/011-d-sample.in",
+    "expected": "tests/011-d-sample.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-d-boundary-empty",
+    "input": "tests/012-d-boundary-empty.in",
+    "expected": "tests/012-d-boundary-empty.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "013-d-missing-query",
+    "input": "tests/013-d-missing-query.in",
+    "expected": "tests/013-d-missing-query.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-d-missing-delete",
+    "input": "tests/014-d-missing-delete.in",
+    "expected": "tests/014-d-missing-delete.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-d-regression-duplicate-add",
+    "input": "tests/015-d-regression-duplicate-add.in",
+    "expected": "tests/015-d-regression-duplicate-add.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "016-d-regression-reverse-delete",
+    "input": "tests/016-d-regression-reverse-delete.in",
+    "expected": "tests/016-d-regression-reverse-delete.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "017-d-opposite-arcs",
+    "input": "tests/017-d-opposite-arcs.in",
+    "expected": "tests/017-d-opposite-arcs.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-d-interleaved-edges",
+    "input": "tests/018-d-interleaved-edges.in",
+    "expected": "tests/018-d-interleaved-edges.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-d-random-operations",
+    "input": "tests/019-d-random-operations.in",
+    "expected": "tests/019-d-random-operations.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "020-d-stress-max-operations",
+    "input": "tests/020-d-stress-max-operations.in",
+    "expected": "tests/020-d-stress-max-operations.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

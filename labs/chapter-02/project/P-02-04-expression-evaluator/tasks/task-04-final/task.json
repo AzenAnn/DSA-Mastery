@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../schemas/task.schema.json",
+  "schemaVersion": 1, "kind": "ctest",
+  "ctest": {
+    "buildTargets": ["expr_final_tests", "expression_cli"], "moduleTargets": ["expr_evaluator"],
+    "tests": [ { "name": "final-normal", "points": 30 }, { "name": "final-boundary", "points": 25 }, { "name": "final-errors", "points": 25 }, { "name": "final-cli", "points": 20 } ]
+  }
+}

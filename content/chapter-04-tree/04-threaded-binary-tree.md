@@ -4,12 +4,19 @@ description: "深入空链域复用机制、中序线索化算法、O(1) 空间�
 order: 4
 chapter: 4
 chapterTitle: "树与二叉树"
-updated: "2026-08-24"
-contributors: ["Wanderer0、qzmqzm123"]
+updated: "2026-09-09"
+contributors: ["Wanderer0、qzmqzm123", "Azen"]
 status: "draft"
 ---
 
 # 4.4 线索二叉树
+
+<script setup>
+import { withBase } from "vitepress";
+
+const threadingDemoUrl = withBase("/demos/threaded-tree.html");
+const morrisDemoUrl = withBase("/demos/threaded-tree.html?mode=morris");
+</script>
 
 在标准的二叉链表存储中，每个节点包含一个数据域和两个指针域（`left` 与 `right`）。对于一棵拥有 $n$ 个节点的二叉树，系统总共分配了 $2n$ 个指针域。但在 [4.1 节](./01-tree-basics.md) 中我们已经推导过：树中只有 $n-1$ 条父子边。
 
@@ -241,6 +248,23 @@ public:
 };
 ```
 
+:::
+
+---
+
+### 交互式演示：中序线索化
+
+用与上图相同的 `A、B、C、D、E` 亲手走一遍线索化过程：观察 `curr` 和 `prev` 的位置、空指针如何改连，以及 `ltag/rtag` 何时从 `0` 变为 `1`。每条新线索都会单独显示，可以回退或拖动时间线核对指针快照。
+
+<iframe
+  :src="threadingDemoUrl"
+  title="中序线索化 · 指针如何连起来"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 观察什么
+先确认输出为 `D B E A C`，再检查 `D` 的空前驱和 `C` 的空后继。切换“单节点”案例，观察两个标志都变成 `Thread(1)`，而左右指针仍然为 `null`。原来已有孩子的指针不能被线索覆盖。
 :::
 
 ---
@@ -564,6 +588,23 @@ void morrisInorder(ThreadNode* root) {
 
 ---
 
+### 交互式演示：Morris 临时回边
+
+下面从**未线索化的普通二叉树**重新开始。观察前驱的空右指针如何被临时借作返回路径：第一次到达建立回边，第二次到达拆除回边，再输出当前节点。回退到拆除前后，可以检查同一条 `right` 指针的变化。
+
+<iframe
+  :src="morrisDemoUrl"
+  title="Morris 遍历 · 临时回边的建立与恢复"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 与永久线索的区别
+结束时中序序列仍为 `D B E A C`，但临时回边数量必须回到 **0**，所有指针恢复成原树。也可以切换长左链和长右链，比较是否需要借用空右指针。演示为回退保存的快照不属于 Morris 算法自身的辅助空间。
+:::
+
+---
+
 ## 配套理论题
 
 本节对应的理论题库如下：
@@ -585,3 +626,21 @@ void morrisInorder(ThreadNode* root) {
 5. 比较普通二叉链表的非递归中序遍历（显式栈）与中序线索二叉树遍历的时空复杂度差异。
 
 下一节进入[4.5 树、森林与二叉树](./05-trees-and-forests.md)：我们将跨越二叉树的边界，探索一般多叉树、森林如何通过经典“孩子兄弟”映射化繁为简，与二叉树融为一体。
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1100px;
+  }
+}
+</style>

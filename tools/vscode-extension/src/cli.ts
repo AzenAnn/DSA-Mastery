@@ -5,12 +5,13 @@ import * as vscode from "vscode";
 
 /** tools/lab/cli.mjs 当前输出的报告版本。不匹配时提示升级扩展，而不是静默出错。 */
 const SUPPORTED_REPORT_VERSION = 1;
+declare const __LAB_NODE_MINIMUM__: readonly number[];
 
 /** 判题内核使用的退出码，见 tools/lab/errors.mjs 的 EXIT。 */
 export const EXIT = { OK: 0, SCORE_NOT_FULL: 1, TOOL_ERROR: 2 } as const;
 
 export type Verdict = "AC" | "WA" | "TLE" | "RE" | "CE" | "OLE" | "IE";
-export type ProjectStatus = Verdict | "PENDING";
+export type ProjectStatus = Verdict | "PENDING" | "BLOCKED" | "UNASSESSED" | "STALE";
 
 export interface CaseResult {
   id: string;
@@ -61,8 +62,13 @@ export interface ProjectBuildResult {
   ok: boolean;
   phase: "configure" | "build";
   target: "student" | "solution";
-  configure?: unknown;
-  build?: unknown;
+  configure?: { stdout?: string; stderr?: string };
+  build?: { stdout?: string; stderr?: string };
+  targets?: string[];
+  scope?: "task" | "project";
+  blockedBy?: string[];
+  relatedTasks?: string[];
+  legacyBuild?: boolean;
 }
 
 interface ProjectTaskResultBase {
@@ -71,6 +77,10 @@ interface ProjectTaskResultBase {
   status: ProjectStatus;
   weight: number;
   weightedScore: number;
+  inputFingerprint?: string;
+  changedDuringRun?: boolean;
+  assessedAt?: string;
+  blockedBy?: string[];
 }
 
 export interface ProjectStdioTaskResult extends ProjectTaskResultBase {
@@ -83,7 +93,7 @@ export interface ProjectStdioTaskResult extends ProjectTaskResultBase {
 
 export interface ProjectCtestTaskResult extends ProjectTaskResultBase {
   kind: "ctest";
-  status: Verdict;
+  status: Verdict | "BLOCKED";
   score: number;
   maxScore: number;
   tests: ProjectCtestResult[];
@@ -109,6 +119,29 @@ export interface ProjectScoreResult {
   total: number;
   automatedFull: boolean;
   internalError: boolean;
+  selectedTaskId?: string;
+  partial?: boolean;
+  current?: ProjectCurrentState;
+}
+
+export interface ProjectCurrentTask extends ProjectTaskResultBase {
+  score?: number;
+  maxScore?: number;
+  tests?: ProjectCtestResult[];
+  judge?: ScoreResult;
+  build?: ProjectBuildResult;
+  checklist?: string[];
+  historicalScore?: number;
+  bestScore?: number;
+  previousStatus?: ProjectStatus;
+  inputFiles: string[];
+  valid: boolean;
+  unsaved?: boolean;
+}
+
+export interface ProjectCurrentState extends Omit<ProjectScoreResult, "tasks" | "current"> {
+  tasks: ProjectCurrentTask[];
+  complete: boolean;
 }
 
 export interface DoctorTool {
@@ -172,19 +205,28 @@ async function exists(target: string): Promise<boolean> {
  */
 async function resolveNode(): Promise<{ command: string; env?: NodeJS.ProcessEnv }> {
   const configured = vscode.workspace.getConfiguration("dsaMastery").get<string>("nodePath")?.trim();
-  if (configured) return { command: configured };
-
-  const probe = await new Promise<boolean>((resolve) => {
-    const child = spawn("node", ["--version"], { shell: false });
-    child.once("error", () => resolve(false));
-    child.once("close", (code) => resolve(code === 0));
-  });
-  if (probe) return { command: "node" };
-
-  return {
-    command: process.execPath,
-    env: { ...process.env, ELECTRON_RUN_AS_NODE: "1" },
-  };
+  const candidates = configured ? [{ command: configured }] : [
+    { command: "node" },
+    { command: process.execPath, env: { ...process.env, ELECTRON_RUN_AS_NODE: "1" } },
+  ];
+  for (const candidate of candidates) {
+    const version = await new Promise<string>((resolve) => {
+      const child = spawn(candidate.command, ["--version"], { shell: false, env: candidate.env, timeout: 5000 });
+      let output = "";
+      child.stdout.on("data", (chunk) => { output += chunk; });
+      child.once("error", () => resolve(""));
+      child.once("close", (code) => resolve(code === 0 ? output.trim() : ""));
+    });
+    const match = version.match(/^v?(\d+)\.(\d+)\.(\d+)$/);
+    if (match) {
+      const actual = match.slice(1).map(Number);
+      const difference = actual.map((part, index) => part - __LAB_NODE_MINIMUM__[index]).find((part) => part !== 0) ?? 0;
+      if (difference >= 0) return candidate;
+    }
+  }
+  throw new CliError(configured
+    ? `dsaMastery.nodePath 无法提供 Node >=22.13.0：${configured}。请配置有效可执行文件或清空此设置。`
+    : "PATH 和 VS Code 内置运行时均无法提供 Node >=22.13.0。请安装受支持的 Node 或更新 VS Code。", "NODE_VERSION");
 }
 
 interface RunOutcome<T> {
@@ -193,6 +235,7 @@ interface RunOutcome<T> {
 }
 
 async function runCli<T>(repoRoot: string, args: string[]): Promise<RunOutcome<T>> {
+  if (!vscode.workspace.isTrusted) throw new CliError("当前工作区尚未受信任。确认源码可信后，在 VS Code 的工作区信任中启用测评。", "WORKSPACE_UNTRUSTED");
   const cliPath = path.join(repoRoot, "tools", "lab", "cli.mjs");
   if (!(await exists(cliPath))) {
     throw new CliError(`未找到判题内核：${cliPath}。请确认当前工作区是 DSA Mastery 仓库根目录。`);
@@ -271,11 +314,19 @@ export async function scoreLab(repoRoot: string, labRelativePath: string): Promi
  * Project 的权重、CMake/CTest 结果和 stdio 嵌套用例都由 lab CLI 计算；扩展只接收并展示
  * 原始聚合结果，不在这里重新实现一套评分规则。
  */
-export async function scoreProject(repoRoot: string, labRelativePath: string): Promise<ProjectScoreResult> {
-  const { report, exitCode } = await runCli<ProjectScoreResult>(repoRoot, ["score", labRelativePath]);
+export async function scoreProject(repoRoot: string, labRelativePath: string, taskId?: string): Promise<ProjectScoreResult> {
+  const args = ["score", labRelativePath];
+  if (taskId) args.push("--task", taskId);
+  const { report, exitCode } = await runCli<ProjectScoreResult>(repoRoot, args);
   if (!report.result) {
     throw new CliError(`Project 判题报告缺少 result 字段（退出码 ${exitCode}）。`, "REPORT_INCOMPLETE");
   }
+  return report.result;
+}
+
+export async function readProjectCurrent(repoRoot: string, labRelativePath: string, dirtyFiles: string[] = []): Promise<ProjectCurrentState> {
+  const { report } = await runCli<ProjectCurrentState>(repoRoot, ["project-status", labRelativePath, "--dirty-files", JSON.stringify(dirtyFiles)]);
+  if (!report.result) throw new CliError("Project 状态报告缺少 result 字段。", "REPORT_INCOMPLETE");
   return report.result;
 }
 

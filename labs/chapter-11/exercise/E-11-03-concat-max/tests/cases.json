@@ -3,35 +3,182 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-prefix",
     "input": "tests/002-prefix.in",
     "expected": "tests/002-prefix.out",
-    "points": 25,
-    "tags": ["normal", "tricky"]
+    "points": 5,
+    "tags": [
+      "normal",
+      "tricky"
+    ]
   },
   {
     "id": "003-mixed-prefix",
     "input": "tests/003-mixed-prefix.in",
     "expected": "tests/003-mixed-prefix.out",
-    "points": 20,
-    "tags": ["normal", "tricky"]
+    "points": 5,
+    "tags": [
+      "normal",
+      "tricky"
+    ]
   },
   {
     "id": "004-all-same",
     "input": "tests/004-all-same.in",
     "expected": "tests/004-all-same.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "005-single",
     "input": "tests/005-single.in",
     "expected": "tests/005-single.out",
-    "points": 20,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "006-prefix-two",
+    "input": "tests/006-prefix-two.in",
+    "expected": "tests/006-prefix-two.out",
+    "points": 5,
+    "tags": [
+      "tricky"
+    ]
+  },
+  {
+    "id": "007-leading-ones",
+    "input": "tests/007-leading-ones.in",
+    "expected": "tests/007-leading-ones.out",
+    "points": 5,
+    "tags": [
+      "tricky"
+    ]
+  },
+  {
+    "id": "008-n-twenty",
+    "input": "tests/008-n-twenty.in",
+    "expected": "tests/008-n-twenty.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-same-digits",
+    "input": "tests/009-same-digits.in",
+    "expected": "tests/009-same-digits.out",
+    "points": 5,
+    "tags": [
+      "tricky"
+    ]
+  },
+  {
+    "id": "010-single-digits",
+    "input": "tests/010-single-digits.in",
+    "expected": "tests/010-single-digits.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-descending",
+    "input": "tests/011-descending.in",
+    "expected": "tests/011-descending.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-prefix-chain",
+    "input": "tests/012-prefix-chain.in",
+    "expected": "tests/012-prefix-chain.out",
+    "points": 5,
+    "tags": [
+      "tricky"
+    ]
+  },
+  {
+    "id": "013-zero-ending",
+    "input": "tests/013-zero-ending.in",
+    "expected": "tests/013-zero-ending.out",
+    "points": 5,
+    "tags": [
+      "tricky"
+    ]
+  },
+  {
+    "id": "014-random-small",
+    "input": "tests/014-random-small.in",
+    "expected": "tests/014-random-small.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-random-mid",
+    "input": "tests/015-random-mid.in",
+    "expected": "tests/015-random-mid.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-random-large",
+    "input": "tests/016-random-large.in",
+    "expected": "tests/016-random-large.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-two-equal",
+    "input": "tests/017-two-equal.in",
+    "expected": "tests/017-two-equal.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "018-max-value-single",
+    "input": "tests/018-max-value-single.in",
+    "expected": "tests/018-max-value-single.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "019-max-values-two",
+    "input": "tests/019-max-values-two.in",
+    "expected": "tests/019-max-values-two.out",
+    "points": 5,
+    "tags": [
+      "tricky"
+    ]
+  },
+  {
+    "id": "020-all-prefix-of-two",
+    "input": "tests/020-all-prefix-of-two.in",
+    "expected": "tests/020-all-prefix-of-two.out",
+    "points": 5,
+    "tags": [
+      "tricky"
+    ]
   }
 ]

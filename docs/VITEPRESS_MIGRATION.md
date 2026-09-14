@@ -86,7 +86,7 @@ VitePress `1.6.4` 在部分 Lab 跨页面客户端导航中会保留上一页 ou
 | `pnpm run test:discovery` | 临时内容自动发现、渲染与清理 |
 | `pnpm run build` | 构建 `dist/pages` |
 | `pnpm run check:site` | 检查页面清单、内部链接、base、H1 与搜索内容 |
-| `pnpm test` | 依次执行 validate、discovery、最终 build 与 artifact check |
+| `pnpm test` | 依次执行 validate、树演示/启动器/Lab 工具与文档检查、discovery、最终 build 与 artifact check |
 | `pnpm run test:pages` | 对最终 Pages 子路径产物运行 Playwright |
 
 迁移收口时的实际结果：

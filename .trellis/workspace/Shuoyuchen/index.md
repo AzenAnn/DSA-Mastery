@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 5
+- **Total Sessions**: 7
 - **Last Active**: 2026-09-14
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~127 | Active |
+| `journal-1.md` | ~175 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,7 +29,9 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
-| 5 | 2026-09-14 | 修复选择题一键测评 | `22046908` | `codex/fix-choice-one-click-submit` |
+| 7 | 2026-09-14 | 修复选择题一键测评 | `22046908` | `codex/fix-choice-one-click-submit` |
+| 6 | 2026-09-11 | 扩充第 13 章贪心题库 | `1696d44` | `codex/chapter-13-greedy-ten-labs` |
+| 5 | 2026-09-09 | 扩充第 13 章贪心 Lab 与测试 | `f9544c5`, `231aa09` | `codex/chapter-13-greedy-labs-tests` |
 | 4 | 2026-08-28 | 新增 LeetCode 55 跳跃游戏 Lab | `a9c3962` | `codex/chapter-13-container-with-most-water` |
 | 3 | 2026-08-28 | 新增 LeetCode 409 最长回文串 Lab | `d6ae380` | `codex/chapter-13-container-with-most-water` |
 | 2 | 2026-08-24 | 新增第 13 章盛最多水的容器 Lab | `3a9f2f5` | `codex/chapter-13-container-with-most-water` |

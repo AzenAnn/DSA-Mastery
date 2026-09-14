@@ -1,0 +1,202 @@
+[
+  {
+    "id": "001-sample-shortage",
+    "input": "tests/001-sample-shortage.in",
+    "expected": "tests/001-sample-shortage.out",
+    "points": 5,
+    "tags": [
+      "sample",
+      "shortage"
+    ]
+  },
+  {
+    "id": "002-sample-surplus",
+    "input": "tests/002-sample-surplus.in",
+    "expected": "tests/002-sample-surplus.out",
+    "points": 5,
+    "tags": [
+      "sample",
+      "surplus"
+    ]
+  },
+  {
+    "id": "003-no-cookies",
+    "input": "tests/003-no-cookies.in",
+    "expected": "tests/003-no-cookies.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "empty"
+    ]
+  },
+  {
+    "id": "004-single-exact",
+    "input": "tests/004-single-exact.in",
+    "expected": "tests/004-single-exact.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "exact"
+    ]
+  },
+  {
+    "id": "005-single-too-small",
+    "input": "tests/005-single-too-small.in",
+    "expected": "tests/005-single-too-small.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "unmatched"
+    ]
+  },
+  {
+    "id": "006-unsorted",
+    "input": "tests/006-unsorted.in",
+    "expected": "tests/006-unsorted.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "unsorted"
+    ]
+  },
+  {
+    "id": "007-duplicate-demand",
+    "input": "tests/007-duplicate-demand.in",
+    "expected": "tests/007-duplicate-demand.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "008-all-too-small",
+    "input": "tests/008-all-too-small.in",
+    "expected": "tests/008-all-too-small.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "unmatched"
+    ]
+  },
+  {
+    "id": "009-all-satisfied",
+    "input": "tests/009-all-satisfied.in",
+    "expected": "tests/009-all-satisfied.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "all-matched"
+    ]
+  },
+  {
+    "id": "010-skip-small-cookies",
+    "input": "tests/010-skip-small-cookies.in",
+    "expected": "tests/010-skip-small-cookies.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "skip-cookie"
+    ]
+  },
+  {
+    "id": "011-one-large-cookie",
+    "input": "tests/011-one-large-cookie.in",
+    "expected": "tests/011-one-large-cookie.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "shortage"
+    ]
+  },
+  {
+    "id": "012-match-small-first",
+    "input": "tests/012-match-small-first.in",
+    "expected": "tests/012-match-small-first.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "greedy-choice"
+    ]
+  },
+  {
+    "id": "013-int-max",
+    "input": "tests/013-int-max.in",
+    "expected": "tests/013-int-max.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "numeric-range"
+    ]
+  },
+  {
+    "id": "014-mixed-extremes",
+    "input": "tests/014-mixed-extremes.in",
+    "expected": "tests/014-mixed-extremes.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "numeric-range"
+    ]
+  },
+  {
+    "id": "015-fewer-cookies",
+    "input": "tests/015-fewer-cookies.in",
+    "expected": "tests/015-fewer-cookies.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "shortage"
+    ]
+  },
+  {
+    "id": "016-extra-unusable",
+    "input": "tests/016-extra-unusable.in",
+    "expected": "tests/016-extra-unusable.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "skip-cookie"
+    ]
+  },
+  {
+    "id": "017-descending",
+    "input": "tests/017-descending.in",
+    "expected": "tests/017-descending.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "unsorted"
+    ]
+  },
+  {
+    "id": "018-mixed-regression",
+    "input": "tests/018-mixed-regression.in",
+    "expected": "tests/018-mixed-regression.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "mixed"
+    ]
+  },
+  {
+    "id": "019-stress-exact",
+    "input": "tests/019-stress-exact.in",
+    "expected": "tests/019-stress-exact.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "all-matched"
+    ]
+  },
+  {
+    "id": "020-stress-shortage",
+    "input": "tests/020-stress-shortage.in",
+    "expected": "tests/020-stress-shortage.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "shortage"
+    ]
+  }
+]

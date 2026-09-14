@@ -1,56 +1,182 @@
 [
   {
-    "id": "001-sample",
-    "input": "tests/001-sample.in",
+    "points": 5,
     "expected": "tests/001-sample.out",
-    "points": 20,
     "tags": [
       "sample"
-    ]
+    ],
+    "input": "tests/001-sample.in",
+    "id": "001-sample"
   },
   {
-    "id": "002-classic",
-    "input": "tests/002-classic.in",
+    "points": 5,
     "expected": "tests/002-classic.out",
-    "points": 20,
     "tags": [
       "normal"
-    ]
+    ],
+    "input": "tests/002-classic.in",
+    "id": "002-classic"
   },
   {
-    "id": "003-no-match",
-    "input": "tests/003-no-match.in",
+    "points": 5,
     "expected": "tests/003-no-match.out",
-    "points": 15,
     "tags": [
       "error"
-    ]
+    ],
+    "input": "tests/003-no-match.in",
+    "id": "003-no-match"
   },
   {
-    "id": "004-head-match",
-    "input": "tests/004-head-match.in",
+    "points": 5,
     "expected": "tests/004-head-match.out",
-    "points": 15,
     "tags": [
       "boundary"
-    ]
+    ],
+    "input": "tests/004-head-match.in",
+    "id": "004-head-match"
   },
   {
-    "id": "005-repeated",
-    "input": "tests/005-repeated.in",
+    "points": 5,
     "expected": "tests/005-repeated.out",
-    "points": 15,
     "tags": [
       "normal"
-    ]
+    ],
+    "input": "tests/005-repeated.in",
+    "id": "005-repeated"
   },
   {
-    "id": "006-worst-stress",
-    "input": "tests/006-worst-stress.in",
+    "points": 5,
     "expected": "tests/006-worst-stress.out",
-    "points": 15,
     "tags": [
       "stress"
-    ]
+    ],
+    "input": "tests/006-worst-stress.in",
+    "id": "006-worst-stress"
+  },
+  {
+    "points": 5,
+    "expected": "tests/007-multiple-matches.out",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/007-multiple-matches.in",
+    "id": "007-multiple-matches"
+  },
+  {
+    "points": 5,
+    "expected": "tests/008-partial-match.out",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/008-partial-match.in",
+    "id": "008-partial-match"
+  },
+  {
+    "points": 5,
+    "expected": "tests/009-all-same.out",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/009-all-same.in",
+    "id": "009-all-same"
+  },
+  {
+    "points": 5,
+    "expected": "tests/010-long-pattern.out",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/010-long-pattern.in",
+    "id": "010-long-pattern"
+  },
+  {
+    "points": 5,
+    "expected": "tests/011-short-pattern.out",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/011-short-pattern.in",
+    "id": "011-short-pattern"
+  },
+  {
+    "points": 5,
+    "expected": "tests/012-suffix-prefix.out",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/012-suffix-prefix.in",
+    "id": "012-suffix-prefix"
+  },
+  {
+    "points": 5,
+    "expected": "tests/013-special-chars.out",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/013-special-chars.in",
+    "id": "013-special-chars"
+  },
+  {
+    "points": 5,
+    "expected": "tests/014-max-length.out",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/014-max-length.in",
+    "id": "014-max-length"
+  },
+  {
+    "points": 5,
+    "expected": "tests/015-min-length.out",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/015-min-length.in",
+    "id": "015-min-length"
+  },
+  {
+    "points": 5,
+    "expected": "tests/016-binary.out",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/016-binary.in",
+    "id": "016-binary"
+  },
+  {
+    "points": 5,
+    "expected": "tests/017-alternating.out",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/017-alternating.in",
+    "id": "017-alternating"
+  },
+  {
+    "points": 5,
+    "expected": "tests/018-repeated-pattern.out",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/018-repeated-pattern.in",
+    "id": "018-repeated-pattern"
+  },
+  {
+    "points": 5,
+    "expected": "tests/019-no-overlap.out",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/019-no-overlap.in",
+    "id": "019-no-overlap"
+  },
+  {
+    "points": 5,
+    "expected": "tests/020-tail-match.out",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/020-tail-match.in",
+    "id": "020-tail-match"
   }
 ]

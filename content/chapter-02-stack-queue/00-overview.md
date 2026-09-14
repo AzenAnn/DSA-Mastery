@@ -4,7 +4,7 @@ description: "学习受限线性结构的后进先出与先进先出语义，以
 order: 0
 chapter: 2
 chapterTitle: "栈与队列"
-updated: "2026-08-21"
+updated: "2026-09-10"
 contributors: ["Azen", "Jeff", "walker2398", "qzmqzm123"]
 status: "draft"
 ---
@@ -40,8 +40,9 @@ status: "draft"
 1. 先学习[栈](./01-stack.md)，建立“后进先出 + 表尾操作”的模型，再完成[Lab 02-T-01：栈选择题精练](../../labs/chapter-02/theory/T-02-01-stack-quiz/README.md)检查基础概念。
 2. 再学习[队列](./02-queue.md)，重点理解循环队列判空判满的边界约定，再完成[Lab 02-T-02：队列选择题精练](../../labs/chapter-02/theory/T-02-02-queue-quiz/README.md)检查公式应用与实现取舍。
 3. 完成基础实现练习：先做栈序列与最小栈，再做队列窗口、循环结构和用栈实现队列。
-4. 接着学习[应用](./03-applications.md)，完成其中的逆波兰表达式求值例题，并用 Lab 02-09 与 02-10 练习单调队列、单调栈与边界计算。
-5. 最后依次完成可撤销浏览器、超市收银模拟与停车场管理三个综合 Lab。
+4. 接着学习[应用](./03-applications.md)，完成其中的逆波兰表达式求值例题，并用 Lab 02-E-07 与 02-E-08 练习单调队列、单调栈与边界计算。
+5. 完成[Lab 02-T-03：栈与队列综合理论题](../../labs/chapter-02/theory/T-02-03-stack-queue-comprehensive/README.md)，用 20 道选择题和 5 道理论大题检查序列约束、结构设计与证明。
+6. 最后依次完成可撤销浏览器、超市收银模拟与停车场管理三个综合 Lab。
 
 ## 配套 Labs
 
@@ -49,15 +50,16 @@ status: "draft"
 | --- | --- | --- |
 | 栈的概念、边界与复杂度 | [Lab 02-T-01：栈选择题精练](../../labs/chapter-02/theory/T-02-01-stack-quiz/README.md) | 独立判断出栈序列、空满条件、括号匹配与基本操作复杂度 |
 | 队列的语义、边界与实现取舍 | [Lab 02-T-02：队列选择题精练](../../labs/chapter-02/theory/T-02-02-queue-quiz/README.md) | 推导循环下标与长度，辨析链队列边界、复杂度和工程选型 |
-| 栈的模拟与接口实现 | [02-03 验证栈序列](../../labs/chapter-02/exercise/E-02-01-validate-stack-sequences/README.md)、[02-04 最小栈](../../labs/chapter-02/exercise/E-02-02-min-stack/README.md) | 从基础模拟推进到常数时间辅助状态维护 |
-| 队列的窗口与接口实现 | [02-05 最近请求](../../labs/chapter-02/exercise/E-02-03-recent-counter/README.md)、[02-06 循环队列](../../labs/chapter-02/exercise/E-02-04-circular-queue/README.md)、[02-07 用栈实现队列](../../labs/chapter-02/exercise/E-02-05-queue-using-stacks/README.md)、[02-08 循环双端队列](../../labs/chapter-02/exercise/E-02-06-circular-deque/README.md) | 掌握滑动窗口、环绕下标、摊还分析和两端操作 |
-| 单调结构进阶 | [02-09 滑动窗口最大值](../../labs/chapter-02/exercise/E-02-07-sliding-window-maximum/README.md)、[02-10 柱状图最大矩形](../../labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram/README.md) | 维护候选单调性，处理窗口过期和左右边界 |
+| 栈与队列综合理论 | [Lab 02-T-03：栈与队列综合理论题](../../labs/chapter-02/theory/T-02-03-stack-queue-comprehensive/README.md) | 20 道选择题与 5 道大题，完成约束分析、空间复用设计和序列计数证明 |
+| 栈的模拟与接口实现 | [Lab 02-E-01：验证栈序列](../../labs/chapter-02/exercise/E-02-01-validate-stack-sequences/README.md)、[Lab 02-E-02：最小栈](../../labs/chapter-02/exercise/E-02-02-min-stack/README.md) | 从基础模拟推进到常数时间辅助状态维护 |
+| 队列的窗口与接口实现 | [Lab 02-E-03：最近请求](../../labs/chapter-02/exercise/E-02-03-recent-counter/README.md)、[Lab 02-E-04：循环队列](../../labs/chapter-02/exercise/E-02-04-circular-queue/README.md)、[Lab 02-E-05：用栈实现队列](../../labs/chapter-02/exercise/E-02-05-queue-using-stacks/README.md)、[Lab 02-E-06：循环双端队列](../../labs/chapter-02/exercise/E-02-06-circular-deque/README.md) | 掌握滑动窗口、环绕下标、摊还分析和两端操作 |
+| 单调结构进阶 | [Lab 02-E-07：滑动窗口最大值](../../labs/chapter-02/exercise/E-02-07-sliding-window-maximum/README.md)、[Lab 02-E-08：柱状图最大矩形](../../labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram/README.md) | 维护候选单调性，处理窗口过期和左右边界 |
 | 栈、导航历史与 Undo/Redo | [Lab 02-P-01：可撤销浏览器](../../labs/chapter-02/project/P-02-01-undoable-browser/README.md) | 用完整页面状态协调后退、前进和页面级命令历史 |
 | FIFO、多队列与离散时间 | [Lab 02-P-02：超市收银模拟](../../labs/chapter-02/project/P-02-02-supermarket-checkout/README.md) | 统一时间口径，验证等待、逗留、忙碌率和队列峰值 |
 | 栈与队列联动 | [Lab 02-P-03：停车场管理](../../labs/chapter-02/project/P-02-03-parking-lot-management/README.md) | 完成倒车、便道补位、中间删除与统计 |
 
 ::: info Lab 编号说明
-Lab 02-01 与 Lab 02-02 是交互式概念自测；Lab 02-03 至 Lab 02-10 是带起始代码、参考实现和 100 分自动测试的 Program Lab；Lab 02-11 至 Lab 02-13 是综合 Project 规格，目前仍需学习者按任务说明自行创建实现。侧栏按 Theory、Exercise、Project 分类展示。
+Lab 02-T-01 与 Lab 02-T-02 是交互式概念自测，Lab 02-T-03 是包含理论大题的综合训练；Lab 02-E-01 至 Lab 02-E-08 是带起始代码、参考实现和 100 分自动测试的 Program Lab；Lab 02-P-01 至 Lab 02-P-03 是综合 Project 规格，目前仍需学习者按任务说明自行创建实现。侧栏按 Theory、Exercise、Project 分类展示。
 :::
 
 ## 学习建议

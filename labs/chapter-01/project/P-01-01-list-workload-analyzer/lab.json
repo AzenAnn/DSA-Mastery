@@ -28,7 +28,8 @@
       "path": "tasks/task-03-workload-runner",
       "weight": 30,
       "kind": "ctest",
-      "dependsOn": ["sequential-list", "linked-list"]
+      "dependsOn": ["sequential-list", "linked-list"],
+      "buildDependsOn": ["sequential-list", "linked-list"]
     },
     {
       "id": "report",

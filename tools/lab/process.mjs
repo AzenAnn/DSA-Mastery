@@ -1,4 +1,52 @@
-import { spawn } from "node:child_process";
+import { spawn, execFileSync } from "node:child_process";
+import path from "node:path";
+
+const WINDOWS_SCRIPT_EXT = /\.(cmd|bat|com)$/i;
+
+function resolveWindowsCommand(command, env) {
+  if (path.isAbsolute(command)) return command;
+  if (/\.(exe|cmd|bat|com|ps1|msi|vbs|js|wsh)$/i.test(command)) return command;
+  try {
+    const found = execFileSync("where.exe", [command], {
+      encoding: "utf8",
+      timeout: 5000,
+      stdio: ["ignore", "pipe", "ignore"],
+      env: env ?? process.env,
+    });
+    const candidates = found.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+    const withExt = candidates.find((c) => /\.(exe|cmd|bat|com)$/i.test(c));
+    if (withExt) return withExt;
+    if (candidates[0]) return candidates[0];
+  } catch {
+    /* where.exe failed; fall through and let spawn report the error */
+  }
+  return command;
+}
+
+function buildSpawnTarget(command, args, env) {
+  if (process.platform !== "win32") return { command, args };
+  const resolved = resolveWindowsCommand(command, env);
+  if (WINDOWS_SCRIPT_EXT.test(resolved)) {
+    // Quote the script path, then quote any args containing spaces,
+    // and pass the whole line as a single /c argument so cmd.exe
+    // preserves spaces inside the path correctly.
+    const quotedCommand = `"${resolved}"`;
+    const argString = args.map((a) => {
+      const value = String(a);
+      return /[\s"]/.test(value) ? `"${value.replace(/"/g, '\\"')}"` : value;
+    }).join(" ");
+    const fullCommand = argString ? `${quotedCommand} ${argString}` : quotedCommand;
+    return {
+      command: "cmd.exe",
+      args: ["/c", fullCommand],
+      windowsVerbatimArguments: true,
+    };
+  }
+  if (/cmd(?:\.exe)?$/i.test(resolved)) {
+    return { command: resolved, args, windowsVerbatimArguments: true };
+  }
+  return { command: resolved, args };
+}
 
 export function runProcess(command, args, options = {}) {
   const {
@@ -10,10 +58,19 @@ export function runProcess(command, args, options = {}) {
     env,
   } = options;
   const childEnvironment = env === undefined ? process.env : { ...process.env, ...env };
+  const target = buildSpawnTarget(command, args, childEnvironment);
+
   if (inherit) {
     return new Promise((resolve, reject) => {
       const started = performance.now();
-      const child = spawn(command, args, { cwd, env: childEnvironment, shell: false, windowsHide: true, stdio: "inherit" });
+      const child = spawn(target.command, target.args, {
+        cwd,
+        env: childEnvironment,
+        shell: false,
+        windowsHide: true,
+        windowsVerbatimArguments: target.windowsVerbatimArguments,
+        stdio: "inherit",
+      });
       child.once("error", reject);
       child.once("close", (code, signal) => resolve({ code, signal, durationMs: performance.now() - started }));
     });
@@ -21,7 +78,14 @@ export function runProcess(command, args, options = {}) {
   return new Promise((resolve) => {
     const started = performance.now();
     const limitBytes = outputKb * 1024;
-    const child = spawn(command, args, { cwd, env: childEnvironment, shell: false, windowsHide: true, stdio: ["pipe", "pipe", "pipe"] });
+    const child = spawn(target.command, target.args, {
+      cwd,
+      env: childEnvironment,
+      shell: false,
+      windowsHide: true,
+      windowsVerbatimArguments: target.windowsVerbatimArguments,
+      stdio: ["pipe", "pipe", "pipe"],
+    });
     const stdout = [];
     const stderr = [];
     let stdoutBytes = 0;

@@ -1,4 +1,4 @@
-import type { ProjectScoreResult, ProjectStatus, ProjectTaskResult, Verdict } from "./cli";
+import type { ProjectCurrentState, ProjectScoreResult, ProjectStatus, ProjectTaskResult, Verdict } from "./cli";
 
 export interface ProjectCaseSummary {
   id: string;
@@ -43,6 +43,10 @@ export interface ProjectTaskSubmissionSummary {
   buildFailed?: boolean;
   buildPhase?: "configure" | "build";
   diagnostic?: string;
+  blockedBy?: string[];
+  historicalScore?: number;
+  previousStatus?: ProjectStatus;
+  inputFingerprint?: string;
 }
 
 export interface ProjectSubmissionSummary {
@@ -59,6 +63,8 @@ export interface ProjectSubmissionSummary {
 }
 
 export interface ProjectProgress {
+  current?: ProjectCurrentState;
+  currentUnknown?: boolean;
   submissionCount: number;
   automatedScore: number;
   automatedMax: number;
@@ -86,9 +92,9 @@ export function summarizeProjectSubmission(result: ProjectScoreResult, at: strin
 }
 
 export function projectProgressPassed(
-  progress: Pick<ProjectProgress, "automatedFull" | "manualPending" | "internalError">,
+  progress: Pick<ProjectProgress, "automatedFull" | "manualPending" | "internalError" | "current" | "currentUnknown">,
 ): boolean {
-  return progress.automatedFull && progress.manualPending === 0 && !progress.internalError;
+  return !progress.currentUnknown && (progress.current ? progress.current.complete : progress.automatedFull && progress.manualPending === 0 && !progress.internalError);
 }
 
 function summarizeTask(task: ProjectTaskResult): ProjectTaskSubmissionSummary {
@@ -98,6 +104,8 @@ function summarizeTask(task: ProjectTaskResult): ProjectTaskSubmissionSummary {
     status: task.status,
     weight: task.weight,
     weightedScore: task.weightedScore,
+    inputFingerprint: task.inputFingerprint,
+    blockedBy: task.blockedBy,
   };
 
   if (task.kind === "manual") return { ...common, checklist: [...task.checklist] };
@@ -112,7 +120,10 @@ function summarizeTask(task: ProjectTaskResult): ProjectTaskSubmissionSummary {
         points: testCase.points,
         maxPoints: testCase.maxPoints,
         durationMs: testCase.durationMs,
+        stderr: testCase.stderr?.slice(0, 4000),
+        comparison: testCase.comparison,
       })),
+      diagnostic: (task.judge.compilation.stderr || task.judge.compilation.stdout).slice(0, 8000),
     };
   }
 
@@ -126,8 +137,10 @@ function summarizeTask(task: ProjectTaskResult): ProjectTaskSubmissionSummary {
       points: test.points,
       maxPoints: test.maxPoints,
       durationMs: test.durationMs,
+      output: test.output?.slice(0, 8000),
     })),
     buildFailed: task.build ? !task.build.ok : undefined,
     buildPhase: task.build?.phase,
+    diagnostic: task.build && !task.build.ok ? `${task.build.build?.stdout ?? task.build.configure?.stdout ?? ""}\n${task.build.build?.stderr ?? task.build.configure?.stderr ?? ""}`.slice(0, 16000) : undefined,
   };
 }

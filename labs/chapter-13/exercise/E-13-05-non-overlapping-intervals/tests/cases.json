@@ -1,0 +1,202 @@
+[
+  {
+    "id": "001-sample-mixed",
+    "input": "tests/001-sample-mixed.in",
+    "expected": "tests/001-sample-mixed.out",
+    "points": 5,
+    "tags": [
+      "sample",
+      "mixed"
+    ]
+  },
+  {
+    "id": "002-sample-duplicates",
+    "input": "tests/002-sample-duplicates.in",
+    "expected": "tests/002-sample-duplicates.out",
+    "points": 5,
+    "tags": [
+      "sample",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "003-sample-touching",
+    "input": "tests/003-sample-touching.in",
+    "expected": "tests/003-sample-touching.out",
+    "points": 5,
+    "tags": [
+      "sample",
+      "touching"
+    ]
+  },
+  {
+    "id": "004-single",
+    "input": "tests/004-single.in",
+    "expected": "tests/004-single.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "single"
+    ]
+  },
+  {
+    "id": "005-disjoint-unsorted",
+    "input": "tests/005-disjoint-unsorted.in",
+    "expected": "tests/005-disjoint-unsorted.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "unsorted"
+    ]
+  },
+  {
+    "id": "006-nested",
+    "input": "tests/006-nested.in",
+    "expected": "tests/006-nested.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "nested"
+    ]
+  },
+  {
+    "id": "007-same-start",
+    "input": "tests/007-same-start.in",
+    "expected": "tests/007-same-start.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "same-start"
+    ]
+  },
+  {
+    "id": "008-same-end",
+    "input": "tests/008-same-end.in",
+    "expected": "tests/008-same-end.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "same-end"
+    ]
+  },
+  {
+    "id": "009-overlap-chain",
+    "input": "tests/009-overlap-chain.in",
+    "expected": "tests/009-overlap-chain.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "chain"
+    ]
+  },
+  {
+    "id": "010-negative-touching",
+    "input": "tests/010-negative-touching.in",
+    "expected": "tests/010-negative-touching.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "touching"
+    ]
+  },
+  {
+    "id": "011-unsorted-mixed",
+    "input": "tests/011-unsorted-mixed.in",
+    "expected": "tests/011-unsorted-mixed.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "unsorted"
+    ]
+  },
+  {
+    "id": "012-across-zero",
+    "input": "tests/012-across-zero.in",
+    "expected": "tests/012-across-zero.out",
+    "points": 5,
+    "tags": [
+      "normal",
+      "negative"
+    ]
+  },
+  {
+    "id": "013-coordinate-bounds",
+    "input": "tests/013-coordinate-bounds.in",
+    "expected": "tests/013-coordinate-bounds.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "numeric-range"
+    ]
+  },
+  {
+    "id": "014-long-vs-short",
+    "input": "tests/014-long-vs-short.in",
+    "expected": "tests/014-long-vs-short.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "greedy-choice"
+    ]
+  },
+  {
+    "id": "015-contained-touching",
+    "input": "tests/015-contained-touching.in",
+    "expected": "tests/015-contained-touching.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "touching"
+    ]
+  },
+  {
+    "id": "016-mixed-duplicates",
+    "input": "tests/016-mixed-duplicates.in",
+    "expected": "tests/016-mixed-duplicates.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "017-all-overlap",
+    "input": "tests/017-all-overlap.in",
+    "expected": "tests/017-all-overlap.out",
+    "points": 5,
+    "tags": [
+      "boundary",
+      "all-overlap"
+    ]
+  },
+  {
+    "id": "018-mixed-regression",
+    "input": "tests/018-mixed-regression.in",
+    "expected": "tests/018-mixed-regression.out",
+    "points": 5,
+    "tags": [
+      "regression",
+      "mixed"
+    ]
+  },
+  {
+    "id": "019-stress-identical",
+    "input": "tests/019-stress-identical.in",
+    "expected": "tests/019-stress-identical.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "duplicates"
+    ]
+  },
+  {
+    "id": "020-stress-two-groups",
+    "input": "tests/020-stress-two-groups.in",
+    "expected": "tests/020-stress-two-groups.out",
+    "points": 5,
+    "tags": [
+      "stress",
+      "touching"
+    ]
+  }
+]

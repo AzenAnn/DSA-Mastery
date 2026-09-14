@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-sample",
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-singleton",
+    "input": "tests/002-singleton.in",
+    "expected": "tests/002-singleton.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "003-unreachable-finite-estimate",
+    "input": "tests/003-unreachable-finite-estimate.in",
+    "expected": "tests/003-unreachable-finite-estimate.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "004-goal-normalization",
+    "input": "tests/004-goal-normalization.in",
+    "expected": "tests/004-goal-normalization.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "005-zero-weight-equality",
+    "input": "tests/005-zero-weight-equality.in",
+    "expected": "tests/005-zero-weight-equality.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "006-directed-only",
+    "input": "tests/006-directed-only.in",
+    "expected": "tests/006-directed-only.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "007-parallel-min-weight",
+    "input": "tests/007-parallel-min-weight.in",
+    "expected": "tests/007-parallel-min-weight.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "008-self-loop",
+    "input": "tests/008-self-loop.in",
+    "expected": "tests/008-self-loop.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "009-seeded-heuristics-0",
+    "input": "tests/009-seeded-heuristics-0.in",
+    "expected": "tests/009-seeded-heuristics-0.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-seeded-heuristics-1",
+    "input": "tests/010-seeded-heuristics-1.in",
+    "expected": "tests/010-seeded-heuristics-1.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-seeded-heuristics-2",
+    "input": "tests/011-seeded-heuristics-2.in",
+    "expected": "tests/011-seeded-heuristics-2.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-seeded-heuristics-3",
+    "input": "tests/012-seeded-heuristics-3.in",
+    "expected": "tests/012-seeded-heuristics-3.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-seeded-heuristics-4",
+    "input": "tests/013-seeded-heuristics-4.in",
+    "expected": "tests/013-seeded-heuristics-4.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-seeded-heuristics-5",
+    "input": "tests/014-seeded-heuristics-5.in",
+    "expected": "tests/014-seeded-heuristics-5.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-seeded-heuristics-6",
+    "input": "tests/015-seeded-heuristics-6.in",
+    "expected": "tests/015-seeded-heuristics-6.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-seeded-heuristics-7",
+    "input": "tests/016-seeded-heuristics-7.in",
+    "expected": "tests/016-seeded-heuristics-7.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-seeded-heuristics-8",
+    "input": "tests/017-seeded-heuristics-8.in",
+    "expected": "tests/017-seeded-heuristics-8.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-large-distance",
+    "input": "tests/018-large-distance.in",
+    "expected": "tests/018-large-distance.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "019-many-candidates",
+    "input": "tests/019-many-candidates.in",
+    "expected": "tests/019-many-candidates.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  },
+  {
+    "id": "020-dense-zero-graph",
+    "input": "tests/020-dense-zero-graph.in",
+    "expected": "tests/020-dense-zero-graph.out",
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
+  }
+]

@@ -1,65 +1,182 @@
 [
   {
+    "points": 5,
     "id": "001-sample",
-    "input": "tests/001-sample.in",
-    "expected": "tests/001-sample.out",
-    "points": 20,
     "tags": [
       "sample"
-    ]
+    ],
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out"
   },
   {
+    "points": 5,
     "id": "002-classic",
-    "input": "tests/002-classic.in",
-    "expected": "tests/002-classic.out",
-    "points": 20,
     "tags": [
       "normal"
-    ]
+    ],
+    "input": "tests/002-classic.in",
+    "expected": "tests/002-classic.out"
   },
   {
+    "points": 5,
     "id": "003-at-head",
+    "tags": [
+      "boundary"
+    ],
     "input": "tests/003-at-head.in",
-    "expected": "tests/003-at-head.out",
-    "points": 15,
-    "tags": [
-      "boundary"
-    ]
+    "expected": "tests/003-at-head.out"
   },
   {
+    "points": 5,
     "id": "004-at-tail",
-    "input": "tests/004-at-tail.in",
-    "expected": "tests/004-at-tail.out",
-    "points": 15,
     "tags": [
       "boundary"
-    ]
+    ],
+    "input": "tests/004-at-tail.in",
+    "expected": "tests/004-at-tail.out"
   },
   {
+    "points": 5,
     "id": "005-not-found",
-    "input": "tests/005-not-found.in",
-    "expected": "tests/005-not-found.out",
-    "points": 10,
     "tags": [
       "error"
-    ]
+    ],
+    "input": "tests/005-not-found.in",
+    "expected": "tests/005-not-found.out"
   },
   {
+    "points": 5,
     "id": "006-overlap-stress",
-    "input": "tests/006-overlap-stress.in",
-    "expected": "tests/006-overlap-stress.out",
-    "points": 10,
     "tags": [
       "stress"
-    ]
+    ],
+    "input": "tests/006-overlap-stress.in",
+    "expected": "tests/006-overlap-stress.out"
   },
   {
+    "points": 5,
     "id": "007-empty-pattern",
-    "input": "tests/007-empty-pattern.in",
-    "expected": "tests/007-empty-pattern.out",
-    "points": 10,
     "tags": [
       "boundary"
-    ]
+    ],
+    "input": "tests/007-empty-pattern.in",
+    "expected": "tests/007-empty-pattern.out"
+  },
+  {
+    "points": 5,
+    "id": "008-multiple-matches",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/008-multiple-matches.in",
+    "expected": "tests/008-multiple-matches.out"
+  },
+  {
+    "points": 5,
+    "id": "009-partial-match",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/009-partial-match.in",
+    "expected": "tests/009-partial-match.out"
+  },
+  {
+    "points": 5,
+    "id": "010-all-same",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/010-all-same.in",
+    "expected": "tests/010-all-same.out"
+  },
+  {
+    "points": 5,
+    "id": "011-long-pattern",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/011-long-pattern.in",
+    "expected": "tests/011-long-pattern.out"
+  },
+  {
+    "points": 5,
+    "id": "012-short-pattern",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/012-short-pattern.in",
+    "expected": "tests/012-short-pattern.out"
+  },
+  {
+    "points": 5,
+    "id": "013-suffix-prefix",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/013-suffix-prefix.in",
+    "expected": "tests/013-suffix-prefix.out"
+  },
+  {
+    "points": 5,
+    "id": "014-special-chars",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/014-special-chars.in",
+    "expected": "tests/014-special-chars.out"
+  },
+  {
+    "points": 5,
+    "id": "015-max-length",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/015-max-length.in",
+    "expected": "tests/015-max-length.out"
+  },
+  {
+    "points": 5,
+    "id": "016-min-length",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/016-min-length.in",
+    "expected": "tests/016-min-length.out"
+  },
+  {
+    "points": 5,
+    "id": "017-repeated-pattern",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/017-repeated-pattern.in",
+    "expected": "tests/017-repeated-pattern.out"
+  },
+  {
+    "points": 5,
+    "id": "018-alternating",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/018-alternating.in",
+    "expected": "tests/018-alternating.out"
+  },
+  {
+    "points": 5,
+    "id": "019-binary",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/019-binary.in",
+    "expected": "tests/019-binary.out"
+  },
+  {
+    "points": 5,
+    "id": "020-no-overlap",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/020-no-overlap.in",
+    "expected": "tests/020-no-overlap.out"
   }
 ]

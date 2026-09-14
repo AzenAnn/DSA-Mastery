@@ -3,6 +3,8 @@
   "schemaVersion": 1,
   "kind": "ctest",
   "ctest": {
+    "buildTargets": ["workload_runner_tests", "list_workload"],
+    "moduleTargets": ["workload_runner"],
     "tests": [
       { "name": "runner-semantic-equivalence", "points": 40 },
       { "name": "runner-cost-accounting", "points": 35 },

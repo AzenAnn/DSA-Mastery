@@ -3,63 +3,132 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 10,
+    "points": 5,
     "tags": ["sample"]
   },
   {
     "id": "002-cycle",
     "input": "tests/002-cycle.in",
     "expected": "tests/002-cycle.out",
-    "points": 10,
+    "points": 5,
     "tags": ["normal"]
   },
   {
     "id": "003-multiedge",
     "input": "tests/003-multiedge.in",
     "expected": "tests/003-multiedge.out",
-    "points": 10,
+    "points": 5,
     "tags": ["boundary"]
   },
   {
     "id": "004-line",
     "input": "tests/004-line.in",
     "expected": "tests/004-line.out",
-    "points": 10,
+    "points": 5,
     "tags": ["boundary"]
   },
   {
     "id": "005-dense",
     "input": "tests/005-dense.in",
     "expected": "tests/005-dense.out",
-    "points": 10,
+    "points": 5,
     "tags": ["normal"]
   },
   {
     "id": "006-self-loop",
     "input": "tests/006-self-loop.in",
     "expected": "tests/006-self-loop.out",
-    "points": 10,
+    "points": 5,
     "tags": ["boundary"]
   },
   {
     "id": "007-single-vertex",
     "input": "tests/007-single-vertex.in",
     "expected": "tests/007-single-vertex.out",
-    "points": 10,
+    "points": 5,
     "tags": ["boundary"]
   },
   {
     "id": "008-stress",
     "input": "tests/008-stress.in",
     "expected": "tests/008-stress.out",
-    "points": 20,
+    "points": 5,
     "tags": ["stress"]
   },
   {
     "id": "009-multiedge-reversed",
     "input": "tests/009-multiedge-reversed.in",
     "expected": "tests/009-multiedge-reversed.out",
-    "points": 10,
+    "points": 5,
     "tags": ["regression"]
+  },
+  {
+    "id": "010-equal-weights",
+    "input": "tests/010-equal-weights.in",
+    "expected": "tests/010-equal-weights.out",
+    "points": 5,
+    "tags": ["normal", "regression"]
+  },
+  {
+    "id": "011-negative-weights",
+    "input": "tests/011-negative-weights.in",
+    "expected": "tests/011-negative-weights.out",
+    "points": 5,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "012-large-weight",
+    "input": "tests/012-large-weight.in",
+    "expected": "tests/012-large-weight.out",
+    "points": 5,
+    "tags": ["boundary"]
+  },
+  {
+    "id": "013-zero-weight-edges",
+    "input": "tests/013-zero-weight-edges.in",
+    "expected": "tests/013-zero-weight-edges.out",
+    "points": 5
+  },
+  {
+    "id": "014-equal-weight-cycle",
+    "input": "tests/014-equal-weight-cycle.in",
+    "expected": "tests/014-equal-weight-cycle.out",
+    "points": 5
+  },
+  {
+    "id": "015-negative-tree",
+    "input": "tests/015-negative-tree.in",
+    "expected": "tests/015-negative-tree.out",
+    "points": 5
+  },
+  {
+    "id": "016-large-positive-sum",
+    "input": "tests/016-large-positive-sum.in",
+    "expected": "tests/016-large-positive-sum.out",
+    "points": 5
+  },
+  {
+    "id": "017-large-negative-sum",
+    "input": "tests/017-large-negative-sum.in",
+    "expected": "tests/017-large-negative-sum.out",
+    "points": 5
+  },
+  {
+    "id": "018-loop-before-edges",
+    "input": "tests/018-loop-before-edges.in",
+    "expected": "tests/018-loop-before-edges.out",
+    "points": 5
+  },
+  {
+    "id": "019-parallel-negative-edges",
+    "input": "tests/019-parallel-negative-edges.in",
+    "expected": "tests/019-parallel-negative-edges.out",
+    "points": 5
+  },
+  {
+    "id": "020-complete-k5-weighted",
+    "input": "tests/020-complete-k5-weighted.in",
+    "expected": "tests/020-complete-k5-weighted.out",
+    "points": 5
   }
 ]

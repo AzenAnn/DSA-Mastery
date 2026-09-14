@@ -105,6 +105,10 @@ container-code
 示例正文。
 :::
 
+::: example 示例 · $n=16$ 时最多比较几次
+标题公式渲染检查正文。
+:::
+
 ::: counterexample
 反例正文。
 :::
@@ -256,6 +260,10 @@ try {
   await mkdir(stableTitleLabDirectory, { recursive: true });
   await mkdir(projectCategoryDirectory, { recursive: true });
   await mkdir(sidebarLabDirectory, { recursive: true });
+  const nestedAssets = path.join(stableTitleLabDirectory, "assets", "nested");
+  await mkdir(nestedAssets, { recursive: true });
+  const assetBytes = Buffer.from([0, 1, 127, 128, 254, 255]);
+  await writeFile(path.join(nestedAssets, "quiz evidence.bin"), assetBytes);
   await writeFile(path.join(lessonDirectory, "00-autodiscovery.md"), lesson, "utf8");
   await writeFile(path.join(labDirectory, "README.md"), lab, "utf8");
   await writeFile(
@@ -269,6 +277,12 @@ try {
   runNpm(["run", "validate:content"]);
   runNpm(["run", "build:vitepress"]);
   runNpm(["run", "check:site"]);
+
+  const copiedAsset = await readFile(path.join(
+    projectRoot, "dist", "pages", "labs", "chapter-99", "theory",
+    "T-99-01-stable-title-fixture", "assets", "nested", "quiz evidence.bin",
+  ));
+  if (!copiedAsset.equals(assetBytes)) throw new Error("Lab assets outside Markdown must be copied unchanged");
 
   const lessonHtml = await readFile(
     path.join(projectRoot, "dist", "pages", "learn", "chapter-99-discovery-fixture", "00-autodiscovery", "index.html"),
@@ -360,6 +374,9 @@ try {
   if (lessonHtml.includes('<span><img src="x"') || lessonHtml.includes("<span><img src=x")) {
     throw new Error("Theory container title emitted executable HTML");
   }
+  if (!lessonHtml.includes("示例 · <mjx-container")) {
+    throw new Error("Theory container title did not render inline MathJax");
+  }
   if (!lessonHtml.includes("<mark>语义高亮</mark>")) {
     throw new Error("Mark syntax did not render semantic <mark>");
   }
@@ -447,7 +464,7 @@ try {
     "05T04 · 并查集题精练",
     "05T05 · 堆题精练",
     "05E01 · 二叉搜索树的插入与查找",
-    "05E17 · B+ 树的范围查询",
+    "05E27 · B+ 树的范围查询",
     "暂无工程型 Lab",
   ]) {
     if (!chapterFiveItem.includes(required)) {
@@ -460,7 +477,7 @@ try {
     chapterFiveSidebarEnd < 0 ||
     chapterFiveItemStart < 0 ||
     chapterFiveItemEnd < 0 ||
-    chapterFiveLabLinks.length !== 22 ||
+    chapterFiveLabLinks.length !== 32 ||
     chapterFiveItem.includes("暂无理论型 Lab") ||
     chapterFiveItem.includes("暂无实验型 Lab")
   ) {

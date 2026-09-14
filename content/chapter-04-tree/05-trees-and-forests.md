@@ -4,12 +4,18 @@ description: "阐述树、森林与二叉树之间的经典孩子兄弟转换法
 order: 5
 chapter: 4
 chapterTitle: "树与二叉树"
-updated: "2026-08-24"
-contributors: ["Wanderer0、qzmqzm123"]
+updated: "2026-09-09"
+contributors: ["Wanderer0、qzmqzm123", "Azen"]
 status: "draft"
 ---
 
 # 4.5 树、森林与二叉树
+
+<script setup>
+import { withBase } from "vitepress";
+
+const traversalDemoUrl = withBase("/demos/tree-forest-traversal.html");
+</script>
 
 在现实生活和计算机系统中，多叉树（如文件系统的目录树、企业组织架构图、XML/JSON 语法树）与森林（多个独立树的集合）更为普遍。多叉树的节点度数各不相同，若为每个节点预留最大可能的孩子指针数组，会浪费大量内存，而且操作逻辑也会变得繁杂。
 
@@ -232,6 +238,21 @@ digraph ForestToBinary {
 | 森林（Forest） | 后序遍历 | 二叉树的中序遍历（$LDR$） |
 :::
 
+### 交互式演示：转换与同步遍历
+
+左侧保留原树，右侧依次演示“加兄弟线、只留首孩子、改为二叉树布局”。转换完成后，每前进一步，原树的**后根遍历**与二叉树的**中序遍历**就会同时输出同一个节点。点击任意一侧的节点，可在另一侧找到相同字母，并检查它的 `left`、`right` 分别对应哪个孩子和兄弟。
+
+<iframe
+  :src="traversalDemoUrl"
+  title="树与二叉树 · 转换与同步遍历"
+  class="search-demo-frame"
+  loading="lazy"
+></iframe>
+
+::: tip 做两个对照
+课本示例两侧都应输出 `B E C D A`。切换三棵树的森林，观察各根如何通过右指针串联；再切换先根/先序模式，比较对应的二叉树前序。这里以“输出一个节点”为同步单位，两种算法的递归调用步骤不必完全相同。
+:::
+
 ::: proof 为什么“树的后根遍历”对应“二叉树的中序遍历”而非后序遍历？（严格归纳证明）
 
 **1、基础情况（高度为 1 的树）**
@@ -347,3 +368,21 @@ $$
 :::
 
 下一节进入[4.6 二叉树的经典问题](./06-binary-tree-classic-problems.md)：我们将综合运用递归框架、DFS/BFS 状态转移与树形动态规划，系统讨论二叉树形态统计、路径回溯、对称变换与最近公共祖先等经典问题。
+
+<style scoped>
+.search-demo-frame {
+  display: block;
+  width: 100%;
+  height: 760px;
+  margin: 20px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--course-code-bg);
+}
+
+@media (max-width: 720px) {
+  .search-demo-frame {
+    height: 1100px;
+  }
+}
+</style>
