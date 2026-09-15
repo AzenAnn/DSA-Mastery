@@ -132,6 +132,69 @@ GLNode* copy(const GLNode* ls) {
 }
 ```
 
+
+## 完整解题范例
+
+### 范例一：用 Head/Tail 取出深层原子
+
+**题目解读**：给定 `L=((x,y,z),(a,b,c,d))`，执行 `THTH`。Head 的结果可能是原子或子表，Tail 的结果一定是表。
+
+**算法分析**：逐步保留对象类型：`T` 得到 `((a,b,c,d))`，`H` 得到 `(a,b,c,d)`，再 `T` 得到 `(b,c,d)`，最后 `H` 得到 `b`。
+
+**伪代码**：
+
+```text
+node = parse(L)
+for op in "THTH":
+    if op == H: node = node.head
+    else: node = node.tail
+return serialize(node)
+```
+
+**最终代码**：
+
+```cpp
+std::string takeB(NodePtr node) {
+    node = tail(node);
+    node = head(node);
+    node = tail(node);
+    node = head(node);
+    return serialize(node);
+}
+```
+
+**拓展和思考**：`Tail((a))` 是 `()`，不是 `a`；若将操作继续作用在原子或空表上，必须先做前置条件检查。对应实验是 [Lab 03-E-06：广义表的表头与表尾](../../labs/chapter-03/exercise/E-03-06-generalized-list-head-tail/README.md)。
+
+### 范例二：递归求广义表深度
+
+**题目解读**：求 `G=(a,(b),(c,(d,e)))` 的深度。原子深度为 0，空表深度为 1，非空表取子元素最大深度再加 1。
+
+**算法分析**：`(b)` 深度为 1，`(d,e)` 深度为 1，`(c,(d,e))` 深度为 2，因此 `G` 的深度为 3。递归必须遍历同层所有元素，否则会漏掉更深的分支。
+
+**伪代码**：
+
+```text
+depth(node):
+    if atom: return 0
+    if empty list: return 1
+    return max(depth(child)) + 1
+```
+
+**最终代码**：
+
+```cpp
+int depth(const Node& node) {
+    if (node.isAtom()) return 0;
+    if (node.children.empty()) return 1;
+    int best = 0;
+    for (const auto& child : node.children)
+        best = std::max(best, depth(*child));
+    return best + 1;
+}
+```
+
+**拓展和思考**：若允许共享子表或循环引用，应增加访问状态避免无限递归；若修改空表约定，必须同步修改证明、测试与题解。对应实验是 [Lab 03-E-07：广义表的深度](../../labs/chapter-03/exercise/E-03-07-generalized-list-depth/README.md)。
+
 ## 解题视角与易错点
 
 手算广义表题时，建议始终保留“当前对象的类型”：
