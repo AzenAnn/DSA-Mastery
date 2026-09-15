@@ -1251,7 +1251,7 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
   await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
-  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(8);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(20);
   const exerciseLabs = [
     { title: "Lab 02-E-01：验证栈序列", slug: "exercise/E-02-01-validate-stack-sequences" },
     { title: "Lab 02-E-02：最小栈", slug: "exercise/E-02-02-min-stack" },
@@ -1264,6 +1264,18 @@ test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
       title: "Lab 02-E-08：柱状图中最大的矩形",
       slug: "exercise/E-02-08-largest-rectangle-histogram",
     },
+    { title: "Lab 02-E-09：括号匹配", slug: "exercise/E-02-09-bracket-matching" },
+    { title: "Lab 02-E-10：逆波兰表达式求值", slug: "exercise/E-02-10-rpn-evaluation" },
+    { title: "Lab 02-E-11：中缀表达式转后缀", slug: "exercise/E-02-11-infix-to-postfix" },
+    { title: "Lab 02-E-12：下一个更大元素", slug: "exercise/E-02-12-next-greater-element" },
+    { title: "Lab 02-E-13：下一个更小元素", slug: "exercise/E-02-13-next-smaller-element" },
+    { title: "Lab 02-E-14：农夫抓牛", slug: "exercise/E-02-14-farmer-cow-bfs" },
+    { title: "Lab 02-E-15：Josephus 出列顺序", slug: "exercise/E-02-15-josephus-order" },
+    { title: "Lab 02-E-16：队列生成二进制数", slug: "exercise/E-02-16-binary-number-queue" },
+    { title: "Lab 02-E-17：双端队列回文检查", slug: "exercise/E-02-17-palindrome-deque" },
+    { title: "Lab 02-E-18：反转队列前 K 个元素", slug: "exercise/E-02-18-reverse-first-k-queue" },
+    { title: "Lab 02-E-19：仅用辅助栈排序", slug: "exercise/E-02-19-stack-sorting" },
+    { title: "Lab 02-E-20：股票价格跨度", slug: "exercise/E-02-20-stock-span" },
   ];
   for (const { title, slug } of exerciseLabs) {
     const link = exerciseGroup.getByRole("link", { name: labSidebarTitle(title) });
