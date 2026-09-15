@@ -73,6 +73,32 @@ test("program and quiz panels expose the stable Lab ID in their metadata", async
   assert.match(html, /题号 \$\{escapeHtml\(lab\.id\)\}/);
 });
 
+test("quiz sidebar submit batches selected unanswered answers without reloading the active panel", async () => {
+  const html = await readPackageFile("src/panelHtml.ts");
+  const panel = await readPackageFile("src/panel.ts");
+  const extension = await readPackageFile("src/extension.ts");
+  const submitQuiz = panel.slice(panel.indexOf("static async submitQuiz"), panel.indexOf("private async load"));
+
+  assert.match(html, /message\.type === 'submitQuiz'/);
+  assert.match(html, /input:checked:not\(:disabled\)/);
+  assert.match(html, /type: 'quizAnswers'/);
+  assert.match(html, /let quizBatchInFlight = false/);
+  assert.match(html, /const pendingQuizQuestions = new Set\(\)/);
+  assert.match(html, /pendingQuizQuestions\.add\(questionId\)/);
+  assert.match(html, /pendingQuizQuestions\.delete\(message\.questionId\)/);
+  assert.match(html, /message\.type === 'quizBatchComplete'/);
+  assert.match(submitQuiz, /current\.panel\.webview\.postMessage\(\{ type: "submitQuiz" \}\)/);
+  assert.doesNotMatch(submitQuiz, /\.load\(/);
+  assert.match(panel, /case "quizAnswers"/);
+  assert.match(panel, /new Set<string>/);
+  assert.match(panel, /private quizBatchInProgress = false/);
+  assert.match(panel, /private readonly pendingQuizAnswers = new Set<string>/);
+  assert.match(panel, /LabPanel\.current\.submitting \|\| LabPanel\.current\.quizBatchInProgress/);
+  assert.match(panel, /!labName \|\| this\.submitting \|\| this\.quizBatchInProgress/);
+  assert.match(panel, /await this\.answerQuiz\(questionId, selected\)/);
+  assert.match(extension, /if \(lab\.type === "quiz"\)[\s\S]*?LabPanel\.submitQuiz/);
+});
+
 test("project panel exposes the task graph and manual pending state", async () => {
   const html = await readPackageFile("src/panelHtml.ts");
 

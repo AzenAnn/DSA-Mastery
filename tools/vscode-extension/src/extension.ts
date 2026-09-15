@@ -83,6 +83,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await vscode.window.showWarningMessage("没有可提交的题目。请先打开一道题。");
         return;
       }
+      if (lab.type === "quiz") {
+        await LabPanel.submitQuiz(lab, panelDeps);
+        return;
+      }
       // 统一走面板提交，保证结果有地方显示。
       await LabPanel.show(lab, panelDeps);
       if (LabPanel.activeLab()?.id === lab.id) await LabPanel.submitActive(taskId);

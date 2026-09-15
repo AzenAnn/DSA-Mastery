@@ -18,7 +18,7 @@ test("simultaneously remaps all overlapping IDs without consuming moved records"
   const source = Object.fromEntries(CH04_RENUMBERING.map(([old]) => [`04E${pad(old)}`, { old }]));
   const migrated = remapRecordKeys(source, ch04IdAliases(labs, []), () => { throw new Error("Unexpected collision"); });
   for (const [old, next] of CH04_RENUMBERING) assert.deepEqual(migrated.records[`04E${pad(next)}`], { old });
-  assert.equal(Object.keys(migrated.records).length, 20);
+  assert.equal(Object.keys(migrated.records).length, 17);
   assert.equal(source["04E01"].old, 1);
   assert.deepEqual(ch04IdAliases(labs, [CH04_MIGRATION]), []);
   assert.deepEqual(ch04IdAliases(labs.slice(1), []), []);

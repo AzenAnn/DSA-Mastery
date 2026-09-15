@@ -253,13 +253,13 @@ test("discovers all real Project labs in the repository", async () => {
   ]);
 });
 
-test("discovers 34 renumbered Ch4 exercises with legacy aliases in final order", async () => {
+test("discovers 31 renumbered Ch4 exercises with legacy aliases in final order", async () => {
   const { discoverProgramLabs } = await loadLabIndex();
   const { CH04_RENUMBERING, ch04IdAliases } = await import("../src/ch04Migration.ts");
   const exercises = (await discoverProgramLabs(path.resolve(packageRoot, "../..")))
     .flatMap((chapter) => chapter.labs).filter((lab) => lab.chapter === 4 && lab.type === "program");
-  assert.deepEqual(exercises.map((lab) => lab.id), Array.from({ length: 34 }, (_, i) => `04E${String(i + 1).padStart(2, "0")}`));
-  assert.equal(ch04IdAliases(exercises, []).length, 20);
+  assert.deepEqual(exercises.map((lab) => lab.id), Array.from({ length: 31 }, (_, i) => `04E${String(i + 1).padStart(2, "0")}`));
+  assert.equal(ch04IdAliases(exercises, []).length, 17);
   for (const [old, next, slug] of CH04_RENUMBERING) {
     const lab = exercises[next - 1];
     assert(lab.legacyNames.includes(`E-04-${String(old).padStart(2, "0")}-${slug}`));
