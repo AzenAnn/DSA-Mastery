@@ -67,90 +67,116 @@
     "input": "tests/008-flat-head.in",
     "expected": "tests/008-flat-head.out",
     "points": 5,
-    "tags": ","
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "009-flat-tail",
     "input": "tests/009-flat-tail.in",
     "expected": "tests/009-flat-tail.out",
     "points": 5,
-    "tags": ","
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "010-list-tail",
     "input": "tests/010-list-tail.in",
     "expected": "tests/010-list-tail.out",
     "points": 5,
-    "tags": "a"
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "011-list-tail-head",
     "input": "tests/011-list-tail-head.in",
     "expected": "tests/011-list-tail-head.out",
     "points": 5,
-    "tags": "a"
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "012-multi-tail",
     "input": "tests/012-multi-tail.in",
     "expected": "tests/012-multi-tail.out",
     "points": 5,
-    "tags": ","
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "013-nested-head",
     "input": "tests/013-nested-head.in",
     "expected": "tests/013-nested-head.out",
     "points": 5,
-    "tags": "a"
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "014-nested-tail-head",
     "input": "tests/014-nested-tail-head.in",
     "expected": "tests/014-nested-tail-head.out",
     "points": 5,
-    "tags": "a"
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "015-deep-chain",
     "input": "tests/015-deep-chain.in",
     "expected": "tests/015-deep-chain.out",
     "points": 5,
-    "tags": ","
+    "tags": [
+      "regression"
+    ]
   },
   {
     "id": "016-double-tail",
     "input": "tests/016-double-tail.in",
     "expected": "tests/016-double-tail.out",
     "points": 5,
-    "tags": ","
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "017-empty-tail",
     "input": "tests/017-empty-tail.in",
     "expected": "tests/017-empty-tail.out",
     "points": 5,
-    "tags": "a"
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "018-empty-nested-tail",
     "input": "tests/018-empty-nested-tail.in",
     "expected": "tests/018-empty-nested-tail.out",
     "points": 5,
-    "tags": "a"
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "019-atom-tail",
     "input": "tests/019-atom-tail.in",
     "expected": "tests/019-atom-tail.out",
     "points": 5,
-    "tags": "("
+    "tags": [
+      "regression"
+    ]
   },
   {
     "id": "020-deep-head-tail",
     "input": "tests/020-deep-head-tail.in",
     "expected": "tests/020-deep-head-tail.out",
     "points": 5,
-    "tags": "a"
+    "tags": [
+      "regression"
+    ]
   }
 ]
