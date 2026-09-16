@@ -3,7 +3,7 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 5,
+    "points": 8,
     "tags": [
       "sample"
     ],
@@ -15,7 +15,7 @@
     "id": "002-inclusive-boundary",
     "input": "tests/002-inclusive-boundary.in",
     "expected": "tests/002-inclusive-boundary.out",
-    "points": 15,
+    "points": 8,
     "tags": [
       "boundary"
     ]
@@ -24,7 +24,7 @@
     "id": "003-sparse",
     "input": "tests/003-sparse.in",
     "expected": "tests/003-sparse.out",
-    "points": 20,
+    "points": 8,
     "tags": [
       "normal"
     ]
@@ -33,7 +33,7 @@
     "id": "004-dense",
     "input": "tests/004-dense.in",
     "expected": "tests/004-dense.out",
-    "points": 20,
+    "points": 8,
     "tags": [
       "normal"
     ]
@@ -42,7 +42,7 @@
     "id": "005-large-time",
     "input": "tests/005-large-time.in",
     "expected": "tests/005-large-time.out",
-    "points": 20,
+    "points": 8,
     "tags": [
       "boundary"
     ]
@@ -51,29 +51,137 @@
     "id": "006-scale",
     "input": "tests/006-scale.in",
     "expected": "tests/006-scale.out",
-    "points": 1,
+    "points": 4,
     "tags": [
       "scale",
       "complexity"
     ]
   },
-  {"id":"007-single","input":"tests/007-single.in","expected":"tests/007-single.out","points":1,"tags":["boundary"]},
-  {"id":"008-all-within","input":"tests/008-all-within.in","expected":"tests/008-all-within.out","points":1,"tags":["normal"]},
-  {"id":"009-boundary-repeated","input":"tests/009-boundary-repeated.in","expected":"tests/009-boundary-repeated.out","points":1,"tags":["boundary","regression"]},
-  {"id":"010-large-gaps","input":"tests/010-large-gaps.in","expected":"tests/010-large-gaps.out","points":1,"tags":["normal"]},
-  {"id":"011-burst-and-gap","input":"tests/011-burst-and-gap.in","expected":"tests/011-burst-and-gap.out","points":1,"tags":["normal"]},
-  {"id":"012-near-zero","input":"tests/012-near-zero.in","expected":"tests/012-near-zero.out","points":1,"tags":["boundary"]},
-  {"id":"013-max-timestamp","input":"tests/013-max-timestamp.in","expected":"tests/013-max-timestamp.out","points":1,"tags":["boundary"]},
-  {"id":"014-steady-spacing","input":"tests/014-steady-spacing.in","expected":"tests/014-steady-spacing.out","points":1,"tags":["normal"]},
-  {"id":"015-window-expiry","input":"tests/015-window-expiry.in","expected":"tests/015-window-expiry.out","points":1,"tags":["regression"]},
-  {"id":"016-exact-boundaries","input":"tests/016-exact-boundaries.in","expected":"tests/016-exact-boundaries.out","points":1,"tags":["boundary"]},
-  {"id":"017-two-bursts","input":"tests/017-two-bursts.in","expected":"tests/017-two-bursts.out","points":1,"tags":["normal"]},
-  {"id":"018-near-zero-window","input":"tests/018-near-zero-window.in","expected":"tests/018-near-zero-window.out","points":1,"tags":["boundary"]},
-  {"id":"019-repeated-expiry","input":"tests/019-repeated-expiry.in","expected":"tests/019-repeated-expiry.out","points":1,"tags":["regression"]},
-  {"id":"020-max-time-range","input":"tests/020-max-time-range.in","expected":"tests/020-max-time-range.out","points":1,"tags":["boundary"]},
-  {"id":"021-regular-spacing","input":"tests/021-regular-spacing.in","expected":"tests/021-regular-spacing.out","points":1,"tags":["normal"]},
-  {"id":"022-long-gap","input":"tests/022-long-gap.in","expected":"tests/022-long-gap.out","points":1,"tags":["normal"]},
-  {"id":"023-large-timestamps","input":"tests/023-large-timestamps.in","expected":"tests/023-large-timestamps.out","points":1,"tags":["boundary"]},
-  {"id":"024-boundary-reentry","input":"tests/024-boundary-reentry.in","expected":"tests/024-boundary-reentry.out","points":1,"tags":["regression"]},
-  {"id":"025-stepped-expiry","input":"tests/025-stepped-expiry.in","expected":"tests/025-stepped-expiry.out","points":1,"tags":["normal"]}
+  {
+    "id": "007-single",
+    "input": "tests/007-single.in",
+    "expected": "tests/007-single.out",
+    "points": 4,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "008-all-within",
+    "input": "tests/008-all-within.in",
+    "expected": "tests/008-all-within.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-boundary-repeated",
+    "input": "tests/009-boundary-repeated.in",
+    "expected": "tests/009-boundary-repeated.out",
+    "points": 4,
+    "tags": [
+      "boundary",
+      "regression"
+    ]
+  },
+  {
+    "id": "010-large-gaps",
+    "input": "tests/010-large-gaps.in",
+    "expected": "tests/010-large-gaps.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-burst-and-gap",
+    "input": "tests/011-burst-and-gap.in",
+    "expected": "tests/011-burst-and-gap.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-near-zero",
+    "input": "tests/012-near-zero.in",
+    "expected": "tests/012-near-zero.out",
+    "points": 4,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "013-max-timestamp",
+    "input": "tests/013-max-timestamp.in",
+    "expected": "tests/013-max-timestamp.out",
+    "points": 4,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "014-steady-spacing",
+    "input": "tests/014-steady-spacing.in",
+    "expected": "tests/014-steady-spacing.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-window-expiry",
+    "input": "tests/015-window-expiry.in",
+    "expected": "tests/015-window-expiry.out",
+    "points": 4,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "016-exact-boundaries",
+    "input": "tests/016-exact-boundaries.in",
+    "expected": "tests/016-exact-boundaries.out",
+    "points": 4,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "017-two-bursts",
+    "input": "tests/017-two-bursts.in",
+    "expected": "tests/017-two-bursts.out",
+    "points": 4,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-near-zero-window",
+    "input": "tests/018-near-zero-window.in",
+    "expected": "tests/018-near-zero-window.out",
+    "points": 4,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "019-repeated-expiry",
+    "input": "tests/019-repeated-expiry.in",
+    "expected": "tests/019-repeated-expiry.out",
+    "points": 4,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "020-max-time-range",
+    "input": "tests/020-max-time-range.in",
+    "expected": "tests/020-max-time-range.out",
+    "points": 4,
+    "tags": [
+      "boundary"
+    ]
+  }
 ]
