@@ -1060,3 +1060,69 @@ Azen：新增20题和400个独立核验测试，保留稳定ID及两道补充题
 ### Next Steps
 
 - 用户追加授权后已提交、推送并创建 [PR #190](https://github.com/AzenAnn/DSA-Mastery/pull/190)，目标 main；维护者审阅 draft 内容及受限题源后决定合并。新7.2/7.6理论文章上传后按映射更新链接。
+
+
+## Session 41: Ch7 连续编号与题集精简，本地预览待检查
+
+**Date**: 2026-09-16
+**Task**: Ch7 连续编号与题集精简，本地预览待检查
+**Branch**: `codex/ch07-exercise-renumber`
+
+### Summary
+
+基于最新 main，在独立工作目录按 guide 重编号 30 题并移除两道补充题，同步文章链接、校验脚本与 VS Code 进度迁移。
+
+### Main Changes
+
+- 07E01–07E30 与学习清单、目录、标题和 order 一致；原目录已有改动保持不动。
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] pnpm test、30 题 lab:verify、20 题独立 oracle/solutions/mutations、扩展 97 项与类型构建、Pages 62 项全部通过。Windows 符号链接测试按既有策略跳过 1 项。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 用户检查 http://127.0.0.1:5177/DSA-Mastery/learn/chapter-07-graph-traversal/00-exercise-guide/；源码未提交、未推送。
+
+
+## Session 42: Ch7 编号迁移提交与 PR
+
+**Date**: 2026-09-16
+**Task**: Ch7 编号迁移提交与 PR
+**Branch**: `codex/ch07-exercise-renumber`
+
+### Summary
+
+用户追加授权后，提交并推送 Ch7 连续编号与题集精简，创建面向 main 的 PR #195。
+
+### Main Changes
+
+- PR: https://github.com/AzenAnn/DSA-Mastery/pull/195；分支 codex/ch07-exercise-renumber。
+- 当前任务归档；保留本地静态预览，原工作目录已有改动保持不动。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c67d16e4` | (see git log) |
+
+### Testing
+
+- [OK] 沿用同一代码版本已通过的 pnpm test、30 题 verify、20 题 oracle/solution/mutations、扩展 97 项和 Pages 62 项验证；提交前 diff 检查通过。
+- [OK] PR 的 base=main、head 分支、OPEN 且非 draft 已核实；CI 已启动，尚未完成。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 维护者审查 PR #195 和本地预览；原生 VSIX 升级安装体验仍待人工复核。尚未合并或发布。

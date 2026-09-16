@@ -7,6 +7,7 @@ import type { QuizQuestion } from "./quiz";
 import { backfillEvents } from "./stats";
 import { remapEventKeys, remapRecordKeys } from "./progressKeys";
 import { CH04_MIGRATION, ch04IdAliases } from "./ch04Migration";
+import { CH07_MIGRATION, ch07IdAliases } from "./ch07Migration";
 import { mergeLabProgress, mergeQuizProgress } from "./progressMerge";
 import {
   projectProgressPassed,
@@ -212,7 +213,11 @@ export class ProgressTracker {
    * 旧源码快照不移动，HistoryEntry.snapshot 继续指向原来的文件。
    */
   async migrateLabKeys(labs: readonly LabEntry[]): Promise<void> {
-    const idAliases = ch04IdAliases(labs, this.store.appliedMigrations);
+    const migrations = [
+      { marker: CH04_MIGRATION, aliases: ch04IdAliases(labs, this.store.appliedMigrations) },
+      { marker: CH07_MIGRATION, aliases: ch07IdAliases(labs, this.store.appliedMigrations) },
+    ].filter((migration) => migration.aliases.length > 0);
+    const idAliases = migrations.flatMap((migration) => migration.aliases);
     const renumbered = remapRecordKeys(this.store.labs, idAliases, mergeLabProgress);
     const renumberedEvents = remapEventKeys(this.store.events, idAliases);
     const aliases = labs.flatMap((lab) =>
@@ -228,7 +233,7 @@ export class ProgressTracker {
     await this.context.globalState.update(`${STATE_KEY}.backup.v${this.store.schemaVersion}.${Date.now()}`, this.store);
     const nextStore: ProgressStore = {
       schemaVersion: SCHEMA_VERSION,
-      appliedMigrations: idAliases.length > 0 ? [...this.store.appliedMigrations, CH04_MIGRATION] : this.store.appliedMigrations,
+      appliedMigrations: [...this.store.appliedMigrations, ...migrations.map((migration) => migration.marker)],
       labs: program.records,
       quizzes: quiz.records,
       events: activity.events,

@@ -5,7 +5,7 @@ order: 101
 chapter: 7
 labId: "07E01"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-14"
+updated: "2026-09-16"
 contributors: ["Qing", "Azen"]
 status: "draft"
 lab: true
@@ -122,7 +122,7 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-01-dfs-timestamps
 
 为了固定访问顺序，排序全部邻接表需要 `O(Σ deg(u) log deg(u))` 时间，上界可写为 `O(m log n)`。排序完成后，每个顶点进入一次，邻接表中的每条记录扫描一次，也就是每条无向边分别从两个方向扫描，DFS 本身为 `O(n + m)`；因此包含排序的总时间为 `O(n + m log n)`。
 
-邻接表占 `O(n + m)` 空间，`visited`、时间戳数组与最坏辅助栈各占 `O(n)` 空间。递归可用深度取决于操作系统、编译器和栈帧大小；现有深链用例可超过 Windows 默认递归栈。参考解在递归深度达到 256 时使用显式栈帧完成该子树，保留完全相同的时间戳。栈帧写法可参考 [Lab 07-E-05](../E-07-05-iterative-dfs/README.md)。
+邻接表占 `O(n + m)` 空间，`visited`、时间戳数组与最坏辅助栈各占 `O(n)` 空间。递归可用深度取决于操作系统、编译器和栈帧大小；现有深链用例可超过 Windows 默认递归栈。参考解在递归深度达到 256 时使用显式栈帧完成该子树，保留完全相同的时间戳。栈帧写法可参考 [Lab 07-E-02](../E-07-02-iterative-dfs/README.md)。
 
 ## 思考与复盘
 
