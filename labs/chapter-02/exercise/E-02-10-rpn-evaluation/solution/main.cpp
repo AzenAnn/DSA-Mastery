@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){int n;if(!(cin>>n))return 0;vector<long long>s;string t;for(int i=0;i<n;i++){cin>>t;if(t=="+"||t=="-"||t=="*"||t=="/"){auto b=s.back();s.pop_back();auto a=s.back();s.pop_back();if(t=="+")s.push_back(a+b);if(t=="-")s.push_back(a-b);if(t=="*")s.push_back(a*b);if(t=="/")s.push_back(a/b);}else s.push_back(stoll(t));}cout<<s.back()<<'\n';}

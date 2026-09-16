@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){int n;cin>>n;deque<long long>q;string o;long long x;while(n--){cin>>o;if(o=="ENQ")cin>>x,q.push_back(x),cout<<"OK\n";else if(o=="DEQ"){if(q.empty())cout<<"EMPTY\n";else cout<<q.front()<<'\n',q.pop_front();}else if(o=="FRONT"){if(q.empty())cout<<"EMPTY\n";else cout<<q.front()<<'\n';}else{if(q.empty())cout<<"EMPTY\n";else cout<<q.back()<<'\n';}}}

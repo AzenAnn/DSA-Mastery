@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){int n;long long m;cin>>n>>m;deque<int>q;for(int i=1;i<=n;i++)q.push_back(i);bool f=1;while(!q.empty()){long long k=(m-1)%q.size();while(k--)q.push_back(q.front()),q.pop_front();if(!f)cout<<' ';f=0;cout<<q.front();q.pop_front();}cout<<'\n';}

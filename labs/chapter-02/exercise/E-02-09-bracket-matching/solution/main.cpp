@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std; int main(){int n; if(!(cin>>n))return 0; string s; if(n>0) cin>>s; vector<char> st; map<char,char> p{{')','('},{']','['},{'}','{'}}; for(char c:s){if(c=='('||c=='['||c=='{')st.push_back(c);else if(p.count(c)){if(st.empty()||st.back()!=p[c]){cout<<"NO\n";return 0;} st.pop_back();}} cout<<(st.empty()?"YES":"NO")<<'\n';}

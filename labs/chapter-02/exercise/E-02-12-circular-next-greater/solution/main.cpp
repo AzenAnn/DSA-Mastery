@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){int n;cin>>n;vector<long long>a(n),r(n,-1);for(auto&x:a)cin>>x;vector<int>s;for(int i=0;i<2*n;i++){while(!s.empty()&&a[s.back()]<a[i%n])r[s.back()]=a[i%n],s.pop_back();if(i<n)s.push_back(i);}for(auto x:r)cout<<x<<' ';cout<<'\n';}

@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){int n;cin>>n;string s; if(n>0) cin>>s; vector<char>v;for(char c:s){if(!v.empty()&&v.back()==c)v.pop_back();else v.push_back(c);}if(v.empty()){cout<<"EMPTY"<<endl;}else {for(char c:v)cout<<c;cout<<endl;}}

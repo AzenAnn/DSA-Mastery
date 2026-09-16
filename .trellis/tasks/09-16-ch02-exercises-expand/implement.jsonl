@@ -1,0 +1,4 @@
+{"file":".trellis/spec/content/labs.md","reason":"题面与稳定身份"}
+{"file":".trellis/spec/content/lab-tooling.md","reason":"C++17 与评分协议"}
+{"file":".trellis/spec/content/frontmatter-and-routing.md","reason":"元数据、排序与链接"}
+{"file":".trellis/tasks/09-16-ch02-exercises-expand/design.md","reason":"分组与独立测试接口"}

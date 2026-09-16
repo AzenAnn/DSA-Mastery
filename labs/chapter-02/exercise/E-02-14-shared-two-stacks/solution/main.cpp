@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){int c,n;cin>>c>>n;vector<long long>l,r;string o;long long x;while(n--){cin>>o>>x;if(o=="LPUSH"){if((int)(l.size()+r.size())<c)l.push_back(x),cout<<"OK\n";else cout<<"FULL\n";}else if(o=="RPUSH"){if((int)(l.size()+r.size())<c)r.push_back(x),cout<<"OK\n";else cout<<"FULL\n";}else if(o=="LPOP"){if(l.empty())cout<<"EMPTY\n";else cout<<l.back()<<'\n',l.pop_back();}else{if(r.empty())cout<<"EMPTY\n";else cout<<r.back()<<'\n',r.pop_back();}}}

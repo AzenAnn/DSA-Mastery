@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){string t;vector<string>o,st;map<string,int>p{{"+",1},{"-",1},{"*",2},{"/",2}};while(cin>>t){if(isdigit(t[0]))o.push_back(t);else if(t=="(")st.push_back(t);else if(t==")"){while(st.back()!="(")o.push_back(st.back()),st.pop_back();st.pop_back();}else{while(!st.empty()&&st.back()!="("&&p[st.back()]>=p[t])o.push_back(st.back()),st.pop_back();st.push_back(t);}}while(!st.empty())o.push_back(st.back()),st.pop_back();for(auto&x:o)cout<<x<<' ';cout<<'\n';}
