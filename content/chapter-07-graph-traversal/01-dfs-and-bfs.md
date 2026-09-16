@@ -47,7 +47,7 @@ graph TraversalExample {
   0 -- 2;
 }
 ```
-<!-- diagram id="dfs-bfs-example-graph" caption: "7.1 示例图：5 个顶点、4 条边的无向图" -->
+<!-- diagram id="dfs-bfs-example-graph" caption="7.1 示例图：5 个顶点、4 条边的无向图" -->
 
 从顶点 `0` 出发：
 
@@ -379,6 +379,233 @@ void bfs(int start, const std::vector<std::vector<int>>& graph,
 - **无权最短路径**：`dist` 数组就是答案；
 - **按层处理**：需要"先处理近的，再处理远的"的问题，如状态空间（把每种局面抽象成一个顶点的图）最少步数、迷宫最短路；
 - **二分图判定**：给顶点交替染色，BFS 逐层扩散时若发现相邻同色，就不是二分图。
+
+## 完整解题范例
+
+下面用两道可以直接提交和运行的题，把 DFS 与 BFS 从“遍历骨架”落实为完整解题流程。第一题强调 DFS 的进入/退出事件，第二题强调 BFS 的分层与入队标记。
+
+### 范例一：完整 DFS 森林的时间戳
+
+#### 题目解读
+
+给定一个可能不连通的无向图，顶点编号为 `0..n-1`。外层按编号升序寻找尚未访问的顶点，每个顶点的邻居也按升序访问。第一次进入顶点 `u` 时记录发现时间 `d[u]`，处理完全部邻居、退出 `u` 时记录完成时间 `f[u]`，最后输出两个数组。
+
+题目中的“可能不连通”决定了不能只调用一次 DFS；“退出时记录”决定了显式栈不能只保存顶点，还要保存下一个待检查的邻居下标。
+
+#### 算法分析
+
+使用栈帧 `(u, next)` 模拟递归调用：
+
+- 顶点第一次压栈时记录 `d[u]`；
+- `next` 指向 `graph[u]` 中下一条尚未检查的邻接记录；
+- 若还有未访问邻居，就先推进 `next`，再把邻居作为新栈帧压入；
+- 若邻居全部处理完，记录 `f[u]` 并弹出当前帧；
+- 外层扫描所有顶点，得到完整 DFS 森林。
+
+排序邻接表需要 $O(m\log n)$ 的简单上界；DFS 本身为 $O(n+m)$，辅助空间为 $O(n+m)$。
+
+#### 伪代码
+
+```text [dfs-timestamps.pseudo]
+timer = 0
+visited = 全 false
+for root = 0 .. n-1:
+    if visited[root]: continue
+    标记 root，d[root] = ++timer
+    stack.push((root, 0))
+    while stack 非空:
+        (u, next) = stack.top
+        if next == graph[u].size:
+            f[u] = ++timer
+            stack.pop
+        else:
+            v = graph[u][next]
+            stack.top.next++
+            if not visited[v]:
+                标记 v，d[v] = ++timer
+                stack.push((v, 0))
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [dfs-timestamps-example.cpp]
+#include <algorithm>
+#include <cstddef>
+#include <iostream>
+#include <utility>
+#include <vector>
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n = 0, m = 0;
+    if (!(std::cin >> n >> m)) return 0;
+
+    std::vector<std::vector<int>> graph(n);
+    for (int i = 0; i < m; ++i) {
+        int u = 0, v = 0;
+        std::cin >> u >> v;
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+    for (auto& neighbors : graph) {
+        std::sort(neighbors.begin(), neighbors.end());
+    }
+
+    std::vector<bool> visited(n, false);
+    std::vector<int> discovered(n), finished(n);
+    int timer = 0;
+
+    for (int root = 0; root < n; ++root) {
+        if (visited[root]) continue;
+        visited[root] = true;
+        discovered[root] = ++timer;
+        std::vector<std::pair<int, std::size_t>> stack{{root, 0}};
+
+        while (!stack.empty()) {
+            int u = stack.back().first;
+            std::size_t& next = stack.back().second;
+            if (next == graph[u].size()) {
+                finished[u] = ++timer;
+                stack.pop_back();
+                continue;
+            }
+
+            int v = graph[u][next++];
+            if (visited[v]) continue;
+            visited[v] = true;
+            discovered[v] = ++timer;
+            stack.push_back({v, 0});
+        }
+    }
+
+    for (int u = 0; u < n; ++u) {
+        if (u) std::cout << ' ';
+        std::cout << discovered[u];
+    }
+    std::cout << '\n';
+    for (int u = 0; u < n; ++u) {
+        if (u) std::cout << ' ';
+        std::cout << finished[u];
+    }
+    std::cout << '\n';
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 若只保存“待访问顶点”而不保存 `next`，就无法准确产生递归版的完成时间；
+- 把无向图改成有向图后，同一套时间戳可继续用于祖先判断和边分类；
+- 若题目只要求发现顺序，可以简化为普通顶点栈，不再记录退出事件；
+- 对应练习：[T01 · 07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md)；完成后可继续做 [T03 · 07E13 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-13-dfs-edge-classification/README.md)。
+
+### 范例二：BFS 判定二分图
+
+#### 题目解读
+
+给定一个可能不连通的无向图，尝试把每个顶点染成 `0/1` 两色，使每条边的两个端点颜色不同。若成功，输出 `YES` 和颜色数组；若遇到同色相邻顶点，输出 `NO` 和第一条冲突边。
+
+一条边会把“端点异色”变成约束 `color[v] = 1 - color[u]`。非连通图的每个分量都要单独选择起点；为了让“第一条冲突边”可复现，根和邻居都按编号升序处理。
+
+#### 算法分析
+
+对每个未染色根执行 BFS：根染 `0` 并入队；扫描边 `u-v` 时，若 `v` 未染色，就给它染相反颜色并立即入队；若 `v` 已染色且与 `u` 同色，则图不是二分图。
+
+染色同时充当访问标记，所以每个顶点最多入队一次。排序后 BFS 为 $O(n+m)$，包含邻接排序时总时间可写为 $O(n+m\log n)$；空间为 $O(n+m)$。
+
+#### 伪代码
+
+```text [bipartite-bfs.pseudo]
+color = 全 -1
+for root = 0 .. n-1:
+    if color[root] != -1: continue
+    color[root] = 0
+    root 入队
+    while 队列非空:
+        u = 出队
+        for v in graph[u]:
+            if color[v] == -1:
+                color[v] = 1 - color[u]
+                v 入队
+            else if color[v] == color[u]:
+                输出 NO 与冲突边并结束
+输出 YES 与 color
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [bipartite-bfs-example.cpp]
+#include <algorithm>
+#include <iostream>
+#include <queue>
+#include <vector>
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n = 0, m = 0;
+    if (!(std::cin >> n >> m)) return 0;
+
+    std::vector<std::vector<int>> graph(n);
+    for (int i = 0; i < m; ++i) {
+        int u = 0, v = 0;
+        std::cin >> u >> v;
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+    for (auto& neighbors : graph) {
+        std::sort(neighbors.begin(), neighbors.end());
+    }
+
+    std::vector<int> color(n, -1);
+    std::queue<int> pending;
+    for (int root = 0; root < n; ++root) {
+        if (color[root] != -1) continue;
+        color[root] = 0;
+        pending.push(root);
+
+        while (!pending.empty()) {
+            int u = pending.front();
+            pending.pop();
+            for (int v : graph[u]) {
+                if (color[v] == -1) {
+                    color[v] = 1 - color[u];
+                    pending.push(v);
+                } else if (color[v] == color[u]) {
+                    std::cout << "NO\n";
+                    std::cout << std::min(u, v) << ' '
+                              << std::max(u, v) << '\n';
+                    return 0;
+                }
+            }
+        }
+    }
+
+    std::cout << "YES\n";
+    for (int u = 0; u < n; ++u) {
+        if (u) std::cout << ' ';
+        std::cout << color[u];
+    }
+    std::cout << '\n';
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 将 BFS 换成 DFS 不会改变是否为二分图，但可能改变颜色方案和首先发现的冲突边；
+- 保存父节点后，可以从同色冲突边的两个端点回溯并还原一个奇环；
+- 动态加边场景可使用带奇偶关系的并查集，但它不直接提供 BFS 层次；
+- 对应练习：[T26 · 07E06 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-06-bfs-bipartite/README.md)。
 
 ## 一张表对比
 
