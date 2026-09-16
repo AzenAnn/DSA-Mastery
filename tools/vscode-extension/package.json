@@ -146,28 +146,34 @@
   "scripts": {
     "build": "node build.mjs",
     "watch": "node build.mjs --watch",
-    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "knip": "knip",
     "package": "node build.mjs && vsce package --no-dependencies --allow-missing-repository --skip-license"
   },
   "dependencies": {
     "gray-matter": "4.0.3",
-    "katex": "0.16.11",
-    "markdown-it": "14.3.0"
+    "katex": "0.18.7",
+    "markdown-it": "14.3.2"
   },
   "devDependencies": {
-    "@types/katex": "0.16.7",
+    "@mzwing/oxc-config": "0.1.6",
     "@types/markdown-it": "^14.1.2",
-    "@types/node": "22.19.19",
+    "@types/node": "22.20.2",
     "@types/vscode": "^1.90.0",
-    "@vscode/vsce": "3.9.2",
-    "esbuild": "0.25.0",
-    "typescript": "5.9.3"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
+    "@vscode/vsce": "4.0.0",
+    "esbuild": "0.28.2",
+    "knip": "6.35.1",
+    "oxfmt": "0.68.0",
+    "oxlint": "1.83.0",
+    "oxlint-tsgolint": "7.0.2001",
+    "typescript": "npm:typescript-native-bridge@6.0.3-bridge.17.tsgo.7.0.2",
+    "vite": "8.3.0",
+    "vitest": "5.0.1"
   },
   "repository": {
     "type": "git",

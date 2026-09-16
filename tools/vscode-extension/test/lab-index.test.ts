@@ -1,8 +1,7 @@
-import assert from "node:assert/strict";
 import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import test from "node:test";
+import { expect, it } from "vitest";
 import { build } from "esbuild";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -54,7 +53,7 @@ const quizData = JSON.stringify([
   { id: "q1", stem: "题面", options: ["A", "B", "C", "D"], answer: 0, explanation: "解析" },
 ]);
 
-test("discovers PR#122 category labs and keeps a legacy flat lab readable", async () => {
+it("discovers PR#122 category labs and keeps a legacy flat lab readable", async () => {
   const { discoverProgramLabs } = await loadLabIndex();
   const repoRoot = await mkdtemp(path.join(tmpdir(), "dsa-lab-index-"));
   try {
@@ -103,21 +102,21 @@ test("discovers PR#122 category labs and keeps a legacy flat lab readable", asyn
     const chapters = await discoverProgramLabs(repoRoot);
     const labs = chapters.flatMap((chapter) => chapter.labs);
 
-    assert.deepEqual(labs.map((lab) => lab.id), ["01T01", "01E01", "01P01", "lab-01-09-legacy-quiz"]);
-    assert.deepEqual(labs.map((lab) => lab.name), [
+    expect(labs.map((lab) => lab.id)).toStrictEqual(["01T01", "01E01", "01P01", "lab-01-09-legacy-quiz"]);
+    expect(labs.map((lab) => lab.name)).toStrictEqual([
       "T-01-01-sequential-list-quiz",
       "E-01-01-sequential-list",
       "P-01-01-list-project",
       "lab-01-09-legacy-quiz",
     ]);
-    assert.deepEqual(labs[1]?.legacyNames, ["lab-01-02-sequential-list"]);
-    assert.match(labs[1]?.relativePath ?? "", /^labs\/chapter-01\/exercise\//);
+    expect(labs[1]?.legacyNames).toStrictEqual(["lab-01-02-sequential-list"]);
+    expect(labs[1]?.relativePath ?? "").toMatch(/^labs\/chapter-01\/exercise\//);
   } finally {
     await rm(repoRoot, { recursive: true, force: true });
   }
 });
 
-test("discovers project task metadata, cases, ctest names, and student files", async () => {
+it("discovers project task metadata, cases, ctest names, and student files", async () => {
   const { discoverProgramLabs } = await loadLabIndex();
   const repoRoot = await mkdtemp(path.join(tmpdir(), "dsa-lab-project-index-"));
   try {
@@ -174,20 +173,20 @@ test("discovers project task metadata, cases, ctest names, and student files", a
     const labs = (await discoverProgramLabs(repoRoot)).flatMap((chapter) => chapter.labs);
     const project = labs.find((lab) => lab.id === "01P02");
 
-    assert.ok(project);
-    assert.equal(project?.type, "project");
+    expect(project).toBeTruthy();
+    expect(project?.type).toBe("project");
     if (project?.type !== "project") return;
 
-    assert.equal(project.buildSystem, "cmake");
-    assert.deepEqual(project.tasks.map((task) => [task.id, task.kind, task.weight]), [
+    expect(project.buildSystem).toBe("cmake");
+    expect(project.tasks.map((task) => [task.id, task.kind, task.weight])).toStrictEqual([
       ["sequential", "stdio", 30],
       ["linked", "ctest", 50],
       ["report", "manual", 20],
     ]);
-    assert.deepEqual(project.tasks[0]?.cases?.map((testCase) => testCase.id), ["small", "large"]);
-    assert.deepEqual(project.tasks[1]?.ctestTests?.map((testCase) => testCase.name), ["linked_basic", "linked_edge"]);
-    assert.deepEqual(project.tasks[2]?.checklist, ["复杂度分析", "实验报告"]);
-    assert.deepEqual(project.studentFiles.map((file) => file.relativePath).sort(), [
+    expect(project.tasks[0]?.cases?.map((testCase) => testCase.id)).toStrictEqual(["small", "large"]);
+    expect(project.tasks[1]?.ctestTests?.map((testCase) => testCase.name)).toStrictEqual(["linked_basic", "linked_edge"]);
+    expect(project.tasks[2]?.checklist).toStrictEqual(["复杂度分析", "实验报告"]);
+    expect(project.studentFiles.map((file) => file.relativePath).sort()).toStrictEqual([
       "tasks/linked/student/linked.cpp",
       "tasks/report/student/report.md",
       "tasks/sequential/student/main.cpp",
@@ -197,7 +196,7 @@ test("discovers project task metadata, cases, ctest names, and student files", a
   }
 });
 
-test("does not follow a project student directory symlink", async () => {
+it("does not follow a project student directory symlink", async () => {
   if (process.platform === "win32") return;
 
   const { discoverProgramLabs } = await loadLabIndex();
@@ -224,25 +223,25 @@ test("does not follow a project student directory symlink", async () => {
     const labs = (await discoverProgramLabs(repoRoot)).flatMap((chapter) => chapter.labs);
     const project = labs.find((lab) => lab.id === "01P03");
 
-    assert.ok(project);
-    assert.equal(project?.type, "project");
+    expect(project).toBeTruthy();
+    expect(project?.type).toBe("project");
     if (project?.type !== "project") return;
-    assert.deepEqual(project.studentFiles, []);
+    expect(project.studentFiles).toStrictEqual([]);
   } finally {
     await rm(repoRoot, { recursive: true, force: true });
     await rm(outsideRoot, { recursive: true, force: true });
   }
 });
 
-test("discovers all real Project labs in the repository", async () => {
+it("discovers all real Project labs in the repository", async () => {
   const { discoverProgramLabs } = await loadLabIndex();
   const repoRoot = path.resolve(packageRoot, "../..");
   const projects = (await discoverProgramLabs(repoRoot))
     .flatMap((chapter) => chapter.labs)
     .filter((lab) => lab.type === "project");
 
-  assert.deepEqual(projects.map((lab) => lab.id), ["01P01", "02P04", "03P01", "03P02", "08P01", "09P01", "10P01"]);
-  assert.deepEqual(projects.map((lab) => lab.relativePath), [
+  expect(projects.map((lab) => lab.id)).toStrictEqual(["01P01", "02P04", "03P01", "03P02", "08P01", "09P01", "10P01"]);
+  expect(projects.map((lab) => lab.relativePath)).toStrictEqual([
     "labs/chapter-01/project/P-01-01-list-workload-analyzer",
     "labs/chapter-02/project/P-02-04-expression-evaluator",
     "labs/chapter-03/project/P-03-01-string-match-engine",
@@ -253,22 +252,22 @@ test("discovers all real Project labs in the repository", async () => {
   ]);
 });
 
-test("discovers 31 renumbered Ch4 exercises with legacy aliases in final order", async () => {
+it("discovers 31 renumbered Ch4 exercises with legacy aliases in final order", async () => {
   const { discoverProgramLabs } = await loadLabIndex();
   const { CH04_RENUMBERING, ch04IdAliases } = await import("../src/ch04Migration.ts");
   const exercises = (await discoverProgramLabs(path.resolve(packageRoot, "../..")))
     .flatMap((chapter) => chapter.labs).filter((lab) => lab.chapter === 4 && lab.type === "program");
-  assert.deepEqual(exercises.map((lab) => lab.id), Array.from({ length: 31 }, (_, i) => `04E${String(i + 1).padStart(2, "0")}`));
-  assert.equal(ch04IdAliases(exercises, []).length, 17);
+  expect(exercises.map((lab) => lab.id)).toStrictEqual(Array.from({ length: 31 }, (_, i) => `04E${String(i + 1).padStart(2, "0")}`));
+  expect(ch04IdAliases(exercises, []).length).toBe(17);
   for (const [old, next, slug] of CH04_RENUMBERING) {
     const lab = exercises[next - 1];
-    assert(lab.legacyNames.includes(`E-04-${String(old).padStart(2, "0")}-${slug}`));
-    assert(lab.legacyNames.includes(`lab-04-${String(old + 8).padStart(2, "0")}-${slug}`));
-    assert.equal(lab.order, next + 8);
+    expect(lab.legacyNames.includes(`E-04-${String(old).padStart(2, "0")}-${slug}`)).toBeTruthy();
+    expect(lab.legacyNames.includes(`lab-04-${String(old + 8).padStart(2, "0")}-${slug}`)).toBeTruthy();
+    expect(lab.order).toBe(next + 8);
   }
 });
 
-test("prefers the categorized lab when a transition checkout contains its old flat copy", async () => {
+it("prefers the categorized lab when a transition checkout contains its old flat copy", async () => {
   const { discoverProgramLabs } = await loadLabIndex();
   const repoRoot = await mkdtemp(path.join(tmpdir(), "dsa-lab-index-"));
   try {
@@ -289,9 +288,9 @@ test("prefers the categorized lab when a transition checkout contains its old fl
 
     const labs = (await discoverProgramLabs(repoRoot)).flatMap((chapter) => chapter.labs);
 
-    assert.equal(labs.length, 1);
-    assert.equal(labs[0]?.id, "01E01");
-    assert.match(labs[0]?.relativePath ?? "", /\/exercise\/E-01-01-sequential-list$/);
+    expect(labs.length).toBe(1);
+    expect(labs[0]?.id).toBe("01E01");
+    expect(labs[0]?.relativePath ?? "").toMatch(/\/exercise\/E-01-01-sequential-list$/);
   } finally {
     await rm(repoRoot, { recursive: true, force: true });
   }

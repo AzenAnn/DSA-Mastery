@@ -1,13 +1,12 @@
-import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import test from "node:test";
+import { expect, it, onTestFinished } from "vitest";
 import { currentProject, projectInputs, withProjectLock } from "../tools/lab/project-state.mjs";
 
-async function fixture(t) {
+async function fixture() {
   const labRoot = await mkdtemp(path.join(os.tmpdir(), "dsa project state "));
-  t.after(() => rm(labRoot, { recursive: true, force: true }));
+  onTestFinished(() => rm(labRoot, { recursive: true, force: true }));
   const tasks = [
     { id: "a", path: "tasks/a", kind: "ctest", weight: 30, dependsOn: [], buildDependsOn: [] },
     { id: "b", path: "tasks/b", kind: "ctest", weight: 30, dependsOn: [], buildDependsOn: [] },
@@ -22,54 +21,54 @@ async function fixture(t) {
   return { labRoot, tasks, manifest: { type: "project" } };
 }
 
-test("source fingerprints invalidate only transitive owners and shared config, ignoring solution/cache", async (t) => {
-  const lab = await fixture(t);
+it("source fingerprints invalidate only transitive owners and shared config, ignoring solution/cache", async () => {
+  const lab = await fixture();
   const before = await projectInputs(lab);
   await writeFile(path.join(lab.labRoot, "tasks/a/student/module.cpp"), "// changed");
   const after = await projectInputs(lab);
-  assert.notEqual(before.a.fingerprint, after.a.fingerprint);
-  assert.equal(before.b.fingerprint, after.b.fingerprint);
-  assert.notEqual(before.final.fingerprint, after.final.fingerprint);
-  assert.notEqual(before.report.fingerprint, after.report.fingerprint);
+  expect(before.a.fingerprint).not.toBe(after.a.fingerprint);
+  expect(before.b.fingerprint).toBe(after.b.fingerprint);
+  expect(before.final.fingerprint).not.toBe(after.final.fingerprint);
+  expect(before.report.fingerprint).not.toBe(after.report.fingerprint);
   for (const dir of ["solution", ".lab-cache"]) {
     await mkdir(path.join(lab.labRoot, dir), { recursive: true });
     await writeFile(path.join(lab.labRoot, dir, "generated.cpp"), "irrelevant");
   }
-  assert.deepEqual(await projectInputs(lab), after);
+  expect(await projectInputs(lab)).toStrictEqual(after);
   await writeFile(path.join(lab.labRoot, "lab.json"), "{\"config\":true}");
   const configured = await projectInputs(lab);
-  for (const task of lab.tasks) assert.notEqual(after[task.id].fingerprint, configured[task.id].fingerprint);
+  for (const task of lab.tasks) expect(after[task.id].fingerprint).not.toBe(configured[task.id].fingerprint);
 });
 
-test("manual, unassessed and stale results cannot become complete; historical grades survive", async (t) => {
-  const lab = await fixture(t);
+it("manual, unassessed and stale results cannot become complete; historical grades survive", async () => {
+  const lab = await fixture();
   const inputs = await projectInputs(lab);
   const state = { tasks: Object.fromEntries(lab.tasks.filter((task) => task.kind !== "manual").map((task) => [task.id, {
     fingerprint: inputs[task.id].fingerprint, at: "2026-09-11", bestScore: task.weight,
     result: { id: task.id, status: "AC", score: 100, maxScore: 100, weightedScore: task.weight },
   }])) };
   const full = currentProject(lab, state, inputs);
-  assert.equal(full.automatedFull, true);
-  assert.equal(full.complete, false);
-  assert.equal(full.manualPending, 10);
+  expect(full.automatedFull).toBe(true);
+  expect(full.complete).toBe(false);
+  expect(full.manualPending).toBe(10);
   await writeFile(path.join(lab.labRoot, "tasks/a/student/module.cpp"), "// stale");
   const stale = currentProject(lab, state, await projectInputs(lab));
-  assert.equal(stale.automatedScore, 30);
-  assert.equal(stale.tasks[0].status, "STALE");
-  assert.equal(stale.tasks[0].historicalScore, 30);
-  assert.equal(stale.tasks[0].bestScore, 30);
-  assert.equal(stale.complete, false);
-  assert.equal(currentProject(lab, { tasks: {} }, inputs).tasks[0].status, "UNASSESSED");
+  expect(stale.automatedScore).toBe(30);
+  expect(stale.tasks[0].status).toBe("STALE");
+  expect(stale.tasks[0].historicalScore).toBe(30);
+  expect(stale.tasks[0].bestScore).toBe(30);
+  expect(stale.complete).toBe(false);
+  expect(currentProject(lab, { tasks: {} }, inputs).tasks[0].status).toBe("UNASSESSED");
   state.tasks.b.changedDuringRun = true;
-  assert.equal(currentProject(lab, state, inputs).tasks[1].status, "STALE");
+  expect(currentProject(lab, state, inputs).tasks[1].status).toBe("STALE");
 });
 
-test("project lock rejects concurrent grading and releases on failure", async (t) => {
-  const lab = await fixture(t);
+it("project lock rejects concurrent grading and releases on failure", async () => {
+  const lab = await fixture();
   await withProjectLock(lab, async () => {
-    assert.equal(JSON.parse(await readFile(path.join(lab.labRoot, ".lab-cache/project.lock"), "utf8")).pid, process.pid);
-    await assert.rejects(withProjectLock(lab, async () => {}), { code: "PROJECT_BUSY" });
+    expect(JSON.parse(await readFile(path.join(lab.labRoot, ".lab-cache/project.lock"), "utf8")).pid).toBe(process.pid);
+    await expect(withProjectLock(lab, async () => {})).rejects.toThrow(expect.objectContaining({ code: "PROJECT_BUSY" }));
   });
-  await assert.rejects(withProjectLock(lab, async () => { throw new Error("fixture failure"); }), /fixture failure/);
-  assert.equal(await withProjectLock(lab, async () => "released"), "released");
+  await expect(withProjectLock(lab, async () => { throw new Error("fixture failure"); })).rejects.toThrow(/fixture failure/);
+  expect(await withProjectLock(lab, async () => "released")).toBe("released");
 });

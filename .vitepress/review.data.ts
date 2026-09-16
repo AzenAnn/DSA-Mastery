@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import MarkdownIt from "markdown-it";
 import mathjax3 from "markdown-it-mathjax3";
 import { defineLoader } from "vitepress";
-import type { QuizQuestion } from "./quiz.data";
+import type { QuizQuestion } from "./quiz.data.ts";
 
 export declare const data: Record<string, QuizQuestion[]>;
 

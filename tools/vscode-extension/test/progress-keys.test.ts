@@ -1,8 +1,7 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, it } from "vitest";
 import { remapEventKeys, remapRecordKeys } from "../src/progressKeys.ts";
 
-test("merges legacy and current directory records under one stable ID", () => {
+it("merges legacy and current directory records under one stable ID", () => {
   const source = {
     "01E01": { attempts: 2 },
     "E-01-01-sequential-list": { attempts: 3 },
@@ -17,16 +16,16 @@ test("merges legacy and current directory records under one stable ID", () => {
     attempts: stable.attempts + legacy.attempts,
   }));
 
-  assert.equal(migrated.changed, true);
-  assert.deepEqual(migrated.records, { "01E01": { attempts: 9 } });
-  assert.deepEqual(source, {
+  expect(migrated.changed).toBe(true);
+  expect(migrated.records).toStrictEqual({ "01E01": { attempts: 9 } });
+  expect(source).toStrictEqual({
     "01E01": { attempts: 2 },
     "E-01-01-sequential-list": { attempts: 3 },
     "lab-01-06-sequential-list": { attempts: 4 },
   });
 });
 
-test("rewrites legacy activity keys without changing event order or payload", () => {
+it("rewrites legacy activity keys without changing event order or payload", () => {
   const events = [
     { labName: "lab-01-06-sequential-list", kind: "submit" },
     { labName: "01E01", kind: "pass" },
@@ -34,14 +33,14 @@ test("rewrites legacy activity keys without changing event order or payload", ()
 
   const migrated = remapEventKeys(events, [{ id: "01E01", name: "lab-01-06-sequential-list" }]);
 
-  assert.equal(migrated.changed, true);
-  assert.deepEqual(migrated.events, [
+  expect(migrated.changed).toBe(true);
+  expect(migrated.events).toStrictEqual([
     { labName: "01E01", kind: "submit" },
     { labName: "01E01", kind: "pass" },
   ]);
 });
 
-test("new category directory keys and old flat directory keys converge on one stable ID", () => {
+it("new category directory keys and old flat directory keys converge on one stable ID", () => {
   const aliases = [
     { id: "01E04", name: "E-01-04-singly-linked-list-reverse" },
     { id: "01E04", name: "lab-01-09-singly-linked-list-reverse" },
@@ -54,5 +53,5 @@ test("new category directory keys and old flat directory keys converge on one st
     aliases,
     (stable, legacy) => ({ attempts: stable.attempts + legacy.attempts }),
   );
-  assert.deepEqual(migrated.records, { "01E04": { attempts: 5 } });
+  expect(migrated.records).toStrictEqual({ "01E04": { attempts: 5 } });
 });

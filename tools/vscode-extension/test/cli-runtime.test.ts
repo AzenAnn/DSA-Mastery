@@ -1,12 +1,11 @@
-import assert from "node:assert/strict";
 import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { build } from "esbuild";
-import test from "node:test";
+import { expect, it } from "vitest";
 
-test("CLI checks trust and explicit Node paths and falls back when PATH has no Node", async () => {
+it("CLI checks trust and explicit Node paths and falls back when PATH has no Node", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "dsa runtime with spaces "));
   const oldPath = process.env.PATH;
   let nodePath = "";
@@ -25,15 +24,15 @@ test("CLI checks trust and explicit Node paths and falls back when PATH has no N
     await writeFile(path.join(root, "tools/lab/cli.mjs"), 'console.log(JSON.stringify({reportVersion:1,command:"project-status",ok:true,result:{tasks:[],complete:false}}));');
     const { readProjectCurrent } = createRequire(import.meta.url)(output);
     fake.workspace.isTrusted = false;
-    await assert.rejects(readProjectCurrent(root, "."), { code: "WORKSPACE_UNTRUSTED" });
+    await expect(readProjectCurrent(root, ".")).rejects.toThrow(expect.objectContaining({ code: "WORKSPACE_UNTRUSTED" }));
     fake.workspace.isTrusted = true;
     nodePath = path.join(root, "missing-node.exe");
-    await assert.rejects(readProjectCurrent(root, "."), { code: "NODE_VERSION" });
+    await expect(readProjectCurrent(root, ".")).rejects.toThrow(expect.objectContaining({ code: "NODE_VERSION" }));
     nodePath = process.execPath;
-    assert.equal((await readProjectCurrent(root, ".")).complete, false);
+    expect((await readProjectCurrent(root, ".")).complete).toBe(false);
     nodePath = "";
     process.env.PATH = "";
-    assert.equal((await readProjectCurrent(root, ".")).complete, false);
+    expect((await readProjectCurrent(root, ".")).complete).toBe(false);
   } finally {
     if (oldPath === undefined) delete process.env.PATH;
     else process.env.PATH = oldPath;

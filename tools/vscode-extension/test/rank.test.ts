@@ -1,10 +1,9 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, it } from "vitest";
 import { RANKS, getNextRank, getRankBySolvedCount, getRankProgress } from "../src/rank.ts";
 import { countActivity, type ActivityEvent } from "../src/stats.ts";
 
-test("rank configuration supplies eight named, contiguous ranges and theme color tokens", () => {
-  assert.deepEqual(RANKS.map(({ id, name, zhName, minSolved, maxSolved }) => ({ id, name, zhName, minSolved, maxSolved })), [
+it("rank configuration supplies eight named, contiguous ranges and theme color tokens", () => {
+  expect(RANKS.map(({ id, name, zhName, minSolved, maxSolved }) => ({ id, name, zhName, minSolved, maxSolved }))).toStrictEqual([
     { id: "trainee", name: "Trainee", zhName: "训练者", minSolved: 0, maxSolved: 9 },
     { id: "pupil", name: "Pupil", zhName: "学徒", minSolved: 10, maxSolved: 29 },
     { id: "specialist", name: "Specialist", zhName: "专精者", minSolved: 30, maxSolved: 59 },
@@ -15,7 +14,7 @@ test("rank configuration supplies eight named, contiguous ranges and theme color
     { id: "legendary", name: "Legendary", zhName: "传奇", minSolved: 250, maxSolved: undefined },
   ]);
   for (const rank of RANKS) {
-    assert.match(rank.color, new RegExp(`^var\\(--rank-${rank.id}, #[0-9A-Fa-f]{6}\\)$`));
+    expect(rank.color).toMatch(new RegExp(`^var\\(--rank-${rank.id}, #[0-9A-Fa-f]{6}\\)$`));
   }
 });
 
@@ -32,20 +31,20 @@ const boundaries: [number, string][] = [
 ];
 
 for (const [solved, name] of boundaries) {
-  test(`${solved} solved belongs to ${name}`, () => {
-    assert.equal(getRankBySolvedCount(solved).name, name);
-    assert.equal(getRankProgress(solved).rank.name, name);
+  it(`${solved} solved belongs to ${name}`, () => {
+    expect(getRankBySolvedCount(solved).name).toBe(name);
+    expect(getRankProgress(solved).rank.name).toBe(name);
   });
 }
 
-test("next rank follows the configured order and accepts the same rank by stable id", () => {
-  assert.deepEqual(RANKS.map((rank) => getNextRank({ ...rank })?.name), [
+it("next rank follows the configured order and accepts the same rank by stable id", () => {
+  expect(RANKS.map((rank) => getNextRank({ ...rank })?.name)).toStrictEqual([
     "Pupil", "Specialist", "Expert", "Candidate Master", "Master", "Grandmaster", "Legendary", undefined,
   ]);
-  assert.equal(getNextRank({ ...RANKS[0], id: "unknown" }), undefined);
+  expect(getNextRank({ ...RANKS[0], id: "unknown" })).toBe(undefined);
 });
 
-test("progress is relative to the current rank and resets on promotion", () => {
+it("progress is relative to the current rank and resets on promotion", () => {
   const cases: [number, number, number, string][] = [
     [0, 0, 10, "Pupil"],
     [9, 90, 1, "Pupil"],
@@ -71,36 +70,36 @@ test("progress is relative to the current rank and resets on promotion", () => {
   ];
   for (const [solved, expectedProgress, remaining, nextName] of cases) {
     const progress = getRankProgress(solved);
-    assert.equal(progress.solvedCount, solved);
-    assert.ok(Math.abs(progress.progress - expectedProgress) < 1e-10, `${solved} solved progress`);
-    assert.equal(progress.remaining, remaining, `${solved} solved remaining`);
-    assert.equal(progress.nextRank?.name, nextName, `${solved} solved next rank`);
+    expect(progress.solvedCount).toBe(solved);
+    expect(Math.abs(progress.progress - expectedProgress) < 1e-10, `${solved} solved progress`).toBeTruthy();
+    expect(progress.remaining, `${solved} solved remaining`).toBe(remaining);
+    expect(progress.nextRank?.name, `${solved} solved next rank`).toBe(nextName);
   }
 });
 
-test("Legendary remains complete without a next rank at and above the maximum threshold", () => {
+it("Legendary remains complete without a next rank at and above the maximum threshold", () => {
   for (const solved of [250, 251, 1000, Number.MAX_VALUE]) {
     const progress = getRankProgress(solved);
-    assert.equal(progress.rank.name, "Legendary");
-    assert.equal(progress.solvedCount, solved);
-    assert.equal(progress.progress, 100);
-    assert.equal(progress.remaining, 0);
-    assert.equal(Object.hasOwn(progress, "nextRank"), false);
+    expect(progress.rank.name).toBe("Legendary");
+    expect(progress.solvedCount).toBe(solved);
+    expect(progress.progress).toBe(100);
+    expect(progress.remaining).toBe(0);
+    expect(Object.hasOwn(progress, "nextRank")).toBe(false);
   }
 });
 
-test("invalid numeric counts become zero and nonnegative finite fractions truncate", () => {
+it("invalid numeric counts become zero and nonnegative finite fractions truncate", () => {
   for (const solved of [NaN, Infinity, -Infinity, -100, -0.1, -0]) {
-    assert.deepEqual(getRankProgress(solved), getRankProgress(0));
-    assert.equal(getRankBySolvedCount(solved), RANKS[0]);
+    expect(getRankProgress(solved)).toStrictEqual(getRankProgress(0));
+    expect(getRankBySolvedCount(solved)).toBe(RANKS[0]);
   }
   for (const [fraction, integer] of [[0.9, 0], [9.99, 9], [10.9, 10], [29.99, 29], [249.99, 249], [250.99, 250]]) {
-    assert.deepEqual(getRankProgress(fraction), getRankProgress(integer));
-    assert.equal(getRankBySolvedCount(fraction), getRankBySolvedCount(integer));
+    expect(getRankProgress(fraction)).toStrictEqual(getRankProgress(integer));
+    expect(getRankBySolvedCount(fraction)).toBe(getRankBySolvedCount(integer));
   }
 });
 
-test("repeated submissions and passes cannot promote a rank until another distinct lab is solved", () => {
+it("repeated submissions and passes cannot promote a rank until another distinct lab is solved", () => {
   const at = new Date(2026, 8, 12, 12).toISOString();
   const labTypes = ["program", "quiz", "project"] as const;
   const events: ActivityEvent[] = Array.from({ length: 29 }, (_, index) => ({
@@ -112,14 +111,14 @@ test("repeated submissions and passes cannot promote a rank until another distin
     events.push({ at, kind: "pass", labName: "solved-0", labType: "program" });
   }
   events.push({ at, kind: "submit", labName: "new-lab", labType: "project" });
-  assert.deepEqual(countActivity(events), { submissions: 301, passes: 329, labsAttempted: 30, labsPassed: 29 });
-  assert.deepEqual(getRankProgress(countActivity(events).labsPassed), before);
-  assert.equal(before.rank.name, "Pupil");
-  assert.equal(before.progress, 95);
+  expect(countActivity(events)).toStrictEqual({ submissions: 301, passes: 329, labsAttempted: 30, labsPassed: 29 });
+  expect(getRankProgress(countActivity(events).labsPassed)).toStrictEqual(before);
+  expect(before.rank.name).toBe("Pupil");
+  expect(before.progress).toBe(95);
 
   events.push({ at, kind: "pass", labName: "new-lab", labType: "project" });
   const promoted = getRankProgress(countActivity(events).labsPassed);
-  assert.equal(promoted.rank.name, "Specialist");
-  assert.equal(promoted.progress, 0);
-  assert.equal(promoted.remaining, 30);
+  expect(promoted.rank.name).toBe("Specialist");
+  expect(promoted.progress).toBe(0);
+  expect(promoted.remaining).toBe(30);
 });

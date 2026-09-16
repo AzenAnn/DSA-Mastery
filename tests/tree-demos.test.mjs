@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { expect, it } from "vitest";
 import {
   BINARY_PRESETS, FOREST_PRESETS, binaryTree, threadingTrace,
   morrisTrace, flattenTrace, forestTrace, forestToBinary,
@@ -28,7 +27,7 @@ function walkThreads(tree, reverse) {
   let id = tree.root;
   while (id !== null && map.get(id)[downTag] === 0) id = map.get(id)[down];
   while (id !== null) {
-    assert(result.length < tree.nodes.length, "thread traversal must terminate");
+    expect(result.length < tree.nodes.length, "thread traversal must terminate").toBeTruthy();
     result.push(id);
     const node = map.get(id);
     id = node[next];
@@ -39,56 +38,56 @@ function walkThreads(tree, reverse) {
 
 function assertThreading(tree) {
   const frames = threadingTrace(tree), final = frames.at(-1), order = expected(tree, "in");
-  assert.equal(final.phase, "done");
-  assert.deepEqual(final.output, order);
+  expect(final.phase).toBe("done");
+  expect(final.output).toStrictEqual(order);
   const byId = new Map(final.nodes.map(node => [node.id, node]));
   for (const original of tree.nodes) {
     const node = byId.get(original.id), i = order.indexOf(node.id);
-    assert.equal(node.ltag, original.left === null ? 1 : 0);
-    assert.equal(node.rtag, original.right === null ? 1 : 0);
-    assert.equal(node.left, original.left ?? order[i - 1] ?? null);
-    assert.equal(node.right, original.right ?? order[i + 1] ?? null);
+    expect(node.ltag).toBe(original.left === null ? 1 : 0);
+    expect(node.rtag).toBe(original.right === null ? 1 : 0);
+    expect(node.left).toBe(original.left ?? order[i - 1] ?? null);
+    expect(node.right).toBe(original.right ?? order[i + 1] ?? null);
   }
-  assert.deepEqual(walkThreads({ ...tree, nodes: final.nodes }, false), order);
-  assert.deepEqual(walkThreads({ ...tree, nodes: final.nodes }, true), [...order].reverse());
-  assert.deepEqual(final.stack, []);
-  for (const frame of frames) assert.deepEqual(frame.output, order.slice(0, frame.output.length));
+  expect(walkThreads({ ...tree, nodes: final.nodes }, false)).toStrictEqual(order);
+  expect(walkThreads({ ...tree, nodes: final.nodes }, true)).toStrictEqual([...order].reverse());
+  expect(final.stack).toStrictEqual([]);
+  for (const frame of frames) expect(frame.output).toStrictEqual(order.slice(0, frame.output.length));
 }
 
 function assertMorris(tree) {
   const frames = morrisTrace(tree), order = expected(tree, "in");
   const original = new Map(tree.nodes.map(node => [node.id, node]));
-  assert.deepEqual(frames.at(-1).nodes, tree.nodes, "Morris restores every original pointer");
-  assert.deepEqual(frames.at(-1).output, order);
-  assert.equal(frames.filter(frame => frame.phase === "create").length, frames.filter(frame => frame.phase === "remove").length);
+  expect(frames.at(-1).nodes, "Morris restores every original pointer").toStrictEqual(tree.nodes);
+  expect(frames.at(-1).output).toStrictEqual(order);
+  expect(frames.filter(frame => frame.phase === "create").length).toBe(frames.filter(frame => frame.phase === "remove").length);
   for (const frame of frames) {
-    assert.deepEqual(frame.output, order.slice(0, frame.output.length));
+    expect(frame.output).toStrictEqual(order.slice(0, frame.output.length));
     for (const node of frame.nodes) {
-      assert.equal(node.left, original.get(node.id).left);
-      if (!frame.temporary.includes(node.id)) assert.equal(node.right, original.get(node.id).right);
-      else assert.equal(original.get(node.id).right, null, "only a vacant right pointer can be borrowed");
+      expect(node.left).toBe(original.get(node.id).left);
+      if (!frame.temporary.includes(node.id)) expect(node.right).toBe(original.get(node.id).right);
+      else expect(original.get(node.id).right, "only a vacant right pointer can be borrowed").toBe(null);
     }
   }
-  assert.deepEqual(frames.at(-1).temporary, []);
+  expect(frames.at(-1).temporary).toStrictEqual([]);
 }
 
 function assertFlatten(tree) {
   const frames = flattenTrace(tree), final = frames.at(-1), order = expected(tree, "pre");
-  assert.deepEqual(final.output, order);
+  expect(final.output).toStrictEqual(order);
   const byId = new Map(final.nodes.map(node => [node.id, node]));
-  assert(final.scans <= tree.nodes.length, "total predecessor moves stay linear");
+  expect(final.scans <= tree.nodes.length, "total predecessor moves stay linear").toBeTruthy();
   order.forEach((id, i) => {
-    assert.equal(byId.get(id).left, null);
-    assert.equal(byId.get(id).right, order[i + 1] ?? null);
+    expect(byId.get(id).left).toBe(null);
+    expect(byId.get(id).right).toBe(order[i + 1] ?? null);
   });
-  for (const frame of frames) assert.deepEqual(frame.output, order.slice(0, frame.output.length));
+  for (const frame of frames) expect(frame.output).toStrictEqual(order.slice(0, frame.output.length));
   for (let i = 1; i < frames.length; i++) {
     const previous = frames[i - 1];
     for (const change of frames[i].changes) {
       const before = previous.nodes.find(node => node.id === change.from);
       const after = frames[i].nodes.find(node => node.id === change.from);
-      assert.equal(before[change.slot], change.before);
-      assert.equal(after[change.slot], change.after);
+      expect(before[change.slot]).toBe(change.before);
+      expect(after[change.slot]).toBe(change.after);
     }
   }
 }
@@ -126,64 +125,64 @@ function expectedForest(forest, post) {
   });
 }
 
-test("all 626 binary shapes through seven nodes preserve threading, Morris and flatten invariants", () => {
+it("all 626 binary shapes through seven nodes preserve threading, Morris and flatten invariants", () => {
   let count = 0;
   for (let n = 0; n <= 7; n++) for (const shape of shapes(n)) {
     const tree = fromShape(shape), before = structuredClone(tree);
     assertThreading(tree); assertMorris(tree); assertFlatten(tree);
-    assert.deepEqual(tree, before, "trace creation cannot modify a preset");
+    expect(tree, "trace creation cannot modify a preset").toStrictEqual(before);
     count++;
   }
-  assert.equal(count, 626);
+  expect(count).toBe(626);
 });
 
-test("LCRS conversion and independently computed visit lanes agree on all 626 ordered forests", () => {
+it("LCRS conversion and independently computed visit lanes agree on all 626 ordered forests", () => {
   for (let n = 0; n <= 7; n++) for (const shape of shapes(n)) {
     const binary = fromShape(shape), forest = asForest(binary);
-    assert.deepEqual(forestToBinary(forest), binary);
+    expect(forestToBinary(forest)).toStrictEqual(binary);
     for (const mode of ["postorder", "preorder"]) {
       const frames = forestTrace(forest, mode), order = expectedForest(forest, mode === "postorder");
-      assert.deepEqual(frames.at(-1).output, order);
-      assert.deepEqual(frames.at(-1).rightOutput, order);
+      expect(frames.at(-1).output).toStrictEqual(order);
+      expect(frames.at(-1).rightOutput).toStrictEqual(order);
       for (const frame of frames) {
-        assert.deepEqual(frame.output, frame.rightOutput);
-        assert.deepEqual(frame.output, order.slice(0, frame.output.length));
+        expect(frame.output).toStrictEqual(frame.rightOutput);
+        expect(frame.output).toStrictEqual(order.slice(0, frame.output.length));
       }
     }
   }
 });
 
-test("every published preset and boundary example satisfies the trace contracts", () => {
+it("every published preset and boundary example satisfies the trace contracts", () => {
   for (const { tree } of Object.values(BINARY_PRESETS)) { assertThreading(tree); assertMorris(tree); assertFlatten(tree); }
   for (const forest of Object.values(FOREST_PRESETS)) for (const mode of ["postorder", "preorder"]) {
-    assert.deepEqual(forestTrace(forest, mode).at(-1).output, expectedForest(forest, mode === "postorder"));
+    expect(forestTrace(forest, mode).at(-1).output).toStrictEqual(expectedForest(forest, mode === "postorder"));
   }
   const tree = BINARY_PRESETS.textbook.tree;
-  assert.deepEqual(threadingTrace(tree).at(-1).output, ["D", "B", "E", "A", "C"]);
-  assert.deepEqual(flattenTrace(BINARY_PRESETS.flatten.tree).at(-1).output, ["1", "2", "3", "4", "5", "6"]);
-  assert.equal(flattenTrace(BINARY_PRESETS.left.tree).at(-1).scans, 0);
-  assert.equal(flattenTrace(BINARY_PRESETS.right.tree).at(-1).scans, 0);
+  expect(threadingTrace(tree).at(-1).output).toStrictEqual(["D", "B", "E", "A", "C"]);
+  expect(flattenTrace(BINARY_PRESETS.flatten.tree).at(-1).output).toStrictEqual(["1", "2", "3", "4", "5", "6"]);
+  expect(flattenTrace(BINARY_PRESETS.left.tree).at(-1).scans).toBe(0);
+  expect(flattenTrace(BINARY_PRESETS.right.tree).at(-1).scans).toBe(0);
 });
 
-test("frames own their arrays and nodes so seeking backward cannot inherit future mutations", () => {
+it("frames own their arrays and nodes so seeking backward cannot inherit future mutations", () => {
   for (const makeTrace of [threadingTrace, morrisTrace, flattenTrace]) {
     const frames = makeTrace(BINARY_PRESETS.textbook.tree);
     const first = structuredClone(frames[0]);
     frames.at(-1).nodes[0].left = "mutated";
     frames.at(-1).output.push("mutated");
-    assert.deepEqual(frames[0], first);
+    expect(frames[0]).toStrictEqual(first);
   }
   const frames = forestTrace(FOREST_PRESETS.textbook);
   frames.at(-1).rightOutput.push("mutated");
-  assert.deepEqual(frames[0].rightOutput, []);
+  expect(frames[0].rightOutput).toStrictEqual([]);
 });
 
-test("flatten records the three writes separately, including a predecessor that still has a left child", () => {
+it("flatten records the three writes separately, including a predecessor that still has a left child", () => {
   const tree = binaryTree([["1", "2", "4"], ["2", "3"], ["3"], ["4"]]);
   const frames = flattenTrace(tree);
   const firstAttach = frames.find(frame => frame.phase === "attach");
-  assert.equal(firstAttach.pred, "2");
-  assert.equal(firstAttach.nodes.find(node => node.id === "2").left, "3");
-  assert.deepEqual(frames.filter(frame => ["attach", "promote", "clear"].includes(frame.phase)).slice(0, 3).map(frame => frame.line), [3, 4, 5]);
-  assert.deepEqual(frames.at(-1).output, ["1", "2", "3", "4"]);
+  expect(firstAttach.pred).toBe("2");
+  expect(firstAttach.nodes.find(node => node.id === "2").left).toBe("3");
+  expect(frames.filter(frame => ["attach", "promote", "clear"].includes(frame.phase)).slice(0, 3).map(frame => frame.line)).toStrictEqual([3, 4, 5]);
+  expect(frames.at(-1).output).toStrictEqual(["1", "2", "3", "4"]);
 });

@@ -13,9 +13,10 @@ import {
   createCourseSidebar,
   normalizePagesBase,
   sourceUrlMap,
-} from "./content-index";
-import { installTheoryMarkdown } from "./markdown/theory";
+} from "./content-index.ts";
+import { installTheoryMarkdown } from "./markdown/theory.ts";
 
+const configuredRenderers = new WeakSet<object>();
 const course = collectCourseIndex();
 const sidebarIconProps = { size: 16, strokeWidth: 2, "aria-hidden": true, focusable: "false" };
 const sidebar = createCourseSidebar(course, {
@@ -147,7 +148,10 @@ export default defineConfig({
   markdown: {
     math: true,
     lineNumbers: false,
-    image: { lazyLoading: true },
+    image: { lazyLoad: true },
+    // @include 的相对路径按被包含文件改基准时，VitePress 用的是 rewrites 之后的路由，
+    // 比源文件深一级，算出来的路径会指到仓库外；保持按引用页解析。
+    include: { rebaseRelativeUrls: false },
     // Course code blocks intentionally keep a dark surface in both site themes.
     // Use one high-contrast dark Shiki palette so light-mode tokens never become
     // dark text on the dark code surface.
@@ -155,6 +159,10 @@ export default defineConfig({
     // 样例输入/输出用 log 语法:shiki 内置,对纯文本不产生高亮 token
     languageAlias: { input: "log", output: "log" },
     config(md) {
+      // VitePress 2 把 markdown 实例存在模块级单例里，页面渲染器和本地搜索索引并发创建时
+      // 会竞态地把同一个实例配置两次，代码标题等增强会重复叠加。
+      if (configuredRenderers.has(md)) return;
+      configuredRenderers.add(md);
       // VitePress exposes its own MarkdownIt structural type, while the stable
       // plugin publishes the equivalent @types/markdown-it signature.
       tasklist(md as unknown as Parameters<typeof tasklist>[0]);

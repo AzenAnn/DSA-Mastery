@@ -1,8 +1,7 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, it } from "vitest";
 import { mergeLabProgress, mergeQuizProgress } from "../src/progressMerge.ts";
 
-test("merges code progress without losing the latest submission or history", () => {
+it("merges code progress without losing the latest submission or history", () => {
   const stable = {
     passed: false,
     bestScore: 60,
@@ -49,18 +48,18 @@ test("merges code progress without losing the latest submission or history", () 
 
   const merged = mergeLabProgress(stable, legacy);
 
-  assert.equal(merged.passed, true);
-  assert.equal(merged.bestScore, 100);
-  assert.equal(merged.submissionCount, 2);
-  assert.equal(merged.lastSubmission?.verdict, "AC");
-  assert.deepEqual(merged.history.map((entry) => entry.id), ["legacy-submit", "stable-submit"]);
-  assert.deepEqual(merged.history.map((entry) => entry.snapshot), [
+  expect(merged.passed).toBe(true);
+  expect(merged.bestScore).toBe(100);
+  expect(merged.submissionCount).toBe(2);
+  expect(merged.lastSubmission?.verdict).toBe("AC");
+  expect(merged.history.map((entry) => entry.id)).toStrictEqual(["legacy-submit", "stable-submit"]);
+  expect(merged.history.map((entry) => entry.snapshot)).toStrictEqual([
     "submissions/lab-01-06-sequential-list/legacy-submit/main.cpp",
     "submissions/01E01/stable-submit/main.cpp",
   ]);
 });
 
-test("merges quiz answers by recency while keeping answers from both records", () => {
+it("merges quiz answers by recency while keeping answers from both records", () => {
   const stable = {
     passed: false,
     bestScore: 1,
@@ -81,9 +80,9 @@ test("merges quiz answers by recency while keeping answers from both records", (
 
   const merged = mergeQuizProgress(stable, legacy);
 
-  assert.equal(merged.passed, true);
-  assert.equal(merged.bestScore, 2);
-  assert.deepEqual(merged.answers, {
+  expect(merged.passed).toBe(true);
+  expect(merged.bestScore).toBe(2);
+  expect(merged.answers).toStrictEqual({
     q1: { selected: 0, correct: true, attempts: 1, answeredAt: "2026-08-02T10:00:00.000Z" },
     q2: { selected: 3, correct: true, attempts: 1, answeredAt: "2026-08-01T11:00:00.000Z" },
   });

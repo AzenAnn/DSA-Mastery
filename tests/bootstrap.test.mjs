@@ -1,9 +1,8 @@
-import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import test from "node:test";
+import { expect, it, onTestFinished } from "vitest";
 
 import {
   NODE_MINIMUM,
@@ -50,25 +49,25 @@ import {
   runSetup,
 } from "../scripts/bootstrap/setup.mjs";
 
-test("version helpers compare partial versions and reject malformed values", () => {
-  assert.deepEqual(parseVersion("v22.13.0"), [22, 13, 0]);
-  assert.deepEqual(parseVersion("Apple clang version 14.0.3"), [14, 0, 3]);
-  assert.equal(parseVersion("not a version"), undefined);
-  assert.equal(compareVersion([22, 13, 0], NODE_MINIMUM), true);
-  assert.equal(compareVersion([22, 12, 99], NODE_MINIMUM), false);
+it("version helpers compare partial versions and reject malformed values", () => {
+  expect(parseVersion("v22.13.0")).toStrictEqual([22, 13, 0]);
+  expect(parseVersion("Apple clang version 14.0.3")).toStrictEqual([14, 0, 3]);
+  expect(parseVersion("not a version")).toBe(undefined);
+  expect(compareVersion([22, 13, 0], NODE_MINIMUM)).toBe(true);
+  expect(compareVersion([22, 12, 99], NODE_MINIMUM)).toBe(false);
 });
 
-test("runtime, basic, and full profiles describe progressively larger installs", () => {
-  assert.deepEqual(Object.keys(PROFILES), ["runtime", "basic", "full"]);
-  assert.equal(profileRequirements("runtime").requiresCompiler, false);
-  assert.equal(profileRequirements("runtime").requiresCmake, false);
-  assert.equal(profileRequirements("basic").requiresCmake, false);
-  assert.equal(profileRequirements("full").requiresCmake, true);
-  assert.equal(PNPM_VERSION, "11.1.1");
+it("runtime, basic, and full profiles describe progressively larger installs", () => {
+  expect(Object.keys(PROFILES)).toStrictEqual(["runtime", "basic", "full"]);
+  expect(profileRequirements("runtime").requiresCompiler).toBe(false);
+  expect(profileRequirements("runtime").requiresCmake).toBe(false);
+  expect(profileRequirements("basic").requiresCmake).toBe(false);
+  expect(profileRequirements("full").requiresCmake).toBe(true);
+  expect(PNPM_VERSION).toBe("11.1.1");
 });
 
-test("setup arguments normalize profile, UI, and repository options", () => {
-  assert.deepEqual(parseSetupArgs([
+it("setup arguments normalize profile, UI, and repository options", () => {
+  expect(parseSetupArgs([
     "--profile", "full",
     "--repo-dir", "student project",
     "--repo-url=https://example.test/repo.git",
@@ -76,7 +75,7 @@ test("setup arguments normalize profile, UI, and repository options", () => {
     "--ui", "plain",
     "--skip-vscode",
     "--update-repo",
-  ]), {
+  ])).toStrictEqual({
     profile: "full",
     repoDir: "student project",
     repoUrl: "https://example.test/repo.git",
@@ -90,67 +89,65 @@ test("setup arguments normalize profile, UI, and repository options", () => {
   });
 });
 
-test("setup arguments reject unknown profile and conflicting UI modes", () => {
-  assert.throws(
-    () => parseSetupArgs(["--profile", "everything"]),
-    (error) => error.code === "ARGUMENT_INVALID" && /profile/i.test(error.message),
+it("setup arguments reject unknown profile and conflicting UI modes", () => {
+  expect(() => parseSetupArgs(["--profile", "everything"])).toThrow(
+    expect.objectContaining({ code: "ARGUMENT_INVALID", message: expect.stringMatching(/profile/i) }),
   );
-  assert.throws(
-    () => parseSetupArgs(["--ui", "tui", "--no-ui"]),
-    (error) => error.code === "ARGUMENT_INVALID" && /ui/i.test(error.message),
+  expect(() => parseSetupArgs(["--ui", "tui", "--no-ui"])).toThrow(
+    expect.objectContaining({ code: "ARGUMENT_INVALID", message: expect.stringMatching(/ui/i) }),
   );
 });
 
-test("plain bootstrap output is readable and contains no ANSI control codes", () => {
+it("plain bootstrap output is readable and contains no ANSI control codes", () => {
   const stages = createStageState(["preflight", "toolchain", "repository"]);
   stages[0].status = "success";
   stages[1].status = "running";
   stages[1].message = "安装 CMake";
   stages[2].status = "pending";
   const output = renderPlain({ title: "DSA Mastery 环境配置", profile: "full", stages, width: 80 });
-  assert.match(output, /DSA Mastery 环境配置/);
-  assert.match(output, /preflight/);
-  assert.match(output, /toolchain/);
-  assert.match(output, /安装 CMake/);
-  assert.equal(output.includes(String.fromCharCode(27)), false);
+  expect(output).toMatch(/DSA Mastery 环境配置/);
+  expect(output).toMatch(/preflight/);
+  expect(output).toMatch(/toolchain/);
+  expect(output).toMatch(/安装 CMake/);
+  expect(output.includes(String.fromCharCode(27))).toBe(false);
 });
 
-test("TUI frame shows progress and clamps to the terminal width", () => {
+it("TUI frame shows progress and clamps to the terminal width", () => {
   const stages = createStageState(["preflight", "toolchain", "repository", "dependencies"]);
   stages[0].status = "success";
   stages[1].status = "success";
   stages[2].status = "running";
   const frame = renderTuiFrame({ title: "DSA Mastery", profile: "basic", stages, width: 42 });
-  assert.match(frame, /2\/4/);
-  assert.match(frame, /50%/);
-  assert.match(frame, /repository/);
-  for (const line of frame.split("\n")) assert.ok(line.length <= 42, `line too wide: ${line}`);
+  expect(frame).toMatch(/2\/4/);
+  expect(frame).toMatch(/50%/);
+  expect(frame).toMatch(/repository/);
+  for (const line of frame.split("\n")) expect(line.length <= 42, `line too wide: ${line}`).toBeTruthy();
 });
 
-test("colored TUI adds a banner and semantic status colors without changing layout", () => {
+it("colored TUI adds a banner and semantic status colors without changing layout", () => {
   const stages = createStageState(["preflight", "toolchain"]);
   stages[0].status = "success";
   stages[1].status = "running";
   const plain = renderTuiFrame({ title: "DSA Mastery", profile: "basic", stages, width: 52, color: false });
   const colored = renderTuiFrame({ title: "DSA Mastery", profile: "basic", stages, width: 52, color: true });
-  assert.match(colored, /DSA MASTERY/);
-  assert.equal(colored.includes(`${String.fromCharCode(27)}[`), true);
-  assert.equal(stripAnsi(colored), plain);
+  expect(colored).toMatch(/DSA MASTERY/);
+  expect(colored.includes(`${String.fromCharCode(27)}[`)).toBe(true);
+  expect(stripAnsi(colored)).toBe(plain);
 });
 
-test("pixel completion banner keeps a fixed-width block layout and colors DSA", () => {
+it("pixel completion banner keeps a fixed-width block layout and colors DSA", () => {
   const plain = renderPixelBanner({ width: 80, color: false });
   const colored = renderPixelBanner({ width: 80, color: true });
   const lines = plain.split("\n");
-  assert.equal(lines.length, 7);
-  assert.equal(new Set(lines.map(displayWidth)).size, 1);
-  assert.equal(colored.includes("\u001b[91m"), true);
-  assert.equal(colored.includes("\u001b[93m"), true);
-  assert.equal(colored.includes("\u001b[94m"), true);
-  assert.equal(stripAnsi(colored), plain);
+  expect(lines.length).toBe(7);
+  expect(new Set(lines.map(displayWidth)).size).toBe(1);
+  expect(colored.includes("\u001b[91m")).toBe(true);
+  expect(colored.includes("\u001b[93m")).toBe(true);
+  expect(colored.includes("\u001b[94m")).toBe(true);
+  expect(stripAnsi(colored)).toBe(plain);
 });
 
-test("TUI completion summary groups metadata, stages, and result details", () => {
+it("TUI completion summary groups metadata, stages, and result details", () => {
   const summary = [
     "DSA Mastery 环境配置：成功",
     "Profile：basic · 平台：darwin/arm64",
@@ -163,18 +160,18 @@ test("TUI completion summary groups metadata, stages, and result details", () =>
   ].join("\n");
   const plain = renderTuiSummary({ summary, width: 72, color: false });
   const colored = renderTuiSummary({ summary, width: 72, color: true });
-  assert.match(plain, /配置结果/);
-  assert.match(plain, /执行阶段/);
-  assert.match(plain, /仓库\s+\/Users\/shuoyuchen\/code\/DSA-Mastery/);
-  assert.equal(stripAnsi(colored), plain);
+  expect(plain).toMatch(/配置结果/);
+  expect(plain).toMatch(/执行阶段/);
+  expect(plain).toMatch(/仓库\s+\/Users\/shuoyuchen\/code\/DSA-Mastery/);
+  expect(stripAnsi(colored)).toBe(plain);
   for (const line of plain.split("\n")) {
     if (line.startsWith("╭") || line.startsWith("╰") || line.startsWith("├") || line.startsWith("│")) {
-      assert.equal(displayWidth(line), 72, `misaligned line: ${line}`);
+      expect(displayWidth(line), `misaligned line: ${line}`).toBe(72);
     }
   }
 });
 
-test("progress UI falls back to stable plain output when stdout is not a TTY", () => {
+it("progress UI falls back to stable plain output when stdout is not a TTY", () => {
   const writes = [];
   const ui = createProgressUI({
     mode: "auto",
@@ -183,20 +180,20 @@ test("progress UI falls back to stable plain output when stdout is not a TTY", (
     profile: "basic",
     stageNames: ["preflight", "toolchain"],
   });
-  assert.equal(ui.mode, "plain");
+  expect(ui.mode).toBe("plain");
   ui.update("preflight", "success", "已有 Node.js");
   ui.update("toolchain", "running", "检查编译器");
   ui.finish({ ok: true });
   const output = writes.join("");
-  assert.match(output, /DSA Mastery/);
-  assert.match(output, /已有 Node\.js/);
-  assert.match(output, /进度：1\/2/);
-  assert.match(writes.at(-1), /进度：1\/2/);
-  assert.equal(output.includes(String.fromCharCode(27)), false);
-  assert.equal(output.includes("███"), false);
+  expect(output).toMatch(/DSA Mastery/);
+  expect(output).toMatch(/已有 Node\.js/);
+  expect(output).toMatch(/进度：1\/2/);
+  expect(writes.at(-1)).toMatch(/进度：1\/2/);
+  expect(output.includes(String.fromCharCode(27))).toBe(false);
+  expect(output.includes("███")).toBe(false);
 });
 
-test("TUI completion renders the summary card and pixel banner together", () => {
+it("TUI completion renders the summary card and pixel banner together", () => {
   const previousNoColor = process.env.NO_COLOR;
   const previousTerm = process.env.TERM;
   delete process.env.NO_COLOR;
@@ -216,11 +213,11 @@ test("TUI completion renders the summary card and pixel banner together", () => 
       summary: "DSA Mastery 环境配置：成功\nProfile：basic\n✓ preflight：完成",
     });
     const output = writes.join("");
-    assert.equal(ui.mode, "tui");
-    assert.match(output, /配置结果/);
-    assert.match(output, /执行阶段/);
-    assert.match(output, /配置结果 · 成功/);
-    assert.match(output, /███/);
+    expect(ui.mode).toBe("tui");
+    expect(output).toMatch(/配置结果/);
+    expect(output).toMatch(/执行阶段/);
+    expect(output).toMatch(/配置结果 · 成功/);
+    expect(output).toMatch(/███/);
   } finally {
     if (previousNoColor === undefined) delete process.env.NO_COLOR;
     else process.env.NO_COLOR = previousNoColor;
@@ -229,9 +226,9 @@ test("TUI completion renders the summary card and pixel banner together", () => 
   }
 });
 
-test("install wizard defaults to Program and derives profile from selected bundles", () => {
+it("install wizard defaults to Program and derives profile from selected bundles", () => {
   const defaults = createInstallSelection();
-  assert.deepEqual(selectionToOptions(defaults), {
+  expect(selectionToOptions(defaults)).toStrictEqual({
     profile: "basic",
     installVscode: false,
     skipVscode: true,
@@ -240,53 +237,53 @@ test("install wizard defaults to Program and derives profile from selected bundl
     selection: ["runtime", "program"],
   });
   const runtime = selectionToOptions(new Set());
-  assert.equal(runtime.profile, "runtime");
-  assert.deepEqual(runtime.selection, ["runtime"]);
+  expect(runtime.profile).toBe("runtime");
+  expect(runtime.selection).toStrictEqual(["runtime"]);
   const full = selectionToOptions(new Set(["project", "cmake-extension"]));
-  assert.equal(full.profile, "full");
-  assert.equal(full.installVscode, true);
-  assert.equal(full.installCmakeExtension, true);
-  assert.deepEqual(full.selection, ["runtime", "program", "project", "vscode", "cmake-extension"]);
+  expect(full.profile).toBe("full");
+  expect(full.installVscode).toBe(true);
+  expect(full.installCmakeExtension).toBe(true);
+  expect(full.selection).toStrictEqual(["runtime", "program", "project", "vscode", "cmake-extension"]);
 });
 
-test("install wizard keeps dependencies consistent when a parent is toggled", () => {
+it("install wizard keeps dependencies consistent when a parent is toggled", () => {
   const selected = new Set(["runtime", "program", "vscode", "cpp-extension"]);
   const removedParent = handleChoiceKey("space", 3, selected);
-  assert.equal(removedParent.action, "toggle");
-  assert.equal(removedParent.selection.has("vscode"), false);
-  assert.equal(removedParent.selection.has("cpp-extension"), false);
+  expect(removedParent.action).toBe("toggle");
+  expect(removedParent.selection.has("vscode")).toBe(false);
+  expect(removedParent.selection.has("cpp-extension")).toBe(false);
   const addedChild = handleChoiceKey("space", 5, new Set(["runtime"]));
-  assert.equal(addedChild.selection.has("project"), true);
-  assert.equal(addedChild.selection.has("program"), true);
-  assert.equal(addedChild.selection.has("vscode"), true);
-  assert.equal(addedChild.selection.has("cmake-extension"), true);
+  expect(addedChild.selection.has("project")).toBe(true);
+  expect(addedChild.selection.has("program")).toBe(true);
+  expect(addedChild.selection.has("vscode")).toBe(true);
+  expect(addedChild.selection.has("cmake-extension")).toBe(true);
   const removedProgram = handleChoiceKey("space", 1, addedChild.selection);
-  assert.equal(removedProgram.selection.has("program"), false);
-  assert.equal(removedProgram.selection.has("project"), false);
-  assert.equal(removedProgram.selection.has("cmake-extension"), false);
+  expect(removedProgram.selection.has("program")).toBe(false);
+  expect(removedProgram.selection.has("project")).toBe(false);
+  expect(removedProgram.selection.has("cmake-extension")).toBe(false);
 });
 
-test("install wizard renders actionable checkboxes and keyboard help", () => {
+it("install wizard renders actionable checkboxes and keyboard help", () => {
   const menu = renderChoiceMenu({ selection: createInstallSelection(), cursor: 0, width: 60 });
-  assert.match(menu, /☑ 基础运行环境/);
-  assert.match(menu, /☑ Program Lab/);
-  assert.match(menu, /☐ Project Lab/);
-  assert.match(menu, /当前方案：basic/);
-  assert.match(menu, /空格 选择\/取消/);
-  for (const line of menu.split("\n")) assert.ok(line.length <= 60, `line too wide: ${line}`);
+  expect(menu).toMatch(/☑ 基础运行环境/);
+  expect(menu).toMatch(/☑ Program Lab/);
+  expect(menu).toMatch(/☐ Project Lab/);
+  expect(menu).toMatch(/当前方案：basic/);
+  expect(menu).toMatch(/空格 选择\/取消/);
+  for (const line of menu.split("\n")) expect(line.length <= 60, `line too wide: ${line}`).toBeTruthy();
 });
 
-test("colored install wizard adds a banner and grouped sections", () => {
+it("colored install wizard adds a banner and grouped sections", () => {
   const plain = renderChoiceMenu({ selection: createInstallSelection(), cursor: 0, width: 72, color: false });
   const colored = renderChoiceMenu({ selection: createInstallSelection(), cursor: 0, width: 72, color: true });
-  assert.match(colored, /DSA MASTERY/);
-  assert.match(colored, /基础运行环境/);
-  assert.match(colored, /编辑器与扩展/);
-  assert.equal(colored.includes(`${String.fromCharCode(27)}[`), true);
-  assert.equal(stripAnsi(colored), plain);
+  expect(colored).toMatch(/DSA MASTERY/);
+  expect(colored).toMatch(/基础运行环境/);
+  expect(colored).toMatch(/编辑器与扩展/);
+  expect(colored.includes(`${String.fromCharCode(27)}[`)).toBe(true);
+  expect(stripAnsi(colored)).toBe(plain);
 });
 
-test("TUI layout accounts for wide CJK characters when padding and truncating", () => {
+it("TUI layout accounts for wide CJK characters when padding and truncating", () => {
   const menu = renderChoiceMenu({ width: 42, color: false });
   const frame = renderTuiFrame({
     title: "DSA Mastery 环境配置",
@@ -297,16 +294,16 @@ test("TUI layout accounts for wide CJK characters when padding and truncating", 
   });
   for (const line of [...menu.split("\n"), ...frame.split("\n")]) {
     if (line.startsWith("╭") || line.startsWith("╰") || line.startsWith("├") || line.startsWith("│")) {
-      assert.equal(displayWidth(line), 42, `misaligned line: ${line}`);
+      expect(displayWidth(line), `misaligned line: ${line}`).toBe(42);
     }
   }
 });
 
-test("install wizard decodes combined arrow, space, and enter input", () => {
-  assert.deepEqual(decodeChoiceInput("\u001b[B\u001b[B \r"), ["down", "down", "space", "enter"]);
+it("install wizard decodes combined arrow, space, and enter input", () => {
+  expect(decodeChoiceInput("\u001b[B\u001b[B \r")).toStrictEqual(["down", "down", "space", "enter"]);
 });
 
-test("interactive install wizard accepts keyboard choices and restores terminal mode", async () => {
+it("interactive install wizard accepts keyboard choices and restores terminal mode", async () => {
   const input = new EventEmitter();
   input.isTTY = true;
   input.isRaw = false;
@@ -318,37 +315,34 @@ test("interactive install wizard accepts keyboard choices and restores terminal 
   const pending = promptInstallSelection({ input, output });
   setImmediate(() => input.emit("data", "\u001b[B \r"));
   const result = await pending;
-  assert.equal(result.cancelled, false);
-  assert.equal(result.profile, "full");
-  assert.equal(result.installCmakeExtension, false);
-  assert.equal(input.isRaw, false);
-  assert.match(writes.join(""), /当前方案：basic（Program）/);
-  assert.match(writes.join(""), /当前方案：full（Program \+ Project）/);
+  expect(result.cancelled).toBe(false);
+  expect(result.profile).toBe("full");
+  expect(result.installCmakeExtension).toBe(false);
+  expect(input.isRaw).toBe(false);
+  expect(writes.join("")).toMatch(/当前方案：basic（Program）/);
+  expect(writes.join("")).toMatch(/当前方案：full（Program \+ Project）/);
 });
 
-test("MSVC environment parsing preserves values containing equals signs", () => {
+it("MSVC environment parsing preserves values containing equals signs", () => {
   const parsed = parseEnvironmentBlock(
     "Path=C:\\VS\\bin;C:\\Windows\\System32\nINCLUDE=C:\\SDK\\include\nLIB=C:\\SDK\\lib\nCUSTOM=a=b=c\n",
     { Path: "old-path", KEEP: "yes" },
   );
-  assert.equal(parsed.Path, "C:\\VS\\bin;C:\\Windows\\System32");
-  assert.equal(parsed.INCLUDE, "C:\\SDK\\include");
-  assert.equal(parsed.CUSTOM, "a=b=c");
-  assert.equal(parsed.KEEP, "yes");
-  assert.equal(isMsvcCommand("cl"), true);
-  assert.equal(isMsvcCommand("C:\\VS\\bin\\cl.exe"), true);
-  assert.equal(isMsvcCommand("clang++"), false);
+  expect(parsed.Path).toBe("C:\\VS\\bin;C:\\Windows\\System32");
+  expect(parsed.INCLUDE).toBe("C:\\SDK\\include");
+  expect(parsed.CUSTOM).toBe("a=b=c");
+  expect(parsed.KEEP).toBe("yes");
+  expect(isMsvcCommand("cl")).toBe(true);
+  expect(isMsvcCommand("C:\\VS\\bin\\cl.exe")).toBe(true);
+  expect(isMsvcCommand("clang++")).toBe(false);
 });
 
-test("vswhere output resolves the first non-empty installation path", () => {
-  assert.equal(
-    parseVsWherePath("C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\r\n"),
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools",
-  );
-  assert.equal(parseVsWherePath("\r\n"), undefined);
+it("vswhere output resolves the first non-empty installation path", () => {
+  expect(parseVsWherePath("C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\r\n")).toBe("C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools");
+  expect(parseVsWherePath("\r\n")).toBe(undefined);
 });
 
-test("MSVC environment resolver uses vswhere and imports the developer environment", async () => {
+it("MSVC environment resolver uses vswhere and imports the developer environment", async () => {
   const calls = [];
   const result = await createMsvcEnvironment({
     platform: "win32",
@@ -365,29 +359,29 @@ test("MSVC environment resolver uses vswhere and imports the developer environme
       };
     },
   });
-  assert.equal(result.family, "msvc");
-  assert.equal(result.env.INCLUDE, "C:\\SDK\\include");
-  assert.equal(result.env.LIB, "C:\\SDK\\lib");
-  assert.equal(result.installationPath, "C:\\VS\\BuildTools");
-  assert.equal(calls.length, 2);
-  assert.match(calls[0].args.join(" "), /VC\.Tools\.x86\.x64/);
-  assert.equal(calls[1].command, "cmd.exe");
-  assert.match(calls[1].args.at(-1), /VsDevCmd\.bat/);
+  expect(result.family).toBe("msvc");
+  expect(result.env.INCLUDE).toBe("C:\\SDK\\include");
+  expect(result.env.LIB).toBe("C:\\SDK\\lib");
+  expect(result.installationPath).toBe("C:\\VS\\BuildTools");
+  expect(calls.length).toBe(2);
+  expect(calls[0].args.join(" ")).toMatch(/VC\.Tools\.x86\.x64/);
+  expect(calls[1].command).toBe("cmd.exe");
+  expect(calls[1].args.at(-1)).toMatch(/VsDevCmd\.bat/);
 });
 
-test("bootstrap command runner preserves arguments containing spaces without a shell", async (t) => {
+it("bootstrap command runner preserves arguments containing spaces without a shell", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa bootstrap command "));
-  t.after(async () => rm(root, { recursive: true, force: true }));
+  onTestFinished(async () => rm(root, { recursive: true, force: true }));
   const result = await runCommand(process.execPath, [
     "-e",
     "process.stdout.write(`${process.argv[1]}:${process.env.BOOTSTRAP_TEST}`)",
     "path with spaces",
   ], { env: { BOOTSTRAP_TEST: "ok" }, cwd: root });
-  assert.equal(result.code, 0);
-  assert.equal(result.stdout, "path with spaces:ok");
+  expect(result.code).toBe(0);
+  expect(result.stdout).toBe("path with spaces:ok");
 });
 
-test("profile evaluation requires a compiler and only full requires CMake", () => {
+it("profile evaluation requires a compiler and only full requires CMake", () => {
   const tools = [
     { name: "Git", available: true, meetsMinimum: true, version: "2.40.0" },
     { name: "Node.js", available: true, meetsMinimum: true, version: "24.0.0" },
@@ -395,14 +389,14 @@ test("profile evaluation requires a compiler and only full requires CMake", () =
     { name: "Clang", available: true, meetsMinimum: true, version: "21.0.0" },
     { name: "CMake", available: false, meetsMinimum: false },
   ];
-  assert.equal(evaluateProfile("basic", tools).ok, true);
-  assert.equal(evaluateProfile("full", tools).ok, false);
-  assert.match(evaluateProfile("full", tools).issues.join(" "), /CMake/);
-  assert.equal(parseCommandVersion("node", "v24.1.0\n"), "24.1.0");
-  assert.equal(evaluateProfile("basic", tools.map((tool) => tool.name === "pnpm" ? { ...tool, version: "11.2.0" } : tool)).ok, false);
+  expect(evaluateProfile("basic", tools).ok).toBe(true);
+  expect(evaluateProfile("full", tools).ok).toBe(false);
+  expect(evaluateProfile("full", tools).issues.join(" ")).toMatch(/CMake/);
+  expect(parseCommandVersion("node", "v24.1.0\n")).toBe("24.1.0");
+  expect(evaluateProfile("basic", tools.map((tool) => tool.name === "pnpm" ? { ...tool, version: "11.2.0" } : tool)).ok).toBe(false);
 });
 
-test("host inspection probes Git, Node, exact pnpm, compilers, and CMake", async () => {
+it("host inspection probes Git, Node, exact pnpm, compilers, and CMake", async () => {
   const outputs = new Map([
     ["git", { stdout: "git version 2.50.1", stderr: "", code: 0 }],
     [process.execPath, { stdout: "v24.1.0", stderr: "", code: 0 }],
@@ -418,14 +412,14 @@ test("host inspection probes Git, Node, exact pnpm, compilers, and CMake", async
     env: {},
     runner: async (command) => outputs.get(command) ?? { spawnError: { code: "ENOENT" }, code: null, stdout: "", stderr: "" },
   });
-  assert.equal(host.tools.find((tool) => tool.name === "Git").meetsMinimum, true);
-  assert.equal(host.tools.find((tool) => tool.name === "pnpm").meetsMinimum, true);
-  assert.equal(host.tools.find((tool) => tool.name === "CMake").meetsMinimum, true);
-  assert.equal(host.tools.find((tool) => tool.name === "GNU Make").meetsMinimum, false);
-  assert.equal(host.msvc.initialized, false);
+  expect(host.tools.find((tool) => tool.name === "Git").meetsMinimum).toBe(true);
+  expect(host.tools.find((tool) => tool.name === "pnpm").meetsMinimum).toBe(true);
+  expect(host.tools.find((tool) => tool.name === "CMake").meetsMinimum).toBe(true);
+  expect(host.tools.find((tool) => tool.name === "GNU Make").meetsMinimum).toBe(false);
+  expect(host.msvc.initialized).toBe(false);
 });
 
-test("Windows host inspection accepts MSVC's nonzero no-input exit after environment setup", async () => {
+it("Windows host inspection accepts MSVC's nonzero no-input exit after environment setup", async () => {
   const calls = [];
   const result = await inspectHost({
     platform: "win32",
@@ -444,27 +438,21 @@ test("Windows host inspection accepts MSVC's nonzero no-input exit after environ
     },
   });
   const msvc = result.tools.find((tool) => tool.name === "MSVC");
-  assert.equal(result.msvc.initialized, true);
-  assert.equal(msvc.available, true);
-  assert.equal(msvc.meetsMinimum, true);
-  assert.equal(result.compilerReady, true);
-  assert.equal(calls.some(({ command }) => command === "cmd.exe"), true);
+  expect(result.msvc.initialized).toBe(true);
+  expect(msvc.available).toBe(true);
+  expect(msvc.meetsMinimum).toBe(true);
+  expect(result.compilerReady).toBe(true);
+  expect(calls.some(({ command }) => command === "cmd.exe")).toBe(true);
 });
 
-test("repository paths resolve relative to the caller and preserve spaces", () => {
+it("repository paths resolve relative to the caller and preserve spaces", () => {
   const callerDirectory = path.join(os.tmpdir(), "work");
-  assert.equal(
-    resolveRepositoryDir({ cwd: callerDirectory, repoDir: "student project" }),
-    path.resolve(callerDirectory, "student project"),
-  );
+  expect(resolveRepositoryDir({ cwd: callerDirectory, repoDir: "student project" })).toBe(path.resolve(callerDirectory, "student project"));
   const absoluteRepository = path.resolve(os.tmpdir(), "DSA Mastery");
-  assert.equal(
-    resolveRepositoryDir({ cwd: callerDirectory, repoDir: absoluteRepository }),
-    absoluteRepository,
-  );
+  expect(resolveRepositoryDir({ cwd: callerDirectory, repoDir: absoluteRepository })).toBe(absoluteRepository);
 });
 
-test("system install plan is profile-aware and never makes GNU Make mandatory", () => {
+it("system install plan is profile-aware and never makes GNU Make mandatory", () => {
   const plan = planToolchainInstall("full", {
     platform: "win32",
     packageManager: "winget",
@@ -477,11 +465,11 @@ test("system install plan is profile-aware and never makes GNU Make mandatory", 
       { name: "GNU Make", meetsMinimum: false },
     ],
   });
-  assert.deepEqual(plan.map((item) => item.id), ["git", "node", "msvc", "cmake"]);
-  assert.equal(plan.some((item) => item.id === "make"), false);
+  expect(plan.map((item) => item.id)).toStrictEqual(["git", "node", "msvc", "cmake"]);
+  expect(plan.some((item) => item.id === "make")).toBe(false);
 });
 
-test("runtime install plan keeps compiler and CMake optional", () => {
+it("runtime install plan keeps compiler and CMake optional", () => {
   const plan = planToolchainInstall("runtime", {
     platform: "darwin",
     packageManager: { kind: "brew", command: "brew" },
@@ -493,39 +481,36 @@ test("runtime install plan keeps compiler and CMake optional", () => {
       { name: "CMake", meetsMinimum: false },
     ],
   });
-  assert.deepEqual(plan.map((item) => item.id), ["git", "node"]);
+  expect(plan.map((item) => item.id)).toStrictEqual(["git", "node"]);
 });
 
-test("IDE extension plan follows interactive selections and preserves legacy profiles", () => {
-  assert.deepEqual(planIdeExtensions({ selection: ["runtime", "program", "vscode"] }, "basic"), []);
-  assert.deepEqual(planIdeExtensions({ selection: ["runtime", "program", "project", "vscode", "cpp-extension", "cmake-extension"], installCppExtension: true, installCmakeExtension: true }, "full"), ["ms-vscode.cpptools", "ms-vscode.cmake-tools"]);
-  assert.deepEqual(planIdeExtensions({}, "runtime"), []);
-  assert.deepEqual(planIdeExtensions({}, "full"), ["ms-vscode.cpptools", "ms-vscode.cmake-tools"]);
+it("IDE extension plan follows interactive selections and preserves legacy profiles", () => {
+  expect(planIdeExtensions({ selection: ["runtime", "program", "vscode"] }, "basic")).toStrictEqual([]);
+  expect(planIdeExtensions({ selection: ["runtime", "program", "project", "vscode", "cpp-extension", "cmake-extension"], installCppExtension: true, installCmakeExtension: true }, "full")).toStrictEqual(["ms-vscode.cpptools", "ms-vscode.cmake-tools"]);
+  expect(planIdeExtensions({}, "runtime")).toStrictEqual([]);
+  expect(planIdeExtensions({}, "full")).toStrictEqual(["ms-vscode.cpptools", "ms-vscode.cmake-tools"]);
 });
 
-test("dirty repositories are protected from implicit updates", () => {
-  assert.throws(
-    () => assertRepositorySafe({ exists: true, directory: true, valid: true, dirty: true, updateRepo: true }),
-    (error) => error.code === "REPOSITORY_DIRTY",
-  );
-  assert.doesNotThrow(() => assertRepositorySafe({ exists: true, directory: true, valid: true, dirty: true, updateRepo: false }));
+it("dirty repositories are protected from implicit updates", () => {
+  expect(() => assertRepositorySafe({ exists: true, directory: true, valid: true, dirty: true, updateRepo: true })).toThrow(expect.objectContaining({ code: "REPOSITORY_DIRTY" }));
+  expect(() => assertRepositorySafe({ exists: true, directory: true, valid: true, dirty: true, updateRepo: false })).not.toThrow();
 });
 
-test("native launchers are present and forward the shared coordinator", async () => {
+it("native launchers are present and forward the shared coordinator", async () => {
   const macos = await readFile(new URL("../scripts/bootstrap/bootstrap-macos.sh", import.meta.url), "utf8");
   const windows = await readFile(new URL("../scripts/bootstrap/bootstrap-windows.ps1", import.meta.url), "utf8");
-  assert.match(macos, /set -euo pipefail/);
-  assert.match(macos, /setup\.mjs/);
-  assert.match(macos, /git clone/);
-  assert.match(windows, /winget/iu);
-  assert.match(windows, /setup\.mjs/);
-  assert.match(windows, /VisualStudio\.2022\.BuildTools/);
-  assert.match(windows, /\$Json/);
+  expect(macos).toMatch(/set -euo pipefail/);
+  expect(macos).toMatch(/setup\.mjs/);
+  expect(macos).toMatch(/git clone/);
+  expect(windows).toMatch(/winget/iu);
+  expect(windows).toMatch(/setup\.mjs/);
+  expect(windows).toMatch(/VisualStudio\.2022\.BuildTools/);
+  expect(windows).toMatch(/\$Json/);
 });
 
-test("check-only runs read-only probes and never installs or clones", async (t) => {
+it("check-only runs read-only probes and never installs or clones", async () => {
   const repo = await mkdtemp(path.join(os.tmpdir(), "dsa bootstrap check-only "));
-  t.after(() => rm(repo, { recursive: true, force: true }));
+  onTestFinished(() => rm(repo, { recursive: true, force: true }));
   await mkdir(path.join(repo, "labs"), { recursive: true });
   await mkdir(path.join(repo, "tools", "lab"), { recursive: true });
   await writeFile(path.join(repo, "package.json"), "{}\n");
@@ -553,14 +538,14 @@ test("check-only runs read-only probes and never installs or clones", async (t) 
       return outputs.get(command) ?? { code: 0, stdout: "", stderr: "" };
     },
   });
-  assert.equal(result.exitCode, 0);
-  assert.equal(result.report.ok, true);
-  assert.equal(calls.some(({ args }) => ["install", "clone", "pull"].includes(args?.[0])), false);
-  assert.equal(result.report.stages.find((stage) => stage.id === "dependencies").status, "skipped");
-  assert.equal(result.report.stages.find((stage) => stage.id === "smoke").status, "skipped");
+  expect(result.exitCode).toBe(0);
+  expect(result.report.ok).toBe(true);
+  expect(calls.some(({ args }) => ["install", "clone", "pull"].includes(args?.[0]))).toBe(false);
+  expect(result.report.stages.find((stage) => stage.id === "dependencies").status).toBe("skipped");
+  expect(result.report.stages.find((stage) => stage.id === "smoke").status).toBe("skipped");
 });
 
-test("check-only and plain UI never open the interactive install wizard", async () => {
+it("check-only and plain UI never open the interactive install wizard", async () => {
   const input = new EventEmitter();
   input.isTTY = true;
   const output = { isTTY: true, columns: 80, write: () => {} };
@@ -570,11 +555,11 @@ test("check-only and plain UI never open the interactive install wizard", async 
     env: { PATH: "/usr/bin", HOME: "/tmp" },
     runner: async () => ({ code: null, stdout: "", stderr: "", spawnError: { code: "ENOENT" } }),
   });
-  assert.equal(checkOnly.report.error?.code, "ENVIRONMENT_NOT_READY");
-  assert.equal(checkOnly.report.cancelled, undefined);
+  expect(checkOnly.report.error?.code).toBe("ENVIRONMENT_NOT_READY");
+  expect(checkOnly.report.cancelled).toBe(undefined);
 });
 
-test("canceling the interactive install wizard stops before any command runs", async () => {
+it("canceling the interactive install wizard stops before any command runs", async () => {
   const input = new EventEmitter();
   input.isTTY = true;
   input.isRaw = false;
@@ -592,14 +577,14 @@ test("canceling the interactive install wizard stops before any command runs", a
   });
   setImmediate(() => input.emit("data", "q"));
   const result = await pending;
-  assert.equal(result.exitCode, 0);
-  assert.equal(result.report.cancelled, true);
-  assert.equal(ran, false);
+  expect(result.exitCode).toBe(0);
+  expect(result.report.cancelled).toBe(true);
+  expect(ran).toBe(false);
 });
 
-test("toolchain probes use the caller directory before cloning a new repository", async (t) => {
+it("toolchain probes use the caller directory before cloning a new repository", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa bootstrap command cwd "));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const missingRepo = path.join(root, "future-repository");
   const calls = [];
   let pnpmChecks = 0;
@@ -630,16 +615,16 @@ test("toolchain probes use the caller directory before cloning a new repository"
       return { code: 0, stdout: "", stderr: "" };
     },
   });
-  assert.equal(result.exitCode, 13);
-  assert.match(result.report.error.message, /clone 完成/);
-  assert.ok(calls.some(({ command, args, cwd }) => command === "npm" && args?.[0] === "install" && cwd === root));
-  assert.ok(calls.some(({ command, args, cwd }) => command === "git" && args?.[0] === "clone" && cwd === root));
-  assert.equal(calls.some(({ cwd }) => cwd === missingRepo), false);
+  expect(result.exitCode).toBe(13);
+  expect(result.report.error.message).toMatch(/clone 完成/);
+  expect(calls.some(({ command, args, cwd }) => command === "npm" && args?.[0] === "install" && cwd === root)).toBeTruthy();
+  expect(calls.some(({ command, args, cwd }) => command === "git" && args?.[0] === "clone" && cwd === root)).toBeTruthy();
+  expect(calls.some(({ cwd }) => cwd === missingRepo)).toBe(false);
 });
 
-test("runtime setup installs only course tooling and skips C++ smoke", async (t) => {
+it("runtime setup installs only course tooling and skips C++ smoke", async () => {
   const repo = await mkdtemp(path.join(os.tmpdir(), "dsa bootstrap runtime "));
-  t.after(() => rm(repo, { recursive: true, force: true }));
+  onTestFinished(() => rm(repo, { recursive: true, force: true }));
   await mkdir(path.join(repo, "labs"), { recursive: true });
   await mkdir(path.join(repo, "tools", "lab"), { recursive: true });
   await writeFile(path.join(repo, "package.json"), "{}\n");
@@ -668,11 +653,11 @@ test("runtime setup installs only course tooling and skips C++ smoke", async (t)
       return { code: 0, stdout: "", stderr: "" };
     },
   });
-  assert.equal(result.exitCode, 0);
-  assert.equal(result.report.ok, true);
-  assert.equal(result.report.profile, "runtime");
-  assert.equal(result.report.stages.find((stage) => stage.id === "smoke").status, "skipped");
-  assert.equal(calls.some(({ command, args }) => command === "pnpm" && args?.[0] === "install"), true);
-  assert.equal(calls.some(({ command, args }) => command === "xcode-select" || (command === "brew" && args?.[0] === "install" && args?.[1] === "cmake")), false);
-  assert.equal(calls.some(({ command, args }) => command === process.execPath && args?.[0] === "tools/lab/cli.mjs"), false);
+  expect(result.exitCode).toBe(0);
+  expect(result.report.ok).toBe(true);
+  expect(result.report.profile).toBe("runtime");
+  expect(result.report.stages.find((stage) => stage.id === "smoke").status).toBe("skipped");
+  expect(calls.some(({ command, args }) => command === "pnpm" && args?.[0] === "install")).toBe(true);
+  expect(calls.some(({ command, args }) => command === "xcode-select" || (command === "brew" && args?.[0] === "install" && args?.[1] === "cmake"))).toBe(false);
+  expect(calls.some(({ command, args }) => command === process.execPath && args?.[0] === "tools/lab/cli.mjs")).toBe(false);
 });

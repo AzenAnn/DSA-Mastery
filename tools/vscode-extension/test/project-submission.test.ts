@@ -1,12 +1,11 @@
-import assert from "node:assert/strict";
 import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { build } from "esbuild";
-import test from "node:test";
+import { expect, it } from "vitest";
 
-test("Project submission captures identity, saves scoped inputs, rejects failed saves and serializes requests", async () => {
+it("Project submission captures identity, saves scoped inputs, rejects failed saves and serializes requests", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "dsa-project-submit-"));
   try {
     const messages: unknown[] = [];
@@ -54,19 +53,19 @@ test("Project submission captures identity, saves scoped inputs, rejects failed 
     const deps = { context: { extensionPath: root }, repoRoot: root, progress, guard: { ensureReady: async () => true }, siblings: () => [lab], onSubmitted() {} };
     await LabPanel.show(lab, deps);
     await LabPanel.submitActive("stack");
-    assert.equal(calls, 0, "failed save must not grade");
-    assert(messages.some((message) => (message as { type: string }).type === "projectSubmitFailed"));
+    expect(calls, "failed save must not grade").toBe(0);
+    expect(messages.some((message) => (message as { type: string }).type === "projectSubmitFailed")).toBeTruthy();
     allowSave = true;
     const pending = LabPanel.submitActive("stack");
     while (!release) await new Promise((resolve) => setTimeout(resolve, 10));
     await LabPanel.show({ ...lab, id: "other", labPath: path.join(root, "other") }, deps);
     await LabPanel.submitActive("stack");
-    assert.equal(LabPanel.activeLab().id, "02P04");
-    assert.equal(calls, 1, "duplicate submit must not grade twice");
+    expect(LabPanel.activeLab().id).toBe("02P04");
+    expect(calls, "duplicate submit must not grade twice").toBe(1);
     release();
     await pending;
-    assert.deepEqual(submissions.map((item) => item.lab), ["02P04"]);
-    assert(saved.every((file) => file.endsWith("api.hpp")));
+    expect(submissions.map((item) => item.lab)).toStrictEqual(["02P04"]);
+    expect(saved.every((file) => file.endsWith("api.hpp"))).toBeTruthy();
     LabPanel.current.dispose();
   } finally {
     delete (globalThis as unknown as { projectFixture?: unknown }).projectFixture;

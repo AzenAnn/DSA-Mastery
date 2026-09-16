@@ -1,9 +1,8 @@
-import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { createRequire } from "node:module";
-import test from "node:test";
+import { expect, it } from "vitest";
 import { build } from "esbuild";
 import { CH04_MIGRATION, CH04_RENUMBERING, ch04IdAliases, ch04LegacyNames } from "../src/ch04Migration.ts";
 import { remapRecordKeys } from "../src/progressKeys.ts";
@@ -14,19 +13,19 @@ const labs = CH04_RENUMBERING.map(([, next, slug]) => ({
 }));
 labs.push({ id: "04E01", name: "E-04-01-lcrs-leaf-count", type: "program", legacyNames: [] });
 
-test("simultaneously remaps all overlapping IDs without consuming moved records", () => {
+it("simultaneously remaps all overlapping IDs without consuming moved records", () => {
   const source = Object.fromEntries(CH04_RENUMBERING.map(([old]) => [`04E${pad(old)}`, { old }]));
   const migrated = remapRecordKeys(source, ch04IdAliases(labs, []), () => { throw new Error("Unexpected collision"); });
-  for (const [old, next] of CH04_RENUMBERING) assert.deepEqual(migrated.records[`04E${pad(next)}`], { old });
-  assert.equal(Object.keys(migrated.records).length, 17);
-  assert.equal(source["04E01"].old, 1);
-  assert.deepEqual(ch04IdAliases(labs, [CH04_MIGRATION]), []);
-  assert.deepEqual(ch04IdAliases(labs.slice(1), []), []);
+  for (const [old, next] of CH04_RENUMBERING) expect(migrated.records[`04E${pad(next)}`]).toStrictEqual({ old });
+  expect(Object.keys(migrated.records).length).toBe(17);
+  expect(source["04E01"].old).toBe(1);
+  expect(ch04IdAliases(labs, [CH04_MIGRATION])).toStrictEqual([]);
+  expect(ch04IdAliases(labs.slice(1), [])).toStrictEqual([]);
   const oldLayout = CH04_RENUMBERING.map(([old, , slug]) => ({ id: `04E${pad(old)}`, name: `E-04-${pad(old)}-${slug}`, type: "program" }));
-  assert.deepEqual(ch04IdAliases(oldLayout, []), []);
+  expect(ch04IdAliases(oldLayout, [])).toStrictEqual([]);
 });
 
-test("tracker awaits backup, persists marker, merges aliases, preserves snapshots and survives reset", async () => {
+it("tracker awaits backup, persists marker, merges aliases, preserves snapshots and survives reset", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "dsa-ch04-progress-"));
   try {
     const bundle = path.join(root, "progress.cjs");
@@ -64,31 +63,31 @@ test("tracker awaits backup, persists marker, merges aliases, preserves snapshot
       },
     };
     const tracker = new ProgressTracker(context);
-    await assert.rejects(tracker.migrateLabKeys(labs), /Backup unavailable/);
-    assert.deepEqual(memory.get(stateKey), source);
-    assert.equal(tracker.get("04E01").bestScore, 60);
+    await expect(tracker.migrateLabKeys(labs)).rejects.toThrow(/Backup unavailable/);
+    expect(memory.get(stateKey)).toStrictEqual(source);
+    expect(tracker.get("04E01").bestScore).toBe(60);
     failBackup = false;
     await tracker.migrateLabKeys(labs);
-    assert.match(writes[0], /backup/);
-    assert.equal(writes[1], stateKey);
-    assert.deepEqual(memory.get(writes[0]), sourceWithMarker(source));
-    assert.equal(tracker.get("04E03").bestScore, 100);
-    assert.equal(tracker.get("04E07").bestScore, 40);
-    assert.deepEqual(tracker.get("04E03").history.map((item: { snapshot: string }) => item.snapshot).sort(), ["submissions/old-dir/main.cpp", "submissions/old-id/main.cpp"]);
-    assert.deepEqual(tracker.events(), [{ ...source.events[0], labName: "04E03" }]);
+    expect(writes[0]).toMatch(/backup/);
+    expect(writes[1]).toBe(stateKey);
+    expect(memory.get(writes[0])).toStrictEqual(sourceWithMarker(source));
+    expect(tracker.get("04E03").bestScore).toBe(100);
+    expect(tracker.get("04E07").bestScore).toBe(40);
+    expect(tracker.get("04E03").history.map((item: { snapshot: string }) => item.snapshot).sort()).toStrictEqual(["submissions/old-dir/main.cpp", "submissions/old-id/main.cpp"]);
+    expect(tracker.events()).toStrictEqual([{ ...source.events[0], labName: "04E03" }]);
     const saved = structuredClone(memory.get(stateKey));
     const restarted = new ProgressTracker(context);
     await restarted.migrateLabKeys(labs);
-    assert.deepEqual(memory.get(stateKey), saved);
+    expect(memory.get(stateKey)).toStrictEqual(saved);
     await restarted.resetAll();
     const reset = memory.get(stateKey) as { appliedMigrations: string[]; labs: Record<string, unknown> };
-    assert.deepEqual(reset.appliedMigrations, [CH04_MIGRATION]);
+    expect(reset.appliedMigrations).toStrictEqual([CH04_MIGRATION]);
     reset.labs["04E01"] = entry("new-leaf-count", 80);
     memory.set(stateKey, reset);
     const afterReset = new ProgressTracker(context);
     await afterReset.migrateLabKeys(labs);
-    assert.equal(afterReset.get("04E01").bestScore, 80);
-    assert.equal(afterReset.get("04E03"), undefined);
+    expect(afterReset.get("04E01").bestScore).toBe(80);
+    expect(afterReset.get("04E03")).toBe(undefined);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

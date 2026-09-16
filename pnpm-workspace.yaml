@@ -1,2 +1,5 @@
 allowBuilds:
   esbuild: true
+overrides:
+  typescript: npm:typescript-native-bridge@6.0.3-bridge.17.tsgo.7.0.2
+  speech-rule-engine>@xmldom/xmldom: 0.9.12

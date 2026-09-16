@@ -1,0 +1,5 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+  "entry": ["src/extension.ts", "test/host/driver.cjs"],
+  "project": ["src/**/*.ts", "test/**/*.{ts,cjs}"]
+}

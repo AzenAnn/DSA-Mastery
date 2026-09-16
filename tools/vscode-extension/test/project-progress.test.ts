@@ -1,9 +1,8 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, it } from "vitest";
 import { projectProgressPassed, summarizeProjectSubmission } from "../src/projectProgress.ts";
 import type { ProjectScoreResult } from "../src/cli";
 
-test("project submission summaries preserve nested task results without long output", () => {
+it("project submission summaries preserve nested task results without long output", () => {
   const result: ProjectScoreResult = {
     target: "student",
     tasks: [
@@ -44,23 +43,23 @@ test("project submission summaries preserve nested task results without long out
 
   const summary = summarizeProjectSubmission(result, "2026-09-02T00:00:00.000Z");
 
-  assert.equal(summary.tasks[0]?.cases?.[0]?.id, "sample");
-  assert.equal(summary.tasks[0]?.cases?.[0]?.verdict, "AC");
-  assert.deepEqual(summary.tasks[1]?.checklist, ["实验报告"]);
-  assert.equal("output" in (summary.tasks[0]?.cases?.[0] ?? {}), false);
+  expect(summary.tasks[0]?.cases?.[0]?.id).toBe("sample");
+  expect(summary.tasks[0]?.cases?.[0]?.verdict).toBe("AC");
+  expect(summary.tasks[1]?.checklist).toStrictEqual(["实验报告"]);
+  expect("output" in (summary.tasks[0]?.cases?.[0] ?? {})).toBe(false);
 });
 
-test("automatic full score with manual weight remains pending instead of passed", () => {
-  assert.equal(projectProgressPassed({ automatedFull: true, manualPending: 20, internalError: false }), false);
-  assert.equal(projectProgressPassed({ automatedFull: true, manualPending: 0, internalError: false }), true);
-  assert.equal(projectProgressPassed({ automatedFull: true, manualPending: 0, internalError: true }), false);
+it("automatic full score with manual weight remains pending instead of passed", () => {
+  expect(projectProgressPassed({ automatedFull: true, manualPending: 20, internalError: false })).toBe(false);
+  expect(projectProgressPassed({ automatedFull: true, manualPending: 0, internalError: false })).toBe(true);
+  expect(projectProgressPassed({ automatedFull: true, manualPending: 0, internalError: true })).toBe(false);
 });
 
-test("historical full score cannot override unknown, unassessed or stale current code", () => {
+it("historical full score cannot override unknown, unassessed or stale current code", () => {
   const history = { automatedFull: true, manualPending: 0, internalError: false };
-  assert.equal(projectProgressPassed({ ...history, currentUnknown: true }), false);
-  assert.equal(projectProgressPassed({ ...history, current: {
+  expect(projectProgressPassed({ ...history, currentUnknown: true })).toBe(false);
+  expect(projectProgressPassed({ ...history, current: {
     tasks: [], automatedScore: 0, automatedMax: 100, manualPending: 0,
     provisionalTotal: 0, total: 100, automatedFull: false, internalError: false, complete: false,
-  } }), false);
+  } })).toBe(false);
 });

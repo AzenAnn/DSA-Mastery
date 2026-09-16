@@ -1,5 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, it } from "vitest";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -10,104 +9,104 @@ async function readPackageFile(relativePath: string): Promise<string> {
   return readFile(path.join(packageRoot, relativePath), "utf8");
 }
 
-test("program panel exposes a collapsible bounded result inspector", async () => {
+it("program panel exposes a collapsible bounded result inspector", async () => {
   const html = await readPackageFile("src/panelHtml.ts");
   const css = await readPackageFile("media/panel.css");
 
-  assert.match(html, /class="lab-workspace/);
-  assert.match(html, /id="inspector-toggle"/);
-  assert.match(html, /data-inspector-tab="result"/);
-  assert.match(html, /data-inspector-tab="cases"/);
-  assert.match(html, /const initialInspectorOpen = Boolean\(progress\?\.lastSubmission\)/);
-  assert.match(html, /aria-expanded="\$\{initialOpen\}"/);
-  assert.match(css, /grid-template-columns:\s*minmax\(0,\s*2fr\)\s+minmax\(220px,\s*min\(34%,\s*360px\)\)/);
-  assert.match(css, /@media\s*\(max-width:\s*720px\)/);
-  assert.match(css, /min-width:\s*0/);
-  assert.match(css, /\.lab-inspector\.is-collapsed \.inspector-toggle-text/);
+  expect(html).toMatch(/class="lab-workspace/);
+  expect(html).toMatch(/id="inspector-toggle"/);
+  expect(html).toMatch(/data-inspector-tab="result"/);
+  expect(html).toMatch(/data-inspector-tab="cases"/);
+  expect(html).toMatch(/const initialInspectorOpen = Boolean\(progress\?\.lastSubmission\)/);
+  expect(html).toMatch(/aria-expanded="\$\{initialOpen\}"/);
+  expect(css).toMatch(/grid-template-columns:\s*minmax\(0,\s*2fr\)\s+minmax\(220px,\s*min\(34%,\s*360px\)\)/);
+  expect(css).toMatch(/@media\s*\(max-width:\s*720px\)/);
+  expect(css).toMatch(/min-width:\s*0/);
+  expect(css).toMatch(/\.lab-inspector\.is-collapsed \.inspector-toggle-text/);
 });
 
-test("program panel keeps existing host-facing controls", async () => {
+it("program panel keeps existing host-facing controls", async () => {
   const html = await readPackageFile("src/panelHtml.ts");
 
-  assert.match(html, /id="submit"/);
-  assert.match(html, /id="open-source"/);
-  assert.match(html, /id="history"/);
-  assert.match(html, /id="nav-prev"/);
-  assert.match(html, /id="nav-next"/);
+  expect(html).toMatch(/id="submit"/);
+  expect(html).toMatch(/id="open-source"/);
+  expect(html).toMatch(/id="history"/);
+  expect(html).toMatch(/id="nav-prev"/);
+  expect(html).toMatch(/id="nav-next"/);
 });
 
-test("program panel pins the action bar and reserves its viewport space", async () => {
+it("program panel pins the action bar and reserves its viewport space", async () => {
   const html = await readPackageFile("src/panelHtml.ts");
   const css = await readPackageFile("media/panel.css");
   const actionbarBlock = css.match(/\.lab-actionbar\s*\{[\s\S]*?\n\}/)?.[0] ?? "";
 
-  assert.match(actionbarBlock, /position:\s*fixed/);
-  assert.doesNotMatch(actionbarBlock, /position:\s*sticky/);
-  assert.match(actionbarBlock, /bottom:\s*16px/);
-  assert.match(actionbarBlock, /padding:\s*6px/);
-  assert.match(actionbarBlock, /border-radius:\s*10px/);
-  assert.match(css, /\.lab-actionbar \.lab-button\s*\{[\s\S]*?min-height:\s*32px/);
-  assert.match(css, /\.program-page\s*\{[\s\S]*?--lab-actionbar-reserve/);
-  assert.match(css, /padding-bottom:\s*var\(--lab-actionbar-reserve\)/);
-  assert.match(html, /class="program-scroll-region"/);
-  assert.match(css, /body\.program-body[\s\S]*?overflow:\s*hidden/);
-  assert.match(css, /\.program-scroll-region\s*\{[\s\S]*?overflow-y:\s*auto/);
-  assert.match(html, /const readingSurface = document\.querySelector\("\.lab-reading-surface"\)/);
-  assert.match(html, /actionbar\.style\.left/);
-  assert.match(html, /actionbar\.style\.width/);
-  assert.match(html, /new ResizeObserver/);
+  expect(actionbarBlock).toMatch(/position:\s*fixed/);
+  expect(actionbarBlock).not.toMatch(/position:\s*sticky/);
+  expect(actionbarBlock).toMatch(/bottom:\s*16px/);
+  expect(actionbarBlock).toMatch(/padding:\s*6px/);
+  expect(actionbarBlock).toMatch(/border-radius:\s*10px/);
+  expect(css).toMatch(/\.lab-actionbar \.lab-button\s*\{[\s\S]*?min-height:\s*32px/);
+  expect(css).toMatch(/\.program-page\s*\{[\s\S]*?--lab-actionbar-reserve/);
+  expect(css).toMatch(/padding-bottom:\s*var\(--lab-actionbar-reserve\)/);
+  expect(html).toMatch(/class="program-scroll-region"/);
+  expect(css).toMatch(/body\.program-body[\s\S]*?overflow:\s*hidden/);
+  expect(css).toMatch(/\.program-scroll-region\s*\{[\s\S]*?overflow-y:\s*auto/);
+  expect(html).toMatch(/const readingSurface = document\.querySelector\("\.lab-reading-surface"\)/);
+  expect(html).toMatch(/actionbar\.style\.left/);
+  expect(html).toMatch(/actionbar\.style\.width/);
+  expect(html).toMatch(/new ResizeObserver/);
 });
 
-test("quiz panel uses the shared WebView shell without adding sidebar navigation", async () => {
+it("quiz panel uses the shared WebView shell without adding sidebar navigation", async () => {
   const html = await readPackageFile("src/panelHtml.ts");
 
-  assert.match(html, /class="lab-page quiz-page"/);
-  assert.match(html, /class="readme"/);
-  assert.match(html, /class="course-quiz"/);
-  assert.doesNotMatch(html, /class="chapter-sidebar"/);
+  expect(html).toMatch(/class="lab-page quiz-page"/);
+  expect(html).toMatch(/class="readme"/);
+  expect(html).toMatch(/class="course-quiz"/);
+  expect(html).not.toMatch(/class="chapter-sidebar"/);
 });
 
-test("program and quiz panels expose the stable Lab ID in their metadata", async () => {
+it("program and quiz panels expose the stable Lab ID in their metadata", async () => {
   const html = await readPackageFile("src/panelHtml.ts");
 
-  assert.match(html, /题号 \$\{escapeHtml\(lab\.id\)\}/);
+  expect(html).toMatch(/题号 \$\{escapeHtml\(lab\.id\)\}/);
 });
 
-test("quiz sidebar submit batches selected unanswered answers without reloading the active panel", async () => {
+it("quiz sidebar submit batches selected unanswered answers without reloading the active panel", async () => {
   const html = await readPackageFile("src/panelHtml.ts");
   const panel = await readPackageFile("src/panel.ts");
   const extension = await readPackageFile("src/extension.ts");
   const submitQuiz = panel.slice(panel.indexOf("static async submitQuiz"), panel.indexOf("private async load"));
 
-  assert.match(html, /message\.type === 'submitQuiz'/);
-  assert.match(html, /input:checked:not\(:disabled\)/);
-  assert.match(html, /type: 'quizAnswers'/);
-  assert.match(html, /let quizBatchInFlight = false/);
-  assert.match(html, /const pendingQuizQuestions = new Set\(\)/);
-  assert.match(html, /pendingQuizQuestions\.add\(questionId\)/);
-  assert.match(html, /pendingQuizQuestions\.delete\(message\.questionId\)/);
-  assert.match(html, /message\.type === 'quizBatchComplete'/);
-  assert.match(submitQuiz, /current\.panel\.webview\.postMessage\(\{ type: "submitQuiz" \}\)/);
-  assert.doesNotMatch(submitQuiz, /\.load\(/);
-  assert.match(panel, /case "quizAnswers"/);
-  assert.match(panel, /new Set<string>/);
-  assert.match(panel, /private quizBatchInProgress = false/);
-  assert.match(panel, /private readonly pendingQuizAnswers = new Set<string>/);
-  assert.match(panel, /LabPanel\.current\.submitting \|\| LabPanel\.current\.quizBatchInProgress/);
-  assert.match(panel, /!labName \|\| this\.submitting \|\| this\.quizBatchInProgress/);
-  assert.match(panel, /await this\.answerQuiz\(questionId, selected\)/);
-  assert.match(extension, /if \(lab\.type === "quiz"\)[\s\S]*?LabPanel\.submitQuiz/);
+  expect(html).toMatch(/message\.type === 'submitQuiz'/);
+  expect(html).toMatch(/input:checked:not\(:disabled\)/);
+  expect(html).toMatch(/type: 'quizAnswers'/);
+  expect(html).toMatch(/let quizBatchInFlight = false/);
+  expect(html).toMatch(/const pendingQuizQuestions = new Set\(\)/);
+  expect(html).toMatch(/pendingQuizQuestions\.add\(questionId\)/);
+  expect(html).toMatch(/pendingQuizQuestions\.delete\(message\.questionId\)/);
+  expect(html).toMatch(/message\.type === 'quizBatchComplete'/);
+  expect(submitQuiz).toMatch(/current\.panel\.webview\.postMessage\(\{ type: "submitQuiz" \}\)/);
+  expect(submitQuiz).not.toMatch(/\.load\(/);
+  expect(panel).toMatch(/case "quizAnswers"/);
+  expect(panel).toMatch(/new Set<string>/);
+  expect(panel).toMatch(/private quizBatchInProgress = false/);
+  expect(panel).toMatch(/private readonly pendingQuizAnswers = new Set<string>/);
+  expect(panel).toMatch(/LabPanel\.current\.submitting \|\| LabPanel\.current\.quizBatchInProgress/);
+  expect(panel).toMatch(/!labName \|\| this\.submitting \|\| this\.quizBatchInProgress/);
+  expect(panel).toMatch(/await this\.answerQuiz\(questionId, selected\)/);
+  expect(extension).toMatch(/if \(lab\.type === "quiz"\)[\s\S]*?LabPanel\.submitQuiz/);
 });
 
-test("project panel exposes the task graph and manual pending state", async () => {
+it("project panel exposes the task graph and manual pending state", async () => {
   const html = await readPackageFile("src/panelHtml.ts");
 
-  assert.match(html, /renderProjectPanelHtml/);
-  assert.match(html, /project-task-card/);
-  assert.match(html, /PENDING/);
-  assert.match(html, /ctest/);
-  assert.match(html, /openProjectFile/);
-  assert.match(html, /project-score-grid/);
-  assert.match(html, /item\.comparison/);
-  assert.match(html, /item\.output/);
+  expect(html).toMatch(/renderProjectPanelHtml/);
+  expect(html).toMatch(/project-task-card/);
+  expect(html).toMatch(/PENDING/);
+  expect(html).toMatch(/ctest/);
+  expect(html).toMatch(/openProjectFile/);
+  expect(html).toMatch(/project-score-grid/);
+  expect(html).toMatch(/item\.comparison/);
+  expect(html).toMatch(/item\.output/);
 });

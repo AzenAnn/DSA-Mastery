@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+  "entry": [".vitepress/*.data.ts", "scripts/**/*.mjs", "public/demos/*.mjs", "lab.mjs"],
+  "project": ["**/*.{ts,mts,mjs,vue}"],
+  // .trellis 是归档任务产物，tools/vscode-extension 是自带 knip.jsonc 的独立子包
+  "ignore": [".trellis/**", "tools/vscode-extension/**"],
+  // 工具链之外的系统命令，由 doctor/bootstrap 自行探测；knip 按正则匹配，需转义
+  "ignoreBinaries": ["g\\+\\+", "vsce", "where\\.exe"]
+}

@@ -1,8 +1,7 @@
-import assert from "node:assert/strict";
 import { access, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import test from "node:test";
+import { expect, it, onTestFinished } from "vitest";
 import { compareOutput } from "../tools/lab/compare.mjs";
 import { selectCompiler } from "../tools/lab/compiler.mjs";
 import { findLabRoot, loadLab, resolveLabPath, validateQuizQuestions, validateQuizReadme } from "../tools/lab/core.mjs";
@@ -38,40 +37,40 @@ async function fixture(manifest, extra = {}) {
   return root;
 }
 
-test("findLabRoot finds the nearest manifest from a nested path containing spaces", async (t) => {
+it("findLabRoot finds the nearest manifest from a nested path containing spaces", async () => {
   const root = await fixture({ schemaVersion: 1, type: "quiz", quiz: { questions: "quiz.json" } }, {
     "quiz.json": JSON.stringify([{ id: "q1", stem: "题面", options: ["一", "二", "三", "四"], answer: 0, explanation: "解析" }]),
   });
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const nested = path.join(root, "nested path", "deeper");
   await mkdir(nested, { recursive: true });
-  assert.equal(await findLabRoot(nested), root);
+  expect(await findLabRoot(nested)).toBe(root);
 });
 
-test("loadLab rejects an unknown schema major version", async (t) => {
+it("loadLab rejects an unknown schema major version", async () => {
   const root = await fixture({ schemaVersion: 2, type: "quiz", quiz: { questions: "quiz.json" } });
-  t.after(() => rm(root, { recursive: true, force: true }));
-  await assert.rejects(loadLab(root), (error) => error.code === "SCHEMA_VERSION");
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
+  await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "SCHEMA_VERSION" }));
 });
 
-test("loadLab rejects paths escaping the lab root", async (t) => {
+it("loadLab rejects paths escaping the lab root", async () => {
   const root = await fixture({ schemaVersion: 1, type: "quiz", quiz: { questions: "../quiz.json" } });
-  t.after(() => rm(root, { recursive: true, force: true }));
-  await assert.rejects(loadLab(root), (error) => error.code === "PATH_ESCAPE");
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
+  await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "PATH_ESCAPE" }));
 });
 
-test("path resolution rejects absolute paths", async (t) => {
+it("path resolution rejects absolute paths", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa absolute path "));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const outside = path.resolve(root, "file.txt");
   await writeFile(outside, "fixture");
-  await assert.rejects(resolveLabPath(root, outside, "absolute fixture"), (error) => error.code === "PATH_ESCAPE");
+  await expect(resolveLabPath(root, outside, "absolute fixture")).rejects.toThrow(expect.objectContaining({ code: "PATH_ESCAPE" }));
 });
 
-test("loadLab rejects a symbolic link escaping the lab root", async (t) => {
+it("loadLab rejects a symbolic link escaping the lab root", async (t) => {
   const outside = await mkdtemp(path.join(os.tmpdir(), "dsa outside "));
   const root = await fixture({ schemaVersion: 1, type: "quiz", quiz: { questions: "linked-quiz.json" } });
-  t.after(() => Promise.all([rm(root, { recursive: true, force: true }), rm(outside, { recursive: true, force: true })]));
+  onTestFinished(() => Promise.all([rm(root, { recursive: true, force: true }), rm(outside, { recursive: true, force: true })]));
   const outsideFile = path.join(outside, "quiz.json");
   await writeFile(outsideFile, JSON.stringify([{ id: "q1", stem: "题", options: ["一", "二", "三", "四"], answer: 0, explanation: "解" }]));
   try {
@@ -83,10 +82,10 @@ test("loadLab rejects a symbolic link escaping the lab root", async (t) => {
     }
     throw error;
   }
-  await assert.rejects(loadLab(root), (error) => error.code === "PATH_ESCAPE");
+  await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "PATH_ESCAPE" }));
 });
 
-test("program cases must total exactly 100 points", async (t) => {
+it("program cases must total exactly 100 points", async () => {
   const manifest = {
     schemaVersion: 1,
     type: "program",
@@ -102,11 +101,11 @@ test("program cases must total exactly 100 points", async (t) => {
     "tests/output.out": "",
     "tests/cases.json": JSON.stringify([{ id: "sample", input: "tests/input.in", expected: "tests/output.out", points: 99 }]),
   });
-  t.after(() => rm(root, { recursive: true, force: true }));
-  await assert.rejects(loadLab(root), (error) => error.code === "CASES_POINTS");
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
+  await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "CASES_POINTS" }));
 });
 
-test("project dependencies must be acyclic", async (t) => {
+it("project dependencies must be acyclic", async () => {
   const manifest = {
     schemaVersion: 1,
     type: "project",
@@ -119,11 +118,11 @@ test("project dependencies must be acyclic", async (t) => {
     ],
   };
   const root = await fixture(manifest, { "tasks/first/.keep": "", "tasks/second/.keep": "" });
-  t.after(() => rm(root, { recursive: true, force: true }));
-  await assert.rejects(loadLab(root), (error) => error.code === "TASK_CYCLE");
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
+  await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "TASK_CYCLE" }));
 });
 
-test("project validation rejects bad total weights and missing dependencies", async (t) => {
+it("project validation rejects bad total weights and missing dependencies", async () => {
   const base = {
     schemaVersion: 1,
     type: "project",
@@ -139,32 +138,32 @@ test("project validation rejects bad total weights and missing dependencies", as
     ...base,
     tasks: [{ id: "report", path: "report", weight: 100, kind: "manual", dependsOn: ["missing"] }],
   }, { "Makefile": THIN_MAKEFILE, "report/task.json": JSON.stringify({ schemaVersion: 1, kind: "manual", checklist: ["review"] }) });
-  t.after(() => Promise.all([rm(weights, { recursive: true, force: true }), rm(dependency, { recursive: true, force: true })]));
-  await assert.rejects(loadLab(weights), (error) => error.code === "TASK_WEIGHTS");
-  await assert.rejects(loadLab(dependency), (error) => error.code === "TASK_DEPENDENCY");
+  onTestFinished(() => Promise.all([rm(weights, { recursive: true, force: true }), rm(dependency, { recursive: true, force: true })]));
+  await expect(loadLab(weights)).rejects.toThrow(expect.objectContaining({ code: "TASK_WEIGHTS" }));
+  await expect(loadLab(dependency)).rejects.toThrow(expect.objectContaining({ code: "TASK_DEPENDENCY" }));
 });
 
-test("Project build metadata remains optional and rejects invalid targets and build dependency cycles", async (t) => {
+it("Project build metadata remains optional and rejects invalid targets and build dependency cycles", async () => {
   const task = { schemaVersion: 1, kind: "ctest", ctest: { tests: [{ name: "unit", points: 100 }] } };
   const manifest = { schemaVersion: 1, type: "project", language: "cpp", toolchain: { standard: "c++17" }, buildSystem: "cmake",
     tasks: [{ id: "module", path: "tasks/module", kind: "ctest", weight: 100, dependsOn: [] }] };
   const root = await fixture(manifest, { "Makefile": THIN_MAKEFILE, "tasks/module/task.json": JSON.stringify(task) });
-  t.after(() => rm(root, { recursive: true, force: true }));
-  assert.equal((await loadLab(root)).tasks[0].config.ctest.buildTargets, undefined);
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
+  expect((await loadLab(root)).tasks[0].config.ctest.buildTargets).toBe(undefined);
   for (const buildTargets of [[], ["--all"], ["one", "one"], ["path/target"]]) {
     await writeFile(path.join(root, "tasks/module/task.json"), JSON.stringify({ ...task, ctest: { ...task.ctest, buildTargets } }));
-    await assert.rejects(loadLab(root), { code: "SCHEMA_INVALID" });
+    await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "SCHEMA_INVALID" }));
   }
   await writeFile(path.join(root, "tasks/module/task.json"), JSON.stringify(task));
   manifest.tasks[0].buildDependsOn = ["missing"];
   await writeFile(path.join(root, "lab.json"), JSON.stringify(manifest));
-  await assert.rejects(loadLab(root), { code: "TASK_DEPENDENCY" });
+  await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "TASK_DEPENDENCY" }));
   manifest.tasks[0].buildDependsOn = ["module"];
   await writeFile(path.join(root, "lab.json"), JSON.stringify(manifest));
-  await assert.rejects(loadLab(root), { code: "TASK_CYCLE" });
+  await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "TASK_CYCLE" }));
 });
 
-test("single stdio case feedback cannot replace a full Task grade or complete a manual Project", async (t) => {
+it("single stdio case feedback cannot replace a full Task grade or complete a manual Project", async () => {
   const root = await fixture({ schemaVersion: 1, type: "project", language: "cpp", toolchain: { standard: "c++17" }, buildSystem: "cmake",
     tasks: [{ id: "code", path: "code", kind: "stdio", weight: 90, dependsOn: [] }, { id: "report", path: "report", kind: "manual", weight: 10, dependsOn: ["code"] }] }, {
     "Makefile": THIN_MAKEFILE,
@@ -174,20 +173,20 @@ test("single stdio case feedback cannot replace a full Task grade or complete a 
     "code/tests/cases.json": JSON.stringify([{ id: "one", input: "tests/input.in", expected: "tests/one.out", points: 50 }, { id: "two", input: "tests/input.in", expected: "tests/two.out", points: 50 }]),
     "report/task.json": JSON.stringify({ schemaVersion: 1, kind: "manual", checklist: ["review"] }),
   });
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const lab = await loadLab(root);
   const whole = await scoreProject(lab);
-  assert.equal(whole.current.automatedScore, 45);
+  expect(whole.current.automatedScore).toBe(45);
   const partial = await scoreProject(lab, { taskId: "code", caseId: "one" });
-  assert.equal(partial.automatedFull, true);
-  assert.equal(partial.partial, true);
-  assert.equal(partial.current.automatedScore, 45);
-  assert.equal(partial.current.tasks[0].status, "WA");
-  assert.equal(partial.current.complete, false);
-  assert.equal(partial.current.manualPending, 10);
+  expect(partial.automatedFull).toBe(true);
+  expect(partial.partial).toBe(true);
+  expect(partial.current.automatedScore).toBe(45);
+  expect(partial.current.tasks[0].status).toBe("WA");
+  expect(partial.current.complete).toBe(false);
+  expect(partial.current.manualPending).toBe(10);
 });
 
-test("executable labs reject a forked thin Makefile", async (t) => {
+it("executable labs reject a forked thin Makefile", async () => {
   const manifest = {
     schemaVersion: 1,
     type: "program",
@@ -204,52 +203,49 @@ test("executable labs reject a forked thin Makefile", async (t) => {
     "tests/output.out": "",
     "tests/cases.json": JSON.stringify([{ id: "sample", input: "tests/input.in", expected: "tests/output.out", points: 100 }]),
   });
-  t.after(() => rm(root, { recursive: true, force: true }));
-  await assert.rejects(loadLab(root), (error) => error.code === "MAKEFILE_DRIFT");
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
+  await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "MAKEFILE_DRIFT" }));
 });
 
-test("quiz contract rejects authored option labels and duplicate options", () => {
-  assert.throws(() => validateQuizQuestions([{ id: "q1", stem: "题", options: ["A. 一", "二", "三", "四"], answer: 0, explanation: "解" }]), /不要手写/);
-  assert.throws(() => validateQuizQuestions([{ id: "q1", stem: "题", options: ["一", "一", "三", "四"], answer: 0, explanation: "解" }]), /重复选项/);
+it("quiz contract rejects authored option labels and duplicate options", () => {
+  expect(() => validateQuizQuestions([{ id: "q1", stem: "题", options: ["A. 一", "二", "三", "四"], answer: 0, explanation: "解" }])).toThrow(/不要手写/);
+  expect(() => validateQuizQuestions([{ id: "q1", stem: "题", options: ["一", "一", "三", "四"], answer: 0, explanation: "解" }])).toThrow(/重复选项/);
 });
 
-test("quiz contract rejects wrong option counts, answer indexes, duplicate IDs, and README answer copies", () => {
+it("quiz contract rejects wrong option counts, answer indexes, duplicate IDs, and README answer copies", () => {
   const valid = { id: "q1", stem: "题", options: ["一", "二", "三", "四"], answer: 0, explanation: "解" };
-  assert.throws(() => validateQuizQuestions([{ ...valid, options: ["一", "二", "三"] }]), /恰好包含 4 项/);
-  assert.throws(() => validateQuizQuestions([{ ...valid, answer: 4 }]), /0～3/);
-  assert.throws(() => validateQuizQuestions([valid, { ...valid }]), /id q1 重复/);
-  assert.throws(() => validateQuizReadme("# Quiz\n\n<QuizSet />\n\n## 答案速查\n"), /不得重复维护/);
-  assert.throws(() => validateQuizReadme("# Quiz\n\n<QuizSet />\n\n## 标准答案\n\n| 题号 | 答案 |\n| --- | --- |\n| 1 | A |\n"), /不得重复维护/);
-  assert.throws(() => validateQuizReadme("# Quiz\n"), /必须且只能挂载一次/);
+  expect(() => validateQuizQuestions([{ ...valid, options: ["一", "二", "三"] }])).toThrow(/恰好包含 4 项/);
+  expect(() => validateQuizQuestions([{ ...valid, answer: 4 }])).toThrow(/0～3/);
+  expect(() => validateQuizQuestions([valid, { ...valid }])).toThrow(/id q1 重复/);
+  expect(() => validateQuizReadme("# Quiz\n\n<QuizSet />\n\n## 答案速查\n")).toThrow(/不得重复维护/);
+  expect(() => validateQuizReadme("# Quiz\n\n<QuizSet />\n\n## 标准答案\n\n| 题号 | 答案 |\n| --- | --- |\n| 1 | A |\n")).toThrow(/不得重复维护/);
+  expect(() => validateQuizReadme("# Quiz\n")).toThrow(/必须且只能挂载一次/);
 });
 
-test("output comparators normalize CRLF and support exact, tokens, and float tolerances", () => {
-  assert.equal(compareOutput("a\r\nb\r\n", "a\nb\n", { mode: "exact" }).equal, true);
-  assert.equal(compareOutput("1  2\n3", "1\n2 3\n", { mode: "tokens" }).equal, true);
-  assert.equal(compareOutput("value 1.0000", "value 1.0009", { mode: "float", absTol: 0.001, relTol: 0 }).equal, true);
+it("output comparators normalize CRLF and support exact, tokens, and float tolerances", () => {
+  expect(compareOutput("a\r\nb\r\n", "a\nb\n", { mode: "exact" }).equal).toBe(true);
+  expect(compareOutput("1  2\n3", "1\n2 3\n", { mode: "tokens" }).equal).toBe(true);
+  expect(compareOutput("value 1.0000", "value 1.0009", { mode: "float", absTol: 0.001, relTol: 0 }).equal).toBe(true);
   const mismatch = compareOutput("one two", "one three", { mode: "tokens" });
-  assert.deepEqual(mismatch.difference, { kind: "token", index: 2, expected: "two", actual: "three" });
+  expect(mismatch.difference).toStrictEqual({ kind: "token", index: 2, expected: "two", actual: "three" });
 });
 
-test("exact comparison ignores line-end horizontal whitespace without hiding other differences", () => {
-  assert.equal(compareOutput("42\n", "42", { mode: "exact" }).equal, true);
-  assert.equal(compareOutput("42", "42\n", { mode: "exact" }).equal, true);
-  assert.equal(compareOutput("1 2 3\n4 5\n", "1 2 3 \n4 5\n", { mode: "exact" }).equal, true);
-  assert.equal(compareOutput("1 2\n3", "1 2  \t\n3\t", { mode: "exact" }).equal, true);
-  assert.equal(
-    classifyExecution(
+it("exact comparison ignores line-end horizontal whitespace without hiding other differences", () => {
+  expect(compareOutput("42\n", "42", { mode: "exact" }).equal).toBe(true);
+  expect(compareOutput("42", "42\n", { mode: "exact" }).equal).toBe(true);
+  expect(compareOutput("1 2 3\n4 5\n", "1 2 3 \n4 5\n", { mode: "exact" }).equal).toBe(true);
+  expect(compareOutput("1 2\n3", "1 2  \t\n3\t", { mode: "exact" }).equal).toBe(true);
+  expect(classifyExecution(
       { code: 0, stdout: "1 2 3 \n4 5\n", stderr: "", timedOut: false, outputExceeded: false },
       "1 2 3\n4 5\n",
       { mode: "exact" },
-    ).verdict,
-    "AC",
-  );
-  assert.equal(compareOutput("42\n\n", "42\n", { mode: "exact" }).equal, false);
-  assert.equal(compareOutput("42\n", "42\nextra\n", { mode: "exact" }).equal, false);
-  assert.equal(compareOutput("42\n43", "4243", { mode: "exact" }).equal, false);
-  assert.equal(compareOutput("1  2", "1 2", { mode: "exact" }).equal, false);
-  assert.equal(compareOutput(" 42", "42", { mode: "exact" }).equal, false);
-  assert.deepEqual(compareOutput("1 2\n3", "1 2 \n4", { mode: "exact" }).difference, {
+    ).verdict).toBe("AC");
+  expect(compareOutput("42\n\n", "42\n", { mode: "exact" }).equal).toBe(false);
+  expect(compareOutput("42\n", "42\nextra\n", { mode: "exact" }).equal).toBe(false);
+  expect(compareOutput("42\n43", "4243", { mode: "exact" }).equal).toBe(false);
+  expect(compareOutput("1  2", "1 2", { mode: "exact" }).equal).toBe(false);
+  expect(compareOutput(" 42", "42", { mode: "exact" }).equal).toBe(false);
+  expect(compareOutput("1 2\n3", "1 2 \n4", { mode: "exact" }).difference).toStrictEqual({
     kind: "character",
     index: 4,
     line: 2,
@@ -259,11 +255,11 @@ test("exact comparison ignores line-end horizontal whitespace without hiding oth
   });
 });
 
-test("expected-output refresh renders a reviewable line diff", () => {
-  assert.equal(previewDiff("one\ntwo\n", "one\nthree\n"), "@@ line 2 @@\n- two\n+ three");
+it("expected-output refresh renders a reviewable line diff", () => {
+  expect(previewDiff("one\ntwo\n", "one\nthree\n")).toBe("@@ line 2 @@\n- two\n+ three");
 });
 
-test("expected-output refresh is preview-only until --write and clean preserves sources", async (t) => {
+it("expected-output refresh is preview-only until --write and clean preserves sources", async () => {
   const manifest = {
     schemaVersion: 1,
     type: "program",
@@ -280,68 +276,68 @@ test("expected-output refresh is preview-only until --write and clean preserves 
     "tests/sample.in": "",
     "tests/sample.out": "old\n",
   });
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const lab = await loadLab(root);
   const preview = await refreshExpected(lab, false);
-  assert.equal(preview.changed, 1);
-  assert.equal(preview.written, 0);
-  assert.equal(await readFile(path.join(root, "tests", "sample.out"), "utf8"), "old\n");
+  expect(preview.changed).toBe(1);
+  expect(preview.written).toBe(0);
+  expect(await readFile(path.join(root, "tests", "sample.out"), "utf8")).toBe("old\n");
   const written = await refreshExpected(lab, true);
-  assert.equal(written.written, 1);
-  assert.equal(await readFile(path.join(root, "tests", "sample.out"), "utf8"), "new\n");
+  expect(written.written).toBe(1);
+  expect(await readFile(path.join(root, "tests", "sample.out"), "utf8")).toBe("new\n");
   await cleanLab(lab);
-  await assert.rejects(access(path.join(root, ".lab-cache")));
-  assert.match(await readFile(path.join(root, "student", "main.cpp"), "utf8"), /int main/);
-  assert.match(await readFile(path.join(root, "solution", "main.cpp"), "utf8"), /std::cout/);
+  await expect(access(path.join(root, ".lab-cache"))).rejects.toThrow();
+  expect(await readFile(path.join(root, "student", "main.cpp"), "utf8")).toMatch(/int main/);
+  expect(await readFile(path.join(root, "solution", "main.cpp"), "utf8")).toMatch(/std::cout/);
 });
 
-test("execution classification covers AC, WA, TLE, RE, OLE, and IE", () => {
+it("execution classification covers AC, WA, TLE, RE, OLE, and IE", () => {
   const base = { code: 0, stdout: "ok\n", stderr: "", timedOut: false, outputExceeded: false };
-  assert.equal(classifyExecution(base, "ok\r\n", { mode: "exact" }).verdict, "AC");
-  assert.equal(classifyExecution(base, "different", { mode: "exact" }).verdict, "WA");
-  assert.equal(classifyExecution({ ...base, timedOut: true }, "", { mode: "exact" }).verdict, "TLE");
-  assert.equal(classifyExecution({ ...base, code: 3 }, "", { mode: "exact" }).verdict, "RE");
-  assert.equal(classifyExecution({ ...base, outputExceeded: true }, "", { mode: "exact" }).verdict, "OLE");
-  assert.equal(classifyExecution({ ...base, spawnError: new Error("missing") }, "", { mode: "exact" }).verdict, "IE");
+  expect(classifyExecution(base, "ok\r\n", { mode: "exact" }).verdict).toBe("AC");
+  expect(classifyExecution(base, "different", { mode: "exact" }).verdict).toBe("WA");
+  expect(classifyExecution({ ...base, timedOut: true }, "", { mode: "exact" }).verdict).toBe("TLE");
+  expect(classifyExecution({ ...base, code: 3 }, "", { mode: "exact" }).verdict).toBe("RE");
+  expect(classifyExecution({ ...base, outputExceeded: true }, "", { mode: "exact" }).verdict).toBe("OLE");
+  expect(classifyExecution({ ...base, spawnError: new Error("missing") }, "", { mode: "exact" }).verdict).toBe("IE");
 });
 
-test("project scoring promotes nested IE verdicts to a tool error", () => {
-  assert.equal(projectHasInternalError([{ id: "stdio", status: "WA", judge: { cases: [{ verdict: "IE" }] } }]), true);
-  assert.equal(projectHasInternalError([{ id: "ctest", status: "IE", tests: [] }]), true);
-  assert.equal(projectHasInternalError([{ id: "ok", status: "AC", tests: [{ verdict: "AC" }] }]), false);
+it("project scoring promotes nested IE verdicts to a tool error", () => {
+  expect(projectHasInternalError([{ id: "stdio", status: "WA", judge: { cases: [{ verdict: "IE" }] } }])).toBe(true);
+  expect(projectHasInternalError([{ id: "ctest", status: "IE", tests: [] }])).toBe(true);
+  expect(projectHasInternalError([{ id: "ok", status: "AC", tests: [{ verdict: "AC" }] }])).toBe(false);
 });
 
-test("CTest zero-match and infrastructure failures never receive AC", () => {
+it("CTest zero-match and infrastructure failures never receive AC", () => {
   const base = { code: 0, stdout: "", stderr: "", timedOut: false, outputExceeded: false };
-  assert.equal(classifyCtestExecution({ ...base, stdout: "No tests were found!!!" }), "IE");
-  assert.equal(classifyCtestExecution({ ...base, spawnError: new Error("missing") }), "IE");
-  assert.equal(classifyCtestExecution({ ...base, code: 1 }), "WA");
-  assert.equal(classifyCtestExecution(base), "AC");
+  expect(classifyCtestExecution({ ...base, stdout: "No tests were found!!!" })).toBe("IE");
+  expect(classifyCtestExecution({ ...base, spawnError: new Error("missing") })).toBe("IE");
+  expect(classifyCtestExecution({ ...base, code: 1 })).toBe("WA");
+  expect(classifyCtestExecution(base)).toBe("AC");
 });
 
-test("Project CMake standard follows the manifest override", () => {
-  assert.equal(cmakeStandardNumber("c++17"), "17");
-  assert.equal(cmakeStandardNumber("c++20"), "20");
-  assert.throws(() => cmakeStandardNumber("c++14"), /不支持/);
+it("Project CMake standard follows the manifest override", () => {
+  expect(cmakeStandardNumber("c++17")).toBe("17");
+  expect(cmakeStandardNumber("c++20")).toBe("20");
+  expect(() => cmakeStandardNumber("c++14")).toThrow(/不支持/);
 });
 
-test("Project clean removes top-level and task-local caches only", async (t) => {
+it("Project clean removes top-level and task-local caches only", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa project clean "));
   const taskPath = path.join(root, "tasks", "implementation");
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   await mkdir(path.join(root, ".lab-cache"), { recursive: true });
   await mkdir(path.join(taskPath, ".lab-cache"), { recursive: true });
   await mkdir(path.join(taskPath, "student"), { recursive: true });
   await writeFile(path.join(taskPath, "student", "main.cpp"), "int main() {}\n");
   await cleanLab({ labRoot: root, tasks: [{ taskPath }] });
-  await assert.rejects(access(path.join(root, ".lab-cache")));
-  await assert.rejects(access(path.join(taskPath, ".lab-cache")));
+  await expect(access(path.join(root, ".lab-cache"))).rejects.toThrow();
+  await expect(access(path.join(taskPath, ".lab-cache"))).rejects.toThrow();
   await access(path.join(taskPath, "student", "main.cpp"));
 });
 
-test("judge reports compiler errors as CE", async (t) => {
+it("judge reports compiler errors as CE", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa ce "));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   await mkdir(path.join(root, "student"));
   await writeFile(path.join(root, "student", "main.cpp"), "this is not valid C++\n");
   const result = await judgeProgram({
@@ -354,118 +350,106 @@ test("judge reports compiler errors as CE", async (t) => {
     },
     cases: [],
   });
-  assert.equal(result.verdict, "CE");
-  assert.equal(result.score, 0);
+  expect(result.verdict).toBe("CE");
+  expect(result.score).toBe(0);
 });
 
-test("an unavailable CXX override produces a clear compiler error", async () => {
+it("an unavailable CXX override produces a clear compiler error", async () => {
   const previous = process.env.CXX;
   process.env.CXX = path.join(os.tmpdir(), "definitely-missing-cxx.exe");
   try {
-    await assert.rejects(selectCompiler(), (error) => error.code === "COMPILER_NOT_FOUND");
+    await expect(selectCompiler()).rejects.toThrow(expect.objectContaining({ code: "COMPILER_NOT_FOUND" }));
   } finally {
     if (previous === undefined) delete process.env.CXX;
     else process.env.CXX = previous;
   }
 });
 
-test("process runner enforces real timeout and output limits", async () => {
+it("process runner enforces real timeout and output limits", async () => {
   const timeout = await runProcess(process.execPath, ["-e", "setInterval(() => {}, 1000)"], { timeMs: 100, outputKb: 64 });
-  assert.equal(timeout.timedOut, true);
+  expect(timeout.timedOut).toBe(true);
   const output = await runProcess(process.execPath, ["-e", "process.stdout.write('x'.repeat(4096))"], { timeMs: 2000, outputKb: 1 });
-  assert.equal(output.outputExceeded, true);
+  expect(output.outputExceeded).toBe(true);
 });
 
-test("process runner merges an injected toolchain environment", async () => {
+it("process runner merges an injected toolchain environment", async () => {
   const result = await runProcess(process.execPath, ["-e", "process.stdout.write(process.env.LAB_TOOLCHAIN_MARKER)"], {
     env: { LAB_TOOLCHAIN_MARKER: "from-env" },
     timeMs: 2000,
     outputKb: 64,
   });
-  assert.equal(result.code, 0);
-  assert.equal(result.stdout, "from-env");
+  expect(result.code).toBe(0);
+  expect(result.stdout).toBe("from-env");
 });
 
-test("stable Lab IDs normalize common shorthand", () => {
-  assert.equal(normalizeLabId("02T3"), "02T03");
-  assert.equal(normalizeLabId("2t3"), "02T03");
-  assert.equal(normalizeLabId("02-T-03"), "02T03");
-  assert.equal(normalizeLabId("lab02-T-03"), "02T03");
-  assert.deepEqual(parseLabId("02P12"), { id: "02P12", chapter: 2, tag: "P", sequence: 12 });
-  assert.equal(formatLabDocumentTitlePrefix("2e3"), "Lab 02-E-03：");
-  assert.throws(() => normalizeLabId("02X03"), (error) => error.code === "LAB_ID_INVALID");
-  assert.throws(() => normalizeLabId("02T0"), (error) => error.code === "LAB_ID_INVALID");
+it("stable Lab IDs normalize common shorthand", () => {
+  expect(normalizeLabId("02T3")).toBe("02T03");
+  expect(normalizeLabId("2t3")).toBe("02T03");
+  expect(normalizeLabId("02-T-03")).toBe("02T03");
+  expect(normalizeLabId("lab02-T-03")).toBe("02T03");
+  expect(parseLabId("02P12")).toStrictEqual({ id: "02P12", chapter: 2, tag: "P", sequence: 12 });
+  expect(formatLabDocumentTitlePrefix("2e3")).toBe("Lab 02-E-03：");
+  expect(() => normalizeLabId("02X03")).toThrow(expect.objectContaining({ code: "LAB_ID_INVALID" }));
+  expect(() => normalizeLabId("02T0")).toThrow(expect.objectContaining({ code: "LAB_ID_INVALID" }));
 });
 
-test("Lab ID migration preserves the frontmatter line ending beside chapter", () => {
+it("Lab ID migration preserves the frontmatter line ending beside chapter", () => {
   const mixed = "---\nchapter: 2\nchapterTitle: 测试\r\n---\r\n";
   const migrated = insertLabIdFrontmatter(mixed, "2t3");
-  assert.equal(migrated, "---\nchapter: 2\nlabId: \"02T03\"\nchapterTitle: 测试\r\n---\r\n");
+  expect(migrated).toBe("---\nchapter: 2\nlabId: \"02T03\"\nchapterTitle: 测试\r\n---\r\n");
 });
 
-test("scaffolder allocates independent type sequences and optional display order", async (t) => {
+it("scaffolder allocates independent type sequences and optional display order", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa scaffold "));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const emptyCategoryMarker = path.join(root, "labs", "chapter-02", "theory", ".gitkeep");
   await mkdir(path.dirname(emptyCategoryMarker), { recursive: true });
   await writeFile(emptyCategoryMarker, "");
   const quiz = await createLab({ type: "quiz", chapter: "2", order: "3", slug: "stack-quiz" }, root);
-  await assert.rejects(access(emptyCategoryMarker), (error) => error.code === "ENOENT");
+  await expect(access(emptyCategoryMarker)).rejects.toThrow(expect.objectContaining({ code: "ENOENT" }));
   await access(path.join(root, "labs", "chapter-02", "exercise", ".gitkeep"));
   await access(path.join(root, "labs", "chapter-02", "project", ".gitkeep"));
   const program = await createLab({ type: "program", chapter: "2", slug: "stack-run" }, root);
-  await assert.rejects(
-    access(path.join(root, "labs", "chapter-02", "exercise", ".gitkeep")),
-    (error) => error.code === "ENOENT",
-  );
+  await expect(access(path.join(root, "labs", "chapter-02", "exercise", ".gitkeep"))).rejects.toThrow(expect.objectContaining({ code: "ENOENT" }));
   const project = await createLab({ type: "project", chapter: "2", order: "5", slug: "stack-project" }, root);
-  await assert.rejects(
-    access(path.join(root, "labs", "chapter-02", "project", ".gitkeep")),
-    (error) => error.code === "ENOENT",
-  );
+  await expect(access(path.join(root, "labs", "chapter-02", "project", ".gitkeep"))).rejects.toThrow(expect.objectContaining({ code: "ENOENT" }));
   const nextProgram = await createLab({ type: "program", chapter: "2", slug: "stack-run" }, root);
-  assert.deepEqual(
-    [quiz.labId, program.labId, project.labId, nextProgram.labId],
-    ["02T01", "02E01", "02P01", "02E02"],
-  );
-  assert.deepEqual([quiz.order, program.order, project.order, nextProgram.order], [3, 4, 5, 6]);
-  assert.equal(quiz.relativeRoot, "labs/chapter-02/theory/T-02-01-stack-quiz");
-  assert.equal(program.relativeRoot, "labs/chapter-02/exercise/E-02-01-stack-run");
-  assert.equal((await loadLab(quiz.labRoot)).manifest.type, "quiz");
-  assert.equal((await loadLab(program.labRoot)).manifest.type, "program");
-  assert.equal((await loadLab(project.labRoot)).manifest.type, "project");
-  assert.equal(await readFile(path.join(program.labRoot, "Makefile"), "utf8"), THIN_MAKEFILE);
+  expect([quiz.labId, program.labId, project.labId, nextProgram.labId]).toStrictEqual(["02T01", "02E01", "02P01", "02E02"]);
+  expect([quiz.order, program.order, project.order, nextProgram.order]).toStrictEqual([3, 4, 5, 6]);
+  expect(quiz.relativeRoot).toBe("labs/chapter-02/theory/T-02-01-stack-quiz");
+  expect(program.relativeRoot).toBe("labs/chapter-02/exercise/E-02-01-stack-run");
+  expect((await loadLab(quiz.labRoot)).manifest.type).toBe("quiz");
+  expect((await loadLab(program.labRoot)).manifest.type).toBe("program");
+  expect((await loadLab(project.labRoot)).manifest.type).toBe("project");
+  expect(await readFile(path.join(program.labRoot, "Makefile"), "utf8")).toBe(THIN_MAKEFILE);
   const projectTask = JSON.parse(await readFile(path.join(project.labRoot, "tasks", "task-01-implementation", "task.json"), "utf8"));
   const projectReport = JSON.parse(await readFile(path.join(project.labRoot, "report", "task.json"), "utf8"));
-  assert.equal(projectTask.$schema, "../../../../../../schemas/task.schema.json");
-  assert.equal(projectReport.$schema, "../../../../../schemas/task.schema.json");
+  expect(projectTask.$schema).toBe("../../../../../../schemas/task.schema.json");
+  expect(projectReport.$schema).toBe("../../../../../schemas/task.schema.json");
   const projectPackage = await packStudent(await loadLab(project.labRoot));
-  assert.equal((await loadLab(projectPackage.packageRoot)).manifest.distribution, "student");
+  expect((await loadLab(projectPackage.packageRoot)).manifest.distribution).toBe("student");
   const programReadme = await readFile(path.join(program.labRoot, "README.md"), "utf8");
-  assert.match(programReadme, /labId: "02E01"/);
-  assert.match(programReadme, /title: "Lab 02-E-01：编程练习"/);
-  await assert.rejects(
-    createLab({ type: "quiz", chapter: "2", order: "3", slug: "duplicate-order" }, root),
-    (error) => error.code === "ORDER_DUPLICATE",
-  );
+  expect(programReadme).toMatch(/labId: "02E01"/);
+  expect(programReadme).toMatch(/title: "Lab 02-E-01：编程练习"/);
+  await expect(createLab({ type: "quiz", chapter: "2", order: "3", slug: "duplicate-order" }, root)).rejects.toThrow(expect.objectContaining({ code: "ORDER_DUPLICATE" }));
 });
 
-test("Lab scanning rejects flat legacy directories and malformed categorized directories", async (t) => {
+it("Lab scanning rejects flat legacy directories and malformed categorized directories", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa lab layout "));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const chapterRoot = path.join(root, "labs", "chapter-02");
   const flat = path.join(chapterRoot, "lab-02-01-flat");
   await mkdir(flat, { recursive: true });
-  await assert.rejects(scanLabRecords(root), (error) => error.code === "LAB_PATH_INVALID");
+  await expect(scanLabRecords(root)).rejects.toThrow(expect.objectContaining({ code: "LAB_PATH_INVALID" }));
   await rm(flat, { recursive: true, force: true });
 
   await mkdir(path.join(chapterRoot, "theory", "lab-02-T-01-malformed"), { recursive: true });
-  await assert.rejects(scanLabRecords(root), (error) => error.code === "LAB_PATH_INVALID");
+  await expect(scanLabRecords(root)).rejects.toThrow(expect.objectContaining({ code: "LAB_PATH_INVALID" }));
 });
 
-test("allocator uses max plus one and never fills a deleted gap", async (t) => {
+it("allocator uses max plus one and never fills a deleted gap", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa lab identity "));
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   for (const [directory, labId, order] of [
     ["T-02-01-first", "02T01", 1],
     ["T-02-03-third", "02T03", 3],
@@ -475,24 +459,21 @@ test("allocator uses max plus one and never fills a deleted gap", async (t) => {
     await writeFile(path.join(labRoot, "README.md"), `---\ntitle: "Fixture"\ndescription: "Fixture"\norder: ${order}\nchapter: 2\nlabId: "${labId}"\nchapterTitle: "栈与队列"\nupdated: "2026-08-31"\ncontributors: ["Test"]\nstatus: "draft"\nlab: true\nlabCategory: "theory"\ndifficulty: "测试"\nduration: "1 分钟"\n---\n`);
   }
   const allocated = await allocateLabIdentity(root, { type: "quiz", chapter: 2 });
-  assert.deepEqual(allocated, { id: "02T04", chapter: 2, tag: "T", sequence: 4, order: 4 });
+  expect(allocated).toStrictEqual({ id: "02T04", chapter: 2, tag: "T", sequence: 4, order: 4 });
 
   const duplicateRoot = path.join(root, "labs", "chapter-02", "theory", "T-02-03-duplicate");
   await mkdir(duplicateRoot, { recursive: true });
   await writeFile(path.join(duplicateRoot, "README.md"), `---\ntitle: "Duplicate"\ndescription: "Duplicate"\norder: 4\nchapter: 2\nlabId: "02T03"\nchapterTitle: "栈与队列"\nupdated: "2026-08-31"\ncontributors: ["Test"]\nstatus: "draft"\nlab: true\nlabCategory: "theory"\ndifficulty: "测试"\nduration: "1 分钟"\n---\n`);
-  await assert.rejects(
-    allocateLabIdentity(root, { type: "quiz", chapter: 2 }),
-    (error) => error.code === "LAB_ID_DUPLICATE",
-  );
+  await expect(allocateLabIdentity(root, { type: "quiz", chapter: 2 })).rejects.toThrow(expect.objectContaining({ code: "LAB_ID_DUPLICATE" }));
 });
 
-test("Lab IDs locate a unique repository path", async () => {
+it("Lab IDs locate a unique repository path", async () => {
   const located = await locateLabById(projectRoot, "1e4");
-  assert.equal(located.id, "01E04");
-  assert.equal(located.relativePath, "labs/chapter-01/exercise/E-01-04-singly-linked-list-reverse");
+  expect(located.id).toBe("01E04");
+  expect(located.relativePath).toBe("labs/chapter-01/exercise/E-01-04-singly-linked-list-reverse");
 });
 
-test("student pack follows multi-source manifests and excludes binaries", async (t) => {
+it("student pack follows multi-source manifests and excludes binaries", async () => {
   const root = await fixture({
     schemaVersion: 1,
     type: "program",
@@ -514,16 +495,16 @@ test("student pack follows multi-source manifests and excludes binaries", async 
     "public/sample.in": "",
     "public/sample.out": "",
   });
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const packed = await packStudent(await loadLab(root));
   await access(path.join(packed.packageRoot, "student", "main.cpp"));
   await access(path.join(packed.packageRoot, "shared", "helper.cpp"));
   await access(path.join(packed.packageRoot, "include", "helper.hpp"));
-  await assert.rejects(access(path.join(packed.packageRoot, "student", "stale.exe")));
-  await assert.rejects(access(path.join(packed.packageRoot, "solution")));
+  await expect(access(path.join(packed.packageRoot, "student", "stale.exe"))).rejects.toThrow();
+  await expect(access(path.join(packed.packageRoot, "solution"))).rejects.toThrow();
 });
 
-test("student pack lab CLI runs outside the source repository", async (t) => {
+it("student pack lab CLI runs outside the source repository", async () => {
   const root = await fixture({
     schemaVersion: 1,
     type: "program",
@@ -539,44 +520,44 @@ test("student pack lab CLI runs outside the source repository", async (t) => {
     "tests/sample.in": "",
     "tests/sample.out": "",
   });
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const packed = await packStudent(await loadLab(root));
   const result = await runProcess(process.execPath, ["tools/lab/cli.mjs", "validate", "--json", "--no-color"], {
     cwd: packed.packageRoot,
     timeMs: 5000,
     outputKb: 256,
   });
-  assert.equal(result.code, 0, result.stderr || result.stdout);
-  assert.equal(JSON.parse(result.stdout).ok, true);
+  expect(result.code, result.stderr || result.stdout).toBe(0);
+  expect(JSON.parse(result.stdout).ok).toBe(true);
 });
 
-test("schema documents are valid JSON with stable v1 identities", async () => {
+it("schema documents are valid JSON with stable v1 identities", async () => {
   for (const file of ["lab.schema.json", "quiz.schema.json", "cases.schema.json", "task.schema.json"]) {
     const schema = JSON.parse(await readFile(path.join(projectRoot, "schemas", file), "utf8"));
-    assert.equal(schema.$schema, "https://json-schema.org/draft/2020-12/schema");
-    assert.match(schema.$id, /\/schemas\//);
+    expect(schema.$schema).toBe("https://json-schema.org/draft/2020-12/schema");
+    expect(schema.$id).toMatch(/\/schemas\//);
   }
 });
 
-test("CLI JSON mode is versioned, color-free, and uses exit 2 for unknown commands", async (t) => {
+it("CLI JSON mode is versioned, color-free, and uses exit 2 for unknown commands", async () => {
   const root = await fixture({ schemaVersion: 1, type: "quiz", quiz: { questions: "quiz.json" } }, {
     "quiz.json": JSON.stringify([{ id: "q1", stem: "题面", options: ["一", "二", "三", "四"], answer: 0, explanation: "解析" }]),
   });
-  t.after(() => rm(root, { recursive: true, force: true }));
+  onTestFinished(() => rm(root, { recursive: true, force: true }));
   const valid = await runProcess(process.execPath, ["tools/lab/cli.mjs", "validate", root, "--json", "--no-color"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
-  assert.equal(valid.code, 0);
-  assert.equal(JSON.parse(valid.stdout).reportVersion, 1);
-  assert.equal(valid.stdout.includes(String.fromCharCode(27)), false);
+  expect(valid.code).toBe(0);
+  expect(JSON.parse(valid.stdout).reportVersion).toBe(1);
+  expect(valid.stdout.includes(String.fromCharCode(27))).toBe(false);
   const forwarded = await runProcess(process.execPath, ["tools/lab/cli.mjs", "validate", "--", root, "--json", "--no-color"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
-  assert.equal(forwarded.code, 0);
-  assert.equal(JSON.parse(forwarded.stdout).lab.path, root);
+  expect(forwarded.code).toBe(0);
+  expect(JSON.parse(forwarded.stdout).lab.path).toBe(root);
   const unknown = await runProcess(process.execPath, ["tools/lab/cli.mjs", "unknown", "--json"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
-  assert.equal(unknown.code, 2);
-  assert.equal(JSON.parse(unknown.stdout).error.code, "COMMAND_UNKNOWN");
+  expect(unknown.code).toBe(2);
+  expect(JSON.parse(unknown.stdout).error.code).toBe("COMMAND_UNKNOWN");
   const unsupportedInteractiveJson = await runProcess(process.execPath, ["tools/lab/cli.mjs", "interactive", root, "--json"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
-  assert.equal(unsupportedInteractiveJson.code, 2);
-  assert.equal(JSON.parse(unsupportedInteractiveJson.stdout).error.code, "ARGUMENT_INVALID");
+  expect(unsupportedInteractiveJson.code).toBe(2);
+  expect(JSON.parse(unsupportedInteractiveJson.stdout).error.code).toBe("ARGUMENT_INVALID");
   const located = await runProcess(process.execPath, ["tools/lab/cli.mjs", "locate", "01E4", "--json"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
-  assert.equal(located.code, 0);
-  assert.equal(JSON.parse(located.stdout).lab.id, "01E04");
+  expect(located.code).toBe(0);
+  expect(JSON.parse(located.stdout).lab.id).toBe("01E04");
 });
