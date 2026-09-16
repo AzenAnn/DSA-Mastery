@@ -3,49 +3,180 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 15,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-tail",
     "input": "tests/002-tail.in",
     "expected": "tests/002-tail.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "003-take-atom",
     "input": "tests/003-take-atom.in",
     "expected": "tests/003-take-atom.out",
-    "points": 20,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "004-single-head",
     "input": "tests/004-single-head.in",
     "expected": "tests/004-single-head.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "005-single-tail-empty",
     "input": "tests/005-single-tail-empty.in",
     "expected": "tests/005-single-tail-empty.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "006-head-is-list",
     "input": "tests/006-head-is-list.in",
     "expected": "tests/006-head-is-list.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "007-nested-head-tail",
     "input": "tests/007-nested-head-tail.in",
     "expected": "tests/007-nested-head-tail.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-flat-head",
+    "input": "tests/008-flat-head.in",
+    "expected": "tests/008-flat-head.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-flat-tail",
+    "input": "tests/009-flat-tail.in",
+    "expected": "tests/009-flat-tail.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-list-tail",
+    "input": "tests/010-list-tail.in",
+    "expected": "tests/010-list-tail.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-list-tail-head",
+    "input": "tests/011-list-tail-head.in",
+    "expected": "tests/011-list-tail-head.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-multi-tail",
+    "input": "tests/012-multi-tail.in",
+    "expected": "tests/012-multi-tail.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-nested-head",
+    "input": "tests/013-nested-head.in",
+    "expected": "tests/013-nested-head.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-nested-tail-head",
+    "input": "tests/014-nested-tail-head.in",
+    "expected": "tests/014-nested-tail-head.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-deep-chain",
+    "input": "tests/015-deep-chain.in",
+    "expected": "tests/015-deep-chain.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "016-double-tail",
+    "input": "tests/016-double-tail.in",
+    "expected": "tests/016-double-tail.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-empty-tail",
+    "input": "tests/017-empty-tail.in",
+    "expected": "tests/017-empty-tail.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "018-empty-nested-tail",
+    "input": "tests/018-empty-nested-tail.in",
+    "expected": "tests/018-empty-nested-tail.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "019-atom-tail",
+    "input": "tests/019-atom-tail.in",
+    "expected": "tests/019-atom-tail.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "020-deep-head-tail",
+    "input": "tests/020-deep-head-tail.in",
+    "expected": "tests/020-deep-head-tail.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
   }
 ]
