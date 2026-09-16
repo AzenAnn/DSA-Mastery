@@ -4,7 +4,7 @@ description: "基数排序的 LSD 按位分配收集原理、稳定性关键、�
 order: 6
 chapter: 11
 chapterTitle: "高效排序与外部排序"
-updated: "2026-08-21"
+updated: "2026-09-16"
 contributors: ["Ph1z"]
 status: "draft"
 ---
@@ -21,11 +21,197 @@ status: "draft"
 
 ## 代码
 
+```text
+Algorithm RadixSort(A, n):
+    Input: An array A of n elements (non-negative integers)
+    Output: Array A sorted in ascending order
+
+    // 1. 找出数组中的最大值，确定最大位数
+    maxVal = A[0]
+    for i = 1 to n - 1 do
+        if A[i] > maxVal then maxVal = A[i]
+    end for
+
+    // 2. 从最低位到最高位，逐位进行稳定计数排序
+    exp = 1                                 // exp = 10^k，表示当前处理的位
+    while maxVal / exp > 0 do
+        CountingSortByDigit(A, n, exp)      // 按第 exp 位排序
+        exp = exp * 10
+    end while
+
+    return A
+
+Algorithm CountingSortByDigit(A, n, exp):
+    Input: An array A, size n, current digit exp
+    Output: Array A sorted by the digit at exp position
+
+    Create cnt[0...9] initialized to 0      // 十进制每位只有 0-9
+
+    // 1. 统计当前位频次
+    for i = 0 to n - 1 do
+        digit = (A[i] / exp) % 10
+        cnt[digit] = cnt[digit] + 1
+    end for
+
+    // 2. 前缀和，确定每个数字的结束位置
+    for i = 1 to 9 do
+        cnt[i] = cnt[i] + cnt[i - 1]
+    end for
+
+    // 3. 从后往前回填（保证稳定性）
+    Create out[0...n-1]
+    for i = n - 1 down to 0 do
+        digit = (A[i] / exp) % 10
+        cnt[digit] = cnt[digit] - 1
+        out[cnt[digit]] = A[i]
+    end for
+
+    // 4. 拷贝回原数组
+    for i = 0 to n - 1 do
+        A[i] = out[i]
+    end for
+```
+
 ```cpp
+// 按当前位进行稳定计数排序
+void countingSortByDigit(int a[], int n, int exp) {
+    vector<int> cnt(10, 0);                          // 0-9 共 10 个桶
+    vector<int> out(n);
+
+    // 1. 统计当前位频次
+    for (int i = 0; i < n; ++i) {
+        ++cnt[(a[i] / exp) % 10];
+    }
+
+    // 2. 前缀和，确定每个数字的结束位置
+    for (int i = 1; i < 10; ++i) {
+        cnt[i] += cnt[i - 1];
+    }
+
+    // 3. 从后往前回填（保证稳定性）
+    for (int i = n - 1; i >= 0; --i) {
+        int digit = (a[i] / exp) % 10;
+        out[--cnt[digit]] = a[i];
+    }
+
+    // 4. 拷贝回原数组
+    for (int i = 0; i < n; ++i) a[i] = out[i];
+}
+
 void radixSort(int a[], int n) {
+    int maxVal = *max_element(a, a + n);              // 找最大值
+    for (int exp = 1; maxVal / exp > 0; exp *= 10) {  // 从个位到最高位
+        countingSortByDigit(a, n, exp);               // 按当前位排序
+    }
+}
+```
+
+## 优化代码
+
+基数排序的核心问题是：**只能处理非负整数，且每一位都需要一次完整的计数排序（需要额外空间）**。以下是几种常见的优化方向：
+
+```cpp
+// 优化 1：支持负数（将负数和非负数分开处理，或使用偏移量）
+void radixSortWithNegative(int a[], int n) {
+    if (n <= 1) return;
+
+    // 分离负数和非负数
+    vector<int> neg, pos;
+    for (int i = 0; i < n; ++i) {
+        if (a[i] < 0) neg.push_back(-a[i]);     // 取绝对值
+        else          pos.push_back(a[i]);
+    }
+
+    // 分别排序
+    if (!neg.empty()) radixSort(neg.data(), neg.size());
+    if (!pos.empty()) radixSort(pos.data(), pos.size());
+
+    // 合并：负数逆序放前面，非负数顺序放后面
+    int idx = 0;
+    for (int i = neg.size() - 1; i >= 0; --i) a[idx++] = -neg[i];
+    for (int x : pos) a[idx++] = x;
+}
+```
+
+```cpp
+// 优化 2：使用基数 2^k（如 256）减少排序趟数
+// 十进制每位需要 10 个桶，基数 256 只需 4 趟（32 位整数）
+void radixSort256(int a[], int n) {
+    if (n <= 1) return;
+
+    const int RADIX = 256;                          // 2^8
+    const int MASK = RADIX - 1;
+    vector<int> out(n);
+    vector<int> cnt(RADIX);
+
+    // 32 位整数需 4 趟（每趟 8 位）
+    for (int shift = 0; shift < 32; shift += 8) {
+        fill(cnt.begin(), cnt.end(), 0);
+
+        // 统计当前字节频次
+        for (int i = 0; i < n; ++i) {
+            ++cnt[(a[i] >> shift) & MASK];
+        }
+
+        // 前缀和
+        for (int i = 1; i < RADIX; ++i) {
+            cnt[i] += cnt[i - 1];
+        }
+
+        // 从后往前回填（保稳定）
+        for (int i = n - 1; i >= 0; --i) {
+            out[--cnt[(a[i] >> shift) & MASK]] = a[i];
+        }
+
+        // 拷回原数组
+        for (int i = 0; i < n; ++i) a[i] = out[i];
+    }
+}
+```
+
+```cpp
+// 优化 3：MSD 基数排序（从高位到低位，递归分桶）
+// 适合字符串排序，且可在高位分桶后提前终止
+void radixSortMSD(int a[], int n, int exp) {
+    if (n <= 1 || exp == 0) return;
+
+    vector<vector<int>> buckets(10);
+    for (int i = 0; i < n; ++i) {
+        buckets[(a[i] / exp) % 10].push_back(a[i]);
+    }
+
+    int idx = 0;
+    for (int i = 0; i < 10; ++i) {
+        if (!buckets[i].empty()) {
+            // 递归对每个桶按更高位排序
+            radixSortMSD(buckets[i].data(), buckets[i].size(), exp / 10);
+            for (int x : buckets[i]) a[idx++] = x;
+        }
+    }
+}
+
+void radixSortMSD(int a[], int n) {
+    int maxVal = *max_element(a, a + n);
+    int exp = 1;
+    while (maxVal / exp >= 10) exp *= 10;           // 最高位
+    radixSortMSD(a, n, exp);
+}
+```
+
+```cpp
+// 优化 4：原地基数排序（减少 out 数组，但会破坏稳定性）
+// 空间从 O(n + k) 降到 O(k)，但实现复杂且不保证稳定
+void radixSortInPlace(int a[], int n) {
+    if (n <= 1) return;
+
     int maxVal = *max_element(a, a + n);
     for (int exp = 1; maxVal / exp > 0; exp *= 10) {
-        countingSortByDigit(a, n, exp);  // 稳定计数排序按当前位分配
+        vector<int> cnt(10, 0);
+        for (int i = 0; i < n; ++i) ++cnt[(a[i] / exp) % 10];
+        for (int i = 1; i < 10; ++i) cnt[i] += cnt[i - 1];
+
+        // 使用"循环置换"方式原地重排（实现复杂，略）
+        // 实际中不推荐，因为会破坏稳定性
     }
 }
 ```
