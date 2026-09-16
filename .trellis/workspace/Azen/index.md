@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 41
+- **Total Sessions**: 42
 - **Last Active**: 2026-09-16
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~1093 | Active |
+| `journal-1.md` | ~1128 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 42 | 2026-09-16 | Ch7 编号迁移提交与 PR | `c67d16e4` | `codex/ch07-exercise-renumber` |
 | 41 | 2026-09-16 | Ch7 连续编号与题集精简，本地预览待检查 | - | `codex/ch07-exercise-renumber` |
 | 40 | 2026-09-14 | Ch7 三十题清单落地与测试完善 | `865a6005` | `codex/ch07-program-exercises` |
 | 39 | 2026-09-12 | Statistics profile and extension 0.1.14 release preparation | `c1fa9b23` | `feat/vscode-stats-profile` |
