@@ -49,3 +49,14 @@ yarn-error.log*
 /.trellis/tasks/08-31-vscode-stats-dashboard-ui/
 /.trellis/tasks/archive/2026-08/08-31-vscode-exercise-webview-ui/
 /.trellis/tasks/archive/2026-08/08-31-vscode-stats-dashboard-ui/
+
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
