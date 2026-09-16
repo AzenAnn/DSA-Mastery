@@ -31,12 +31,20 @@ status: "draft"
 
 先看一张有 $5$ 个顶点、$6$ 条边的无向图：
 
-```text [example-graph.txt]
-      0 ───── 1 ───── 3
-       \      /        |
-        \    /         |
-          2 ────────── 4
+```graphviz
+graph FoundationExample {
+  rankdir=LR;
+  node [shape=circle];
+
+  0 -- 1;
+  0 -- 2;
+  1 -- 2;
+  1 -- 3;
+  2 -- 4;
+  3 -- 4;
+}
 ```
+<!-- diagram id="graph-basics-foundation-example" caption="6.1 贯穿例图：5 个顶点由 6 条无向边连接，顶点 1 和 2 的度均为 3" -->
 
 它的顶点集与边集为：
 
