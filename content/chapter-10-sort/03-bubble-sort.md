@@ -17,17 +17,84 @@ status: "draft"
 
 ## 代码
 
+```伪代码
+Algorithm BubbleSort(A, n):
+    Input: An array A of n elements
+    Output: Array A sorted in ascending order
+
+    // 外层循环：控制排序趟数，最多 n-1 趟
+    for i = 0 to n - 2 do
+        swapped = false             // 标记本趟是否发生交换
+
+        // 内层循环：比较相邻元素，将最大值"冒泡"到末尾
+        for j = 0 to n - i - 2 do
+            if A[j] > A[j + 1] then
+                swap(A[j], A[j + 1])
+                swapped = true      // 记录发生了交换
+            end if
+        end for
+
+        // 早停优化：若本趟无交换，说明数组已有序
+        if swapped == false then
+            break
+        end if
+    end for
+
+    return A
+```
+
 ```cpp
 void bubbleSort(int a[], int n) {
     for (int i = 0; i < n - 1; ++i) {
-        bool swapped = false;
+        bool swapped = false;                // 本趟是否发生交换
         for (int j = 0; j < n - i - 1; ++j) {
             if (a[j] > a[j + 1]) {
                 std::swap(a[j], a[j + 1]);
-                swapped = true;
+                swapped = true;              // 标记发生交换
             }
         }
-        if (!swapped) break;  // 早停：这趟没交换，已经有序
+        if (!swapped) break;                 // 早停：已有序
+    }
+}
+```
+
+## 优化代码
+
+```cpp
+// 优化 1：记录最后交换位置（减少无效比较）
+// 每趟记录最后一次交换的位置，该位置之后的元素已经有序，无需再比较
+void optimizedBubbleSort(int a[], int n) {
+    int lastSwapPos = n - 1;                 // 最后一次交换的位置
+    while (lastSwapPos > 0) {
+        int bound = lastSwapPos;             // 本趟比较的边界
+        lastSwapPos = 0;                     // 重置，准备记录本趟最后交换位置
+        for (int j = 0; j < bound; ++j) {
+            if (a[j] > a[j + 1]) {
+                std::swap(a[j], a[j + 1]);
+                lastSwapPos = j;             // 更新最后交换位置
+            }
+        }
+    }
+}
+```
+
+```cpp
+// 优化 2：双向冒泡排序（鸡尾酒排序）
+// 每趟同时从前往后和从后往前扫描，解决"乌龟问题"（小元素在末尾移动慢）
+void cocktailSort(int a[], int n) {
+    int left = 0, right = n - 1;
+    while (left < right) {
+        // 正向冒泡：将最大值移到右端
+        for (int i = left; i < right; ++i) {
+            if (a[i] > a[i + 1]) std::swap(a[i], a[i + 1]);
+        }
+        --right;
+
+        // 反向冒泡：将最小值移到左端
+        for (int i = right; i > left; --i) {
+            if (a[i - 1] > a[i]) std::swap(a[i - 1], a[i]);
+        }
+        ++left;
     }
 }
 ```

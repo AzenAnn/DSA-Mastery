@@ -15,11 +15,62 @@ status: "draft"
 
 > **Ph1zの理解：** 普通插入排序只能一个一个挪，遇到逆序对就慢得要命。希尔排序的妙处在于——先大步跳着排，把远处的逆序对快速消除；再小步走，把细节理顺。就像整理书架，先把明显放错位置的大部头搬好，再微调每本书的位置。
 
+
 ## 代码
+
+```伪代码
+Algorithm ShellSort(A, n):
+    Input: An array A of n elements
+    Output: Array A sorted in ascending order
+
+    // 外层循环：逐步缩小增量 gap，直到 gap = 1
+    for gap = n / 2 down to 1 do
+        // 对每个增量 gap，进行分组插入排序
+        for i = gap to n - 1 do
+            key = A[i]                  // 当前待插入元素
+            j = i - gap                 // 同组前一个元素的位置
+
+            // 在组内向前寻找插入位置，并后移元素
+            while j >= 0 and A[j] > key do
+                A[j + gap] = A[j]       // 组内元素后移
+                j = j - gap             // 跳到同组前一个元素
+            end while
+
+            A[j + gap] = key            // 插入到正确位置
+        end for
+    end for
+
+    return A
+```
 
 ```cpp
 void shellSort(int a[], int n) {
-    for (int gap = n / 2; gap > 0; gap /= 2) {
+    for (int gap = n / 2; gap > 0; gap /= 2) {       // 增量序列：折半缩小
+        for (int i = gap; i < n; ++i) {
+            int key = a[i];                          // 当前待插入元素
+            int j = i - gap;                         // 同组前一个元素
+            while (j >= 0 && a[j] > key) {
+                a[j + gap] = a[j];                   // 组内元素后移
+                j -= gap;
+            }
+            a[j + gap] = key;                        // 插入到正确位置
+        }
+    }
+}
+```
+
+## 优化代码
+
+
+```cpp
+// 优化 1：Hibbard 增量序列（2^k - 1）
+// 最坏时间复杂度 O(n^(3/2))，性能显著优于折半序列
+void shellSortHibbard(int a[], int n) {
+    // 生成 Hibbard 序列：1, 3, 7, 15, 31, ...
+    int gap = 1;
+    while (gap < n / 2) gap = gap * 2 + 1;
+
+    for (; gap > 0; gap = (gap - 1) / 2) {
         for (int i = gap; i < n; ++i) {
             int key = a[i];
             int j = i - gap;
@@ -33,6 +84,64 @@ void shellSort(int a[], int n) {
 }
 ```
 
+```cpp
+// 优化 2：Knuth 增量序列（3^k - 1）/ 2
+// 最坏时间复杂度 O(n^(3/2))，实践表现优异
+void shellSortKnuth(int a[], int n) {
+    // 生成 Knuth 序列：1, 4, 13, 40, 121, ...
+    int gap = 1;
+    while (gap < n / 3) gap = gap * 3 + 1;
+
+    for (; gap > 0; gap /= 3) {
+        for (int i = gap; i < n; ++i) {
+            int key = a[i];
+            int j = i - gap;
+            while (j >= 0 && a[j] > key) {
+                a[j + gap] = a[j];
+                j -= gap;
+            }
+            a[j + gap] = key;
+        }
+    }
+}
+```
+
+```cpp
+// 优化 3：Sedgewick 增量序列（综合性能最优）
+// 最坏时间复杂度 O(n^(4/3))，是已知最优的实用序列之一
+void shellSortSedgewick(int a[], int n) {
+    // Sedgewick 序列：1, 5, 19, 41, 109, 209, ...
+    std::vector<int> gaps;
+    int k = 0;
+    while (true) {
+        int gap;
+        if (k % 2 == 0) {
+            int p = k / 2;
+            gap = 9 * (1 << (2 * p)) - 9 * (1 << p) + 1;
+        } else {
+            int p = (k - 1) / 2;
+            gap = (1 << (2 * p + 4)) - 3 * (1 << (p + 2)) + 1;
+        }
+        if (gap >= n) break;
+        gaps.push_back(gap);
+        ++k;
+    }
+
+    // 从大到小使用增量
+    for (int idx = gaps.size() - 1; idx >= 0; --idx) {
+        int gap = gaps[idx];
+        for (int i = gap; i < n; ++i) {
+            int key = a[i];
+            int j = i - gap;
+            while (j >= 0 && a[j] > key) {
+                a[j + gap] = a[j];
+                j -= gap;
+            }
+            a[j + gap] = key;
+        }
+    }
+}
+```
 ## 正确性证明
 
 希尔排序的正确性基于"每次增量排序后，间隔为 `gap` 的子序列有序"。
