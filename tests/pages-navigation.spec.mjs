@@ -1374,7 +1374,7 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await exerciseGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
-  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(9);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(20);
   for (const title of [
     "Lab 03-E-01：KMP 模式匹配（首次出现位置）",
     "Lab 03-E-02：next 与 nextval 数组推导",
@@ -1385,6 +1385,17 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
     "Lab 03-E-07：广义表的深度",
     "Lab 03-E-08：三对角矩阵压缩与取值",
     "Lab 03-E-09：多维数组行优先寻址",
+    "Lab 03-E-10：串的块链存储与结点定位",
+    "Lab 03-E-11：KMP 全部匹配位置（允许重叠）",
+    "Lab 03-E-12：最小循环节与周期",
+    "Lab 03-E-13：对称矩阵压缩存储与取值",
+    "Lab 03-E-14：稀疏矩阵三元组快速转置",
+    "Lab 03-E-15：广义表的长度与结点计数",
+    "Lab 03-E-16：定长顺序串的插入与删除",
+    "Lab 03-E-17：KMP 与 nextval 的比较次数",
+    "Lab 03-E-18：上三角矩阵压缩存储与取值",
+    "Lab 03-E-19：行优先与列优先寻址（含字节地址）",
+    "Lab 03-E-20：Head/Tail 复合运算求值",
   ]) {
     await expect(exerciseGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }

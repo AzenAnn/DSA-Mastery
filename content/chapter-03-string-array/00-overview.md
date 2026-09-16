@@ -44,7 +44,7 @@ status: "draft"
 2. 再学习[串的模式匹配与处理实践](./02-string-matching-and-processing.md)，这是本章的核心难点。
 3. 然后学习[数组寻址与特殊矩阵](./03-array-and-matrix.md)，难度相对平缓。
 4. 最后学习[广义表与递归算法](./04-generalized-list.md)，体会递归定义如何贯穿存储与算法。
-5. 阅读后完成配套 Lab：先做 3.1 串基础与 3.2 模式匹配的选择题精练检验术语与存储，再依次完成 KMP、next 推导、比较次数、替换与 UTF-8 实验，最后用 Lab 03-P-01 工程题把本章串知识收口。
+5. 阅读后完成配套 Lab：先做 3.1 串基础与 3.2 模式匹配的选择题精练检验术语与存储，再依次完成 KMP、next 推导、比较次数、替换与 UTF-8 实验，配合块链存储、全部匹配位置、最小循环节把串的存储与匹配落实；数组与广义表部分用三对角、行优先、对称矩阵、快速转置和广义表计数实验验证寻址与递归结构，最后用 Lab 03-P-01、Lab 03-P-02 工程题把本章串知识与矩阵知识分别收口。
 
 ## 配套 Labs
 
@@ -61,6 +61,17 @@ status: "draft"
 - [Lab 03-E-07：广义表的深度](../../labs/chapter-03/exercise/E-03-07-generalized-list-depth/README.md)
 - [Lab 03-E-08：三对角矩阵压缩与取值](../../labs/chapter-03/exercise/E-03-08-tridiagonal-compress/README.md)
 - [Lab 03-E-09：多维数组行优先寻址](../../labs/chapter-03/exercise/E-03-09-ndarray-offset/README.md)
+- [Lab 03-E-10：串的块链存储与结点定位](../../labs/chapter-03/exercise/E-03-10-block-chain-storage/README.md)
+- [Lab 03-E-11：KMP 全部匹配位置（允许重叠）](../../labs/chapter-03/exercise/E-03-11-kmp-all-occurrences/README.md)
+- [Lab 03-E-12：最小循环节与周期](../../labs/chapter-03/exercise/E-03-12-smallest-period/README.md)
+- [Lab 03-E-13：对称矩阵压缩存储与取值](../../labs/chapter-03/exercise/E-03-13-symmetric-matrix-compress/README.md)
+- [Lab 03-E-14：稀疏矩阵三元组快速转置](../../labs/chapter-03/exercise/E-03-14-sparse-fast-transpose/README.md)
+- [Lab 03-E-15：广义表的长度与结点计数](../../labs/chapter-03/exercise/E-03-15-generalized-list-length/README.md)
+- [Lab 03-E-16：定长顺序串的插入与删除](../../labs/chapter-03/exercise/E-03-16-fixed-capacity-string-edit/README.md)
+- [Lab 03-E-17：KMP 与 nextval 的比较次数](../../labs/chapter-03/exercise/E-03-17-nextval-comparison-count/README.md)
+- [Lab 03-E-18：上三角矩阵压缩存储与取值](../../labs/chapter-03/exercise/E-03-18-upper-triangular-compress/README.md)
+- [Lab 03-E-19：行优先与列优先寻址（含字节地址）](../../labs/chapter-03/exercise/E-03-19-row-col-major-addressing/README.md)
+- [Lab 03-E-20：Head/Tail 复合运算求值](../../labs/chapter-03/exercise/E-03-20-head-tail-evaluation/README.md)
 - [Lab 03-P-01：串匹配与文本处理引擎（工程题）](../../labs/chapter-03/project/P-03-01-string-match-engine/README.md)
 - [Lab 03-P-02：稀疏矩阵运算库（工程题）](../../labs/chapter-03/project/P-03-02-sparse-matrix-library/README.md)
 
