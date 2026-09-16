@@ -1,0 +1,182 @@
+[
+  {
+    "points": 5,
+    "id": "001-sample",
+    "tags": [
+      "sample"
+    ],
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out"
+  },
+  {
+    "points": 5,
+    "id": "002-double-repeat",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/002-double-repeat.in",
+    "expected": "tests/002-double-repeat.out"
+  },
+  {
+    "points": 5,
+    "id": "003-triple-repeat",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/003-triple-repeat.in",
+    "expected": "tests/003-triple-repeat.out"
+  },
+  {
+    "points": 5,
+    "id": "004-quad-repeat",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/004-quad-repeat.in",
+    "expected": "tests/004-quad-repeat.out"
+  },
+  {
+    "points": 5,
+    "id": "005-base-four",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/005-base-four.in",
+    "expected": "tests/005-base-four.out"
+  },
+  {
+    "points": 5,
+    "id": "006-base-five",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/006-base-five.in",
+    "expected": "tests/006-base-five.out"
+  },
+  {
+    "points": 5,
+    "id": "007-two-char-many",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/007-two-char-many.in",
+    "expected": "tests/007-two-char-many.out"
+  },
+  {
+    "points": 5,
+    "id": "008-alnum-base",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/008-alnum-base.in",
+    "expected": "tests/008-alnum-base.out"
+  },
+  {
+    "points": 5,
+    "id": "009-long-period-divisible",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/009-long-period-divisible.in",
+    "expected": "tests/009-long-period-divisible.out"
+  },
+  {
+    "points": 5,
+    "id": "010-period-not-dividing",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/010-period-not-dividing.in",
+    "expected": "tests/010-period-not-dividing.out"
+  },
+  {
+    "points": 5,
+    "id": "011-single-char",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/011-single-char.in",
+    "expected": "tests/011-single-char.out"
+  },
+  {
+    "points": 5,
+    "id": "012-all-same-two",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/012-all-same-two.in",
+    "expected": "tests/012-all-same-two.out"
+  },
+  {
+    "points": 5,
+    "id": "013-two-distinct",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/013-two-distinct.in",
+    "expected": "tests/013-two-distinct.out"
+  },
+  {
+    "points": 5,
+    "id": "014-all-same-odd",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/014-all-same-odd.in",
+    "expected": "tests/014-all-same-odd.out"
+  },
+  {
+    "points": 5,
+    "id": "015-abcab-trap",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/015-abcab-trap.in",
+    "expected": "tests/015-abcab-trap.out"
+  },
+  {
+    "points": 5,
+    "id": "016-abcabcab-trap",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/016-abcabcab-trap.in",
+    "expected": "tests/016-abcabcab-trap.out"
+  },
+  {
+    "points": 5,
+    "id": "017-ababa-trap",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/017-ababa-trap.in",
+    "expected": "tests/017-ababa-trap.out"
+  },
+  {
+    "points": 5,
+    "id": "018-half-length-base",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/018-half-length-base.in",
+    "expected": "tests/018-half-length-base.out"
+  },
+  {
+    "points": 5,
+    "id": "019-stress-all-a",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/019-stress-all-a.in",
+    "expected": "tests/019-stress-all-a.out"
+  },
+  {
+    "points": 5,
+    "id": "020-stress-ten-char-period",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/020-stress-ten-char-period.in",
+    "expected": "tests/020-stress-ten-char-period.out"
+  }
+]

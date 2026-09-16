@@ -1,0 +1,182 @@
+[
+  {
+    "points": 5,
+    "id": "001-sample",
+    "tags": [
+      "sample"
+    ],
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out"
+  },
+  {
+    "points": 5,
+    "id": "002-no-match",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/002-no-match.in",
+    "expected": "tests/002-no-match.out"
+  },
+  {
+    "points": 5,
+    "id": "003-single-occurrence",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/003-single-occurrence.in",
+    "expected": "tests/003-single-occurrence.out"
+  },
+  {
+    "points": 5,
+    "id": "004-pattern-longer-than-text",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/004-pattern-longer-than-text.in",
+    "expected": "tests/004-pattern-longer-than-text.out"
+  },
+  {
+    "points": 5,
+    "id": "005-identical-single-char",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/005-identical-single-char.in",
+    "expected": "tests/005-identical-single-char.out"
+  },
+  {
+    "points": 5,
+    "id": "006-single-char-no-match",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/006-single-char-no-match.in",
+    "expected": "tests/006-single-char-no-match.out"
+  },
+  {
+    "points": 5,
+    "id": "007-empty-text",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/007-empty-text.in",
+    "expected": "tests/007-empty-text.out"
+  },
+  {
+    "points": 5,
+    "id": "008-text-equals-pattern",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/008-text-equals-pattern.in",
+    "expected": "tests/008-text-equals-pattern.out"
+  },
+  {
+    "points": 5,
+    "id": "009-match-at-very-end",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/009-match-at-very-end.in",
+    "expected": "tests/009-match-at-very-end.out"
+  },
+  {
+    "points": 5,
+    "id": "010-spaces-in-both-lines",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/010-spaces-in-both-lines.in",
+    "expected": "tests/010-spaces-in-both-lines.out"
+  },
+  {
+    "points": 5,
+    "id": "011-punctuation-and-digits",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/011-punctuation-and-digits.in",
+    "expected": "tests/011-punctuation-and-digits.out"
+  },
+  {
+    "points": 5,
+    "id": "012-large-pattern",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/012-large-pattern.in",
+    "expected": "tests/012-large-pattern.out"
+  },
+  {
+    "points": 5,
+    "id": "013-overlap-cascade",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/013-overlap-cascade.in",
+    "expected": "tests/013-overlap-cascade.out"
+  },
+  {
+    "points": 5,
+    "id": "014-periodic-text",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/014-periodic-text.in",
+    "expected": "tests/014-periodic-text.out"
+  },
+  {
+    "points": 5,
+    "id": "015-count-equals-text-length",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/015-count-equals-text-length.in",
+    "expected": "tests/015-count-equals-text-length.out"
+  },
+  {
+    "points": 5,
+    "id": "016-border-heavy-noise",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/016-border-heavy-noise.in",
+    "expected": "tests/016-border-heavy-noise.out"
+  },
+  {
+    "points": 5,
+    "id": "017-almost-match",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/017-almost-match.in",
+    "expected": "tests/017-almost-match.out"
+  },
+  {
+    "points": 5,
+    "id": "018-match-at-start-and-end",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/018-match-at-start-and-end.in",
+    "expected": "tests/018-match-at-start-and-end.out"
+  },
+  {
+    "points": 5,
+    "id": "019-stress-naive-worst-case",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/019-stress-naive-worst-case.in",
+    "expected": "tests/019-stress-naive-worst-case.out"
+  },
+  {
+    "points": 5,
+    "id": "020-stress-max-overlap",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/020-stress-max-overlap.in",
+    "expected": "tests/020-stress-max-overlap.out"
+  }
+]
