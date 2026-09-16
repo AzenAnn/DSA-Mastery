@@ -1060,3 +1060,34 @@ Azen：新增20题和400个独立核验测试，保留稳定ID及两道补充题
 ### Next Steps
 
 - 用户追加授权后已提交、推送并创建 [PR #190](https://github.com/AzenAnn/DSA-Mastery/pull/190)，目标 main；维护者审阅 draft 内容及受限题源后决定合并。新7.2/7.6理论文章上传后按映射更新链接。
+
+
+## Session 41: Ch7 连续编号与题集精简，本地预览待检查
+
+**Date**: 2026-09-16
+**Task**: Ch7 连续编号与题集精简，本地预览待检查
+**Branch**: `codex/ch07-exercise-renumber`
+
+### Summary
+
+基于最新 main，在独立工作目录按 guide 重编号 30 题并移除两道补充题，同步文章链接、校验脚本与 VS Code 进度迁移。
+
+### Main Changes
+
+- 07E01–07E30 与学习清单、目录、标题和 order 一致；原目录已有改动保持不动。
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] pnpm test、30 题 lab:verify、20 题独立 oracle/solutions/mutations、扩展 97 项与类型构建、Pages 62 项全部通过。Windows 符号链接测试按既有策略跳过 1 项。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- 用户检查 http://127.0.0.1:5177/DSA-Mastery/learn/chapter-07-graph-traversal/00-exercise-guide/；源码未提交、未推送。

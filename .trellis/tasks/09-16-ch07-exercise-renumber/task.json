@@ -1,0 +1,31 @@
+{
+  "id": "ch07-exercise-renumber",
+  "name": "ch07-exercise-renumber",
+  "title": "Ch7 按 guide 重新编号并删除补充题",
+  "description": "按 Ch7 guide 将 30 道代码题重编号为 07E01–07E30，移除两道补充题，同步进度并提供本地预览。",
+  "status": "review",
+  "dev_type": "fullstack",
+  "scope": "ch07",
+  "package": null,
+  "priority": "P2",
+  "creator": "Azen",
+  "assignee": "Azen",
+  "createdAt": "2026-09-16",
+  "completedAt": null,
+  "branch": "codex/ch07-exercise-renumber",
+  "base_branch": "main",
+  "worktree_path": "C:\\Users\\28962\\Desktop\\dsa-lab-ch07-renumber",
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "content/chapter-07-graph-traversal/00-exercise-guide.md",
+    "labs/chapter-07/exercise",
+    "scripts/check-ch07-exercises.py",
+    "tools/vscode-extension/src/ch07Migration.ts"
+  ],
+  "notes": "基于 origin/main 5bb70c1e；独立工作目录保护原工作树。全部验证完成：pnpm test、30 题 verify、20 题 oracle/solution/mutations、97 扩展测试、62 Pages 测试均通过；本地静态预览保留。用户追加授权提交、推送分支并创建面向 main 的 PR；等待维护者审查，不合并或生产发布。",
+  "meta": {}
+}

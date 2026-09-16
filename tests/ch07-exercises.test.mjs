@@ -6,14 +6,33 @@ import { loadLab } from "../tools/lab/core.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 const directory = path.join(root, "labs/chapter-07/exercise");
-// These are permanent identities; inserting an exercise must not renumber old Labs.
-const sequence = [1, 5, 13, 14, 15, 16, 17, 18, 19, 20, 21, 4, 22, 23, 24,
-  7, 8, 9, 11, 12, 10, 25, 26, 27, 28, 6, 29, 30, 31, 32];
+// The maintainer explicitly renumbered Ch7 on 2026-09-16 to match this guide.
+const sequence = [
+  "dfs-timestamps", "iterative-dfs", "dfs-edge-classification", "eulerian-classification",
+  "seven-bridges", "course-schedule", "course-schedule-ii", "eventual-safe-states",
+  "food-chain-count", "parallel-courses", "critical-path", "minimum-spanning-tree",
+  "connect-cities", "connect-points", "minimum-effort-path", "dijkstra-trace",
+  "dijkstra-matrix-path", "network-delay-time", "bellman-ford-negative", "floyd-all-pairs",
+  "emergency-rescue", "wormholes", "astar-grid", "heuristic-validation", "eight-puzzle",
+  "bfs-bipartite", "bipartite-matching", "pilot-pairing", "edmonds-karp", "min-cost-max-flow",
+];
+const oracleIds = new Set([3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 22, 23, 24, 25, 27, 28, 29, 30]);
 const normalize = (text) => text.replace(/\r\n?/g, "\n");
 
-test("Ch7 preserves identities and follows all thirty requested exercises", async () => {
+test("Ch7 numbers exactly the thirty guide exercises in learning order", async () => {
   const folders = (await readdir(directory)).filter((name) => /^E-07-\d+-/.test(name));
-  assert.equal(folders.length, 32);
+  const expectedFolders = sequence.map((slug, index) => `E-07-${String(index + 1).padStart(2, "0")}-${slug}`);
+  assert.deepEqual(folders.sort(), expectedFolders);
+  const guide = normalize(await readFile(path.join(root, "content/chapter-07-graph-traversal/00-exercise-guide.md"), "utf8"));
+  assert.ok(guide.includes("07E01–07E30"));
+  const guideRows = [...guide.matchAll(/\| T(\d+) \| \[07E(\d+) · [^\]]+\]\(\.\.\/\.\.\/labs\/chapter-07\/exercise\/([^/]+)\/README\.md\)/g)];
+  assert.equal(guideRows.length, 30);
+  for (const [index, row] of guideRows.entries()) {
+    assert.equal(Number(row[1]), index + 1);
+    assert.equal(row[1], row[2]);
+    assert.equal(row[3], expectedFolders[index]);
+  }
+  assert.doesNotMatch(guide, /connected-components|directed-cycle-detection/);
   const seen = new Set();
   for (const folder of folders) {
     const labRoot = path.join(directory, folder);
@@ -25,12 +44,12 @@ test("Ch7 preserves identities and follows all thirty requested exercises", asyn
     seen.add(id);
     assert.equal(Number(/^E-07-(\d+)-/.exec(folder)[1]), id);
     const order = Number(/^order: (\d+)/m.exec(readme)?.[1]);
-    const expected = id === 2 ? 191 : id === 3 ? 192 : 101 + sequence.indexOf(id);
+    const expected = 100 + id;
     assert.equal(order, expected, folder);
-    if (id < 13) continue;
     const title = /^title: "(.+)"$/m.exec(readme)[1];
-    assert.match(title, new RegExp(`^Lab 07-E-${id}：`));
+    assert.match(title, new RegExp(`^Lab 07-E-${String(id).padStart(2, "0")}：`));
     assert.ok(readme.includes(`# ${title}\n`));
+    if (!oracleIds.has(id)) continue;
     const cases = JSON.parse(await readFile(path.join(labRoot, "tests/cases.json"), "utf8"));
     assert.ok(cases.length >= 20, folder);
     assert.equal(cases.reduce((sum, item) => sum + item.points, 0), 100);
@@ -50,5 +69,5 @@ test("Ch7 preserves identities and follows all thirty requested exercises", asyn
     }
     assert.match(await readFile(path.join(labRoot, "student/main.cpp"), "utf8"), /TODO/);
   }
-  assert.equal(seen.size, 32);
+  assert.equal(seen.size, 30);
 });
