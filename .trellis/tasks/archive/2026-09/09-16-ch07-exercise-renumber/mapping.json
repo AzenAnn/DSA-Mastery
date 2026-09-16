@@ -1,0 +1,242 @@
+[
+  {
+    "old": 1,
+    "new": 1,
+    "title": "DFS 遍历与时间戳",
+    "slug": "dfs-timestamps",
+    "before": "E-07-01-dfs-timestamps",
+    "after": "E-07-01-dfs-timestamps"
+  },
+  {
+    "old": 5,
+    "new": 2,
+    "title": "显式栈 DFS",
+    "slug": "iterative-dfs",
+    "before": "E-07-05-iterative-dfs",
+    "after": "E-07-02-iterative-dfs"
+  },
+  {
+    "old": 13,
+    "new": 3,
+    "title": "DFS 边分类统计",
+    "slug": "dfs-edge-classification",
+    "before": "E-07-13-dfs-edge-classification",
+    "after": "E-07-03-dfs-edge-classification"
+  },
+  {
+    "old": 14,
+    "new": 4,
+    "title": "欧拉回路判定",
+    "slug": "eulerian-classification",
+    "before": "E-07-14-eulerian-classification",
+    "after": "E-07-04-eulerian-classification"
+  },
+  {
+    "old": 15,
+    "new": 5,
+    "title": "哥尼斯堡七桥问题",
+    "slug": "seven-bridges",
+    "before": "E-07-15-seven-bridges",
+    "after": "E-07-05-seven-bridges"
+  },
+  {
+    "old": 16,
+    "new": 6,
+    "title": "课程表",
+    "slug": "course-schedule",
+    "before": "E-07-16-course-schedule",
+    "after": "E-07-06-course-schedule"
+  },
+  {
+    "old": 17,
+    "new": 7,
+    "title": "课程表 II",
+    "slug": "course-schedule-ii",
+    "before": "E-07-17-course-schedule-ii",
+    "after": "E-07-07-course-schedule-ii"
+  },
+  {
+    "old": 18,
+    "new": 8,
+    "title": "找到最终的安全状态",
+    "slug": "eventual-safe-states",
+    "before": "E-07-18-eventual-safe-states",
+    "after": "E-07-08-eventual-safe-states"
+  },
+  {
+    "old": 19,
+    "new": 9,
+    "title": "最大食物链计数",
+    "slug": "food-chain-count",
+    "before": "E-07-19-food-chain-count",
+    "after": "E-07-09-food-chain-count"
+  },
+  {
+    "old": 20,
+    "new": 10,
+    "title": "并行课程 III",
+    "slug": "parallel-courses",
+    "before": "E-07-20-parallel-courses",
+    "after": "E-07-10-parallel-courses"
+  },
+  {
+    "old": 21,
+    "new": 11,
+    "title": "关键路径分析（AOE 网）",
+    "slug": "critical-path",
+    "before": "E-07-21-critical-path",
+    "after": "E-07-11-critical-path"
+  },
+  {
+    "old": 4,
+    "new": 12,
+    "title": "最小生成树",
+    "slug": "minimum-spanning-tree",
+    "before": "E-07-04-minimum-spanning-tree",
+    "after": "E-07-12-minimum-spanning-tree"
+  },
+  {
+    "old": 22,
+    "new": 13,
+    "title": "最低成本连通所有城市",
+    "slug": "connect-cities",
+    "before": "E-07-22-connect-cities",
+    "after": "E-07-13-connect-cities"
+  },
+  {
+    "old": 23,
+    "new": 14,
+    "title": "连接所有点的最小费用",
+    "slug": "connect-points",
+    "before": "E-07-23-connect-points",
+    "after": "E-07-14-connect-points"
+  },
+  {
+    "old": 24,
+    "new": 15,
+    "title": "最小体力消耗路径",
+    "slug": "minimum-effort-path",
+    "before": "E-07-24-minimum-effort-path",
+    "after": "E-07-15-minimum-effort-path"
+  },
+  {
+    "old": 7,
+    "new": 16,
+    "title": "Dijkstra 逐轮推演",
+    "slug": "dijkstra-trace",
+    "before": "E-07-07-dijkstra-trace",
+    "after": "E-07-16-dijkstra-trace"
+  },
+  {
+    "old": 8,
+    "new": 17,
+    "title": "朴素 Dijkstra 与路径还原",
+    "slug": "dijkstra-matrix-path",
+    "before": "E-07-08-dijkstra-matrix-path",
+    "after": "E-07-17-dijkstra-matrix-path"
+  },
+  {
+    "old": 9,
+    "new": 18,
+    "title": "网络延迟时间",
+    "slug": "network-delay-time",
+    "before": "E-07-09-network-delay-time",
+    "after": "E-07-18-network-delay-time"
+  },
+  {
+    "old": 11,
+    "new": 19,
+    "title": "Bellman-Ford 与负环",
+    "slug": "bellman-ford-negative",
+    "before": "E-07-11-bellman-ford-negative",
+    "after": "E-07-19-bellman-ford-negative"
+  },
+  {
+    "old": 12,
+    "new": 20,
+    "title": "Floyd 全源最短路径",
+    "slug": "floyd-all-pairs",
+    "before": "E-07-12-floyd-all-pairs",
+    "after": "E-07-20-floyd-all-pairs"
+  },
+  {
+    "old": 10,
+    "new": 21,
+    "title": "紧急救援",
+    "slug": "emergency-rescue",
+    "before": "E-07-10-emergency-rescue",
+    "after": "E-07-21-emergency-rescue"
+  },
+  {
+    "old": 25,
+    "new": 22,
+    "title": "虫洞（Wormholes）",
+    "slug": "wormholes",
+    "before": "E-07-25-wormholes",
+    "after": "E-07-22-wormholes"
+  },
+  {
+    "old": 26,
+    "new": 23,
+    "title": "A* 网格寻路",
+    "slug": "astar-grid",
+    "before": "E-07-26-astar-grid",
+    "after": "E-07-23-astar-grid"
+  },
+  {
+    "old": 27,
+    "new": 24,
+    "title": "启发式函数有效性判定",
+    "slug": "heuristic-validation",
+    "before": "E-07-27-heuristic-validation",
+    "after": "E-07-24-heuristic-validation"
+  },
+  {
+    "old": 28,
+    "new": 25,
+    "title": "八数码问题（A*）",
+    "slug": "eight-puzzle",
+    "before": "E-07-28-eight-puzzle",
+    "after": "E-07-25-eight-puzzle"
+  },
+  {
+    "old": 6,
+    "new": 26,
+    "title": "BFS 二分图判定",
+    "slug": "bfs-bipartite",
+    "before": "E-07-06-bfs-bipartite",
+    "after": "E-07-26-bfs-bipartite"
+  },
+  {
+    "old": 29,
+    "new": 27,
+    "title": "二分图最大匹配（匈牙利）",
+    "slug": "bipartite-matching",
+    "before": "E-07-29-bipartite-matching",
+    "after": "E-07-27-bipartite-matching"
+  },
+  {
+    "old": 30,
+    "new": 28,
+    "title": "飞行员配对方案",
+    "slug": "pilot-pairing",
+    "before": "E-07-30-pilot-pairing",
+    "after": "E-07-28-pilot-pairing"
+  },
+  {
+    "old": 31,
+    "new": 29,
+    "title": "最大流（Edmonds-Karp）",
+    "slug": "edmonds-karp",
+    "before": "E-07-31-edmonds-karp",
+    "after": "E-07-29-edmonds-karp"
+  },
+  {
+    "old": 32,
+    "new": 30,
+    "title": "最小费用最大流",
+    "slug": "min-cost-max-flow",
+    "before": "E-07-32-min-cost-max-flow",
+    "after": "E-07-30-min-cost-max-flow"
+  }
+]

@@ -21,6 +21,14 @@ ROOT = Path(__file__).resolve().parents[1]
 LABS = ROOT / "labs/chapter-07/exercise"
 CACHE = ROOT / ".lab-cache/ch07-audit"
 
+# Public Lab numbers follow the guide. Fixture IDs remain frozen so renumbering
+# cannot change random seeds, oracle dispatch, or the historical mutation suite.
+FIXTURE_IDS = {
+    3: 13, 4: 14, 5: 15, 6: 16, 7: 17, 8: 18, 9: 19, 10: 20, 11: 21,
+    13: 22, 14: 23, 15: 24, 22: 25, 23: 26, 24: 27, 25: 28,
+    27: 29, 28: 30, 29: 31, 30: 32,
+}
+
 # Single, realistic bug per reference. The test suite must reject each mutant.
 MUTATIONS = {
     13: ('discovered[u] < discovered[v] ? "FORWARD" : "CROSS"', '"CROSS"'),
@@ -79,21 +87,22 @@ def main():
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--solutions", action="store_true")
     parser.add_argument("--mutations", action="store_true")
-    parser.add_argument("--lab", type=int, choices=range(13, 33))
+    parser.add_argument("--lab", type=int, choices=sorted(FIXTURE_IDS))
     args = parser.parse_args()
     compiler = shutil.which(os.environ.get("CXX", "clang++")) or shutil.which("g++")
     if args.solutions or args.mutations:
         assert compiler, "Set CXX to a GCC/Clang C++ compiler."
     CACHE.mkdir(parents=True, exist_ok=True)
     report = []
-    for lab_id in ([args.lab] if args.lab else range(13, 33)):
+    for lab_id in ([args.lab] if args.lab else sorted(FIXTURE_IDS)):
+        fixture_id = FIXTURE_IDS[lab_id]
         matches = list(LABS.glob(f"E-07-{lab_id:02d}-*"))
         assert len(matches) == 1, (lab_id, matches)
         lab = matches[0]
         cases, expected = [], []
-        for index, (name, data, tag) in enumerate(fixtures(lab_id), 1):
+        for index, (name, data, tag) in enumerate(fixtures(fixture_id), 1):
             case_id = f"{index:03d}-{name}"
-            output = ORACLES[lab_id](data)
+            output = ORACLES[fixture_id](data)
             entry = {"id": case_id, "input": f"tests/{case_id}.in",
                      "expected": f"tests/{case_id}.out", "points": 5, "tags": [tag]}
             cases.append(entry)
@@ -109,7 +118,7 @@ def main():
             case_path.write_text(json.dumps(cases, indent=2) + "\n", encoding="utf-8", newline="\n")
         assert json.loads(case_path.read_text(encoding="utf-8")) == cases
         assert sum(c["points"] for c in cases) == 100
-        entry = {"labId": f"07E{lab_id}", "cases": len(cases), "oracle": "PASS"}
+        entry = {"labId": f"07E{lab_id:02d}", "cases": len(cases), "oracle": "PASS"}
         extension = ".exe" if os.name == "nt" else ""
         if args.solutions:
             binary = CACHE / f"solution-{lab_id}{extension}"
@@ -120,7 +129,7 @@ def main():
         if args.mutations:
             source = (lab / "solution/main.cpp").read_text(encoding="utf-8")
             mutant = CACHE / f"mutant-{lab_id}.cpp"
-            mutant.write_text(mutant_source(lab_id, source), encoding="utf-8")
+            mutant.write_text(mutant_source(fixture_id, source), encoding="utf-8")
             binary = CACHE / f"mutant-{lab_id}{extension}"
             compile_cpp(compiler, mutant, binary)
             killed = []

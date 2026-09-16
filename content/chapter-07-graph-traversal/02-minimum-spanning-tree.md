@@ -217,7 +217,7 @@ Prim 与 Kruskal 都能正确求出 MST，选谁取决于图的**稠密程度**�
 
 按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
 
-- [T12 · 07E04 · 最小生成树](../../labs/chapter-07/exercise/E-07-04-minimum-spanning-tree/README.md)
-- [T13 · 07E22 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-22-connect-cities/README.md)
-- [T14 · 07E23 · 连接所有点的最小费用](../../labs/chapter-07/exercise/E-07-23-connect-points/README.md)
-- [T15 · 07E24 · 最小体力消耗路径](../../labs/chapter-07/exercise/E-07-24-minimum-effort-path/README.md)
+- [T12 · 07E12 · 最小生成树](../../labs/chapter-07/exercise/E-07-12-minimum-spanning-tree/README.md)
+- [T13 · 07E13 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-13-connect-cities/README.md)
+- [T14 · 07E14 · 连接所有点的最小费用](../../labs/chapter-07/exercise/E-07-14-connect-points/README.md)
+- [T15 · 07E15 · 最小体力消耗路径](../../labs/chapter-07/exercise/E-07-15-minimum-effort-path/README.md)

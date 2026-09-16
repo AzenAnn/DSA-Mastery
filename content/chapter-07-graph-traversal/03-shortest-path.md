@@ -554,10 +554,10 @@ $\mathrm{dist}[F]=6$，最短路径就是直达边 $A\to F$。绕行路径从未
 
 按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
 
-- [T16 · 07E07 · Dijkstra 逐轮推演](../../labs/chapter-07/exercise/E-07-07-dijkstra-trace/README.md)
-- [T17 · 07E08 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-08-dijkstra-matrix-path/README.md)
-- [T18 · 07E09 · 网络延迟时间](../../labs/chapter-07/exercise/E-07-09-network-delay-time/README.md)
-- [T19 · 07E11 · Bellman-Ford 与负环](../../labs/chapter-07/exercise/E-07-11-bellman-ford-negative/README.md)
-- [T20 · 07E12 · Floyd 全源最短路径](../../labs/chapter-07/exercise/E-07-12-floyd-all-pairs/README.md)
-- [T21 · 07E10 · 紧急救援](../../labs/chapter-07/exercise/E-07-10-emergency-rescue/README.md)
-- [T22 · 07E25 · 虫洞（Wormholes）](../../labs/chapter-07/exercise/E-07-25-wormholes/README.md)
+- [T16 · 07E16 · Dijkstra 逐轮推演](../../labs/chapter-07/exercise/E-07-16-dijkstra-trace/README.md)
+- [T17 · 07E17 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-17-dijkstra-matrix-path/README.md)
+- [T18 · 07E18 · 网络延迟时间](../../labs/chapter-07/exercise/E-07-18-network-delay-time/README.md)
+- [T19 · 07E19 · Bellman-Ford 与负环](../../labs/chapter-07/exercise/E-07-19-bellman-ford-negative/README.md)
+- [T20 · 07E20 · Floyd 全源最短路径](../../labs/chapter-07/exercise/E-07-20-floyd-all-pairs/README.md)
+- [T21 · 07E21 · 紧急救援](../../labs/chapter-07/exercise/E-07-21-emergency-rescue/README.md)
+- [T22 · 07E22 · 虫洞（Wormholes）](../../labs/chapter-07/exercise/E-07-22-wormholes/README.md)
