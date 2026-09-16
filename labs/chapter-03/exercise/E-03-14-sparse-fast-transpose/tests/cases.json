@@ -1,0 +1,182 @@
+[
+  {
+    "points": 5,
+    "id": "001-sample",
+    "tags": [
+      "sample"
+    ],
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out"
+  },
+  {
+    "points": 5,
+    "id": "002-zero-nnz",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/002-zero-nnz.in",
+    "expected": "tests/002-zero-nnz.out"
+  },
+  {
+    "points": 5,
+    "id": "003-single-element",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/003-single-element.in",
+    "expected": "tests/003-single-element.out"
+  },
+  {
+    "points": 5,
+    "id": "004-single-row",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/004-single-row.in",
+    "expected": "tests/004-single-row.out"
+  },
+  {
+    "points": 5,
+    "id": "005-single-column",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/005-single-column.in",
+    "expected": "tests/005-single-column.out"
+  },
+  {
+    "points": 5,
+    "id": "006-full-matrix",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/006-full-matrix.in",
+    "expected": "tests/006-full-matrix.out"
+  },
+  {
+    "points": 5,
+    "id": "007-diagonal",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/007-diagonal.in",
+    "expected": "tests/007-diagonal.out"
+  },
+  {
+    "points": 5,
+    "id": "008-negative-values",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/008-negative-values.in",
+    "expected": "tests/008-negative-values.out"
+  },
+  {
+    "points": 5,
+    "id": "009-large-values",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/009-large-values.in",
+    "expected": "tests/009-large-values.out"
+  },
+  {
+    "points": 5,
+    "id": "010-heavy-first-column",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/010-heavy-first-column.in",
+    "expected": "tests/010-heavy-first-column.out"
+  },
+  {
+    "points": 5,
+    "id": "011-empty-columns-in-middle",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/011-empty-columns-in-middle.in",
+    "expected": "tests/011-empty-columns-in-middle.out"
+  },
+  {
+    "points": 5,
+    "id": "012-cols-greater-than-rows",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/012-cols-greater-than-rows.in",
+    "expected": "tests/012-cols-greater-than-rows.out"
+  },
+  {
+    "points": 5,
+    "id": "013-zero-rows",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/013-zero-rows.in",
+    "expected": "tests/013-zero-rows.out"
+  },
+  {
+    "points": 5,
+    "id": "014-zero-cols",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/014-zero-cols.in",
+    "expected": "tests/014-zero-cols.out"
+  },
+  {
+    "points": 5,
+    "id": "015-lower-triangular",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/015-lower-triangular.in",
+    "expected": "tests/015-lower-triangular.out"
+  },
+  {
+    "points": 5,
+    "id": "016-checkerboard",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/016-checkerboard.in",
+    "expected": "tests/016-checkerboard.out"
+  },
+  {
+    "points": 5,
+    "id": "017-sparse-many-columns",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/017-sparse-many-columns.in",
+    "expected": "tests/017-sparse-many-columns.out"
+  },
+  {
+    "points": 5,
+    "id": "018-repeated-values",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/018-repeated-values.in",
+    "expected": "tests/018-repeated-values.out"
+  },
+  {
+    "points": 5,
+    "id": "019-stress-max-size",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/019-stress-max-size.in",
+    "expected": "tests/019-stress-max-size.out"
+  },
+  {
+    "points": 5,
+    "id": "020-single-heavy-column",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/020-single-heavy-column.in",
+    "expected": "tests/020-single-heavy-column.out"
+  }
+]

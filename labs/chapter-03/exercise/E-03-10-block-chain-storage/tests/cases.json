@@ -1,0 +1,182 @@
+[
+  {
+    "points": 5,
+    "id": "001-sample",
+    "tags": [
+      "sample"
+    ],
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out"
+  },
+  {
+    "points": 5,
+    "id": "002-block-head",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/002-block-head.in",
+    "expected": "tests/002-block-head.out"
+  },
+  {
+    "points": 5,
+    "id": "003-block-tail",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/003-block-tail.in",
+    "expected": "tests/003-block-tail.out"
+  },
+  {
+    "points": 5,
+    "id": "004-single-char-block",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/004-single-char-block.in",
+    "expected": "tests/004-single-char-block.out"
+  },
+  {
+    "points": 5,
+    "id": "005-block-larger-than-text",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/005-block-larger-than-text.in",
+    "expected": "tests/005-block-larger-than-text.out"
+  },
+  {
+    "points": 5,
+    "id": "006-exact-multiple",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/006-exact-multiple.in",
+    "expected": "tests/006-exact-multiple.out"
+  },
+  {
+    "points": 5,
+    "id": "007-last-char",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/007-last-char.in",
+    "expected": "tests/007-last-char.out"
+  },
+  {
+    "points": 5,
+    "id": "008-first-char",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/008-first-char.in",
+    "expected": "tests/008-first-char.out"
+  },
+  {
+    "points": 5,
+    "id": "009-two-per-block",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/009-two-per-block.in",
+    "expected": "tests/009-two-per-block.out"
+  },
+  {
+    "points": 5,
+    "id": "010-odd-length",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/010-odd-length.in",
+    "expected": "tests/010-odd-length.out"
+  },
+  {
+    "points": 5,
+    "id": "011-digits-and-symbols",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/011-digits-and-symbols.in",
+    "expected": "tests/011-digits-and-symbols.out"
+  },
+  {
+    "points": 5,
+    "id": "012-all-blocks-full",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/012-all-blocks-full.in",
+    "expected": "tests/012-all-blocks-full.out"
+  },
+  {
+    "points": 5,
+    "id": "013-single-char-text",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/013-single-char-text.in",
+    "expected": "tests/013-single-char-text.out"
+  },
+  {
+    "points": 5,
+    "id": "014-large-block-size",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/014-large-block-size.in",
+    "expected": "tests/014-large-block-size.out"
+  },
+  {
+    "points": 5,
+    "id": "015-repeated-pattern",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/015-repeated-pattern.in",
+    "expected": "tests/015-repeated-pattern.out"
+  },
+  {
+    "points": 5,
+    "id": "016-thousand-blocks",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/016-thousand-blocks.in",
+    "expected": "tests/016-thousand-blocks.out"
+  },
+  {
+    "points": 5,
+    "id": "017-mixed-alphabet",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/017-mixed-alphabet.in",
+    "expected": "tests/017-mixed-alphabet.out"
+  },
+  {
+    "points": 5,
+    "id": "018-tail-of-large-text",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/018-tail-of-large-text.in",
+    "expected": "tests/018-tail-of-large-text.out"
+  },
+  {
+    "points": 5,
+    "id": "019-stress-max-length",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/019-stress-max-length.in",
+    "expected": "tests/019-stress-max-length.out"
+  },
+  {
+    "points": 5,
+    "id": "020-stress-small-block",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/020-stress-small-block.in",
+    "expected": "tests/020-stress-small-block.out"
+  }
+]
