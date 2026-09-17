@@ -248,7 +248,10 @@ test("chapter 7 new exercises preserve order and remain reachable from Labs", as
   }
   await page.locator(".vp-doc").getByRole("link", { name: "A* 寻路可视化", exact: true }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/chapter-07-graph-applications/04-astar-visualization/`);
-  await page.locator(".vp-doc").getByRole("link", { name: /T25 · 07E28/ }).click();
+  await page.locator(".vp-doc").getByRole("link", {
+    name: "T25 · 07E28 · 八数码问题（A*）",
+    exact: true,
+  }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 07-E-28：八数码问题（A*）");
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator(".vp-doc")).toContainText("123804765");
