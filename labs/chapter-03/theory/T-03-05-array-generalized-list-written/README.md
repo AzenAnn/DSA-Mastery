@@ -1,7 +1,7 @@
 ---
 title: "Lab 03-T-05：数组与广义表理论大题训练"
 description: "5 道数组与广义表理论大题，训练寻址推导、特殊矩阵压缩、稀疏矩阵转置和递归结构分析。"
-order: 16
+order: 27
 chapter: 3
 labId: "03T05"
 chapterTitle: "字符串与数组"
