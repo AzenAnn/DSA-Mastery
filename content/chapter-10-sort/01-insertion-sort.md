@@ -4,7 +4,7 @@ description: "插入排序的原理、循环不变式正确性证明、复杂度
 order: 1
 chapter: 10
 chapterTitle: "排序"
-updated: "2026-08-21"
+updated: "2026-09-16"
 contributors: ["Ph1z"]
 status: "draft"
 ---
@@ -17,19 +17,74 @@ status: "draft"
 
 ## 代码
 
+```text
+Algorithm InsertionSort(A, n):
+    Input: An array A of n elements
+    Output: Array A sorted in ascending order
+
+    // 从第二个元素开始遍历（下标从 1 到 n-1）
+    for i = 1 to n - 1 do
+        key = A[i]                  // 记录当前要插入的元素
+        j = i - 1                   // 从当前元素的前一个位置开始向前比较
+
+        // 向前寻找插入位置，并将大于 key 的元素向后移动
+        while j >= 0 and A[j] > key do
+            A[j + 1] = A[j]         // 元素后移
+            j = j - 1               // 继续向前比较
+        end while
+
+        // 将 key 插入到正确的位置
+        A[j + 1] = key
+    end for
+
+    return A
+```
+
 ```cpp
 void insertionSort(int a[], int n) {
     for (int i = 1; i < n; ++i) {
-        int key = a[i];
-        int j = i - 1;
+        int key = a[i];          // 当前待插入元素
+        int j = i - 1;           // 从已排序区末尾向前扫描
+        
+        // 寻找插入位置，并将大于 key 的元素后移
         while (j >= 0 && a[j] > key) {
             a[j + 1] = a[j];
             j--;
         }
-        a[j + 1] = key;
+        a[j + 1] = key;          // 插入到正确位置
     }
 }
 ```
+## 优化代码
+
+```cpp
+void binaryInsertionSort(int a[], int n) {
+    for (int i = 1; i < n; ++i) {
+        int key = a[i];          // 当前待插入元素
+        int left = 0;            // 二分查找左边界
+        int right = i - 1;       // 二分查找右边界
+
+        // 1. 二分查找插入位置（left 最终为插入点）
+        while (left <= right) {
+            int mid = left + (right - left) / 2; // 防止溢出
+            if (a[mid] > key) {
+                right = mid - 1; // 插入点在左侧
+            } else {
+                left = mid + 1;  // 插入点在右侧（保持稳定）
+            }
+        }
+
+        // 2. 将 [left, i-1] 的元素整体后移一位
+        for (int j = i - 1; j >= left; --j) {
+            a[j + 1] = a[j];
+        }
+
+        // 3. 将 key 放入正确位置
+        a[left] = key;
+    }
+}
+```
+
 
 ## 正确性证明：循环不变式
 

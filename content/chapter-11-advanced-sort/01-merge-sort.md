@@ -4,7 +4,7 @@ description: "归并排序的分治原理、正确性证明、主定理复杂度
 order: 1
 chapter: 11
 chapterTitle: "高效排序与外部排序"
-updated: "2026-08-21"
+updated: "2026-09-16"
 contributors: ["Ph1z"]
 status: "draft"
 ---
@@ -17,13 +17,106 @@ status: "draft"
 
 ## 代码
 
+```text
+Algorithm MergeSort(A, l, r):
+    Input: An array A, left index l, right index r
+    Output: Array A[l...r] sorted in ascending order
+
+    // 递归终止条件：区间内元素少于等于 1 个
+    if l >= r then
+        return
+    end if
+
+    // 将区间一分为二
+    mid = (l + r) / 2
+
+    // 递归排序左半区和右半区
+    MergeSort(A, l, mid)
+    MergeSort(A, mid + 1, r)
+
+    // 合并两个已有序的子区间
+    Merge(A, l, mid, r)
+```
+
 ```cpp
+// 合并两个已有序的子区间 [l, mid] 和 [mid+1, r]
+void merge(int a[], int l, int mid, int r) {
+    std::vector<int> temp(r - l + 1);     // 辅助数组
+    int i = l, j = mid + 1, k = 0;
+
+    // 双指针合并：谁小取谁
+    while (i <= mid && j <= r) {
+        if (a[i] <= a[j]) temp[k++] = a[i++];   // <= 保证稳定性
+        else              temp[k++] = a[j++];
+    }
+    while (i <= mid) temp[k++] = a[i++];        // 左半区剩余
+    while (j <= r)   temp[k++] = a[j++];        // 右半区剩余
+
+    // 拷贝回原数组
+    for (int t = 0; t < k; ++t) a[l + t] = temp[t];
+}
+
 void mergeSort(int a[], int l, int r) {
-    if (l >= r) return;
-    int mid = (l + r) / 2;
-    mergeSort(a, l, mid);
-    mergeSort(a, mid + 1, r);
-    merge(a, l, mid, r);
+    if (l >= r) return;              // 递归终止：区间内元素 <= 1
+    int mid = (l + r) / 2;           // 将区间一分为二
+    mergeSort(a, l, mid);            // 递归排序左半区
+    mergeSort(a, mid + 1, r);        // 递归排序右半区
+    merge(a, l, mid, r);             // 合并两个有序子区间
+}
+```
+
+## 优化代码
+
+归并排序的核心问题是：**需要额外的辅助空间 \(O(n)\)，且递归调用有函数开销**。以下是几种常见的优化方向：
+
+```cpp
+// 优化 1：全局辅助数组 + 迭代版（避免递归和频繁分配内存）
+// 一次性分配辅助数组，避免每次 merge 都重新分配
+void mergeSortIterative(int a[], int n) {
+    std::vector<int> temp(n);                 // 一次性分配辅助空间
+
+    // 自底向上：从长度为 1 的子区间开始，逐步合并
+    for (int width = 1; width < n; width *= 2) {
+        for (int l = 0; l < n; l += 2 * width) {
+            int mid = std::min(l + width - 1, n - 1);
+            int r   = std::min(l + 2 * width - 1, n - 1);
+            if (mid >= r) continue;           // 无右半区，无需合并
+
+            // 原地合并到 temp，再拷回 a
+            int i = l, j = mid + 1, k = l;
+            while (i <= mid && j <= r) {
+                temp[k++] = (a[i] <= a[j]) ? a[i++] : a[j++];
+            }
+            while (i <= mid) temp[k++] = a[i++];
+            while (j <= r)   temp[k++] = a[j++];
+            for (int t = l; t <= r; ++t) a[t] = temp[t];
+        }
+    }
+}
+```
+
+```cpp
+// 优化 2：原地归并（不使用额外数组，但实现复杂）
+// 时间换空间：时间复杂度略高于 O(n log n)，但空间为 O(1)
+void inPlaceMerge(int a[], int l, int mid, int r) {
+    int i = l, j = mid + 1;
+    while (i < j && j <= r) {
+        if (a[i] <= a[j]) {
+            ++i;
+        } else {
+            // 将 a[j] 插入到 a[i] 前面，整体后移
+            int value = a[j];
+            int index = j;
+            while (index > i) {
+                a[index] = a[index - 1];
+                --index;
+            }
+            a[i] = value;
+            ++i;
+            ++j;
+            ++mid;                            // mid 也要右移
+        }
+    }
 }
 ```
 

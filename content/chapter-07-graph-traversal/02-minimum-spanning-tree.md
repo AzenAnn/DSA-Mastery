@@ -285,7 +285,7 @@ int main() {
 - 若输入不保证连通，应在结束时检查 `used == n-1`；否则得到的只是最小生成森林；
 - 若还要输出树边，只需在 `unite` 成功时保存当前边；
 - 若边已经有序，可省去排序，时间接近 $O(m\alpha(n))$；
-- 对应练习：[T12 · 07E04 · 最小生成树](../../labs/chapter-07/exercise/E-07-04-minimum-spanning-tree/README.md)；再迁移到 [T13 · 07E22 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-22-connect-cities/README.md)。
+- 对应练习：[T12 · 07E12 · 最小生成树](../../labs/chapter-07/exercise/E-07-12-minimum-spanning-tree/README.md)；再迁移到 [T13 · 07E13 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-13-connect-cities/README.md)。
 
 ### 范例二：Prim 连接平面上的所有点
 
@@ -374,7 +374,7 @@ int main() {
 - 若费用改为欧几里得距离，MST 框架不变，但边权计算和数值类型会变化；
 - 若输入只提供部分可用边，就不能假设图天然连通，必须检测无法选出新顶点的情况；
 - 若 `n` 很大，需要利用几何结构减少候选边，而不能继续扫描完全图；
-- 对应练习：[T14 · 07E23 · 连接所有点的最小费用](../../labs/chapter-07/exercise/E-07-23-connect-points/README.md)。
+- 对应练习：[T14 · 07E14 · 连接所有点的最小费用](../../labs/chapter-07/exercise/E-07-14-connect-points/README.md)。
 
 ## 算法的适用范围与选择
 
@@ -437,7 +437,7 @@ Prim 与 Kruskal 都能正确求出 MST，选谁取决于图的**稠密程度**�
 
 按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
 
-- [T12 · 07E04 · 最小生成树](../../labs/chapter-07/exercise/E-07-04-minimum-spanning-tree/README.md)
-- [T13 · 07E22 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-22-connect-cities/README.md)
-- [T14 · 07E23 · 连接所有点的最小费用](../../labs/chapter-07/exercise/E-07-23-connect-points/README.md)
-- [T15 · 07E24 · 最小体力消耗路径](../../labs/chapter-07/exercise/E-07-24-minimum-effort-path/README.md)
+- [T12 · 07E12 · 最小生成树](../../labs/chapter-07/exercise/E-07-12-minimum-spanning-tree/README.md)
+- [T13 · 07E13 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-13-connect-cities/README.md)
+- [T14 · 07E14 · 连接所有点的最小费用](../../labs/chapter-07/exercise/E-07-14-connect-points/README.md)
+- [T15 · 07E15 · 最小体力消耗路径](../../labs/chapter-07/exercise/E-07-15-minimum-effort-path/README.md)

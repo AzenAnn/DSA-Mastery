@@ -502,7 +502,7 @@ int main() {
 - 若只保存“待访问顶点”而不保存 `next`，就无法准确产生递归版的完成时间；
 - 把无向图改成有向图后，同一套时间戳可继续用于祖先判断和边分类；
 - 若题目只要求发现顺序，可以简化为普通顶点栈，不再记录退出事件；
-- 对应练习：[T01 · 07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md)；完成后可继续做 [T03 · 07E13 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-13-dfs-edge-classification/README.md)。
+- 对应练习：[T01 · 07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md)；完成后可继续做 [T03 · 07E03 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-03-dfs-edge-classification/README.md)。
 
 ### 范例二：BFS 判定二分图
 
@@ -605,7 +605,7 @@ int main() {
 - 将 BFS 换成 DFS 不会改变是否为二分图，但可能改变颜色方案和首先发现的冲突边；
 - 保存父节点后，可以从同色冲突边的两个端点回溯并还原一个奇环；
 - 动态加边场景可使用带奇偶关系的并查集，但它不直接提供 BFS 层次；
-- 对应练习：[T26 · 07E06 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-06-bfs-bipartite/README.md)。
+- 对应练习：[T26 · 07E26 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-26-bfs-bipartite/README.md)。
 
 ## 一张表对比
 
@@ -678,18 +678,18 @@ int main() {
 按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
 
 - [T01 · 07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md)
-- [T02 · 07E05 · 显式栈 DFS](../../labs/chapter-07/exercise/E-07-05-iterative-dfs/README.md)
-- [T03 · 07E13 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-13-dfs-edge-classification/README.md)
-- [T04 · 07E14 · 欧拉回路判定](../../labs/chapter-07/exercise/E-07-14-eulerian-classification/README.md)
-- [T05 · 07E15 · 哥尼斯堡七桥问题](../../labs/chapter-07/exercise/E-07-15-seven-bridges/README.md)
-- [T06 · 07E16 · 课程表](../../labs/chapter-07/exercise/E-07-16-course-schedule/README.md)
-- [T07 · 07E17 · 课程表 II](../../labs/chapter-07/exercise/E-07-17-course-schedule-ii/README.md)
-- [T08 · 07E18 · 找到最终的安全状态](../../labs/chapter-07/exercise/E-07-18-eventual-safe-states/README.md)
-- [T09 · 07E19 · 最大食物链计数](../../labs/chapter-07/exercise/E-07-19-food-chain-count/README.md)
-- [T10 · 07E20 · 并行课程 III](../../labs/chapter-07/exercise/E-07-20-parallel-courses/README.md)
-- [T11 · 07E21 · 关键路径分析（AOE 网）](../../labs/chapter-07/exercise/E-07-21-critical-path/README.md)
-- [T26 · 07E06 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-06-bfs-bipartite/README.md)
-- [T27 · 07E29 · 二分图最大匹配（匈牙利）](../../labs/chapter-07/exercise/E-07-29-bipartite-matching/README.md)
-- [T28 · 07E30 · 飞行员配对方案](../../labs/chapter-07/exercise/E-07-30-pilot-pairing/README.md)
-- [T29 · 07E31 · 最大流（Edmonds-Karp）](../../labs/chapter-07/exercise/E-07-31-edmonds-karp/README.md)
-- [T30 · 07E32 · 最小费用最大流](../../labs/chapter-07/exercise/E-07-32-min-cost-max-flow/README.md)
+- [T02 · 07E02 · 显式栈 DFS](../../labs/chapter-07/exercise/E-07-02-iterative-dfs/README.md)
+- [T03 · 07E03 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-03-dfs-edge-classification/README.md)
+- [T04 · 07E04 · 欧拉回路判定](../../labs/chapter-07/exercise/E-07-04-eulerian-classification/README.md)
+- [T05 · 07E05 · 哥尼斯堡七桥问题](../../labs/chapter-07/exercise/E-07-05-seven-bridges/README.md)
+- [T06 · 07E06 · 课程表](../../labs/chapter-07/exercise/E-07-06-course-schedule/README.md)
+- [T07 · 07E07 · 课程表 II](../../labs/chapter-07/exercise/E-07-07-course-schedule-ii/README.md)
+- [T08 · 07E08 · 找到最终的安全状态](../../labs/chapter-07/exercise/E-07-08-eventual-safe-states/README.md)
+- [T09 · 07E09 · 最大食物链计数](../../labs/chapter-07/exercise/E-07-09-food-chain-count/README.md)
+- [T10 · 07E10 · 并行课程 III](../../labs/chapter-07/exercise/E-07-10-parallel-courses/README.md)
+- [T11 · 07E11 · 关键路径分析（AOE 网）](../../labs/chapter-07/exercise/E-07-11-critical-path/README.md)
+- [T26 · 07E26 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-26-bfs-bipartite/README.md)
+- [T27 · 07E27 · 二分图最大匹配（匈牙利）](../../labs/chapter-07/exercise/E-07-27-bipartite-matching/README.md)
+- [T28 · 07E28 · 飞行员配对方案](../../labs/chapter-07/exercise/E-07-28-pilot-pairing/README.md)
+- [T29 · 07E29 · 最大流（Edmonds-Karp）](../../labs/chapter-07/exercise/E-07-29-edmonds-karp/README.md)
+- [T30 · 07E30 · 最小费用最大流](../../labs/chapter-07/exercise/E-07-30-min-cost-max-flow/README.md)

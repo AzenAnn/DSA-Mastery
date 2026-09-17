@@ -156,7 +156,7 @@ int main() {
 - 若允许八方向移动，曼哈顿距离不再匹配动作模型；单位对角移动可考虑切比雪夫距离；
 - 若不同格子的进入代价不同，应把 `g+1` 改为真实边权，并重新证明启发式可采纳；
 - 若需要输出路径，松弛时保存 `parent[v]=u`，终点确定后反向还原；
-- 对应练习：[T23 · 07E26 · A* 网格寻路](../../labs/chapter-07/exercise/E-07-26-astar-grid/README.md)；随后可挑战 [T25 · 07E28 · 八数码问题](../../labs/chapter-07/exercise/E-07-28-eight-puzzle/README.md)。
+- 对应练习：[T23 · 07E23 · A* 网格寻路](../../labs/chapter-07/exercise/E-07-23-astar-grid/README.md)；随后可挑战 [T25 · 07E25 · 八数码问题](../../labs/chapter-07/exercise/E-07-25-eight-puzzle/README.md)。
 
 ### 范例二：判定启发式是否可采纳且一致
 
@@ -282,7 +282,7 @@ int main() {
 - 一致性配合 `h(target)=0` 时，对任何能到达目标的顶点沿路径逐边累加即可推出可采纳性；实现仍按定义分别检查并输出；
 - 若边权允许为负，反向 Dijkstra 不再适用，应改用能处理负权的最短路算法；
 - 构造启发式时，可从真实距离乘以 $0\le c\le1$ 得到一族可采纳启发式，再检查是否保持一致；
-- 对应练习：[T24 · 07E27 · 启发式函数有效性判定](../../labs/chapter-07/exercise/E-07-27-heuristic-validation/README.md)。
+- 对应练习：[T24 · 07E24 · 启发式函数有效性判定](../../labs/chapter-07/exercise/E-07-24-heuristic-validation/README.md)。
 
 ## 易错点
 
@@ -333,6 +333,6 @@ int main() {
 
 按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
 
-- [T23 · 07E26 · A* 网格寻路](../../labs/chapter-07/exercise/E-07-26-astar-grid/README.md)
-- [T24 · 07E27 · 启发式函数有效性判定](../../labs/chapter-07/exercise/E-07-27-heuristic-validation/README.md)
-- [T25 · 07E28 · 八数码问题（A*）](../../labs/chapter-07/exercise/E-07-28-eight-puzzle/README.md)
+- [T23 · 07E23 · A* 网格寻路](../../labs/chapter-07/exercise/E-07-23-astar-grid/README.md)
+- [T24 · 07E24 · 启发式函数有效性判定](../../labs/chapter-07/exercise/E-07-24-heuristic-validation/README.md)
+- [T25 · 07E25 · 八数码问题（A*）](../../labs/chapter-07/exercise/E-07-25-eight-puzzle/README.md)

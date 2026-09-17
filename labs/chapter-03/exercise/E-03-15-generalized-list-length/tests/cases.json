@@ -1,0 +1,182 @@
+[
+  {
+    "points": 5,
+    "id": "001-sample",
+    "tags": [
+      "sample"
+    ],
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out"
+  },
+  {
+    "points": 5,
+    "id": "002-empty-list",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/002-empty-list.in",
+    "expected": "tests/002-empty-list.out"
+  },
+  {
+    "points": 5,
+    "id": "003-single-atom",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/003-single-atom.in",
+    "expected": "tests/003-single-atom.out"
+  },
+  {
+    "points": 5,
+    "id": "004-nested-single",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/004-nested-single.in",
+    "expected": "tests/004-nested-single.out"
+  },
+  {
+    "points": 5,
+    "id": "005-empty-subtable",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/005-empty-subtable.in",
+    "expected": "tests/005-empty-subtable.out"
+  },
+  {
+    "points": 5,
+    "id": "006-nested-empty-list",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/006-nested-empty-list.in",
+    "expected": "tests/006-nested-empty-list.out"
+  },
+  {
+    "points": 5,
+    "id": "007-flat-atoms",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/007-flat-atoms.in",
+    "expected": "tests/007-flat-atoms.out"
+  },
+  {
+    "points": 5,
+    "id": "008-digits-only",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/008-digits-only.in",
+    "expected": "tests/008-digits-only.out"
+  },
+  {
+    "points": 5,
+    "id": "009-two-empty-sublists",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/009-two-empty-sublists.in",
+    "expected": "tests/009-two-empty-sublists.out"
+  },
+  {
+    "points": 5,
+    "id": "010-two-atom-sublists",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/010-two-atom-sublists.in",
+    "expected": "tests/010-two-atom-sublists.out"
+  },
+  {
+    "points": 5,
+    "id": "011-deep-chain",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/011-deep-chain.in",
+    "expected": "tests/011-deep-chain.out"
+  },
+  {
+    "points": 5,
+    "id": "012-deep-nesting",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/012-deep-nesting.in",
+    "expected": "tests/012-deep-nesting.out"
+  },
+  {
+    "points": 5,
+    "id": "013-mixed-digits-letters",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/013-mixed-digits-letters.in",
+    "expected": "tests/013-mixed-digits-letters.out"
+  },
+  {
+    "points": 5,
+    "id": "014-wide-with-sublists",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/014-wide-with-sublists.in",
+    "expected": "tests/014-wide-with-sublists.out"
+  },
+  {
+    "points": 5,
+    "id": "015-left-deep",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/015-left-deep.in",
+    "expected": "tests/015-left-deep.out"
+  },
+  {
+    "points": 5,
+    "id": "016-long-flat",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/016-long-flat.in",
+    "expected": "tests/016-long-flat.out"
+  },
+  {
+    "points": 5,
+    "id": "017-many-empty-sublists",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/017-many-empty-sublists.in",
+    "expected": "tests/017-many-empty-sublists.out"
+  },
+  {
+    "points": 5,
+    "id": "018-empty-inside-nested",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/018-empty-inside-nested.in",
+    "expected": "tests/018-empty-inside-nested.out"
+  },
+  {
+    "points": 5,
+    "id": "019-stress-deep-nesting",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/019-stress-deep-nesting.in",
+    "expected": "tests/019-stress-deep-nesting.out"
+  },
+  {
+    "points": 5,
+    "id": "020-stress-long-flat",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/020-stress-long-flat.in",
+    "expected": "tests/020-stress-long-flat.out"
+  }
+]

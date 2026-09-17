@@ -4,7 +4,7 @@ description: "选择排序的原理、正确性证明、复杂度分析与不稳
 order: 2
 chapter: 10
 chapterTitle: "排序"
-updated: "2026-08-21"
+updated: "2026-09-16"
 contributors: ["Ph1z"]
 status: "draft"
 ---
@@ -17,14 +17,79 @@ status: "draft"
 
 ## 代码
 
+```text
+Algorithm SelectionSort(A, n):
+    Input: An array A of n elements
+    Output: Array A sorted in ascending order
+
+    // 遍历数组，确定每个位置的最小值
+    for i = 0 to n - 2 do
+        minIndex = i                // 假设当前位置是最小值
+
+        // 在未排序区寻找真正的最小值
+        for j = i + 1 to n - 1 do
+            if A[j] < A[minIndex] then
+                minIndex = j        // 更新最小值下标
+            end if
+        end for
+
+        // 将找到的最小值交换到当前位置
+        if minIndex != i then
+            swap(A[i], A[minIndex])
+        end if
+    end for
+
+    return A
+```
+
 ```cpp
 void selectionSort(int a[], int n) {
     for (int i = 0; i < n - 1; ++i) {
-        int minIndex = i;
+        int minIndex = i;               // 假设当前位置为最小值
         for (int j = i + 1; j < n; ++j) {
-            if (a[j] < a[minIndex]) minIndex = j;
+            if (a[j] < a[minIndex]) minIndex = j; // 更新最小值下标
         }
-        if (minIndex != i) std::swap(a[i], a[minIndex]);
+        if (minIndex != i) std::swap(a[i], a[minIndex]); // 交换到正确位置
+    }
+}
+```
+
+## 优化代码
+
+```cpp
+// 优化 1：二元选择排序（同时找最小值和最大值）
+// 每轮循环同时确定最小值和最大值，循环次数减半
+void binarySelectionSort(int a[], int n) {
+    int left = 0, right = n - 1;
+    while (left < right) {
+        int minIndex = left, maxIndex = left;
+        // 同时寻找最小值和最大值
+        for (int i = left; i <= right; ++i) {
+            if (a[i] < a[minIndex]) minIndex = i;
+            if (a[i] > a[maxIndex]) maxIndex = i;
+        }
+        if (minIndex != left) std::swap(a[left], a[minIndex]);
+        // 注意：如果最大值恰好在 left 位置，交换后已被移到 minIndex
+        if (maxIndex == left) maxIndex = minIndex;
+        if (maxIndex != right) std::swap(a[right], a[maxIndex]);
+        ++left;
+        --right;
+    }
+}
+```
+
+```cpp
+// 优化 2：堆排序（将选择排序的思想发挥到极致）
+// 利用堆结构将"寻找最小值"的时间从 O(n) 降到 O(log n)
+#include <algorithm>
+
+void heapSort(int a[], int n) {
+    // 1. 建堆（大顶堆）
+    std::make_heap(a, a + n);
+    
+    // 2. 依次将堆顶（最大值）交换到末尾，并调整堆
+    for (int i = n - 1; i > 0; --i) {
+        std::pop_heap(a, a + i + 1); // 将堆顶移到 a[i]
     }
 }
 ```

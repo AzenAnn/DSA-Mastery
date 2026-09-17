@@ -559,7 +559,7 @@ int main() {
 - 若需要输出最晚收到信号的节点，可在扫描最大距离时同时维护编号；
 - 若所有边权都为 `1`，可改用 BFS，把复杂度降为 $O(n+m)$；
 - 若允许负权边，应改用 Bellman-Ford，不能继续使用 Dijkstra；
-- 对应练习：[T18 · 07E09 · 网络延迟时间](../../labs/chapter-07/exercise/E-07-09-network-delay-time/README.md)；可先完成 [T17 · 07E08 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-08-dijkstra-matrix-path/README.md)。
+- 对应练习：[T18 · 07E18 · 网络延迟时间](../../labs/chapter-07/exercise/E-07-18-network-delay-time/README.md)；可先完成 [T17 · 07E17 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-17-dijkstra-matrix-path/README.md)。
 
 ### 范例二：Floyd 回答多组最短路径查询
 
@@ -669,7 +669,7 @@ int main() {
 - 若只需要距离，不需要路径，可以删除 `next` 矩阵；
 - 若查询很少、图稀疏且边权非负，对每个实际出现的源点运行一次 Dijkstra 可能更省；
 - 若允许负环，应在 Floyd 后检查 `dist[k][k] < 0`，并进一步判断哪些查询点对受负环影响；
-- 对应练习：[T20 · 07E12 · Floyd 全源最短路径](../../labs/chapter-07/exercise/E-07-12-floyd-all-pairs/README.md)。
+- 对应练习：[T20 · 07E20 · Floyd 全源最短路径](../../labs/chapter-07/exercise/E-07-20-floyd-all-pairs/README.md)。
 
 ## 小结
 
@@ -784,10 +784,10 @@ $\mathrm{dist}[F]=6$，最短路径就是直达边 $A\to F$。绕行路径从未
 
 按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
 
-- [T16 · 07E07 · Dijkstra 逐轮推演](../../labs/chapter-07/exercise/E-07-07-dijkstra-trace/README.md)
-- [T17 · 07E08 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-08-dijkstra-matrix-path/README.md)
-- [T18 · 07E09 · 网络延迟时间](../../labs/chapter-07/exercise/E-07-09-network-delay-time/README.md)
-- [T19 · 07E11 · Bellman-Ford 与负环](../../labs/chapter-07/exercise/E-07-11-bellman-ford-negative/README.md)
-- [T20 · 07E12 · Floyd 全源最短路径](../../labs/chapter-07/exercise/E-07-12-floyd-all-pairs/README.md)
-- [T21 · 07E10 · 紧急救援](../../labs/chapter-07/exercise/E-07-10-emergency-rescue/README.md)
-- [T22 · 07E25 · 虫洞（Wormholes）](../../labs/chapter-07/exercise/E-07-25-wormholes/README.md)
+- [T16 · 07E16 · Dijkstra 逐轮推演](../../labs/chapter-07/exercise/E-07-16-dijkstra-trace/README.md)
+- [T17 · 07E17 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-17-dijkstra-matrix-path/README.md)
+- [T18 · 07E18 · 网络延迟时间](../../labs/chapter-07/exercise/E-07-18-network-delay-time/README.md)
+- [T19 · 07E19 · Bellman-Ford 与负环](../../labs/chapter-07/exercise/E-07-19-bellman-ford-negative/README.md)
+- [T20 · 07E20 · Floyd 全源最短路径](../../labs/chapter-07/exercise/E-07-20-floyd-all-pairs/README.md)
+- [T21 · 07E21 · 紧急救援](../../labs/chapter-07/exercise/E-07-21-emergency-rescue/README.md)
+- [T22 · 07E22 · 虫洞（Wormholes）](../../labs/chapter-07/exercise/E-07-22-wormholes/README.md)

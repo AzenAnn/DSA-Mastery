@@ -4,53 +4,51 @@ description: "按六个主题组织 30 道图算法代码题，列出稳定编�
 order: 0
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-14"
+updated: "2026-09-16"
 contributors: ["Azen"]
 status: "draft"
 ---
 
 # Ch7 代码题学习清单
 
-更新日期：2026-09-14。根据维护者提供的 30 题清单整理。T01–T30 是学习顺序；07E 系列是永久 Lab 身份，两者不互相替代。10 道既有题保留目录及 ID，20 道新题追加为 07E13–07E32。清单外的 07E02、07E03 保留在末尾作为补充，因此本章共有 32 道代码题。
+更新日期：2026-09-16。全章共 30 道代码题，按下表学习顺序统一编号为 07E01–07E30；T01–T30 与题目编号一一对应。
 
 ## 题目映射
 
-| 清单 | 稳定 ID / 题目 | 规划节 | 难度 | 处理 |
-| --- | --- | --- | --- | --- |
-| T01 | [07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md) | 7.1 | 入门 | 保留 |
-| T02 | [07E05 · 显式栈 DFS](../../labs/chapter-07/exercise/E-07-05-iterative-dfs/README.md) | 7.1 | 入门 | 保留 |
-| T03 | [07E13 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-13-dfs-edge-classification/README.md) | 7.1 | 基础 | 新增 |
-| T04 | [07E14 · 欧拉回路判定](../../labs/chapter-07/exercise/E-07-14-eulerian-classification/README.md) | 7.1 | 进阶 | 新增 |
-| T05 | [07E15 · 哥尼斯堡七桥问题](../../labs/chapter-07/exercise/E-07-15-seven-bridges/README.md) | 7.1 | 进阶 | 新增 |
-| T06 | [07E16 · 课程表](../../labs/chapter-07/exercise/E-07-16-course-schedule/README.md) | 7.2 | 基础 | 新增 |
-| T07 | [07E17 · 课程表 II](../../labs/chapter-07/exercise/E-07-17-course-schedule-ii/README.md) | 7.2 | 基础 | 新增 |
-| T08 | [07E18 · 找到最终的安全状态](../../labs/chapter-07/exercise/E-07-18-eventual-safe-states/README.md) | 7.2 | 进阶 | 新增 |
-| T09 | [07E19 · 最大食物链计数](../../labs/chapter-07/exercise/E-07-19-food-chain-count/README.md) | 7.2 | 进阶 | 新增 |
-| T10 | [07E20 · 并行课程 III](../../labs/chapter-07/exercise/E-07-20-parallel-courses/README.md) | 7.2 | 挑战 | 新增 |
-| T11 | [07E21 · 关键路径分析（AOE 网）](../../labs/chapter-07/exercise/E-07-21-critical-path/README.md) | 7.2 | 挑战 | 新增 |
-| T12 | [07E04 · 最小生成树](../../labs/chapter-07/exercise/E-07-04-minimum-spanning-tree/README.md) | 7.3 | 基础 | 保留 |
-| T13 | [07E22 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-22-connect-cities/README.md) | 7.3 | 基础 | 新增 |
-| T14 | [07E23 · 连接所有点的最小费用](../../labs/chapter-07/exercise/E-07-23-connect-points/README.md) | 7.3 | 进阶 | 新增 |
-| T15 | [07E24 · 最小体力消耗路径](../../labs/chapter-07/exercise/E-07-24-minimum-effort-path/README.md) | 7.3 | 进阶 | 新增 |
-| T16 | [07E07 · Dijkstra 逐轮推演](../../labs/chapter-07/exercise/E-07-07-dijkstra-trace/README.md) | 7.4 | 入门 | 保留 |
-| T17 | [07E08 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-08-dijkstra-matrix-path/README.md) | 7.4 | 基础 | 保留 |
-| T18 | [07E09 · 网络延迟时间](../../labs/chapter-07/exercise/E-07-09-network-delay-time/README.md) | 7.4 | 基础 | 保留 |
-| T19 | [07E11 · Bellman-Ford 与负环](../../labs/chapter-07/exercise/E-07-11-bellman-ford-negative/README.md) | 7.4 | 基础 | 保留 |
-| T20 | [07E12 · Floyd 全源最短路径](../../labs/chapter-07/exercise/E-07-12-floyd-all-pairs/README.md) | 7.4 | 基础 | 保留 |
-| T21 | [07E10 · 紧急救援](../../labs/chapter-07/exercise/E-07-10-emergency-rescue/README.md) | 7.4 | 进阶 | 保留 |
-| T22 | [07E25 · 虫洞（Wormholes）](../../labs/chapter-07/exercise/E-07-25-wormholes/README.md) | 7.4 | 进阶 | 新增 |
-| T23 | [07E26 · A* 网格寻路](../../labs/chapter-07/exercise/E-07-26-astar-grid/README.md) | 7.5 | 进阶 | 新增 |
-| T24 | [07E27 · 启发式函数有效性判定](../../labs/chapter-07/exercise/E-07-27-heuristic-validation/README.md) | 7.5 | 进阶 | 新增 |
-| T25 | [07E28 · 八数码问题（A*）](../../labs/chapter-07/exercise/E-07-28-eight-puzzle/README.md) | 7.5 | 挑战 | 新增 |
-| T26 | [07E06 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-06-bfs-bipartite/README.md) | 7.6 | 基础 | 保留 |
-| T27 | [07E29 · 二分图最大匹配（匈牙利）](../../labs/chapter-07/exercise/E-07-29-bipartite-matching/README.md) | 7.6 | 进阶 | 新增 |
-| T28 | [07E30 · 飞行员配对方案](../../labs/chapter-07/exercise/E-07-30-pilot-pairing/README.md) | 7.6 | 进阶 | 新增 |
-| T29 | [07E31 · 最大流（Edmonds-Karp）](../../labs/chapter-07/exercise/E-07-31-edmonds-karp/README.md) | 7.6 | 挑战 | 新增 |
-| T30 | [07E32 · 最小费用最大流](../../labs/chapter-07/exercise/E-07-32-min-cost-max-flow/README.md) | 7.6 | 挑战 | 新增 |
+| 清单 | 编号 / 题目 | 规划节 | 难度 |
+| --- | --- | --- | --- |
+| T01 | [07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md) | 7.1 | 入门 |
+| T02 | [07E02 · 显式栈 DFS](../../labs/chapter-07/exercise/E-07-02-iterative-dfs/README.md) | 7.1 | 入门 |
+| T03 | [07E03 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-03-dfs-edge-classification/README.md) | 7.1 | 基础 |
+| T04 | [07E04 · 欧拉回路判定](../../labs/chapter-07/exercise/E-07-04-eulerian-classification/README.md) | 7.1 | 进阶 |
+| T05 | [07E05 · 哥尼斯堡七桥问题](../../labs/chapter-07/exercise/E-07-05-seven-bridges/README.md) | 7.1 | 进阶 |
+| T06 | [07E06 · 课程表](../../labs/chapter-07/exercise/E-07-06-course-schedule/README.md) | 7.2 | 基础 |
+| T07 | [07E07 · 课程表 II](../../labs/chapter-07/exercise/E-07-07-course-schedule-ii/README.md) | 7.2 | 基础 |
+| T08 | [07E08 · 找到最终的安全状态](../../labs/chapter-07/exercise/E-07-08-eventual-safe-states/README.md) | 7.2 | 进阶 |
+| T09 | [07E09 · 最大食物链计数](../../labs/chapter-07/exercise/E-07-09-food-chain-count/README.md) | 7.2 | 进阶 |
+| T10 | [07E10 · 并行课程 III](../../labs/chapter-07/exercise/E-07-10-parallel-courses/README.md) | 7.2 | 挑战 |
+| T11 | [07E11 · 关键路径分析（AOE 网）](../../labs/chapter-07/exercise/E-07-11-critical-path/README.md) | 7.2 | 挑战 |
+| T12 | [07E12 · 最小生成树](../../labs/chapter-07/exercise/E-07-12-minimum-spanning-tree/README.md) | 7.3 | 基础 |
+| T13 | [07E13 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-13-connect-cities/README.md) | 7.3 | 基础 |
+| T14 | [07E14 · 连接所有点的最小费用](../../labs/chapter-07/exercise/E-07-14-connect-points/README.md) | 7.3 | 进阶 |
+| T15 | [07E15 · 最小体力消耗路径](../../labs/chapter-07/exercise/E-07-15-minimum-effort-path/README.md) | 7.3 | 进阶 |
+| T16 | [07E16 · Dijkstra 逐轮推演](../../labs/chapter-07/exercise/E-07-16-dijkstra-trace/README.md) | 7.4 | 入门 |
+| T17 | [07E17 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-17-dijkstra-matrix-path/README.md) | 7.4 | 基础 |
+| T18 | [07E18 · 网络延迟时间](../../labs/chapter-07/exercise/E-07-18-network-delay-time/README.md) | 7.4 | 基础 |
+| T19 | [07E19 · Bellman-Ford 与负环](../../labs/chapter-07/exercise/E-07-19-bellman-ford-negative/README.md) | 7.4 | 基础 |
+| T20 | [07E20 · Floyd 全源最短路径](../../labs/chapter-07/exercise/E-07-20-floyd-all-pairs/README.md) | 7.4 | 基础 |
+| T21 | [07E21 · 紧急救援](../../labs/chapter-07/exercise/E-07-21-emergency-rescue/README.md) | 7.4 | 进阶 |
+| T22 | [07E22 · 虫洞（Wormholes）](../../labs/chapter-07/exercise/E-07-22-wormholes/README.md) | 7.4 | 进阶 |
+| T23 | [07E23 · A* 网格寻路](../../labs/chapter-07/exercise/E-07-23-astar-grid/README.md) | 7.5 | 进阶 |
+| T24 | [07E24 · 启发式函数有效性判定](../../labs/chapter-07/exercise/E-07-24-heuristic-validation/README.md) | 7.5 | 进阶 |
+| T25 | [07E25 · 八数码问题（A*）](../../labs/chapter-07/exercise/E-07-25-eight-puzzle/README.md) | 7.5 | 挑战 |
+| T26 | [07E26 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-26-bfs-bipartite/README.md) | 7.6 | 基础 |
+| T27 | [07E27 · 二分图最大匹配（匈牙利）](../../labs/chapter-07/exercise/E-07-27-bipartite-matching/README.md) | 7.6 | 进阶 |
+| T28 | [07E28 · 飞行员配对方案](../../labs/chapter-07/exercise/E-07-28-pilot-pairing/README.md) | 7.6 | 进阶 |
+| T29 | [07E29 · 最大流（Edmonds-Karp）](../../labs/chapter-07/exercise/E-07-29-edmonds-karp/README.md) | 7.6 | 挑战 |
+| T30 | [07E30 · 最小费用最大流](../../labs/chapter-07/exercise/E-07-30-min-cost-max-flow/README.md) | 7.6 | 挑战 |
 
 各节题量为 5 / 6 / 4 / 7 / 3 / 5。按清单逐行难度计算：入门 3、基础 10、进阶 12、挑战 5；原清单末尾“基础 11、挑战 4”的汇总与逐行标注不符，本次采用逐行标注。
-
-补充练习：[07E02 连通分量](../../labs/chapter-07/exercise/E-07-02-connected-components/README.md)、[07E03 有向图环检测](../../labs/chapter-07/exercise/E-07-03-directed-cycle-detection/README.md)。07E03 保留“有环输出 YES”的原接口；T06/07E16 使用“可完成课程输出 YES”，避免把旧用户程序的判定语义翻转。
 
 ## 文章重编与现有链接
 
@@ -106,7 +104,7 @@ status: "draft"
 python scripts/check-ch07-exercises.py
 python scripts/check-ch07-exercises.py --solutions --mutations
 python scripts/check-ch07-exercises.py --write
-python scripts/check-ch07-exercises.py --lab 32 --solutions --mutations
+python scripts/check-ch07-exercises.py --lab 30 --solutions --mutations
 ```
 
 不带 --write 时只核对现有输入、LF 期望、分值和 oracle 一致性；--write 才重建指定新题测试文件。--solutions 编译并逐例对照，--mutations 为每题注入一个典型错误，必须至少被一个测试点检出。作者检查需要 Python 3.10+；编译检查需要 clang++/g++，可通过 CXX 指定。报告与可执行文件写入 .lab-cache/ch07-audit/，不进入提交。学习者只需标准 Lab CLI，无需 Python。
