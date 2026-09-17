@@ -1368,7 +1368,7 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   await theoryGroup.locator(":scope > .item").focus();
   await page.keyboard.press("Enter");
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
-  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(4);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(5);
   await expect(
     theoryGroup.getByRole("link", { name: "03T01 · 串的基础选择题精练", exact: true }),
   ).toHaveCount(1);
@@ -1380,6 +1380,9 @@ test("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async ({ 
   ).toHaveCount(1);
   await expect(
     theoryGroup.getByRole("link", { name: "03T04 · 广义表选择题精练", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    theoryGroup.getByRole("link", { name: "03T05 · 数组与广义表理论大题训练", exact: true }),
   ).toHaveCount(1);
 
   await exerciseGroup.locator(":scope > .item").focus();
