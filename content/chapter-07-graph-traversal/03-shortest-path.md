@@ -17,16 +17,23 @@ status: "draft"
 
 小镇上有 $6$ 个地点。骑手从餐厅 $A$ 出发，要把外卖送到顾客 $F$ 手里。每条路单向通行，路旁标注的数字是骑行耗时（分钟）：
 
-```text [delivery-map.txt]
-              1            3            2            1
-      A ──────────► B ──────────► D ──────────► E ──────────► F
-      │             │             ▲             ▲             ▲
-      │             │             │             │             │
-    4 │           8 │           1 │           5 │             │
-      ▼             ▼             │             │             │
-      └─────► C ────┴─────────────┴─────────────┘             │
-      └────────────────────────── 10 ─────────────────────────┘
+```graphviz
+digraph DeliveryMap {
+  rankdir=LR;
+  node [shape=circle];
+  A -> B [label="1"];
+  A -> C [label="4"];
+  A -> F [label="10"];
+  B -> C [label="8"];
+  B -> D [label="3"];
+  C -> D [label="1"];
+  C -> E [label="5"];
+  D -> E [label="2"];
+  D -> F [label="6"];
+  E -> F [label="1"];
+}
 ```
+<!-- diagram id="shortest-path-delivery-map" caption="7.3 配送例图：边上的数字表示从起点到终点的单向骑行耗时" -->
 
 为了避免示意图布局造成误读，下面列出本页例图的完整边集。后续手算均使用这组边。
 
@@ -414,12 +421,22 @@ Floyd 的递推式不要求边权非负：算法按中转点逐步扩展允许�
 
 这四种方法都使用松弛，但状态组织、调度顺序与终止条件不同。选型时先看任务范围和边权条件：
 
-```text [decision.txt]
-任务与边权？── 无权单源 ─────────────► BFS            O(n+m)
-          ├── 非负权单源 ───────────► Dijkstra       O((n+m)log n)（稠密 O(n²)）
-          ├── 可含负权的单源 ───────► Bellman-Ford   O(nm)（可检测可达负环）
-          └── 顶点较少的全源问题 ───► Floyd          O(n³)（可检测负环）
+```graphviz
+digraph ShortestPathDecision {
+  rankdir=TB;
+  node [shape=box];
+  task [shape=diamond, label="任务范围与边权？"];
+  bfs [label="BFS\n无权单源\nO(n+m)"];
+  dijkstra [label="Dijkstra\n非负权单源\nO((n+m) log n)"];
+  bellman [label="Bellman-Ford\n可含负权的单源\nO(nm)"];
+  floyd [label="Floyd\n顶点较少的全源问题\nO(n³)"];
+  task -> bfs [label="无权单源"];
+  task -> dijkstra [label="非负权单源"];
+  task -> bellman [label="可含负权"];
+  task -> floyd [label="全源"];
+}
 ```
+<!-- diagram id="shortest-path-algorithm-decision" caption="7.3 最短路径入门选型：先看任务范围，再检查边权条件" -->
 
 这是一张入门选型表，不覆盖所有规模组合。例如，大型稀疏非负权图的全源问题可以对每个源点运行 Dijkstra；允许负权的大型稀疏图还可考虑 Johnson 算法。
 
@@ -440,6 +457,219 @@ Floyd 的递推式不要求边权非负：算法按中转点逐步扩展允许�
 | $A$ 到 $F$ 最少几分钟？ | Dijkstra | $7$ 分钟（$A\to B\to D\to E\to F$） |
 | 任意两地的耗时表？ | Floyd | $D^{(6)}$ 全矩阵 |
 
+
+## 完整解题范例
+
+### 范例一：网络延迟时间
+
+#### 题目解读
+
+有 `n` 个网络节点和 `m` 条有向边，边 `u v w` 表示信号从 `u` 到 `v` 需要 `w` 毫秒，所有权值均为正。源点 `s` 在时刻 `0` 发出信号，节点收到后会并行转发。求全部节点都收到信号的最早时刻；若存在不可达节点，输出 `-1`。
+
+“并行传播”不是把所有边权相加：节点 `v` 的首次收到时间是 $d(s,v)$，全网完成时间是所有最短距离的最大值。
+
+#### 算法分析
+
+边权非负，使用堆优化 Dijkstra。`dist[v]` 保存源点到 `v` 的当前最短估计；松弛成功后把新状态压入小根堆。堆中可能同时存在同一顶点的旧记录，因此弹出 `(d,u)` 时若 `d != dist[u]` 就跳过。
+
+算法结束后扫描 `dist`：存在无穷值则输出 `-1`，否则输出最大距离。时间为 $O((n+m)\log n)$，空间为 $O(n+m)$。
+
+#### 伪代码
+
+```text [network-delay.pseudo]
+dist = 全 INF, dist[s] = 0
+把 (0, s) 放入小根堆
+while 堆非空:
+    (d, u) = 弹出最小项
+    if d != dist[u]: continue
+    for (v, w) in graph[u]:
+        if d + w < dist[v]:
+            dist[v] = d + w
+            压入 (dist[v], v)
+if 存在 dist[v] == INF: 输出 -1
+else 输出 max(dist)
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [network-delay-example.cpp]
+#include <algorithm>
+#include <functional>
+#include <iostream>
+#include <limits>
+#include <queue>
+#include <utility>
+#include <vector>
+
+struct Edge {
+    int to;
+    long long weight;
+};
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n = 0, m = 0, source = 0;
+    if (!(std::cin >> n >> m >> source)) return 0;
+    std::vector<std::vector<Edge>> graph(n);
+    for (int i = 0; i < m; ++i) {
+        int u = 0, v = 0;
+        long long w = 0;
+        std::cin >> u >> v >> w;
+        graph[u].push_back({v, w});
+    }
+
+    const long long INF = std::numeric_limits<long long>::max() / 4;
+    std::vector<long long> dist(n, INF);
+    using Entry = std::pair<long long, int>;
+    std::priority_queue<Entry, std::vector<Entry>, std::greater<Entry>> ready;
+    dist[source] = 0;
+    ready.push({0, source});
+
+    while (!ready.empty()) {
+        auto [d, u] = ready.top();
+        ready.pop();
+        if (d != dist[u]) continue;
+        for (const Edge& edge : graph[u]) {
+            if (d + edge.weight >= dist[edge.to]) continue;
+            dist[edge.to] = d + edge.weight;
+            ready.push({dist[edge.to], edge.to});
+        }
+    }
+
+    long long answer = 0;
+    for (long long d : dist) {
+        if (d == INF) {
+            std::cout << -1 << '\n';
+            return 0;
+        }
+        answer = std::max(answer, d);
+    }
+    std::cout << answer << '\n';
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 若需要输出最晚收到信号的节点，可在扫描最大距离时同时维护编号；
+- 若所有边权都为 `1`，可改用 BFS，把复杂度降为 $O(n+m)$；
+- 若允许负权边，应改用 Bellman-Ford，不能继续使用 Dijkstra；
+- 对应练习：[T18 · 07E18 · 网络延迟时间](../../labs/chapter-07/exercise/E-07-18-network-delay-time/README.md)；可先完成 [T17 · 07E17 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-17-dijkstra-matrix-path/README.md)。
+
+### 范例二：Floyd 回答多组最短路径查询
+
+#### 题目解读
+
+给定顶点数较少的有向带权图以及多组查询 `(s,t)`。图允许负权边但不含负环；可能有自环、平行边和不可达点对。每次查询需要输出最短距离以及完整顶点路径，不可达时输出 `-1`。
+
+多组查询意味着不能每次都从头搜索；`n\le300` 时可以用 Floyd 预计算所有点对距离。平行边初始化时取最小权，路径还原使用后继矩阵 `nxt`。
+
+#### 算法分析
+
+初始化 `d[i][i]=0`，边 `u→v` 令 `d[u][v]` 取最小权、`nxt[u][v]=v`。Floyd 按中转点 `k` 逐轮松弛；若经 `k` 使 `d[i][j]` 变小，就把第一跳改为 `nxt[i][k]`。
+
+查询时从 `s` 开始不断令 `u=nxt[u][t]`，直到到达 `t`。预处理时间 $O(n^3)$、空间 $O(n^2)$，每次还原路径的时间与输出路径长度成正比。
+
+#### 伪代码
+
+```text [floyd-queries.pseudo]
+d[i][j] = INF, d[i][i] = 0, nxt[i][j] = -1
+for 每条边 (u, v, w):
+    if w < d[u][v]:
+        d[u][v] = w
+        nxt[u][v] = v
+for k = 0 .. n-1:
+    for i = 0 .. n-1:
+        for j = 0 .. n-1:
+            if i 能到 k 且 k 能到 j 且 d[i][k] + d[k][j] < d[i][j]:
+                d[i][j] = d[i][k] + d[k][j]
+                nxt[i][j] = nxt[i][k]
+对每个查询 (s, t):
+    若不可达输出 -1
+    否则沿 nxt[*][t] 输出路径
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [floyd-queries-example.cpp]
+#include <iostream>
+#include <limits>
+#include <vector>
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n = 0, m = 0, query_count = 0;
+    if (!(std::cin >> n >> m >> query_count)) return 0;
+    const long long INF = std::numeric_limits<long long>::max() / 4;
+    std::vector<std::vector<long long>> dist(
+        n, std::vector<long long>(n, INF));
+    std::vector<std::vector<int>> next(
+        n, std::vector<int>(n, -1));
+    for (int i = 0; i < n; ++i) dist[i][i] = 0;
+
+    for (int i = 0; i < m; ++i) {
+        int u = 0, v = 0;
+        long long w = 0;
+        std::cin >> u >> v >> w;
+        if (w < dist[u][v]) {
+            dist[u][v] = w;
+            next[u][v] = v;
+        }
+    }
+
+    for (int k = 0; k < n; ++k) {
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (dist[i][k] == INF || dist[k][j] == INF) continue;
+                long long candidate = dist[i][k] + dist[k][j];
+                if (candidate < dist[i][j]) {
+                    dist[i][j] = candidate;
+                    next[i][j] = next[i][k];
+                }
+            }
+        }
+    }
+
+    while (query_count-- > 0) {
+        int source = 0, target = 0;
+        std::cin >> source >> target;
+        if (source == target) {
+            std::cout << "0: " << source << '\n';
+            continue;
+        }
+        if (next[source][target] == -1) {
+            std::cout << -1 << '\n';
+            continue;
+        }
+
+        std::cout << dist[source][target] << ':';
+        int current = source;
+        while (current != target) {
+            std::cout << ' ' << current;
+            current = next[current][target];
+        }
+        std::cout << ' ' << target << '\n';
+    }
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 若只需要距离，不需要路径，可以删除 `next` 矩阵；
+- 若查询很少、图稀疏且边权非负，对每个实际出现的源点运行一次 Dijkstra 可能更省；
+- 若允许负环，应在 Floyd 后检查 `dist[k][k] < 0`，并进一步判断哪些查询点对受负环影响；
+- 对应练习：[T20 · 07E20 · Floyd 全源最短路径](../../labs/chapter-07/exercise/E-07-20-floyd-all-pairs/README.md)。
 
 ## 小结
 

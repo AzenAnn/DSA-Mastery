@@ -32,6 +32,21 @@ status: "draft"
 - 树中任意两顶点之间有且仅有一条简单路径；
 - 给树加任意一条边，会形成唯一一个环；删去树上任意一条边，图不再连通。
 
+下面这张带权无向图会贯穿后面的 Kruskal 范例。粗体无法稳定跨主题表达，因此图中用 `MST` 标注最终选中的三条边；它们的权值和为 $4+5+10=19$。
+
+```graphviz
+graph MstExample {
+  layout=neato;
+  node [shape=circle];
+  0 -- 1 [label="10 · MST", penwidth=2];
+  0 -- 2 [label="6"];
+  0 -- 3 [label="5 · MST", penwidth=2];
+  1 -- 3 [label="15"];
+  2 -- 3 [label="4 · MST", penwidth=2];
+}
+```
+<!-- diagram id="mst-weighted-example" caption="7.2 带权无向例图：三条标注 MST 的边构成权值和为 19 的最小生成树" -->
+
 ::: tip 最小生成树可能不唯一
 当图中存在权值相等的边时，MST **可能**不止一棵，但等权边并不必然导致多解；无论有多少棵 MST，**最小边权和都是唯一确定的**。若所有边权两两不同，则 MST 一定唯一（见下文定理）。存在多棵 MST 时，算法返回哪一棵取决于具体的选边顺序，但总权值相同。
 :::
@@ -164,6 +179,203 @@ std::optional<long long> kruskal(std::vector<Edge> edges, int n) {
 }
 ```
 
+## 完整解题范例
+
+### 范例一：Kruskal 求最小生成树权值
+
+#### 题目解读
+
+给定一个连通无向图，可能含自环、平行边和负权边，求最小生成树的总权值。输入规模允许 $n$ 达到 $10^5$、$m$ 达到 $2\times10^5$，因此不能枚举生成树，也不适合使用邻接矩阵。
+
+自环永远不能连接两个不同分量；平行边无需预处理，排序后较轻边会先被考虑；负权边不破坏 MST 的切分定理，可以正常参与排序和选边。
+
+#### 算法分析
+
+将全部边按权值升序排序，用并查集维护当前森林的连通分量。若边 `(u,v)` 的两个端点属于不同分量，就选中该边并合并分量；否则加入它会成环，直接跳过。选满 `n-1` 条边后得到 MST。
+
+排序为 $O(m\log m)$；路径压缩和按秩合并使并查集操作均摊为 $O(\alpha(n))$，总时间由排序主导，空间为 $O(n+m)$。
+
+#### 伪代码
+
+```text [kruskal.pseudo]
+按权值升序排序 edges
+初始化 n 个单点分量
+total = 0, used = 0
+for edge in edges:
+    if find(edge.u) == find(edge.v): continue
+    合并 edge.u 与 edge.v
+    total += edge.w
+    used++
+    if used == n - 1: break
+输出 total
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [kruskal-example.cpp]
+#include <algorithm>
+#include <iostream>
+#include <numeric>
+#include <vector>
+
+struct Edge {
+    int u;
+    int v;
+    long long w;
+};
+
+class DSU {
+public:
+    explicit DSU(int n) : parent_(n), rank_(n, 0) {
+        std::iota(parent_.begin(), parent_.end(), 0);
+    }
+
+    int find(int x) {
+        if (parent_[x] != x) parent_[x] = find(parent_[x]);
+        return parent_[x];
+    }
+
+    bool unite(int a, int b) {
+        a = find(a);
+        b = find(b);
+        if (a == b) return false;
+        if (rank_[a] < rank_[b]) std::swap(a, b);
+        parent_[b] = a;
+        if (rank_[a] == rank_[b]) ++rank_[a];
+        return true;
+    }
+
+private:
+    std::vector<int> parent_;
+    std::vector<int> rank_;
+};
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n = 0, m = 0;
+    if (!(std::cin >> n >> m)) return 0;
+    std::vector<Edge> edges(m);
+    for (Edge& edge : edges) {
+        std::cin >> edge.u >> edge.v >> edge.w;
+    }
+    std::sort(edges.begin(), edges.end(), [](const Edge& a, const Edge& b) {
+        return a.w < b.w;
+    });
+
+    DSU dsu(n);
+    long long total = 0;
+    int used = 0;
+    for (const Edge& edge : edges) {
+        if (!dsu.unite(edge.u, edge.v)) continue;
+        total += edge.w;
+        if (++used == n - 1) break;
+    }
+    std::cout << total << '\n';
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 若输入不保证连通，应在结束时检查 `used == n-1`；否则得到的只是最小生成森林；
+- 若还要输出树边，只需在 `unite` 成功时保存当前边；
+- 若边已经有序，可省去排序，时间接近 $O(m\alpha(n))$；
+- 对应练习：[T12 · 07E12 · 最小生成树](../../labs/chapter-07/exercise/E-07-12-minimum-spanning-tree/README.md)；再迁移到 [T13 · 07E13 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-13-connect-cities/README.md)。
+
+### 范例二：Prim 连接平面上的所有点
+
+#### 题目解读
+
+平面上有 `n` 个点，任意两点都能连接，费用为曼哈顿距离
+
+$$
+|x_i-x_j|+|y_i-y_j|.
+$$
+
+求把全部点连成一棵树的最小费用。因为任意两点间都有边，显式生成完全图需要 $\Theta(n^2)$ 条边；当 $n\le1000$ 时，可以用朴素 Prim 即时计算边权，只保存每个未选点连接当前树的最小费用。
+
+#### 算法分析
+
+维护 `best[v]`：顶点 `v` 到当前树的最小连接费用。每轮选择 `best` 最小的未选顶点 `u`，把 `best[u]` 累加到答案，再用 `u` 到其他未选点的曼哈顿距离更新它们的 `best`。
+
+完全图天然连通，因此每轮一定能选到新点。共进行 `n` 轮，每轮扫描和更新 $O(n)$ 个点，时间 $O(n^2)$，辅助空间 $O(n)$；避免了保存 $O(n^2)$ 条边。
+
+#### 伪代码
+
+```text [manhattan-prim.pseudo]
+best = 全 INF, best[0] = 0
+used = 全 false
+total = 0
+重复 n 次:
+    u = best 最小的未选点
+    used[u] = true
+    total += best[u]
+    for 每个未选点 v:
+        w = |x[u]-x[v]| + |y[u]-y[v]|
+        best[v] = min(best[v], w)
+输出 total
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [manhattan-prim-example.cpp]
+#include <algorithm>
+#include <cstdlib>
+#include <iostream>
+#include <limits>
+#include <utility>
+#include <vector>
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n = 0;
+    if (!(std::cin >> n)) return 0;
+    std::vector<std::pair<long long, long long>> points(n);
+    for (auto& [x, y] : points) std::cin >> x >> y;
+
+    const long long INF = std::numeric_limits<long long>::max() / 4;
+    std::vector<long long> best(n, INF);
+    std::vector<bool> used(n, false);
+    best[0] = 0;
+    long long total = 0;
+
+    for (int step = 0; step < n; ++step) {
+        int u = -1;
+        for (int v = 0; v < n; ++v) {
+            if (!used[v] && (u == -1 || best[v] < best[u])) u = v;
+        }
+        used[u] = true;
+        total += best[u];
+
+        for (int v = 0; v < n; ++v) {
+            if (used[v]) continue;
+            long long weight = std::llabs(points[u].first - points[v].first)
+                             + std::llabs(points[u].second - points[v].second);
+            best[v] = std::min(best[v], weight);
+        }
+    }
+    std::cout << total << '\n';
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 若费用改为欧几里得距离，MST 框架不变，但边权计算和数值类型会变化；
+- 若输入只提供部分可用边，就不能假设图天然连通，必须检测无法选出新顶点的情况；
+- 若 `n` 很大，需要利用几何结构减少候选边，而不能继续扫描完全图；
+- 对应练习：[T14 · 07E14 · 连接所有点的最小费用](../../labs/chapter-07/exercise/E-07-14-connect-points/README.md)。
+
 ## 算法的适用范围与选择
 
 Prim 与 Kruskal 都能正确求出 MST，选谁取决于图的**稠密程度**和**存储表示**：
@@ -187,6 +399,14 @@ Prim 与 Kruskal 都能正确求出 MST，选谁取决于图的**稠密程度**�
 :::
 
 ## 做题流程与边界检查
+
+::: pitfall 易错点 · 把生成森林当成最小生成树
+图不连通时不存在覆盖全部顶点的生成树。Kruskal 必须检查是否选满 `n-1` 条边；Prim 必须检查每轮是否还能找到有限候选。若题目要求森林，应明确改称“最小生成森林”。
+:::
+
+::: pitfall 易错点 · 等权边不等于 MST 一定不唯一
+等权边只意味着可能存在多种安全选择。判断唯一性需要分析是否存在可互换的同权边；无论结构是否唯一，所有 MST 的总权值都相同。
+:::
 
 手算或编程实现 MST 时，可以固定使用下面的检查顺序：
 

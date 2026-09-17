@@ -44,6 +44,256 @@ $$
 分别尝试无障碍网格、只有一条窄通道的网格，以及需要远离终点绕行的网格。比较开放集大小、节点展开顺序和最终路径，理解启发式只改变搜索效率，不应改变满足前提时的最优结果。
 :::
 
+## 完整解题范例
+
+### 范例一：A* 网格寻路
+
+#### 题目解读
+
+网格中 `0` 表示空地、`1` 表示障碍。起点固定为左上角 `(0,0)`，终点固定为右下角 `(rows-1,cols-1)`；每次只能向上、下、左、右移动一格，每步代价为 `1`。求最少移动次数，不可达或端点是障碍时输出 `-1`。
+
+状态是一个可通行格子；`g` 是已经走过的步数，`h` 使用到终点的曼哈顿距离。因为每次移动至多让曼哈顿距离减少 `1`，`h` 不会高估真实剩余距离，并且满足一致性。
+
+#### 算法分析
+
+维护每个格子的最小已知代价 `distance`，开放集使用按 `(f,g,编号)` 排序的小根堆。找到更小的 `g` 时更新并重新入堆；弹出状态时跳过过期记录。由于启发式一致，当终点以当前有效记录从堆中弹出时，`g` 就是最短距离。
+
+令 $V=rows\times cols$。每个格子只有常数条边，最坏时间复杂度为 $O(V\log V)$，空间复杂度为 $O(V)$。启发式通常减少实际展开量，但不改变最坏阶。
+
+#### 伪代码
+
+```text [astar-grid.pseudo]
+若起点或终点是障碍: 输出 -1
+将所有 g 初始化为 INF，g[start] = 0
+把 (g[start] + h(start), g[start], start) 放入开放集
+while 开放集非空:
+    (f, current_g, u) = 弹出最小项
+    if current_g != g[u]: continue
+    if u 是终点: 输出 current_g
+    for u 的四个相邻格 v:
+        if v 越界或是障碍: continue
+        if current_g + 1 < g[v]:
+            g[v] = current_g + 1
+            压入 (g[v] + h(v), g[v], v)
+输出 -1
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [astar-grid-example.cpp]
+#include <functional>
+#include <iostream>
+#include <limits>
+#include <queue>
+#include <tuple>
+#include <vector>
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int rows = 0, cols = 0;
+    if (!(std::cin >> rows >> cols)) return 0;
+    std::vector<std::vector<int>> grid(rows, std::vector<int>(cols));
+    for (auto& row : grid) {
+        for (int& cell : row) std::cin >> cell;
+    }
+
+    if (grid[0][0] || grid[rows - 1][cols - 1]) {
+        std::cout << -1 << '\n';
+        return 0;
+    }
+
+    const int INF = std::numeric_limits<int>::max() / 4;
+    const int target = rows * cols - 1;
+    std::vector<int> distance(rows * cols, INF);
+    using State = std::tuple<int, int, int>;  // f, g, vertex
+    std::priority_queue<State, std::vector<State>, std::greater<State>> open;
+    distance[0] = 0;
+    open.push({rows + cols - 2, 0, 0});
+
+    const int dr[] = {-1, 0, 1, 0};
+    const int dc[] = {0, 1, 0, -1};
+    while (!open.empty()) {
+        auto [f, g, u] = open.top();
+        open.pop();
+        (void)f;
+        if (g != distance[u]) continue;
+        if (u == target) {
+            std::cout << g << '\n';
+            return 0;
+        }
+
+        int row = u / cols;
+        int col = u % cols;
+        for (int direction = 0; direction < 4; ++direction) {
+            int next_row = row + dr[direction];
+            int next_col = col + dc[direction];
+            if (next_row < 0 || next_row >= rows ||
+                next_col < 0 || next_col >= cols ||
+                grid[next_row][next_col]) {
+                continue;
+            }
+
+            int v = next_row * cols + next_col;
+            if (g + 1 >= distance[v]) continue;
+            distance[v] = g + 1;
+            int h = rows - 1 - next_row + cols - 1 - next_col;
+            open.push({distance[v] + h, distance[v], v});
+        }
+    }
+
+    std::cout << -1 << '\n';
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 若允许八方向移动，曼哈顿距离不再匹配动作模型；单位对角移动可考虑切比雪夫距离；
+- 若不同格子的进入代价不同，应把 `g+1` 改为真实边权，并重新证明启发式可采纳；
+- 若需要输出路径，松弛时保存 `parent[v]=u`，终点确定后反向还原；
+- 对应练习：[T23 · 07E23 · A* 网格寻路](../../labs/chapter-07/exercise/E-07-23-astar-grid/README.md)；随后可挑战 [T25 · 07E25 · 八数码问题](../../labs/chapter-07/exercise/E-07-25-eight-puzzle/README.md)。
+
+### 范例二：判定启发式是否可采纳且一致
+
+下面的小图以顶点 `2` 为目标。启发式 $h=[2,0,0]$ 没有高估真实距离，所以可采纳；但边 $0\to1$ 上有 $2>1+0$，因此不一致。
+
+```graphviz
+digraph HeuristicExample {
+  rankdir=LR;
+  node [shape=circle];
+  v0 [label="0\nh=2"];
+  v1 [label="1\nh=0"];
+  v2 [label="2\nh=0\n目标"];
+  v0 -> v1 [label="1"];
+  v1 -> v2 [label="1"];
+}
+```
+<!-- diagram id="astar-heuristic-counterexample" caption="7.4 可采纳但不一致的启发式：顶点 0 的估计未高估目标距离，却违反边上的一致性不等式" -->
+
+#### 题目解读
+
+给定非负权有向图、目标点 `target` 和若干组非负启发式值 `h`。分别判断：
+
+- 可采纳：`h[target]=0`，且每个能到目标的点都满足 $h(u)\le d(u,target)$；
+- 一致：`h[target]=0`，且每条边 `u→v` 都满足 $h(u)\le w(u,v)+h(v)$。
+
+无法到达目标的点，其真实距离视为正无穷，所以任何有限非负估计都不会高估；但它所在分量中的边仍必须参加一致性检查。
+
+#### 算法分析
+
+把每条原边 `u→v` 反向为 `v→u`，从目标点运行一次 Dijkstra，即可得到所有 `d(u,target)`。之后对每组启发式扫描全部顶点检查可采纳性，再扫描全部原边检查一致性。
+
+反向 Dijkstra 为 $O((n+m)\log n)$；若有 `k` 组启发式，检查成本为 $O(k(n+m))$，总空间为 $O(n+m)$（若边读入后逐组处理，则无须同时保存全部启发式）。
+
+#### 伪代码
+
+```text [heuristic-validation.pseudo]
+反向保存所有边
+从 target 在反图上运行 Dijkstra，得到 distance[u] = d(u, target)
+for 每组启发式 h:
+    admissible = (h[target] == 0)
+    consistent = (h[target] == 0)
+    for u = 0 .. n-1:
+        if distance[u] 有限且 h[u] > distance[u]: admissible = false
+    for 每条原边 (u, v, w):
+        if h[u] > w + h[v]: consistent = false
+    输出两个判断
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [heuristic-validation-example.cpp]
+#include <functional>
+#include <iostream>
+#include <limits>
+#include <queue>
+#include <tuple>
+#include <utility>
+#include <vector>
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n = 0, m = 0, target = 0, count = 0;
+    if (!(std::cin >> n >> m >> target >> count)) return 0;
+
+    using Edge = std::tuple<int, int, long long>;
+    std::vector<Edge> edges;
+    std::vector<std::vector<std::pair<int, long long>>> reversed(n);
+    for (int i = 0; i < m; ++i) {
+        int u = 0, v = 0;
+        long long w = 0;
+        std::cin >> u >> v >> w;
+        edges.push_back({u, v, w});
+        reversed[v].push_back({u, w});
+    }
+
+    const long long INF = std::numeric_limits<long long>::max() / 4;
+    std::vector<long long> distance(n, INF);
+    using Entry = std::pair<long long, int>;
+    std::priority_queue<Entry, std::vector<Entry>, std::greater<Entry>> ready;
+    distance[target] = 0;
+    ready.push({0, target});
+
+    while (!ready.empty()) {
+        auto [d, u] = ready.top();
+        ready.pop();
+        if (d != distance[u]) continue;
+        for (auto [v, w] : reversed[u]) {
+            if (d + w >= distance[v]) continue;
+            distance[v] = d + w;
+            ready.push({distance[v], v});
+        }
+    }
+
+    while (count-- > 0) {
+        std::vector<long long> h(n);
+        for (long long& value : h) std::cin >> value;
+        bool admissible = h[target] == 0;
+        bool consistent = h[target] == 0;
+
+        for (int u = 0; u < n; ++u) {
+            if (distance[u] != INF && h[u] > distance[u]) {
+                admissible = false;
+            }
+        }
+        for (auto [u, v, w] : edges) {
+            if (h[u] > w + h[v]) consistent = false;
+        }
+
+        std::cout << (admissible ? "YES" : "NO") << ' '
+                  << (consistent ? "YES" : "NO") << '\n';
+    }
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 一致性配合 `h(target)=0` 时，对任何能到达目标的顶点沿路径逐边累加即可推出可采纳性；实现仍按定义分别检查并输出；
+- 若边权允许为负，反向 Dijkstra 不再适用，应改用能处理负权的最短路算法；
+- 构造启发式时，可从真实距离乘以 $0\le c\le1$ 得到一族可采纳启发式，再检查是否保持一致；
+- 对应练习：[T24 · 07E24 · 启发式函数有效性判定](../../labs/chapter-07/exercise/E-07-24-heuristic-validation/README.md)。
+
+## 易错点
+
+::: pitfall 易错点 · 首次发现目标不等于已经最优
+目标第一次被加入开放集，只说明找到了一条路径。应在目标以当前有效的最小优先级记录弹出时结束，并跳过所有过期 `g` 记录；否则可能提前返回次优答案。
+:::
+
+::: pitfall 易错点 · 可采纳不等于一致
+可采纳只比较 `h(u)` 与真实终点距离；一致性检查的是原图中的每一条边。只检查最短路树，或忽略无法到达目标的分量中的边，都会漏掉不一致反例。
+:::
+
 ## 练习与自测
 
 1. 当 $h(n)=0$ 时，为什么 A* 与 Dijkstra 使用相同的优先级？若希望节点选择顺序也完全相同，还需要什么条件？
