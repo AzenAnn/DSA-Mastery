@@ -238,6 +238,8 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
       "content/chapter-05-tree-applications/03-huffman-tree-and-coding.md",
       "content/chapter-05-tree-applications/04-disjoint-set-union.md",
       "content/chapter-05-tree-applications/05-b-tree-and-b-plus-tree.md",
+      "content/chapter-05-tree-applications/06-problem-solving.md",
+      "content/chapter-05-tree-applications/07-greedy-optimality.md",
     ],
     autoLabChapter: 5,
   },
