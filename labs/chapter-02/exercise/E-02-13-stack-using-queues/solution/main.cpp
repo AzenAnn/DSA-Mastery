@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){int n;cin>>n;deque<long long>q;string o;long long x;while(n--){cin>>o;if(o=="push"){cin>>x;q.push_back(x);rotate(q.begin(),q.end()-1,q.end());}else if(o=="pop"){if(q.empty())cout<<"EMPTY\n";else cout<<q.front()<<'\n',q.pop_front();}else{if(q.empty())cout<<"EMPTY\n";else cout<<q.front()<<'\n';}}}

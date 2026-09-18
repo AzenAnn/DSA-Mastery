@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){unsigned long long n;int b;cin>>n>>b;string d="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",s;if(!n){cout<<"0\n";return 0;}while(n)s=d[n%b]+s,n/=b;cout<<s<<'\n';}

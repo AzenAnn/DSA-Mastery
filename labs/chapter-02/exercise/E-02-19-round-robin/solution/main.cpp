@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;int main(){int n;long long qn;cin>>n>>qn;deque<pair<int,long long>>q;for(int i=1;i<=n;i++){long long w;cin>>w;q.push_back({i,w});}long long t=0;bool f=1;while(!q.empty()){auto [i,w]=q.front();q.pop_front();long long d=min(w,qn);t+=d;w-=d;if(w)q.push_back({i,w});else{if(!f)cout<<'\n';f=0;cout<<i<<':'<<t;}}cout<<'\n';}

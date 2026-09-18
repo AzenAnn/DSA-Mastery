@@ -1,0 +1,182 @@
+[
+  {
+    "id": "001-case",
+    "input": "tests/001-case.in",
+    "expected": "tests/001-case.out",
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
+  },
+  {
+    "id": "002-case",
+    "input": "tests/002-case.in",
+    "expected": "tests/002-case.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "003-case",
+    "input": "tests/003-case.in",
+    "expected": "tests/003-case.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "004-case",
+    "input": "tests/004-case.in",
+    "expected": "tests/004-case.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "005-case",
+    "input": "tests/005-case.in",
+    "expected": "tests/005-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "006-case",
+    "input": "tests/006-case.in",
+    "expected": "tests/006-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "007-case",
+    "input": "tests/007-case.in",
+    "expected": "tests/007-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "008-case",
+    "input": "tests/008-case.in",
+    "expected": "tests/008-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-case",
+    "input": "tests/009-case.in",
+    "expected": "tests/009-case.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "010-case",
+    "input": "tests/010-case.in",
+    "expected": "tests/010-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-case",
+    "input": "tests/011-case.in",
+    "expected": "tests/011-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-case",
+    "input": "tests/012-case.in",
+    "expected": "tests/012-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-case",
+    "input": "tests/013-case.in",
+    "expected": "tests/013-case.out",
+    "points": 5,
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "014-case",
+    "input": "tests/014-case.in",
+    "expected": "tests/014-case.out",
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
+  },
+  {
+    "id": "015-case",
+    "input": "tests/015-case.in",
+    "expected": "tests/015-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-case",
+    "input": "tests/016-case.in",
+    "expected": "tests/016-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-case",
+    "input": "tests/017-case.in",
+    "expected": "tests/017-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-case",
+    "input": "tests/018-case.in",
+    "expected": "tests/018-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-case",
+    "input": "tests/019-case.in",
+    "expected": "tests/019-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "020-case",
+    "input": "tests/020-case.in",
+    "expected": "tests/020-case.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  }
+]
