@@ -3,70 +3,180 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 10,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-flat",
     "input": "tests/002-flat.in",
     "expected": "tests/002-flat.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "003-nested",
     "input": "tests/003-nested.in",
     "expected": "tests/003-nested.out",
-    "points": 10,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "004-empty",
     "input": "tests/004-empty.in",
     "expected": "tests/004-empty.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "005-atom",
     "input": "tests/005-atom.in",
     "expected": "tests/005-atom.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "006-two-branches",
     "input": "tests/006-two-branches.in",
     "expected": "tests/006-two-branches.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "007-deep",
     "input": "tests/007-deep.in",
     "expected": "tests/007-deep.out",
-    "points": 20,
-    "tags": ["stress"]
+    "points": 5,
+    "tags": [
+      "stress"
+    ]
   },
   {
     "id": "008-single-nested",
     "input": "tests/008-single-nested.in",
     "expected": "tests/008-single-nested.out",
     "points": 5,
-    "tags": ["boundary"]
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "009-wide-flat",
     "input": "tests/009-wide-flat.in",
     "expected": "tests/009-wide-flat.out",
     "points": 5,
-    "tags": ["normal"]
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "010-mixed-depth",
     "input": "tests/010-mixed-depth.in",
     "expected": "tests/010-mixed-depth.out",
     "points": 5,
-    "tags": ["regression"]
+    "tags": [
+      "regression"
+    ]
+  },
+  {
+    "id": "011-branch-mix",
+    "input": "tests/011-branch-mix.in",
+    "expected": "tests/011-branch-mix.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-three-level",
+    "input": "tests/012-three-level.in",
+    "expected": "tests/012-three-level.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-four-deep",
+    "input": "tests/013-four-deep.in",
+    "expected": "tests/013-four-deep.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-parallel-singletons",
+    "input": "tests/014-parallel-singletons.in",
+    "expected": "tests/014-parallel-singletons.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-five-deep",
+    "input": "tests/015-five-deep.in",
+    "expected": "tests/015-five-deep.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-five-wrapped",
+    "input": "tests/016-five-wrapped.in",
+    "expected": "tests/016-five-wrapped.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-wide-sublist",
+    "input": "tests/017-wide-sublist.in",
+    "expected": "tests/017-wide-sublist.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-two-deep-branches",
+    "input": "tests/018-two-deep-branches.in",
+    "expected": "tests/018-two-deep-branches.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-atom-again",
+    "input": "tests/019-atom-again.in",
+    "expected": "tests/019-atom-again.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "020-flat-with-nested",
+    "input": "tests/020-flat-with-nested.in",
+    "expected": "tests/020-flat-with-nested.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   }
 ]
