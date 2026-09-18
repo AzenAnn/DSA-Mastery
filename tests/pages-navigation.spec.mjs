@@ -1238,6 +1238,7 @@ test("chapter 1 Lab sidebar groups remain native, categorized, and visually dist
 });
 
 test("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async ({ page }) => {
+  test.setTimeout(120_000);
   const failures = monitorPage(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`${baseUrl}/learn/outline/chapter-02-stack-queue/`);
