@@ -4,8 +4,8 @@ description: "最小生成树的定义、切分定理与环性质，Prim 与 Kru
 order: 3
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-14"
-contributors: ["Fishman", "Azen"]
+updated: "2026-09-19"
+contributors: ["Fishman", "Azen", "qzm123"]
 status: "draft"
 ---
 

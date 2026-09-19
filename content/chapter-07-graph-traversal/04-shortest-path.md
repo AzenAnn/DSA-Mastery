@@ -4,8 +4,8 @@ description: "以松弛理论为主线，用一个贯穿全文的配送图依次
 order: 4
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-14"
-contributors: ["Jeff", "Azen"]
+updated: "2026-09-19"
+contributors: ["Jeff", "Azen", "qzm123"]
 status: "draft"
 ---
 
