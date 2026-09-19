@@ -6,7 +6,6 @@ import { loadLab } from "../tools/lab/core.mjs";
 
 const root = path.resolve(import.meta.dirname, "..");
 const directory = path.join(root, "labs/chapter-07/exercise");
-// The maintainer explicitly renumbered Ch7 on 2026-09-16 to match this guide.
 const sequence = [
   "dfs-timestamps", "iterative-dfs", "dfs-edge-classification", "eulerian-classification",
   "seven-bridges", "course-schedule", "course-schedule-ii", "eventual-safe-states",
@@ -19,20 +18,10 @@ const sequence = [
 const oracleIds = new Set([3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 22, 23, 24, 25, 27, 28, 29, 30]);
 const normalize = (text) => text.replace(/\r\n?/g, "\n");
 
-test("Ch7 numbers exactly the thirty guide exercises in learning order", async () => {
+test("Ch7 contains exactly thirty exercises in learning order", async () => {
   const folders = (await readdir(directory)).filter((name) => /^E-07-\d+-/.test(name));
   const expectedFolders = sequence.map((slug, index) => `E-07-${String(index + 1).padStart(2, "0")}-${slug}`);
   assert.deepEqual(folders.sort(), expectedFolders);
-  const guide = normalize(await readFile(path.join(root, "content/chapter-07-graph-traversal/00-exercise-guide.md"), "utf8"));
-  assert.ok(guide.includes("07E01–07E30"));
-  const guideRows = [...guide.matchAll(/\| T(\d+) \| \[07E(\d+) · [^\]]+\]\(\.\.\/\.\.\/labs\/chapter-07\/exercise\/([^/]+)\/README\.md\)/g)];
-  assert.equal(guideRows.length, 30);
-  for (const [index, row] of guideRows.entries()) {
-    assert.equal(Number(row[1]), index + 1);
-    assert.equal(row[1], row[2]);
-    assert.equal(row[3], expectedFolders[index]);
-  }
-  assert.doesNotMatch(guide, /connected-components|directed-cycle-detection/);
   const seen = new Set();
   for (const folder of folders) {
     const labRoot = path.join(directory, folder);
@@ -49,6 +38,7 @@ test("Ch7 numbers exactly the thirty guide exercises in learning order", async (
     const title = /^title: "(.+)"$/m.exec(readme)[1];
     assert.match(title, new RegExp(`^Lab 07-E-${String(id).padStart(2, "0")}：`));
     assert.ok(readme.includes(`# ${title}\n`));
+    assert.match(readme, /## 解题思路\n\n\S/);
     if (!oracleIds.has(id)) continue;
     const cases = JSON.parse(await readFile(path.join(labRoot, "tests/cases.json"), "utf8"));
     assert.ok(cases.length >= 20, folder);

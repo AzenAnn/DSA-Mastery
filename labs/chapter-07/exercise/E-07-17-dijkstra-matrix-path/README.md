@@ -5,8 +5,8 @@ order: 117
 chapter: 7
 labId: "07E17"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Jeff", "Azen"]
+updated: "2026-09-19"
+contributors: ["Jeff", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -15,7 +15,6 @@ duration: "75～90 分钟"
 
 # Lab 07-E-17：朴素 Dijkstra 与路径还原
 
-> 题集 T17 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 
@@ -129,6 +128,10 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-17-dijkstra-matrix-path
 - [ ] `prev` 回溯对"目标即源点"正确输出单点路径；
 - [ ] 不可达目标不会触发回溯；
 - [ ] 稠密图用例在时限内通过。
+
+## 解题思路
+
+使用邻接矩阵实现朴素 Dijkstra，`dist` 保存当前最短距离，`prev` 保存产生改进的前驱。查询目标时沿前驱反向回溯，再反转得到从源点出发的路径。
 
 ## 复杂度分析
 

@@ -232,7 +232,7 @@ test("clicks through the learner journey beneath the Pages base", async ({ page 
   expect(failures).toEqual([]);
 });
 
-test("chapter 7 guide and Labs expose exactly thirty sequential exercises", async ({ page }) => {
+test("chapter 7 articles and Labs expose exactly thirty sequential exercises", async ({ page }) => {
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/labs/`);
   await page.locator("a.course-labs-list-card").filter({ hasText: "Lab 07-E-24：启发式函数有效性判定" }).click();
@@ -246,7 +246,7 @@ test("chapter 7 guide and Labs expose exactly thirty sequential exercises", asyn
     await expect(links.nth(index)).toContainText(`07E${String(id).padStart(2, "0")} ·`);
   }
   await page.locator(".vp-doc").getByRole("link", { name: "A* 寻路可视化", exact: true }).click();
-  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-07-graph-applications/04-astar-visualization/`);
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-07-graph-traversal/05-astar-visualization/`);
   await page.locator(".vp-doc").getByRole("link", {
     name: "T25 · 07E25 · 八数码问题（A*）",
     exact: true,
@@ -254,15 +254,6 @@ test("chapter 7 guide and Labs expose exactly thirty sequential exercises", asyn
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 07-E-25：八数码问题（A*）");
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator(".vp-doc")).toContainText("123804765");
-  await page.goto(`${baseUrl}/learn/chapter-07-graph-traversal/00-exercise-guide/`);
-  const guideLinks = page.locator(".vp-doc table").first().locator('a[href*="/labs/chapter-07/exercise/"]');
-  await expect(guideLinks).toHaveCount(30);
-  for (const [index, id] of ids.entries()) {
-    await expect(guideLinks.nth(index)).toContainText(`07E${String(id).padStart(2, "0")} ·`);
-  }
-  await expect(page.locator(".vp-doc")).not.toContainText("补充练习");
-  await guideLinks.last().click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 07-E-30：最小费用最大流");
   const overflow = await page.locator("html").evaluate((element) => element.scrollWidth > element.clientWidth + 1);
   expect(overflow).toBe(false);
   expect(failures).toEqual([]);

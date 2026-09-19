@@ -5,8 +5,8 @@ order: 121
 chapter: 7
 labId: "07E21"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Jeff", "Azen"]
+updated: "2026-09-19"
+contributors: ["Jeff", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "进阶"
@@ -15,7 +15,6 @@ duration: "90～120 分钟"
 
 # Lab 07-E-21：紧急救援
 
-> 题集 T21 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 
@@ -146,6 +145,10 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-21-emergency-rescue
 - [ ] "等长"分支只累加 `cnt`、取 `max sum`，不动 `dist`；
 - [ ] 无向边正确拆成两条有向边；
 - [ ] `cnt` 使用 `long long`。
+
+## 解题思路
+
+Dijkstra 松弛时同时维护最短距离、达到该距离的路径条数和路径上救援队总数。距离更短时三项全部替换，距离相等时累加路径数并保留更大的救援队数。
 
 ## 复杂度分析
 

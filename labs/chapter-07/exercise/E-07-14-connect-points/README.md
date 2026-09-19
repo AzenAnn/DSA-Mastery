@@ -5,8 +5,8 @@ order: 114
 chapter: 7
 labId: "07E14"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "进阶"
@@ -15,7 +15,7 @@ duration: "60～90 分钟"
 
 # Lab 07-E-14：连接所有点的最小费用
 
-> 题集 T14 · 规划节 7.3。题目来源：改编自 [LeetCode 1584 连接所有点的最小费用](https://leetcode.cn/problems/min-cost-to-connect-all-points/)，坐标数组改为逐行输入。
+> 题目来源：改编自 [LeetCode 1584 连接所有点的最小费用](https://leetcode.cn/problems/min-cost-to-connect-all-points/)，坐标数组改为逐行输入。
 
 ## 学习目标
 
@@ -25,7 +25,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[最小生成树](../../../../content/chapter-07-graph-traversal/02-minimum-spanning-tree.md)。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[最小生成树](../../../../content/chapter-07-graph-traversal/03-minimum-spanning-tree.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -116,6 +116,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-14-connect-points --case 001-sampl
 pnpm lab:score -- labs/chapter-07/exercise/E-07-14-connect-points
 ```
 
+## 解题思路
+
+把点看作完全图但不显式建立所有边，使用 Prim 的 `best` 数组维护每个未选点到当前树的最小曼哈顿距离。每轮选取最小值并用新点更新其他点。
+
 ## 复杂度分析
 
 朴素 Prim 每轮扫描全部点并即时计算边权，时间 O(n²)、辅助空间 O(n)。
@@ -135,8 +139,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-14-connect-points
 不能用欧几里得距离、平方距离或只比较一个坐标轴。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 为什么 Prim 可以在不显式建立完全图的情况下求解本题？`best[i]` 在每轮表示什么不变量？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+`best[i]` 表示点 i 到当前已选点集合的最小曼哈顿距离。加入一个新点后只需用它更新所有未选点，因此无需保存全部 O(n²) 条边。
 :::

@@ -5,8 +5,8 @@ order: 107
 chapter: 7
 labId: "07E07"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -15,7 +15,7 @@ duration: "60～90 分钟"
 
 # Lab 07-E-07：课程表 II
 
-> 题集 T07 · 规划节 7.2。题目来源：改编自 [LeetCode 210 课程表 II](https://leetcode.cn/problems/course-schedule-ii/)。原题允许任意合法顺序，课程版要求字典序最小顺序以适配固定输出判题。
+> 题目来源：改编自 [LeetCode 210 课程表 II](https://leetcode.cn/problems/course-schedule-ii/)。原题允许任意合法顺序，课程版要求字典序最小顺序以适配固定输出判题。
 
 ## 学习目标
 
@@ -25,7 +25,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[有向图与 DFS 基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。对应新节的完整文章尚未纳入当前版本，可先按本题任务步骤完成练习。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[拓扑排序与有向无环图](../../../../content/chapter-07-graph-traversal/02-topological-sort.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -114,6 +114,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-07-course-schedule-ii --case 001-s
 pnpm lab:score -- labs/chapter-07/exercise/E-07-07-course-schedule-ii
 ```
 
+## 解题思路
+
+同样建立 `b→a` 的邻接表和入度数组，但把出队顺序记录为答案。处理完所有顶点后输出序列；若数量不足 `n`，说明图有环，输出题目规定的失败结果。
+
 ## 复杂度分析
 
 最小堆 Kahn 算法 O(m+n log n) 时间，O(n+m) 空间。
@@ -133,8 +137,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-07-course-schedule-ii
 初始零入度点排序后使用普通 FIFO，不能保证最终字典序最小。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 多个零入度课程同时可选时，为什么必须使用小根堆而不是普通队列？请给出会产生不同合法序列的例子。
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+普通队列的结果取决于入边读入顺序；例如 `0→2`、`1→2` 时，0 和 1 都可先选。小根堆每次取编号最小者，才能满足题目要求的字典序最小输出。
 :::
