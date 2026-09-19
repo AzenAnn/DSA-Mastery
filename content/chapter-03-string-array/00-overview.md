@@ -52,6 +52,7 @@ status: "draft"
 - [Lab 03-T-02：模式匹配选择题精练（3.2）](../../labs/chapter-03/theory/T-03-02-string-matching-quiz/README.md)
 - [Lab 03-T-03：数组与矩阵选择题精练（3.3）](../../labs/chapter-03/theory/T-03-03-array-matrix-quiz/README.md)
 - [Lab 03-T-04：广义表选择题精练（3.4）](../../labs/chapter-03/theory/T-03-04-generalized-list-quiz/README.md)
+- [Lab 03-T-05：数组与广义表理论大题训练](../../labs/chapter-03/theory/T-03-05-array-generalized-list-written/README.md)
 - [Lab 03-E-01：KMP 模式匹配（首次出现位置）](../../labs/chapter-03/exercise/E-03-01-kmp-match/README.md)
 - [Lab 03-E-02：next 与 nextval 数组推导](../../labs/chapter-03/exercise/E-03-02-next-array/README.md)
 - [Lab 03-E-03：朴素匹配与 KMP 比较次数](../../labs/chapter-03/exercise/E-03-03-match-comparison/README.md)
