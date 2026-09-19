@@ -26,7 +26,7 @@ duration: "90～120 分钟"
 
 ## 前置知识
 
-先读[第 7.3 节最短路径](../../../../content/chapter-07-graph-traversal/03-shortest-path.md)中的“负权边为何使 Dijkstra 失效”小节，并完成 [Lab 07-E-16：Dijkstra 逐轮推演](../E-07-16-dijkstra-trace/README.md)。本题进一步处理**允许负权边的单源最短路**，并检测从源点可达的负环。
+先读[第 7.4 节最短路径](../../../../content/chapter-07-graph-traversal/04-shortest-path.md)中的“负权边为何使 Dijkstra 失效”小节，并完成 [Lab 07-E-16：Dijkstra 逐轮推演](../E-07-16-dijkstra-trace/README.md)。本题进一步处理**允许负权边的单源最短路**，并检测从源点可达的负环。
 
 ## 为什么需要新算法
 

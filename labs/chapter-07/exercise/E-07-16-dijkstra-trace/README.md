@@ -26,7 +26,7 @@ duration: "60～75 分钟"
 
 ## 前置知识
 
-完成前建议先阅读[第 7.3 节 最短路径](../../../../content/chapter-07-graph-traversal/03-shortest-path.md)（重点看"第二幕 · Dijkstra 的贪心"与手算表）。你需要准备支持 C++17 的编译器；可先运行 `make doctor` 检查环境。
+完成前建议先阅读[第 7.4 节 最短路径](../../../../content/chapter-07-graph-traversal/04-shortest-path.md)（重点看"第二幕 · Dijkstra 的贪心"与手算表）。你需要准备支持 C++17 的编译器；可先运行 `make doctor` 检查环境。
 
 ## 输入格式
 

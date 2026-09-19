@@ -28,7 +28,7 @@ duration: "40～60 分钟"
 
 ## 前置知识
 
-建议先阅读 [7.2 最小生成树](../../../../content/chapter-07-graph-traversal/02-minimum-spanning-tree.md)，理解切分定理、环性质，以及 Prim / Kruskal 两种贪心算法各自的适用场景。
+建议先阅读 [7.3 最小生成树](../../../../content/chapter-07-graph-traversal/03-minimum-spanning-tree.md)，理解切分定理、环性质，以及 Prim / Kruskal 两种贪心算法各自的适用场景。
 
 ## 作答方法
 

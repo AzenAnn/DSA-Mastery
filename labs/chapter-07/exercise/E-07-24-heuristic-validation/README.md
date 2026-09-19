@@ -25,7 +25,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[A* 寻路可视化](../../../../content/chapter-07-graph-applications/04-astar-visualization.md)。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[A* 寻路：从直觉到实现](../../../../content/chapter-07-graph-traversal/05-astar-visualization.md)。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 题目
 

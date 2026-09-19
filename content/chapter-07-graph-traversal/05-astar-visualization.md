@@ -1,11 +1,11 @@
 ---
-title: "7.4 A* 寻路可视化"
-description: "通过交互式网格理解 A* 如何结合实际代价与启发式估计寻找最短路径。"
-order: 4
+title: "7.5 A* 寻路：从直觉到实现"
+description: "从 Dijkstra 出发理解 A* 的启发式搜索、可采纳性与一致性，并通过交互式网格完成实现验证。"
+order: 5
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-14"
-contributors: ["Azen"]
+updated: "2026-09-17"
+contributors: ["qzm123"]
 status: "draft"
 ---
 
@@ -15,13 +15,50 @@ import { withBase } from "vitepress";
 const demoUrl = withBase("/demos/astar-pathfinding.html");
 </script>
 
-# 7.4 A* 寻路可视化
+# 7.5 A* 寻路：从直觉到实现
 
-A* 既记录从起点到当前状态已经付出的代价，也估计当前状态到终点还需要多远，并优先探索总评分较小的候选：
+## 从 Dijkstra 到 A*
+
+Dijkstra 只按 `g(n)`（起点到当前点的已知代价）选择候选。在网格上，它会像水波一样向各个方向扩散，直到目标被确定。A* 仍然维护同一套最短路代价，但把“还要走多远”的估计加入优先级：
 
 $$
 f(n)=g(n)+h(n).
 $$
+
+启发式 `h(n)` 让搜索更早关注目标方向。`h(n)=0` 时 A* 完全退化为 Dijkstra；启发式越接近真实剩余代价，通常展开的节点越少，但不能为了少搜索而牺牲正确性。
+
+## 启发式函数的两个性质
+
+**可采纳（admissible）** 要求 `h(n)` 不高估从 `n` 到目标的真实最短代价，并且 `h(target)=0`。四方向、单位代价网格中的曼哈顿距离满足这一条件；将它乘以 `2` 则可能高估，A* 可能更快但不再保证最优。
+
+**一致（consistent）** 要求每条边 `u -> v` 都满足：
+
+$$
+h(u)\le w(u,v)+h(v).
+$$
+
+一致性意味着沿任意边前进时 `f` 不会下降，因此节点以当前最小有效记录弹出时，其 `g` 已经确定，不需要重新打开。可采纳但不一致的启发式仍可能找到最优解，但图搜索必须允许重新打开已关闭节点。
+
+## 实现骨架：维护 `g`、`h` 和 `f`
+
+实现只比 Dijkstra 多一个 `h`，以及开放集中的优先级由 `g` 改为 `g+h`。优先队列允许同一节点存在多条旧记录，因此弹出时必须跳过 `current_g != g[u]` 的过期项；目标以有效记录弹出时才可以结束。
+
+```text [astar-skeleton.pseudo]
+g[start] = 0，其他顶点为 INF
+open.push((g[start] + h(start), g[start], start))
+while open 非空:
+    (f, current_g, u) = open.pop()
+    if current_g != g[u]: continue
+    if u == target: return current_g
+    for (u, v, w) in edges:
+        if current_g + w < g[v]:
+            g[v] = current_g + w
+            parent[v] = u
+            open.push((g[v] + h(v), g[v], v))
+return 不可达
+```
+
+A* 既记录从起点到当前状态已经付出的代价，也估计当前状态到终点还需要多远，并优先探索总评分较小的候选：
 
 - $g(n)$：从起点到当前节点的已知代价；
 - $h(n)$：从当前节点到终点的启发式估计；

@@ -1,7 +1,7 @@
 ---
-title: "7.2 最小生成树"
+title: "7.3 最小生成树"
 description: "最小生成树的定义、切分定理与环性质，Prim 与 Kruskal 的实现与选型。"
-order: 2
+order: 3
 chapter: 7
 chapterTitle: "图的遍历与应用"
 updated: "2026-09-14"
@@ -9,7 +9,7 @@ contributors: ["Fishman", "Azen"]
 status: "draft"
 ---
 
-# 7.2 最小生成树
+# 7.3 最小生成树
 
 在带权图上，有一个经典问题把"贪心"落到实处：**最小生成树**（Minimum Spanning Tree，MST）用最小的边权总和连通全部顶点。它依靠"每一步做局部最优选择"的贪心方法，背后的理论支撑是**切分定理**与**环性质**。理解"为什么贪心在这里是对的"，比单纯硬背代码更重要。
 
@@ -98,7 +98,10 @@ $$
 
 ```cpp:line-numbers [prim.cpp]
 // 邻接矩阵 g[u][v] = 边权；INF 表示无边；nullopt 表示图不连通
-std::optional<long long> prim(const std::vector<std::vector<long long>>& g, int n) {
+std::vector<std::vector<long long>> graph;
+int n;
+
+std::optional<long long> prim() {
     if (n == 0) return 0LL;
     std::vector<long long> dist(n, INF); // dist[v]：v 到当前树的最小边权
     std::vector<bool> inTree(n, false);
@@ -112,7 +115,7 @@ std::optional<long long> prim(const std::vector<std::vector<long long>>& g, int 
         inTree[u] = true;
         total += dist[u];
         for (int v = 0; v < n; ++v)      // 用 u 更新邻居
-            if (!inTree[v] && g[u][v] < dist[v]) dist[v] = g[u][v];
+            if (!inTree[v] && graph[u][v] < dist[v]) dist[v] = graph[u][v];
     }
     return total;
 }
@@ -161,7 +164,9 @@ struct DSU {
 };
 
 // 返回 nullopt 表示图不连通；负数总权值仍是合法结果
-std::optional<long long> kruskal(std::vector<Edge> edges, int n) {
+std::vector<Edge> edges;
+
+std::optional<long long> kruskal() {
     if (n == 0) return 0LL;
     std::sort(edges.begin(), edges.end());    // 按权值升序
     DSU dsu(n);

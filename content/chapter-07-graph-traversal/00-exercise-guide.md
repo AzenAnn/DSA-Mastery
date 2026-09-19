@@ -5,7 +5,7 @@ order: 0
 chapter: 7
 chapterTitle: "图的遍历与应用"
 updated: "2026-09-16"
-contributors: ["Azen"]
+contributors: ["Azen", "qzm123"]
 status: "draft"
 ---
 
@@ -57,11 +57,11 @@ status: "draft"
 | 新规划 | 当前可以阅读的文章 |
 | --- | --- |
 | 7.1 DFS 与欧拉图 | [当前 7.1 DFS 与 BFS](../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md) |
-| 7.2 拓扑排序与关键路径 | 新文章尚未上传；题面提供独立完成所需合同与步骤 |
-| 7.3 最小生成树 | [当前 7.2 最小生成树](../../content/chapter-07-graph-traversal/02-minimum-spanning-tree.md) |
-| 7.4 最短路径 | [当前 7.3 最短路径](../../content/chapter-07-graph-traversal/03-shortest-path.md) |
-| 7.5 A* | [当前 7.4 A* 寻路可视化](../../content/chapter-07-graph-applications/04-astar-visualization.md) |
-| 7.6 匹配与流 | 新文章尚未上传；以二分图染色为前置，题面明确增广合同 |
+| 7.2 拓扑排序与关键路径 | [7.2 拓扑排序与有向无环图](./02-topological-sort.md) |
+| 7.3 最小生成树 | [7.3 最小生成树](./03-minimum-spanning-tree.md) |
+| 7.4 最短路径 | [7.4 最短路径](./04-shortest-path.md) |
+| 7.5 A* | [7.5 A* 寻路：从直觉到实现](./05-astar-visualization.md) |
+| 7.6 匹配与流 | [7.6 网络流与二分图匹配](./06-network-flow-and-matching.md) |
 
 ## 题源核对与改编
 

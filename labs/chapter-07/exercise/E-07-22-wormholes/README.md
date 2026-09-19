@@ -25,7 +25,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[最短路径](../../../../content/chapter-07-graph-traversal/03-shortest-path.md)。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[最短路径](../../../../content/chapter-07-graph-traversal/04-shortest-path.md)。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 题目
 

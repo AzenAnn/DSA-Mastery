@@ -28,7 +28,7 @@ duration: "40～60 分钟"
 
 ## 前置知识
 
-建议先阅读 [7.3 最短路径](../../../../content/chapter-07-graph-traversal/03-shortest-path.md)，理解 BFS / Dijkstra / Floyd-Warshall 的统一主线“松弛”，以及三个算法各自的适用条件。
+建议先阅读 [7.4 最短路径](../../../../content/chapter-07-graph-traversal/04-shortest-path.md)，理解 BFS / Dijkstra / Floyd-Warshall 的统一主线“松弛”，以及三个算法各自的适用条件。
 
 ## 作答方法
 
