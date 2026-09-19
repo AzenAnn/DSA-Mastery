@@ -5,8 +5,8 @@ order: 129
 chapter: 7
 labId: "07E29"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "挑战"
@@ -15,7 +15,6 @@ duration: "90～120 分钟"
 
 # Lab 07-E-29：最大流（Edmonds-Karp）
 
-> 题集 T29 · 规划节 7.6。题目来源：课程原创经典 Edmonds-Karp 最大流模板。
 
 ## 学习目标
 
@@ -25,7 +24,7 @@ duration: "90～120 分钟"
 
 ## 前置知识与环境
 
-先阅读[图的遍历基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。对应新节的完整文章尚未纳入当前版本，可先按本题任务步骤完成练习。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[网络流与二分图匹配](../../../../content/chapter-07-graph-traversal/06-network-flow-and-matching.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -115,6 +114,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-29-edmonds-karp --case 001-sample
 pnpm lab:score -- labs/chapter-07/exercise/E-07-29-edmonds-karp
 ```
 
+## 解题思路
+
+为每条输入边建立独立的正向边和反向残量边。每轮 BFS 找到最短增广路，沿路计算瓶颈并更新正反向容量，直到不存在从源点到汇点的残量路径。
+
 ## 复杂度分析
 
 Edmonds-Karp 时间 O(n·m²)，空间 O(n+m)。这是教学规模的模板，容量很大时也不应逐单位增广。
@@ -134,8 +137,8 @@ Edmonds-Karp 时间 O(n·m²)，空间 O(n+m)。这是教学规模的模板，�
 反向残量边用于撤销旧流量；不能把原图已有的反向输入边当成它。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 为什么每条输入边都必须有独立的反向残量边？如果把平行边合并，哪种重新分配流量的情况会出错？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+反向边用于撤销此前经过的流量；平行边各自容量和流量独立，合并会丢失它们的身份，导致残量网络无法准确表示可撤销的流量。
 :::

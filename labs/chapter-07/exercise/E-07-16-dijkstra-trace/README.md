@@ -5,8 +5,8 @@ order: 116
 chapter: 7
 labId: "07E16"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Jeff", "Azen"]
+updated: "2026-09-19"
+contributors: ["Jeff", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "入门"
@@ -15,7 +15,6 @@ duration: "60～75 分钟"
 
 # Lab 07-E-16：Dijkstra 逐轮推演
 
-> 题集 T16 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 
@@ -139,6 +138,10 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-16-dijkstra-trace
 - [ ] 选点时只考虑"未确定且 `dist` 有限"的顶点；
 - [ ] 提前终止条件正确（选不出顶点时停止，而不是死循环 `n` 次）；
 - [ ] 不可达顶点的 `dist` 与 `prev` 均为 `-1`。
+
+## 解题思路
+
+维护距离数组、前驱数组和已确定标记，每轮在线性扫描中选择距离最小的未确定顶点。用该顶点松弛所有出边，并按题目要求记录每轮确定顺序。
 
 ## 复杂度分析
 

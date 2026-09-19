@@ -435,7 +435,7 @@ AOE 网络可能有多个汇点。总工期应取所有汇点最早时间的最�
 
 ## 代码题练习
 
-按 [Ch7 题集学习清单](./00-exercise-guide.md)练习：
+按本节下方的 Lab 入口练习：
 
 - [T06 · 07E06 · 课程表](../../labs/chapter-07/exercise/E-07-06-course-schedule/README.md)
 - [T07 · 07E07 · 课程表 II](../../labs/chapter-07/exercise/E-07-07-course-schedule-ii/README.md)

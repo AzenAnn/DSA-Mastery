@@ -5,8 +5,8 @@ order: 102
 chapter: 7
 labId: "07E02"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Qing", "Azen"]
+updated: "2026-09-19"
+contributors: ["Qing", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "入门"
@@ -15,9 +15,8 @@ duration: "60～90 分钟"
 
 # Lab 07-E-02：显式栈 DFS
 
-> 题集 T02 · 规划节 7.1；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
-> 题目来源：课程经典显式栈 DFS 练习，没有直接对应的 LeetCode 原题。本 Lab 特别要求用“顶点 + 下一个邻居下标”的栈帧严格模拟递归，而不是只保证访问到相同的顶点集合。
+> 题目来源：课程经典显式栈 DFS 练习。本 Lab 特别要求用“顶点 + 下一个邻居下标”的栈帧严格模拟递归，而不是只保证访问到相同的顶点集合。
 
 ## 学习目标
 
@@ -120,6 +119,10 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-02-iterative-dfs
 - [ ] 显式帧顺序与递归升序一致；
 - [ ] 长链与星形压力用例均通过，未用递归实现；
 - [ ] 输出行末无空格，不可达顶点未输出。
+
+## 解题思路
+
+用栈帧保存当前顶点和下一个待处理的邻居下标，模拟递归调用和返回。入栈时标记顶点，出栈时完成处理，就能在不使用递归的情况下保持升序 DFS 顺序。
 
 ## 复杂度分析
 

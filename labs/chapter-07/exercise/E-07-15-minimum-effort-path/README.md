@@ -5,8 +5,8 @@ order: 115
 chapter: 7
 labId: "07E15"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "进阶"
@@ -15,7 +15,7 @@ duration: "60～90 分钟"
 
 # Lab 07-E-15：最小体力消耗路径
 
-> 题集 T15 · 规划节 7.3。题目来源：改编自 [LeetCode 1631 最小体力消耗路径](https://leetcode.cn/problems/path-with-minimum-effort/)。
+> 题目来源：改编自 [LeetCode 1631 最小体力消耗路径](https://leetcode.cn/problems/path-with-minimum-effort/)。
 
 ## 学习目标
 
@@ -25,7 +25,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[最小生成树](../../../../content/chapter-07-graph-traversal/03-minimum-spanning-tree.md)。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[最小生成树](../../../../content/chapter-07-graph-traversal/03-minimum-spanning-tree.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -114,6 +114,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-15-minimum-effort-path --case 001-
 pnpm lab:score -- labs/chapter-07/exercise/E-07-15-minimum-effort-path
 ```
 
+## 解题思路
+
+把网格相邻格子连边，边权是高度差绝对值。用 Dijkstra 最小化路径上的最大边权：松弛时取 `max(current, edge)`，第一次确定终点时即得到最小体力。
+
 ## 复杂度分析
 
 令 V=rows×cols，网格边数 O(V)，Kruskal 时间 O(V log V)，空间 O(V)。二分+BFS 为 O(V log H)，H 是高度差上界。
@@ -133,8 +137,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-15-minimum-effort-path
 目标是最大边权的最小值，不能把路径高度差相加。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 为什么松弛时使用 `max(dist[u], effort(u,v))` 而不是加法？这与题目中的“路径体力”定义有什么关系？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+路径体力由经过的最大高度差决定，而不是高度差总和。到达 v 的候选代价应是当前路径最大边权与新边权的较大者，再在候选中取最小值。
 :::

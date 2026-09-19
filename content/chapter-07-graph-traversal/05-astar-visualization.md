@@ -368,7 +368,7 @@ int main() {
 
 ## 代码题练习
 
-按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
+按本节下方的 Lab 入口练习。下列入口使用稳定 Lab 编号。
 
 - [T23 · 07E23 · A* 网格寻路](../../labs/chapter-07/exercise/E-07-23-astar-grid/README.md)
 - [T24 · 07E24 · 启发式函数有效性判定](../../labs/chapter-07/exercise/E-07-24-heuristic-validation/README.md)

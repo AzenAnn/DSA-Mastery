@@ -5,8 +5,8 @@ order: 112
 chapter: 7
 labId: "07E12"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Fishman", "Azen"]
+updated: "2026-09-19"
+contributors: ["Fishman", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -15,7 +15,6 @@ duration: "120～150 分钟"
 
 # Lab 07-E-12：最小生成树
 
-> 题集 T12 · 规划节 7.3；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 > 题目来源：参考 [GeeksforGeeks 的经典 Kruskal 练习](https://www.geeksforgeeks.org/dsa/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/)与 [LeetCode 1135：最低成本联通所有城市](https://leetcode.cn/problems/connecting-cities-with-minimum-cost/)进行课程化改编。本 Lab 使用从 `0` 开始的顶点编号、保证图连通，并采用独立输入输出与测试。
 
@@ -108,6 +107,10 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-12-minimum-spanning-tree
 - [ ] 边权用 64 位整数累加，避免溢出；
 - [ ] 多重边无需预先去重，答案不受平行边输入顺序影响；
 - [ ] README 中的命令已从干净检出验证。
+
+## 解题思路
+
+按边权升序遍历所有边，用并查集判断两个端点是否已经连通。只有不会形成环的边才加入生成树，选够 `n-1` 条边即得到答案；不足则图不连通。
 
 ## 复杂度分析
 

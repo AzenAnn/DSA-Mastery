@@ -5,8 +5,8 @@ order: 120
 chapter: 7
 labId: "07E20"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Jeff", "Azen"]
+updated: "2026-09-19"
+contributors: ["Jeff", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -15,7 +15,6 @@ duration: "90～120 分钟"
 
 # Lab 07-E-20：Floyd 全源最短路径
 
-> 题集 T20 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 
@@ -150,6 +149,10 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-20-floyd-all-pairs
 - [ ] `nxt` 更新写 `nxt[i][j] = nxt[i][k]` 而非 `= k`；
 - [ ] 松弛用严格小于，`INF` 参与加法前先判有限；
 - [ ] `s == t` 与不可达两类边界正确处理。
+
+## 解题思路
+
+令 `dist[i][j]` 表示当前点对最短距离，依次把每个顶点作为中转点。若经过 `k` 更短就更新距离，并同步更新后继矩阵，查询时沿后继逐步还原路径。
 
 ## 复杂度分析
 

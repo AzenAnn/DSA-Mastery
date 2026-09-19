@@ -263,7 +263,6 @@ const curriculumChapterDefinitions: CurriculumChapterDefinition[] = [
     description: "从 DFS、BFS 走向最小生成树、最短路径等图算法。",
     url: "/learn/outline/chapter-07-graph-traversal-applications/",
     lessonSources: [
-      "content/chapter-07-graph-traversal/00-exercise-guide.md",
       "content/chapter-07-graph-traversal/01-dfs-and-bfs.md",
       "content/chapter-07-graph-traversal/02-topological-sort.md",
       "content/chapter-07-graph-traversal/03-minimum-spanning-tree.md",

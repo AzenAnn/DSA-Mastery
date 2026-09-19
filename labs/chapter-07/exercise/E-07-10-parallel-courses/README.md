@@ -5,8 +5,8 @@ order: 110
 chapter: 7
 labId: "07E10"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "挑战"
@@ -15,7 +15,7 @@ duration: "90～120 分钟"
 
 # Lab 07-E-10：并行课程 III
 
-> 题集 T10 · 规划节 7.2。题目来源：改编自 [LeetCode 2050 并行课程 III](https://leetcode.cn/problems/parallel-courses-iii/)，改为边表与耗时数组的标准输入。
+> 题目来源：改编自 [LeetCode 2050 并行课程 III](https://leetcode.cn/problems/parallel-courses-iii/)，改为边表与耗时数组的标准输入。
 
 ## 学习目标
 
@@ -25,7 +25,7 @@ duration: "90～120 分钟"
 
 ## 前置知识与环境
 
-先阅读[有向图与 DFS 基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。对应新节的完整文章尚未纳入当前版本，可先按本题任务步骤完成练习。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[拓扑排序与有向无环图](../../../../content/chapter-07-graph-traversal/02-topological-sort.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -115,6 +115,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-10-parallel-courses --case 001-sam
 pnpm lab:score -- labs/chapter-07/exercise/E-07-10-parallel-courses
 ```
 
+## 解题思路
+
+拓扑排序时维护每门课程的最早完成时间。课程出队后，用 `finish[u]` 更新后继的开始时间，所有前驱处理完再确定后继；答案是所有课程完成时间的最大值。
+
 ## 复杂度分析
 
 拓扑排序和最长路径 DP 为 O(n+m) 时间、O(n+m) 空间。
@@ -134,8 +138,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-10-parallel-courses
 多个先修取完成时间的最大值；不能取和，也不能让最后处理的先修覆盖较大的值。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 一门课程有多个先修课时，为什么最早开始时间取所有前驱完成时间的最大值，而不是求和？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+前驱课程可以并行完成，当前课程只能等待最后一个完成的前驱，因此开始时间是前驱完成时间的最大值；求和会错误地把并行任务当成串行任务。
 :::

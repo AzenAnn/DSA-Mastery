@@ -5,8 +5,8 @@ order: 130
 chapter: 7
 labId: "07E30"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "挑战"
@@ -15,7 +15,7 @@ duration: "90～120 分钟"
 
 # Lab 07-E-30：最小费用最大流
 
-> 题集 T30 · 规划节 7.6。题目来源：参考 [洛谷 P3381 最小费用最大流](https://www.luogu.com.cn/problem/P3381) 改编。课程版明确支持负费用边，但保证初始网络没有负费用有向环，并采用教学规模。
+> 题目来源：参考 [洛谷 P3381 最小费用最大流](https://www.luogu.com.cn/problem/P3381) 改编。课程版明确支持负费用边，但保证初始网络没有负费用有向环，并采用教学规模。
 
 ## 学习目标
 
@@ -25,7 +25,7 @@ duration: "90～120 分钟"
 
 ## 前置知识与环境
 
-先阅读[图的遍历基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。对应新节的完整文章尚未纳入当前版本，可先按本题任务步骤完成练习。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[网络流与二分图匹配](../../../../content/chapter-07-graph-traversal/06-network-flow-and-matching.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -115,6 +115,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-30-min-cost-max-flow --case 001-sa
 pnpm lab:score -- labs/chapter-07/exercise/E-07-30-min-cost-max-flow
 ```
 
+## 解题思路
+
+在残量网络中用 Bellman-Ford 找费用最小的增广路，沿路按瓶颈增广并累加流量与费用。反向边费用必须取相反数，重复增广直到无法到达汇点。
+
 ## 复杂度分析
 
 参考解用 Bellman-Ford 找增广路，若增广 A 次，时间 O(A·n·m)，空间 O(n+m)。整数容量下 A≤最大流值，但通常每次推送整条路径瓶颈；大规模网络应进一步学习势能+Dijkstra。
@@ -134,8 +138,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-30-min-cost-max-flow
 遇到正费用增广路也必须继续以达到最大流；反向边费用符号错误会使重配后的总费用出错。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 为什么最小费用最大流不能在找到一条负费用路径后立即停止？反向边费用为负时有什么作用？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+目标首先是最大流，正费用增广路也必须继续使用。反向边的相反费用允许算法撤销早先的昂贵选择、重新分配流量，最终在最大流中取得最小费用。
 :::

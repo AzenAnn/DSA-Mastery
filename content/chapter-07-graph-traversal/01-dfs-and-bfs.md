@@ -824,7 +824,7 @@ int main() {
 
 ## 代码题练习
 
-按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
+按本节下方的 Lab 入口练习。下列入口使用稳定 Lab 编号。
 
 - [T01 · 07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md)
 - [T02 · 07E02 · 显式栈 DFS](../../labs/chapter-07/exercise/E-07-02-iterative-dfs/README.md)

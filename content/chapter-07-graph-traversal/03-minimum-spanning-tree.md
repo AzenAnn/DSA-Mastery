@@ -440,7 +440,7 @@ Prim 与 Kruskal 都能正确求出 MST，选谁取决于图的**稠密程度**�
 
 ## 代码题练习
 
-按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
+按本节下方的 Lab 入口练习。下列入口使用稳定 Lab 编号。
 
 - [T12 · 07E12 · 最小生成树](../../labs/chapter-07/exercise/E-07-12-minimum-spanning-tree/README.md)
 - [T13 · 07E13 · 最低成本连通所有城市](../../labs/chapter-07/exercise/E-07-13-connect-cities/README.md)

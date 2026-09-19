@@ -377,7 +377,7 @@ int main() {
 
 ## 代码题练习
 
-按 [Ch7 题集学习清单](./00-exercise-guide.md)练习：
+按本节下方的 Lab 入口练习：
 
 - [T26 · 07E26 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-26-bfs-bipartite/README.md)
 - [T27 · 07E27 · 二分图最大匹配（匈牙利）](../../labs/chapter-07/exercise/E-07-27-bipartite-matching/README.md)

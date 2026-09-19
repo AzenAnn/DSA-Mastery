@@ -5,8 +5,8 @@ order: 127
 chapter: 7
 labId: "07E27"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "进阶"
@@ -15,7 +15,6 @@ duration: "60～90 分钟"
 
 # Lab 07-E-27：二分图最大匹配（匈牙利）
 
-> 题集 T27 · 规划节 7.6。题目来源：参考 [AcWing 861 二分图的最大匹配](https://www.acwing.com/problem/content/863/) 的模板主题。原站核对时要求登录，题面与测试按下列课程合同独立编写。
 
 ## 学习目标
 
@@ -25,7 +24,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[图的遍历基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。对应新节的完整文章尚未纳入当前版本，可先按本题任务步骤完成练习。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[网络流与二分图匹配](../../../../content/chapter-07-graph-traversal/06-network-flow-and-matching.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -114,6 +113,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-27-bipartite-matching --case 001-s
 pnpm lab:score -- labs/chapter-07/exercise/E-07-27-bipartite-matching
 ```
 
+## 解题思路
+
+从左侧顶点逐个尝试寻找增广路，递归访问右侧顶点。若右侧顶点尚未匹配，或原匹配的左顶点可以改走其他边，就更新匹配并使匹配数增加。
+
 ## 复杂度分析
 
 逐左顶点 DFS 增广 O(n1·m+n1·n2) 时间，邻接表与访问/匹配数组 O(n1+n2+m) 空间。
@@ -133,8 +136,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-27-bipartite-matching
 遇到已匹配右顶点时需要尝试为原左顶点重新配对；每次增广都必须重置访问标记。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 增广路为什么能让匹配数增加 1？沿路径交替改变匹配状态后，哪些边会被加入或移除？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+增广路两端都是未匹配点，路径上的边交替为未匹配边和已匹配边。翻转后未匹配边比被移除的已匹配边多一条，因此匹配数增加 1。
 :::

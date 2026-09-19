@@ -788,7 +788,7 @@ $\mathrm{dist}[F]=6$，最短路径就是直达边 $A\to F$。绕行路径从未
 
 ## 代码题练习
 
-按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
+按本节下方的 Lab 入口练习。下列入口使用稳定 Lab 编号。
 
 - [T16 · 07E16 · Dijkstra 逐轮推演](../../labs/chapter-07/exercise/E-07-16-dijkstra-trace/README.md)
 - [T17 · 07E17 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-17-dijkstra-matrix-path/README.md)

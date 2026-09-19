@@ -5,8 +5,8 @@ order: 126
 chapter: 7
 labId: "07E26"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Qing", "Azen"]
+updated: "2026-09-19"
+contributors: ["Qing", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -15,7 +15,6 @@ duration: "60～90 分钟"
 
 # Lab 07-E-26：BFS 二分图判定
 
-> 题集 T26 · 规划节 7.6；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 > 题目来源：改编自 [LeetCode 785：判断二分图](https://leetcode.cn/problems/is-graph-bipartite/)。原题接收邻接表并只返回布尔值；本 Lab 改用无向边集输入，并额外输出一组确定的染色或首次发现的冲突边。
 
@@ -127,6 +126,10 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-26-bfs-bipartite
 - [ ] 冲突时立即终止并输出 `NO` + 冲突边（`u < v`）；
 - [ ] `YES` 时输出长度为 `n` 的 0/1 颜色数组，孤立点为 `0`；
 - [ ] 能结合 BFS 父子关系，从同色冲突边还原出一个奇环。
+
+## 解题思路
+
+对每个未染色顶点启动 BFS，并给相邻顶点染相反颜色。若发现一条边连接了同色顶点，图不是二分图；记录扫描顺序中的第一条冲突边即可满足确定性输出。
 
 ## 复杂度分析
 
