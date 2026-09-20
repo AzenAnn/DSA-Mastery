@@ -44,9 +44,11 @@ DSA Mastery 将课程讲解与实验练习放在同一个学习入口中：读�
 ## 课程内容
 
 <p align="center">
-  <strong>60+ 教材页面</strong>
+  <strong>82 篇教材正文</strong>
   &nbsp;·&nbsp;
-  <strong>100+ Lab</strong>
+  <strong>221 个 Lab</strong>
+  &nbsp;·&nbsp;
+  <strong>15 个课程章节</strong>
 </p>
 
 课程从基础概念与线性结构出发，逐步进入树、图、查找、排序和算法方法。内容仍在持续完善；尚未完成的页面会明确标注状态，不把草稿包装成完成品。
@@ -60,7 +62,7 @@ DSA Mastery 将课程讲解与实验练习放在同一个学习入口中：读�
 | 基础与线性结构 | 绪论、线性表、栈与队列、字符串、数组与矩阵 |
 | 树与图 | 树与二叉树、树的应用、图的基础、存储、遍历与应用 |
 | 查找与排序 | 查找、基础排序、高效排序与外部排序 |
-| 算法方法 | 贪心算法、动态规划，以及围绕课程主线持续补充的练习与实验 |
+| 算法方法 | 分治与递归、贪心算法、动态规划，以及围绕课程主线持续补充的练习与实验 |
 
 完整章节安排请前往[课程地图](https://azenann.github.io/DSA-Mastery/learn/)，也可以直接从[在线课程首页](https://azenann.github.io/DSA-Mastery/)开始阅读。
 
@@ -74,9 +76,19 @@ Lab 不是教材末尾的附属材料，而是用于检查理解、练习实现�
 
 | Theory | Exercise | Project |
 | --- | --- | --- |
-| 通过交互选择题和概念辨析，检查术语、性质与关键结论。 | 通过可编译、可运行的 C++ 任务，练习核心结构、算法和边界处理。 | 通过包含多个任务与依赖关系的综合实验，组织完整的问题解决过程。 |
+| **45 个**。通过交互选择题和概念辨析，检查术语、性质与关键结论。 | **168 个**。通过可编译、可运行的 C++ 任务，练习核心结构、算法和边界处理。 | **8 个**。通过包含多个任务与依赖关系的综合实验，组织完整的问题解决过程。 |
 
 你可以在 [Labs 目录](https://azenann.github.io/DSA-Mastery/labs/)中按章节和类型选择练习。
+
+### 同一套题目，多种学习入口
+
+| 入口 | 适合场景 | 已有能力 |
+| --- | --- | --- |
+| 在线课程 | 阅读教材、快速练习 | Theory 在线作答、答案解析、按章节浏览全部 Lab |
+| Lab CLI | 在终端写代码和精确定位问题 | 环境检查、编译、公开用例、单 case / task 重跑、评分与学生包 |
+| VS Code 扩展 | 在编辑器里完成完整做题循环 | 题目树、Quiz 作答、Program / Project 提交、结果面板与提交历史 |
+
+三种入口复用相同的 Lab 描述与判题合同。终端和 VS Code 扩展调用同一个评测内核，不会出现两套规则各自演进的问题。
 
 ## 开始学习
 
@@ -146,6 +158,48 @@ powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windo
 - Windows：[Windows 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/02-windows-student-setup/)
 
 脚本也可以只做检查：`--check-only` 不安装工具、不 clone/pull 仓库、不安装依赖。学校设备、公司代理或包管理器不可用时，请按对应平台教程使用逐项手工安装路径。
+
+### 在终端运行 Lab
+
+完成一键配置后，可以直接用章节、类型和题号运行一道题：
+
+```bash
+# 第 1 章 Exercise 第 1 题
+node ./lab.mjs 1 E 1
+```
+
+需要查看完整评测过程时，使用跨平台的 Lab CLI：
+
+```bash
+lab="labs/chapter-01/exercise/E-01-01-sequential-list-deduplication"
+
+pnpm lab:doctor -- "$lab"
+pnpm lab:run -- "$lab"
+pnpm lab:score -- "$lab"
+```
+
+`doctor` 检查本机工具链，`run` 运行公开测试并显示逐用例结果，`score` 用严格退出码判断自动部分是否满分。Project Lab 使用相同命令，并按 task 展示 CTest、标准输入输出用例和人工待评分项；GNU Make 只是可选快捷入口。
+
+完整参数、单 case / task 重跑、交互运行与学生包说明见 [Lab 命令与接口使用指南](./docs/LAB_CLI_COMMAND_GUIDE.md)。
+
+### 在 VS Code 中做题
+
+项目提供可选的 DSA Mastery Labs 扩展，将 Theory、Exercise 和 Project 放进同一个侧边栏。你可以阅读题面、打开学生文件、提交评测、查看首处差异与历史快照；Project 的人工评审项会明确保持 `PENDING`，不会被自动分数替代。
+
+扩展目前通过 GitHub Releases 分发测试版 `.vsix`。安装、使用范围和常见问题见 [VS Code 扩展指南](./docs/VSCODE_EXTENSION_GUIDE.md)。
+
+## 项目基础设施
+
+| 能力 | 当前状态 |
+| --- | --- |
+| 课程网站 | VitePress 自动生成章节、侧栏、搜索和 Lab 索引，并通过 GitHub Pages 发布 |
+| 跨平台环境 | macOS / Windows 原生安装向导，支持 `basic`、`full` 和只读 `check-only` |
+| Lab 工具链 | 三类 Lab 共用稳定 ID、Schema、定位、校验、运行、评分、验证、打包和清理命令 |
+| C++ 评测 | 支持 GCC、Clang 与 MSVC；Program 使用公开用例，Project 组合 stdio、CTest 与人工任务 |
+| 编辑器体验 | VS Code 扩展支持题目浏览、Quiz 作答、Program / Project 提交和本地进度记录 |
+| 质量门禁 | 内容校验、类型检查、lint、自动发现、静态构建、链接审计及跨平台 Lab 验证 |
+
+基础设施的目标是减少环境和操作摩擦，让学习者把时间放在理解与实现上；网站、CLI 和插件都不会取代教材质量与人工 Review。
 
 ## 参与贡献
 
