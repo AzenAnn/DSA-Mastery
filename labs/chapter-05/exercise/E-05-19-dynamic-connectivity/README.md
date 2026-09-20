@@ -136,5 +136,5 @@ int main() {
 
 ## 本地运行与提交
 ```powershell
-pnpm lab:run -- labs/chapter-05/exercise/E-05-19-dynamic-connectivity
+pnpm lab run labs/chapter-05/exercise/E-05-19-dynamic-connectivity
 ```

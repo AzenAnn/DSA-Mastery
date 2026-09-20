@@ -82,10 +82,10 @@ cd labs/chapter-14/exercise/E-14-04-maximum-subarray
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-14/exercise/E-14-04-maximum-subarray
+pnpm lab run labs/chapter-14/exercise/E-14-04-maximum-subarray
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-14/exercise/E-14-04-maximum-subarray
+pnpm lab verify labs/chapter-14/exercise/E-14-04-maximum-subarray
 ```
 
 ## 完成清单

@@ -50,9 +50,9 @@ KROKI_SERVER_URL=http://localhost:8000 pnpm run build
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm run validate
+pnpm test
 pnpm run build
-pnpm run check:site
+pnpm test --project site-audit
 ```
 
 构建期插件会复用 `public/diagrams/` 中已有 SVG；缺失或无法生成时构建失败并显示错误。检查页面时确认 SVG 可见、caption 存在，并在 390px 窄屏和浅/暗主题下没有横向溢出。

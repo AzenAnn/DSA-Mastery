@@ -115,10 +115,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/exercise/E-02-07-sliding-window-maximum
-pnpm lab:run -- labs/chapter-02/exercise/E-02-07-sliding-window-maximum
-pnpm lab:run -- labs/chapter-02/exercise/E-02-07-sliding-window-maximum --case 001-sample
-pnpm lab:score -- labs/chapter-02/exercise/E-02-07-sliding-window-maximum
+pnpm lab doctor labs/chapter-02/exercise/E-02-07-sliding-window-maximum
+pnpm lab run labs/chapter-02/exercise/E-02-07-sliding-window-maximum
+pnpm lab run labs/chapter-02/exercise/E-02-07-sliding-window-maximum --case 001-sample
+pnpm lab score labs/chapter-02/exercise/E-02-07-sliding-window-maximum
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`008-scale` 使用两千个元素和宽窗口，回归候选过期、重复淘汰与连续输出。线性复杂度要求仍需结合实现分析判断，不依赖易受机器性能影响的极限超时。

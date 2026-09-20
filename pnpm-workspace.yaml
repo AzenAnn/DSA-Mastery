@@ -1,5 +1,23 @@
+packages:
+  - packages/*
+  - apps/*
 allowBuilds:
+  "@vscode/vsce-sign": false
   esbuild: true
+  keytar: false
+  simple-git-hooks: false
+# VitePress 把 markdown-it 打包进了自己的 dist，插件最终装到的是它那个实例上：
+# 版本跨大版本就会静默失效（@mdit/plugin-container 2.x 装到 14 的实例上，theory 容器全部不渲染）。
+# @types/node 必须描述 engines 声明的最低 Node，否则会放行 22.13 上不存在的 API。
+# 这几个只能跟着 VitePress 的依赖走，别让 pnpm update -L 自作主张。
+updateConfig:
+  ignoreDependencies:
+    - "@mdit/plugin-container"
+    - "@mdit/plugin-mark"
+    - "@types/markdown-it"
+    - "@types/node"
+    - markdown-it
+    - markdown-it-mathjax3
 overrides:
   typescript: npm:typescript-native-bridge@6.0.3-bridge.17.tsgo.7.0.2
   speech-rule-engine>@xmldom/xmldom: 0.9.12

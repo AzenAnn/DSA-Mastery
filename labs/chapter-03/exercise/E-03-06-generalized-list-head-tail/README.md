@@ -131,9 +131,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-06-generalized-list-head-tail
-pnpm lab:run -- labs/chapter-03/exercise/E-03-06-generalized-list-head-tail
-pnpm lab:score -- labs/chapter-03/exercise/E-03-06-generalized-list-head-tail
+pnpm lab doctor labs/chapter-03/exercise/E-03-06-generalized-list-head-tail
+pnpm lab run labs/chapter-03/exercise/E-03-06-generalized-list-head-tail
+pnpm lab score labs/chapter-03/exercise/E-03-06-generalized-list-head-tail
 ```
 
 - [ ] 四个样例全部通过；

@@ -7,7 +7,7 @@ import { createHighlighter } from "shiki";
 import { defineLoader } from "vitepress";
 
 // github-dark 里数字 token 是蓝色 #79B8FF；渲染后统一替换为亮白，其余高亮不变。
-const NUMBER_TOKEN_COLOR = /#79[Bb]8[Ff]{2}/g;
+const NUMBER_TOKEN_COLOR = /#79B8F{2}/gi;
 const NUMBER_TEXT_COLOR = "#d7dbe8";
 
 export interface QuizQuestion {
@@ -57,14 +57,18 @@ function optionalString(value: unknown, field: string, source: string): string |
   return value;
 }
 
-function parseQuestion(value: unknown, index: number, source: string): Omit<QuizQuestion, "stemHtml" | "codeHtml" | "hintHtml" | "optionHtml" | "explanationHtml"> {
+function parseQuestion(
+  value: unknown,
+  index: number,
+  source: string,
+): Omit<QuizQuestion, "stemHtml" | "codeHtml" | "hintHtml" | "optionHtml" | "explanationHtml"> {
   const label = `${source}: 第 ${index + 1} 题`;
   if (!isRecord(value)) throw new Error(`${label} 必须是对象`);
 
   const id = optionalString(value.id, "id", label);
   const stem = optionalString(value.stem, "stem", label);
   const explanation = optionalString(value.explanation, "explanation", label);
-  if (!id || !stem || !explanation) throw new Error(`${label} 缺少必填字段`);
+  if (id === undefined || stem === undefined || explanation === undefined) throw new Error(`${label} 缺少必填字段`);
   if (!Array.isArray(value.options) || value.options.length !== 4) {
     throw new Error(`${label} options 必须恰好包含 4 项`);
   }
@@ -72,7 +76,7 @@ function parseQuestion(value: unknown, index: number, source: string): Omit<Quiz
     if (typeof option !== "string" || !option.trim()) {
       throw new Error(`${label} 的选项 ${optionIndex + 1} 必须是非空字符串`);
     }
-    if (/^[A-DＡ-Ｄ][.．、:：)）]\s*/i.test(option.trim())) {
+    if (/^[A-DＡＢＣＤ][.．、:：)）]\s*/i.test(option.trim())) {
       throw new Error(`${label} 的选项 ${optionIndex + 1} 不要手写 A、B、C、D 前缀`);
     }
     return option;
@@ -82,7 +86,10 @@ function parseQuestion(value: unknown, index: number, source: string): Omit<Quiz
   if (!Number.isInteger(value.answer) || Number(value.answer) < 0 || Number(value.answer) >= options.length) {
     throw new Error(`${label} answer 必须是 0～3 的整数`);
   }
-  if (value.topics !== undefined && (!Array.isArray(value.topics) || value.topics.some((topic) => typeof topic !== "string" || !topic.trim()))) {
+  if (
+    value.topics !== undefined &&
+    (!Array.isArray(value.topics) || value.topics.some((topic) => typeof topic !== "string" || !topic.trim()))
+  ) {
     throw new Error(`${label} topics 必须是非空字符串数组`);
   }
   if (value.points !== undefined && (!Number.isInteger(value.points) || Number(value.points) <= 0)) {
@@ -152,8 +159,8 @@ export default defineLoader({
             raw.map(async (question) => ({
               ...question,
               stemHtml: markdown.render(question.stem),
-              codeHtml: question.code ? await highlightCode(question.code) : undefined,
-              hintHtml: question.hint ? markdown.render(question.hint) : undefined,
+              codeHtml: question.code === undefined ? undefined : await highlightCode(question.code),
+              hintHtml: question.hint === undefined ? undefined : markdown.render(question.hint),
               optionHtml: question.options.map((option) => markdown.renderInline(option)),
               explanationHtml: markdown.render(question.explanation),
             })),

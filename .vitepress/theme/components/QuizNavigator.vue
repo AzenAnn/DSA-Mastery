@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { QuizItemStatus } from "../quiz-state";
 import { useData } from "vitepress";
 import { computed } from "vue";
-import { quizStatus, type QuizItemStatus } from "../quiz-state";
+import { quizStatus } from "../quiz-state";
 
 const { page } = useData();
 

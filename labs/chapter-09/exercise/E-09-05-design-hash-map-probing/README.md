@@ -137,10 +137,10 @@ $C=10$ 时键 `0`、`10`、`20` 散列地址都是 0，依次落进槽 0、1、2
 ```powershell
 make run
 # 免 Make 兜底：在仓库根执行
-pnpm lab:run -- labs/chapter-09/exercise/E-09-05-design-hash-map-probing
+pnpm lab run labs/chapter-09/exercise/E-09-05-design-hash-map-probing
 ```
 
-需要单用例或严格评分时使用 `make run CASE=006-stress-2e5` 与 `make score`；也可用 `pnpm lab:score -- labs/chapter-09/exercise/E-09-05-design-hash-map-probing` 兜底。
+需要单用例或严格评分时使用 `make run CASE=006-stress-2e5` 与 `make score`；也可用 `pnpm lab score labs/chapter-09/exercise/E-09-05-design-hash-map-probing` 兜底。
 
 ## 完成清单
 

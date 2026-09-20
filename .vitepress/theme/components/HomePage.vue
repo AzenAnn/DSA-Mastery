@@ -15,7 +15,11 @@ import { courseIndex } from "../course";
 const learningLoop = ["理解", "推导", "实现", "测试", "练习", "讲解", "复盘", "迁移"];
 const curriculumGroups = [
   { id: "foundations", label: "基础部分", chapters: courseIndex.curriculum.foundations },
-  ...courseIndex.curriculum.parts.map((part) => ({ id: part.id, label: `Part ${part.numeral} · ${part.title}`, chapters: part.chapters })),
+  ...courseIndex.curriculum.parts.map((part) => ({
+    id: part.id,
+    label: `Part ${part.numeral} · ${part.title}`,
+    chapters: part.chapters,
+  })),
 ];
 const chapterEntryCount = curriculumGroups.reduce((total, group) => total + group.chapters.length, 0);
 const firstLessonUrl = courseIndex.curriculum.url;
@@ -36,7 +40,9 @@ function courseHref(path: string): string {
           </div>
           <h1>把数据结构与算法<br /><span>学透、做实、用活</span></h1>
           <p>
-            DSA Mastery 面向课程学习者，把定义、推导、实现、测试与典型问题训练连成一条完整路径，帮助读者建立能够应对课堂、考试、实验和综合应用的扎实能力。项目由一个近二十人的学生团队共同维护，并通过交叉 Review 持续校正内容。
+            DSA Mastery
+            面向课程学习者，把定义、推导、实现、测试与典型问题训练连成一条完整路径，帮助读者建立能够应对课堂、考试、实验和综合应用的扎实能力。项目由一个近二十人的学生团队共同维护，并通过交叉
+            Review 持续校正内容。
           </p>
           <div class="course-hero-actions">
             <a class="course-button course-button-primary" :href="courseHref(firstLessonUrl)">
@@ -79,9 +85,18 @@ function courseHref(path: string): string {
       </div>
 
       <div class="course-hero-stats">
-        <div><strong>{{ chapterEntryCount }}</strong><span>个章节入口</span></div>
-        <div><strong>{{ courseIndex.lessons.length }}</strong><span>篇教程页面</span></div>
-        <div><strong>{{ courseIndex.labs.length }}</strong><span>个动手实验</span></div>
+        <div>
+          <strong>{{ chapterEntryCount }}</strong
+          ><span>个章节入口</span>
+        </div>
+        <div>
+          <strong>{{ courseIndex.lessons.length }}</strong
+          ><span>篇教程页面</span>
+        </div>
+        <div>
+          <strong>{{ courseIndex.labs.length }}</strong
+          ><span>个动手实验</span>
+        </div>
         <div><strong>1</strong><span>条理论到实践的路径</span></div>
       </div>
     </section>
@@ -121,13 +136,14 @@ function courseHref(path: string): string {
               <li v-for="lesson in chapter.lessons.slice(0, 3)" :key="lesson.url">{{ lesson.title }}</li>
               <li v-if="!chapter.lessons.length">内容待完善</li>
             </ul>
-            <a :href="courseHref(chapter.url)">
-              进入本章 <ArrowRight aria-hidden="true" :size="16" />
-            </a>
+            <a :href="courseHref(chapter.url)"> 进入本章 <ArrowRight aria-hidden="true" :size="16" /> </a>
           </article>
         </div>
       </div>
-      <a class="course-button course-button-secondary course-curriculum-link" :href="courseHref(courseIndex.curriculum.url)">
+      <a
+        class="course-button course-button-secondary course-curriculum-link"
+        :href="courseHref(courseIndex.curriculum.url)"
+      >
         查看课程总目录 <ArrowRight aria-hidden="true" :size="16" />
       </a>
     </section>
@@ -143,7 +159,12 @@ function courseHref(path: string): string {
         </a>
       </div>
       <div class="course-lab-grid">
-        <a v-for="lab in courseIndex.labs.slice(0, 4)" :key="lab.url" class="course-lab-card" :href="courseHref(lab.url)">
+        <a
+          v-for="lab in courseIndex.labs.slice(0, 4)"
+          :key="lab.url"
+          class="course-lab-card"
+          :href="courseHref(lab.url)"
+        >
           <span class="course-lab-icon"><FlaskConical aria-hidden="true" :size="20" /></span>
           <span class="course-lab-copy">
             <small>第 {{ lab.chapter }} 章 · {{ lab.difficulty || "基础" }}</small>
@@ -166,9 +187,27 @@ function courseHref(path: string): string {
           </a>
         </div>
         <ol class="course-update-steps">
-          <li><span>01</span><div><strong>创建 Markdown</strong><p>复制相邻页面，填写标题、章节号、顺序与更新时间。</p></div></li>
-          <li><span>02</span><div><strong>本地检查</strong><p>保存后检查导航、公式、代码和相对链接是否正确。</p></div></li>
-          <li><span>03</span><div><strong>Review 后合并</strong><p>另一名成员验证内容与 Lab，合并后由同一内容源统一构建网站。</p></div></li>
+          <li>
+            <span>01</span>
+            <div>
+              <strong>创建 Markdown</strong>
+              <p>复制相邻页面，填写标题、章节号、顺序与更新时间。</p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <strong>本地检查</strong>
+              <p>保存后检查导航、公式、代码和相对链接是否正确。</p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <strong>Review 后合并</strong>
+              <p>另一名成员验证内容与 Lab，合并后由同一内容源统一构建网站。</p>
+            </div>
+          </li>
         </ol>
       </div>
     </section>

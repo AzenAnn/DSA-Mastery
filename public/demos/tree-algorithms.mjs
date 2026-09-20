@@ -7,45 +7,69 @@ export function binaryTree(rows) {
 }
 
 export const BINARY_PRESETS = {
-  textbook: { label: "课本示例 A / B C / D E", tree: binaryTree([
-    ["A", "B", "C"], ["B", "D", "E"], ["C"], ["D"], ["E"],
-  ]) },
-  flatten: { label: "先序示例 1,2,3,4,5,6", tree: binaryTree([
-    ["1", "2", "5"], ["2", "3", "4"], ["3"], ["4"], ["5", null, "6"], ["6"],
-  ]) },
-  nested: { label: "拼接点仍有左孩子", tree: binaryTree([
-    ["1", "2", "5"], ["2", "3", "4"], ["3"], ["4", "7"], ["7"], ["5", null, "6"], ["6"],
-  ]) },
-  left: { label: "长左链 A → B → C → D", tree: binaryTree([
-    ["A", "B"], ["B", "C"], ["C", "D"], ["D"],
-  ]) },
-  right: { label: "长右链 A → B → C → D", tree: binaryTree([
-    ["A", null, "B"], ["B", null, "C"], ["C", null, "D"], ["D"],
-  ]) },
+  textbook: {
+    label: "课本示例 A / B C / D E",
+    tree: binaryTree([["A", "B", "C"], ["B", "D", "E"], ["C"], ["D"], ["E"]]),
+  },
+  flatten: {
+    label: "先序示例 1,2,3,4,5,6",
+    tree: binaryTree([["1", "2", "5"], ["2", "3", "4"], ["3"], ["4"], ["5", null, "6"], ["6"]]),
+  },
+  nested: {
+    label: "拼接点仍有左孩子",
+    tree: binaryTree([["1", "2", "5"], ["2", "3", "4"], ["3"], ["4", "7"], ["7"], ["5", null, "6"], ["6"]]),
+  },
+  left: { label: "长左链 A → B → C → D", tree: binaryTree([["A", "B"], ["B", "C"], ["C", "D"], ["D"]]) },
+  right: {
+    label: "长右链 A → B → C → D",
+    tree: binaryTree([["A", null, "B"], ["B", null, "C"], ["C", null, "D"], ["D"]]),
+  },
   single: { label: "单节点 A", tree: binaryTree([["A"]]) },
   empty: { label: "空树", tree: binaryTree([]) },
 };
 
 export const FOREST_PRESETS = {
-  textbook: { label: "课本多叉树：A 的三个孩子", roots: ["A"], nodes: [
-    { id: "A", children: ["B", "C", "D"] }, { id: "B", children: [] },
-    { id: "C", children: ["E"] }, { id: "D", children: [] }, { id: "E", children: [] },
-  ] },
-  forest: { label: "森林：三棵树 A、F、H", roots: ["A", "F", "H"], nodes: [
-    { id: "A", children: ["B", "C"] }, { id: "B", children: ["D", "E"] },
-    { id: "C", children: [] }, { id: "D", children: [] }, { id: "E", children: [] },
-    { id: "F", children: ["G"] }, { id: "G", children: [] }, { id: "H", children: [] },
-  ] },
-  chain: { label: "单孩子链：A → B → C → D", roots: ["A"], nodes: [
-    { id: "A", children: ["B"] }, { id: "B", children: ["C"] },
-    { id: "C", children: ["D"] }, { id: "D", children: [] },
-  ] },
+  textbook: {
+    label: "课本多叉树：A 的三个孩子",
+    roots: ["A"],
+    nodes: [
+      { id: "A", children: ["B", "C", "D"] },
+      { id: "B", children: [] },
+      { id: "C", children: ["E"] },
+      { id: "D", children: [] },
+      { id: "E", children: [] },
+    ],
+  },
+  forest: {
+    label: "森林：三棵树 A、F、H",
+    roots: ["A", "F", "H"],
+    nodes: [
+      { id: "A", children: ["B", "C"] },
+      { id: "B", children: ["D", "E"] },
+      { id: "C", children: [] },
+      { id: "D", children: [] },
+      { id: "E", children: [] },
+      { id: "F", children: ["G"] },
+      { id: "G", children: [] },
+      { id: "H", children: [] },
+    ],
+  },
+  chain: {
+    label: "单孩子链：A → B → C → D",
+    roots: ["A"],
+    nodes: [
+      { id: "A", children: ["B"] },
+      { id: "B", children: ["C"] },
+      { id: "C", children: ["D"] },
+      { id: "D", children: [] },
+    ],
+  },
   single: { label: "单节点 A", roots: ["A"], nodes: [{ id: "A", children: [] }] },
   empty: { label: "空森林", roots: [], nodes: [] },
 };
 
 export function binaryOrder(tree, order = "inorder") {
-  const byId = new Map(tree.nodes.map(node => [node.id, node]));
+  const byId = new Map(tree.nodes.map((node) => [node.id, node]));
   const result = [];
   function visit(id) {
     if (id === null) return;
@@ -60,18 +84,20 @@ export function binaryOrder(tree, order = "inorder") {
 }
 
 function recorder(tree, tagged = false) {
-  const nodes = tree.nodes.map(node => ({ ...node, ...(tagged ? { ltag: 0, rtag: 0 } : {}) }));
-  const byId = new Map(nodes.map(node => [node.id, node]));
+  const nodes = tree.nodes.map((node) => ({ ...node, ...(tagged ? { ltag: 0, rtag: 0 } : {}) }));
+  const byId = new Map(nodes.map((node) => [node.id, node]));
   const frames = [];
   const state = { curr: null, prev: null, pred: null, output: [], stack: [], temporary: [], scans: 0 };
   function record(phase, message, line, extra = {}) {
     const previous = frames.at(-1);
     const changes = [];
-    for (let i = 0; previous && i < nodes.length; i++) {
-      for (const slot of ["left", "right"]) {
-        const tag = slot === "left" ? "ltag" : "rtag";
-        if (previous.nodes[i][slot] !== nodes[i][slot] || previous.nodes[i][tag] !== nodes[i][tag]) {
-          changes.push({ from: nodes[i].id, slot, before: previous.nodes[i][slot], after: nodes[i][slot] });
+    if (previous) {
+      for (let i = 0; i < nodes.length; i++) {
+        for (const slot of ["left", "right"]) {
+          const tag = slot === "left" ? "ltag" : "rtag";
+          if (previous.nodes[i][slot] !== nodes[i][slot] || previous.nodes[i][tag] !== nodes[i][tag]) {
+            changes.push({ from: nodes[i].id, slot, before: previous.nodes[i][slot], after: nodes[i][slot] });
+          }
         }
       }
     }
@@ -95,7 +121,11 @@ export function threadingTrace(tree) {
     if (node.left === null) {
       node.left = state.prev;
       node.ltag = 1;
-      record("predecessor", `${id}.left = ${state.prev ?? "nullptr"}，ltag = Thread(1)。${state.prev === null ? "它是中序第一个节点，没有前驱。" : "空左指针现在指向中序前驱。"}`, 1);
+      record(
+        "predecessor",
+        `${id}.left = ${state.prev ?? "nullptr"}，ltag = Thread(1)。${state.prev === null ? "它是中序第一个节点，没有前驱。" : "空左指针现在指向中序前驱。"}`,
+        1,
+      );
     }
     const previous = byId.get(state.prev);
     if (previous && previous.right === null) {
@@ -117,7 +147,13 @@ export function threadingTrace(tree) {
     byId.get(state.prev).rtag = 1;
     record("tail", `最后一个节点 ${state.prev} 的 right = nullptr、rtag = Thread(1)，表示没有后继。`, 5);
   }
-  record("done", tree.root === null ? "空树无需线索化，访问序列为空。" : "线索化完成。原有孩子边保持不变，空指针已按中序前驱/后继标记。点击节点检查指针表。", -1);
+  record(
+    "done",
+    tree.root === null
+      ? "空树无需线索化，访问序列为空。"
+      : "线索化完成。原有孩子边保持不变，空指针已按中序前驱/后继标记。点击节点检查指针表。",
+    -1,
+  );
   return frames;
 }
 
@@ -133,7 +169,11 @@ export function morrisTrace(tree) {
       state.output.push(node.id);
       record("visit", `${node.id} 没有左孩子，直接输出它。`, 1);
       state.curr = node.right;
-      record("move", `沿 ${node.id}.right 移到 ${state.curr ?? "nullptr"}${state.temporary.includes(node.id) ? "，这次走的是临时回边。" : "。"}`, 2);
+      record(
+        "move",
+        `沿 ${node.id}.right 移到 ${state.curr ?? "nullptr"}${state.temporary.includes(node.id) ? "，这次走的是临时回边。" : "。"}`,
+        2,
+      );
     } else {
       state.pred = node.left;
       record("find", `从左孩子 ${state.pred} 出发，寻找 ${node.id} 的中序前驱。`, 3);
@@ -151,7 +191,7 @@ export function morrisTrace(tree) {
         record("move", `进入左子树 ${state.curr}；之后通过这条回边回到 ${node.id}。`, 5);
       } else {
         pred.right = null;
-        state.temporary = state.temporary.filter(id => id !== pred.id);
+        state.temporary = state.temporary.filter((id) => id !== pred.id);
         record("remove", `第二次到达 ${node.id}：左子树已完成，拆除 ${pred.id} → ${node.id}，恢复空右指针。`, 6);
         state.output.push(node.id);
         record("visit", `现在输出 ${node.id}，然后进入其右侧。`, 7);
@@ -172,7 +212,11 @@ export function flattenTrace(tree) {
   while (state.curr !== null) {
     const node = byId.get(state.curr);
     state.pred = null;
-    record("inspect", `处理 curr = ${node.id}。${node.left === null ? "没有左子树，无需拼接。" : "先为左子树寻找拼接点。"}`, 0);
+    record(
+      "inspect",
+      `处理 curr = ${node.id}。${node.left === null ? "没有左子树，无需拼接。" : "先为左子树寻找拼接点。"}`,
+      0,
+    );
     if (node.left !== null) {
       state.pred = node.left;
       record("find", `pred 从左孩子 ${state.pred} 出发，沿 right 找到末端。`, 1);
@@ -193,21 +237,25 @@ export function flattenTrace(tree) {
     record("move", `节点 ${node.id} 已就位，curr 沿新 right 移到 ${state.curr ?? "nullptr"}。`, 6);
   }
   state.pred = null;
-  record("done", tree.root === null ? "空树展开后仍为空。" : "展开完成：所有 left 均为空，沿 right 得到原树的先序序列。", -1);
+  record(
+    "done",
+    tree.root === null ? "空树展开后仍为空。" : "展开完成：所有 left 均为空，沿 right 得到原树的先序序列。",
+    -1,
+  );
   return frames;
 }
 
 export function forestToBinary(forest) {
-  const nodes = forest.nodes.map(node => ({ id: node.id, left: node.children[0] ?? null, right: null }));
-  const byId = new Map(nodes.map(node => [node.id, node]));
-  for (const siblings of [forest.roots, ...forest.nodes.map(node => node.children)]) {
+  const nodes = forest.nodes.map((node) => ({ id: node.id, left: node.children[0] ?? null, right: null }));
+  const byId = new Map(nodes.map((node) => [node.id, node]));
+  for (const siblings of [forest.roots, ...forest.nodes.map((node) => node.children)]) {
     for (let i = 0; i + 1 < siblings.length; i++) byId.get(siblings[i]).right = siblings[i + 1];
   }
   return { root: forest.roots[0] ?? null, nodes };
 }
 
 export function forestOrder(forest, order = "postorder") {
-  const byId = new Map(forest.nodes.map(node => [node.id, node]));
+  const byId = new Map(forest.nodes.map((node) => [node.id, node]));
   const result = [];
   function visit(id) {
     if (order === "preorder") result.push(id);
@@ -224,17 +272,39 @@ export function forestTrace(forest, order = "postorder") {
   const rightOrder = binaryOrder(binary, order === "postorder" ? "inorder" : "preorder");
   const { frames, state, record } = recorder(binary);
   const modes = order === "postorder" ? "原树后根 / 森林后序 ↔ 二叉树中序" : "原树先根 / 森林先序 ↔ 二叉树前序";
-  record("original", "先看原结构。节点字母就是两侧共同的身份；点击任意节点可查看对应关系。", 0, { stage: 0, rightOutput: [] });
-  record("siblings", "加线：同一父节点的孩子按顺序连成兄弟链；森林各根也按顺序相连。", 1, { stage: 1, rightOutput: [] });
-  record("first-child", "抹线：每个父节点只保留通往第一个孩子的边，其他孩子由兄弟链串起来。", 2, { stage: 2, rightOutput: [] });
-  record("binary", "转换布局：左指针代表第一个孩子，右指针代表下一个兄弟。节点身份与兄弟次序均未改变。", 3, { stage: 3, rightOutput: [] });
+  record("original", "先看原结构。节点字母就是两侧共同的身份；点击任意节点可查看对应关系。", 0, {
+    stage: 0,
+    rightOutput: [],
+  });
+  record("siblings", "加线：同一父节点的孩子按顺序连成兄弟链；森林各根也按顺序相连。", 1, {
+    stage: 1,
+    rightOutput: [],
+  });
+  record("first-child", "抹线：每个父节点只保留通往第一个孩子的边，其他孩子由兄弟链串起来。", 2, {
+    stage: 2,
+    rightOutput: [],
+  });
+  record("binary", "转换布局：左指针代表第一个孩子，右指针代表下一个兄弟。节点身份与兄弟次序均未改变。", 3, {
+    stage: 3,
+    rightOutput: [],
+  });
   for (let i = 0; i < leftOrder.length; i++) {
     if (leftOrder[i] !== rightOrder[i]) throw new Error("Traversal correspondence failed");
     state.curr = leftOrder[i];
     state.output.push(leftOrder[i]);
-    record("visit", `第 ${i + 1} 次访问：两侧同时输出 ${leftOrder[i]}。${modes}。`, 4, { stage: 3, rightOutput: rightOrder.slice(0, i + 1) });
+    record("visit", `第 ${i + 1} 次访问：两侧同时输出 ${leftOrder[i]}。${modes}。`, 4, {
+      stage: 3,
+      rightOutput: rightOrder.slice(0, i + 1),
+    });
   }
   state.curr = null;
-  record("done", leftOrder.length ? "遍历完成，两侧的每次输出一一对应。转换后二叉树的右孩子是原结构的兄弟，不是原树的孩子。" : "空森林对应空二叉树，两侧访问序列都为空。", -1, { stage: 3, rightOutput: rightOrder });
+  record(
+    "done",
+    leftOrder.length
+      ? "遍历完成，两侧的每次输出一一对应。转换后二叉树的右孩子是原结构的兄弟，不是原树的孩子。"
+      : "空森林对应空二叉树，两侧访问序列都为空。",
+    -1,
+    { stage: 3, rightOutput: rightOrder },
+  );
   return frames;
 }

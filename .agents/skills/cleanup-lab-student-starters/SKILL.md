@@ -14,7 +14,7 @@ description: "Cleans up complete solutions mistakenly placed in the student-code
 1. **定位**：扫描 `labs/**/student/main.cpp`（含 `labs/**/tasks/*/student/main.cpp`）及 `student/` 下需要学生补全的其它源文件。只扫描、只改 `student/`，不碰 `solution/`、`tests/`、`README.md`、`lab.json`/`quiz.json`/`task.json`。
 
 2. **判定「误写完整解」**（优选权威信号，避免误判行数多的合法骨架）：
-   - 首选：对候选 Lab 运行 `pnpm lab:verify -- <lab-path>`；若输出含「**学生骨架分数：错误地得到满分**」，即完整解，需清理。
+   - 首选：对候选 Lab 运行 `pnpm lab verify <lab-path>`；若输出含「**学生骨架分数：错误地得到满分**」，即完整解，需清理。
    - 备选（当前无法编译/运行 verify 时）：比对 `student/main.cpp` 与同目录 `solution/main.cpp`；若 student 已把核心算法/判定/维护逻辑完整实现（而非用 `TODO` 留空），或与 solution 高度雷同，视为完整解。
    - 注意：**行数多不等于完整解**（合法骨架可能含较多输入读取/数据结构脚手架，但核心逻辑仍是 TODO）。以「是否实现了本应留空的算法逻辑」为准。
 
@@ -24,7 +24,7 @@ description: "Cleans up complete solutions mistakenly placed in the student-code
    - 若原文件没有可保留的 I/O 骨架，则参考 `solution/main.cpp` 的输入输出契约，构造一个结构一致、核心逻辑留空的最小骨架。
    - 确保骨架能**编译通过**、输出不完整/非满分；风格对齐既有正常 skeleton（如 `labs/chapter-02/lab-02-04-min-stack/student/main.cpp`）。
 
-4. **复验**：对清理过的 Lab 重跑 `pnpm lab:verify -- <lab-path>`，确认变为「学生骨架编译：可编译」「学生骨架分数：未误得满分」；若影响结构再运行 `pnpm run validate:content` / `pnpm run test:lab-tools`。
+4. **复验**：对清理过的 Lab 重跑 `pnpm lab verify <lab-path>`，确认变为「学生骨架编译：可编译」「学生骨架分数：未误得满分」；若影响结构再运行 `pnpm test --project content` / `pnpm test --project lab-tools`。
 
 5. **报告**：列出扫描范围、判定为完整解的 Lab、每个文件的改动要点、实际执行的命令与结果、未复验项。
 
@@ -46,4 +46,4 @@ description: "Cleans up complete solutions mistakenly placed in the student-code
 ## 参考
 
 - 完整解判定与验收标准见 `docs/LAB_AUTHORING_GUIDE.md`、`.trellis/spec/content/labs.md`（Program：reference=100、starter<100）。
-- 本地复现：`pnpm lab:run -- <lab-path>` / `pnpm lab:verify -- <lab-path>`。
+- 本地复现：`pnpm lab run <lab-path>` / `pnpm lab verify <lab-path>`。

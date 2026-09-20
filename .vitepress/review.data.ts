@@ -1,10 +1,10 @@
+import type { QuizQuestion } from "./quiz.data.ts";
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import MarkdownIt from "markdown-it";
 import mathjax3 from "markdown-it-mathjax3";
 import { defineLoader } from "vitepress";
-import type { QuizQuestion } from "./quiz.data.ts";
 
 export declare const data: Record<string, QuizQuestion[]>;
 

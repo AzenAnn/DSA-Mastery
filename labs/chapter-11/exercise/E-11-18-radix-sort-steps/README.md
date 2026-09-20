@@ -90,8 +90,8 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用等价的 pnpm 入口：
 
 ```powershell
-pnpm lab:run -- labs/chapter-11/exercise/E-11-18-radix-sort-steps
-pnpm lab:score -- labs/chapter-11/exercise/E-11-18-radix-sort-steps
+pnpm lab run labs/chapter-11/exercise/E-11-18-radix-sort-steps
+pnpm lab score labs/chapter-11/exercise/E-11-18-radix-sort-steps
 ```
 
 标准输出参与判题，调试信息请写入标准错误。

@@ -124,9 +124,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-07-generalized-list-depth
-pnpm lab:run -- labs/chapter-03/exercise/E-03-07-generalized-list-depth
-pnpm lab:score -- labs/chapter-03/exercise/E-03-07-generalized-list-depth
+pnpm lab doctor labs/chapter-03/exercise/E-03-07-generalized-list-depth
+pnpm lab run labs/chapter-03/exercise/E-03-07-generalized-list-depth
+pnpm lab score labs/chapter-03/exercise/E-03-07-generalized-list-depth
 ```
 
 - [ ] 四个样例全部通过；

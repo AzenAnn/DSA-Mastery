@@ -76,14 +76,14 @@ duration: "90～150 分钟"
 在仓库根目录执行：
 
 ```powershell
-pnpm lab:run -- labs/chapter-15/exercise/E-15-20-target-sudoku
-pnpm lab:score -- labs/chapter-15/exercise/E-15-20-target-sudoku
+pnpm lab run labs/chapter-15/exercise/E-15-20-target-sudoku
+pnpm lab score labs/chapter-15/exercise/E-15-20-target-sudoku
 ```
 
 进入本 Lab 目录后也可以运行 `make run`。作者与 CI 严格核验：
 
 ```powershell
-pnpm lab:verify -- labs/chapter-15/exercise/E-15-20-target-sudoku
+pnpm lab verify labs/chapter-15/exercise/E-15-20-target-sudoku
 ```
 
 ## 完成清单

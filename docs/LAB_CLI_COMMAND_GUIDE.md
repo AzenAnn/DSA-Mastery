@@ -2,7 +2,7 @@
 
 DSA Mastery 的 Quiz、Program 与 Project 共用一套 Lab 描述格式，但它们的“完成方式”并不相同：Quiz 在网页中提交选项，Program 逐个运行标准输入输出用例，Project 则把多个 `stdio`、`ctest` 与 `manual` task 汇总为工程成绩。
 
-本指南从学习者最常用的 `pnpm lab:run` 出发，逐步展开到单用例、单 task、严格评分、JSON、Make 和作者维护命令。读完后，你应该能看懂一条命令究竟在检查什么，也能判断某个参数是否适用于当前题目。
+本指南从学习者最常用的 `pnpm lab run` 出发，逐步展开到单用例、单 task、严格评分、JSON、Make 和作者维护命令。读完后，你应该能看懂一条命令究竟在检查什么，也能判断某个参数是否适用于当前题目。
 
 ::: info 适用范围
 下面的命令以仓库当前实现为准。命令中的 `<lab-path>`、`<case-id>` 和 `<task-id>` 都是占位符，实际输入时不要保留尖括号。
@@ -52,29 +52,29 @@ node ./lab.mjs 1 E 2
 ```
 
 ```powershell [Program · 代码题]
-pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab doctor labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 ```powershell [Project · 工程题]
-pnpm lab:doctor -- labs/chapter-01/project/P-01-01-list-workload-analyzer
-pnpm lab:run -- labs/chapter-01/project/P-01-01-list-workload-analyzer
+pnpm lab doctor labs/chapter-01/project/P-01-01-list-workload-analyzer
+pnpm lab run labs/chapter-01/project/P-01-01-list-workload-analyzer
 ```
 
 :::
 
 | 你现在想做什么 | 首选命令 | 结果 |
 | --- | --- | --- |
-| 检查本机能不能做题 | `pnpm lab:doctor` | 编译器、CMake、Make 与最低版本 |
-| 检查题目文件是否完整 | `pnpm lab:validate` | Schema、路径、用例、task 与依赖 |
-| 运行公开测试并看得分 | `pnpm lab:run` | Program 用例表或 Project task 面板 |
+| 检查本机能不能做题 | `pnpm lab doctor` | 编译器、CMake、Make 与最低版本 |
+| 检查题目文件是否完整 | `pnpm lab validate` | Schema、路径、用例、task 与依赖 |
+| 运行公开测试并看得分 | `pnpm lab run` | Program 用例表或 Project task 面板 |
 | 只重跑一个失败点 | `--case` / `--task` | 缩小反馈范围 |
-| 在终端手工输入 | `pnpm lab:interactive` | 学生程序直接接管当前终端 |
-| 严格判断自动部分是否满分 | `pnpm lab:score` | 未满分时退出码为 `1` |
+| 在终端手工输入 | `pnpm lab interactive` | 学生程序直接接管当前终端 |
+| 严格判断自动部分是否满分 | `pnpm lab score` | 未满分时退出码为 `1` |
 | 没有安装 GNU Make | 继续使用 pnpm | 功能不受影响 |
 
 ::: intuition 心智模型 · 一套评分内核，两种命令外壳
-pnpm 与 Make 并不是两套判题系统。它们最终都会调用 `tools/lab/cli.mjs`：pnpm 适合所有平台，Make 只是把较长命令缩短为 `make run`、`make score` 等形式。
+pnpm 与 Make 并不是两套判题系统。它们最终都会调用 `packages/lab-cli/dist/cli.js`：pnpm 适合所有平台，Make 只是把较长命令缩短为 `make run`、`make score` 等形式。
 :::
 
 ## 先看懂一条 pnpm 命令
@@ -82,11 +82,11 @@ pnpm 与 Make 并不是两套判题系统。它们最终都会调用 `tools/lab/
 一条完整命令由四部分组成：
 
 ```powershell:line-numbers [lab-command-shape.ps1]
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --case 001-sample
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --case 001-sample
 #     └─脚本名   └─pnpm 参数分隔符        └─Lab 路径                         └─CLI 选项
 ```
 
-- `pnpm lab:run`：运行 `package.json` 中的 `lab:run` 脚本；写成 `pnpm run lab:run` 也等价。
+- `pnpm lab run`：运行 `package.json` 中的 `lab:run` 脚本；写成 `pnpm lab run` 也等价。
 - `--`：告诉 pnpm，后面的内容交给 Lab CLI。只运行默认行为、没有额外参数时可以省略。
 - `<lab-path>`：仓库中的 Lab 目录；每条命令最多接受一个路径。
 - `--case 001-sample`：只选择 ID 为 `001-sample` 的公开用例。
@@ -96,13 +96,13 @@ pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication -
 ::: code-group
 
 ```powershell [仓库根目录 · 显式路径]
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 ```powershell [Lab 目录内 · 省略路径]
 cd labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
-pnpm lab:run
-pnpm lab:run -- --case 001-sample
+pnpm lab run
+pnpm lab run --case 001-sample
 ```
 
 :::
@@ -110,7 +110,7 @@ pnpm lab:run -- --case 001-sample
 省略路径时，CLI 从启动命令的目录向上寻找最近的 `lab.json`。因此在 `student/`、`tests/` 等 Lab 子目录中启动，也仍能定位当前题目；如果一路找不到，就返回 `LAB_NOT_FOUND`。
 
 ::: pitfall 易错点 · 裸 `pnpm run` 不是判题命令
-当前仓库要求写出完整脚本名，例如 `pnpm lab:run` 或 `pnpm lab:score`。单独输入 `pnpm run` 只会列出 package scripts，单独输入 `pnpm test` 运行的是仓库质量门禁，都不会自动匹配当前 Lab。
+当前仓库要求写出完整脚本名，例如 `pnpm lab run` 或 `pnpm lab score`。单独输入 `pnpm run` 只会列出 package scripts，单独输入 `pnpm test` 运行的是仓库质量门禁，都不会自动匹配当前 Lab。
 :::
 
 ## 三类 Lab 的能力边界
@@ -154,7 +154,7 @@ Quiz 的答案提交、提示、解析和得分由网页组件完成，不需要
 查看 CLI 内置帮助：
 
 ```powershell
-node tools/lab/cli.mjs help
+node packages/lab-cli/dist/cli.js help
 ```
 
 ## 参数字典
@@ -202,7 +202,7 @@ node tools/lab/cli.mjs help
 | `--slug` | 小写 kebab-case | `--slug stack-merge` |
 
 ```powershell
-pnpm lab:new -- --type program --chapter 2 --slug stack-merge
+pnpm lab new --type program --chapter 2 --slug stack-merge
 ```
 
 假设第 2 章已有 `02E01`～`02E08`，这条命令会生成 `02E09`，目录为 `labs/chapter-02/exercise/E-02-09-stack-merge`，README 标题以 `Lab 02-E-09：` 开头。编号按“最大值加一”计算，删除 `02E04` 后也不会复用旧号。省略 `--order` 时，新 Lab 排在本章现有 Lab 之后；显式填写只改变展示位置，不改变稳定 ID 或标题编号。
@@ -214,8 +214,8 @@ pnpm lab:new -- --type program --chapter 2 --slug stack-merge
 规范编号写作 `02T03`，交流时可以简写成 `02T3`。定位命令同时接受 `2t3`、`02-T-03` 和 `lab02-T-03`。下面使用仓库中实际存在的 `02T02` 演示：
 
 ```powershell
-pnpm lab:locate -- 02T2
-pnpm lab:locate -- 02T2 --json
+pnpm lab locate 02T2
+pnpm lab locate 02T2 --json
 ```
 
 第一条输出规范 ID 和仓库相对路径；第二条适合编辑器、Issue Bot 或其他脚本消费。编号不存在、格式错误或全仓重复都会以工具错误结束，不会猜测最接近的题目。
@@ -229,13 +229,13 @@ Program 把一个 C++ 程序放入若干公开用例。每个 case 都有输入�
 ```powershell:line-numbers [program-workflow.ps1]
 $lab = "labs/chapter-01/exercise/E-01-01-sequential-list-deduplication"
 
-pnpm lab:doctor -- $lab
-pnpm lab:validate -- $lab
-pnpm lab:run -- $lab
-pnpm lab:run -- $lab --case 001-sample
-pnpm lab:interactive -- $lab
-pnpm lab:score -- $lab
-pnpm lab:clean -- $lab
+pnpm lab doctor $lab
+pnpm lab validate $lab
+pnpm lab run $lab
+pnpm lab run $lab --case 001-sample
+pnpm lab interactive $lab
+pnpm lab score $lab
+pnpm lab clean $lab
 ```
 
 1. `doctor` 先确认至少一个 C++ 编译器满足最低版本；Make 找不到只是可选项提示。
@@ -273,27 +273,27 @@ Project 是多个子任务的集合。`lab.json` 为每个 task 声明 ID、类�
 $project = "labs/chapter-08/project/P-08-01-avl-tree-rotations"
 
 # 整个 Project：stdio + CTest + manual pending
-pnpm lab:run -- $project
+pnpm lab run $project
 
 # 只运行一个 stdio task
-pnpm lab:run -- $project --task frequency
+pnpm lab run $project --task frequency
 
 # 只运行该 task 的一个公开 case
-pnpm lab:run -- $project --task frequency --case weighted
+pnpm lab run $project --task frequency --case weighted
 
 # 只运行 CTest task
-pnpm lab:run -- $project --task codec
+pnpm lab run $project --task codec
 
 # 严格检查全部自动 task
-pnpm lab:score -- $project
+pnpm lab score $project
 ```
 
 如果 Project 只有 CTest 与 manual task，例如第一章的线性表工程题，可以按 task 缩小范围：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/project/P-01-01-list-workload-analyzer --task sequential-list
-pnpm lab:run -- labs/chapter-01/project/P-01-01-list-workload-analyzer --task linked-list
-pnpm lab:run -- labs/chapter-01/project/P-01-01-list-workload-analyzer --task workload-runner
+pnpm lab run labs/chapter-01/project/P-01-01-list-workload-analyzer --task sequential-list
+pnpm lab run labs/chapter-01/project/P-01-01-list-workload-analyzer --task linked-list
+pnpm lab run labs/chapter-01/project/P-01-01-list-workload-analyzer --task workload-runner
 ```
 
 结果底部的三个数字含义不同：
@@ -309,7 +309,7 @@ Project 的 `score` 只严格判断自动部分。即使退出码为 `0`，只�
 Project 的 `interactive` 只支持 `stdio` task：
 
 ```powershell
-pnpm lab:interactive -- labs/chapter-08/project/P-08-01-avl-tree-rotations --task frequency
+pnpm lab interactive labs/chapter-08/project/P-08-01-avl-tree-rotations --task frequency
 ```
 
 CTest 或 `manual` task 不能用交互模式。
@@ -348,8 +348,8 @@ CTest 或 `manual` task 不能用交互模式。
 人类阅读默认彩色面板；自动化程序应消费 JSON 字段，不要用正则解析对齐表格。
 
 ```powershell
-pnpm lab:score -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --json
-pnpm lab:score -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --json > lab-report.json
+pnpm lab score labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --json
+pnpm lab score labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --json > lab-report.json
 ```
 
 报告顶层稳定包含：
@@ -371,7 +371,7 @@ pnpm lab:score -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 
 ## Make：同一套能力的短命令
 
-Program 和 Project 的 Makefile 只有三行薄入口，真实逻辑集中在 `tools/lab/lab.mk`。因此 `make run` 和 `pnpm lab:run` 使用同一份 manifest、编译器选择、测试和计分规则。
+Program 和 Project 的 Makefile 只有三行薄入口，真实逻辑集中在 `packages/lab-cli/lab.mk`。因此 `make run` 和 `pnpm lab run` 使用同一份 manifest、编译器选择、测试和计分规则。
 
 ::: code-group
 
@@ -443,7 +443,7 @@ make refresh-expected LAB=labs/chapter-08/project/P-08-01-avl-tree-rotations TAS
 ### `validate`：只检查合同
 
 ```powershell
-pnpm lab:validate -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab validate labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 它检查 JSON、路径安全、分值合计、Quiz 四选一规则、Program cases、Project task 权重/依赖和薄 Makefile，但不会证明学生答案正确。
@@ -451,8 +451,8 @@ pnpm lab:validate -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplicat
 ### `build`：只编译目标
 
 ```powershell
-pnpm lab:build -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target student
-pnpm lab:build -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target solution
+pnpm lab build labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target student
+pnpm lab build labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target solution
 ```
 
 Program 直接调用可用 C++ 编译器；Project 使用 CMake preset。编译成功不代表测试通过。
@@ -460,9 +460,9 @@ Program 直接调用可用 C++ 编译器；Project 使用 CMake preset。编译�
 ### `verify`：验证题目本身
 
 ```powershell
-pnpm lab:verify -- labs/chapter-00/theory/T-00-02-complexity-quiz
-pnpm lab:verify -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
-pnpm lab:verify -- labs/chapter-08/project/P-08-01-avl-tree-rotations
+pnpm lab verify labs/chapter-00/theory/T-00-02-complexity-quiz
+pnpm lab verify labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab verify labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 - Quiz：验证题库合同；
@@ -473,19 +473,19 @@ pnpm lab:verify -- labs/chapter-08/project/P-08-01-avl-tree-rotations
 
 ```powershell
 # 只预览变化
-pnpm lab:refresh-expected -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab refresh-expected labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 
 # 确认参考实现正确后才写入
-pnpm lab:refresh-expected -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --write
+pnpm lab refresh-expected labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --write
 
 # Project 只选择 stdio task
-pnpm lab:refresh-expected -- labs/chapter-08/project/P-08-01-avl-tree-rotations --task frequency
+pnpm lab refresh-expected labs/chapter-08/project/P-08-01-avl-tree-rotations --task frequency
 ```
 
 ### `pack`：生成学生包
 
 ```powershell
-pnpm lab:pack -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --profile student
+pnpm lab pack labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --profile student
 ```
 
 输出位于当前 Lab 的 `.lab-cache/packages/`，排除 `solution`、缓存、对象文件和二进制。学生包内只保留学习者所需的 Lab scripts。
@@ -493,7 +493,7 @@ pnpm lab:pack -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication 
 ### `clean`：安全清理生成物
 
 ```powershell
-pnpm lab:clean -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab clean labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 它只删除当前 Lab 及其 task 的 `.lab-cache/`，不会删除 `student/`、`solution/`、`tests/` 或 README。
@@ -531,7 +531,7 @@ pnpm lab:clean -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 
 ## 最后记住四件事
 
-1. `pnpm lab:run` 是跨平台默认入口，Make 只是短命令。
+1. `pnpm lab run` 是跨平台默认入口，Make 只是短命令。
 2. `--case` 选择公开用例，`--task` 选择 Project 子任务，`--target` 选择实现。
 3. `run` 面向学习过程，`score` 面向严格自动检查。
 4. Project 的 `PENDING` 必须由人工完成，不能被自动满分替代。

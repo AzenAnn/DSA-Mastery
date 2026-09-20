@@ -73,14 +73,14 @@ duration: "35～65 分钟"
 在仓库根目录执行：
 
 ```powershell
-pnpm lab:run -- labs/chapter-15/exercise/E-15-01-permutations
-pnpm lab:score -- labs/chapter-15/exercise/E-15-01-permutations
+pnpm lab run labs/chapter-15/exercise/E-15-01-permutations
+pnpm lab score labs/chapter-15/exercise/E-15-01-permutations
 ```
 
 进入本 Lab 目录后也可运行 `make run`。作者核验命令为：
 
 ```powershell
-pnpm lab:verify -- labs/chapter-15/exercise/E-15-01-permutations
+pnpm lab verify labs/chapter-15/exercise/E-15-01-permutations
 ```
 
 ## 完成清单

@@ -120,9 +120,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-03-match-comparison
-pnpm lab:run -- labs/chapter-03/exercise/E-03-03-match-comparison
-pnpm lab:score -- labs/chapter-03/exercise/E-03-03-match-comparison
+pnpm lab doctor labs/chapter-03/exercise/E-03-03-match-comparison
+pnpm lab run labs/chapter-03/exercise/E-03-03-match-comparison
+pnpm lab score labs/chapter-03/exercise/E-03-03-match-comparison
 ```
 
 - [ ] 三个样例全部通过，且能手工复述每一趟的比较次数；

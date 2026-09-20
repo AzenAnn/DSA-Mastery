@@ -141,5 +141,5 @@ int main() {
 
 ## 本地运行与提交
 ```powershell
-pnpm lab:run -- labs/chapter-05/exercise/E-05-04-bst-kth-smallest
+pnpm lab run labs/chapter-05/exercise/E-05-04-bst-kth-smallest
 ```

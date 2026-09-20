@@ -1,8 +1,8 @@
+import type MarkdownIt from "markdown-it";
 import { container } from "@mdit/plugin-container";
 import { mark } from "@mdit/plugin-mark";
-import type MarkdownIt from "markdown-it";
 
-export const theoryContainers = [
+const theoryContainers = [
   { name: "definition", label: "定义", code: "DEF" },
   { name: "theorem", label: "定理", code: "THM" },
   { name: "lemma", label: "引理", code: "LEM" },
@@ -43,7 +43,7 @@ function renderTheoryTitle(md: MarkdownIt, title: string, env: InlineRenderEnv):
 function extractFenceTitle(info: string): string | undefined {
   const match = info.match(/\[([^\r\n]*)\]/);
   const title = match?.[1]?.trim();
-  return title || undefined;
+  return title === "" ? undefined : title;
 }
 
 function markCodeGroupFences(md: MarkdownIt): void {
@@ -60,7 +60,7 @@ function markCodeGroupFences(md: MarkdownIt): void {
         continue;
       }
       if (token.type === "fence" && codeGroupDepth > 0) {
-        token.meta = { ...token.meta, [codeGroupMetaKey]: true };
+        token.meta = { ...(token.meta as Record<string, unknown> | undefined), [codeGroupMetaKey]: true };
       }
     }
   });
@@ -73,16 +73,13 @@ function addStandaloneCodeTitles(md: MarkdownIt): void {
   md.renderer.rules.fence = (tokens, index, options, env, self) => {
     const token = tokens[index];
     const title = extractFenceTitle(token.info);
-    const insideCodeGroup = Boolean(token.meta?.[codeGroupMetaKey]);
+    const insideCodeGroup = (token.meta as Record<string, unknown> | undefined)?.[codeGroupMetaKey] === true;
     const rendered = renderFence(tokens, index, options, env, self);
 
-    if (!title || insideCodeGroup) return rendered;
+    if (title === undefined || insideCodeGroup) return rendered;
 
     const escapedTitle = md.utils.escapeHtml(title);
-    const titledWrapper = rendered.replace(
-      /^(<div class="[^"]+)/,
-      "$1 dsa-code-block--titled",
-    );
+    const titledWrapper = rendered.replace(/^(<div class="[^"]+)/, "$1 dsa-code-block--titled");
     const titleMarkup = `<span class="dsa-code-title" title="${escapedTitle}">${escapedTitle}</span>`;
     return titledWrapper.replace(/(<\/pre>)/, `$1${titleMarkup}`);
   };
@@ -99,7 +96,7 @@ export function installTheoryMarkdown(md: MarkdownIt): void {
         const title = containerTitle(token, definition.name, definition.label);
         const attrs = md.renderer.renderAttrs(token);
         const renderedTitle = renderTheoryTitle(md, title, {
-          references: env?.references,
+          references: (env as { references?: unknown } | undefined)?.references,
         });
         return `<div class="dsa-theory-block dsa-theory-block--${definition.name}" data-theory-kind="${definition.name}"${attrs}>\n<p class="dsa-theory-block__title"><span class="dsa-theory-block__code" aria-hidden="true">${definition.code}</span><span>${renderedTitle}</span></p>\n`;
       },

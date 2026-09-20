@@ -1,6 +1,0 @@
-allowBuilds:
-  '@vscode/vsce-sign': false
-  esbuild: true
-  keytar: false
-overrides:
-  typescript: npm:typescript-native-bridge@6.0.3-bridge.17.tsgo.7.0.2

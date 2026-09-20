@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+# workspace 成员各自的 node_modules（packages/*/dist 是入库产物，不能一起忽略）
+packages/*/node_modules
+apps/*/node_modules
 /.pnpm-store/
 /.pnp
 .pnp.*
@@ -60,3 +63,5 @@ devenv.local.yaml
 
 # pre-commit
 .pre-commit-config.yaml
+packages/*/dist/.sources.sha256
+packages/*/dist/.build.lock

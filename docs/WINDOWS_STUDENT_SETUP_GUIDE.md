@@ -12,7 +12,7 @@
 
 ```powershell
 cd "$HOME\code\DSA-Mastery"
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1
 ```
 
 如果仓库在其他位置，只需要把第一行换成实际目录，例如 `cd "$HOME\DSA-Mastery"`。
@@ -23,7 +23,7 @@ powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windo
 
 ```powershell
 $bootstrap = Join-Path $env:TEMP "dsa-mastery-bootstrap.ps1"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-windows.ps1" -OutFile $bootstrap
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/packages/bootstrap/scripts/bootstrap-windows.ps1" -OutFile $bootstrap
 powershell.exe -ExecutionPolicy Bypass -File $bootstrap -RepoDir "$HOME\code\DSA-Mastery"
 ```
 
@@ -33,7 +33,7 @@ powershell.exe -ExecutionPolicy Bypass -File $bootstrap -RepoDir "$HOME\code\DSA
 New-Item -ItemType Directory -Force "$HOME\code" | Out-Null
 git clone https://github.com/AzenAnn/DSA-Mastery.git "$HOME\code\DSA-Mastery"
 cd "$HOME\code\DSA-Mastery"
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1
 ```
 
 不带参数运行时会进入交互式选择界面：
@@ -50,25 +50,25 @@ powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windo
 
 ```powershell
 # 只安装并验证 Quiz/Program 所需环境
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1 -Profile basic
 
 # 完整课程环境，额外安装并验证 CMake/Project Lab
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1 -Profile full
 ```
 
 常用选项：
 
 ```powershell
 # 只读检查，不安装工具、不 clone/pull、不安装依赖、不运行 smoke
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -CheckOnly -Profile basic -RepoDir "C:\课程项目\DSA-Mastery"
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1 -CheckOnly -Profile basic -RepoDir "C:\课程项目\DSA-Mastery"
 
 # 跳过 VS Code，或显式安装 VS Code 与课程扩展
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full -SkipVscode
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full -InstallVscode
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1 -Profile full -SkipVscode
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1 -Profile full -InstallVscode
 
 # CI/重定向时使用稳定纯文本或 JSON 输出
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic -NonInteractive -Ui plain
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic -NonInteractive -Json
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1 -Profile basic -NonInteractive -Ui plain
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1 -Profile basic -NonInteractive -Json
 ```
 
 支持 TTY 时会显示阶段、状态和整体进度；非 TTY 会自动使用纯文本。安装失败后可以直接重跑，脚本会复用已安装工具和已有仓库。核心失败日志写入 `%LOCALAPPDATA%\DSA-Mastery\setup\`；`-CheckOnly` 不创建日志。
@@ -297,7 +297,7 @@ cd C:\Proj\DSA-Mastery
 先使用环境检查命令：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab doctor labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 如果已安装 GNU Make，也可以使用等价命令：
@@ -311,7 +311,7 @@ make doctor LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 如果环境检查通过，可以运行公开测试：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 使用 Make 时可以运行：
@@ -327,7 +327,7 @@ make run LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 也可以只运行示例测试：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --case 001-sample
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --case 001-sample
 ```
 
 对应的 Make 命令是：
@@ -343,7 +343,7 @@ make run LAB=labs/chapter-01/exercise/E-01-01-sequential-list-deduplication CASE
 Project Lab 除了 MSVC，还需要 CMake。可以先检查：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-08/project/P-08-01-avl-tree-rotations
+pnpm lab doctor labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 使用 Make 时可以运行：
@@ -366,13 +366,13 @@ MSVC                 AVAILABLE   19.51.36256 (>= 19.30.0)
 CMake                AVAILABLE   4.3.1 (>= 3.25.0)
 GNU Make             AVAILABLE   4.4.1 (>= 4.0.0)
 
-GNU Make 为推荐项而非必装依赖；免 Make 入口： pnpm lab:run -- <lab-path>
+GNU Make 为推荐项而非必装依赖；免 Make 入口： pnpm lab run <lab-path>
 ```
 
 然后运行 Project Lab：
 
 ```powershell
-pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations
+pnpm lab run labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 对应的 Make 命令是：
@@ -384,7 +384,7 @@ make run LAB=labs/chapter-08/project/P-08-01-avl-tree-rotations
 也可以运行指定 task 和测试用例：
 
 ```powershell
-pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations --task frequency --case weighted
+pnpm lab run labs/chapter-08/project/P-08-01-avl-tree-rotations --task frequency --case weighted
 ```
 
 使用 Make 时可以运行：

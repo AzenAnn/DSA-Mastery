@@ -120,7 +120,7 @@ git switch -c answer-你的名字
 
 本地答题使用项目自建的 **DSA Mastery VSCode 插件**，不需要先用终端运行判题命令：
 
-1. 用 VSCode 打开仓库根目录，也就是包含 `labs/` 和 `tools/lab/cli.mjs` 的目录。不要只打开某个 Lab 子目录。
+1. 用 VSCode 打开仓库根目录，也就是包含 `labs/` 和 `packages/lab-cli/dist/cli.js` 的目录。不要只打开某个 Lab 子目录。
 2. 查看最左侧活动栏，点击 **DSA Mastery**。
 3. 展开章节并点击要做的题目。题目面板会显示题面和相关信息。
 4. 点击 **打开答题文件**；Project 题还可以在 task 卡片中选择对应文件。

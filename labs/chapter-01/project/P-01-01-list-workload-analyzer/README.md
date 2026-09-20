@@ -33,7 +33,7 @@ duration: "5～7 小时"
 ```powershell
 make doctor
 # 未安装 GNU Make 时，在仓库根执行：
-pnpm lab:doctor -- labs/chapter-01/project/P-01-01-list-workload-analyzer
+pnpm lab doctor labs/chapter-01/project/P-01-01-list-workload-analyzer
 ```
 
 ## 公共接口与边界
@@ -141,10 +141,10 @@ make verify
 仓库根免 Make 入口：
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/project/P-01-01-list-workload-analyzer
-pnpm lab:run -- labs/chapter-01/project/P-01-01-list-workload-analyzer --task sequential-list
-pnpm lab:score -- labs/chapter-01/project/P-01-01-list-workload-analyzer
-pnpm lab:verify -- labs/chapter-01/project/P-01-01-list-workload-analyzer
+pnpm lab run labs/chapter-01/project/P-01-01-list-workload-analyzer
+pnpm lab run labs/chapter-01/project/P-01-01-list-workload-analyzer --task sequential-list
+pnpm lab score labs/chapter-01/project/P-01-01-list-workload-analyzer
+pnpm lab verify labs/chapter-01/project/P-01-01-list-workload-analyzer
 ```
 
 ## 正常、边界与错误情况

@@ -98,10 +98,10 @@ true
 
 ```powershell
 # 运行评测
-pnpm lab:run -- labs/chapter-04/exercise/E-04-03-complete-binary-tree-check
+pnpm lab run labs/chapter-04/exercise/E-04-03-complete-binary-tree-check
 
 # 单用例调试
-pnpm lab:run -- labs/chapter-04/exercise/E-04-03-complete-binary-tree-check --case 001-sample
+pnpm lab run labs/chapter-04/exercise/E-04-03-complete-binary-tree-check --case 001-sample
 ```
 
 ## 题解
@@ -231,5 +231,5 @@ int main() {
 
 ## 本地运行与提交
 ```powershell
-pnpm lab:run -- labs/chapter-04/exercise/E-04-03-complete-binary-tree-check
+pnpm lab run labs/chapter-04/exercise/E-04-03-complete-binary-tree-check
 ```

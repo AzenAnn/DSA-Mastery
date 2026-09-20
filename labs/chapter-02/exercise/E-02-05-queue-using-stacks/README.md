@@ -147,10 +147,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/exercise/E-02-05-queue-using-stacks
-pnpm lab:run -- labs/chapter-02/exercise/E-02-05-queue-using-stacks
-pnpm lab:run -- labs/chapter-02/exercise/E-02-05-queue-using-stacks --case 001-lazy-transfer
-pnpm lab:score -- labs/chapter-02/exercise/E-02-05-queue-using-stacks
+pnpm lab doctor labs/chapter-02/exercise/E-02-05-queue-using-stacks
+pnpm lab run labs/chapter-02/exercise/E-02-05-queue-using-stacks
+pnpm lab run labs/chapter-02/exercise/E-02-05-queue-using-stacks --case 001-lazy-transfer
+pnpm lab score labs/chapter-02/exercise/E-02-05-queue-using-stacks
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`006-scale-transfer` 先累积 400 个元素，再交替执行 `FRONT` 与 `DEQUEUE`，回归一次转移后持续从输出栈取队头的状态变化。均摊复杂度要求还需结合实现分析判断。

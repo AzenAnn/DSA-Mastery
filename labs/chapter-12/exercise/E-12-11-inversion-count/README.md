@@ -83,10 +83,10 @@ cd labs/chapter-12/exercise/E-12-11-inversion-count
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-12/exercise/E-12-11-inversion-count
+pnpm lab run labs/chapter-12/exercise/E-12-11-inversion-count
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-12/exercise/E-12-11-inversion-count
+pnpm lab verify labs/chapter-12/exercise/E-12-11-inversion-count
 ```
 
 ## 完成清单

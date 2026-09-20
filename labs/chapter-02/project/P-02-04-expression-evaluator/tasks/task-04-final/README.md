@@ -8,4 +8,4 @@
 
 `final-normal` 30 分，`final-boundary` 25 分，`final-errors` 25 分，`final-cli` 20 分；项目权重 35%。前三组检查函数组合行为，最后一组通过 `tests/cli_test.cmake` 启动真实可执行程序，将 `cli.in` 输入并与 `cli.out` 比较，检查多行错误恢复。单元测试通过不能代替此项。
 
-在仓库根运行 `pnpm lab:run -- labs/chapter-02/project/P-02-04-expression-evaluator --task final`。也可进入 Project 目录执行 `cmake --preset student`、`cmake --build --preset student --config Release --target expression_cli`；多配置生成器将可执行程序放在 `tasks/task-04-final/Release`，单配置生成器放在 `tasks/task-04-final`，均位于 `.lab-cache/cmake/student` 内。
+在仓库根运行 `pnpm lab run labs/chapter-02/project/P-02-04-expression-evaluator --task final`。也可进入 Project 目录执行 `cmake --preset student`、`cmake --build --preset student --config Release --target expression_cli`；多配置生成器将可执行程序放在 `tasks/task-04-final/Release`，单配置生成器放在 `tasks/task-04-final`，均位于 `.lab-cache/cmake/student` 内。

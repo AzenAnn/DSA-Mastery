@@ -79,9 +79,9 @@ make score
 Windows 未安装 GNU Make 时，在仓库根使用免 Make 兜底：
 
 ```powershell
-pnpm lab:run -- labs/chapter-10/project/P-10-01-sort-workload-analyzer
-pnpm lab:run -- labs/chapter-10/project/P-10-01-sort-workload-analyzer --task insertion
-pnpm lab:score -- labs/chapter-10/project/P-10-01-sort-workload-analyzer
+pnpm lab run labs/chapter-10/project/P-10-01-sort-workload-analyzer
+pnpm lab run labs/chapter-10/project/P-10-01-sort-workload-analyzer --task insertion
+pnpm lab score labs/chapter-10/project/P-10-01-sort-workload-analyzer
 ```
 
 维护者可用 `--target solution` 验证参考实现自动部分满分。Project 使用 CMake ≥ 3.25 与 CTest，所有构建产物只写入 `.lab-cache/`。

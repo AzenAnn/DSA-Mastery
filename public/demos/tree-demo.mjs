@@ -1,31 +1,111 @@
 import {
-  BINARY_PRESETS, FOREST_PRESETS, binaryOrder, threadingTrace,
-  morrisTrace, flattenTrace, forestTrace, forestToBinary,
+  BINARY_PRESETS,
+  FOREST_PRESETS,
+  binaryOrder,
+  threadingTrace,
+  morrisTrace,
+  flattenTrace,
+  forestTrace,
+  forestToBinary,
 } from "./tree-algorithms.mjs";
 
 const kind = document.body.dataset.demo;
 const configs = {
-  threaded: { modes: [["threading", "中序线索化"], ["morris", "Morris 中序遍历"]], preset: "textbook" },
-  forest: { modes: [["postorder", "后根 / 后序森林 ↔ 中序"], ["preorder", "先根 / 先序森林 ↔ 前序"]], preset: "textbook" },
+  threaded: {
+    modes: [
+      ["threading", "中序线索化"],
+      ["morris", "Morris 中序遍历"],
+    ],
+    preset: "textbook",
+  },
+  forest: {
+    modes: [
+      ["postorder", "后根 / 后序森林 ↔ 中序"],
+      ["preorder", "先根 / 先序森林 ↔ 前序"],
+    ],
+    preset: "textbook",
+  },
   flatten: { modes: [["flatten", "原地迭代展开"]], preset: "flatten" },
 };
 const code = {
-  threading: ["递归真实左子树", "若 left 为空：left = prev; ltag = 1", "若 prev.right 为空：right = curr; rtag = 1", "访问 curr; prev = curr", "递归真实右子树", "收尾：prev.right = null; rtag = 1"],
-  morris: ["检查 curr.left", "无左孩子：输出 curr", "curr = curr.right", "pred 从左孩子沿 right 找前驱", "首次到达：pred.right = curr", "curr = curr.left", "再次到达：pred.right = null", "输出 curr", "curr = curr.right"],
-  flatten: ["检查 curr.left", "pred = curr.left", "沿 right 移动 pred，直到末端", "pred.right = curr.right", "curr.right = curr.left", "curr.left = null", "curr = curr.right"],
-  postorder: ["原树 / 森林", "加线：串起右兄弟", "抹线：只保留首孩子边", "left = 首孩子; right = 右兄弟", "原结构后根 / 后序 ↔ 二叉树中序"],
-  preorder: ["原树 / 森林", "加线：串起右兄弟", "抹线：只保留首孩子边", "left = 首孩子; right = 右兄弟", "原结构先根 / 先序 ↔ 二叉树前序"],
+  threading: [
+    "递归真实左子树",
+    "若 left 为空：left = prev; ltag = 1",
+    "若 prev.right 为空：right = curr; rtag = 1",
+    "访问 curr; prev = curr",
+    "递归真实右子树",
+    "收尾：prev.right = null; rtag = 1",
+  ],
+  morris: [
+    "检查 curr.left",
+    "无左孩子：输出 curr",
+    "curr = curr.right",
+    "pred 从左孩子沿 right 找前驱",
+    "首次到达：pred.right = curr",
+    "curr = curr.left",
+    "再次到达：pred.right = null",
+    "输出 curr",
+    "curr = curr.right",
+  ],
+  flatten: [
+    "检查 curr.left",
+    "pred = curr.left",
+    "沿 right 移动 pred，直到末端",
+    "pred.right = curr.right",
+    "curr.right = curr.left",
+    "curr.left = null",
+    "curr = curr.right",
+  ],
+  postorder: [
+    "原树 / 森林",
+    "加线：串起右兄弟",
+    "抹线：只保留首孩子边",
+    "left = 首孩子; right = 右兄弟",
+    "原结构后根 / 后序 ↔ 二叉树中序",
+  ],
+  preorder: [
+    "原树 / 森林",
+    "加线：串起右兄弟",
+    "抹线：只保留首孩子边",
+    "left = 首孩子; right = 右兄弟",
+    "原结构先根 / 先序 ↔ 二叉树前序",
+  ],
 };
-const phaseNames = { ready: "准备", done: "已完成", visit: "访问", descend: "递归进入", inspect: "检查", predecessor: "前驱线索", successor: "后继线索", right: "递归右侧", tail: "末端处理", move: "移动指针", find: "寻找拼接点", scan: "沿右链搜索", create: "建立回边", remove: "拆除回边", attach: "连接原右侧", promote: "左移到右", clear: "清空左侧", original: "原结构", siblings: "加线", "first-child": "抹线", binary: "转换完成" };
+const phaseNames = {
+  ready: "准备",
+  done: "已完成",
+  visit: "访问",
+  descend: "递归进入",
+  inspect: "检查",
+  predecessor: "前驱线索",
+  successor: "后继线索",
+  right: "递归右侧",
+  tail: "末端处理",
+  move: "移动指针",
+  find: "寻找拼接点",
+  scan: "沿右链搜索",
+  create: "建立回边",
+  remove: "拆除回边",
+  attach: "连接原右侧",
+  promote: "左移到右",
+  clear: "清空左侧",
+  original: "原结构",
+  siblings: "加线",
+  "first-child": "抹线",
+  binary: "转换完成",
+};
 const presets = kind === "forest" ? FOREST_PRESETS : BINARY_PRESETS;
 const config = configs[kind];
 const queryMode = new URLSearchParams(location.search).get("mode");
 let mode = config.modes.some(([value]) => value === queryMode) ? queryMode : config.modes[0][0];
 let presetId = config.preset;
-let frames = [], index = 0, timer = null, selected = null;
+let frames = [],
+  index = 0,
+  timer = null,
+  selected = null;
 let source, originalLayout, binaryLayout, expectedOrder;
 let svgCount = 0;
-const $ = selector => document.querySelector(selector);
+const $ = (selector) => document.querySelector(selector);
 
 $("#demo").innerHTML = `
   <section class="layout">
@@ -63,8 +143,21 @@ $("#demo").innerHTML = `
   </section>
   <p class="footer-note" id="footer-note"></p>`;
 
-const ui = { timeline: $("[data-role=timeline]"), speed: $("[data-role=speed]"), mode: $("[data-role=mode]"), dataset: $("[data-role=dataset]"), play: $("[data-action=play]"), prev: $("[data-action=prev]"), next: $("[data-action=next]") };
-function option(value, label) { const node = document.createElement("option"); node.value = value; node.textContent = label; return node; }
+const ui = {
+  timeline: $("[data-role=timeline]"),
+  speed: $("[data-role=speed]"),
+  mode: $("[data-role=mode]"),
+  dataset: $("[data-role=dataset]"),
+  play: $("[data-action=play]"),
+  prev: $("[data-action=prev]"),
+  next: $("[data-action=next]"),
+};
+function option(value, label) {
+  const node = document.createElement("option");
+  node.value = value;
+  node.textContent = label;
+  return node;
+}
 ui.dataset.replaceChildren(...Object.entries(presets).map(([key, value]) => option(key, value.label)));
 ui.mode.replaceChildren(...config.modes.map(([value, label]) => option(value, label)));
 ui.mode.value = mode;
@@ -72,8 +165,10 @@ ui.dataset.value = presetId;
 
 // Layout follows only original child edges; threading/Morris snapshots may contain cycles.
 function layoutBinary(tree) {
-  const positions = {}, byId = new Map(tree.nodes.map(node => [node.id, node]));
-  let position = 0, depthMax = 0;
+  const positions = {},
+    byId = new Map(tree.nodes.map((node) => [node.id, node]));
+  let position = 0,
+    depthMax = 0;
   function walk(id, depth) {
     if (id === null) return;
     const node = byId.get(id);
@@ -89,34 +184,54 @@ function layoutBinary(tree) {
 }
 
 function layoutForest(forest) {
-  const positions = {}, byId = new Map(forest.nodes.map(node => [node.id, node]));
-  let leaf = 0, depthMax = 0;
+  const positions = {},
+    byId = new Map(forest.nodes.map((node) => [node.id, node]));
+  let leaf = 0,
+    depthMax = 0;
   function walk(id, depth) {
     const node = byId.get(id);
     depthMax = Math.max(depthMax, depth);
-    const xs = node.children.map(child => walk(child, depth + 1));
+    const xs = node.children.map((child) => walk(child, depth + 1));
     const x = xs.length ? (xs[0] + xs.at(-1)) / 2 : 70 + leaf++ * 90;
     positions[id] = { x, y: 65 + depth * 100 };
     return x;
   }
-  forest.roots.forEach(id => { walk(id, 0); leaf += .5; });
+  forest.roots.forEach((id) => {
+    walk(id, 0);
+    leaf += 0.5;
+  });
   const width = Math.max(300, 140 + Math.max(0, leaf - 1) * 90);
   if (forest.nodes.length === 1) positions[forest.roots[0]].x = width / 2;
   return { positions, width, height: Math.max(230, depthMax * 100 + 140) };
 }
 
 function nodeEdges(nodes, temporary = [], forest = false) {
-  return nodes.flatMap(node => ["left", "right"].filter(slot => node[slot] !== null).map(slot => {
-    const tag = slot === "left" ? node.ltag : node.rtag;
-    const type = tag === 1 ? (slot === "left" ? "predecessor" : "successor")
-      : slot === "right" && temporary.includes(node.id) ? "temporary"
-        : forest ? (slot === "left" ? "first-child" : "sibling") : "child";
-    return { from: node.id, to: node[slot], slot, type };
-  }));
+  return nodes.flatMap((node) =>
+    ["left", "right"]
+      .filter((slot) => node[slot] !== null)
+      .map((slot) => {
+        const tag = slot === "left" ? node.ltag : node.rtag;
+        const type =
+          tag === 1
+            ? slot === "left"
+              ? "predecessor"
+              : "successor"
+            : slot === "right" && temporary.includes(node.id)
+              ? "temporary"
+              : forest
+                ? slot === "left"
+                  ? "first-child"
+                  : "sibling"
+                : "child";
+        return { from: node.id, to: node[slot], slot, type };
+      }),
+  );
 }
 
 function originalForestEdges() {
-  return source.nodes.flatMap(node => node.children.map((child, i) => ({ from: node.id, to: child, slot: "child", type: "child", first: i === 0 })));
+  return source.nodes.flatMap((node) =>
+    node.children.map((child, i) => ({ from: node.id, to: child, slot: "child", type: "child", first: i === 0 })),
+  );
 }
 
 const NS = "http://www.w3.org/2000/svg";
@@ -130,65 +245,145 @@ function svgElement(tag, attributes = {}, text) {
 function drawTree(container, nodes, edges, layout, frame, changes = []) {
   const { positions, width, height } = layout;
   const prefix = `arrows-${svgCount++}`;
-  const svg = svgElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "group", "aria-label": container.id === "left-tree" ? $("#left-title").textContent : $("#right-title").textContent });
+  const svg = svgElement("svg", {
+    viewBox: `0 0 ${width} ${height}`,
+    role: "group",
+    "aria-label": container.id === "left-tree" ? $("#left-title").textContent : $("#right-title").textContent,
+  });
   const defs = svgElement("defs");
-  for (const [name, color] of Object.entries({ child: "--muted", predecessor: "--purple", successor: "--cyan", temporary: "--yellow", sibling: "--purple", "first-child": "--cyan", added: "--green", removed: "--red" })) {
-    const marker = svgElement("marker", { id: `${prefix}-${name}`, viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 5, markerHeight: 5, orient: "auto-start-reverse" });
+  for (const [name, color] of Object.entries({
+    child: "--muted",
+    predecessor: "--purple",
+    successor: "--cyan",
+    temporary: "--yellow",
+    sibling: "--purple",
+    "first-child": "--cyan",
+    added: "--green",
+    removed: "--red",
+  })) {
+    const marker = svgElement("marker", {
+      id: `${prefix}-${name}`,
+      viewBox: "0 0 10 10",
+      refX: 9,
+      refY: 5,
+      markerWidth: 5,
+      markerHeight: 5,
+      orient: "auto-start-reverse",
+    });
     marker.append(svgElement("path", { d: "M 0 0 L 10 5 L 0 10 z", fill: `var(${color})` }));
     defs.append(marker);
   }
   svg.append(defs);
-  const removed = changes.filter(change => change.before !== null && change.before !== change.after).map(change => ({ from: change.from, to: change.before, slot: change.slot, type: "removed" }));
+  const removed = changes
+    .filter((change) => change.before !== null && change.before !== change.after)
+    .map((change) => ({ from: change.from, to: change.before, slot: change.slot, type: "removed" }));
   const allEdges = [...edges, ...removed];
   for (const edge of allEdges) {
-    const a = positions[edge.from], b = positions[edge.to];
+    const a = positions[edge.from],
+      b = positions[edge.to];
     if (!a || !b) continue;
-    const added = changes.some(change => change.from === edge.from && change.slot === edge.slot && change.after === edge.to && change.before !== change.after);
+    const added = changes.some(
+      (change) =>
+        change.from === edge.from &&
+        change.slot === edge.slot &&
+        change.after === edge.to &&
+        change.before !== change.after,
+    );
     const type = edge.type === "removed" ? "removed" : added ? "added" : edge.type;
     // Separate coincident L/R pointers during flatten's three individual writes.
-    const sharedTarget = edge.slot === "right" && allEdges.some(other => other.from === edge.from && other.to === edge.to && other.slot === "left");
-    const curved = ["predecessor", "successor", "temporary"].includes(edge.type) || sharedTarget || (edge.type === "removed" && mode === "morris");
+    const sharedTarget =
+      edge.slot === "right" &&
+      allEdges.some((other) => other.from === edge.from && other.to === edge.to && other.slot === "left");
+    const curved =
+      ["predecessor", "successor", "temporary"].includes(edge.type) ||
+      sharedTarget ||
+      (edge.type === "removed" && mode === "morris");
     let d, labelX, labelY;
     if (curved) {
       const side = edge.slot === "left" ? -1 : 1;
-      const sx = a.x + side * 25, tx = b.x + side * 25;
-      const control = Math.min(width - 10, Math.max(10, (side === -1 ? Math.min(sx, tx) : Math.max(sx, tx)) + side * 44));
+      const sx = a.x + side * 25,
+        tx = b.x + side * 25;
+      const control = Math.min(
+        width - 10,
+        Math.max(10, (side === -1 ? Math.min(sx, tx) : Math.max(sx, tx)) + side * 44),
+      );
       d = `M ${sx} ${a.y} C ${control} ${a.y}, ${control} ${b.y}, ${tx} ${b.y}`;
       labelX = (sx + 6 * control + tx) / 8;
       labelY = (a.y + b.y) / 2 - 5;
     } else {
       const length = Math.hypot(b.x - a.x, b.y - a.y) || 1;
-      const dx = (b.x - a.x) / length, dy = (b.y - a.y) / length;
+      const dx = (b.x - a.x) / length,
+        dy = (b.y - a.y) / length;
       d = `M ${a.x + dx * 25} ${a.y + dy * 25} L ${b.x - dx * 28} ${b.y - dy * 28}`;
       labelX = (a.x + b.x) / 2 + 7;
       labelY = (a.y + b.y) / 2 - 6;
     }
-    const path = svgElement("path", { d, class: `edge ${edge.type}${added ? " added" : ""}`, "marker-end": `url(#${prefix}-${type})`, "data-from": edge.from, "data-to": edge.to, "data-slot": edge.slot });
-    path.append(svgElement("title", {}, `${edge.from}.${edge.slot} → ${edge.to}${type === "removed" ? "（本步删除）" : ""}`));
+    const path = svgElement("path", {
+      d,
+      class: `edge ${edge.type}${added ? " added" : ""}`,
+      "marker-end": `url(#${prefix}-${type})`,
+      "data-from": edge.from,
+      "data-to": edge.to,
+      "data-slot": edge.slot,
+    });
+    path.append(
+      svgElement("title", {}, `${edge.from}.${edge.slot} → ${edge.to}${type === "removed" ? "（本步删除）" : ""}`),
+    );
     svg.append(path);
-    const labels = { predecessor: "前驱", successor: "后继", temporary: "临时", sibling: "右兄弟", "first-child": "首孩子" };
+    const labels = {
+      predecessor: "前驱",
+      successor: "后继",
+      temporary: "临时",
+      sibling: "右兄弟",
+      "first-child": "首孩子",
+    };
     const childLabel = kind === "threaded" || edge.slot === "child" ? "" : edge.slot === "left" ? "L" : "R";
-    if (edge.type !== "removed") svg.append(svgElement("text", { x: labelX, y: labelY, class: "edge-label" }, labels[edge.type] ?? childLabel));
-    if (edge.type === "removed") svg.append(svgElement("path", { class: "removed-cross", d: `M ${labelX - 5} ${labelY - 5} l 10 10 m -10 0 l 10 -10` }));
+    if (edge.type !== "removed")
+      svg.append(svgElement("text", { x: labelX, y: labelY, class: "edge-label" }, labels[edge.type] ?? childLabel));
+    if (edge.type === "removed") {
+      svg.append(
+        svgElement("path", { class: "removed-cross", d: `M ${labelX - 5} ${labelY - 5} l 10 10 m -10 0 l 10 -10` }),
+      );
+    }
   }
   if (!nodes.length) svg.append(svgElement("text", { x: width / 2, y: height / 2, class: "empty-label" }, "∅ 空结构"));
   for (const node of nodes) {
     const point = positions[node.id];
     if (!point) continue;
     const isSelected = selected === node.id;
-    const roles = [frame.curr === node.id ? "curr" : "", frame.prev === node.id ? "prev" : "", frame.pred === node.id ? "pred" : ""].filter(Boolean);
-    const g = svgElement("g", { class: `node${frame.output.includes(node.id) ? " visited" : ""}${isSelected ? " selected" : ""}${frame.curr === node.id ? " current" : ""}`, transform: `translate(${point.x},${point.y})`, "data-node": node.id, role: "button", tabindex: 0, "aria-label": `节点 ${node.id}，查看对应关系和指针`, "aria-pressed": String(isSelected) });
+    const roles = [
+      frame.curr === node.id ? "curr" : "",
+      frame.prev === node.id ? "prev" : "",
+      frame.pred === node.id ? "pred" : "",
+    ].filter(Boolean);
+    const g = svgElement("g", {
+      class: `node${frame.output.includes(node.id) ? " visited" : ""}${isSelected ? " selected" : ""}${frame.curr === node.id ? " current" : ""}`,
+      transform: `translate(${point.x},${point.y})`,
+      "data-node": node.id,
+      role: "button",
+      tabindex: 0,
+      "aria-label": `节点 ${node.id}，查看对应关系和指针`,
+      "aria-pressed": String(isSelected),
+    });
     g.append(svgElement("circle", { r: 24 }), svgElement("text", { y: 6 }, node.id));
     if (isSelected) g.append(svgElement("circle", { r: 29, class: "selection-ring" }));
     if (roles.length) g.append(svgElement("text", { y: -34, class: "pointer-label" }, roles.join(" / ")));
-    if (node.ltag !== undefined) g.append(svgElement("text", { y: 43, class: "node-tag" }, `L${node.ltag} / R${node.rtag}`));
+    if (node.ltag !== undefined)
+      g.append(svgElement("text", { y: 43, class: "node-tag" }, `L${node.ltag} / R${node.rtag}`));
     svg.append(g);
   }
   container.replaceChildren(svg);
 }
 
 function sequence(container, values) {
-  container.replaceChildren(...values.map(value => { const span = document.createElement("span"); span.className = "tok"; span.textContent = value; return span; }));
+  container.replaceChildren(
+    ...values.map((value) => {
+      const span = document.createElement("span");
+      span.className = "tok";
+      span.textContent = value;
+      return span;
+    }),
+  );
   if (!values.length) container.textContent = "（尚无输出）";
 }
 
@@ -197,33 +392,46 @@ function drawTable(frame) {
   table.className = "pointer-table";
   table.setAttribute("aria-label", kind === "forest" ? "孩子兄弟映射表" : "当前左右指针快照");
   const tagged = mode === "threading";
-  const head = document.createElement("thead"), tr = document.createElement("tr");
+  const head = document.createElement("thead"),
+    tr = document.createElement("tr");
   for (const value of tagged ? ["节点", "left", "ltag", "right", "rtag"] : ["节点", "left", "right"]) {
-    const th = document.createElement("th"); th.scope = "col"; th.textContent = value; tr.append(th);
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = value;
+    tr.append(th);
   }
-  head.append(tr); table.append(head);
+  head.append(tr);
+  table.append(head);
   const body = document.createElement("tbody");
   for (const node of frame.nodes) {
     const row = document.createElement("tr");
     row.classList.toggle("selected", selected === node.id);
-    const cell = document.createElement("td"), button = document.createElement("button");
-    button.textContent = node.id; button.dataset.select = node.id;
+    const cell = document.createElement("td"),
+      button = document.createElement("button");
+    button.textContent = node.id;
+    button.dataset.select = node.id;
     button.setAttribute("aria-label", `查看节点 ${node.id} 的指针`);
-    cell.append(button); row.append(cell);
+    cell.append(button);
+    row.append(cell);
     for (const slot of tagged ? ["left", "ltag", "right", "rtag"] : ["left", "right"]) {
       const td = document.createElement("td");
       td.textContent = node[slot] ?? "null";
       const pointerSlot = slot === "ltag" ? "left" : slot === "rtag" ? "right" : slot;
-      td.classList.toggle("changed", frame.changes.some(change => change.from === node.id && change.slot === pointerSlot));
+      td.classList.toggle(
+        "changed",
+        frame.changes.some((change) => change.from === node.id && change.slot === pointerSlot),
+      );
       row.append(td);
     }
     body.append(row);
   }
-  table.append(body); $("#table").replaceChildren(table);
+  table.append(body);
+  $("#table").replaceChildren(table);
   const id = selected ?? frame.curr;
-  const node = frame.nodes.find(value => value.id === id);
+  const node = frame.nodes.find((value) => value.id === id);
   $("#inspector").textContent = node
-    ? kind === "forest" ? `节点 ${id} 在两侧身份相同：left → ${node.left ?? "null"} 是第一个孩子；right → ${node.right ?? "null"} 是下一个兄弟。`
+    ? kind === "forest"
+      ? `节点 ${id} 在两侧身份相同：left → ${node.left ?? "null"} 是第一个孩子；right → ${node.right ?? "null"} 是下一个兄弟。`
       : `${id}：left → ${node.left ?? "null"}${tagged ? `（${node.ltag ? "前驱线索" : "孩子指针"}）` : ""}；right → ${node.right ?? "null"}${tagged ? `（${node.rtag ? "后继线索" : "孩子指针"}）` : frame.temporary.includes(id) ? "（临时回边）" : ""}。`
     : "点击图中节点或表中按钮，查看当前指针含义。";
 }
@@ -239,17 +447,28 @@ function render() {
   $("#narration").textContent = frame.message;
   ui.timeline.value = index;
   ui.timeline.setAttribute("aria-valuetext", `第 ${index} 步，共 ${frames.length - 1} 步：${phaseNames[frame.phase]}`);
-  ui.prev.disabled = index === 0; ui.next.disabled = index === frames.length - 1;
+  ui.prev.disabled = index === 0;
+  ui.next.disabled = index === frames.length - 1;
   ui.play.textContent = timer ? "❚❚ 暂停" : index === frames.length - 1 ? "▶ 重播" : "▶ 播放";
   ui.play.setAttribute("aria-pressed", String(timer !== null));
   for (const pointer of ["curr", "prev", "pred"]) $(`#${pointer}`).textContent = frame[pointer] ?? "null";
   $("#prev").closest(".stat").hidden = mode !== "threading";
   $("#pred").closest(".stat").hidden = mode !== "morris" && mode !== "flatten";
-  $("#metrics").textContent = mode === "threading" ? `递归调用栈：${frame.stack.join(" → ") || "空"}；已访问 ${frame.output.length} 个节点。`
-    : mode === "morris" ? `临时回边：${frame.temporary.length} 条；沿右链寻找前驱：${frame.scans} 次移动。`
-      : kind === "flatten" ? `已就位：${frame.output.length}/${frame.nodes.length}；pred 总移动：${frame.scans} 次。`
-        : `已同步访问：${frame.output.length}/${frame.nodes.length}；两侧序列${frame.output.join() === frame.rightOutput.join() ? "一致" : "不同"}。`;
-  $("#code").querySelectorAll("li").forEach((li, i) => { li.classList.toggle("active", i === frame.line); if (i === frame.line) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current"); });
+  $("#metrics").textContent =
+    mode === "threading"
+      ? `递归调用栈：${frame.stack.join(" → ") || "空"}；已访问 ${frame.output.length} 个节点。`
+      : mode === "morris"
+        ? `临时回边：${frame.temporary.length} 条；沿右链寻找前驱：${frame.scans} 次移动。`
+        : kind === "flatten"
+          ? `已就位：${frame.output.length}/${frame.nodes.length}；pred 总移动：${frame.scans} 次。`
+          : `已同步访问：${frame.output.length}/${frame.nodes.length}；两侧序列${frame.output.join() === frame.rightOutput.join() ? "一致" : "不同"}。`;
+  $("#code")
+    .querySelectorAll("li")
+    .forEach((li, i) => {
+      li.classList.toggle("active", i === frame.line);
+      if (i === frame.line) li.setAttribute("aria-current", "step");
+      else li.removeAttribute("aria-current");
+    });
   if (kind === "forest") {
     $("#left-title").textContent = "原树 / 森林";
     $("#right-title").textContent = frame.stage < 3 ? "孩子兄弟转换过程" : "转换后的二叉树";
@@ -259,20 +478,32 @@ function render() {
     drawTree($("#left-tree"), source.nodes, originalEdges, originalLayout, frame);
     let edges = nodeEdges(frame.nodes, [], true);
     if (frame.stage === 0) edges = originalEdges;
-    if (frame.stage === 1) edges = [...originalEdges, ...edges.filter(edge => edge.slot === "right")];
-    if (frame.stage === 2) edges.push(...originalEdges.filter(edge => !edge.first).map(edge => ({ ...edge, type: "removed" })));
+    if (frame.stage === 1) edges = [...originalEdges, ...edges.filter((edge) => edge.slot === "right")];
+    if (frame.stage === 2)
+      edges.push(...originalEdges.filter((edge) => !edge.first).map((edge) => ({ ...edge, type: "removed" })));
     drawTree($("#right-tree"), frame.nodes, edges, frame.stage < 3 ? originalLayout : binaryLayout, frame);
-    sequence($("#left-sequence"), frame.output); sequence($("#right-sequence"), frame.rightOutput);
+    sequence($("#left-sequence"), frame.output);
+    sequence($("#right-sequence"), frame.rightOutput);
   } else {
     $("#left-title").textContent = "原树（保持不变）";
-    $("#right-title").textContent = mode === "threading" ? "中序线索化现场" : mode === "morris" ? "Morris 临时指针现场" : frame.phase === "done" ? "展开后的先序右链" : "指针重连现场";
+    $("#right-title").textContent =
+      mode === "threading"
+        ? "中序线索化现场"
+        : mode === "morris"
+          ? "Morris 临时指针现场"
+          : frame.phase === "done"
+            ? "展开后的先序右链"
+            : "指针重连现场";
     $("#left-sequence-label").textContent = "原树先序（对照目标）";
     $("#right-sequence-label").textContent = kind === "flatten" ? "已就位的先序节点" : "已输出的中序节点";
     if (paired) {
       drawTree($("#left-tree"), source.nodes, nodeEdges(source.nodes), originalLayout, frame);
       sequence($("#left-sequence"), expectedOrder);
     }
-    const layout = kind === "flatten" && frame.phase === "done" ? layoutBinary({ root: source.root, nodes: frame.nodes }) : originalLayout;
+    const layout =
+      kind === "flatten" && frame.phase === "done"
+        ? layoutBinary({ root: source.root, nodes: frame.nodes })
+        : originalLayout;
     drawTree($("#right-tree"), frame.nodes, nodeEdges(frame.nodes, frame.temporary), layout, frame, frame.changes);
     sequence($("#right-sequence"), frame.output);
   }
@@ -288,87 +519,179 @@ function pause(redraw = true) {
   if (redraw && frames.length) render();
 }
 function play() {
-  if (timer !== null) { pause(); return; }
+  if (timer !== null) {
+    pause();
+    return;
+  }
   if (index === frames.length - 1) index = 0;
   timer = setInterval(() => {
     index++;
-    if (index >= frames.length - 1) { index = frames.length - 1; pause(false); }
+    if (index >= frames.length - 1) {
+      index = frames.length - 1;
+      pause(false);
+    }
     render();
   }, Number(ui.speed.value));
   render();
 }
-function move(to) { pause(false); index = Math.max(0, Math.min(frames.length - 1, to)); render(); }
+function move(to) {
+  pause(false);
+  index = Math.max(0, Math.min(frames.length - 1, to));
+  render();
+}
 
 function load() {
-  pause(false); selected = null; index = 0;
+  pause(false);
+  selected = null;
+  index = 0;
   const preset = presets[presetId];
   if (kind === "forest") {
     source = preset;
     frames = forestTrace(source, mode);
-    originalLayout = layoutForest(source); binaryLayout = layoutBinary(forestToBinary(source));
+    originalLayout = layoutForest(source);
+    binaryLayout = layoutBinary(forestToBinary(source));
   } else {
     source = preset.tree;
-    frames = mode === "threading" ? threadingTrace(source) : mode === "morris" ? morrisTrace(source) : flattenTrace(source);
-    originalLayout = layoutBinary(source); expectedOrder = binaryOrder(source, "preorder");
+    frames =
+      mode === "threading" ? threadingTrace(source) : mode === "morris" ? morrisTrace(source) : flattenTrace(source);
+    originalLayout = layoutBinary(source);
+    expectedOrder = binaryOrder(source, "preorder");
   }
   ui.timeline.max = frames.length - 1;
-  $("#code").replaceChildren(...code[mode].map(text => { const li = document.createElement("li"); li.textContent = text; return li; }));
-  const legend = mode === "threading" ? [["child", "实线：孩子"], ["predecessor", "紫虚线：前驱"], ["successor", "青虚线：后继"]]
-    : mode === "morris" ? [["child", "实线：原孩子"], ["temporary", "黄虚线：临时回边"], ["removed", "红虚线 ×：本步拆除"]]
-      : kind === "forest" ? [["child", "原树孩子"], ["first-child", "青线：首孩子 / left"], ["predecessor", "紫虚线：右兄弟 / right"], ["removed", "红虚线 ×：抹去"]]
-        : [["child", "原有指针"], ["added", "绿粗线：本步新增"], ["removed", "红虚线 ×：本步删除"]];
+  $("#code").replaceChildren(
+    ...code[mode].map((text) => {
+      const li = document.createElement("li");
+      li.textContent = text;
+      return li;
+    }),
+  );
+  const legend =
+    mode === "threading"
+      ? [
+          ["child", "实线：孩子"],
+          ["predecessor", "紫虚线：前驱"],
+          ["successor", "青虚线：后继"],
+        ]
+      : mode === "morris"
+        ? [
+            ["child", "实线：原孩子"],
+            ["temporary", "黄虚线：临时回边"],
+            ["removed", "红虚线 ×：本步拆除"],
+          ]
+        : kind === "forest"
+          ? [
+              ["child", "原树孩子"],
+              ["first-child", "青线：首孩子 / left"],
+              ["predecessor", "紫虚线：右兄弟 / right"],
+              ["removed", "红虚线 ×：抹去"],
+            ]
+          : [
+              ["child", "原有指针"],
+              ["added", "绿粗线：本步新增"],
+              ["removed", "红虚线 ×：本步删除"],
+            ];
   if (kind === "threaded") legend.push(["added", "绿粗线：本步新增"]);
-  $("#legend").replaceChildren(...legend.map(([type, label]) => { const span = document.createElement("span"); span.className = "key"; const swatch = document.createElement("i"); swatch.className = `swatch ${type}`; swatch.setAttribute("aria-hidden", "true"); span.append(swatch, document.createTextNode(label)); return span; }));
+  $("#legend").replaceChildren(
+    ...legend.map(([type, label]) => {
+      const span = document.createElement("span");
+      span.className = "key";
+      const swatch = document.createElement("i");
+      swatch.className = `swatch ${type}`;
+      swatch.setAttribute("aria-hidden", "true");
+      span.append(swatch, document.createTextNode(label));
+      return span;
+    }),
+  );
   $("#table-title").textContent = kind === "forest" ? "孩子兄弟映射表" : "指针快照";
-  $("#table-note").textContent = mode === "threading" ? "0 = Link（孩子）；1 = Thread（线索）。指向 null 的首尾线索也会在表中标记。"
-    : mode === "morris" ? "Morris 不使用 ltag/rtag；临时线索复用 right，完成时所有指针应与原树一致。"
-      : kind === "forest" ? "表格始终展示最终映射：left 为第一个孩子，right 为下一个兄弟；单棵树的根没有右兄弟。"
-        : "每一步都展示实际指针。重连的中间状态可能暂时有两条指针指向同一节点，下一步再清空旧 left。";
-  $("#footer-note").textContent = kind === "forest" ? "两侧以“输出一个节点”为同步单位，分别执行原结构遍历和二叉树遍历；递归调用的数量与时机不必相同。"
-    : mode === "threading" ? "线索化算法使用 O(h) 递归栈；线索建成后的中序遍历才可使用 O(1) 辅助空间。"
-      : "这里展示的是算法自身的指针操作；为支持回退而保存的演示快照，不计入原算法的辅助空间分析。";
+  $("#table-note").textContent =
+    mode === "threading"
+      ? "0 = Link（孩子）；1 = Thread（线索）。指向 null 的首尾线索也会在表中标记。"
+      : mode === "morris"
+        ? "Morris 不使用 ltag/rtag；临时线索复用 right，完成时所有指针应与原树一致。"
+        : kind === "forest"
+          ? "表格始终展示最终映射：left 为第一个孩子，right 为下一个兄弟；单棵树的根没有右兄弟。"
+          : "每一步都展示实际指针。重连的中间状态可能暂时有两条指针指向同一节点，下一步再清空旧 left。";
+  $("#footer-note").textContent =
+    kind === "forest"
+      ? "两侧以“输出一个节点”为同步单位，分别执行原结构遍历和二叉树遍历；递归调用的数量与时机不必相同。"
+      : mode === "threading"
+        ? "线索化算法使用 O(h) 递归栈；线索建成后的中序遍历才可使用 O(1) 辅助空间。"
+        : "这里展示的是算法自身的指针操作；为支持回退而保存的演示快照，不计入原算法的辅助空间分析。";
   if (kind === "threaded") {
     $("h1").textContent = mode === "morris" ? "Morris 遍历 · 借一条路，再还原" : "中序线索化 · 指针如何连起来";
-    $(".hero p").textContent = mode === "morris"
-      ? "跟随 curr 与 pred，观察空右指针如何临时成为返回路径。第一次到达建立回边，第二次到达拆除回边，结束时核对所有指针是否恢复。"
-      : "逐步跟随 curr 与 prev，把空指针连向中序前驱和后继；也可切换到 Morris，观察临时回边如何建立、使用，再恢复为空。";
+    $(".hero p").textContent =
+      mode === "morris"
+        ? "跟随 curr 与 pred，观察空右指针如何临时成为返回路径。第一次到达建立回边，第二次到达拆除回边，结束时核对所有指针是否恢复。"
+        : "逐步跟随 curr 与 prev，把空指针连向中序前驱和后继；也可切换到 Morris，观察临时回边如何建立、使用，再恢复为空。";
   }
   render();
 }
 
-ui.dataset.addEventListener("change", () => { presetId = ui.dataset.value; load(); });
-ui.mode.addEventListener("change", () => { mode = ui.mode.value; load(); });
+ui.dataset.addEventListener("change", () => {
+  presetId = ui.dataset.value;
+  load();
+});
+ui.mode.addEventListener("change", () => {
+  mode = ui.mode.value;
+  load();
+});
 ui.play.addEventListener("click", play);
 ui.prev.addEventListener("click", () => move(index - 1));
 ui.next.addEventListener("click", () => move(index + 1));
-$("[data-action=reset]").addEventListener("click", () => { selected = null; move(0); });
+$("[data-action=reset]").addEventListener("click", () => {
+  selected = null;
+  move(0);
+});
 ui.timeline.addEventListener("input", () => move(Number(ui.timeline.value)));
-ui.speed.addEventListener("change", () => { if (timer !== null) { pause(false); play(); } });
+ui.speed.addEventListener("change", () => {
+  if (timer !== null) {
+    pause(false);
+    play();
+  }
+});
 function selectNode(id) {
   // Rebuild only the diagrams/table; preserve focus after replacing SVG nodes.
   const active = document.activeElement;
   const boardId = active?.closest(".board")?.id;
   const wasTable = active?.hasAttribute("data-select");
   selected = id;
-  pause(false); render();
-  const target = boardId ? document.getElementById(boardId).querySelector(`[data-node="${CSS.escape(id)}"]`)
-    : wasTable ? document.querySelector(`[data-select="${CSS.escape(id)}"]`) : null;
+  pause(false);
+  render();
+  const target = boardId
+    ? document.getElementById(boardId).querySelector(`[data-node="${CSS.escape(id)}"]`)
+    : wasTable
+      ? document.querySelector(`[data-select="${CSS.escape(id)}"]`)
+      : null;
   target?.focus({ preventScroll: true });
 }
-$("#demo").addEventListener("click", event => {
+$("#demo").addEventListener("click", (event) => {
   const node = event.target.closest("[data-node], [data-select]");
   if (node) selectNode(node.dataset.node ?? node.dataset.select);
 });
-$("#demo").addEventListener("keydown", event => {
+$("#demo").addEventListener("keydown", (event) => {
   const node = event.target.closest("[data-node]");
-  if (node && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); selectNode(node.dataset.node); }
+  if (node && (event.key === "Enter" || event.key === " ")) {
+    event.preventDefault();
+    selectNode(node.dataset.node);
+  }
 });
-document.addEventListener("keydown", event => {
+document.addEventListener("keydown", (event) => {
   if (event.defaultPrevented || event.target.closest("input, select, button, [role=button]")) return;
-  if (event.key === "ArrowRight") { event.preventDefault(); move(index + 1); }
-  if (event.key === "ArrowLeft") { event.preventDefault(); move(index - 1); }
-  if (event.key === " ") { event.preventDefault(); play(); }
+  if (event.key === "ArrowRight") {
+    event.preventDefault();
+    move(index + 1);
+  }
+  if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    move(index - 1);
+  }
+  if (event.key === " ") {
+    event.preventDefault();
+    play();
+  }
 });
-document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) pause();
+});
 window.addEventListener("pagehide", () => pause(false));
 load();

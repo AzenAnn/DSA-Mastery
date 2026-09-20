@@ -79,14 +79,14 @@ cf
 在仓库根目录执行：
 
 ```powershell
-pnpm lab:run -- labs/chapter-15/exercise/E-15-05-phone-letter-combinations
-pnpm lab:score -- labs/chapter-15/exercise/E-15-05-phone-letter-combinations
+pnpm lab run labs/chapter-15/exercise/E-15-05-phone-letter-combinations
+pnpm lab score labs/chapter-15/exercise/E-15-05-phone-letter-combinations
 ```
 
 进入本 Lab 目录后也可运行 `make run`。作者核验命令为：
 
 ```powershell
-pnpm lab:verify -- labs/chapter-15/exercise/E-15-05-phone-letter-combinations
+pnpm lab verify labs/chapter-15/exercise/E-15-05-phone-letter-combinations
 ```
 
 ## 完成清单

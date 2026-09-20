@@ -11,10 +11,10 @@
 <!-- 写实际执行的命令、Lab/示例结果，以及手工检查的页面。 -->
 
 - [ ] `pnpm test`
-- [ ] 新式 Lab：`pnpm lab:validate -- <lab-path>`；Program/Project：`pnpm lab:verify -- <lab-path>`
+- [ ] 新式 Lab：`pnpm lab validate <lab-path>`；Program/Project：`pnpm lab verify <lab-path>`
 - [ ] 可执行 Lab 已记录操作系统、编译器/CMake 版本、自动分与人工待评分；构建后工作树无污染
 - [ ] Student pack（如适用）不含 `solution/`、缓存或二进制，并可脱离原仓库运行
-- [ ] 涉及导航、主题、Markdown 渲染、base 或发布时：Pages 子路径 `pnpm run check:site` 与 `pnpm run test:pages`
+- [ ] 涉及导航、主题、Markdown 渲染、base 或发布时：Pages 子路径 `pnpm test --project site-audit` 与 `pnpm test --project site-e2e`
 - [ ] 新页面的导航、相对 `.md` 链接、公式、代码块和前后页跳转已检查
 - [ ] 实际命令、结果与未执行项原因已写在本节
 

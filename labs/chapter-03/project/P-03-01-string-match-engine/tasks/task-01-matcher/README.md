@@ -39,7 +39,7 @@ nextval first=<pos> comparisons=<n> prefix=<p>
 make run
 make run TASK=matcher CASE=001-sample
 # 免 Make 兜底（仓库根）：
-pnpm lab:run -- labs/chapter-03/project/P-03-01-string-match-engine --task matcher
+pnpm lab run labs/chapter-03/project/P-03-01-string-match-engine --task matcher
 ```
 
 ## 完成标准

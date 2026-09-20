@@ -115,13 +115,13 @@ make score
 如果没有 Make，也可以在仓库根目录执行：
 
 ```bash
-pnpm lab:run -- labs/chapter-13/exercise/E-13-04-assign-cookies --target student
+pnpm lab run labs/chapter-13/exercise/E-13-04-assign-cookies --target student
 ```
 
 参考实现可以使用下面的命令验证：
 
 ```bash
-pnpm lab:verify -- labs/chapter-13/exercise/E-13-04-assign-cookies --no-color
+pnpm lab verify labs/chapter-13/exercise/E-13-04-assign-cookies --no-color
 ```
 
 ## 完成清单

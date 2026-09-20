@@ -86,8 +86,8 @@ make score
 也可以在仓库根目录执行：
 
 ```bash
-pnpm lab:run -- labs/chapter-13/exercise/E-13-15-minimum-number-of-refueling-stops --target student
-pnpm lab:verify -- labs/chapter-13/exercise/E-13-15-minimum-number-of-refueling-stops --no-color
+pnpm lab run labs/chapter-13/exercise/E-13-15-minimum-number-of-refueling-stops --target student
+pnpm lab verify labs/chapter-13/exercise/E-13-15-minimum-number-of-refueling-stops --no-color
 ```
 
 ## 完成清单

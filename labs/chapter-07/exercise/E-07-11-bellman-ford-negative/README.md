@@ -159,9 +159,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-07/exercise/E-07-11-bellman-ford-negative
-pnpm lab:run -- labs/chapter-07/exercise/E-07-11-bellman-ford-negative
-pnpm lab:score -- labs/chapter-07/exercise/E-07-11-bellman-ford-negative
+pnpm lab doctor labs/chapter-07/exercise/E-07-11-bellman-ford-negative
+pnpm lab run labs/chapter-07/exercise/E-07-11-bellman-ford-negative
+pnpm lab score labs/chapter-07/exercise/E-07-11-bellman-ford-negative
 ```
 
 ## 完成清单

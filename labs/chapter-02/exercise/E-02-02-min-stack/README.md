@@ -136,10 +136,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/exercise/E-02-02-min-stack
-pnpm lab:run -- labs/chapter-02/exercise/E-02-02-min-stack
-pnpm lab:run -- labs/chapter-02/exercise/E-02-02-min-stack --case 001-duplicate-minimum
-pnpm lab:score -- labs/chapter-02/exercise/E-02-02-min-stack
+pnpm lab doctor labs/chapter-02/exercise/E-02-02-min-stack
+pnpm lab run labs/chapter-02/exercise/E-02-02-min-stack
+pnpm lab run labs/chapter-02/exercise/E-02-02-min-stack --case 001-duplicate-minimum
+pnpm lab score labs/chapter-02/exercise/E-02-02-min-stack
 ```
 
 `make run` 用于查看各用例结果；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`007-scale` 在 400 个元素上连续执行 `MIN`，回归最小值查询不会改变栈状态。`O(1)` 查询要求还需结合实现与复杂度分析判断，不依赖易受机器性能影响的极限超时。

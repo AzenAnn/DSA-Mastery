@@ -2,11 +2,11 @@
 import { useRoute } from "vitepress";
 import DefaultTheme from "vitepress/theme-without-fonts";
 import { computed } from "vue";
-import { findCourseDocument } from "./course";
 import BrandMark from "./components/BrandMark.vue";
 import DocumentFooterNote from "./components/DocumentFooterNote.vue";
 import DocumentHeader from "./components/DocumentHeader.vue";
 import QuizNavigator from "./components/QuizNavigator.vue";
+import { findCourseDocument } from "./course";
 
 const DefaultLayout = DefaultTheme.Layout;
 const route = useRoute();

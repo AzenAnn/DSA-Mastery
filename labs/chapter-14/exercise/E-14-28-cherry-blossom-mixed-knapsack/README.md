@@ -84,10 +84,10 @@ cd labs/chapter-14/exercise/E-14-28-cherry-blossom-mixed-knapsack
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-14/exercise/E-14-28-cherry-blossom-mixed-knapsack
+pnpm lab run labs/chapter-14/exercise/E-14-28-cherry-blossom-mixed-knapsack
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-14/exercise/E-14-28-cherry-blossom-mixed-knapsack
+pnpm lab verify labs/chapter-14/exercise/E-14-28-cherry-blossom-mixed-knapsack
 ```
 
 ## 完成清单

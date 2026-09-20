@@ -1,9 +1,23 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
-  "entry": [".vitepress/*.data.ts", "scripts/**/*.mjs", "public/demos/*.mjs", "lab.mjs"],
-  "project": ["**/*.{ts,mts,mjs,vue}"],
-  // .trellis 是归档任务产物，tools/vscode-extension 是自带 knip.jsonc 的独立子包
-  "ignore": [".trellis/**", "tools/vscode-extension/**"],
+  // workspace 成员的入口由 knip 从 package.json 自动推断；这里只补它看不到的部分。
+  // 不再用 scripts/**/*.mjs 这种大包围 glob —— 正是它让 4500 行一次性脚本在工具链里隐形了很久。
+  "workspaces": {
+    ".": {
+      "entry": [".vitepress/*.data.ts", "public/demos/*.mjs", "tests/**/*.test.ts", "tests/support/*.ts"],
+      "project": [".vitepress/**/*.{ts,vue}", "tests/**/*.ts"],
+    },
+    "packages/course-authoring": {
+      "entry": ["src/chapter-*-audit.ts", "src/chapter-06/audit.ts", "src/chapter-06/generate.ts", "test/**/*.test.ts"],
+    },
+    // 逐个列出带测试的包：用 packages/* 通配会给 course-index 和 lab-testkit 配上匹配不到的 entry。
+    "packages/bootstrap": { "entry": ["test/**/*.test.ts"] },
+    "packages/lab-cli": { "entry": ["test/**/*.test.ts"] },
+    "packages/lab-core": { "entry": ["test/**/*.test.ts"] },
+    "packages/lab-runner": { "entry": ["test/**/*.test.ts"] },
+    "apps/vscode-extension": { "entry": ["test/**/*.test.ts"] },
+  },
+  "ignore": ["packages/*/dist/**"],
   // 工具链之外的系统命令，由 doctor/bootstrap 自行探测；knip 按正则匹配，需转义
-  "ignoreBinaries": ["g\\+\\+", "vsce", "where\\.exe"]
+  "ignoreBinaries": ["where\\.exe"],
 }

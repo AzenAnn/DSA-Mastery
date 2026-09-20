@@ -12,7 +12,7 @@
 
 ```bash
 cd ~/code/DSA-Mastery
-bash scripts/bootstrap/bootstrap-macos.sh
+bash packages/bootstrap/scripts/bootstrap-macos.sh
 ```
 
 如果仓库在其他位置，只需要把第一行换成实际目录，例如 `cd ~/DSA-Mastery`。
@@ -22,7 +22,7 @@ bash scripts/bootstrap/bootstrap-macos.sh
 如果 Git 和仓库都还没有准备好，先下载启动器，再由它准备工具并 clone 仓库：
 
 ```bash
-curl -fL https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-macos.sh -o /tmp/bootstrap-macos.sh
+curl -fL https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/packages/bootstrap/scripts/bootstrap-macos.sh -o /tmp/bootstrap-macos.sh
 bash /tmp/bootstrap-macos.sh --repo-dir "$HOME/code/DSA-Mastery"
 ```
 
@@ -32,7 +32,7 @@ bash /tmp/bootstrap-macos.sh --repo-dir "$HOME/code/DSA-Mastery"
 mkdir -p ~/code
 git clone https://github.com/AzenAnn/DSA-Mastery.git ~/code/DSA-Mastery
 cd ~/code/DSA-Mastery
-bash scripts/bootstrap/bootstrap-macos.sh
+bash packages/bootstrap/scripts/bootstrap-macos.sh
 ```
 
 不带参数运行时会进入交互式选择界面：
@@ -49,24 +49,24 @@ bash scripts/bootstrap/bootstrap-macos.sh
 
 ```bash
 # 只安装并验证 Quiz/Program 所需环境
-bash scripts/bootstrap/bootstrap-macos.sh --profile basic
+bash packages/bootstrap/scripts/bootstrap-macos.sh --profile basic
 
 # 完整课程环境，额外安装并验证 CMake/Project Lab
-bash scripts/bootstrap/bootstrap-macos.sh --profile full
+bash packages/bootstrap/scripts/bootstrap-macos.sh --profile full
 ```
 
 常用选项：
 
 ```bash
 # 只读检查，不安装工具、不 clone/pull、不安装依赖、不运行 smoke
-bash scripts/bootstrap/bootstrap-macos.sh --check-only --profile basic --repo-dir "/Users/me/课程项目/DSA-Mastery"
+bash packages/bootstrap/scripts/bootstrap-macos.sh --check-only --profile basic --repo-dir "/Users/me/课程项目/DSA-Mastery"
 
 # 跳过 VS Code；脚本默认不会强制安装 IDE
-bash scripts/bootstrap/bootstrap-macos.sh --profile full --skip-vscode
+bash packages/bootstrap/scripts/bootstrap-macos.sh --profile full --skip-vscode
 
 # CI 或重定向时使用稳定纯文本/JSON 输出
-bash scripts/bootstrap/bootstrap-macos.sh --profile basic --non-interactive --ui plain
-bash scripts/bootstrap/bootstrap-macos.sh --profile basic --non-interactive --json
+bash packages/bootstrap/scripts/bootstrap-macos.sh --profile basic --non-interactive --ui plain
+bash packages/bootstrap/scripts/bootstrap-macos.sh --profile basic --non-interactive --json
 ```
 
 TTY 中会显示阶段面板、状态、进度和失败摘要；成功时会显示完成信息，支持颜色的终端还会显示像素风完成 Banner。非 TTY 会自动降级为纯文本。安装失败后直接重跑同一命令即可，已满足的工具和依赖会被复用。核心失败日志写入 `~/Library/Logs/DSA-Mastery/setup/`；`--check-only` 不创建日志。
@@ -445,7 +445,7 @@ cd ~/Projects/DSA-Mastery
 先检查运行环境：
 
 ```bash
-pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab doctor labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 看到 `PASS 环境检查`，并且 Clang 显示 `AVAILABLE`，即可继续。
@@ -455,7 +455,7 @@ pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplicatio
 为了确认编译和测试流程正常，可以运行仓库中的参考实现：
 
 ```bash
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target solution
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target solution
 ```
 
 看到 `PASS`、`4/4 cases` 和 `100/100`，表示测试全部通过。
@@ -465,7 +465,7 @@ pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication -
 也可以只运行示例测试：
 
 ```bash
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target solution --case 001-sample
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --target solution --case 001-sample
 ```
 
 ![Program Lab 示例测试通过](../../docs/image/MACOS_STUDENT_SETUP_GUIDE/4550e0bf28331a52b348a1c3d793d831.png)
@@ -473,7 +473,7 @@ pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication -
 `--target solution` 用于验证仓库提供的参考实现。学生完成自己的代码后，应去掉该参数：
 
 ```bash
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 ## 9. 运行 Project Lab
@@ -481,7 +481,7 @@ pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 Project Lab 需要 Apple Clang 和 CMake。先执行环境检查：
 
 ```bash
-pnpm lab:doctor -- labs/chapter-08/project/P-08-01-avl-tree-rotations
+pnpm lab doctor labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 看到 `PASS 环境检查`，并且 Clang 和 CMake 显示 `AVAILABLE`，即可继续。MSVC 仅供 Windows 使用，显示 `NOT FOUND` 属于正常情况；GNU Make 版本较旧也不影响使用 `pnpm`。
@@ -491,7 +491,7 @@ pnpm lab:doctor -- labs/chapter-08/project/P-08-01-avl-tree-rotations
 运行 Project Lab 的参考实现：
 
 ```bash
-pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations --target solution
+pnpm lab run labs/chapter-08/project/P-08-01-avl-tree-rotations --target solution
 ```
 
 自动测试通过后会显示：
@@ -507,7 +507,7 @@ AUTOMATED PASS · MANUAL REVIEW PENDING
 也可以只运行指定任务和测试用例：
 
 ```bash
-pnpm lab:run -- labs/chapter-08/project/P-08-01-avl-tree-rotations --target solution --task bst --case 001-basic
+pnpm lab run labs/chapter-08/project/P-08-01-avl-tree-rotations --target solution --task bst --case 001-basic
 ```
 
 看到 `AUTOMATED PASS` 即表示该测试通过。因为这里只运行了一个任务，所以 `Provisional total` 不会显示为 100 分。

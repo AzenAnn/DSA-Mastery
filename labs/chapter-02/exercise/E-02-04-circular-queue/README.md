@@ -155,10 +155,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/exercise/E-02-04-circular-queue
-pnpm lab:run -- labs/chapter-02/exercise/E-02-04-circular-queue
-pnpm lab:run -- labs/chapter-02/exercise/E-02-04-circular-queue --case 001-sample
-pnpm lab:score -- labs/chapter-02/exercise/E-02-04-circular-queue
+pnpm lab doctor labs/chapter-02/exercise/E-02-04-circular-queue
+pnpm lab run labs/chapter-02/exercise/E-02-04-circular-queue
+pnpm lab run labs/chapter-02/exercise/E-02-04-circular-queue --case 001-sample
+pnpm lab score labs/chapter-02/exercise/E-02-04-circular-queue
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`006-scale-wraparound` 使用容量 400 的满队列完成一整轮队头、队尾环绕，回归取模更新和满载状态稳定性。常数时间要求还需结合实现分析判断。

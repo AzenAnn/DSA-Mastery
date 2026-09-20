@@ -24,5 +24,5 @@
 
 ```powershell
 make run TASK=transpose
-pnpm lab:run -- labs/chapter-03/project/P-03-02-sparse-matrix-library --task transpose
+pnpm lab run labs/chapter-03/project/P-03-02-sparse-matrix-library --task transpose
 ```

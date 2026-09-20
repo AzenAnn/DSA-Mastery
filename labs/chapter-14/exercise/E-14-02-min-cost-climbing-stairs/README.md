@@ -82,10 +82,10 @@ cd labs/chapter-14/exercise/E-14-02-min-cost-climbing-stairs
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-14/exercise/E-14-02-min-cost-climbing-stairs
+pnpm lab run labs/chapter-14/exercise/E-14-02-min-cost-climbing-stairs
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-14/exercise/E-14-02-min-cost-climbing-stairs
+pnpm lab verify labs/chapter-14/exercise/E-14-02-min-cost-climbing-stairs
 ```
 
 ## 完成清单

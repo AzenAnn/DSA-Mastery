@@ -87,10 +87,10 @@ cd labs/chapter-14/exercise/E-14-19-box-packing
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-14/exercise/E-14-19-box-packing
+pnpm lab run labs/chapter-14/exercise/E-14-19-box-packing
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-14/exercise/E-14-19-box-packing
+pnpm lab verify labs/chapter-14/exercise/E-14-19-box-packing
 ```
 
 ## 完成清单

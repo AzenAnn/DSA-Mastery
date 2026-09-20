@@ -1,5 +1,6 @@
+import type { CourseIndex } from "@dsa/course-index";
+import { collectCourseIndex } from "@dsa/course-index";
 import { defineLoader } from "vitepress";
-import { collectCourseIndex, type CourseIndex } from "./content-index.ts";
 
 export declare const data: CourseIndex;
 

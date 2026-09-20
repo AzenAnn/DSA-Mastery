@@ -137,5 +137,5 @@ int main() {
 
 ## 本地运行与提交
 ```powershell
-pnpm lab:run -- labs/chapter-05/exercise/E-05-10-task-scheduler
+pnpm lab run labs/chapter-05/exercise/E-05-10-task-scheduler
 ```

@@ -14,7 +14,7 @@ export default oxfmt({
     "playwright-report/**",
     "test-results/**",
     // 独立子包，自带 oxfmt.config.ts
-    "tools/vscode-extension/**",
+    "apps/vscode-extension/**",
     // 教材与 Lab 属于内容，由 validate-content 和 lab schema 把关，不交给代码格式化器
     "content/**",
     "curriculum/**",

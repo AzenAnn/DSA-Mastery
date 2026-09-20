@@ -24,6 +24,6 @@
 make run TASK=ops
 make score
 # 或
-pnpm lab:run -- labs/chapter-03/project/P-03-02-sparse-matrix-library --task ops
-pnpm lab:score -- labs/chapter-03/project/P-03-02-sparse-matrix-library
+pnpm lab run labs/chapter-03/project/P-03-02-sparse-matrix-library --task ops
+pnpm lab score labs/chapter-03/project/P-03-02-sparse-matrix-library
 ```

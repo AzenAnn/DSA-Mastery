@@ -103,12 +103,12 @@ status: "draft"
 作者命令（仓库根目录）：
 
 ```powershell
-python scripts/check-ch07-exercises.py
-python scripts/check-ch07-exercises.py --solutions --mutations
-python scripts/check-ch07-exercises.py --write
-python scripts/check-ch07-exercises.py --lab 32 --solutions --mutations
+python packages/course-authoring/ch07/check-ch07-exercises.py
+python packages/course-authoring/ch07/check-ch07-exercises.py --solutions --mutations
+python packages/course-authoring/ch07/check-ch07-exercises.py --write
+python packages/course-authoring/ch07/check-ch07-exercises.py --lab 32 --solutions --mutations
 ```
 
 不带 --write 时只核对现有输入、LF 期望、分值和 oracle 一致性；--write 才重建指定新题测试文件。--solutions 编译并逐例对照，--mutations 为每题注入一个典型错误，必须至少被一个测试点检出。作者检查需要 Python 3.10+；编译检查需要 clang++/g++，可通过 CXX 指定。报告与可执行文件写入 .lab-cache/ch07-audit/，不进入提交。学习者只需标准 Lab CLI，无需 Python。
 
-继续使用 `pnpm lab:verify -- <lab-path>` 检验官方评分入口：参考满分、starter 可编译非满分、期望文件稳定。20 题独立 oracle 全过不能代替全章 CLI、站点与人工知识 Review。
+继续使用 `pnpm lab verify <lab-path>` 检验官方评分入口：参考满分、starter 可编译非满分、期望文件稳定。20 题独立 oracle 全过不能代替全章 CLI、站点与人工知识 Review。

@@ -1,22 +1,19 @@
-import path from "node:path";
+import type MarkdownIt from "markdown-it";
 import { existsSync } from "node:fs";
 import { cp } from "node:fs/promises";
-import { tasklist } from "@mdit/plugin-tasklist";
+import path from "node:path";
+import process from "node:process";
+import { collectCourseIndex, createCourseSidebar, normalizePagesBase, sourceUrlMap } from "@dsa/course-index";
 import { Blocks, BookOpen, FlaskConical } from "@lucide/vue";
-import type MarkdownIt from "markdown-it";
 import { defineConfig } from "vitepress";
 import { createBuildTimeDiagramsPlugin } from "vitepress-plugin-diagrams";
 import { h } from "vue";
 import { renderToString } from "vue/server-renderer";
-import {
-  collectCourseIndex,
-  createCourseSidebar,
-  normalizePagesBase,
-  sourceUrlMap,
-} from "./content-index.ts";
 import { installTheoryMarkdown } from "./markdown/theory.ts";
 
-const configuredRenderers = new WeakSet<object>();
+// 标记挂在 md 实例自己身上，而不是模块级 WeakSet：
+// VitePress 2 会把这份 config 加载多次，每次都是新的模块实例，WeakSet 守不住共享的 markdown 单例。
+const CONFIGURED = Symbol.for("dsa-mastery.markdown-configured");
 const course = collectCourseIndex();
 const sidebarIconProps = { size: 16, strokeWidth: 2, "aria-hidden": true, focusable: "false" };
 const sidebar = createCourseSidebar(course, {
@@ -100,7 +97,8 @@ export default defineConfig({
     "CLAUDE.local.md",
     "content/README.md",
     "docs/**",
-    "tools/**",
+    "apps/**",
+    "packages/**",
     ".github/**",
     ".trellis/**",
     ".agents/**",
@@ -116,16 +114,14 @@ export default defineConfig({
   },
   transformHead({ pageData }) {
     const route = routeForSource(pageData.relativePath);
-    const pageTitle = pageData.title
-      ? `${pageData.title} · DSA Mastery`
-      : "DSA Mastery · 数据结构与算法理论与实验教程";
+    const pageTitle = pageData.title ? `${pageData.title} · DSA Mastery` : "DSA Mastery · 数据结构与算法理论与实验教程";
     const pageDescription = pageData.description || courseDescription;
     const socialHead: [string, Record<string, string>][] = [
       ["meta", { property: "og:title", content: pageTitle }],
       ["meta", { property: "og:description", content: pageDescription }],
     ];
 
-    if (!route) return socialHead;
+    if (route === undefined || route === "") return socialHead;
     const canonical = new URL(withBase(route), absoluteSiteUrl).toString();
     return [
       ["link", { rel: "canonical", href: canonical }],
@@ -160,28 +156,20 @@ export default defineConfig({
     languageAlias: { input: "log", output: "log" },
     config(md) {
       // VitePress 2 把 markdown 实例存在模块级单例里，页面渲染器和本地搜索索引并发创建时
-      // 会竞态地把同一个实例配置两次，代码标题等增强会重复叠加。
-      if (configuredRenderers.has(md)) return;
-      configuredRenderers.add(md);
-      // VitePress exposes its own MarkdownIt structural type, while the stable
-      // plugin publishes the equivalent @types/markdown-it signature.
-      tasklist(md as unknown as Parameters<typeof tasklist>[0]);
+      // 会竞态地把同一个实例配置两次：tasklist 会在每个任务项里再嵌一个 checkbox，代码标题等增强也会叠加。
+      const configured = md as unknown as Record<symbol, boolean>;
+      if (configured[CONFIGURED]) return;
+      configured[CONFIGURED] = true;
       installTheoryMarkdown(md as unknown as MarkdownIt);
       configureDiagramsMarkdown(md);
       md.core.ruler.after("block", "dsa-course-source-transform", (state) => {
-        const renderedPath =
-          typeof state.env?.relativePath === "string"
-            ? state.env.relativePath.replaceAll("\\", "/")
-            : "";
-        const relativePath = isCourseSource(renderedPath)
-          ? renderedPath
-          : virtualSources.get(renderedPath);
-        if (!relativePath) return;
+        const env = state.env as { relativePath?: string; dsaSearchIndex?: boolean } | undefined;
+        const renderedPath = typeof env?.relativePath === "string" ? env.relativePath.replaceAll("\\", "/") : "";
+        const relativePath = isCourseSource(renderedPath) ? renderedPath : virtualSources.get(renderedPath);
+        if (relativePath === undefined) return;
 
-        if (state.env?.dsaSearchIndex !== true && sourceRoutes.has(virtualSources.get(renderedPath) ?? relativePath)) {
-          const firstH1 = state.tokens.findIndex(
-            (token) => token.type === "heading_open" && token.tag === "h1",
-          );
+        if (env?.dsaSearchIndex !== true && sourceRoutes.has(virtualSources.get(renderedPath) ?? relativePath)) {
+          const firstH1 = state.tokens.findIndex((token) => token.type === "heading_open" && token.tag === "h1");
           if (
             firstH1 >= 0 &&
             state.tokens[firstH1 + 1]?.type === "inline" &&
@@ -200,7 +188,7 @@ export default defineConfig({
                 path.posix.join(path.posix.dirname(relativePath), relativeTarget),
               );
               const route = sourceRoutes.get(sourceTarget);
-              return route ? `](${route}${hash})` : match;
+              return route === undefined ? match : `](${route}${hash})`;
             },
           );
         }
@@ -213,9 +201,7 @@ export default defineConfig({
       { text: "教材", link: course.curriculum.url },
       { text: "Labs", link: "/labs/", target: "_self" },
     ],
-    socialLinks: [
-      { icon: "github", link: "https://github.com/AzenAnn/DSA-Mastery", ariaLabel: "GitHub 仓库" },
-    ],
+    socialLinks: [{ icon: "github", link: "https://github.com/AzenAnn/DSA-Mastery", ariaLabel: "GitHub 仓库" }],
     sidebar: {
       "/learn/": sidebar,
       "/labs/": sidebar,
@@ -223,9 +209,11 @@ export default defineConfig({
     search: {
       provider: "local",
       options: {
-        _render(source, environment, markdown) {
+        async _render(source, environment, markdown) {
           const env = { ...environment, dsaSearchIndex: true };
-          const html = markdown.render(source, env);
+          // 必须走 renderAsync：@include 的展开在异步管线里，用同步 render 会让
+          // 所有 @include 页（前言的 6 篇指南）只索引到 frontmatter 外壳，站内完全搜不到。
+          const html = await markdown.renderAsync(source, env);
           // 自定义渲染器不会走 VitePress 内置的 frontmatter.search 排除逻辑，
           // 这里手动尊重 `search: false`，把配图源等构建专用页排除出站内搜索。
           if (env.frontmatter?.search === false) return "";

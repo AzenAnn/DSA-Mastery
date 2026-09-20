@@ -123,9 +123,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-06/exercise/E-06-03-flower-planting
-pnpm lab:run -- labs/chapter-06/exercise/E-06-03-flower-planting
-pnpm lab:score -- labs/chapter-06/exercise/E-06-03-flower-planting
+pnpm lab doctor labs/chapter-06/exercise/E-06-03-flower-planting
+pnpm lab run labs/chapter-06/exercise/E-06-03-flower-planting
+pnpm lab score labs/chapter-06/exercise/E-06-03-flower-planting
 ```
 
 ## 完成清单

@@ -29,7 +29,7 @@ pnpm run dev
 pnpm test
 ```
 
-`pnpm test` 已包含内容、Lab manifest/判题工具/文档示例、类型、lint、自动发现、VitePress build 和静态产物检查。涉及导航、Pages base、主题或 Markdown 渲染时，再按 [VitePress 迁移说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)构建 Pages 子路径并运行 `pnpm run test:pages`。可执行 Lab 还要按 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md#10-author-checkci-与-review-证据)运行其 `verify`，在 PR 中记录编译器、分数与结果。
+`pnpm test` 已包含内容、Lab manifest/判题工具/文档示例、类型、lint、自动发现、VitePress build 和静态产物检查。涉及导航、Pages base、主题或 Markdown 渲染时，再按 [VitePress 迁移说明](docs/VITEPRESS_MIGRATION.md#3-本地命令与已验证结果)构建 Pages 子路径并运行 `pnpm test --project site-e2e`。可执行 Lab 还要按 [Lab 更新与测试指南](docs/LAB_AUTHORING_GUIDE.md#10-author-checkci-与-review-证据)运行其 `verify`，在 PR 中记录编译器、分数与结果。
 
 ## 提交原则
 

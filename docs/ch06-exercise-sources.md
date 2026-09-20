@@ -37,6 +37,6 @@ CSES 官方访问超时，1682 另核对了 [USACO Guide 题解](https://usaco.g
 
 ## 维护与验证
 
-题面元数据和教学内容由 `scripts/chapter-06/catalog.mjs` 维护；固定测试结构由 `fixtures.mjs` 维护；输入合同与独立 JavaScript oracle 位于 `contracts.mjs`。C++ student/solution 文件独立维护，生成器不会改动学生或参考代码，也不会覆盖原有三个 Lab。
+题面元数据和教学内容由 `packages/course-authoring/src/chapter-06/catalog.mjs` 维护；固定测试结构由 `fixtures.mjs` 维护；输入合同与独立 JavaScript oracle 位于 `contracts.mjs`。C++ student/solution 文件独立维护，生成器不会改动学生或参考代码，也不会覆盖原有三个 Lab。
 
-`node scripts/generate-chapter-06-labs.mjs` 默认只预览；确认数据变更后使用 `--write`。`node scripts/check-chapter-06-lab-contracts.mjs` 检查 400 组数据、样例同步与独立答案；`--verify` 增加全部 C++ 验证，`--differential` 增加固定种子的小图对拍。使用 `CXX` 选择实际编译器，不并发切换同一 Lab 的编译器。
+`pnpm exec tsx packages/course-authoring/src/chapter-06/generate.ts` 默认只预览；确认数据变更后使用 `--write`。`pnpm exec tsx packages/course-authoring/src/chapter-06/audit.ts` 检查 400 组数据、样例同步与独立答案；`--verify` 增加全部 C++ 验证，`--differential` 增加固定种子的小图对拍。使用 `CXX` 选择实际编译器，不并发切换同一 Lab 的编译器。

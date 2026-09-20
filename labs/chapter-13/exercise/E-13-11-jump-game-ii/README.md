@@ -83,8 +83,8 @@ make score
 也可以在仓库根目录执行：
 
 ```bash
-pnpm lab:run -- labs/chapter-13/exercise/E-13-11-jump-game-ii --target student
-pnpm lab:verify -- labs/chapter-13/exercise/E-13-11-jump-game-ii --no-color
+pnpm lab run labs/chapter-13/exercise/E-13-11-jump-game-ii --target student
+pnpm lab verify labs/chapter-13/exercise/E-13-11-jump-game-ii --no-color
 ```
 
 ## 完成清单

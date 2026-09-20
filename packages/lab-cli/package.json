@@ -1,0 +1,23 @@
+{
+  "name": "@dsa/lab-cli",
+  "version": "0.0.0",
+  "private": true,
+  "bin": {
+    "lab": "./dist/cli.js"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsdown"
+  },
+  "dependencies": {
+    "@dsa/lab-core": "workspace:*",
+    "@dsa/lab-runner": "workspace:*"
+  },
+  "devDependencies": {
+    "@dsa/lab-testkit": "workspace:*",
+    "tsdown": "0.23.0"
+  }
+}
