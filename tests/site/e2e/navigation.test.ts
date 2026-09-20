@@ -171,30 +171,23 @@ it("clicks through the learner journey beneath the Pages base", async () => {
   expect(failures).toEqual([]);
 });
 
-it("chapter 7 new exercises preserve order and remain reachable from Labs", async () => {
+it("chapter 7 articles and Labs expose exactly thirty sequential exercises", async () => {
   const page = await newPage();
   const failures = monitorPage(page);
   await page.goto(`${baseUrl}/labs/`);
-  await page.locator("a.course-labs-list-card").filter({ hasText: "Lab 07-E-27：启发式函数有效性判定" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 07-E-27：启发式函数有效性判定");
+  await page.locator("a.course-labs-list-card").filter({ hasText: "Lab 07-E-24：启发式函数有效性判定" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 07-E-24：启发式函数有效性判定");
   await expect(page.locator(".vp-doc")).toContainText("YES NO");
   await expect(page.locator(".vp-doc")).toContainText("不可达");
   const links = page.locator('.VPSidebar a[href*="/labs/chapter-07/exercise/"]');
-  await expect(links).toHaveCount(32);
-  const ids = [
-    1, 5, 13, 14, 15, 16, 17, 18, 19, 20, 21, 4, 22, 23, 24, 7, 8, 9, 11, 12, 10, 25, 26, 27, 28, 6, 29, 30, 31, 32, 2,
-    3,
-  ];
-  for (const [index, id] of ids.entries()) {
-    await expect(links.nth(index)).toContainText(`07E${String(id).padStart(2, "0")} ·`);
+  await expect(links).toHaveCount(30);
+  for (let id = 1; id <= 30; id += 1) {
+    await expect(links.nth(id - 1)).toContainText(`07E${String(id).padStart(2, "0")} ·`);
   }
-  await page.locator(".vp-doc").getByRole("link", { name: "A* 寻路可视化", exact: true }).click();
-  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-07-graph-applications/04-astar-visualization/`);
-  await page
-    .locator(".vp-doc")
-    .getByRole("link", { name: /T25 · 07E28/ })
-    .click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 07-E-28：八数码问题（A*）");
+  await page.locator(".vp-doc").getByRole("link", { name: "A* 寻路：从直觉到实现", exact: true }).click();
+  await expect(page).toHaveURL(`${baseUrl}/learn/chapter-07-graph-traversal/05-astar-visualization/`);
+  await page.locator(".vp-doc").getByRole("link", { name: "T25 · 07E25 · 八数码问题（A*）", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Lab 07-E-25：八数码问题（A*）");
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator(".vp-doc")).toContainText("123804765");
   const overflow = await page.locator("html").evaluate((element) => element.scrollWidth > element.clientWidth + 1);
@@ -1196,7 +1189,7 @@ it("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async () =>
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
   await expect(exerciseGroup.locator(".course-lab-category__empty")).toHaveCount(0);
-  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(8);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(20);
   const exerciseLabs = [
     { title: "Lab 02-E-01：验证栈序列", slug: "exercise/E-02-01-validate-stack-sequences" },
     { title: "Lab 02-E-02：最小栈", slug: "exercise/E-02-02-min-stack" },
@@ -1209,6 +1202,18 @@ it("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async () =>
       title: "Lab 02-E-08：柱状图中最大的矩形",
       slug: "exercise/E-02-08-largest-rectangle-histogram",
     },
+    { title: "Lab 02-E-09：括号匹配", slug: "exercise/E-02-09-bracket-matching" },
+    { title: "Lab 02-E-10：逆波兰表达式求值", slug: "exercise/E-02-10-rpn-evaluation" },
+    { title: "Lab 02-E-11：中缀表达式转后缀", slug: "exercise/E-02-11-infix-to-postfix" },
+    { title: "Lab 02-E-12：下一个更大元素", slug: "exercise/E-02-12-next-greater-element" },
+    { title: "Lab 02-E-13：下一个更小元素", slug: "exercise/E-02-13-next-smaller-element" },
+    { title: "Lab 02-E-14：农夫抓牛", slug: "exercise/E-02-14-farmer-cow-bfs" },
+    { title: "Lab 02-E-15：Josephus 出列顺序", slug: "exercise/E-02-15-josephus-order" },
+    { title: "Lab 02-E-16：队列生成二进制数", slug: "exercise/E-02-16-binary-number-queue" },
+    { title: "Lab 02-E-17：双端队列回文检查", slug: "exercise/E-02-17-palindrome-deque" },
+    { title: "Lab 02-E-18：反转队列前 K 个元素", slug: "exercise/E-02-18-reverse-first-k-queue" },
+    { title: "Lab 02-E-19：仅用辅助栈排序", slug: "exercise/E-02-19-stack-sorting" },
+    { title: "Lab 02-E-20：股票价格跨度", slug: "exercise/E-02-20-stock-span" },
   ];
   for (const { title, slug } of exerciseLabs) {
     const link = exerciseGroup.getByRole("link", { name: labSidebarTitle(title) });
@@ -1226,6 +1231,7 @@ it("chapter 2 Lab sidebar groups labs into categorized 本章 Labs", async () =>
     await expect(projectGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }
   await expect(exerciseGroup.locator(":scope > .items a").first()).toContainText("02E01");
+  await expect(exerciseGroup.locator(":scope > .items a").last()).toContainText("02E20");
   await expect(projectGroup.locator(":scope > .items a").first()).toContainText("02P01");
 
   for (const { title, slug } of exerciseLabs) {
@@ -1268,16 +1274,17 @@ it("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async () =>
   await theoryGroup.locator(":scope > .item .caret").focus();
   await page.keyboard.press("Enter");
   await expect(theoryGroup).not.toHaveClass(/collapsed/);
-  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(4);
+  await expect(theoryGroup.locator(":scope > .items a")).toHaveCount(5);
   await expect(theoryGroup.getByRole("link", { name: "03T01 · 串的基础选择题精练", exact: true })).toHaveCount(1);
   await expect(theoryGroup.getByRole("link", { name: "03T02 · 模式匹配选择题精练", exact: true })).toHaveCount(1);
   await expect(theoryGroup.getByRole("link", { name: "03T03 · 数组与矩阵选择题精练", exact: true })).toHaveCount(1);
   await expect(theoryGroup.getByRole("link", { name: "03T04 · 广义表选择题精练", exact: true })).toHaveCount(1);
+  await expect(theoryGroup.getByRole("link", { name: "03T05 · 数组与广义表理论大题训练", exact: true })).toHaveCount(1);
 
   await exerciseGroup.locator(":scope > .item .caret").focus();
   await page.keyboard.press("Enter");
   await expect(exerciseGroup).not.toHaveClass(/collapsed/);
-  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(9);
+  await expect(exerciseGroup.locator(":scope > .items a")).toHaveCount(20);
   for (const title of [
     "Lab 03-E-01：KMP 模式匹配（首次出现位置）",
     "Lab 03-E-02：next 与 nextval 数组推导",
@@ -1288,6 +1295,17 @@ it("chapter 3 Lab sidebar groups labs into categorized 本章 Labs", async () =>
     "Lab 03-E-07：广义表的深度",
     "Lab 03-E-08：三对角矩阵压缩与取值",
     "Lab 03-E-09：多维数组行优先寻址",
+    "Lab 03-E-10：串的块链存储与结点定位",
+    "Lab 03-E-11：KMP 全部匹配位置（允许重叠）",
+    "Lab 03-E-12：最小循环节与周期",
+    "Lab 03-E-13：对称矩阵压缩存储与取值",
+    "Lab 03-E-14：稀疏矩阵三元组快速转置",
+    "Lab 03-E-15：广义表的长度与结点计数",
+    "Lab 03-E-16：定长顺序串的插入与删除",
+    "Lab 03-E-17：KMP 与 nextval 的比较次数",
+    "Lab 03-E-18：上三角矩阵压缩存储与取值",
+    "Lab 03-E-19：行优先与列优先寻址（含字节地址）",
+    "Lab 03-E-20：Head/Tail 复合运算求值",
   ]) {
     await expect(exerciseGroup.getByRole("link", { name: labSidebarTitle(title) })).toHaveCount(1);
   }

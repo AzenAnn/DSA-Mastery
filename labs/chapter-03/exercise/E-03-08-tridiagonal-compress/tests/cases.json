@@ -3,56 +3,182 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 15,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-single",
     "input": "tests/002-single.in",
     "expected": "tests/002-single.out",
     "points": 5,
-    "tags": ["boundary"]
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "003-diagonal",
     "input": "tests/003-diagonal.in",
     "expected": "tests/003-diagonal.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "004-off-diagonal",
     "input": "tests/004-off-diagonal.in",
     "expected": "tests/004-off-diagonal.out",
-    "points": 20,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "005-boundary",
     "input": "tests/005-boundary.in",
     "expected": "tests/005-boundary.out",
-    "points": 15,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "006-single-order",
     "input": "tests/006-single-order.in",
     "expected": "tests/006-single-order.out",
-    "points": 10,
-    "tags": ["boundary", "regression"]
+    "points": 5,
+    "tags": [
+      "boundary",
+      "regression"
+    ]
   },
   {
     "id": "007-two-by-two",
     "input": "tests/007-two-by-two.in",
     "expected": "tests/007-two-by-two.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "008-negative-values",
     "input": "tests/008-negative-values.in",
     "expected": "tests/008-negative-values.out",
-    "points": 10,
-    "tags": ["normal", "regression"]
+    "points": 5,
+    "tags": [
+      "normal",
+      "regression"
+    ]
+  },
+  {
+    "id": "009-three-band",
+    "input": "tests/009-three-band.in",
+    "expected": "tests/009-three-band.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-negative-mixed",
+    "input": "tests/010-negative-mixed.in",
+    "expected": "tests/010-negative-mixed.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-five-diagonal",
+    "input": "tests/011-five-diagonal.in",
+    "expected": "tests/011-five-diagonal.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-two-negative",
+    "input": "tests/012-two-negative.in",
+    "expected": "tests/012-two-negative.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-six-pattern",
+    "input": "tests/013-six-pattern.in",
+    "expected": "tests/013-six-pattern.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-zero-band",
+    "input": "tests/014-zero-band.in",
+    "expected": "tests/014-zero-band.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-large-values",
+    "input": "tests/015-large-values.in",
+    "expected": "tests/015-large-values.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-five-boundary",
+    "input": "tests/016-five-boundary.in",
+    "expected": "tests/016-five-boundary.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-single-large",
+    "input": "tests/017-single-large.in",
+    "expected": "tests/017-single-large.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-zero-in-band",
+    "input": "tests/018-zero-in-band.in",
+    "expected": "tests/018-zero-in-band.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-four-boundary",
+    "input": "tests/019-four-boundary.in",
+    "expected": "tests/019-four-boundary.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "020-two-query-mix",
+    "input": "tests/020-two-query-mix.in",
+    "expected": "tests/020-two-query-mix.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   }
 ]

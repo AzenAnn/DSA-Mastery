@@ -167,6 +167,90 @@ struct OLNode {
 压缩把空间换成时间：对称矩阵的下标换算保持 `O(1)` 访问，而稀疏矩阵三元组的访问依赖查找。不要只看空间收益，操作模式（随机访问 vs 批量处理）决定哪种方案合适。
 :::
 
+
+## 完整解题范例
+
+### 范例一：三维数组行优先寻址
+
+**题目解读**：`A[2][3][4]` 使用 0-based 下标，求 `A[1][2][3]` 的一维偏移。最右侧维度变化最快，所以第一维的 stride 是 `3×4`，第二维的 stride 是 `4`。
+
+**算法分析**：逐维计算右侧维度乘积并累加：`1×12 + 2×4 + 3 = 23`。该方法也适用于任意维数；预先从右向左计算 stride 可将复杂度降为 `O(n)`。
+
+**伪代码**：
+
+```text
+offset = 0
+stride = 1
+for k = n-1 .. 0:
+    offset += index[k] * stride
+    stride *= bound[k]
+return offset
+```
+
+**最终代码**：
+
+```cpp
+long long rowMajorOffset(const std::vector<long long>& bound,
+                         const std::vector<long long>& index) {
+    long long offset = 0, stride = 1;
+    for (int k = static_cast<int>(bound.size()) - 1; k >= 0; --k) {
+        offset += index[k] * stride;
+        stride *= bound[k];
+    }
+    return offset;
+}
+```
+
+**拓展和思考**：列优先时从左向右累积 stride；下标若从 1 开始，先减去各维下界。对应实验是 [Lab 03-E-09：多维数组行优先寻址](../../labs/chapter-03/exercise/E-03-09-ndarray-offset/README.md)。
+
+```graphviz
+digraph RowMajorStride {
+  rankdir=LR;
+  node [shape=record];
+  A [label="A[1][2][3]"];
+  D0 [label="第0维 stride=3×4=12"];
+  D1 [label="第1维 stride=4"];
+  D2 [label="第2维 stride=1"];
+  A -> D0 -> D1 -> D2;
+}
+```
+<!-- diagram id="ch03-array-row-major-stride" caption="行优先寻址中各维 stride 的传递关系" -->
+
+### 范例二：稀疏矩阵快速转置
+
+**题目解读**：转置要同时完成行列交换和行优先重排。假设三元组按原矩阵行优先排列，先统计每一列非零元数，再计算转置后每一行的起始位置。
+
+**算法分析**：`num[col]` 统计列频次，`cpot[col]` 是转置后第 `col` 行的首位置；扫描一次三元组即可定位目标槽位，复杂度 `O(cols+t)`，空间 `O(cols+t)`。
+
+**伪代码**：
+
+```text
+统计每列 num
+由 num 前缀和得到 cpot
+for 每个 (r,c,v):
+    T[cpot[c]] = (c,r,v)
+    cpot[c]++
+```
+
+**最终代码**：
+
+```cpp
+std::vector<Triple> fastTranspose(int cols,
+                                   const std::vector<Triple>& data) {
+    std::vector<int> num(cols), cpot(cols);
+    for (const auto& x : data) ++num[x.col];
+    for (int c = 1; c < cols; ++c) cpot[c] = cpot[c - 1] + num[c - 1];
+    std::vector<Triple> out(data.size());
+    for (const auto& x : data) {
+        int pos = cpot[x.col]++;
+        out[pos] = {x.col, x.row, x.value};
+    }
+    return out;
+}
+```
+
+**拓展和思考**：空列不会产生三元组，但会让 `cpot` 的前缀和跨过一段空区间；平行位置或零权值必须保留，不能用 `(row,col)` 或 `value==0` 作为唯一去重条件。对应综合工程题是 [Lab 03-P-02：稀疏矩阵运算库](../../labs/chapter-03/project/P-03-02-sparse-matrix-library/README.md)。
+
 ## 解题视角与易错点
 
 遇到数组或特殊矩阵题，先不要急着套公式，可以按下面的顺序检查：

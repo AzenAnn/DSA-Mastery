@@ -1,0 +1,182 @@
+[
+  {
+    "points": 5,
+    "id": "001-sample",
+    "tags": [
+      "sample"
+    ],
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out"
+  },
+  {
+    "points": 5,
+    "id": "002-long-a-run-mismatch",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/002-long-a-run-mismatch.in",
+    "expected": "tests/002-long-a-run-mismatch.out"
+  },
+  {
+    "points": 5,
+    "id": "003-nextval-saves",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/003-nextval-saves.in",
+    "expected": "tests/003-nextval-saves.out"
+  },
+  {
+    "points": 5,
+    "id": "004-periodic-abab",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/004-periodic-abab.in",
+    "expected": "tests/004-periodic-abab.out"
+  },
+  {
+    "points": 5,
+    "id": "005-multiple-occurrences",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/005-multiple-occurrences.in",
+    "expected": "tests/005-multiple-occurrences.out"
+  },
+  {
+    "points": 5,
+    "id": "006-random-letters",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/006-random-letters.in",
+    "expected": "tests/006-random-letters.out"
+  },
+  {
+    "points": 5,
+    "id": "007-overlapping-partial",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/007-overlapping-partial.in",
+    "expected": "tests/007-overlapping-partial.out"
+  },
+  {
+    "points": 5,
+    "id": "008-digits-and-symbols",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/008-digits-and-symbols.in",
+    "expected": "tests/008-digits-and-symbols.out"
+  },
+  {
+    "points": 5,
+    "id": "009-single-char-runs",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/009-single-char-runs.in",
+    "expected": "tests/009-single-char-runs.out"
+  },
+  {
+    "points": 5,
+    "id": "010-single-char-pattern-at-end",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/010-single-char-pattern-at-end.in",
+    "expected": "tests/010-single-char-pattern-at-end.out"
+  },
+  {
+    "points": 5,
+    "id": "011-single-char-pattern-no-match",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/011-single-char-pattern-no-match.in",
+    "expected": "tests/011-single-char-pattern-no-match.out"
+  },
+  {
+    "points": 5,
+    "id": "012-pattern-equals-text-match",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/012-pattern-equals-text-match.in",
+    "expected": "tests/012-pattern-equals-text-match.out"
+  },
+  {
+    "points": 5,
+    "id": "013-pattern-equals-text-last-mismatch",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/013-pattern-equals-text-last-mismatch.in",
+    "expected": "tests/013-pattern-equals-text-last-mismatch.out"
+  },
+  {
+    "points": 5,
+    "id": "014-match-only-at-last-char",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/014-match-only-at-last-char.in",
+    "expected": "tests/014-match-only-at-last-char.out"
+  },
+  {
+    "points": 5,
+    "id": "015-pattern-with-space",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/015-pattern-with-space.in",
+    "expected": "tests/015-pattern-with-space.out"
+  },
+  {
+    "points": 5,
+    "id": "016-no-match-at-all",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/016-no-match-at-all.in",
+    "expected": "tests/016-no-match-at-all.out"
+  },
+  {
+    "points": 5,
+    "id": "017-all-same-short",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/017-all-same-short.in",
+    "expected": "tests/017-all-same-short.out"
+  },
+  {
+    "points": 5,
+    "id": "018-mixed-alphabet-long",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/018-mixed-alphabet-long.in",
+    "expected": "tests/018-mixed-alphabet-long.out"
+  },
+  {
+    "points": 5,
+    "id": "019-stress-identical-max",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/019-stress-identical-max.in",
+    "expected": "tests/019-stress-identical-max.out"
+  },
+  {
+    "points": 5,
+    "id": "020-stress-worst-mismatch",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/020-stress-worst-mismatch.in",
+    "expected": "tests/020-stress-worst-mismatch.out"
+  }
+]

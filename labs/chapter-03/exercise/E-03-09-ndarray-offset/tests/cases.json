@@ -3,56 +3,181 @@
     "id": "001-sample",
     "input": "tests/001-sample.in",
     "expected": "tests/001-sample.out",
-    "points": 20,
-    "tags": ["sample"]
+    "points": 5,
+    "tags": [
+      "sample"
+    ]
   },
   {
     "id": "002-3d",
     "input": "tests/002-3d.in",
     "expected": "tests/002-3d.out",
-    "points": 20,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "003-1d",
     "input": "tests/003-1d.in",
     "expected": "tests/003-1d.out",
-    "points": 10,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "004-4d",
     "input": "tests/004-4d.in",
     "expected": "tests/004-4d.out",
-    "points": 20,
-    "tags": ["normal"]
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   },
   {
     "id": "005-boundary",
     "input": "tests/005-boundary.in",
     "expected": "tests/005-boundary.out",
-    "points": 15,
-    "tags": ["boundary"]
+    "points": 5,
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "006-one-dimensional",
     "input": "tests/006-one-dimensional.in",
     "expected": "tests/006-one-dimensional.out",
     "points": 5,
-    "tags": ["boundary"]
+    "tags": [
+      "boundary"
+    ]
   },
   {
     "id": "007-all-last-index",
     "input": "tests/007-all-last-index.in",
     "expected": "tests/007-all-last-index.out",
     "points": 5,
-    "tags": ["boundary", "regression"]
+    "tags": [
+      "boundary",
+      "regression"
+    ]
   },
   {
     "id": "008-five-dimensional",
     "input": "tests/008-five-dimensional.in",
     "expected": "tests/008-five-dimensional.out",
     "points": 5,
-    "tags": ["normal"]
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "009-2d-origin",
+    "input": "tests/009-2d-origin.in",
+    "expected": "tests/009-2d-origin.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "010-2d-last-row",
+    "input": "tests/010-2d-last-row.in",
+    "expected": "tests/010-2d-last-row.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "011-3d-origin",
+    "input": "tests/011-3d-origin.in",
+    "expected": "tests/011-3d-origin.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "012-3d-last",
+    "input": "tests/012-3d-last.in",
+    "expected": "tests/012-3d-last.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "013-4d-mixed",
+    "input": "tests/013-4d-mixed.in",
+    "expected": "tests/013-4d-mixed.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "014-5d-origin",
+    "input": "tests/014-5d-origin.in",
+    "expected": "tests/014-5d-origin.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "015-5d-last",
+    "input": "tests/015-5d-last.in",
+    "expected": "tests/015-5d-last.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "016-singleton-dims",
+    "input": "tests/016-singleton-dims.in",
+    "expected": "tests/016-singleton-dims.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "017-large-strides",
+    "input": "tests/017-large-strides.in",
+    "expected": "tests/017-large-strides.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "018-2d-wide",
+    "input": "tests/018-2d-wide.in",
+    "expected": "tests/018-2d-wide.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "019-4d-last-axis",
+    "input": "tests/019-4d-last-axis.in",
+    "expected": "tests/019-4d-last-axis.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "020-6d-mixed",
+    "input": "tests/020-6d-mixed.in",
+    "expected": "tests/020-6d-mixed.out",
+    "points": 5,
+    "tags": [
+      "normal"
+    ]
   }
 ]

@@ -1,0 +1,182 @@
+[
+  {
+    "points": 5,
+    "id": "001-sample-2d",
+    "tags": [
+      "sample"
+    ],
+    "input": "tests/001-sample-2d.in",
+    "expected": "tests/001-sample-2d.out"
+  },
+  {
+    "points": 5,
+    "id": "002-sample-3d",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/002-sample-3d.in",
+    "expected": "tests/002-sample-3d.out"
+  },
+  {
+    "points": 5,
+    "id": "003-3d-various-w",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/003-3d-various-w.in",
+    "expected": "tests/003-3d-various-w.out"
+  },
+  {
+    "points": 5,
+    "id": "004-4d-row-col",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/004-4d-row-col.in",
+    "expected": "tests/004-4d-row-col.out"
+  },
+  {
+    "points": 5,
+    "id": "005-all-zero-indices",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/005-all-zero-indices.in",
+    "expected": "tests/005-all-zero-indices.out"
+  },
+  {
+    "points": 5,
+    "id": "006-all-max-indices",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/006-all-max-indices.in",
+    "expected": "tests/006-all-max-indices.out"
+  },
+  {
+    "points": 5,
+    "id": "007-n1-with-base",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/007-n1-with-base.in",
+    "expected": "tests/007-n1-with-base.out"
+  },
+  {
+    "points": 5,
+    "id": "008-n1-max-base",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/008-n1-max-base.in",
+    "expected": "tests/008-n1-max-base.out"
+  },
+  {
+    "points": 5,
+    "id": "009-unit-dims-all-one",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/009-unit-dims-all-one.in",
+    "expected": "tests/009-unit-dims-all-one.out"
+  },
+  {
+    "points": 5,
+    "id": "010-unit-dim-mixed",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/010-unit-dim-mixed.in",
+    "expected": "tests/010-unit-dim-mixed.out"
+  },
+  {
+    "points": 5,
+    "id": "011-two-dims-large-w",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/011-two-dims-large-w.in",
+    "expected": "tests/011-two-dims-large-w.out"
+  },
+  {
+    "points": 5,
+    "id": "012-varied-shape",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/012-varied-shape.in",
+    "expected": "tests/012-varied-shape.out"
+  },
+  {
+    "points": 5,
+    "id": "013-random-4d",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/013-random-4d.in",
+    "expected": "tests/013-random-4d.out"
+  },
+  {
+    "points": 5,
+    "id": "014-one-dim-block",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/014-one-dim-block.in",
+    "expected": "tests/014-one-dim-block.out"
+  },
+  {
+    "points": 5,
+    "id": "015-mixed-max-w",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/015-mixed-max-w.in",
+    "expected": "tests/015-mixed-max-w.out"
+  },
+  {
+    "points": 5,
+    "id": "016-project-like-10d",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/016-project-like-10d.in",
+    "expected": "tests/016-project-like-10d.out"
+  },
+  {
+    "points": 5,
+    "id": "017-six-dims",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/017-six-dims.in",
+    "expected": "tests/017-six-dims.out"
+  },
+  {
+    "points": 5,
+    "id": "018-max-dims-min-q",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/018-max-dims-min-q.in",
+    "expected": "tests/018-max-dims-min-q.out"
+  },
+  {
+    "points": 5,
+    "id": "019-stress-10d-full-q",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/019-stress-10d-full-q.in",
+    "expected": "tests/019-stress-10d-full-q.out"
+  },
+  {
+    "points": 5,
+    "id": "020-stress-max-scale",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/020-stress-max-scale.in",
+    "expected": "tests/020-stress-max-scale.out"
+  }
+]

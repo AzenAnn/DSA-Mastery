@@ -4,7 +4,7 @@ description: "快速排序的枢轴划分原理、正确性证明、最坏退化
 order: 2
 chapter: 11
 chapterTitle: "高效排序与外部排序"
-updated: "2026-08-21"
+updated: "2026-09-16"
 contributors: ["Ph1z"]
 status: "draft"
 ---
@@ -22,27 +22,153 @@ status: "draft"
 
 ## 代码
 
+```text
+Algorithm Partition(A, l, r):
+    Input: An array A, left index l, right index r
+    Output: The final position of the pivot
+
+    pivot = A[r]                    // 选择最右侧元素作为基准
+    i = l - 1                       // i 指向 <= pivot 区域的末尾
+
+    // 遍历 [l, r-1]，将 <= pivot 的元素移到左侧
+    for j = l to r - 1 do
+        if A[j] <= pivot then
+            i = i + 1
+            swap(A[i], A[j])        // 将小元素交换到左侧
+        end if
+    end for
+
+    // 将 pivot 放到最终位置
+    swap(A[i + 1], A[r])
+    return i + 1
+
+Algorithm QuickSort(A, l, r):
+    Input: An array A, left index l, right index r
+    Output: Array A[l...r] sorted in ascending order
+
+    if l >= r then
+        return                      // 递归终止：区间内元素 <= 1
+    end if
+
+    p = Partition(A, l, r)          // 划分，p 为基准的最终位置
+    QuickSort(A, l, p - 1)          // 递归排序左半区
+    QuickSort(A, p + 1, r)          // 递归排序右半区
+```
+
 ```cpp
 int partition(int a[], int l, int r) {
-    int pivot = a[r];
-    int i = l - 1;
+    int pivot = a[r];                // 选择最右元素为基准
+    int i = l - 1;                   // i 指向 <= pivot 区域的末尾
     for (int j = l; j < r; ++j) {
         if (a[j] <= pivot) {
             ++i;
-            std::swap(a[i], a[j]);
+            std::swap(a[i], a[j]);   // 将小元素交换到左侧
         }
     }
-    std::swap(a[i + 1], a[r]);
-    return i + 1;
+    std::swap(a[i + 1], a[r]);       // 将 pivot 放到最终位置
+    return i + 1;                    // 返回基准位置
 }
 
 void quickSort(int a[], int l, int r) {
-    if (l >= r) return;
-    int p = partition(a, l, r);
-    quickSort(a, l, p - 1);
-    quickSort(a, p + 1, r);
+    if (l >= r) return;              // 递归终止
+    int p = partition(a, l, r);      // 划分
+    quickSort(a, l, p - 1);          // 递归左半区
+    quickSort(a, p + 1, r);          // 递归右半区
 }
 ```
+
+## 优化代码
+
+快速排序的核心问题是：**当数据接近有序时，固定选择最右元素作为基准会导致划分极度不平衡，退化为 \(O(n^2)\)**。以下是几种常见的优化方向：
+
+```cpp
+// 优化 1：随机化基准（避免最坏情况）
+// 随机选择基准，使期望时间复杂度稳定在 O(n log n)
+#include <cstdlib>   // rand
+int partitionRandom(int a[], int l, int r) {
+    int randomIdx = l + rand() % (r - l + 1);   // 随机选一个位置
+    std::swap(a[randomIdx], a[r]);              // 换到最右侧
+    return partition(a, l, r);                  // 复用原 partition
+}
+```
+
+
+```cpp
+// 优化 2：三路划分（Dutch National Flag）
+// 将数组分为 < pivot, == pivot, > pivot 三部分，处理大量重复元素
+#include <cstdlib>   // rand
+void quickSort3Way(int a[], int l, int r) {
+    if (l >= r) return;
+
+    int pivot = a[l + rand() % (r - l + 1)];   // 随机基准
+    int lt = l, gt = r, i = l;                 // lt: <区末尾, gt: >区开头
+
+    while (i <= gt) {
+        if (a[i] < pivot) {
+            std::swap(a[lt++], a[i++]);        // 放入 < 区
+        } else if (a[i] > pivot) {
+            std::swap(a[i], a[gt--]);          // 放入 > 区（i 不前进）
+        } else {
+            ++i;                               // == pivot，跳过
+        }
+    }
+    // 递归处理 < 区和 > 区，== 区已就位
+    quickSort3Way(a, l, lt - 1);
+    quickSort3Way(a, gt + 1, r);
+}
+```
+
+```cpp
+// 优化 3：IntroSort（内省排序，STL 的 std::sort 实现）
+// 快排 + 堆排 + 插入排序的组合：
+//   - 深度过深时切换堆排序（避免 O(n^2) 最坏情况）
+//   - 小区间切换插入排序（减少递归开销）
+#include <algorithm>  // std::make_heap / std::sort_heap
+#include <cmath>      // std::log2
+void introSort(int a[], int l, int r, int depthLimit) {
+    const int THRESHOLD = 16;
+
+    // 小区间：插入排序
+    if (r - l + 1 <= THRESHOLD) {
+        for (int i = l + 1; i <= r; ++i) {
+            int key = a[i];
+            int j = i - 1;
+            while (j >= l && a[j] > key) {
+                a[j + 1] = a[j];
+                --j;
+            }
+            a[j + 1] = key;
+        }
+        return;
+    }
+
+    // 递归深度过深：切换堆排序
+    if (depthLimit == 0) {
+        std::make_heap(a + l, a + r + 1);
+        std::sort_heap(a + l, a + r + 1);
+        return;
+    }
+
+    // 三数取中 + 划分
+    int mid = l + (r - l) / 2;
+    if (a[l] > a[mid])   std::swap(a[l], a[mid]);
+    if (a[l] > a[r])     std::swap(a[l], a[r]);
+    if (a[mid] > a[r])   std::swap(a[mid], a[r]);
+    std::swap(a[mid], a[r]);
+
+    int p = partition(a, l, r);
+
+    introSort(a, l, p - 1, depthLimit - 1);
+    introSort(a, p + 1, r, depthLimit - 1);
+}
+
+// 调用入口
+void introSort(int a[], int n) {
+    int depthLimit = 2 * (int)std::log2(n);    // 最大递归深度
+    introSort(a, 0, n - 1, depthLimit);
+}
+```
+
 
 ## 正确性证明
 

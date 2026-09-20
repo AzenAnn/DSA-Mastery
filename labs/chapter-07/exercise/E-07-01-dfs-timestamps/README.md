@@ -5,8 +5,8 @@ order: 101
 chapter: 7
 labId: "07E01"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-14"
-contributors: ["Qing", "Azen"]
+updated: "2026-09-19"
+contributors: ["Qing", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "入门"
@@ -15,9 +15,8 @@ duration: "45～60 分钟"
 
 # Lab 07-E-01：DFS 遍历与时间戳
 
-> 题集 T01 · 规划节 7.1；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
-> 题目来源：课程经典 DFS 时间戳练习；发现时间、完成时间与括号化定理的定义参考 [CLRS《Introduction to Algorithms》第 22 章](https://books.google.com/books?vid=ISBN9780262033848)。本 Lab 使用固定扫描顺序与独立测试，没有直接对应的 LeetCode 原题。
+> 题目来源：课程经典 DFS 时间戳练习；发现时间、完成时间与括号化定理的定义参考 [CLRS《Introduction to Algorithms》第 22 章](https://books.google.com/books?vid=ISBN9780262033848)。本 Lab 使用固定扫描顺序与独立测试。
 
 ## 学习目标
 
@@ -118,11 +117,15 @@ pnpm lab score labs/chapter-07/exercise/E-07-01-dfs-timestamps
 - [ ] 每个顶点的邻居按升序访问，输出可复现；
 - [ ] 能画出至少一组 `d/f` 区间并验证祖先关系。
 
+## 解题思路
+
+按编号扫描所有顶点，遇到未访问顶点就启动一次 DFS。进入顶点时记录发现时间，遍历完全部邻居后记录完成时间；邻接表先排序即可保证输出稳定。
+
 ## 复杂度分析
 
 为了固定访问顺序，排序全部邻接表需要 `O(Σ deg(u) log deg(u))` 时间，上界可写为 `O(m log n)`。排序完成后，每个顶点进入一次，邻接表中的每条记录扫描一次，也就是每条无向边分别从两个方向扫描，DFS 本身为 `O(n + m)`；因此包含排序的总时间为 `O(n + m log n)`。
 
-邻接表占 `O(n + m)` 空间，`visited`、时间戳数组与最坏辅助栈各占 `O(n)` 空间。递归可用深度取决于操作系统、编译器和栈帧大小；现有深链用例可超过 Windows 默认递归栈。参考解在递归深度达到 256 时使用显式栈帧完成该子树，保留完全相同的时间戳。栈帧写法可参考 [Lab 07-E-05](../E-07-05-iterative-dfs/README.md)。
+邻接表占 `O(n + m)` 空间，`visited`、时间戳数组与最坏辅助栈各占 `O(n)` 空间。递归可用深度取决于操作系统、编译器和栈帧大小；现有深链用例可超过 Windows 默认递归栈。参考解在递归深度达到 256 时使用显式栈帧完成该子树，保留完全相同的时间戳。栈帧写法可参考 [Lab 07-E-02](../E-07-02-iterative-dfs/README.md)。
 
 ## 思考与复盘
 

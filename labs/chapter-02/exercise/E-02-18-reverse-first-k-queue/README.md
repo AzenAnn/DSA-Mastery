@@ -1,0 +1,82 @@
+---
+title: "Lab 02-E-18：反转队列前 K 个元素"
+description: "借助栈反转队头前缀并保持剩余元素相对顺序。"
+order: 29
+chapter: 2
+labId: "02E18"
+chapterTitle: "栈与队列"
+updated: "2026-09-11"
+contributors: ["DSA Mastery Team"]
+status: "draft"
+lab: true
+difficulty: "基础"
+duration: "35～50 分钟"
+---
+
+# Lab 02-E-18：反转队列前 K 个元素
+
+## 学习目标
+
+- 借助栈反转队列前 `k` 个元素，同时保留后缀相对顺序。
+- 处理 `k=0`、`k=1` 和 `k=n`，明确输入顺序为队头到队尾。
+- 证明每个元素只经历常数次入队/出队。
+
+## 前置知识与环境
+
+建议先学习[第 2 章栈与队列](../../../../content/chapter-02-stack-queue/00-overview.md)。使用 ISO C++17；开始前可在本目录运行 `make doctor`。
+
+## 任务
+
+队列最初从队头到队尾依次为输入的 `a[0]..a[n-1]`。仅将前 `k` 个元素逆序，后 `n-k` 个元素原顺序接在后面。例如 `[1,2,3,4,5]` 且 `k=3` 时，输出 `[3,2,1,4,5]`。
+
+## 输入格式
+
+第一行两个整数 `n k`；第二行从队头到队尾给出 `n` 个 64 位有符号整数。保证 `0 <= k <= n <= 200000`；`n=0` 时第二行为空。
+
+## 输出格式
+
+输出操作后从队头到队尾的整个队列，元素以空格分隔，末尾换行；`n=0` 输出空行。
+
+## 数据范围与限制
+
+- 输入规模不超过 `200000`，除题面另有说明外整数使用 64 位有符号范围。
+- 标准输出只保留题目要求的结果；调试信息写入标准错误。
+- 目标算法应为线性或摊还线性时间，辅助空间不超过 `O(n)`。
+
+## 边界与验收重点
+
+- `k=0` 或 `k=1` 时队列不变；`k=n` 时整个队列逆序。
+- 前缀使用 LIFO 反转后，原后缀仍需保持 FIFO 顺序。
+- 重复值不能代替位置判断，输入顺序才决定答案。
+
+## 如何验证
+
+```powershell
+make doctor
+make run
+make score
+```
+
+未安装 Make 时，在仓库根目录运行：
+
+```powershell
+pnpm lab validate labs/chapter-02/exercise/E-02-18-reverse-first-k-queue
+pnpm lab run labs/chapter-02/exercise/E-02-18-reverse-first-k-queue
+pnpm lab score labs/chapter-02/exercise/E-02-18-reverse-first-k-queue
+```
+
+- [ ] 全部 20 个公开测试通过。
+- [ ] 能手算五元素、`k=3` 的例子。
+- [ ] 能说明时间 `O(n)`、额外空间 `O(n)`。
+
+## 思考与复盘
+
+1. 为什么反转前缀后仍要把原后缀轮转到队尾？
+2. `k=0` 时应有多少次栈的压入与弹出？
+
+<details><summary>思考题参考</summary>
+
+1. 前缀逆序元素是追加在队尾的，原后缀还在前面；轮转后才能得到正确顺序。
+2. 零次；结果与原队列完全相同。
+
+</details>

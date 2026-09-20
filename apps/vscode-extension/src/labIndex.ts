@@ -5,6 +5,7 @@ import { parseQuizQuestions } from './quiz';
 import type { QuizQuestion } from './quiz';
 import { readStableLabId } from "./labIdentity";
 import { ch04LegacyNames } from "./ch04Migration";
+import { ch07LegacyNames } from "./ch07Migration";
 
 /**
  * 一道可作答 lab 的静态信息，来自 lab.json 与 README frontmatter。
@@ -506,7 +507,7 @@ function buildBase(
   return {
     id: readStableLabId(front.labId, labDir),
     name: labDir,
-    legacyNames: [...new Set([...legacyNames, ...ch04LegacyNames(labDir)])],
+    legacyNames: [...new Set([...legacyNames, ...ch04LegacyNames(labDir), ...ch07LegacyNames(labDir)])],
     labPath,
     relativePath: path.relative(repoRoot, labPath).split(path.sep).join("/"),
     title: typeof front.title === "string" ? front.title : labDir,

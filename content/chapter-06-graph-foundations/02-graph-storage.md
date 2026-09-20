@@ -40,12 +40,20 @@ status: "draft"
 
 继续使用 6.1 的简单无向图：
 
-```text [example-graph.txt]
-      0 ───── 1 ───── 3
-       \      /        |
-        \    /         |
-          2 ────────── 4
+```graphviz
+graph StorageExample {
+  rankdir=LR;
+  node [shape=circle];
+
+  0 -- 1;
+  0 -- 2;
+  1 -- 2;
+  1 -- 3;
+  2 -- 4;
+  3 -- 4;
+}
 ```
+<!-- diagram id="graph-storage-foundation-example" caption="6.2 存储例图：邻接矩阵、邻接表和边集数组都表示同一组 6 条无向边" -->
 
 $$
 V=\{0,1,2,3,4\},

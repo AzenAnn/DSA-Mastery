@@ -1,0 +1,182 @@
+[
+  {
+    "points": 5,
+    "id": "001-sample",
+    "tags": [
+      "sample"
+    ],
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out"
+  },
+  {
+    "points": 5,
+    "id": "002-insert-at-head",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/002-insert-at-head.in",
+    "expected": "tests/002-insert-at-head.out"
+  },
+  {
+    "points": 5,
+    "id": "003-insert-at-middle",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/003-insert-at-middle.in",
+    "expected": "tests/003-insert-at-middle.out"
+  },
+  {
+    "points": 5,
+    "id": "004-insert-at-tail",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/004-insert-at-tail.in",
+    "expected": "tests/004-insert-at-tail.out"
+  },
+  {
+    "points": 5,
+    "id": "005-delete-at-head",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/005-delete-at-head.in",
+    "expected": "tests/005-delete-at-head.out"
+  },
+  {
+    "points": 5,
+    "id": "006-delete-at-middle",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/006-delete-at-middle.in",
+    "expected": "tests/006-delete-at-middle.out"
+  },
+  {
+    "points": 5,
+    "id": "007-delete-at-tail",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/007-delete-at-tail.in",
+    "expected": "tests/007-delete-at-tail.out"
+  },
+  {
+    "points": 5,
+    "id": "008-insert-then-delete",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/008-insert-then-delete.in",
+    "expected": "tests/008-insert-then-delete.out"
+  },
+  {
+    "points": 5,
+    "id": "009-long-insert-then-delete",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/009-long-insert-then-delete.in",
+    "expected": "tests/009-long-insert-then-delete.out"
+  },
+  {
+    "points": 5,
+    "id": "010-many-edits",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/010-many-edits.in",
+    "expected": "tests/010-many-edits.out"
+  },
+  {
+    "points": 5,
+    "id": "011-boundary-cap-exactly-full",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/011-boundary-cap-exactly-full.in",
+    "expected": "tests/011-boundary-cap-exactly-full.out"
+  },
+  {
+    "points": 5,
+    "id": "012-boundary-insert-truncated",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/012-boundary-insert-truncated.in",
+    "expected": "tests/012-boundary-insert-truncated.out"
+  },
+  {
+    "points": 5,
+    "id": "013-boundary-truncated-large-insert",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/013-boundary-truncated-large-insert.in",
+    "expected": "tests/013-boundary-truncated-large-insert.out"
+  },
+  {
+    "points": 5,
+    "id": "014-boundary-delete-beyond-end",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/014-boundary-delete-beyond-end.in",
+    "expected": "tests/014-boundary-delete-beyond-end.out"
+  },
+  {
+    "points": 5,
+    "id": "015-boundary-delete-whole-string",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/015-boundary-delete-whole-string.in",
+    "expected": "tests/015-boundary-delete-whole-string.out"
+  },
+  {
+    "points": 5,
+    "id": "016-boundary-empty-insert-text",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/016-boundary-empty-insert-text.in",
+    "expected": "tests/016-boundary-empty-insert-text.out"
+  },
+  {
+    "points": 5,
+    "id": "017-boundary-zero-length-delete",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/017-boundary-zero-length-delete.in",
+    "expected": "tests/017-boundary-zero-length-delete.out"
+  },
+  {
+    "points": 5,
+    "id": "018-boundary-initial-empty-string",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/018-boundary-initial-empty-string.in",
+    "expected": "tests/018-boundary-initial-empty-string.out"
+  },
+  {
+    "points": 5,
+    "id": "019-stress-frequent-truncation",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/019-stress-frequent-truncation.in",
+    "expected": "tests/019-stress-frequent-truncation.out"
+  },
+  {
+    "points": 5,
+    "id": "020-stress-mass-delete",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/020-stress-mass-delete.in",
+    "expected": "tests/020-stress-mass-delete.out"
+  }
+]

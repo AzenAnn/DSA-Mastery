@@ -53,13 +53,15 @@ status: "draft"
 | 栈与队列综合理论 | [Lab 02-T-03：栈与队列综合理论题](../../labs/chapter-02/theory/T-02-03-stack-queue-comprehensive/README.md) | 20 道选择题与 5 道大题，完成约束分析、空间复用设计和序列计数证明 |
 | 栈的模拟与接口实现 | [Lab 02-E-01：验证栈序列](../../labs/chapter-02/exercise/E-02-01-validate-stack-sequences/README.md)、[Lab 02-E-02：最小栈](../../labs/chapter-02/exercise/E-02-02-min-stack/README.md) | 从基础模拟推进到常数时间辅助状态维护 |
 | 队列的窗口与接口实现 | [Lab 02-E-03：最近请求](../../labs/chapter-02/exercise/E-02-03-recent-counter/README.md)、[Lab 02-E-04：循环队列](../../labs/chapter-02/exercise/E-02-04-circular-queue/README.md)、[Lab 02-E-05：用栈实现队列](../../labs/chapter-02/exercise/E-02-05-queue-using-stacks/README.md)、[Lab 02-E-06：循环双端队列](../../labs/chapter-02/exercise/E-02-06-circular-deque/README.md) | 掌握滑动窗口、环绕下标、摊还分析和两端操作 |
-| 单调结构进阶 | [Lab 02-E-07：滑动窗口最大值](../../labs/chapter-02/exercise/E-02-07-sliding-window-maximum/README.md)、[Lab 02-E-08：柱状图最大矩形](../../labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram/README.md) | 维护候选单调性，处理窗口过期和左右边界 |
+| 单调结构进阶 | [Lab 02-E-07：滑动窗口最大值](../../labs/chapter-02/exercise/E-02-07-sliding-window-maximum/README.md)、[Lab 02-E-08：柱状图最大矩形](../../labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram/README.md)、[Lab 02-E-12：下一个更大元素](../../labs/chapter-02/exercise/E-02-12-next-greater-element/README.md)、[Lab 02-E-13：下一个更小元素](../../labs/chapter-02/exercise/E-02-13-next-smaller-element/README.md)、[Lab 02-E-20：股票价格跨度](../../labs/chapter-02/exercise/E-02-20-stock-span/README.md) | 维护候选单调性，处理严格比较、相等价格和左右边界 |
+| 嵌套与表达式 | [Lab 02-E-09：括号匹配](../../labs/chapter-02/exercise/E-02-09-bracket-matching/README.md)、[Lab 02-E-10：逆波兰表达式求值](../../labs/chapter-02/exercise/E-02-10-rpn-evaluation/README.md)、[Lab 02-E-11：中缀表达式转后缀](../../labs/chapter-02/exercise/E-02-11-infix-to-postfix/README.md) | 区分栈顶匹配、操作数顺序、优先级与非法输入 |
+| 队列与栈的进一步应用 | [Lab 02-E-14：农夫抓牛](../../labs/chapter-02/exercise/E-02-14-farmer-cow-bfs/README.md)、[Lab 02-E-15：Josephus 出列顺序](../../labs/chapter-02/exercise/E-02-15-josephus-order/README.md)、[Lab 02-E-16：二进制数生成](../../labs/chapter-02/exercise/E-02-16-binary-number-queue/README.md)、[Lab 02-E-17：双端队列回文检查](../../labs/chapter-02/exercise/E-02-17-palindrome-deque/README.md)、[Lab 02-E-18：反转队列前缀](../../labs/chapter-02/exercise/E-02-18-reverse-first-k-queue/README.md)、[Lab 02-E-19：辅助栈排序](../../labs/chapter-02/exercise/E-02-19-stack-sorting/README.md) | 练习分层搜索、循环报数、FIFO 构造、两端比较和栈队列协作 |
 | 栈、导航历史与 Undo/Redo | [Lab 02-P-01：可撤销浏览器](../../labs/chapter-02/project/P-02-01-undoable-browser/README.md) | 用完整页面状态协调后退、前进和页面级命令历史 |
 | FIFO、多队列与离散时间 | [Lab 02-P-02：超市收银模拟](../../labs/chapter-02/project/P-02-02-supermarket-checkout/README.md) | 统一时间口径，验证等待、逗留、忙碌率和队列峰值 |
 | 栈与队列联动 | [Lab 02-P-03：停车场管理](../../labs/chapter-02/project/P-02-03-parking-lot-management/README.md) | 完成倒车、便道补位、中间删除与统计 |
 
 ::: info Lab 编号说明
-Lab 02-T-01 与 Lab 02-T-02 是交互式概念自测，Lab 02-T-03 是包含理论大题的综合训练；Lab 02-E-01 至 Lab 02-E-08 是带起始代码、参考实现和 100 分自动测试的 Program Lab；Lab 02-P-01 至 Lab 02-P-03 是综合 Project 规格，目前仍需学习者按任务说明自行创建实现。侧栏按 Theory、Exercise、Project 分类展示。
+Lab 02-T-01 与 Lab 02-T-02 是交互式概念自测，Lab 02-T-03 是包含理论大题的综合训练；Lab 02-E-01 至 Lab 02-E-20 是带起始代码、参考实现和 100 分自动测试的 Program Lab；Lab 02-P-01 至 Lab 02-P-03 是综合 Project 规格，目前仍需学习者按任务说明自行创建实现。侧栏按 Theory、Exercise、Project 分类展示。
 :::
 
 ## 学习建议

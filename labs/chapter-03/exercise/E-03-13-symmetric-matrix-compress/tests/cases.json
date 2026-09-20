@@ -1,0 +1,182 @@
+[
+  {
+    "points": 5,
+    "id": "001-sample",
+    "tags": [
+      "sample"
+    ],
+    "input": "tests/001-sample.in",
+    "expected": "tests/001-sample.out"
+  },
+  {
+    "points": 5,
+    "id": "002-basic-mixed",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/002-basic-mixed.in",
+    "expected": "tests/002-basic-mixed.out"
+  },
+  {
+    "points": 5,
+    "id": "003-small-random",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/003-small-random.in",
+    "expected": "tests/003-small-random.out"
+  },
+  {
+    "points": 5,
+    "id": "004-zeros-and-ones",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/004-zeros-and-ones.in",
+    "expected": "tests/004-zeros-and-ones.out"
+  },
+  {
+    "points": 5,
+    "id": "005-width-eight",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/005-width-eight.in",
+    "expected": "tests/005-width-eight.out"
+  },
+  {
+    "points": 5,
+    "id": "006-width-twenty",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/006-width-twenty.in",
+    "expected": "tests/006-width-twenty.out"
+  },
+  {
+    "points": 5,
+    "id": "007-width-fifty",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/007-width-fifty.in",
+    "expected": "tests/007-width-fifty.out"
+  },
+  {
+    "points": 5,
+    "id": "008-width-hundred",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/008-width-hundred.in",
+    "expected": "tests/008-width-hundred.out"
+  },
+  {
+    "points": 5,
+    "id": "009-width-two-hundred",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/009-width-two-hundred.in",
+    "expected": "tests/009-width-two-hundred.out"
+  },
+  {
+    "points": 5,
+    "id": "010-width-five-hundred",
+    "tags": [
+      "normal"
+    ],
+    "input": "tests/010-width-five-hundred.in",
+    "expected": "tests/010-width-five-hundred.out"
+  },
+  {
+    "points": 5,
+    "id": "011-single-element",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/011-single-element.in",
+    "expected": "tests/011-single-element.out"
+  },
+  {
+    "points": 5,
+    "id": "012-two-by-two-all",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/012-two-by-two-all.in",
+    "expected": "tests/012-two-by-two-all.out"
+  },
+  {
+    "points": 5,
+    "id": "013-diagonal-only",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/013-diagonal-only.in",
+    "expected": "tests/013-diagonal-only.out"
+  },
+  {
+    "points": 5,
+    "id": "014-upper-only",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/014-upper-only.in",
+    "expected": "tests/014-upper-only.out"
+  },
+  {
+    "points": 5,
+    "id": "015-negative-values",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/015-negative-values.in",
+    "expected": "tests/015-negative-values.out"
+  },
+  {
+    "points": 5,
+    "id": "016-large-magnitude",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/016-large-magnitude.in",
+    "expected": "tests/016-large-magnitude.out"
+  },
+  {
+    "points": 5,
+    "id": "017-single-query",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/017-single-query.in",
+    "expected": "tests/017-single-query.out"
+  },
+  {
+    "points": 5,
+    "id": "018-corners-max-n",
+    "tags": [
+      "boundary"
+    ],
+    "input": "tests/018-corners-max-n.in",
+    "expected": "tests/018-corners-max-n.out"
+  },
+  {
+    "points": 5,
+    "id": "019-stress-random",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/019-stress-random.in",
+    "expected": "tests/019-stress-random.out"
+  },
+  {
+    "points": 5,
+    "id": "020-stress-diagonal-tail",
+    "tags": [
+      "stress"
+    ],
+    "input": "tests/020-stress-diagonal-tail.in",
+    "expected": "tests/020-stress-diagonal-tail.out"
+  }
+]

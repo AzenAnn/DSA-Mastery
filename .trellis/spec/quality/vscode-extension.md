@@ -92,6 +92,8 @@ ProjectScoreResult {
 
 ## 5. Good / Base / Bad Cases
 
+Ch7 的维护者授权重编号由 `ch07Migration.ts` 保存，标记为 `ch07-exercise-order-2026-09-16`。仅完整新布局且删除题不再被扫描时触发。旧 07E02/03 的进度、事件归档到旧目录键，不能并入新同号题；其他 30 题同时迁移，保留旧目录别名与快照路径。Ch4/Ch7 各自持久化标记，备份失败不得更改主状态。回归见 `ch07-migration.test.ts`，覆盖 32 个旧身份、真实目录扫描、双章迁移、删除题隔离、重启与重置。
+
 - Good：`P-03-01` 进入树；面板显示 matcher 的 stdio cases、engine 的 CTest 名称和 report 的 `PENDING`，提交传入 `labs/chapter-03/project/P-03-01-string-match-engine`，结果保留 task → case/test 层级。
 - Good：自动结果 `Automated 80/80 + Manual pending 20` 时显示“自动通过 · 待人工”，章节完成数不增加。
 - Base：本机缺少 CMake 时 Project 仍可展示；提交由 CLI 返回 `CMAKE_NOT_FOUND`，扩展显示环境错误，Program/Quiz 不受影响。

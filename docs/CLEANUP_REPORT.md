@@ -376,3 +376,14 @@ labs/index.md
 | `labs/chapter-12/exercise/E-12-13-different-ways-to-compute` | 表达式结果集合 | `E-12-12-different-ways-add-parentheses` | 新题明确保留重复结果并提供 20 组测试，已严格 verify | 删除 | 同上 |
 
 执行时须先把上述路径解析为绝对路径并逐项确认都位于 `labs/chapter-12/theory` 或 `labs/chapter-12/exercise` 内，再按这份固定清单删除。删除后运行产品源码引用检查、16 个 Lab verify、内容发现、完整 `pnpm test` 与 Pages-base 浏览器验收；任一门禁失败则回退本组删除和对应正文改写。
+
+## 2026-09-16 Ch7 题集精简
+
+用户明确要求删除学习清单外的两题；Ch6 旧入口已移除，guide 不再追加补充项。历史记录及迁移别名保留，不是活动入口。
+
+本地采用可恢复移除：原目录移入 gitignored 的 `.lab-cache/ch07-removed-labs/`，课程扫描与 Git 变更均视为删除；该备份不发布、不提交。
+
+| 候选路径 | 旧职责 | 替代物 | 无引用证据 | 决定 | 回滚方式 |
+| --- | --- | --- | --- | --- | --- |
+| labs/chapter-07/exercise/E-07-02-connected-components | 清单外补充题 | guide 的 30 题清单 | 内容校验、全站链接与 Ch7 缺席断言 | 按用户要求删除 | 从 5bb70c1e 恢复目录并撤回相关编号迁移 |
+| labs/chapter-07/exercise/E-07-03-directed-cycle-detection | 清单外补充题 | guide 的 30 题清单 | 内容校验、全站链接与 Ch7 缺席断言 | 按用户要求删除 | 从 5bb70c1e 恢复目录并撤回相关编号迁移 |

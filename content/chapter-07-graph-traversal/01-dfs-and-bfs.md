@@ -4,8 +4,8 @@ description: "从一张小图出发理解深度优先与广度优先搜索：标
 order: 1
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-14"
-contributors: ["Qing", "Azen"]
+updated: "2026-09-19"
+contributors: ["Qing", "Azen", "qzm123"]
 status: "draft"
 ---
 
@@ -47,7 +47,7 @@ graph TraversalExample {
   0 -- 2;
 }
 ```
-<!-- diagram id="dfs-bfs-example-graph" caption: "7.1 示例图：5 个顶点、4 条边的无向图" -->
+<!-- diagram id="dfs-bfs-example-graph" caption="7.1 示例图：5 个顶点、4 条边的无向图" -->
 
 从顶点 `0` 出发：
 
@@ -141,18 +141,20 @@ DFS 的规则一句话：**能深入就深入，深入不了就退回一步，�
 ```cpp:line-numbers [dfs-recursive.cpp]
 #include <vector>
 
-void dfs(int u, const std::vector<std::vector<int>>& graph,
-         std::vector<bool>& visited, std::vector<int>& order) {
-    // 进入顶点时立即标记
-    visited[u] = true;          // [!code highlight]
-    order.push_back(u);         // 记录访问顺序
+std::vector<std::vector<int>> graph;
+std::vector<bool> visited;
+std::vector<int> order;
+
+void dfs(int u) {
+    visited[u] = true;
+    order.push_back(u);
     for (int v : graph[u]) {
-        if (!visited[v]) dfs(v, graph, visited, order);
+        if (!visited[v]) dfs(v);
     }
 }
 ```
 
-函数体只有三件事：`visited[u] = true` 标记当前顶点；`order.push_back(u)` 记录访问顺序；`for` 循环逐个处理未访问的邻居，对每个邻居递归调用自身。某个邻居的整棵子树走完后，函数返回，循环继续检查下一个邻居——代码里的"返回"就是直觉里的"回头"。
+函数体只有三件事：`visited[u] = true` 标记当前顶点；`order.push_back(u)` 记录访问顺序；`for` 循环逐个处理未访问的邻居，对每个邻居递归调用自身。这里把图、访问标记和输出序列统一作为程序状态，`dfs(u)` 只保留“从 `u` 继续搜索”这一件事。某个邻居的整棵子树走完后，函数返回，循环继续检查下一个邻居——代码里的"返回"就是直觉里的"回头"。
 
 ::: example 示例 · 递归 DFS 怎么走
 对照路线图，从 `0` 出发，邻居升序：
@@ -181,8 +183,11 @@ void dfs(int u, const std::vector<std::vector<int>>& graph,
 #include <stack>
 #include <vector>
 
-void dfs_iterative(int start, const std::vector<std::vector<int>>& graph,
-                   std::vector<bool>& visited, std::vector<int>& order) {
+std::vector<std::vector<int>> graph;
+std::vector<bool> visited;
+std::vector<int> order;
+
+void dfs_iterative(int start) {
     std::stack<int> pending;
     pending.push(start);
     // 入栈时标记，避免同一顶点重复入栈
@@ -234,25 +239,33 @@ DFS 优先深入，第一次到达某顶点时走过的边数**未必最少**。
 DFS 除了输出"访问顺序"，还可以给每个顶点记下两个时间戳，从而精确刻画顶点在 DFS 树中的祖先关系。递归版 DFS 在进入顶点时记录**发现时间**，在所有邻居处理完毕、返回之前记录**完成时间**：
 
 ```cpp:line-numbers [dfs-timestamps.cpp]
+#include <iostream>
 #include <vector>
 
+using namespace std;
+
+vector<vector<int>> graph;
+vector<bool> visited;
+vector<int> discover, finish;
 int timer = 0;   // 全局时钟
-void dfs(int u, const std::vector<std::vector<int>>& graph,
-         std::vector<bool>& visited, std::vector<int>& d, std::vector<int>& f) {
+
+void dfs(int u) {
     visited[u] = true;
-    d[u] = ++timer;            // 发现时间：进入顶点时
+    discover[u] = ++timer;     // 发现时间：进入顶点时
     for (int v : graph[u]) {
-        if (!visited[v]) dfs(v, graph, visited, d, f);
+        if (!visited[v]) dfs(v);
     }
-    f[u] = ++timer;            // 完成时间：全部邻居处理完后
+    finish[u] = ++timer;       // 完成时间：全部邻居处理完后
 }
 ```
+
+这里把同一次 DFS 需要的状态统一放在程序级变量中：`dfs` 只接受当前顶点 `u`，读写 `visited`、`discover`、`finish` 和 `timer`。这正是许多数据结构教材中最常见的写法：递归函数只表达“从当前顶点继续搜索”，不把一长串容器参数夹在算法主线中。若要封装成库函数，再把这些状态放入一个对象或上下文结构即可。
 
 上面的 `dfs` 只从 `u` 出发，覆盖 `u` 所在的可达分量。若想让全图每个顶点都有时间戳（构造完整 DFS 森林），需要在外层对所有未访问顶点各启动一次：
 
 ```cpp:line-numbers [dfs-forest.cpp]
 for (int v = 0; v < n; ++v) {
-    if (!visited[v]) dfs(v, graph, visited, d, f);
+    if (!visited[v]) dfs(v);
 }
 ```
 
@@ -291,11 +304,146 @@ DFS 过程中顶点的状态可以看作三种"颜色"：**白色**（尚未发�
 有向图存在环，当且仅当其 DFS 森林中存在后向边。因此 DFS 森林中无后向边等价于该图是无环有向图（DAG），而 DAG 一定存在拓扑排序。
 :::
 
+### DFS 拓展：从七桥问题到欧拉路径
+
+#### 先看一个现实问题：哥尼斯堡七桥
+
+18 世纪的哥尼斯堡城被普雷格尔河分成四块陆地，七座桥把这些陆地连接起来。人们提出了一个问题：
+
+> 能不能从某块陆地出发，恰好经过每座桥一次，最后回到原来的位置？
+
+把每块陆地看成顶点，把桥看成边，问题就变成“是否存在一条经过每条边恰好一次的回路”。欧拉把这件事抽象成图论问题，并发现不需要尝试所有走法，只要观察每个顶点连接了多少条边即可。
+
+::: definition 定义 · 欧拉路径与欧拉回路
+在无向图中，经过每条边恰好一次的路线叫**欧拉路径**；如果路线的起点和终点相同，叫**欧拉回路**。顶点可以重复经过，但边不能重复使用。
+:::
+
+#### 度数为什么决定答案
+
+每次进入一个中间顶点，都必须再从另一条边离开，所以中间顶点的边必须两两配对，度数只能是偶数。若路线从顶点出发但不回到它，起点会多“离开”一次，终点会多“进入”一次，因此恰好允许两个奇度顶点。
+
+::: theorem 定理 · 无向图欧拉路线判定
+忽略孤立顶点后，图连通时：
+
+- 所有顶点度数为偶数，当且仅当存在欧拉回路；
+- 恰好两个顶点度数为奇数，当且仅当存在欧拉路径但不存在欧拉回路；
+- 奇度顶点不是 `0` 或 `2` 时，不存在欧拉路径。
+:::
+
+::: proof
+必要性来自“进入和离开配对”：回路中每个顶点每进入一次就必须离开一次，所以每个顶点度数为偶数；非闭合路径只有起点和终点各少配对一次，所以它们为奇数，其余顶点为偶数。
+
+充分性可以用构造法证明。若所有度数为偶数，从任意非孤立顶点出发不断选择尚未使用的边，不能在中途停下：每次到达一个非起点顶点时，已用边数与未用边数保持配对，最终只能回到起点，得到一个闭合回路。若还有未使用的边，连通性保证它与已有回路相交；从交点再走出一个回路并拼接，反复进行即可覆盖所有边。恰有两个奇度顶点时，从其中一个出发，除起点和终点外仍然可以成对进出，最终在另一个奇度顶点结束；同样拼接剩余回路即可。
+:::
+
+七桥图的四块陆地中，每个顶点的度数都是奇数，共有四个奇度顶点，不满足 `0` 或 `2` 的条件，因此不存在这样的路线。这就是七桥问题的结论。
+
+#### Hierholzer 算法：把证明变成程序
+
+上面的充分性证明本身就是算法。沿未使用的边前进；走到当前顶点没有未用边时，把它放入答案并回退。因为答案是从“走不动”的末端逆向记录的，最后需要反转。这里直接用递归 DFS 表达这个回溯过程：递归调用负责沿边深入，函数返回前把当前顶点加入路径。
+
+```cpp [euler-tour-dfs.cpp]
+vector<vector<pair<int, int>>> graph;
+vector<bool> used;
+vector<int> path, next_edge;
+
+void euler_dfs(int u) {
+    while (next_edge[u] < static_cast<int>(graph[u].size())) {
+        auto [v, id] = graph[u][next_edge[u]++];
+        if (used[id]) continue;
+        used[id] = true;
+        euler_dfs(v);
+    }
+    path.push_back(u);
+}
+```
+
+这段功能代码只展示 Hierholzer 的 DFS 核心。与普通 DFS 的关键区别是：普通 DFS 标记“顶点是否访问过”，Hierholzer 标记“边是否使用过”；同一顶点可以多次进入。若图有重边，必须给每条边独立编号，不能只用 `visited[v]`。
+
+::: details 可编译 C++17 完整实现 · 判定并输出欧拉路线
+```cpp:line-numbers [euler-tour.cpp]
+#include <algorithm>
+#include <iostream>
+#include <utility>
+#include <vector>
+
+using namespace std;
+
+vector<vector<pair<int, int>>> graph;
+vector<bool> used;
+vector<int> path, next_edge;
+
+void euler_dfs(int u) {
+    while (next_edge[u] < static_cast<int>(graph[u].size())) {
+        auto [v, id] = graph[u][next_edge[u]++];
+        if (used[id]) continue;
+        used[id] = true;
+        euler_dfs(v);
+    }
+    path.push_back(u);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+    vector<int> degree(n, 0);
+    graph.assign(n, {});
+
+    for (int i = 0; i < m; ++i) {
+        int u, v;
+        cin >> u >> v;
+        graph[u].push_back({v, i});
+        graph[v].push_back({u, i});
+        ++degree[u];
+        ++degree[v];
+    }
+
+    int odd = 0;
+    int start = -1;
+    for (int u = 0; u < n; ++u) {
+        if (degree[u] % 2 == 1) {
+            ++odd;
+            if (start == -1) start = u;
+        }
+        if (start == -1 && degree[u] > 0) start = u;
+    }
+
+    if (odd != 0 && odd != 2) {
+        cout << "NO\n";
+        return 0;
+    }
+    if (m == 0) {
+        cout << "YES\n0\n";
+        return 0;
+    }
+
+    used.assign(m, false);
+    next_edge.assign(n, 0);
+    euler_dfs(start);
+
+    if (static_cast<int>(path.size()) != m + 1) {
+        cout << "NO\n";
+        return 0;
+    }
+    reverse(path.begin(), path.end());
+    cout << "YES\n";
+    for (int i = 0; i < static_cast<int>(path.size()); ++i) {
+        if (i) cout << ' ';
+        cout << path[i];
+    }
+    cout << '\n';
+}
+```
+:::
+
 ## BFS：广度优先搜索
 
 ### 直觉：一圈一圈往外扩
 
-本节讨论的是**无权图**，即每条边的代价都视为 1；BFS 的“按层”只在这一前提下直接给出最短距离。边权非负时可使用[7.3 节](./03-shortest-path.md)的 Dijkstra；允许负权边时还需根据是否存在负环等条件选择 Bellman-Ford 等算法。BFS 的规则一句话：**先访问起点，再访问起点的全部邻居，再访问邻居的邻居**。前面小图里，`{1, 2}` 是第 1 层，`{3, 4}` 是第 2 层，BFS 严格按层访问。队列的"先进先出（FIFO）"恰好保证这一点：先入队的（更近的）一定先出队。第 2 章的[队列应用](../chapter-02-stack-queue/03-applications.md)已预告过这种"按层扩散"，这里正式用在图上。
+本节讨论的是**无权图**，即每条边的代价都视为 1；BFS 的“按层”只在这一前提下直接给出最短距离。边权非负时可使用[7.4 节](./04-shortest-path.md)的 Dijkstra；允许负权边时还需根据是否存在负环等条件选择 Bellman-Ford 等算法。BFS 的规则一句话：**先访问起点，再访问起点的全部邻居，再访问邻居的邻居**。前面小图里，`{1, 2}` 是第 1 层，`{3, 4}` 是第 2 层，BFS 严格按层访问。队列的"先进先出（FIFO）"恰好保证这一点：先入队的（更近的）一定先出队。第 2 章的[队列应用](../chapter-02-stack-queue/03-applications.md)已预告过这种"按层扩散"，这里正式用在图上。
 
 ::: definition 定义 · 按层访问
 把到起点 $s$ 需要最少 $k$ 条边的顶点称为**第 $k$ 层**。第 0 层是 $s$ 自己；第 $k+1$ 层由第 $k$ 层顶点的未访问邻居构成。BFS 按第 0、1、2……层依次访问。
@@ -309,8 +457,10 @@ DFS 用栈式调度（后进先出，先深入），BFS 用队列调度（先进
 #include <queue>
 #include <vector>
 
-void bfs(int start, const std::vector<std::vector<int>>& graph,
-         std::vector<int>& order, std::vector<int>& dist) {
+std::vector<std::vector<int>> graph;
+std::vector<int> order, dist;
+
+void bfs(int start) {
     int n = static_cast<int>(graph.size());
     dist.assign(n, -1);         // -1 表示未访问
     std::queue<int> pending;
@@ -380,6 +530,232 @@ void bfs(int start, const std::vector<std::vector<int>>& graph,
 - **按层处理**：需要"先处理近的，再处理远的"的问题，如状态空间（把每种局面抽象成一个顶点的图）最少步数、迷宫最短路；
 - **二分图判定**：给顶点交替染色，BFS 逐层扩散时若发现相邻同色，就不是二分图。
 
+## 完整解题范例
+
+下面用两道可以直接提交和运行的题，把 DFS 与 BFS 从“遍历骨架”落实为完整解题流程。第一题强调 DFS 的进入/退出事件，第二题强调 BFS 的分层与入队标记。
+
+### 范例一：完整 DFS 森林的时间戳
+
+#### 题目解读
+
+给定一个可能不连通的无向图，顶点编号为 `0..n-1`。外层按编号升序寻找尚未访问的顶点，每个顶点的邻居也按升序访问。第一次进入顶点 `u` 时记录发现时间 `d[u]`，处理完全部邻居、退出 `u` 时记录完成时间 `f[u]`，最后输出两个数组。
+
+题目中的“可能不连通”决定了不能只调用一次 DFS；“退出时记录”决定了显式栈不能只保存顶点，还要保存下一个待检查的邻居下标。
+
+#### 算法分析
+
+使用栈帧 `(u, next)` 模拟递归调用：
+
+- 顶点第一次压栈时记录 `d[u]`；
+- `next` 指向 `graph[u]` 中下一条尚未检查的邻接记录；
+- 若还有未访问邻居，就先推进 `next`，再把邻居作为新栈帧压入；
+- 若邻居全部处理完，记录 `f[u]` 并弹出当前帧；
+- 外层扫描所有顶点，得到完整 DFS 森林。
+
+排序邻接表需要 $O(m\log n)$ 的简单上界；DFS 本身为 $O(n+m)$，辅助空间为 $O(n+m)$。
+
+#### 伪代码
+
+```text [dfs-timestamps.pseudo]
+timer = 0
+visited = 全 false
+for root = 0 .. n-1:
+    if visited[root]: continue
+    标记 root，d[root] = ++timer
+    stack.push((root, 0))
+    while stack 非空:
+        (u, next) = stack.top
+        if next == graph[u].size:
+            f[u] = ++timer
+            stack.pop
+        else:
+            v = graph[u][next]
+            stack.top.next++
+            if not visited[v]:
+                标记 v，d[v] = ++timer
+                stack.push((v, 0))
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [dfs-timestamps-example.cpp]
+#include <algorithm>
+#include <cstddef>
+#include <iostream>
+#include <utility>
+#include <vector>
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n = 0, m = 0;
+    if (!(std::cin >> n >> m)) return 0;
+
+    std::vector<std::vector<int>> graph(n);
+    for (int i = 0; i < m; ++i) {
+        int u = 0, v = 0;
+        std::cin >> u >> v;
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+    for (auto& neighbors : graph) {
+        std::sort(neighbors.begin(), neighbors.end());
+    }
+
+    std::vector<bool> visited(n, false);
+    std::vector<int> discovered(n), finished(n);
+    int timer = 0;
+
+    for (int root = 0; root < n; ++root) {
+        if (visited[root]) continue;
+        visited[root] = true;
+        discovered[root] = ++timer;
+        std::vector<std::pair<int, std::size_t>> stack{{root, 0}};
+
+        while (!stack.empty()) {
+            int u = stack.back().first;
+            std::size_t& next = stack.back().second;
+            if (next == graph[u].size()) {
+                finished[u] = ++timer;
+                stack.pop_back();
+                continue;
+            }
+
+            int v = graph[u][next++];
+            if (visited[v]) continue;
+            visited[v] = true;
+            discovered[v] = ++timer;
+            stack.push_back({v, 0});
+        }
+    }
+
+    for (int u = 0; u < n; ++u) {
+        if (u) std::cout << ' ';
+        std::cout << discovered[u];
+    }
+    std::cout << '\n';
+    for (int u = 0; u < n; ++u) {
+        if (u) std::cout << ' ';
+        std::cout << finished[u];
+    }
+    std::cout << '\n';
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 若只保存“待访问顶点”而不保存 `next`，就无法准确产生递归版的完成时间；
+- 把无向图改成有向图后，同一套时间戳可继续用于祖先判断和边分类；
+- 若题目只要求发现顺序，可以简化为普通顶点栈，不再记录退出事件；
+- 对应练习：[T01 · 07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md)；完成后可继续做 [T03 · 07E03 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-03-dfs-edge-classification/README.md)。
+
+### 范例二：BFS 判定二分图
+
+#### 题目解读
+
+给定一个可能不连通的无向图，尝试把每个顶点染成 `0/1` 两色，使每条边的两个端点颜色不同。若成功，输出 `YES` 和颜色数组；若遇到同色相邻顶点，输出 `NO` 和第一条冲突边。
+
+一条边会把“端点异色”变成约束 `color[v] = 1 - color[u]`。非连通图的每个分量都要单独选择起点；为了让“第一条冲突边”可复现，根和邻居都按编号升序处理。
+
+#### 算法分析
+
+对每个未染色根执行 BFS：根染 `0` 并入队；扫描边 `u-v` 时，若 `v` 未染色，就给它染相反颜色并立即入队；若 `v` 已染色且与 `u` 同色，则图不是二分图。
+
+染色同时充当访问标记，所以每个顶点最多入队一次。排序后 BFS 为 $O(n+m)$，包含邻接排序时总时间可写为 $O(n+m\log n)$；空间为 $O(n+m)$。
+
+#### 伪代码
+
+```text [bipartite-bfs.pseudo]
+color = 全 -1
+for root = 0 .. n-1:
+    if color[root] != -1: continue
+    color[root] = 0
+    root 入队
+    while 队列非空:
+        u = 出队
+        for v in graph[u]:
+            if color[v] == -1:
+                color[v] = 1 - color[u]
+                v 入队
+            else if color[v] == color[u]:
+                输出 NO 与冲突边并结束
+输出 YES 与 color
+```
+
+#### 最终代码
+
+::: details 可编译 C++17 实现
+
+```cpp:line-numbers [bipartite-bfs-example.cpp]
+#include <algorithm>
+#include <iostream>
+#include <queue>
+#include <vector>
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n = 0, m = 0;
+    if (!(std::cin >> n >> m)) return 0;
+
+    std::vector<std::vector<int>> graph(n);
+    for (int i = 0; i < m; ++i) {
+        int u = 0, v = 0;
+        std::cin >> u >> v;
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+    for (auto& neighbors : graph) {
+        std::sort(neighbors.begin(), neighbors.end());
+    }
+
+    std::vector<int> color(n, -1);
+    std::queue<int> pending;
+    for (int root = 0; root < n; ++root) {
+        if (color[root] != -1) continue;
+        color[root] = 0;
+        pending.push(root);
+
+        while (!pending.empty()) {
+            int u = pending.front();
+            pending.pop();
+            for (int v : graph[u]) {
+                if (color[v] == -1) {
+                    color[v] = 1 - color[u];
+                    pending.push(v);
+                } else if (color[v] == color[u]) {
+                    std::cout << "NO\n";
+                    std::cout << std::min(u, v) << ' '
+                              << std::max(u, v) << '\n';
+                    return 0;
+                }
+            }
+        }
+    }
+
+    std::cout << "YES\n";
+    for (int u = 0; u < n; ++u) {
+        if (u) std::cout << ' ';
+        std::cout << color[u];
+    }
+    std::cout << '\n';
+}
+```
+
+:::
+
+#### 拓展、思考与变式
+
+- 将 BFS 换成 DFS 不会改变是否为二分图，但可能改变颜色方案和首先发现的冲突边；
+- 保存父节点后，可以从同色冲突边的两个端点回溯并还原一个奇环；
+- 动态加边场景可使用带奇偶关系的并查集，但它不直接提供 BFS 层次；
+
 ## 一张表对比
 
 | 维度 | DFS | BFS |
@@ -448,21 +824,10 @@ void bfs(int start, const std::vector<std::vector<int>>& graph,
 
 ## 代码题练习
 
-按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
+按本节下方的 Lab 入口练习。下列入口使用稳定 Lab 编号。
 
 - [T01 · 07E01 · DFS 遍历与时间戳](../../labs/chapter-07/exercise/E-07-01-dfs-timestamps/README.md)
-- [T02 · 07E05 · 显式栈 DFS](../../labs/chapter-07/exercise/E-07-05-iterative-dfs/README.md)
-- [T03 · 07E13 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-13-dfs-edge-classification/README.md)
-- [T04 · 07E14 · 欧拉回路判定](../../labs/chapter-07/exercise/E-07-14-eulerian-classification/README.md)
-- [T05 · 07E15 · 哥尼斯堡七桥问题](../../labs/chapter-07/exercise/E-07-15-seven-bridges/README.md)
-- [T06 · 07E16 · 课程表](../../labs/chapter-07/exercise/E-07-16-course-schedule/README.md)
-- [T07 · 07E17 · 课程表 II](../../labs/chapter-07/exercise/E-07-17-course-schedule-ii/README.md)
-- [T08 · 07E18 · 找到最终的安全状态](../../labs/chapter-07/exercise/E-07-18-eventual-safe-states/README.md)
-- [T09 · 07E19 · 最大食物链计数](../../labs/chapter-07/exercise/E-07-19-food-chain-count/README.md)
-- [T10 · 07E20 · 并行课程 III](../../labs/chapter-07/exercise/E-07-20-parallel-courses/README.md)
-- [T11 · 07E21 · 关键路径分析（AOE 网）](../../labs/chapter-07/exercise/E-07-21-critical-path/README.md)
-- [T26 · 07E06 · BFS 二分图判定](../../labs/chapter-07/exercise/E-07-06-bfs-bipartite/README.md)
-- [T27 · 07E29 · 二分图最大匹配（匈牙利）](../../labs/chapter-07/exercise/E-07-29-bipartite-matching/README.md)
-- [T28 · 07E30 · 飞行员配对方案](../../labs/chapter-07/exercise/E-07-30-pilot-pairing/README.md)
-- [T29 · 07E31 · 最大流（Edmonds-Karp）](../../labs/chapter-07/exercise/E-07-31-edmonds-karp/README.md)
-- [T30 · 07E32 · 最小费用最大流](../../labs/chapter-07/exercise/E-07-32-min-cost-max-flow/README.md)
+- [T02 · 07E02 · 显式栈 DFS](../../labs/chapter-07/exercise/E-07-02-iterative-dfs/README.md)
+- [T03 · 07E03 · DFS 边分类统计](../../labs/chapter-07/exercise/E-07-03-dfs-edge-classification/README.md)
+- [T04 · 07E04 · 欧拉回路判定](../../labs/chapter-07/exercise/E-07-04-eulerian-classification/README.md)
+- [T05 · 07E05 · 哥尼斯堡七桥问题](../../labs/chapter-07/exercise/E-07-05-seven-bridges/README.md)

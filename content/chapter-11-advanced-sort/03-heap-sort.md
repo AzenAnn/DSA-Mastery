@@ -4,7 +4,7 @@ description: "堆排序的堆结构原理、正确性证明、建堆 O(n) 分析
 order: 3
 chapter: 11
 chapterTitle: "高效排序与外部排序"
-updated: "2026-08-21"
+updated: "2026-09-16"
 contributors: ["Ph1z"]
 status: "draft"
 ---
@@ -17,15 +17,151 @@ status: "draft"
 
 ## 代码
 
+```text
+Algorithm HeapSort(A, n):
+    Input: An array A of n elements
+    Output: Array A sorted in ascending order
+
+    // 1. 建堆：从最后一个非叶子节点开始，依次向下调整
+    MakeHeap(A, n)
+
+    // 2. 排序：依次将堆顶（最大值）交换到末尾，并缩小堆的范围
+    for i = n - 1 down to 1 do
+        swap(A[0], A[i])            // 将堆顶最大值放到最终位置
+        SiftDown(A, 0, i)           // 对剩余元素重新维护大根堆
+    end for
+
+    return A
+
+Algorithm MakeHeap(A, n):
+    Input: An array A of n elements
+    Output: A converted into a max-heap
+
+    // 从最后一个非叶子节点开始，依次向前调整
+    for i = n / 2 - 1 down to 0 do
+        SiftDown(A, i, n)
+    end for
+
+Algorithm SiftDown(A, i, n):
+    Input: An array A, current node index i, heap size n
+    Output: Subtree rooted at i satisfies max-heap property
+
+    while 2 * i + 1 < n do
+        left = 2 * i + 1            // 左孩子
+        right = 2 * i + 2           // 右孩子
+        largest = i
+
+        // 找出父节点和左右孩子中的最大值
+        if left < n and A[left] > A[largest] then
+            largest = left
+        end if
+        if right < n and A[right] > A[largest] then
+            largest = right
+        end if
+
+        // 若父节点已是最大值，调整结束
+        if largest == i then
+            break
+        end if
+
+        swap(A[i], A[largest])      // 交换并继续向下调整
+        i = largest
+    end while
+```
+
 ```cpp
+// 向下调整：维护以 i 为根的大根堆
+void siftDown(int a[], int i, int n) {
+    while (2 * i + 1 < n) {
+        int left = 2 * i + 1;               // 左孩子
+        int right = 2 * i + 2;              // 右孩子
+        int largest = i;                    // 假设父节点最大
+
+        if (left < n && a[left] > a[largest])   largest = left;
+        if (right < n && a[right] > a[largest]) largest = right;
+
+        if (largest == i) break;            // 父节点已是最大，调整结束
+
+        std::swap(a[i], a[largest]);        // 交换并继续向下调整
+        i = largest;
+    }
+}
+
+// 建堆：从最后一个非叶子节点开始，依次向下调整
+void makeHeap(int a[], int n) {
+    for (int i = n / 2 - 1; i >= 0; --i) {
+        siftDown(a, i, n);
+    }
+}
+
 void heapSort(int a[], int n) {
-    makeHeap(a, n);               // 建大根堆
+    makeHeap(a, n);                         // 建大根堆
     for (int i = n - 1; i > 0; --i) {
-        std::swap(a[0], a[i]);
-        siftDown(a, 0, i);       // 维护堆性质
+        std::swap(a[0], a[i]);              // 堆顶（最大值）放到末尾
+        siftDown(a, 0, i);                  // 对剩余元素重新维护堆
     }
 }
 ```
+
+## 优化代码
+
+堆排序的核心问题是：**建堆和调整过程中存在大量无效比较，且交换操作频繁**。以下是两种常见的优化方向：
+
+```cpp
+// 优化 1：用"赋值"替代"交换"（减少 2/3 的赋值操作）
+// 原始 siftDown 每次交换需要 3 次赋值，改为"暂存 + 移动"只需 1 次
+void siftDownOptimized(int a[], int i, int n) {
+    int key = a[i];                         // 暂存当前节点
+    while (2 * i + 1 < n) {
+        int child = 2 * i + 1;              // 左孩子
+        // 选较大的孩子
+        if (child + 1 < n && a[child + 1] > a[child]) {
+            ++child;
+        }
+        if (a[child] <= key) break;         // 孩子不大于 key，停止
+
+        a[i] = a[child];                    // 孩子上移（赋值而非交换）
+        i = child;
+    }
+    a[i] = key;                             // 将 key 放到最终位置
+}
+```
+
+```cpp
+// 优化 2：原地堆排序 + 迭代版本（避免递归）
+// 完全非递归实现，适合对栈空间敏感的场景
+void heapSortIterative(int a[], int n) {
+    // 建堆
+    for (int i = n / 2 - 1; i >= 0; --i) {
+        int parent = i;
+        int key = a[parent];
+        while (2 * parent + 1 < n) {
+            int child = 2 * parent + 1;
+            if (child + 1 < n && a[child + 1] > a[child]) ++child;
+            if (a[child] <= key) break;
+            a[parent] = a[child];
+            parent = child;
+        }
+        a[parent] = key;
+    }
+
+    // 排序
+    for (int i = n - 1; i > 0; --i) {
+        std::swap(a[0], a[i]);
+        int parent = 0;
+        int key = a[parent];
+        while (2 * parent + 1 < i) {
+            int child = 2 * parent + 1;
+            if (child + 1 < i && a[child + 1] > a[child]) ++child;
+            if (a[child] <= key) break;
+            a[parent] = a[child];
+            parent = child;
+        }
+        a[parent] = key;
+    }
+}
+```
+
 
 ## 正确性证明
 
