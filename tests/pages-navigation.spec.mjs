@@ -245,7 +245,7 @@ test("chapter 7 articles and Labs expose exactly thirty sequential exercises", a
   for (const [index, id] of ids.entries()) {
     await expect(links.nth(index)).toContainText(`07E${String(id).padStart(2, "0")} ·`);
   }
-  await page.locator(".vp-doc").getByRole("link", { name: "A* 寻路可视化", exact: true }).click();
+  await page.locator(".vp-doc").getByRole("link", { name: "A* 寻路：从直觉到实现", exact: true }).click();
   await expect(page).toHaveURL(`${baseUrl}/learn/chapter-07-graph-traversal/05-astar-visualization/`);
   await page.locator(".vp-doc").getByRole("link", {
     name: "T25 · 07E25 · 八数码问题（A*）",
