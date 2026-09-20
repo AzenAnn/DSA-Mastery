@@ -1,15 +1,15 @@
 ---
-title: "7.3 最短路径：同一个问题的三次升级"
+title: "7.4 最短路径：同一个问题的三次升级"
 description: "以松弛理论为主线，用一个贯穿全文的配送图依次引出 BFS、Dijkstra 与 Floyd，含手算过程、正确性证明与选型决策。"
-order: 3
+order: 4
 chapter: 7
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-14"
-contributors: ["Jeff", "Azen"]
+updated: "2026-09-19"
+contributors: ["Jeff", "Azen", "qzm123"]
 status: "draft"
 ---
 
-# 7.3 最短路径：同一个问题的三次升级
+# 7.4 最短路径：同一个问题的三次升级
 
 本节从一个配送场景引出 BFS、Dijkstra 与 Floyd。三种算法都使用松弛操作，但它们组织状态和安排松弛顺序的方式不同，适用条件也不同。
 
@@ -123,10 +123,13 @@ $$
 无权图满足：距离为 $k+1$ 的顶点可以从某个距离为 $k$ 的顶点一步到达。换句话说，顶点可以按最短距离分层，而 BFS 的队列恰好按层处理。
 
 ```cpp:line-numbers [bfs.cpp]
-// graph[u] = {u 的所有出边邻居}；返回 s 到各顶点的边数距离（不可达为 -1）
-std::vector<int> bfs(const std::vector<std::vector<int>>& graph, int s) {
+// graph[u] = {u 的所有出边邻居}；dist 保存 s 到各顶点的边数距离（不可达为 -1）
+std::vector<std::vector<int>> graph;
+std::vector<int> dist;
+
+void bfs(int s) {
     int n = static_cast<int>(graph.size());
-    std::vector<int> dist(n, -1);          // -1 兼作"未访问"标记
+    dist.assign(n, -1);                    // -1 兼作"未访问"标记
     std::queue<int> q;
     dist[s] = 0;                           // 入队即赋距离
     q.push(s);
@@ -138,7 +141,6 @@ std::vector<int> bfs(const std::vector<std::vector<int>>& graph, int s) {
                 q.push(v);
             }
     }
-    return dist;
 }
 ```
 
@@ -209,12 +211,14 @@ Dijkstra 改为**按当前估计距离选择顶点**：每一轮找出 `dist` �
 
 ```cpp:line-numbers [dijkstra.cpp]
 // graph[u] = {(邻居, 边权), ...}，边权非负；prev 记录前驱用于还原路径
-std::vector<int> dijkstra(int s, const std::vector<std::vector<std::pair<int,int>>>& graph,
-                          std::vector<int>& prev) {
+std::vector<std::vector<std::pair<int, int>>> graph;
+std::vector<int> dist, prev;
+
+void dijkstra(int s) {
     int n = static_cast<int>(graph.size());
-    prev.assign(n, -1);
+    prev.assign(n, -1);                    // prev[v]：最短路上的前一个顶点
     const int INF = std::numeric_limits<int>::max();
-    std::vector<int> dist(n, INF);
+    dist.assign(n, INF);
     std::vector<bool> done(n, false);      // done[u]：u 是否已确定
     using P = std::pair<int,int>;          // (dist, vertex)，小根堆
     std::priority_queue<P, std::vector<P>, std::greater<P>> pq;
@@ -231,7 +235,6 @@ std::vector<int> dijkstra(int s, const std::vector<std::vector<std::pair<int,int
                 pq.push({dist[v], v});
             }
     }
-    return dist;
 }
 ```
 
@@ -339,17 +342,20 @@ $$
 
 ```cpp:line-numbers [floyd.cpp]
 // d 初始为邻接矩阵（无边处 INF，对角线 0）；nxt 记录后继用于还原路径
-void floyd(std::vector<std::vector<int>>& d, std::vector<std::vector<int>>& nxt, int n) {
+std::vector<std::vector<int>> dist, next_vertex;
+int n;
+
+void floyd() {
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < n; ++j)
-            nxt[i][j] = (i == j || d[i][j] == INF) ? -1 : j;
+            next_vertex[i][j] = (i == j || dist[i][j] == INF) ? -1 : j;
     for (int k = 0; k < n; ++k)                    // 中转点必须是【最外层】
         for (int i = 0; i < n; ++i)
             for (int j = 0; j < n; ++j)
-                if (d[i][k] < INF && d[k][j] < INF &&
-                    d[i][k] + d[k][j] < d[i][j]) { // relax：经 k 中转
-                    d[i][j] = d[i][k] + d[k][j];
-                    nxt[i][j] = nxt[i][k];         // 路径第一跳改为 i 的去向
+                if (dist[i][k] < INF && dist[k][j] < INF &&
+                    dist[i][k] + dist[k][j] < dist[i][j]) { // relax：经 k 中转
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                    next_vertex[i][j] = next_vertex[i][k];  // 路径第一跳改为 i 的去向
                 }
 }
 ```
@@ -436,7 +442,7 @@ digraph ShortestPathDecision {
   task -> floyd [label="全源"];
 }
 ```
-<!-- diagram id="shortest-path-algorithm-decision" caption="7.3 最短路径入门选型：先看任务范围，再检查边权条件" -->
+<!-- diagram id="shortest-path-algorithm-decision" caption="7.4 最短路径入门选型：先看任务范围，再检查边权条件" -->
 
 这是一张入门选型表，不覆盖所有规模组合。例如，大型稀疏非负权图的全源问题可以对每个源点运行 Dijkstra；允许负权的大型稀疏图还可考虑 Johnson 算法。
 
@@ -782,7 +788,7 @@ $\mathrm{dist}[F]=6$，最短路径就是直达边 $A\to F$。绕行路径从未
 
 ## 代码题练习
 
-按[Ch7 题集学习顺序](../../content/chapter-07-graph-traversal/00-exercise-guide.md)练习。清单的规划节编号与当前文章标题对照见该清单；下列入口使用稳定 Lab 编号。
+按本节下方的 Lab 入口练习。下列入口使用稳定 Lab 编号。
 
 - [T16 · 07E16 · Dijkstra 逐轮推演](../../labs/chapter-07/exercise/E-07-16-dijkstra-trace/README.md)
 - [T17 · 07E17 · 朴素 Dijkstra 与路径还原](../../labs/chapter-07/exercise/E-07-17-dijkstra-matrix-path/README.md)

@@ -5,8 +5,8 @@ order: 128
 chapter: 7
 labId: "07E28"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "进阶"
@@ -15,7 +15,7 @@ duration: "60～90 分钟"
 
 # Lab 07-E-28：飞行员配对方案
 
-> 题集 T28 · 规划节 7.6。题目来源：改编自 [洛谷 P2756 飞行员配对方案问题](https://www.luogu.com.cn/problem/P2756)。原题允许任意最大配对，课程版固定 DFS 增广顺序；无配对统一输出 0。
+> 题目来源：改编自 [洛谷 P2756 飞行员配对方案问题](https://www.luogu.com.cn/problem/P2756)。原题允许任意最大配对，课程版固定 DFS 增广顺序；无配对统一输出 0。
 
 ## 学习目标
 
@@ -25,7 +25,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[图的遍历基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。对应新节的完整文章尚未纳入当前版本，可先按本题任务步骤完成练习。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[网络流与二分图匹配](../../../../content/chapter-07-graph-traversal/06-network-flow-and-matching.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -117,6 +117,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-28-pilot-pairing --case 001-sample
 pnpm lab:score -- labs/chapter-07/exercise/E-07-28-pilot-pairing
 ```
 
+## 解题思路
+
+将可配对关系建立为二分图，按排序去重后运行增广路匹配。每找到一条增广路就固定一对飞行员，最后按题目要求输出匹配数量和配对方案。
+
 ## 复杂度分析
 
 排序后逐左顶点 DFS 增广，时间 O(m log(m+1)+L(m+N))，空间 O(N+m)。
@@ -136,8 +140,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-28-pilot-pairing
 同样达到最大数量的另一种方案，在本课程的规范输出合同下不一定相同；规则必须在实现前读清。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 为什么邻接表排序和 DFS 顺序会影响输出方案，但不影响最大匹配数量？题目为什么还要固定它们？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+不同增广顺序可能得到不同的最大匹配，但最大数量由增广路定理决定。固定排序和 DFS 顺序是为了让同一输入产生唯一、可复现的配对输出。
 :::

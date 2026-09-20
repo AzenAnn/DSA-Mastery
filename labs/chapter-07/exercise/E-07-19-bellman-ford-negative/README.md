@@ -5,8 +5,8 @@ order: 119
 chapter: 7
 labId: "07E19"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Jeff", "Azen"]
+updated: "2026-09-19"
+contributors: ["Jeff", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -15,7 +15,6 @@ duration: "90～120 分钟"
 
 # Lab 07-E-19：Bellman-Ford 与负环
 
-> 题集 T19 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 
@@ -26,7 +25,7 @@ duration: "90～120 分钟"
 
 ## 前置知识
 
-先读[第 7.3 节最短路径](../../../../content/chapter-07-graph-traversal/03-shortest-path.md)中的“负权边为何使 Dijkstra 失效”小节，并完成 [Lab 07-E-16：Dijkstra 逐轮推演](../E-07-16-dijkstra-trace/README.md)。本题进一步处理**允许负权边的单源最短路**，并检测从源点可达的负环。
+先读[第 7.4 节最短路径](../../../../content/chapter-07-graph-traversal/04-shortest-path.md)中的“负权边为何使 Dijkstra 失效”小节，并完成 [Lab 07-E-16：Dijkstra 逐轮推演](../E-07-16-dijkstra-trace/README.md)。本题进一步处理**允许负权边的单源最短路**，并检测从源点可达的负环。
 
 ## 为什么需要新算法
 
@@ -171,6 +170,10 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-19-bellman-ford-negative
 - [ ] 第 $n$ 轮检测在完整 $n-1$ 轮之后进行；
 - [ ] 只有"从源点可达"的负环才输出 `NEGATIVE CYCLE`；
 - [ ] `prev` 在负环检测后不再更新（直接输出标记）。
+
+## 解题思路
+
+重复扫描全部边并进行松弛，最多执行 `n-1` 轮即可得到没有负环时的最短路。第 `n` 轮若仍能改进，则从源点可达负环；不可达部分的边不能触发负环判定。
 
 ## 复杂度分析
 

@@ -5,8 +5,8 @@ order: 118
 chapter: 7
 labId: "07E18"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Jeff", "Azen"]
+updated: "2026-09-19"
+contributors: ["Jeff", "Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -15,7 +15,6 @@ duration: "75～90 分钟"
 
 # Lab 07-E-18：网络延迟时间
 
-> 题集 T18 · 规划节 7.4；[全章题目与重编映射](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
 
 ## 学习目标
 
@@ -116,6 +115,10 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-18-network-delay-time
 - [ ] 加法前判断 `dist[u]` 为无穷（或保证不入堆无穷值），避免溢出；
 - [ ] 答案取最大值而不是某个单点距离；
 - [ ] 不可达判定覆盖 `n == 1` 与"源点无出边"两类边界。
+
+## 解题思路
+
+从源点运行 Dijkstra，得到所有顶点的最短到达时间。若存在不可达顶点输出 `-1`，否则取所有最短距离的最大值作为信号传遍网络的时间。
 
 ## 复杂度分析
 

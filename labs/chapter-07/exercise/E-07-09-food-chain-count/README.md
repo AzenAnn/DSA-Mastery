@@ -5,8 +5,8 @@ order: 109
 chapter: 7
 labId: "07E09"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "进阶"
@@ -15,7 +15,7 @@ duration: "60～90 分钟"
 
 # Lab 07-E-09：最大食物链计数
 
-> 题集 T09 · 规划节 7.2。题目来源：改编自 [洛谷 P4017 最大食物链计数](https://www.luogu.com.cn/problem/P4017)。保持模数与边方向，课程版补充 m=0 和孤立生物的约定。
+> 题目来源：改编自 [洛谷 P4017 最大食物链计数](https://www.luogu.com.cn/problem/P4017)。保持模数与边方向，课程版补充 m=0 和孤立生物的约定。
 
 ## 学习目标
 
@@ -25,7 +25,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[有向图与 DFS 基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。对应新节的完整文章尚未纳入当前版本，可先按本题任务步骤完成练习。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[拓扑排序与有向无环图](../../../../content/chapter-07-graph-traversal/02-topological-sort.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -114,6 +114,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-09-food-chain-count --case 001-sam
 pnpm lab:score -- labs/chapter-07/exercise/E-07-09-food-chain-count
 ```
 
+## 解题思路
+
+先拓扑排序，再按拓扑顺序把每个顶点的路径数累加给出边终点。源点路径数初始化为 1，其余为 0；每次转移都按题目要求取模。
+
 ## 复杂度分析
 
 拓扑排序和路径计数 O(n+m) 时间、O(n+m) 空间。
@@ -133,8 +137,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-09-food-chain-count
 应初始化所有源点并汇总所有汇点；每次加法及时取模。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 为什么源点路径数初始化为 1，而不是 0？多个源点和多个汇点时应如何汇总答案？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+空路径表示从源点开始已有一种走法，所以每个源点初值为 1。拓扑转移后应把所有汇点的路径数相加，而不是只取编号最大或最后处理的汇点。
 :::

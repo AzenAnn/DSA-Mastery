@@ -5,8 +5,8 @@ order: 111
 chapter: 7
 labId: "07E11"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "挑战"
@@ -15,7 +15,7 @@ duration: "90～120 分钟"
 
 # Lab 07-E-11：关键路径分析（AOE 网）
 
-> 题集 T11 · 规划节 7.2。题目来源：课程原创 AOE 网练习。
+> 题目来源：课程原创 AOE 网练习。
 
 ## 学习目标
 
@@ -25,7 +25,7 @@ duration: "90～120 分钟"
 
 ## 前置知识与环境
 
-先阅读[有向图与 DFS 基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。对应新节的完整文章尚未纳入当前版本，可先按本题任务步骤完成练习。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[拓扑排序与有向无环图](../../../../content/chapter-07-graph-traversal/02-topological-sort.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -116,6 +116,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-11-critical-path --case 001-sample
 pnpm lab:score -- labs/chapter-07/exercise/E-07-11-critical-path
 ```
 
+## 解题思路
+
+先正向拓扑计算事件最早发生时间，再从总工期逆拓扑计算最晚允许时间。对每条活动比较最早开始和最晚开始时间，二者相等的活动属于关键活动。
+
 ## 复杂度分析
 
 正向与逆向拓扑 DP O(n+m) 时间，O(n+m) 空间。
@@ -135,8 +139,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-11-critical-path
 多个不连通分量必须共用全局完工时间；较短分量中的活动未必关键。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 为什么关键活动必须相对于全局总工期计算？如果把多个汇点或分量分别计算，会把哪类活动误判为关键？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+总工期是所有汇点最早时间的最大值。较短分量中的活动可能有整体余量；分别计算会把它们的局部余量误当成零，错误标为关键活动。
 :::

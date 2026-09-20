@@ -5,8 +5,8 @@ order: 123
 chapter: 7
 labId: "07E23"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "进阶"
@@ -15,7 +15,6 @@ duration: "60～90 分钟"
 
 # Lab 07-E-23：A* 网格寻路
 
-> 题集 T23 · 规划节 7.5。题目来源：课程原创 A* 网格练习。
 
 ## 学习目标
 
@@ -25,7 +24,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[A* 寻路可视化](../../../../content/chapter-07-graph-applications/04-astar-visualization.md)。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[A* 寻路：从直觉到实现](../../../../content/chapter-07-graph-traversal/05-astar-visualization.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -114,6 +113,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-23-astar-grid --case 001-sample
 pnpm lab:score -- labs/chapter-07/exercise/E-07-23-astar-grid
 ```
 
+## 解题思路
+
+先检查起点和终点是否可通行，再令 `f=g+h`，把 `(f,g,顶点)` 放入小根堆。弹出最小状态并松弛相邻格子；一致的曼哈顿启发式保证首次确定终点时路径最优。
+
 ## 复杂度分析
 
 令 V=rows×cols，二叉堆 A* 最坏 O(V log V) 时间、O(V) 空间；启发式改善通常探索量，但不改变最坏阶。
@@ -133,8 +136,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-23-astar-grid
 不能在首次把终点加入开放集时套用一般加权图的结束规则；按最小 f 弹出并检查过期 g 更稳妥。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 为什么要在终点从开放集弹出时再结束，而不是第一次发现终点就结束？请结合堆中 `f` 值解释。
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+第一次发现终点只得到一个候选路径，其他节点可能仍有更小的 f 值并最终产生更短路径。只有终点以当前最小优先级弹出时，A* 的最优性条件才允许结束。
 :::

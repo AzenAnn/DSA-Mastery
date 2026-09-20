@@ -5,8 +5,8 @@ order: 103
 chapter: 7
 labId: "07E03"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "基础"
@@ -15,7 +15,6 @@ duration: "60～90 分钟"
 
 # Lab 07-E-03：DFS 边分类统计
 
-> 题集 T03 · 规划节 7.1。题目来源：课程原创。
 
 ## 学习目标
 
@@ -25,7 +24,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[DFS 与 BFS 基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[DFS 与 BFS 基础](../../../../content/chapter-07-graph-traversal/01-dfs-and-bfs.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -124,6 +123,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-03-dfs-edge-classification --case 
 pnpm lab:score -- labs/chapter-07/exercise/E-07-03-dfs-edge-classification
 ```
 
+## 解题思路
+
+先按边编号和邻点编号确定扫描顺序，再用 DFS 的颜色或发现/完成时间判断边类型。无向边要结合父边编号去重，重边必须按独立边编号分别统计。
+
 ## 复杂度分析
 
 邻接排序 O(m log(m+1))，DFS O(n+m)，空间 O(n+m)。显式栈避免深链递归栈溢出。
@@ -143,8 +146,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-03-dfs-edge-classification
 不能把所有指向黑色顶点的边都归为横叉边；重边有各自身份。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 如果一条边指向已经完成的顶点，为什么还不能只凭“黑色”判断它是横叉边？请结合发现/完成时间或祖先关系说明。
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+黑色只说明目标顶点已经完成，边可能来自目标的后代，也可能来自另一棵 DFS 树；必须比较时间区间或 DFS 树关系，再区分前向边和横叉边。
 :::

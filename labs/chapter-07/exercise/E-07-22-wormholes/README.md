@@ -5,8 +5,8 @@ order: 122
 chapter: 7
 labId: "07E22"
 chapterTitle: "图的遍历与应用"
-updated: "2026-09-16"
-contributors: ["Azen"]
+updated: "2026-09-19"
+contributors: ["Azen", "qzm123"]
 status: "draft"
 lab: true
 difficulty: "进阶"
@@ -15,7 +15,6 @@ duration: "60～90 分钟"
 
 # Lab 07-E-22：虫洞（Wormholes）
 
-> 题集 T22 · 规划节 7.4。题目来源：参考 [POJ 3259 Wormholes](https://poj.org/problem?id=3259)。核对时原站访问失败；本课程明确采用“全图任意地点存在负环”的完整合同。
 
 ## 学习目标
 
@@ -25,7 +24,7 @@ duration: "60～90 分钟"
 
 ## 前置知识与环境
 
-先阅读[最短路径](../../../../content/chapter-07-graph-traversal/03-shortest-path.md)。需要 C++17 编译器，运行前可执行 `make doctor`。全章顺序和重编映射见[Ch7 题目清单](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md)。
+先阅读[最短路径](../../../../content/chapter-07-graph-traversal/04-shortest-path.md)。需要 C++17 编译器，运行前可执行 `make doctor`。
 
 ## 题目
 
@@ -115,6 +114,10 @@ pnpm lab:run -- labs/chapter-07/exercise/E-07-22-wormholes --case 001-sample
 pnpm lab:score -- labs/chapter-07/exercise/E-07-22-wormholes
 ```
 
+## 解题思路
+
+普通道路拆成两个方向的正权边，虫洞只建立一条负权有向边。使用 Bellman-Ford 从指定源点松弛所有边，若第 `n` 轮仍可更新则存在可达负环。
+
 ## 复杂度分析
 
 每组 Bellman-Ford 时间 O(n(2m+w))，空间 O(n+m+w)。
@@ -134,8 +137,8 @@ pnpm lab:score -- labs/chapter-07/exercise/E-07-22-wormholes
 只从地点 1 初始化距离会漏掉其他分量的负环；所有点初始距离设为 0 等价于增加超级源。
 :::
 
-2. 如何证明程序并非只对样例有效？
+2. 为什么本题检测的是全图负环，而不是只检测从地点 1 可达的负环？把所有距离初始化为 0 有什么等价含义？
 
 ::: details 参考思路
-先按上表选取与样例结构不同的边界和反例，手算答案，再运行单测试点。最后改变规模，检查时间和空间是否符合复杂度分析。测试设计与独立答案核对见[全章测试规范](../../../../content/chapter-07-graph-traversal/00-exercise-guide.md#测试与独立核验)。
+题目要求任意位置存在负环都报告 YES，因此需要覆盖所有分量。所有距离初始化为 0 等价于增加一个能到达每个顶点、边权为 0 的超级源。
 :::
