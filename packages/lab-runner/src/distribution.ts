@@ -61,7 +61,7 @@ async function rewriteTaskManifests(packageRoot: string): Promise<void> {
       targets?: Record<string, unknown>;
       $schema?: string;
     };
-    if (taskManifest.targets !== undefined) delete taskManifest.targets.solution;
+    if (taskManifest.targets !== undefined) delete taskManifest.targets["solution"];
     taskManifest.$schema = path
       .relative(path.dirname(taskFile), path.join(packageRoot, "schemas", "task.schema.json"))
       .replaceAll("\\", "/");
@@ -104,9 +104,9 @@ export async function packStudent(lab: ExecutableLab): Promise<{ packageRoot: st
   const manifest = structuredClone(lab.manifest) as unknown as Record<string, unknown> & {
     targets?: Record<string, unknown>;
   };
-  manifest.distribution = "student";
-  manifest.$schema = "schemas/lab.schema.json";
-  if (manifest.targets !== undefined) delete manifest.targets.solution;
+  manifest["distribution"] = "student";
+  manifest["$schema"] = "schemas/lab.schema.json";
+  if (manifest.targets !== undefined) delete manifest.targets["solution"];
   await writeFile(path.join(packageRoot, "lab.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   await writeFile(path.join(packageRoot, "Makefile"), STANDALONE_MAKEFILE, "utf8");
   await cp(path.join(repoRoot, "schemas"), path.join(packageRoot, "schemas"), { recursive: true });

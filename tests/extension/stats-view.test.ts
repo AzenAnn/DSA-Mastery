@@ -173,7 +173,7 @@ function renderFixture(scenario: string, themeName: ThemeName): string {
   });
   </script>`;
 
-  return renderStatsDocument(scenarios[scenario], { cspSource: "'self'", styleUri: "./panel.css", nonce: NONCE })
+  return renderStatsDocument(scenarios[scenario]!, { cspSource: "'self'", styleUri: "./panel.css", nonce: NONCE })
     .replace("</head>", `<link rel="stylesheet" href="./fixture.css" />${shim}</head>`)
     .replace(
       'class="stats-body"',
@@ -314,7 +314,7 @@ async function assertContrast(locator: Locator, minimum: number, label: string):
         return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
       });
 
-      return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
+      return rgb[0]! * 0.2126 + rgb[1]! * 0.7152 + rgb[2]! * 0.0722;
     };
     const background = luminance(globalThis.getComputedStyle(doc.body).backgroundColor);
 
@@ -423,9 +423,9 @@ it("超宽、缩放与最小宽度下的版式", async () => {
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 640, height: 900 });
-  await page.locator("body").evaluate((body) => (body.dataset.fixtureScale = "large"));
+  await page.locator("body").evaluate((body) => (body.dataset["fixtureScale"] = "large"));
   await assertLayout(page, "enlarged-text-reduced-motion", 1, [225, 312.5], 1.25);
-  await page.locator("body").evaluate((body) => delete body.dataset.fixtureScale);
+  await page.locator("body").evaluate((body) => delete body.dataset["fixtureScale"]);
   await page.setViewportSize({ width: 320, height: 700 });
   await assertLayout(page, "minimum-width-reduced-motion", 1, [180, 220]);
   expect(errors).toEqual([]);

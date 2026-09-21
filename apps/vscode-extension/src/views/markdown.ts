@@ -32,7 +32,7 @@ function stripSections(markdown: string, titles = HIDDEN_SECTIONS): string {
     if (!insideFence) {
       const heading = line.match(/^##(\s+\S.*)$/u);
       if (heading) {
-        const title = heading[1].replace(/[:：].*$/u, "").trim();
+        const title = heading[1]!.replace(/[:：].*$/u, "").trim();
         skipping = titles.some((hidden) => title === hidden || title.startsWith(hidden));
         if (skipping) continue;
       }
@@ -78,7 +78,7 @@ function renderMath(md: MarkdownIt): void {
 function rewriteImages(md: MarkdownIt, lab: LabEntry, webview: vscode.Webview): void {
   const original = md.renderer.rules.image;
   md.renderer.rules.image = (tokens, index, options, env, self) => {
-    const token = tokens[index];
+    const token = tokens[index]!;
     const src = token.attrGet("src");
     if (src !== null && !/^(?:https?:|data:)/u.test(src)) {
       const absolute = path.resolve(lab.labPath, src);

@@ -42,7 +42,7 @@ it("重复提交同一道题不会晋级，解出新题才会", () => {
     at,
     kind: "pass",
     labName: `solved-${index}`,
-    labType: labTypes[index % labTypes.length],
+    labType: labTypes[index % labTypes.length]!,
   }));
   const before = getRankProgress(countActivity(events).labsPassed);
   for (let repeat = 0; repeat < 300; repeat += 1) {

@@ -53,7 +53,7 @@ export function parseVsWherePath(source: unknown): string | undefined {
 
 function vsWhereCandidates(env: NodeJS.ProcessEnv): string[] {
   const candidates: string[] = [];
-  if (env.VSWHERE_PATH !== undefined && env.VSWHERE_PATH !== "") candidates.push(env.VSWHERE_PATH);
+  if (env["VSWHERE_PATH"] !== undefined && env["VSWHERE_PATH"] !== "") candidates.push(env["VSWHERE_PATH"]);
   if (env["ProgramFiles(x86)"] !== undefined) {
     candidates.push(path.win32.join(env["ProgramFiles(x86)"], "Microsoft Visual Studio", "Installer", "vswhere.exe"));
   }
@@ -131,15 +131,15 @@ export async function createMinGwEnvironment({
   env = process.env,
   runner = runProcess,
 }: ToolchainProbeOptions = {}): Promise<MinGwEnvironment | undefined> {
-  if (platform !== "win32" || (env.CMAKE_GENERATOR ?? "") !== "") return undefined;
-  if (env.CXX !== undefined && !/g\+\+|mingw|gcc/iu.test(env.CXX)) return undefined;
+  if (platform !== "win32" || (env["CMAKE_GENERATOR"] ?? "") !== "") return undefined;
+  if (env["CXX"] !== undefined && !/g\+\+|mingw|gcc/iu.test(env["CXX"])) return undefined;
   const probe = await runner("g++", ["--version"], { env, timeMs: 10_000, outputKb: 256 });
   if (probe.spawnError || probe.code !== 0) return undefined;
 
   return {
     family: "mingw",
     command: "g++",
-    env: { ...env, CMAKE_GENERATOR: "MinGW Makefiles", CXX: env.CXX ?? "g++" },
+    env: { ...env, CMAKE_GENERATOR: "MinGW Makefiles", CXX: env["CXX"] ?? "g++" },
   };
 }
 

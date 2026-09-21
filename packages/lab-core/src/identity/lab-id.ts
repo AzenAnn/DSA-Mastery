@@ -41,7 +41,7 @@ export function parseLabId(value: unknown): ParsedLabId {
     throw new LabError("LAB_ID_INVALID", `Lab ID 格式无效：${source || "(empty)"}；示例：02T03、02T3、02-T-03`);
   }
   const chapter = Number(match[1]);
-  const tag = match[2].toUpperCase() as LabTag;
+  const tag = match[2]!.toUpperCase() as LabTag;
   const sequence = Number(match[3]);
   if (!Number.isInteger(sequence) || sequence < 1) {
     throw new LabError("LAB_ID_INVALID", "Lab 类型内序号必须从 1 开始");

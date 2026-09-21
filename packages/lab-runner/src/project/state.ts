@@ -29,18 +29,18 @@ export interface TaskInputs {
 
 export interface TaskResult {
   status: Verdict | "BLOCKED" | "STALE" | "UNASSESSED" | "PENDING";
-  score?: number;
-  maxScore?: number;
-  weightedScore?: number;
+  score?: number | undefined;
+  maxScore?: number | undefined;
+  weightedScore?: number | undefined;
   [key: string]: unknown;
 }
 
 export interface TaskStateEntry {
   result: TaskResult;
   fingerprint: string;
-  changedDuringRun?: boolean;
-  bestScore?: number;
-  at?: string;
+  changedDuringRun?: boolean | undefined;
+  bestScore?: number | undefined;
+  at?: string | undefined;
 }
 
 export interface ProjectState {
@@ -53,17 +53,17 @@ export interface CurrentTask extends TaskResult {
   kind: ProjectTask["kind"];
   weight: number;
   weightedScore: number;
-  historicalScore?: number;
-  bestScore?: number;
-  previousStatus?: TaskResult["status"];
-  assessedAt?: string;
+  historicalScore?: number | undefined;
+  bestScore?: number | undefined;
+  previousStatus?: TaskResult["status"] | undefined;
+  assessedAt?: string | undefined;
   inputFingerprint: string;
   inputFiles: string[];
   valid: boolean;
   unsaved: boolean;
   dependsOn: string[];
-  buildDependsOn?: string[];
-  checklist?: string[];
+  buildDependsOn?: string[] | undefined;
+  checklist?: string[] | undefined;
 }
 
 export interface CurrentProject {
@@ -186,9 +186,10 @@ export function currentProject(
 ): CurrentProject {
   const tasks: CurrentTask[] = lab.tasks.map((task) => {
     const entry = state.tasks[task.id];
-    const dirty = inputs[task.id].files.some((file) => dirtyFiles.includes(file));
+    const taskInputs = inputs[task.id]!;
+    const dirty = taskInputs.files.some((file) => dirtyFiles.includes(file));
     const valid =
-      entry !== undefined && entry.fingerprint === inputs[task.id].fingerprint && !entry.changedDuringRun && !dirty;
+      entry !== undefined && entry.fingerprint === taskInputs.fingerprint && !entry.changedDuringRun && !dirty;
     const status =
       task.kind === "manual" ? "PENDING" : entry === undefined ? "UNASSESSED" : valid ? entry.result.status : "STALE";
 
@@ -206,8 +207,8 @@ export function currentProject(
       bestScore: entry?.bestScore,
       previousStatus: entry?.result.status,
       assessedAt: entry?.at,
-      inputFingerprint: inputs[task.id].fingerprint,
-      inputFiles: inputs[task.id].files,
+      inputFingerprint: taskInputs.fingerprint,
+      inputFiles: taskInputs.files,
       valid: valid && task.kind !== "manual",
       dependsOn: task.dependsOn,
       unsaved: dirty,

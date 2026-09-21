@@ -12,19 +12,19 @@ const NUMBER_TEXT_COLOR = "#d7dbe8";
 
 export interface QuizQuestion {
   id: string;
-  title?: string;
-  source?: string;
-  difficulty?: string;
-  topics?: string[];
-  targetId?: string;
+  title?: string | undefined;
+  source?: string | undefined;
+  difficulty?: string | undefined;
+  topics?: string[] | undefined;
+  targetId?: string | undefined;
   stem: string;
   /** 构建期渲染后的受信任本地 Markdown。 */
   stemHtml: string;
-  code?: string;
+  code?: string | undefined;
   /** 构建期用 shiki 高亮后的代码 HTML，渲染在深色代码窗口内。 */
-  codeHtml?: string;
-  hint?: string;
-  hintHtml?: string;
+  codeHtml?: string | undefined;
+  hint?: string | undefined;
+  hintHtml?: string | undefined;
   options: string[];
   optionHtml: string[];
   answer: number;
@@ -32,9 +32,9 @@ export interface QuizQuestion {
   explanationHtml: string;
   points: number;
   /** 教材正文即时复习：每个选项对应的原文锚点 id（可选，仅 inline 模式使用）。 */
-  optionTargets?: string[];
+  optionTargets?: string[] | undefined;
   /** 教材正文即时复习：所属复习块 id，配合 <QuizSet block="..."> 分组挂载（可选）。 */
-  block?: string;
+  block?: string | undefined;
 }
 
 export declare const data: Record<string, QuizQuestion[]>;
@@ -65,14 +65,14 @@ function parseQuestion(
   const label = `${source}: 第 ${index + 1} 题`;
   if (!isRecord(value)) throw new Error(`${label} 必须是对象`);
 
-  const id = optionalString(value.id, "id", label);
-  const stem = optionalString(value.stem, "stem", label);
-  const explanation = optionalString(value.explanation, "explanation", label);
+  const id = optionalString(value["id"], "id", label);
+  const stem = optionalString(value["stem"], "stem", label);
+  const explanation = optionalString(value["explanation"], "explanation", label);
   if (id === undefined || stem === undefined || explanation === undefined) throw new Error(`${label} 缺少必填字段`);
-  if (!Array.isArray(value.options) || value.options.length !== 4) {
+  if (!Array.isArray(value["options"]) || value["options"].length !== 4) {
     throw new Error(`${label} options 必须恰好包含 4 项`);
   }
-  const options = value.options.map((option, optionIndex) => {
+  const options = value["options"].map((option, optionIndex) => {
     if (typeof option !== "string" || !option.trim()) {
       throw new Error(`${label} 的选项 ${optionIndex + 1} 必须是非空字符串`);
     }
@@ -83,33 +83,33 @@ function parseQuestion(
   });
   const normalizedOptions = options.map((option) => option.trim().replace(/\s+/gu, " ").toLocaleLowerCase());
   if (new Set(normalizedOptions).size !== normalizedOptions.length) throw new Error(`${label} 含重复选项`);
-  if (!Number.isInteger(value.answer) || Number(value.answer) < 0 || Number(value.answer) >= options.length) {
+  if (!Number.isInteger(value["answer"]) || Number(value["answer"]) < 0 || Number(value["answer"]) >= options.length) {
     throw new Error(`${label} answer 必须是 0～3 的整数`);
   }
   if (
-    value.topics !== undefined &&
-    (!Array.isArray(value.topics) || value.topics.some((topic) => typeof topic !== "string" || !topic.trim()))
+    value["topics"] !== undefined &&
+    (!Array.isArray(value["topics"]) || value["topics"].some((topic) => typeof topic !== "string" || !topic.trim()))
   ) {
     throw new Error(`${label} topics 必须是非空字符串数组`);
   }
-  if (value.points !== undefined && (!Number.isInteger(value.points) || Number(value.points) <= 0)) {
+  if (value["points"] !== undefined && (!Number.isInteger(value["points"]) || Number(value["points"]) <= 0)) {
     throw new Error(`${label} points 必须是正整数`);
   }
 
   return {
     id,
-    title: optionalString(value.title, "title", label),
-    source: optionalString(value.source, "source", label),
-    difficulty: optionalString(value.difficulty, "difficulty", label),
-    topics: value.topics as string[] | undefined,
-    targetId: optionalString(value.targetId, "targetId", label),
+    title: optionalString(value["title"], "title", label),
+    source: optionalString(value["source"], "source", label),
+    difficulty: optionalString(value["difficulty"], "difficulty", label),
+    topics: value["topics"] as string[] | undefined,
+    targetId: optionalString(value["targetId"], "targetId", label),
     stem,
-    code: optionalString(value.code, "code", label),
-    hint: optionalString(value.hint, "hint", label),
+    code: optionalString(value["code"], "code", label),
+    hint: optionalString(value["hint"], "hint", label),
     options,
-    answer: Number(value.answer),
+    answer: Number(value["answer"]),
     explanation,
-    points: value.points === undefined ? 1 : Number(value.points),
+    points: value["points"] === undefined ? 1 : Number(value["points"]),
   };
 }
 

@@ -41,8 +41,8 @@ export interface ToolStatus {
   version: string;
   minimum: string;
   meetsMinimum: boolean;
-  summary?: string;
-  error?: string;
+  summary?: string | undefined;
+  error?: string | undefined;
 }
 
 export interface ProfileEvaluation {
@@ -62,10 +62,10 @@ export interface HostReport {
   runtimeReady: boolean;
   msvc: {
     initialized: boolean;
-    installationPath?: string;
-    developerCommand?: string;
-    environment?: NodeJS.ProcessEnv;
-    error?: string;
+    installationPath?: string | undefined;
+    developerCommand?: string | undefined;
+    environment?: NodeJS.ProcessEnv | undefined;
+    error?: string | undefined;
     fallbackDetected: boolean;
   };
 }
@@ -97,13 +97,13 @@ export function evaluateProfile(profile: string, tools: ToolStatus[] = []): Prof
 }
 
 interface ProbeOptions {
-  env?: NodeJS.ProcessEnv;
-  cwd?: string;
-  runner?: Runner;
-  timeMs?: number;
-  pattern?: RegExp;
-  allowNonzero?: boolean;
-  exactVersion?: string;
+  env?: NodeJS.ProcessEnv | undefined;
+  cwd?: string | undefined;
+  runner?: Runner | undefined;
+  timeMs?: number | undefined;
+  pattern?: RegExp | undefined;
+  allowNonzero?: boolean | undefined;
+  exactVersion?: string | undefined;
 }
 
 async function probeTool(
@@ -143,11 +143,11 @@ async function probeTool(
 }
 
 export interface InspectHostOptions {
-  platform?: NodeJS.Platform;
-  architecture?: string;
-  env?: NodeJS.ProcessEnv;
-  runner?: Runner;
-  nodeCommand?: string;
+  platform?: NodeJS.Platform | undefined;
+  architecture?: string | undefined;
+  env?: NodeJS.ProcessEnv | undefined;
+  runner?: Runner | undefined;
+  nodeCommand?: string | undefined;
 }
 
 export async function inspectHost({

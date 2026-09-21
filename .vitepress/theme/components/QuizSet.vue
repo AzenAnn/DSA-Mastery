@@ -70,9 +70,10 @@ function submit(questionId: string) {
   if (selections.value[questionId] === null || selections.value[questionId] === undefined) return;
   submitted.value[questionId] = true;
   const index = questions.value.findIndex((question) => question.id === questionId);
+  const question = questions.value[index];
   const statuses = quizStatus[labDir.value];
-  if (index >= 0 && statuses) {
-    statuses[index] = isSelected(questions.value[index], questions.value[index].answer) ? "correct" : "wrong";
+  if (question && statuses) {
+    statuses[index] = isSelected(question, question.answer) ? "correct" : "wrong";
   }
 }
 

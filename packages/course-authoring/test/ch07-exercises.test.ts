@@ -81,8 +81,8 @@ it("Ch7 contains exactly thirty exercises in learning order", async () => {
     ] as const) {
       const sample = new RegExp(`\x60\x60\x60${fence}\\n([\\s\\S]*?)\x60\x60\x60`).exec(readme);
       expect(sample, `${folder}: missing sample ${fence}`).toBeTruthy();
-      const expectedText = normalize(await readFile(path.join(labRoot, cases[0][key]), "utf8"));
-      expect(sample![1].trim(), `${folder}: sample drift`).toBe(expectedText.trim());
+      const expectedText = normalize(await readFile(path.join(labRoot, cases[0]![key]), "utf8"));
+      expect(sample![1]!.trim(), `${folder}: sample drift`).toBe(expectedText.trim());
     }
     expect(await readFile(path.join(labRoot, "student/main.cpp"), "utf8")).toMatch(/TODO/);
   }

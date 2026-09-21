@@ -62,7 +62,7 @@ export function parseLabDirectoryName(value: unknown): LabDirectoryIdentity {
 
   return {
     ...parseLabId(formatLabId(Number(match[2]), match[1], Number(match[3]))),
-    slug: match[4],
+    slug: match[4]!,
     directoryName: source,
   };
 }

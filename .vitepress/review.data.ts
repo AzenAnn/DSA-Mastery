@@ -35,31 +35,31 @@ function parseReview(
     const label = `${source}: 第 ${index + 1} 题`;
     if (!isRecord(item)) throw new Error(`${label} 必须是对象`);
 
-    const id = requiredString(item.id, "id", label);
+    const id = requiredString(item["id"], "id", label);
     if (ids.has(id)) throw new Error(`${source}: 题目标识 ${id} 重复`);
     ids.add(id);
 
-    const stem = requiredString(item.stem, "stem", label);
-    const explanation = requiredString(item.explanation, "explanation", label);
-    if (!Array.isArray(item.options) || item.options.length !== 4) {
+    const stem = requiredString(item["stem"], "stem", label);
+    const explanation = requiredString(item["explanation"], "explanation", label);
+    if (!Array.isArray(item["options"]) || item["options"].length !== 4) {
       throw new Error(`${label} options 必须恰好包含 4 项`);
     }
-    const options = item.options.map((option, optionIndex) => {
+    const options = item["options"].map((option, optionIndex) => {
       if (typeof option !== "string" || !option.trim()) {
         throw new Error(`${label} 的选项 ${optionIndex + 1} 必须是非空字符串`);
       }
       return option;
     });
-    if (!Number.isInteger(item.answer) || Number(item.answer) < 0 || Number(item.answer) >= options.length) {
+    if (!Number.isInteger(item["answer"]) || Number(item["answer"]) < 0 || Number(item["answer"]) >= options.length) {
       throw new Error(`${label} answer 必须是 0～3 的整数`);
     }
 
     let optionTargets: string[] | undefined;
-    if (item.optionTargets !== undefined) {
-      if (!Array.isArray(item.optionTargets) || item.optionTargets.length !== options.length) {
+    if (item["optionTargets"] !== undefined) {
+      if (!Array.isArray(item["optionTargets"]) || item["optionTargets"].length !== options.length) {
         throw new Error(`${label} optionTargets 必须与 options 等长`);
       }
-      optionTargets = item.optionTargets.map((target, optionIndex) => {
+      optionTargets = item["optionTargets"].map((target, optionIndex) => {
         if (typeof target !== "string" || !target.trim()) {
           throw new Error(`${label} 选项 ${optionIndex + 1} 的 optionTargets 必须是非空字符串`);
         }
@@ -67,14 +67,14 @@ function parseReview(
       });
     }
 
-    const block = item.block === undefined ? undefined : requiredString(item.block, "block", label);
+    const block = item["block"] === undefined ? undefined : requiredString(item["block"], "block", label);
 
     return {
       id,
       block,
       stem,
       options,
-      answer: Number(item.answer),
+      answer: Number(item["answer"]),
       explanation,
       points: 1,
       optionTargets,

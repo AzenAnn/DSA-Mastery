@@ -17,14 +17,14 @@ export interface RepositoryState {
   valid: boolean;
   git: boolean;
   dirty: boolean;
-  remote?: string;
-  updateRepo?: boolean;
+  remote?: string | undefined;
+  updateRepo?: boolean | undefined;
 }
 
 export function resolveRepositoryDir({
   cwd = process.cwd(),
   repoDir,
-}: { cwd?: string; repoDir?: string } = {}): string {
+}: { cwd?: string | undefined; repoDir?: string | undefined } = {}): string {
   return path.resolve(cwd, repoDir ?? ".");
 }
 

@@ -6,6 +6,7 @@ import path from "node:path";
 import * as vscode from "vscode";
 import { CliError, readProjectCurrent } from "./cli/client";
 import { EnvironmentGuard } from "./cli/doctor";
+import { studentSourcePath } from "./labs/discovery";
 import { ProgressTracker } from "./progress/tracker";
 import { LabPanel, projectDirtyFiles } from "./views/panel";
 import { StatsPanel } from "./views/stats-panel";
@@ -223,7 +224,7 @@ async function showHistory(lab: LabEntry, progress: ProgressTracker): Promise<vo
   const items: Item[] = state.history.map((entry, index) => ({
     label: `${entry.verdict === "AC" ? "$(pass-filled)" : "$(error)"} ${entry.verdict} ${entry.score}/${entry.maxScore}`,
     description: new Date(entry.at).toLocaleString(),
-    detail: index === 0 ? "最近一次提交" : undefined,
+    ...(index === 0 ? { detail: "最近一次提交" } : {}),
     entry,
   }));
 
@@ -245,7 +246,7 @@ async function showHistory(lab: LabEntry, progress: ProgressTracker): Promise<vo
     return;
   }
 
-  const current = vscode.Uri.file(path.join(lab.labPath, lab.studentSources[0]));
+  const current = vscode.Uri.file(studentSourcePath(lab));
   await vscode.commands.executeCommand(
     "vscode.diff",
     snapshot,

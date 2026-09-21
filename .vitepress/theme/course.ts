@@ -11,7 +11,7 @@ export const courseIndex: CourseIndex = {
 };
 
 function normalizeCourseUrl(value: string): string {
-  const path = decodeURI(value.split(/[?#]/, 1)[0] || "/")
+  const path = decodeURI(value.split(/[?#]/, 1)[0]! || "/")
     .replace(/\/index\.html$/i, "/")
     .replace(/\.html$/i, "")
     .replace(/\/{2,}/g, "/");

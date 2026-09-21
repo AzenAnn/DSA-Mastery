@@ -114,9 +114,9 @@ export async function auditPages(artifact: SiteArtifact): Promise<void> {
     ]),
   );
   if (
-    chapterOneCategoryCounts.theory < 5 ||
-    chapterOneCategoryCounts.exercise < 15 ||
-    chapterOneCategoryCounts.project < 1
+    (chapterOneCategoryCounts["theory"] ?? 0) < 5 ||
+    (chapterOneCategoryCounts["exercise"] ?? 0) < 15 ||
+    (chapterOneCategoryCounts["project"] ?? 0) < 1
   ) {
     throw new Error(`Chapter 1 Lab category counts drifted: ${JSON.stringify(chapterOneCategoryCounts)}`);
   }
@@ -158,7 +158,7 @@ export async function auditPages(artifact: SiteArtifact): Promise<void> {
     );
 
     for (const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
-      const value = match[1];
+      const value = match[1]!;
       if (!value || value.startsWith("#") || /^(?:mailto:|tel:|data:|javascript:)/i.test(value)) continue;
       const targetUrl = new URL(value, pageUrl);
       if (targetUrl.origin !== pageUrl.origin) continue;

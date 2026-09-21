@@ -104,9 +104,9 @@ function assertFlatten(tree: BinaryTree) {
   for (const frame of frames) expect(frame.output).toStrictEqual(order.slice(0, frame.output.length));
   for (let i = 1; i < frames.length; i++) {
     const previous = frames[i - 1];
-    for (const change of frames[i].changes) {
-      const before = previous.nodes.find((node) => node.id === change.from)!;
-      const after = frames[i].nodes.find((node) => node.id === change.from)!;
+    for (const change of frames[i]!.changes) {
+      const before = previous!.nodes.find((node) => node.id === change.from)!;
+      const after = frames[i]!.nodes.find((node) => node.id === change.from)!;
       expect(before[change.slot]).toBe(change.before);
       expect(after[change.slot]).toBe(change.after);
     }
@@ -204,24 +204,24 @@ it("every published preset and boundary example satisfies the trace contracts", 
       expect(forestTrace(forest, mode).at(-1)!.output).toStrictEqual(expectedForest(forest, mode === "postorder"));
     }
   }
-  const tree = BINARY_PRESETS.textbook.tree;
+  const tree = BINARY_PRESETS["textbook"]!.tree;
   expect(threadingTrace(tree).at(-1)!.output).toStrictEqual(["D", "B", "E", "A", "C"]);
-  expect(flattenTrace(BINARY_PRESETS.flatten.tree).at(-1)!.output).toStrictEqual(["1", "2", "3", "4", "5", "6"]);
-  expect(flattenTrace(BINARY_PRESETS.left.tree).at(-1)!.scans).toBe(0);
-  expect(flattenTrace(BINARY_PRESETS.right.tree).at(-1)!.scans).toBe(0);
+  expect(flattenTrace(BINARY_PRESETS["flatten"]!.tree).at(-1)!.output).toStrictEqual(["1", "2", "3", "4", "5", "6"]);
+  expect(flattenTrace(BINARY_PRESETS["left"]!.tree).at(-1)!.scans).toBe(0);
+  expect(flattenTrace(BINARY_PRESETS["right"]!.tree).at(-1)!.scans).toBe(0);
 });
 
 it("frames own their arrays and nodes so seeking backward cannot inherit future mutations", () => {
   for (const makeTrace of [threadingTrace, morrisTrace, flattenTrace]) {
-    const frames = makeTrace(BINARY_PRESETS.textbook.tree);
+    const frames = makeTrace(BINARY_PRESETS["textbook"]!.tree);
     const first = structuredClone(frames[0]);
-    frames.at(-1)!.nodes[0].left = "mutated";
+    frames.at(-1)!.nodes[0]!.left = "mutated";
     frames.at(-1)!.output.push("mutated");
     expect(frames[0]).toStrictEqual(first);
   }
-  const frames = forestTrace(FOREST_PRESETS.textbook);
+  const frames = forestTrace(FOREST_PRESETS["textbook"]!);
   frames.at(-1)!.rightOutput.push("mutated");
-  expect(frames[0].rightOutput).toStrictEqual([]);
+  expect(frames[0]!.rightOutput).toStrictEqual([]);
 });
 
 it("flatten records the three writes separately, including a predecessor that still has a left child", () => {

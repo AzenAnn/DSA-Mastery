@@ -34,10 +34,10 @@ const { configureMarkdown: configureDiagramsMarkdown, vitePlugin: createDiagrams
     diagramsDir: "public/diagrams",
     publicPath: `${base}diagrams`,
     diagramsDistDir: "diagrams",
-    krokiServerUrl: process.env.KROKI_SERVER_URL ?? "https://kroki.io",
+    krokiServerUrl: process.env["KROKI_SERVER_URL"] ?? "https://kroki.io",
     enableFileImports: false,
   });
-const absoluteSiteUrl = process.env.SITE_URL ?? `https://azenann.github.io${base}`;
+const absoluteSiteUrl = process.env["SITE_URL"] ?? `https://azenann.github.io${base}`;
 const withBase = (asset: string) => `${base}${asset.replace(/^\//, "")}`;
 const courseDescription =
   "从概念、ADT 与复杂度推导，到动手实现、边界测试与典型问题训练，帮助课程学习者扎实掌握数据结构与算法。";
@@ -216,8 +216,8 @@ export default defineConfig({
           const html = await markdown.renderAsync(source, env);
           // 自定义渲染器不会走 VitePress 内置的 frontmatter.search 排除逻辑，
           // 这里手动尊重 `search: false`，把配图源等构建专用页排除出站内搜索。
-          if (env.frontmatter?.search === false) return "";
-          const labId = typeof env.frontmatter?.labId === "string" ? env.frontmatter.labId : "";
+          if (env.frontmatter?.["search"] === false) return "";
+          const labId = typeof env.frontmatter?.["labId"] === "string" ? env.frontmatter["labId"] : "";
           return labId ? `<p>${labId}</p>${html}` : html;
         },
         translations: {

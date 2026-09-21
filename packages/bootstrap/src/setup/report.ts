@@ -16,24 +16,24 @@ export interface SetupReport {
   reportVersion: number;
   command: string;
   ok: boolean;
-  cancelled?: boolean;
-  message?: string;
-  help?: string;
-  profile?: ProfileName;
-  platform?: NodeJS.Platform;
-  architecture?: string;
-  repoDir?: string;
-  selection?: string[];
-  selectionLabels?: string[];
-  stages?: ReportStage[];
-  repository?: { path: string; valid: boolean; dirty: boolean; remote?: string };
+  cancelled?: boolean | undefined;
+  message?: string | undefined;
+  help?: string | undefined;
+  profile?: ProfileName | undefined;
+  platform?: NodeJS.Platform | undefined;
+  architecture?: string | undefined;
+  repoDir?: string | undefined;
+  selection?: string[] | undefined;
+  selectionLabels?: string[] | undefined;
+  stages?: ReportStage[] | undefined;
+  repository?: { path: string; valid: boolean; dirty: boolean; remote?: string | undefined } | undefined;
   host?: unknown;
   evaluation?: unknown;
-  smoke?: { label: string; ok?: boolean }[];
-  logPath?: string;
-  logError?: string;
-  exitCode?: number;
-  error?: { code?: string; message?: string; details?: unknown; nextAction?: string };
+  smoke?: { label: string; ok?: boolean | undefined }[] | undefined;
+  logPath?: string | undefined;
+  logError?: string | undefined;
+  exitCode?: number | undefined;
+  error?: { code?: string; message?: string; details?: unknown; nextAction?: string } | undefined;
 }
 
 export const SETUP_EXIT = {
@@ -123,12 +123,12 @@ export function summarizeReport(report: SetupReport): string {
 
 export async function writeFailureLog(context: SetupContext, report: SetupReport): Promise<string | undefined> {
   if (context.options.checkOnly) return undefined;
-  const home = context.env.HOME ?? context.env.USERPROFILE ?? os.homedir();
+  const home = context.env["HOME"] ?? context.env["USERPROFILE"] ?? os.homedir();
   const directory =
     context.platform === "darwin"
       ? path.join(home, "Library", "Logs", "DSA-Mastery", "setup")
       : context.platform === "win32"
-        ? path.join(context.env.LOCALAPPDATA ?? path.join(home, "AppData", "Local"), "DSA-Mastery", "setup")
+        ? path.join(context.env["LOCALAPPDATA"] ?? path.join(home, "AppData", "Local"), "DSA-Mastery", "setup")
         : path.join(home, ".local", "state", "DSA-Mastery", "setup");
   await mkdir(directory, { recursive: true });
   const file = path.join(directory, `setup-${new Date().toISOString().replace(/[:.]/g, "-")}.log`);

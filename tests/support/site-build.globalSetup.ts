@@ -47,7 +47,7 @@ function startBuild(base: string): Promise<void> {
  * 而不 await 它，其余 project 全程不用等这次构建。
  */
 export async function setup(project: TestProject): Promise<() => Promise<void>> {
-  const base = process.env.GITHUB_PAGES_BASE_PATH ?? "";
+  const base = process.env["GITHUB_PAGES_BASE_PATH"] ?? "";
   project.provide("siteArtifact", { root: ARTIFACT, base, doneFile: DONE_FILE });
   const shared = globalThis as typeof globalThis & { [BUILDING]?: Promise<void> };
   if (shared[BUILDING]) return async () => {};

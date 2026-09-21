@@ -71,7 +71,7 @@ function addStandaloneCodeTitles(md: MarkdownIt): void {
   if (!renderFence) throw new Error("VitePress fence renderer is unavailable");
 
   md.renderer.rules.fence = (tokens, index, options, env, self) => {
-    const token = tokens[index];
+    const token = tokens[index]!;
     const title = extractFenceTitle(token.info);
     const insideCodeGroup = (token.meta as Record<string, unknown> | undefined)?.[codeGroupMetaKey] === true;
     const rendered = renderFence(tokens, index, options, env, self);
@@ -92,7 +92,7 @@ export function installTheoryMarkdown(md: MarkdownIt): void {
     md.use(container, {
       name: definition.name,
       openRender(tokens, index, _options, env) {
-        const token = tokens[index];
+        const token = tokens[index]!;
         const title = containerTitle(token, definition.name, definition.label);
         const attrs = md.renderer.renderAttrs(token);
         const renderedTitle = renderTheoryTitle(md, title, {

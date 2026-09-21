@@ -62,7 +62,10 @@ export class LabPanel {
   private loadVersion = 0;
   private disposed = false;
 
-  private constructor(private readonly deps: PanelDeps) {
+  private readonly deps: PanelDeps;
+
+  private constructor(deps: PanelDeps) {
+    this.deps = deps;
     this.panel = vscode.window.createWebviewPanel("dsaMastery.lab", "DSA Mastery", vscode.ViewColumn.One, {
       enableScripts: true,
       retainContextWhenHidden: true,

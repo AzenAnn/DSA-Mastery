@@ -42,7 +42,11 @@ async function reportEnvironmentIssues(repoRoot: string, environment: DoctorResu
 export class EnvironmentGuard {
   private verified = new Set<string>();
 
-  constructor(private readonly repoRoot: string) {}
+  private readonly repoRoot: string;
+
+  constructor(repoRoot: string) {
+    this.repoRoot = repoRoot;
+  }
 
   async ensureReady(lab: LabEntry): Promise<boolean> {
     if (this.verified.has(lab.type)) return true;

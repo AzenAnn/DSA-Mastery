@@ -63,13 +63,13 @@ function checkSmallGraph(id: number, data: GraphData) {
     assert.deepEqual(labelsTarjan(data.n, data.edges), labelsClosure(closure(data.n, data.edges)));
   if (!directed || id === 17)
     assert.deepEqual(labelsDsu(data.n, data.edges), labelsClosure(closure(data.n, data.edges, false)));
-  if (id === 12) assert.equal(Number(oracle(id, data)), Number(a[data.source!][data.destination!]));
-  if (id === 13) assert.equal(Number(oracle(id, data)), Number(a[0].every(Boolean)));
+  if (id === 12) assert.equal(Number(oracle(id, data)), Number(a[data.source!]![data.destination!]));
+  if (id === 13) assert.equal(Number(oracle(id, data)), Number(a[0]!.every(Boolean)));
   if (id === 18) {
     let unreachable = 0;
     for (let u = 0; u < data.n; ++u) {
       for (let v = u + 1; v < data.n; ++v) {
-        if (!a[u][v]) ++unreachable;
+        if (!a[u]![v]) ++unreachable;
       }
     }
     assert.equal(Number(oracle(id, data)), unreachable);
@@ -77,7 +77,7 @@ function checkSmallGraph(id: number, data: GraphData) {
   if (id === 21) {
     const result = tokens(oracle(id, data));
     if (result[0] === "YES") assert(a.every((row) => row.every(Boolean)));
-    else assert.equal(a[Number(result[1]) - 1][Number(result[2]) - 1], false);
+    else assert.equal(a[Number(result[1]) - 1]![Number(result[2]) - 1], false);
   }
 }
 
@@ -85,13 +85,14 @@ function checkCondensation(data: GraphData, expected: string) {
   const values = tokens(expected).map(Number),
     [k, m] = values,
     labels = values.slice(2, 2 + data.n);
+  assert(k !== undefined && m !== undefined, "condensation output is truncated");
   assert.equal(values.length, 2 + data.n + 2 * m);
   assert.equal(countLabels(labels), k);
   assert(labels.every((value) => value >= 1 && value <= k));
   const edges: Edge[] = [];
-  for (let i = 2 + data.n; i < values.length; i += 2) edges.push([values[i], values[i + 1]]);
+  for (let i = 2 + data.n; i < values.length; i += 2) edges.push([values[i]!, values[i + 1]!]);
   const expectedEdges = new Set(
-    data.edges.filter(([u, v]) => labels[u] !== labels[v]).map(([u, v]) => edgeKey(labels[u], labels[v])),
+    data.edges.filter(([u, v]) => labels[u] !== labels[v]).map(([u, v]) => edgeKey(labels[u]!, labels[v]!)),
   );
   assert.deepEqual(new Set(edges.map(([u, v]) => edgeKey(u, v))), expectedEdges);
   assert.equal(edges.length, expectedEdges.size);
@@ -106,14 +107,14 @@ function checkCondensation(data: GraphData, expected: string) {
       true,
     ),
     indegree = Array.from<number>({ length: k }).fill(0);
-  for (const [, v] of edges) ++indegree[v - 1];
+  for (const [, v] of edges) ++indegree[v - 1]!;
   const queue: number[] = [];
   for (let v = 0; v < k; ++v) {
-    if (!indegree[v]) queue.push(v);
+    if (indegree[v] === 0) queue.push(v);
   }
   for (let cursor = 0; cursor < queue.length; ++cursor) {
-    for (const v of graph[queue[cursor]]) {
-      if (--indegree[v] === 0) queue.push(v);
+    for (const v of graph[queue[cursor]!]!) {
+      if (--indegree[v]! === 0) queue.push(v);
     }
   }
   assert.equal(queue.length, k, "condensation must be acyclic");
@@ -165,7 +166,7 @@ function randomData(id: number, iteration: number): GraphData {
     data.operations = Array.from({ length: 50 }, (): Operation => {
       const u = next(n),
         v = (u + 1 + next(n - 1)) % n;
-      return [["ADD", "DEL", "HAS"][next(3)], u, v];
+      return [["ADD", "DEL", "HAS"][next(3)]!, u, v];
     });
   }
   if (id === 12) {
@@ -273,7 +274,7 @@ interface LabRecord {
 }
 
 const summary = {
-  compiler: process.env.CXX ?? "default",
+  compiler: process.env["CXX"] ?? "default",
   labs: [] as LabRecord[],
   cases: 0,
   differentialCases: 0,
@@ -289,10 +290,10 @@ for (const item of catalog.filter((item) => selected.includes(item.id))) {
   assert.equal(path.basename(directory), labName(item));
   const readme = normalizeNewlines(read(path.join(directory, "README.md"))),
     frontmatter = matter(readme).data;
-  assert.equal(frontmatter.title, `Lab 06-E-${number}：${item.title}`);
-  assert(readme.includes(`# ${frontmatter.title}\n`));
-  assert.equal(frontmatter.order, item.id + 4);
-  assert.equal(frontmatter.chapter, 6);
+  assert.equal(frontmatter["title"], `Lab 06-E-${number}：${item.title}`);
+  assert(readme.includes(`# ${frontmatter["title"]}\n`));
+  assert.equal(frontmatter["order"], item.id + 4);
+  assert.equal(frontmatter["chapter"], 6);
   assert.equal(lab.cases.length, 20);
   assert.equal(
     lab.cases.reduce((sum, entry) => sum + entry.points, 0),
@@ -315,8 +316,8 @@ for (const item of catalog.filter((item) => selected.includes(item.id))) {
     if (item.id === 23) checkCondensation(data, expected);
     maximumOutputBytes = Math.max(maximumOutputBytes, Buffer.byteLength(expected));
     if (testCase.id === "001-sample") {
-      assert.equal(sampleInput[1].trimEnd(), input.trimEnd());
-      assert.equal(sampleOutput[1].trimEnd(), expected.trimEnd());
+      assert.equal(sampleInput[1]!.trimEnd(), input.trimEnd());
+      assert.equal(sampleOutput[1]!.trimEnd(), expected.trimEnd());
       assert.equal(expected, sampleAnswers[item.id], `${lab.labId}: hand-checked sample`);
     }
     ++summary.cases;

@@ -153,7 +153,7 @@ async function installVisualStudioBuildTools(context: SetupContext) {
 
 export function planToolchainInstall(
   profile: string,
-  host: Partial<HostReport> & { packageManager?: PackageManager } = {},
+  host: Partial<HostReport> & { packageManager?: PackageManager | undefined } = {},
 ): ToolchainAction[] {
   const requirement = profileRequirements(profile);
   const plan: ToolchainAction[] = [];
@@ -294,9 +294,9 @@ async function ensurePnpm(context: SetupContext): Promise<string> {
 
   const base =
     context.platform === "win32"
-      ? path.join(context.env.LOCALAPPDATA ?? context.env.USERPROFILE ?? os.homedir(), "DSA-Mastery", "tools")
+      ? path.join(context.env["LOCALAPPDATA"] ?? context.env["USERPROFILE"] ?? os.homedir(), "DSA-Mastery", "tools")
       : path.join(
-          context.env.XDG_DATA_HOME ?? path.join(context.env.HOME ?? os.homedir(), ".local", "share"),
+          context.env["XDG_DATA_HOME"] ?? path.join(context.env["HOME"] ?? os.homedir(), ".local", "share"),
           "DSA-Mastery",
           "tools",
         );
@@ -309,7 +309,7 @@ async function ensurePnpm(context: SetupContext): Promise<string> {
   );
   recordCommand(context, "npm", ["install", "--global", "--prefix", base, `pnpm@${PNPM_VERSION}`], localInstall);
   const bin = context.platform === "win32" ? base : path.join(base, "bin");
-  context.env.PATH = prependPath(context.env.PATH, [bin], context.platform === "win32" ? ";" : ":");
+  context.env["PATH"] = prependPath(context.env["PATH"], [bin], context.platform === "win32" ? ";" : ":");
   const candidates =
     context.platform === "win32"
       ? [path.join(base, "pnpm.cmd"), path.join(base, "node_modules", ".bin", "pnpm.cmd")]

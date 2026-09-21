@@ -57,7 +57,9 @@ export function shouldUseColor({
   noColor = false,
   environment = process.env,
 }: ColorOptions = {}): boolean {
-  return Boolean(stream?.isTTY) && !noColor && !hasNoColor(environment) && environment.TERM?.toLowerCase() !== "dumb";
+  return (
+    Boolean(stream?.isTTY) && !noColor && !hasNoColor(environment) && environment["TERM"]?.toLowerCase() !== "dumb"
+  );
 }
 
 function paint(enabled: boolean, codes: readonly number[], value: unknown): string {
@@ -112,7 +114,10 @@ export function createTheme(options: ColorOptions & { color?: boolean } = {}): T
     heading,
     path: info,
     command: info,
-    verdict: (value) => (byTone[VERDICT_TONE[String(value).trim()]] ?? heading)(value),
+    verdict: (value) => {
+      const verdictTone = VERDICT_TONE[String(value).trim()];
+      return (verdictTone === undefined ? heading : byTone[verdictTone])(value);
+    },
     status: (value) => {
       const status = String(value).trim();
       if (status === "PASS" || status === "AVAILABLE") return success(value);

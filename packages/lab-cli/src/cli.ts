@@ -49,7 +49,7 @@ import {
 import { createLab } from "./scaffold.ts";
 
 interface ParsedArgs {
-  command?: string;
+  command?: string | undefined;
   options: Record<string, string | boolean>;
   positional: string[];
 }
@@ -62,12 +62,12 @@ function parseArgs(argv: string[]): ParsedArgs {
   const options: Record<string, string | boolean> = {};
   const positional: string[] = [];
   for (let index = 0; index < rest.length; index += 1) {
-    const token = rest[index];
+    const token = rest[index]!;
     if (!token.startsWith("--")) {
       positional.push(token);
       continue;
     }
-    const [rawKey, inline] = token.slice(2).split("=", 2);
+    const [rawKey = "", inline] = token.slice(2).split("=", 2);
     if (["json", "no-color", "write"].includes(rawKey)) {
       options[rawKey] = inline === undefined ? true : inline !== "false";
       continue;
@@ -121,7 +121,7 @@ function validateOptions(parsed: ParsedArgs): void {
 
 /** 位置参数可以是 Lab 路径，也可以是 `02T3` 这样的稳定 ID；都没有时按调用目录推断。 */
 async function resolveLabPathArgument(positional: string[], repoRoot: string | undefined): Promise<string> {
-  const argument = positional[0];
+  const argument = positional[0] ?? "";
   if (!argument) return invocationDirectory(repoRoot);
   if (!LAB_ID_ARGUMENT.test(argument)) return argument;
   if (repoRoot === undefined) throw new LabError("REPO_NOT_FOUND", `只有在仓库内才能用 Lab ID 定位：${argument}`);
@@ -158,7 +158,7 @@ async function main(): Promise<number> {
   try {
     parsed = parseArgs(process.argv.slice(2));
     const theme = createTheme({ stream: process.stdout, noColor: Boolean(parsed.options["no-color"]) });
-    const json = Boolean(parsed.options.json);
+    const json = Boolean(parsed.options["json"]);
     if (parsed.command === undefined || ["help", "--help", "-h"].includes(parsed.command)) {
       console.log(formatHelp(theme));
 
@@ -212,7 +212,7 @@ async function main(): Promise<number> {
 
     if (!EXECUTABLE_COMMANDS.has(parsed.command)) throw new LabError("COMMAND_UNKNOWN", `未知命令：${parsed.command}`);
     const lab = await loadLab(await resolveLabPathArgument(parsed.positional, repoRoot));
-    const target = (parsed.options.target ?? "student") as TargetName;
+    const target = (parsed.options["target"] ?? "student") as TargetName;
     const labPath = parsed.positional[0] ?? lab.labRoot;
 
     if (parsed.command === "validate") {
@@ -268,7 +268,7 @@ async function main(): Promise<number> {
 
     if (parsed.command === "build") {
       const compilation = isProjectLab(lab)
-        ? await buildProject(lab, target, { taskId: parsed.options.task as string | undefined })
+        ? await buildProject(lab, target, { taskId: parsed.options["task"] as string | undefined })
         : await compileTarget(lab, target);
       const report = createReport("build", lab, { compilation });
       report.ok = compilation.ok;
@@ -283,8 +283,8 @@ async function main(): Promise<number> {
       if (isProjectLab(lab)) {
         const project = await scoreProject(lab, {
           target,
-          taskId: parsed.options.task as string | undefined,
-          caseId: parsed.options.case as string | undefined,
+          taskId: parsed.options["task"] as string | undefined,
+          caseId: parsed.options["case"] as string | undefined,
         });
         const report = createReport(parsed.command, lab, { result: project });
         report.ok = !project.internalError;
@@ -296,7 +296,7 @@ async function main(): Promise<number> {
       }
       const judged = await judgeProgram(lab, {
         target,
-        caseId: parsed.options.case as string | undefined,
+        caseId: parsed.options["case"] as string | undefined,
       });
       const internalError = judged.cases.some((item) => item.verdict === "IE");
       const report = createReport(parsed.command, lab, {
@@ -325,7 +325,7 @@ async function main(): Promise<number> {
 
     if (parsed.command === "interactive") {
       const result = isProjectLab(lab)
-        ? await interactiveProjectTask(lab, parsed.options.task as string | undefined, target)
+        ? await interactiveProjectTask(lab, parsed.options["task"] as string | undefined, target)
         : await runInteractive(lab, target);
 
       return result.code;
@@ -334,19 +334,19 @@ async function main(): Promise<number> {
     if (parsed.command === "refresh-expected") {
       const refresh = isProjectLab(lab)
         ? await refreshProjectExpected(lab, {
-            taskId: parsed.options.task as string | undefined,
-            write: Boolean(parsed.options.write),
+            taskId: parsed.options["task"] as string | undefined,
+            write: Boolean(parsed.options["write"]),
           })
-        : await refreshExpected(lab, Boolean(parsed.options.write));
+        : await refreshExpected(lab, Boolean(parsed.options["write"]));
       const report = createReport("refresh-expected", lab, { refresh });
       if (json) console.log(JSON.stringify(report, null, 2));
-      else console.log(formatRefresh(refresh, { write: Boolean(parsed.options.write), theme }));
+      else console.log(formatRefresh(refresh, { write: Boolean(parsed.options["write"]), theme }));
 
-      return refresh.changed && parsed.options.write === undefined ? EXIT.SCORE_NOT_FULL : EXIT.OK;
+      return refresh.changed && parsed.options["write"] === undefined ? EXIT.SCORE_NOT_FULL : EXIT.OK;
     }
 
     if (parsed.command === "pack") {
-      if (parsed.options.profile !== "student")
+      if (parsed.options["profile"] !== "student")
         throw new LabError("ARGUMENT_INVALID", "pack 目前要求 --profile student");
       const packed = await packStudent(lab);
       const report = createReport("pack", lab, { package: packed });
@@ -363,7 +363,7 @@ async function main(): Promise<number> {
     return EXIT.OK;
   } catch (rawError) {
     const error = asLabError(rawError);
-    if (parsed?.options?.json !== undefined) {
+    if (parsed?.options?.["json"] !== undefined) {
       console.log(
         JSON.stringify(
           {

@@ -238,7 +238,7 @@ export function renderChoiceMenu({
     lines.push(frameLine(`  ${choice.description}`, innerWidth, "dim", color));
   });
   const active = choices[cursor];
-  if (active?.detail) {
+  if (active !== undefined && active.detail !== "") {
     lines.push(frameLine("", innerWidth));
     lines.push(frameLine(`▸ 说明：${active.detail}`, innerWidth, "dim", color));
   }
@@ -279,7 +279,7 @@ function decodeChoiceInputInternal(
       pending = remaining;
       break;
     }
-    const character = value[index];
+    const character = value[index] ?? "";
     if (character === "" || character === "\u001B") actions.push("escape");
     else if (character === " ") actions.push("space");
     else if (character === "\r" || character === "\n") actions.push("enter");
@@ -317,10 +317,10 @@ export async function promptInstallSelection({
   initialSelection = createInstallSelection(),
   title = "配置 DSA Mastery",
 }: {
-  input?: InputStream;
-  output?: OutputStream;
-  initialSelection?: Iterable<string>;
-  title?: string;
+  input?: InputStream | undefined;
+  output?: OutputStream | undefined;
+  initialSelection?: Iterable<string> | undefined;
+  title?: string | undefined;
 } = {}): Promise<SelectionOptions & { cancelled: boolean }> {
   if (!input?.isTTY || !output?.isTTY) return { cancelled: false, ...selectionToOptions(initialSelection) };
   let cursor = Math.min(1, INSTALL_CHOICES.length - 1);

@@ -24,10 +24,10 @@ export interface CourseDocument {
   updated: string;
   contributors: string[];
   status: DocumentStatus;
-  difficulty?: string;
-  duration?: string;
-  labCategory?: LabCategory;
-  labId?: string;
+  difficulty?: string | undefined;
+  duration?: string | undefined;
+  labCategory?: LabCategory | undefined;
+  labId?: string | undefined;
   readingMinutes: number;
 }
 
@@ -159,7 +159,7 @@ function resolveLabCategory(file: string, data: Record<string, unknown>): LabCat
     return category;
   }
 
-  const declared = text(data.labCategory).trim();
+  const declared = text(data["labCategory"]).trim();
   if (!declared) return undefined;
   if (!(["theory", "exercise", "project"] as const).includes(declared as LabCategory)) {
     throw new Error(`${path.relative(projectRoot, file)}: labCategory must be theory, exercise, or project`);
@@ -173,9 +173,9 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
   const sourcePath = path.relative(root, file).replaceAll("\\", "/");
   const relativeContentPath = sourcePath.replace(/^(content|labs)\//, "");
   const slug = relativeContentPath.replace(/\.md$/i, "").replace(/\/README$/i, "");
-  const chapter = chapterId(parsed.data.chapter);
-  const title = text(parsed.data.title);
-  const description = text(parsed.data.description);
+  const chapter = chapterId(parsed.data["chapter"]);
+  const title = text(parsed.data["title"]);
+  const description = text(parsed.data["description"]);
 
   if (!title || !description) {
     throw new Error(`${sourcePath}: title and description are required`);
@@ -191,17 +191,17 @@ function createDocument(root: string, file: string, kind: DocumentKind): CourseD
     chapter,
     chapterLabel: chapterLabel(chapter),
     chapterTitle: text(
-      parsed.data.chapterTitle,
+      parsed.data["chapterTitle"],
       chapter === "preface" ? "课程作者指南" : chapter === 0 ? "基础" : `第 ${chapter} 章`,
     ),
-    order: number(parsed.data.order),
-    updated: text(parsed.data.updated, "未标注"),
-    contributors: contributors(parsed.data.contributors),
-    status: text(parsed.data.status, "draft") as DocumentStatus,
-    difficulty: text(parsed.data.difficulty) || undefined,
-    duration: text(parsed.data.duration) || undefined,
+    order: number(parsed.data["order"]),
+    updated: text(parsed.data["updated"], "未标注"),
+    contributors: contributors(parsed.data["contributors"]),
+    status: text(parsed.data["status"], "draft") as DocumentStatus,
+    difficulty: text(parsed.data["difficulty"]) || undefined,
+    duration: text(parsed.data["duration"]) || undefined,
     labCategory: kind === "lab" ? resolveLabCategory(file, parsed.data) : undefined,
-    labId: kind === "lab" ? text(parsed.data.labId) || undefined : undefined,
+    labId: kind === "lab" ? text(parsed.data["labId"]) || undefined : undefined,
     readingMinutes: estimateReadingMinutes(parsed.content),
   };
 }

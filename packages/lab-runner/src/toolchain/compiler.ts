@@ -11,15 +11,15 @@ export type CompilerFamily = "gnu" | "msvc";
 export interface SelectedCompiler {
   command: string;
   family: CompilerFamily;
-  args?: string[];
-  env?: NodeJS.ProcessEnv;
-  toolchain?: MsvcEnvironment;
+  args?: string[] | undefined;
+  env?: NodeJS.ProcessEnv | undefined;
+  toolchain?: MsvcEnvironment | undefined;
 }
 
 /** 编译只需要 Lab 根目录、编译目标和标准，Program Lab 与 Project 的 stdio task 共用这个形状。 */
 export interface CompilableLab {
   labRoot: string;
-  manifest: { targets?: Partial<Record<TargetName, CompileTarget>>; toolchain: Toolchain };
+  manifest: { targets?: Partial<Record<TargetName, CompileTarget>> | undefined; toolchain: Toolchain };
 }
 
 export interface CompileResult {
@@ -50,8 +50,8 @@ export async function selectCompiler({
   env = process.env,
   runner = runProcess,
 }: ToolchainProbeOptions = {}): Promise<SelectedCompiler> {
-  if (env.CXX !== undefined && env.CXX !== "") {
-    const command = env.CXX;
+  if (env["CXX"] !== undefined && env["CXX"] !== "") {
+    const command = env["CXX"];
     const family: CompilerFamily = isMsvcCommand(command) ? "msvc" : "gnu";
     let compilerEnvironment: MsvcEnvironment | undefined;
     if (family === "msvc" && platform === "win32") {

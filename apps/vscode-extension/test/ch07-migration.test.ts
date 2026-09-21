@@ -42,9 +42,9 @@ it("all 32 original identities survive without mixing retired or overlapping sco
   const events = Object.keys(source).map((labName) => ({ labName, kind: "pass", at: "2026-09-01" }));
   const mapped = remapEventKeys(events, aliases);
   expect(new Set(mapped.events.map((event) => event.labName)).size).toBe(32);
-  expect(mapped.events[1].labName).toBe("E-07-02-connected-components");
-  expect(mapped.events[4].labName).toBe("07E02");
-  expect(mapped.events[4].at).toBe(events[4].at);
+  expect(mapped.events[1]!.labName).toBe("E-07-02-connected-components");
+  expect(mapped.events[4]!.labName).toBe("07E02");
+  expect(mapped.events[4]!.at).toBe(events[4]!.at);
   expect(ch07IdAliases(labs, [CH07_MIGRATION])).toStrictEqual([]);
   expect(ch07IdAliases(labs.slice(1), [])).toStrictEqual([]);
   expect(
@@ -80,9 +80,9 @@ it("real Ch7 discovery has thirty matching identities and legacy directory alias
   const actual = chapter.labs.filter((lab) => lab.type === "program");
   expect(actual.length).toBe(30);
   for (const [index, expected] of labs.entries()) {
-    expect(actual[index].id).toBe(expected.id);
-    expect(actual[index].name).toBe(expected.name);
-    for (const legacy of expected.legacyNames) expect(actual[index].legacyNames).toContain(legacy);
+    expect(actual[index]!.id).toBe(expected.id);
+    expect(actual[index]!.name).toBe(expected.name);
+    for (const legacy of expected.legacyNames) expect(actual[index]!.legacyNames).toContain(legacy);
   }
   expect(ch07IdAliases(actual, []).length).toBeGreaterThan(0);
 });
@@ -179,7 +179,7 @@ it("tracker backs up, migrates both chapters once, preserves snapshots and survi
     await tracker.migrateLabKeys(allLabs);
     expect(writes[0]).toMatch(/backup/);
     expect(writes[1]).toBe(stateKey);
-    expect(memory.get(writes[0])).toStrictEqual({ ...source, appliedMigrations: [] });
+    expect(memory.get(writes[0]!)).toStrictEqual({ ...source, appliedMigrations: [] });
     expect(tracker.get("07E02").bestScore).toBe(100);
     expect(tracker.get("07E03").bestScore).toBe(40);
     expect(tracker.get("E-07-02-connected-components").bestScore).toBe(70);

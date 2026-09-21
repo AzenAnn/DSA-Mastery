@@ -39,7 +39,7 @@ async function detectVSCode(context: SetupContext): Promise<{ found: boolean; in
     ]) {
       const binDir = path.join(application, "Contents/Resources/app/bin");
       if (!(await pathExists(path.join(binDir, "code")))) continue;
-      context.env.PATH = prependPath(context.env.PATH, [binDir], ":");
+      context.env["PATH"] = prependPath(context.env["PATH"], [binDir], ":");
       if (await commandAvailable(context, "code", ["--version"])) return { found: true, inPath: false, path: binDir };
     }
   }
@@ -63,7 +63,7 @@ async function detectVSCode(context: SetupContext): Promise<{ found: boolean; in
       candidates.find((p) => /\.cmd$/i.test(p)) ?? candidates.find((p) => /\.exe$/i.test(p)) ?? candidates[0];
     if (codeCmd !== undefined && (await pathExists(codeCmd))) {
       const binDir = path.dirname(codeCmd);
-      context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
+      context.env["PATH"] = prependPath(context.env["PATH"], [binDir], ";");
       const retry = await commandAvailable(context, "code", ["--version"]);
       if (retry) return { found: true, inPath: false, path: binDir };
     }
@@ -73,15 +73,15 @@ async function detectVSCode(context: SetupContext): Promise<{ found: boolean; in
 
   // Scan standard install directories
   const standardDirs: string[] = [];
-  if (context.env.LOCALAPPDATA !== undefined)
-    standardDirs.push(path.join(context.env.LOCALAPPDATA, "Programs", "Microsoft VS Code", "bin"));
-  if (context.env.ProgramFiles !== undefined)
-    standardDirs.push(path.join(context.env.ProgramFiles, "Microsoft VS Code", "bin"));
+  if (context.env["LOCALAPPDATA"] !== undefined)
+    standardDirs.push(path.join(context.env["LOCALAPPDATA"], "Programs", "Microsoft VS Code", "bin"));
+  if (context.env["ProgramFiles"] !== undefined)
+    standardDirs.push(path.join(context.env["ProgramFiles"], "Microsoft VS Code", "bin"));
   if (context.env["ProgramFiles(x86)"] !== undefined)
     standardDirs.push(path.join(context.env["ProgramFiles(x86)"], "Microsoft VS Code", "bin"));
   for (const binDir of standardDirs) {
     if (await pathExists(path.join(binDir, "code.cmd"))) {
-      context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
+      context.env["PATH"] = prependPath(context.env["PATH"], [binDir], ";");
       const retry = await commandAvailable(context, "code", ["--version"]);
       if (retry) return { found: true, inPath: false, path: binDir };
     }

@@ -55,10 +55,10 @@ function parseQuestion(value: unknown, index: number, label: string): QuizQuesti
   const raw = requireRecord(value, itemLabel);
   assertKnownKeys(raw, QUESTION_KEYS, itemLabel);
 
-  if (!Array.isArray(raw.options) || raw.options.length !== 4) {
+  if (!Array.isArray(raw["options"]) || raw["options"].length !== 4) {
     throw new LabError("QUIZ_INVALID", `${itemLabel}.options 必须恰好包含 4 项`);
   }
-  const options = raw.options.map((option, optionIndex) => {
+  const options = raw["options"].map((option, optionIndex) => {
     const text = requireString(option, `${itemLabel}.options[${optionIndex}]`);
     if (OPTION_PREFIX.test(text.trim())) {
       throw new LabError("QUIZ_INVALID", `${itemLabel}.options[${optionIndex}] 不要手写 A、B、C、D 前缀`);
@@ -69,25 +69,26 @@ function parseQuestion(value: unknown, index: number, label: string): QuizQuesti
   const normalized = options.map((option) => option.trim().replace(/\s+/gu, " ").toLocaleLowerCase());
   if (new Set(normalized).size !== normalized.length) throw new LabError("QUIZ_INVALID", `${itemLabel} 含重复选项`);
 
-  if (!Number.isInteger(raw.answer) || (raw.answer as number) < 0 || (raw.answer as number) > 3) {
+  if (!Number.isInteger(raw["answer"]) || (raw["answer"] as number) < 0 || (raw["answer"] as number) > 3) {
     throw new LabError("QUIZ_INVALID", `${itemLabel}.answer 必须是 0～3 的整数`);
   }
 
   const question: QuizQuestion = {
-    id: requireString(raw.id, `${itemLabel}.id`),
-    stem: requireString(raw.stem, `${itemLabel}.stem`),
-    explanation: requireString(raw.explanation, `${itemLabel}.explanation`),
+    id: requireString(raw["id"], `${itemLabel}.id`),
+    stem: requireString(raw["stem"], `${itemLabel}.stem`),
+    explanation: requireString(raw["explanation"], `${itemLabel}.explanation`),
     options,
-    answer: raw.answer as number,
-    points: raw.points === undefined ? 1 : requirePositiveInteger(raw.points, `${itemLabel}.points`),
+    answer: raw["answer"] as number,
+    points: raw["points"] === undefined ? 1 : requirePositiveInteger(raw["points"], `${itemLabel}.points`),
   };
   for (const key of OPTIONAL_STRING_KEYS) {
     const text = optionalString(raw[key], `${itemLabel}.${key}`);
     if (text !== undefined) question[key] = text;
   }
-  if (raw.topics !== undefined) question.topics = requireStringArray(raw.topics, `${itemLabel}.topics`, "QUIZ_INVALID");
-  if (raw.optionTargets !== undefined) {
-    question.optionTargets = requireStringArray(raw.optionTargets, `${itemLabel}.optionTargets`, "QUIZ_INVALID");
+  if (raw["topics"] !== undefined)
+    question.topics = requireStringArray(raw["topics"], `${itemLabel}.topics`, "QUIZ_INVALID");
+  if (raw["optionTargets"] !== undefined) {
+    question.optionTargets = requireStringArray(raw["optionTargets"], `${itemLabel}.optionTargets`, "QUIZ_INVALID");
   }
 
   return question;

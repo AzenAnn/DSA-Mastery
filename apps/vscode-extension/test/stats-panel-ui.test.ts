@@ -192,9 +192,9 @@ it("invalid persisted dates cannot crash charts or change total activity and sol
 });
 
 it("heatmap covers leap years and labels local calendar dates with both event totals", () => {
-  const previousTimezone = process.env.TZ;
+  const previousTimezone = process.env["TZ"];
   try {
-    process.env.TZ = "Asia/Shanghai";
+    process.env["TZ"] = "Asia/Shanghai";
     const leapDay = new Date(2024, 1, 29, 0, 30);
     expect(leapDay.toISOString().startsWith("2024-02-28")).toBeTruthy();
     const events = [
@@ -219,8 +219,8 @@ it("heatmap covers leap years and labels local calendar dates with both event to
     );
     expect(html).toMatch(/id="heatmap-detail" role="status" aria-live="polite"/);
   } finally {
-    if (previousTimezone === undefined) delete process.env.TZ;
-    else process.env.TZ = previousTimezone;
+    if (previousTimezone === undefined) delete process.env["TZ"];
+    else process.env["TZ"] = previousTimezone;
   }
 });
 
@@ -239,10 +239,10 @@ it("trend preserves cumulative pass-event units and real calendar gaps while ran
   expect(html).not.toMatch(/累计通过 4 题/);
   const dataAttribute = html.match(/data-points="([^"]+)"/);
   expect(dataAttribute).toBeTruthy();
-  const points = JSON.parse(dataAttribute![1]) as [number, number][];
+  const points = JSON.parse(dataAttribute![1]!) as [number, number][];
   expect(points.map((point) => point[1])).toStrictEqual([2, 3, 4]);
-  expect(points[1][0] - points[0][0]).toBe(1);
-  expect(points[2][0] - points[1][0]).toBe(9);
+  expect(points[1]![0] - points[0]![0]).toBe(1);
+  expect(points[2]![0] - points[1]![0]).toBe(9);
   const ticks = [...html.matchAll(/class="trend-tick" data-value="(\d+)"/g)].map((match) => Number(match[1]));
   expect(ticks).toStrictEqual([0, 1, 2, 3, 4]);
   expect(html).toMatch(/class="trend-area"[^>]*fill-opacity="0\.08"/);

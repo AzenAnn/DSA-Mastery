@@ -16,7 +16,7 @@ export function parseFrontmatter(source: string, label = "README.md"): Frontmatt
   const match = source.match(BLOCK);
   if (!match) throw new LabError("FRONTMATTER_INVALID", `${label}: 缺少 YAML frontmatter`);
   const data: Record<string, string> = {};
-  for (const line of match[1].split(/\r?\n/)) {
+  for (const line of match[1]!.split(/\r?\n/)) {
     const separator = line.indexOf(":");
     if (separator === -1) continue;
     data[line.slice(0, separator).trim()] = line

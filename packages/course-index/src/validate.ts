@@ -157,19 +157,19 @@ function checkFrontmatter(collector: Collector, file: string, kind: "lesson" | "
     if (data[field] === undefined || data[field] === "")
       collector.add("required-fields", file, `缺少必填字段 ${field}`);
   }
-  if (!VALID_STATUSES.has(String(data.status)))
+  if (!VALID_STATUSES.has(String(data["status"])))
     collector.add("status-enum", file, "status 必须是 draft、review 或 published");
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data.updated)))
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data["updated"])))
     collector.add("updated-format", file, "updated 必须使用 YYYY-MM-DD");
-  if (!Number.isInteger(Number(data.order)) || Number(data.order) < 0) {
+  if (!Number.isInteger(Number(data["order"])) || Number(data["order"]) < 0) {
     collector.add("order-format", file, "order 必须是非负整数");
   }
   const isPrefaceLesson = kind === "lesson" && PREFACE_LESSON.test(relativePath);
-  if (data.chapter === "preface") {
-    if (!isPrefaceLesson || data.chapterTitle !== "课程作者指南") {
+  if (data["chapter"] === "preface") {
+    if (!isPrefaceLesson || data["chapterTitle"] !== "课程作者指南") {
       collector.add("chapter-format", file, "preface 仅允许用于 chapter-preface 下的课程作者指南");
     }
-  } else if (!Number.isInteger(Number(data.chapter)) || Number(data.chapter) < 0) {
+  } else if (!Number.isInteger(Number(data["chapter"])) || Number(data["chapter"]) < 0) {
     collector.add("chapter-format", file, "chapter 必须是非负整数或受支持的 preface");
   }
   if (kind === "lesson" && !isPrefaceLesson && !LESSON_PATH.test(relativePath)) {
@@ -188,24 +188,24 @@ function checkLabIdentity(
   for (const field of ["lab", "difficulty", "duration"]) {
     if (data[field] === undefined) collector.add("lab-fields", file, `Lab 缺少字段 ${field}`);
   }
-  if (data.labCategory !== undefined && !LAB_CATEGORIES.includes(data.labCategory as LabCategory)) {
+  if (data["labCategory"] !== undefined && !LAB_CATEGORIES.includes(data["labCategory"] as LabCategory)) {
     collector.add("lab-fields", file, "labCategory 必须是 theory、exercise 或 project");
   }
-  if (data.labId === undefined) {
+  if (data["labId"] === undefined) {
     collector.add("lab-id", file, "Lab 缺少稳定编号 labId");
 
     return;
   }
   let identity;
   try {
-    identity = parseLabId(data.labId);
+    identity = parseLabId(data["labId"]);
   } catch (error) {
     collector.add("lab-id", file, (error as Error).message);
 
     return;
   }
-  if (identity.id !== data.labId) collector.add("lab-id", file, `labId 必须使用规范形式 ${identity.id}`);
-  if (identity.chapter !== Number(data.chapter))
+  if (identity.id !== data["labId"]) collector.add("lab-id", file, `labId 必须使用规范形式 ${identity.id}`);
+  if (identity.chapter !== Number(data["chapter"]))
     collector.add("lab-id", file, "labId 章节必须与 frontmatter chapter 一致");
   const expectedTag = tagForCategory(labCategory);
   if (!expectedTag || identity.tag !== expectedTag) {
@@ -218,7 +218,7 @@ function checkLabIdentity(
   const directoryName = path.basename(path.dirname(file));
   const categoryDirectory = path.basename(path.dirname(path.dirname(file)));
   const chapterMatch = path.basename(path.dirname(path.dirname(path.dirname(file)))).match(/^chapter-(\d{2})$/);
-  if (!chapterMatch || Number(chapterMatch[1]) !== Number(data.chapter)) {
+  if (!chapterMatch || Number(chapterMatch[1]) !== Number(data["chapter"])) {
     collector.add("lab-directory", file, "chapter 目录必须与 frontmatter chapter 一致");
   }
   if (!LAB_CATEGORIES.includes(categoryDirectory as LabCategory) || categoryDirectory !== labCategory) {
@@ -233,7 +233,7 @@ function checkLabIdentity(
   }
 
   const titlePrefix = formatLabDocumentTitlePrefix(identity.id);
-  const title = String(data.title ?? "");
+  const title = String(data["title"] ?? "");
   if (!title.startsWith(titlePrefix)) collector.add("lab-title", file, `title 必须以 ${titlePrefix} 开头`);
   else if (!title.slice(titlePrefix.length).trim()) collector.add("lab-title", file, "title 的编号后必须包含题目名称");
   if (!parsed.body.includes(`# ${title}`)) collector.add("lab-title", file, "H1 必须与 frontmatter title 一致");
@@ -249,7 +249,7 @@ async function resolveLabCategory(
   try {
     source = await readFile(manifestPath, "utf8");
   } catch {
-    return parsed.data.labCategory as string | undefined;
+    return parsed.data["labCategory"] as string | undefined;
   }
   const type = (JSON.parse(source) as { type?: unknown }).type;
   if (!isLabType(type)) {
@@ -263,10 +263,10 @@ async function resolveLabCategory(
 
 async function checkLinks(collector: Collector, file: string, source: string): Promise<void> {
   const relativeLinks = [...source.matchAll(/\]\(([^)]+\.md(?:#[^)]*)?)\)/g)]
-    .map((match) => match[1])
+    .map((match) => match[1]!)
     .filter((href) => !/^[a-z][a-z\d+.-]*:/i.test(href) && !href.startsWith("/"));
   for (const href of relativeLinks) {
-    const target = path.resolve(path.dirname(file), decodeURIComponent(href.split("#", 1)[0]));
+    const target = path.resolve(path.dirname(file), decodeURIComponent(href.split("#", 1)[0]!));
     try {
       await access(target);
     } catch {
@@ -334,7 +334,7 @@ export async function loadContentCorpus(root: string): Promise<ContentCorpus> {
       if (kind === "lab") {
         const labCategory = await resolveLabCategory(collector, file, parsed);
         checkLabIdentity(collector, file, parsed, labCategory, seenLabIds);
-        if (CATEGORIZED_CHAPTERS.has(Number(parsed.data.chapter)) && parsed.data.labCategory === undefined) {
+        if (CATEGORIZED_CHAPTERS.has(Number(parsed.data["chapter"])) && parsed.data["labCategory"] === undefined) {
           const hasManifest = await access(path.join(path.dirname(file), "lab.json")).then(
             () => true,
             () => false,
@@ -343,7 +343,7 @@ export async function loadContentCorpus(root: string): Promise<ContentCorpus> {
         }
         interactiveQuizCount += await checkQuizLab(collector, file, source);
       }
-      const orderKey = `${kind}:${String(parsed.data.chapter)}:${String(parsed.data.order)}`;
+      const orderKey = `${kind}:${String(parsed.data["chapter"])}:${String(parsed.data["order"])}`;
       const previous = seenOrder.get(orderKey);
       if (previous !== undefined) collector.add("order-unique", file, `chapter + order 与 ${previous} 重复`);
       seenOrder.set(orderKey, collector.relative(file));

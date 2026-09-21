@@ -67,7 +67,7 @@ function normalizeSolvedCount(solvedCount: number): number {
 
 export function getRankBySolvedCount(solvedCount: number): RankInfo {
   const solved = normalizeSolvedCount(solvedCount);
-  return RANKS.findLast((rank) => solved >= rank.minSolved) ?? RANKS[0];
+  return RANKS.findLast((rank) => solved >= rank.minSolved) ?? RANKS[0]!;
 }
 
 export function getNextRank(currentRank: RankInfo): RankInfo | undefined {

@@ -12,19 +12,19 @@ import { commandText } from "../commands.ts";
 import { setupError } from "./report.ts";
 
 export interface SetupIo {
-  input?: InputStream;
-  output?: OutputStream;
+  input?: InputStream | undefined;
+  output?: OutputStream | undefined;
 }
 
 export interface SetupDependencies {
-  io?: SetupIo;
-  runner?: Runner;
-  cwd?: string;
-  commandCwd?: string;
-  env?: NodeJS.ProcessEnv;
-  platform?: NodeJS.Platform;
-  architecture?: string;
-  nodeCommand?: string;
+  io?: SetupIo | undefined;
+  runner?: Runner | undefined;
+  cwd?: string | undefined;
+  commandCwd?: string | undefined;
+  env?: NodeJS.ProcessEnv | undefined;
+  platform?: NodeJS.Platform | undefined;
+  architecture?: string | undefined;
+  nodeCommand?: string | undefined;
 }
 
 interface RecordedCommand {
@@ -43,33 +43,33 @@ export interface SetupContext {
   env: NodeJS.ProcessEnv;
   runner: Runner;
   repoDir: string;
-  commandCwd?: string;
+  commandCwd?: string | undefined;
   options: SetupOptions;
   profile: ProfileName;
   ui: ProgressUI;
   commands: RecordedCommand[];
-  host?: HostReport;
-  packageManager?: PackageManager;
-  pnpmCommand?: string;
-  nodeCommand?: string;
-  repository?: RepositoryState;
-  evaluation?: ProfileEvaluation;
-  smoke?: { label: string; report: unknown }[];
+  host?: HostReport | undefined;
+  packageManager?: PackageManager | undefined;
+  pnpmCommand?: string | undefined;
+  nodeCommand?: string | undefined;
+  repository?: RepositoryState | undefined;
+  evaluation?: ProfileEvaluation | undefined;
+  smoke?: { label: string; report: unknown }[] | undefined;
   ide?: unknown;
   [key: string]: unknown;
 }
 
 export interface RunOverrides {
-  cwd?: string;
-  env?: NodeJS.ProcessEnv;
-  timeoutMs?: number;
-  timeMs?: number;
-  outputLimitKb?: number;
-  outputKb?: number;
-  inherit?: boolean;
-  errorCode?: string;
-  errorMessage?: string;
-  stage?: string;
+  cwd?: string | undefined;
+  env?: NodeJS.ProcessEnv | undefined;
+  timeoutMs?: number | undefined;
+  timeMs?: number | undefined;
+  outputLimitKb?: number | undefined;
+  outputKb?: number | undefined;
+  inherit?: boolean | undefined;
+  errorCode?: string | undefined;
+  errorMessage?: string | undefined;
+  stage?: string | undefined;
 }
 
 export const HOMEBREW_INSTALLER = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh";
@@ -145,8 +145,13 @@ export async function refreshPlatformEnvironment(context: SetupContext): Promise
       outputKb: 256,
     });
     const prefix = firstOutputLine(prefixResult);
-    if (prefix !== undefined && prefix !== "")
-      context.env.PATH = prependPath(context.env.PATH, [path.join(prefix, "bin"), path.join(prefix, "sbin")], ":");
+    if (prefix !== undefined && prefix !== "") {
+      context.env["PATH"] = prependPath(
+        context.env["PATH"],
+        [path.join(prefix, "bin"), path.join(prefix, "sbin")],
+        ":",
+      );
+    }
   }
   if (context.platform === "win32") {
     const pathResult = await runWithRunner(
@@ -160,7 +165,7 @@ export async function refreshPlatformEnvironment(context: SetupContext): Promise
       ],
       { timeMs: 10_000, outputKb: 4096 },
     );
-    if (!resultFailed(pathResult) && pathResult.stdout?.trim()) context.env.PATH = pathResult.stdout.trim();
+    if (!resultFailed(pathResult) && pathResult.stdout?.trim()) context.env["PATH"] = pathResult.stdout.trim();
   }
   return context.env;
 }

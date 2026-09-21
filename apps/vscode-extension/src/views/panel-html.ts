@@ -11,7 +11,7 @@ import { escapeHtml, nonce } from "./html";
 export type QuizQuestionView = QuizQuestion & {
   stemHtml: string;
   optionHtml: string[];
-  hintHtml?: string;
+  hintHtml?: string | undefined;
   explanationHtml: string;
 };
 
@@ -25,7 +25,7 @@ export function renderQuizPanelHtml(
     lab: QuizLab;
     readmeHtml: string;
     questions: QuizQuestionView[];
-    quizProgress?: QuizProgress;
+    quizProgress?: QuizProgress | undefined;
   },
 ): string {
   const { webview, extensionPath, lab, readmeHtml, questions, quizProgress } = options;
@@ -258,8 +258,8 @@ export function renderQuizFeedbackHtml(question: QuizQuestionView, selected: num
 
 /** 上/下一题的跳转目标。序列两端时对应字段为 undefined,按钮置灰。 */
 export interface PanelNav {
-  prev?: { name: string; title: string };
-  next?: { name: string; title: string };
+  prev?: { name: string; title: string } | undefined;
+  next?: { name: string; title: string } | undefined;
 }
 
 interface PanelOptions {

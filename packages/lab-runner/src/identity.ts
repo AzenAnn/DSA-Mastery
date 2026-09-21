@@ -26,8 +26,8 @@ export interface LabRecord {
   directoryIdentity: LabDirectoryIdentity;
   pathChapter: number;
   categoryDirectory: LabCategory;
-  type?: LabType;
-  category?: string;
+  type?: LabType | undefined;
+  category?: string | undefined;
   labId: string;
   order: number;
 }
@@ -104,7 +104,7 @@ export async function scanLabRecords(root: string, options: { chapter?: number }
         }
         const { data } = parseFrontmatter(source, path.relative(root, readmePath));
         const type = await readManifestType(labPath);
-        const declaredCategory = type ? categoryForType(type) : (data.labCategory ?? "").trim();
+        const declaredCategory = type ? categoryForType(type) : (data["labCategory"] ?? "").trim();
         records.push({
           labPath,
           readmePath,
@@ -115,8 +115,8 @@ export async function scanLabRecords(root: string, options: { chapter?: number }
           categoryDirectory: category,
           type,
           category: declaredCategory || undefined,
-          labId: (data.labId ?? "").trim(),
-          order: Number(data.order),
+          labId: (data["labId"] ?? "").trim(),
+          order: Number(data["order"]),
         });
       }
     }
@@ -211,5 +211,5 @@ export async function locateLabById(root: string, value: unknown): Promise<LabRe
     );
   }
 
-  return { id, ...matches[0] };
+  return { id, ...matches[0]! };
 }

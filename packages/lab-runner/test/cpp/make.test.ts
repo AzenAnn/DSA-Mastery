@@ -15,7 +15,7 @@ const labRoot = programCopy.root;
 const projectLabRoot = projectCopy.root;
 
 async function chooseMake(): Promise<string> {
-  for (const command of [process.env.MAKE, "make", "mingw32-make"].filter((value) => value !== undefined)) {
+  for (const command of [process.env["MAKE"], "make", "mingw32-make"].filter((value) => value !== undefined)) {
     const result = await runProcess(command, ["--version"], { cwd: projectRoot, timeMs: 5000, outputKb: 256 });
     if (!result.spawnError && result.code === 0) return command;
   }

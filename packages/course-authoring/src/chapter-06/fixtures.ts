@@ -351,7 +351,7 @@ function directedFixtures(id: number): Fixture[] {
 }
 
 function starFixtures(): Fixture[] {
-  const specs = [
+  const specs: [number, number][] = [
     [4, 1],
     [3, 0],
     [3, 1],
@@ -542,7 +542,7 @@ function adtFixtures(): Fixture[] {
       Array.from({ length: 200 }, (): Operation => {
         const u = next(9),
           v = (u + 1 + next(8)) % 9;
-        return [["ADD", "DEL", "HAS"][next(3)], u, v];
+        return [["ADD", "DEL", "HAS"][next(3)]!, u, v];
       }),
     );
     add(

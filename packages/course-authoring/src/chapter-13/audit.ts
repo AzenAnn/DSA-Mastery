@@ -34,7 +34,7 @@ function tokens(text: string) {
 function parseSizedArray(inputText: string) {
   const values = tokens(inputText).map(Number);
   const n = values[0];
-  assert.equal(values.length, n + 1, "array input length");
+  assert.equal(values.length, n! + 1, "array input length");
   return values.slice(1);
 }
 
@@ -45,7 +45,7 @@ function containerArea(inputText: string) {
     let bruteForce = 0;
     for (let left = 0; left < height.length; ++left) {
       for (let right = left + 1; right < height.length; ++right) {
-        bruteForce = Math.max(bruteForce, (right - left) * Math.min(height[left], height[right]));
+        bruteForce = Math.max(bruteForce, (right - left) * Math.min(height[left]!, height[right]!));
       }
     }
     return String(bruteForce);
@@ -55,8 +55,8 @@ function containerArea(inputText: string) {
   let right = height.length - 1;
   let answer = 0;
   while (left < right) {
-    answer = Math.max(answer, (right - left) * Math.min(height[left], height[right]));
-    if (height[left] < height[right]) ++left;
+    answer = Math.max(answer, (right - left) * Math.min(height[left]!, height[right]!));
+    if (height[left]! < height[right]!) ++left;
     else --right;
   }
   return String(answer);
@@ -65,7 +65,7 @@ function containerArea(inputText: string) {
 function longestPalindrome(inputText: string) {
   const [value] = tokens(inputText);
   const counts = new Map<string, number>();
-  for (const character of value) counts.set(character, (counts.get(character) ?? 0) + 1);
+  for (const character of value!) counts.set(character, (counts.get(character) ?? 0) + 1);
 
   let answer = 0;
   let hasOdd = false;
@@ -84,7 +84,7 @@ function jumpGame(inputText: string) {
     reachable[0] = true;
     for (let index = 0; index < nums.length; ++index) {
       if (!reachable[index]) continue;
-      const end = Math.min(nums.length - 1, index + nums[index]);
+      const end = Math.min(nums.length - 1, index + nums[index]!);
       for (let next = index + 1; next <= end; ++next) reachable[next] = true;
     }
     return String(reachable.at(-1));
@@ -92,7 +92,7 @@ function jumpGame(inputText: string) {
 
   let maxReach = 0;
   for (let index = 0; index < nums.length && index <= maxReach; ++index) {
-    maxReach = Math.max(maxReach, index + nums[index]);
+    maxReach = Math.max(maxReach, index + nums[index]!);
   }
   return String(maxReach >= nums.length - 1);
 }
@@ -100,35 +100,36 @@ function jumpGame(inputText: string) {
 function assignCookies(inputText: string) {
   const values = tokens(inputText).map(Number);
   const [childCount, cookieCount] = values;
-  assert.equal(values.length, 2 + childCount + cookieCount, "cookie input length");
-  const greed = values.slice(2, 2 + childCount).toSorted((left, right) => left - right);
-  const cookies = values.slice(2 + childCount).toSorted((left, right) => left - right);
+  assert.equal(values.length, 2 + childCount! + cookieCount!, "cookie input length");
+  const greed = values.slice(2, 2 + childCount!).toSorted((left, right) => left - right);
+  const cookies = values.slice(2 + childCount!).toSorted((left, right) => left - right);
 
   let child = 0;
   for (const cookie of cookies) {
-    if (child < greed.length && cookie >= greed[child]) ++child;
+    if (child < greed.length && cookie >= greed[child]!) ++child;
   }
   return String(child);
 }
 
 function nonOverlappingIntervals(inputText: string) {
   const values = tokens(inputText).map(Number);
-  const n = values[0];
+  const n = values[0]!;
   assert.equal(values.length, 1 + 2 * n, "interval input length");
-  const intervals = Array.from({ length: n }, (_, index) => [values[1 + 2 * index], values[2 + 2 * index]]).toSorted(
-    (left, right) => left[1] - right[1] || left[0] - right[0],
-  );
+  const intervals = Array.from({ length: n }, (_, index): [number, number] => [
+    values[1 + 2 * index]!,
+    values[2 + 2 * index]!,
+  ]).toSorted((left, right) => left[1] - right[1] || left[0] - right[0]);
 
   if (n <= 200) {
     const bestEndingAt = Array.from<number>({ length: n }).fill(1);
     let kept = 1;
     for (let current = 0; current < n; ++current) {
       for (let previous = 0; previous < current; ++previous) {
-        if (intervals[previous][1] <= intervals[current][0]) {
-          bestEndingAt[current] = Math.max(bestEndingAt[current], bestEndingAt[previous] + 1);
+        if (intervals[previous]![1] <= intervals[current]![0]) {
+          bestEndingAt[current] = Math.max(bestEndingAt[current]!, bestEndingAt[previous]! + 1);
         }
       }
-      kept = Math.max(kept, bestEndingAt[current]);
+      kept = Math.max(kept, bestEndingAt[current]!);
     }
     return String(n - kept);
   }
@@ -146,16 +147,16 @@ function nonOverlappingIntervals(inputText: string) {
 function canPlaceFlowers(inputText: string) {
   const values = tokens(inputText).map(Number);
   const [n, need] = values;
-  assert.equal(values.length, n + 2, "flowerbed input length");
+  assert.equal(values.length, n! + 2, "flowerbed input length");
   const bed = values.slice(2);
   let planted = 0;
-  for (let index = 0; index < n; ++index) {
-    if (bed[index] === 0 && (index === 0 || bed[index - 1] === 0) && (index === n - 1 || bed[index + 1] === 0)) {
+  for (let index = 0; index < n!; ++index) {
+    if (bed[index] === 0 && (index === 0 || bed[index - 1] === 0) && (index === n! - 1 || bed[index + 1] === 0)) {
       bed[index] = 1;
       ++planted;
     }
   }
-  return String(planted >= need);
+  return String(planted >= need!);
 }
 
 function lemonadeChange(inputText: string) {
@@ -186,18 +187,18 @@ function lemonadeChange(inputText: string) {
 function maximizeSumAfterKNegations(inputText: string) {
   const values = tokens(inputText).map(Number);
   const [n, k] = values;
-  assert.equal(values.length, n + 2, "negation input length");
+  assert.equal(values.length, n! + 2, "negation input length");
   const nums = values.slice(2).toSorted((left, right) => left - right);
   let remaining = k;
-  for (let index = 0; index < nums.length && nums[index] < 0 && remaining > 0; ++index, --remaining)
-    nums[index] = -nums[index];
+  for (let index = 0; index < nums.length && nums[index]! < 0 && remaining! > 0; ++index, --remaining!)
+    nums[index] = -nums[index]!;
   const sum = nums.reduce((total, value) => total + value, 0);
-  return String(remaining % 2 === 0 ? sum : sum - 2 * Math.min(...nums));
+  return String(remaining! % 2 === 0 ? sum : sum - 2 * Math.min(...nums));
 }
 
 function stockProfit(inputText: string) {
   const prices = parseSizedArray(inputText);
-  let minimum = prices[0];
+  let minimum = prices[0]!;
   let answer = 0;
   for (const price of prices) {
     answer = Math.max(answer, price - minimum);
@@ -208,11 +209,11 @@ function stockProfit(inputText: string) {
 
 function maximumUnits(inputText: string) {
   const values = tokens(inputText).map(Number);
-  const [typeCount, truckSize] = values;
+  const [typeCount, truckSize] = values as [number, number, ...number[]];
   assert.equal(values.length, 2 + 2 * typeCount, "truck input length");
-  const types = Array.from({ length: typeCount }, (_, index) => [
-    values[2 + index * 2],
-    values[3 + index * 2],
+  const types = Array.from({ length: typeCount }, (_, index): [number, number] => [
+    values[2 + index * 2]!,
+    values[3 + index * 2]!,
   ]).toSorted((left, right) => right[1] - left[1]);
   let capacity = truckSize;
   let answer = 0;
@@ -230,7 +231,7 @@ function jumpGameTwo(inputText: string) {
   let boundary = 0;
   let farthest = 0;
   for (let index = 0; index < nums.length - 1; ++index) {
-    farthest = Math.max(farthest, index + nums[index]);
+    farthest = Math.max(farthest, index + nums[index]!);
     if (index === boundary) {
       ++jumps;
       boundary = farthest;
@@ -240,13 +241,13 @@ function jumpGameTwo(inputText: string) {
 }
 
 function partitionLabels(inputText: string) {
-  const value = tokens(inputText)[0];
+  const value = tokens(inputText)[0]!;
   const last = new Map([...value].map((character, index) => [character, index]));
   const lengths: number[] = [];
   let start = 0;
   let end = 0;
   for (let index = 0; index < value.length; ++index) {
-    end = Math.max(end, last.get(value[index])!);
+    end = Math.max(end, last.get(value[index]!)!);
     if (index === end) {
       lengths.push(end - start + 1);
       start = index + 1;
@@ -257,11 +258,12 @@ function partitionLabels(inputText: string) {
 
 function reconstructQueue(inputText: string) {
   const values = tokens(inputText).map(Number);
-  const n = values[0];
+  const n = values[0]!;
   assert.equal(values.length, 1 + n * 2, "queue input length");
-  const people = Array.from({ length: n }, (_, index) => [values[index * 2 + 1], values[index * 2 + 2]]).toSorted(
-    (left, right) => right[0] - left[0] || left[1] - right[1],
-  );
+  const people = Array.from({ length: n }, (_, index): [number, number] => [
+    values[index * 2 + 1]!,
+    values[index * 2 + 2]!,
+  ]).toSorted((left, right) => right[0] - left[0] || left[1] - right[1]);
   const queue: number[][] = [];
   for (const person of people) queue.splice(person[1], 0, person);
   return queue.map((person) => person.join(" ")).join("\n");
@@ -271,26 +273,29 @@ function candy(inputText: string) {
   const ratings = parseSizedArray(inputText);
   const left = Array.from<number>({ length: ratings.length }).fill(1);
   for (let index = 1; index < ratings.length; ++index) {
-    if (ratings[index] > ratings[index - 1]) left[index] = left[index - 1] + 1;
+    if (ratings[index]! > ratings[index - 1]!) left[index] = left[index - 1]! + 1;
   }
   let answer = left.at(-1)!;
   let right = 1;
   for (let index = ratings.length - 2; index >= 0; --index) {
-    right = ratings[index] > ratings[index + 1] ? right + 1 : 1;
-    answer += Math.max(left[index], right);
+    right = ratings[index]! > ratings[index + 1]! ? right + 1 : 1;
+    answer += Math.max(left[index]!, right);
   }
   return String(answer);
 }
 
 function minimumRefuelStops(inputText: string) {
   const values = tokens(inputText).map(Number);
-  const [target, startFuel, n] = values;
+  const [target, startFuel, n] = values as [number, number, number, ...number[]];
   assert.equal(values.length, 3 + n * 2, "refuel input length");
-  const stations = Array.from({ length: n }, (_, index) => [values[3 + index * 2], values[4 + index * 2]]);
+  const stations = Array.from({ length: n }, (_, index): [number, number] => [
+    values[3 + index * 2]!,
+    values[4 + index * 2]!,
+  ]);
   const available: number[] = [];
   let fuel = startFuel;
   let stops = 0;
-  for (const [position, addedFuel] of [...stations, [target, 0]]) {
+  for (const [position, addedFuel] of [...stations, [target, 0] as [number, number]]) {
     while (fuel < position && available.length > 0) {
       available.sort((left, right) => right - left);
       fuel += available.shift()!;
@@ -411,7 +416,7 @@ function locateLab(sequence: number) {
   const prefix = `E-13-${String(sequence).padStart(2, "0")}-`;
   const matches = fs.readdirSync(EXERCISE_ROOT).filter((name) => name.startsWith(prefix));
   assert.equal(matches.length, 1, `expected one Lab for ${prefix}, found ${matches.join(", ")}`);
-  return path.join(EXERCISE_ROOT, matches[0]);
+  return path.join(EXERCISE_ROOT, matches[0]!);
 }
 
 function assertSampleBlock(readme: string, content: string, message: string) {
@@ -474,8 +479,8 @@ function checkLab(config: LabConfig) {
     return { inputText, outputText };
   });
 
-  assertSampleBlock(readme, loaded[0].inputText, `${config.labId}: sample input drift`);
-  assertSampleBlock(readme, loaded[0].outputText, `${config.labId}: sample output drift`);
+  assertSampleBlock(readme, loaded[0]!.inputText, `${config.labId}: sample input drift`);
+  assertSampleBlock(readme, loaded[0]!.outputText, `${config.labId}: sample output drift`);
   if (config.source !== undefined) assert.ok(readme.includes(config.source), `${config.labId}: LeetCode source`);
 }
 

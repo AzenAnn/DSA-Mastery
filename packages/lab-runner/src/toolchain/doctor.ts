@@ -9,21 +9,26 @@ export interface ToolProbe {
   command: string;
   available: boolean;
   meetsMinimum: boolean;
-  version?: string;
-  minimum?: string;
-  summary?: string;
-  error?: string;
+  version?: string | undefined;
+  minimum?: string | undefined;
+  summary?: string | undefined;
+  error?: string | undefined;
 }
 
 export interface EnvironmentReport {
   platform: NodeJS.Platform;
   architecture: string;
   node: string;
-  standard?: string;
+  standard?: string | undefined;
   tools: ToolProbe[];
   makeOptional: true;
   makeAvailable: boolean;
-  msvc: { initialized: boolean; installationPath?: string; developerCommand?: string; error?: string };
+  msvc: {
+    initialized: boolean;
+    installationPath?: string | undefined;
+    developerCommand?: string | undefined;
+    error?: string | undefined;
+  };
   fallback: string;
   ok: boolean;
   issues: string[];
@@ -41,7 +46,7 @@ async function probe(
   args: string[],
   minimum: Version,
   pattern: RegExp | undefined,
-  options: { env?: NodeJS.ProcessEnv; runner: Runner },
+  options: { env?: NodeJS.ProcessEnv | undefined; runner: Runner },
 ): Promise<ToolProbe> {
   const result = await options.runner(command, args, { env: options.env, timeMs: 5000, outputKb: 256 });
   if (result.spawnError) {

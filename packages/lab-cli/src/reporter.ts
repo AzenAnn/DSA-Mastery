@@ -14,7 +14,13 @@ import { cleanTerminalText, createTheme } from "@dsa/lab-core";
 
 const plain = (theme?: Theme): Theme => theme ?? createTheme({ color: false });
 
-function checkLine(theme: Theme, label: string, passed: boolean, successText: string, failureText: string): string {
+function checkLine(
+  theme: Theme,
+  label: string,
+  passed: boolean | undefined,
+  successText: string,
+  failureText: string,
+): string {
   return `${theme.heading(`${label}：`)}${passed ? theme.success(successText) : theme.danger(failureText)}`;
 }
 
@@ -60,8 +66,8 @@ export function formatNew(created: CreatedLab, source?: Theme): string {
 
 export interface LocatedLab {
   id: string;
-  type?: LabType;
-  category?: string;
+  type?: LabType | undefined;
+  category?: string | undefined;
   relativePath: string;
 }
 
@@ -73,9 +79,9 @@ export function formatLocate(lab: LocatedLab, source?: Theme): string {
 
 export function formatValidate(report: LabReport, source?: Theme): string {
   const theme = plain(source);
-  const quiz = report.quiz as { count: number; totalPoints: number } | undefined;
-  const cases = report.cases as number | undefined;
-  const tasks = report.tasks as number | undefined;
+  const quiz = report["quiz"] as { count: number; totalPoints: number } | undefined;
+  const cases = report["cases"] as number | undefined;
+  const tasks = report["tasks"] as number | undefined;
   const lines = [
     `${theme.success("VALIDATION PASS")} ${report.lab.id === undefined ? "" : `${theme.info(report.lab.id)} · `}${theme.path(report.lab.path)}`,
     `${theme.heading("类型：")}${report.lab.type} · Schema v${report.lab.schemaVersion}`,
@@ -155,10 +161,10 @@ export function formatVerify(type: LabType, verification: Verification, source?:
   } else {
     const { checks, drift } = verification as VerifyResult;
     lines.push(
-      checkLine(theme, "参考实现", checks.solutionFullScore, "100/100", "失败"),
-      checkLine(theme, "学生骨架编译", checks.studentCompiles, "可编译", "编译失败"),
-      checkLine(theme, "学生骨架分数", checks.studentNotFullScore, "未误得满分", "错误地得到满分"),
-      checkLine(theme, "标准输出", checks.expectedStable, "无漂移", `有 ${drift.changed} 处漂移`),
+      checkLine(theme, "参考实现", checks["solutionFullScore"], "100/100", "失败"),
+      checkLine(theme, "学生骨架编译", checks["studentCompiles"], "可编译", "编译失败"),
+      checkLine(theme, "学生骨架分数", checks["studentNotFullScore"], "未误得满分", "错误地得到满分"),
+      checkLine(theme, "标准输出", checks["expectedStable"], "无漂移", `有 ${drift.changed} 处漂移`),
     );
   }
 

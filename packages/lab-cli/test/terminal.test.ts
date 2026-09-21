@@ -181,7 +181,7 @@ it("Project formatter distinguishes automated full score from manual pending", (
   expect(plain).toMatch(/Provisional total： 80\/100/);
   expect(plain).toMatch(/AUTOMATED PASS · MANUAL REVIEW PENDING/);
   const nested = plain.split("\n").filter((line) => /^ {2}(?:short|codec-prefix-property)/.test(line));
-  expect(nested[0].indexOf("AC")).toBe(nested[1].indexOf("AC"));
+  expect(nested[0]!.indexOf("AC")).toBe(nested[1]!.indexOf("AC"));
 });
 
 it("all non-interactive reporters share readable status tokens and remain plain when requested", () => {

@@ -38,7 +38,7 @@ async function writeLab(
   const front = Object.entries(frontmatter)
     .map(([key, value]) => `${key}: ${typeof value === "string" ? JSON.stringify(value) : value}`)
     .join("\n");
-  await writeFile(path.join(labRoot, "README.md"), `---\n${front}\n---\n\n# ${frontmatter.title}\n`, "utf8");
+  await writeFile(path.join(labRoot, "README.md"), `---\n${front}\n---\n\n# ${frontmatter["title"]}\n`, "utf8");
   await writeFile(path.join(labRoot, "lab.json"), JSON.stringify(manifest), "utf8");
   await Promise.all(
     Object.entries(extraFiles).map(async ([relativePath, content]) => {
@@ -317,9 +317,9 @@ it("discovers 31 renumbered Ch4 exercises with legacy aliases in final order", a
   expect(ch04IdAliases(exercises, []).length).toBe(17);
   for (const [old, next, slug] of CH04_RENUMBERING) {
     const lab = exercises[next - 1];
-    expect(lab.legacyNames.includes(`E-04-${String(old).padStart(2, "0")}-${slug}`)).toBeTruthy();
-    expect(lab.legacyNames.includes(`lab-04-${String(old + 8).padStart(2, "0")}-${slug}`)).toBeTruthy();
-    expect(lab.order).toBe(next + 8);
+    expect(lab!.legacyNames.includes(`E-04-${String(old).padStart(2, "0")}-${slug}`)).toBeTruthy();
+    expect(lab!.legacyNames.includes(`lab-04-${String(old + 8).padStart(2, "0")}-${slug}`)).toBeTruthy();
+    expect(lab!.order).toBe(next + 8);
   }
 });
 

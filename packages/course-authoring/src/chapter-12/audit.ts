@@ -31,7 +31,7 @@ function labDirectory(sequence: number) {
   const prefix = `E-12-${String(sequence).padStart(2, "0")}-`;
   const matches = fs.readdirSync(EXERCISE_ROOT).filter((name) => name.startsWith(prefix));
   assert.equal(matches.length, 1, `expected one Lab for ${prefix}, found ${matches.join(", ")}`);
-  return path.join(EXERCISE_ROOT, matches[0]);
+  return path.join(EXERCISE_ROOT, matches[0]!);
 }
 
 function loadLab(sequence: number): LoadedCase[] {
@@ -57,8 +57,8 @@ function loadLab(sequence: number): LoadedCase[] {
   const sampleInput = readme.match(/### 样例输入\s+```text\n([\s\S]*?)\n```/);
   const sampleOutput = readme.match(/### 样例输出\s+```text\n([\s\S]*?)\n```/);
   assert.ok(sampleInput && sampleOutput, `12E${sequence}: README sample blocks`);
-  assert.equal(sampleInput[1].trimEnd(), loaded[0].inputText.trimEnd(), `12E${sequence}: sample input drift`);
-  assert.equal(sampleOutput[1].trimEnd(), loaded[0].outputText.trimEnd(), `12E${sequence}: sample output drift`);
+  assert.equal(sampleInput[1]!.trimEnd(), loaded[0]!.inputText.trimEnd(), `12E${sequence}: sample input drift`);
+  assert.equal(sampleOutput[1]!.trimEnd(), loaded[0]!.outputText.trimEnd(), `12E${sequence}: sample output drift`);
   return loaded;
 }
 
@@ -84,7 +84,7 @@ function checkFunction(cases: LoadedCase[]) {
     const values = tokens(item.inputText).map(Number);
     const expectedLines: string[] = [];
     for (let i = 0; i < values.length; i += 3) {
-      const [a, b, c] = values.slice(i, i + 3);
+      const [a, b, c] = values.slice(i, i + 3) as [number, number, number];
       if (a === -1 && b === -1 && c === -1) break;
       expectedLines.push(`w(${a}, ${b}, ${c}) = ${wFunction(a, b, c, memo)}`);
     }
@@ -117,10 +117,10 @@ function buildTotem(level: number): string[] {
   const width = height * 2;
   const result = Array.from({ length: height * 2 }, () => Array.from<string>({ length: width * 2 }).fill(" "));
   for (let row = 0; row < height; ++row) {
-    for (let column = 0; column < previous[row].length; ++column) {
-      result[row][height + column] = previous[row][column];
-      result[row + height][column] = previous[row][column];
-      result[row + height][width + column] = previous[row][column];
+    for (let column = 0; column < previous[row]!.length; ++column) {
+      result[row]![height + column] = previous[row]![column]!;
+      result[row + height]![column] = previous[row]![column]!;
+      result[row + height]![width + column] = previous[row]![column]!;
     }
   }
   return result.map((row) => row.join("").trimEnd());
@@ -137,7 +137,7 @@ function checkFastPower(cases: LoadedCase[]) {
   for (const item of cases) {
     const [x, n] = tokens(item.inputText).map(Number);
     const actual = Number(tokens(item.outputText)[0]);
-    const expected = x ** n;
+    const expected = x! ** n!;
     const tolerance = 1e-9 + 1e-9 * Math.abs(expected);
     assert.ok(Math.abs(actual - expected) <= tolerance, `${item.id}: fast power`);
   }
@@ -174,7 +174,7 @@ function locateCowCode(initial: string, rawPosition: string) {
 
 function checkCowCode(cases: LoadedCase[]) {
   for (const item of cases) {
-    const [initial, position] = tokens(item.inputText);
+    const [initial, position] = tokens(item.inputText) as [string, string];
     assert.equal(item.outputText.trim(), locateCowCode(initial, position), `${item.id}: cow code`);
   }
 }
@@ -182,13 +182,13 @@ function checkCowCode(cases: LoadedCase[]) {
 function parseArrayCase(inputText: string) {
   const values = tokens(inputText).map(Number);
   const n = values[0];
-  return values.slice(values.length - n);
+  return values.slice(values.length - n!);
 }
 
 function checkQuickselect(cases: LoadedCase[]) {
   for (const item of cases) {
     const input = tokens(item.inputText).map(Number);
-    const [n, k] = input;
+    const [n, k] = input as [number, number, ...number[]];
     const values = input.slice(2, 2 + n).sort((a, b) => a - b);
     assert.equal(Number(tokens(item.outputText)[0]), values[k], `${item.id}: quickselect`);
   }
@@ -217,7 +217,7 @@ function fillDecodedQuadTree(
   if (token === "L0" || token === "L1") {
     const value = token === "L1" ? 1 : 0;
     for (let r = row; r < row + size; ++r) {
-      for (let c = column; c < column + size; ++c) grid[r][c] = value;
+      for (let c = column; c < column + size; ++c) grid[r]![c] = value;
     }
     return;
   }
@@ -233,7 +233,7 @@ function fillDecodedQuadTree(
 function checkQuadTree(cases: LoadedCase[]) {
   for (const item of cases) {
     const input = tokens(item.inputText).map(Number);
-    const n = input[0];
+    const n = input[0]!;
     const original = input.slice(1);
     const decoded = Array.from({ length: n }, () => Array.from<number>({ length: n }).fill(-1));
     const output = tokens(item.outputText);
@@ -270,12 +270,12 @@ const carpetCells: Record<number, [number, number][]> = {
 function checkCarpet(cases: LoadedCase[]) {
   for (const item of cases) {
     const [k, holeRow, holeColumn] = tokens(item.inputText).map(Number);
-    const size = 2 ** k;
+    const size = 2 ** k!;
     const lines = item.outputText.trim().split("\n");
     assert.equal(lines.length, (size * size - 1) / 3, `${item.id}: carpet count`);
     const covered = new Set<string>();
     for (const line of lines) {
-      const [row, column, type] = tokens(line).map(Number);
+      const [row, column, type] = tokens(line).map(Number) as [number, number, number];
       assert.ok(carpetCells[type] !== undefined, `${item.id}: carpet type ${type}`);
       for (const [dr, dc] of carpetCells[type]) {
         const r = row + dr;
@@ -297,7 +297,7 @@ function checkInversions(cases: LoadedCase[]) {
     if (values.length > 300) continue;
     let answer = 0;
     for (let i = 0; i < values.length; ++i) {
-      for (let j = i + 1; j < values.length; ++j) answer += Number(values[i] > values[j]);
+      for (let j = i + 1; j < values.length; ++j) answer += Number(values[i]! > values[j]!);
     }
     assert.equal(Number(tokens(item.outputText)[0]), answer, `${item.id}: inversion brute force`);
   }
@@ -307,7 +307,7 @@ function expressionResults(expression: string, memo = new Map<string, number[]>(
   if (memo.has(expression)) return memo.get(expression)!;
   const result: number[] = [];
   for (let i = 0; i < expression.length; ++i) {
-    const operator = expression[i];
+    const operator = expression[i]!;
     if (!"+-*".includes(operator)) continue;
     for (const left of expressionResults(expression.slice(0, i), memo)) {
       for (const right of expressionResults(expression.slice(i + 1), memo)) {
@@ -345,10 +345,10 @@ function checkBeautiful(cases: LoadedCase[]) {
     for (let a = 1; a <= n; ++a) {
       for (let b = a + 2; b <= n; b += 2) {
         const middle = (a + b) / 2;
-        const left = Math.min(position[a], position[b]);
-        const right = Math.max(position[a], position[b]);
+        const left = Math.min(position[a]!, position[b]!);
+        const right = Math.max(position[a]!, position[b]!);
         assert.ok(
-          position[middle] < left || position[middle] > right,
+          position[middle]! < left || position[middle]! > right,
           `${item.id}: arithmetic progression ${a},${middle},${b}`,
         );
       }
@@ -362,7 +362,7 @@ function checkReversePairs(cases: LoadedCase[]) {
     if (values.length > 300) continue;
     let answer = 0;
     for (let i = 0; i < values.length; ++i) {
-      for (let j = i + 1; j < values.length; ++j) answer += Number(values[i] > 2 * values[j]);
+      for (let j = i + 1; j < values.length; ++j) answer += Number(values[i]! > 2 * values[j]!);
     }
     assert.equal(Number(tokens(item.outputText)[0]), answer, `${item.id}: reverse-pair brute force`);
   }
@@ -381,14 +381,14 @@ function checkRangeSum(cases: LoadedCase[]) {
   for (const item of cases) {
     const input = tokens(item.inputText).map(Number);
     const [n, lower, upper] = input;
-    if (n > 300) continue;
+    if (n! > 300) continue;
     const values = input.slice(3);
     let answer = 0;
-    for (let left = 0; left < n; ++left) {
+    for (let left = 0; left < n!; ++left) {
       let sum = 0;
-      for (let right = left; right < n; ++right) {
-        sum += values[right];
-        if (sum >= lower && sum <= upper) ++answer;
+      for (let right = left; right < n!; ++right) {
+        sum += values[right]!;
+        if (sum >= lower! && sum <= upper!) ++answer;
       }
     }
     assert.equal(Number(tokens(item.outputText)[0]), answer, `${item.id}: range-sum brute force`);
@@ -415,7 +415,7 @@ const checks = [
 ];
 
 for (let sequence = 1; sequence <= 16; ++sequence) {
-  checks[sequence - 1](loadLab(sequence));
+  checks[sequence - 1]!(loadLab(sequence));
   console.log(`PASS 12E${String(sequence).padStart(2, "0")} independent contract check`);
 }
 

@@ -47,18 +47,20 @@ export interface HistoryEntry {
 export interface LabProgress {
   /** 一旦为 true 永不回退 —— 通过一次即永久绿勾。 */
   passed: boolean;
-  firstPassedAt?: string;
+  firstPassedAt?: string | undefined;
   bestScore: number;
   maxScore: number;
   submissionCount: number;
   /** 最近一次提交，可能低于最好成绩；仅用于展示，不影响 passed。 */
-  lastSubmission?: {
-    at: string;
-    verdict: Verdict;
-    score: number;
-    maxScore: number;
-    cases: SubmissionCase[];
-  };
+  lastSubmission?:
+    | {
+        at: string;
+        verdict: Verdict;
+        score: number;
+        maxScore: number;
+        cases: SubmissionCase[];
+      }
+    | undefined;
   history: HistoryEntry[];
 }
 
@@ -140,7 +142,10 @@ export class ProgressTracker {
   private projectStore: ProjectStore;
   private currentProjects = new Map<string, ProjectCurrentState>();
 
-  constructor(private readonly context: vscode.ExtensionContext) {
+  private readonly context: vscode.ExtensionContext;
+
+  constructor(context: vscode.ExtensionContext) {
+    this.context = context;
     this.store = this.load();
     this.projectStore = this.loadProjects();
   }

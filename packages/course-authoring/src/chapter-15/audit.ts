@@ -13,13 +13,13 @@ const tokens = (text: string) => text.trim().split(/\s+/).filter(Boolean);
 const numbers = (text: string) => tokens(text).map(Number);
 function numericOrder(a: number[], b: number[]) {
   for (let i = 0; i < Math.min(a.length, b.length); ++i) {
-    if (a[i] !== b[i]) return a[i] - b[i];
+    if (a[i] !== b[i]) return a[i]! - b[i]!;
   }
   return a.length - b.length;
 }
 function textOrder(a: string[], b: string[]) {
   for (let i = 0; i < Math.min(a.length, b.length); ++i) {
-    if (a[i] !== b[i]) return a[i] < b[i] ? -1 : 1;
+    if (a[i] !== b[i]) return a[i]! < b[i]! ? -1 : 1;
   }
   return a.length - b.length;
 }
@@ -31,7 +31,7 @@ const stringsOutput = (values: string[]) => `${values.length}\n${values.sort().j
 function arrayInput(a: number[], target?: number) {
   return `${a.length}${target === undefined ? "" : ` ${target}`}\n${a.join(" ")}\n`;
 }
-const knightSteps = [
+const knightSteps: [number, number][] = [
   [-2, -1],
   [-2, 1],
   [-1, -2],
@@ -49,11 +49,11 @@ function permutations(values: number[]) {
   for (;;) {
     result.push([...current]);
     let pivot = current.length - 2;
-    while (pivot >= 0 && current[pivot] >= current[pivot + 1]) --pivot;
+    while (pivot >= 0 && current[pivot]! >= current[pivot + 1]!) --pivot;
     if (pivot < 0) break;
     let successor = current.length - 1;
-    while (current[successor] <= current[pivot]) --successor;
-    [current[pivot], current[successor]] = [current[successor], current[pivot]];
+    while (current[successor]! <= current[pivot]!) --successor;
+    [current[pivot], current[successor]] = [current[successor]!, current[pivot]!];
     const suffix = current.splice(pivot + 1).reverse();
     current.push(...suffix);
   }
@@ -69,8 +69,8 @@ function combinations(n: number, r: number) {
     let i = r - 1;
     while (i >= 0 && current[i] === n - r + i + 1) --i;
     if (i < 0) break;
-    ++current[i];
-    for (let j = i + 1; j < r; ++j) current[j] = current[j - 1] + 1;
+    ++current[i]!;
+    for (let j = i + 1; j < r; ++j) current[j] = current[j - 1]! + 1;
   }
   return result;
 }
@@ -118,11 +118,12 @@ function sumCombinations(values: number[], target: number, reusable: boolean) {
 
 function maze(input: string) {
   const [n, m, t, sx, sy, fx, fy, ...obstacles] = numbers(input);
-  assert.ok(t >= 1 && t <= 10 && obstacles.length === t * 2);
+  assert.ok(t! >= 1 && t! <= 10 && obstacles.length === t! * 2);
   let blocked = 0n;
-  for (let i = 0; i < obstacles.length; i += 2) blocked |= 1n << BigInt((obstacles[i] - 1) * m + obstacles[i + 1] - 1);
-  const start = (sx - 1) * m + sy - 1,
-    goal = (fx - 1) * m + fy - 1;
+  for (let i = 0; i < obstacles.length; i += 2)
+    blocked |= 1n << BigInt((obstacles[i]! - 1) * m! + obstacles[i + 1]! - 1);
+  const start = (sx! - 1) * m! + sy! - 1,
+    goal = (fx! - 1) * m! + fy! - 1;
   if (blocked & (1n << BigInt(goal))) return 0;
   const stack: [number, bigint][] = [[start, blocked | (1n << BigInt(start))]];
   let answer = 0;
@@ -133,12 +134,12 @@ function maze(input: string) {
       continue;
     }
     for (const next of [
-      position - m,
-      position + m,
-      position % m ? position - 1 : -1,
-      (position % m) + 1 < m ? position + 1 : -1,
+      position - m!,
+      position + m!,
+      position % m! ? position - 1 : -1,
+      (position % m!) + 1 < m! ? position + 1 : -1,
     ]) {
-      if (next < 0 || next >= n * m || used & (1n << BigInt(next))) continue;
+      if (next < 0 || next >= n! * m! || used & (1n << BigInt(next))) continue;
       stack.push([next, used | (1n << BigInt(next))]);
     }
   }
@@ -146,14 +147,14 @@ function maze(input: string) {
 }
 
 function elevator(input: string) {
-  const [n, start, goal, ...jumps] = numbers(input);
+  const [n, start, goal, ...jumps] = numbers(input) as [number, number, number, ...number[]];
   const distance = Array.from<number>({ length: n }).fill(Infinity);
   distance[start - 1] = 0;
   // Repeated relaxation is independent of the reference queue traversal.
   for (let round = 0; round < n; ++round) {
     for (let from = 0; from < n; ++from) {
-      for (const to of [from - jumps[from], from + jumps[from]]) {
-        if (to >= 0 && to < n) distance[to] = Math.min(distance[to], distance[from] + 1);
+      for (const to of [from - jumps[from]!, from + jumps[from]!]) {
+        if (to >= 0 && to < n) distance[to] = Math.min(distance[to]!, distance[from]! + 1);
       }
     }
   }
@@ -161,18 +162,18 @@ function elevator(input: string) {
 }
 
 function knightDistances(input: string) {
-  const [n, m, x, y] = numbers(input);
+  const [n, m, x, y] = numbers(input) as [number, number, number, number];
   const distances = Array.from<number>({ length: n * m }).fill(-1),
     queue = [(x - 1) * m + y - 1];
-  distances[queue[0]] = 0;
+  distances[queue[0]!] = 0;
   for (let head = 0; head < queue.length; ++head) {
-    const p = queue[head];
+    const p = queue[head]!;
     for (const [dx, dy] of knightSteps) {
       const r = Math.floor(p / m) + dx,
         c = (p % m) + dy,
         next = r * m + c;
       if (r < 0 || r >= n || c < 0 || c >= m || distances[next] !== -1) continue;
-      distances[next] = distances[p] + 1;
+      distances[next] = distances[p]! + 1;
       queue.push(next);
     }
   }
@@ -184,7 +185,7 @@ function wordSearch(input: string) {
     m = Number(mText),
     n = Number(nText);
   const grid = parts.slice(0, m).join(""),
-    word = parts[m];
+    word = parts[m]!;
   for (const letter of new Set(word)) {
     if ([...word].filter((x) => x === letter).length > [...grid].filter((x) => x === letter).length) return false;
   }
@@ -223,7 +224,7 @@ function queens(n: number) {
   const solutions = permutations(Array.from({ length: n }, (_, i) => i)).filter((row) => {
     for (let i = 0; i < n; ++i) {
       for (let j = 0; j < i; ++j) {
-        if (Math.abs(row[i] - row[j]) === i - j) return false;
+        if (Math.abs(row[i]! - row[j]!) === i - j) return false;
       }
     }
     return true;
@@ -240,12 +241,13 @@ function sudokuAnswers(board: number[], maximum = Infinity) {
   for (let r = 0; r < 9; ++r) {
     for (let c = 0; c < 9; ++c) {
       for (let d = 1; d <= 9; ++d) {
-        if (board[r * 9 + c] && board[r * 9 + c] !== d) continue;
+        const clue = board[r * 9 + c]!;
+        if (clue !== 0 && clue !== d) continue;
         const id = rows.length,
           box = Math.floor(r / 3) * 3 + Math.floor(c / 3);
         rows.push([r, c, d]);
         rowColumns.push([r * 9 + c, 81 + r * 9 + d - 1, 162 + c * 9 + d - 1, 243 + box * 9 + d - 1]);
-        for (const col of rowColumns[id]) columns[col].add(id);
+        for (const col of rowColumns[id]!) columns[col]!.add(id);
       }
     }
   }
@@ -256,7 +258,7 @@ function sudokuAnswers(board: number[], maximum = Infinity) {
     if (!active.size) {
       const answer = Array.from<number>({ length: 81 }).fill(0);
       for (const id of chosen) {
-        const [r, c, d] = rows[id];
+        const [r, c, d] = rows[id] as [number, number, number];
         answer[r * 9 + c] = d;
       }
       answers.push(answer);
@@ -264,23 +266,23 @@ function sudokuAnswers(board: number[], maximum = Infinity) {
     }
     let best = -1;
     for (const col of active) {
-      if (best < 0 || columns[col].size < columns[best].size) best = col;
+      if (best < 0 || columns[col]!.size < columns[best]!.size) best = col;
     }
-    for (const id of [...columns[best]]) {
+    for (const id of [...columns[best]!]) {
       const removed: [number, number][] = [];
-      for (const col of rowColumns[id]) {
+      for (const col of rowColumns[id]!) {
         active.delete(col);
-        for (const conflict of [...columns[col]]) {
-          for (const other of rowColumns[conflict]) {
-            if (columns[other].delete(conflict)) removed.push([other, conflict]);
+        for (const conflict of [...columns[col]!]) {
+          for (const other of rowColumns[conflict]!) {
+            if (columns[other]!.delete(conflict)) removed.push([other, conflict]);
           }
         }
       }
       chosen.push(id);
       search();
       chosen.pop();
-      for (const [col, conflict] of removed.reverse()) columns[col].add(conflict);
-      for (const col of rowColumns[id]) active.add(col);
+      for (const [col, conflict] of removed.reverse()) columns[col]!.add(conflict);
+      for (const col of rowColumns[id]!) active.add(col);
       if (answers.length >= maximum) return;
     }
   }
@@ -309,13 +311,13 @@ function eightPuzzleDistances() {
   puzzleDistances = new Map([["123804765", 0]]);
   const queue = ["123804765"];
   for (let head = 0; head < queue.length; ++head) {
-    const state = queue[head],
+    const state = queue[head]!,
       blank = state.indexOf("0"),
       depth = puzzleDistances.get(state)!;
     for (const next of [blank - 3, blank + 3, blank % 3 ? blank - 1 : -1, blank % 3 < 2 ? blank + 1 : -1]) {
       if (next < 0 || next >= 9) continue;
       const chars = [...state];
-      [chars[blank], chars[next]] = [chars[next], chars[blank]];
+      [chars[blank], chars[next]] = [chars[next]!, chars[blank]!];
       const key = chars.join("");
       if (!puzzleDistances.has(key)) {
         puzzleDistances.set(key, depth + 1);
@@ -343,9 +345,10 @@ function sticks(values: number[]) {
     const dp = new Int16Array(2 ** values.length).fill(-1);
     dp[0] = 0;
     for (let mask = 0; mask < dp.length; ++mask) {
-      if (dp[mask] < 0) continue;
+      if (dp[mask]! < 0) continue;
       for (let i = 0; i < values.length; ++i) {
-        if (!(mask & (1 << i)) && dp[mask] + values[i] <= target) dp[mask | (1 << i)] = (dp[mask] + values[i]) % target;
+        if (!(mask & (1 << i)) && dp[mask]! + values[i]! <= target)
+          dp[mask | (1 << i)] = (dp[mask]! + values[i]!) % target;
       }
     }
     if (dp.at(-1) === 0) return target;
@@ -357,8 +360,8 @@ const knightGoal = "111110111100*110000100000";
 const knightMoves = Array.from({ length: 25 }, (_, p) =>
   knightSteps
     .map(([dr, dc]) => [Math.floor(p / 5) + dr, (p % 5) + dc])
-    .filter(([r, c]) => r >= 0 && r < 5 && c >= 0 && c < 5)
-    .map(([r, c]) => r * 5 + c),
+    .filter(([r, c]) => r! >= 0 && r! < 5 && c! >= 0 && c! < 5)
+    .map(([r, c]) => r! * 5 + c!),
 );
 function knightEncode(state: string) {
   return [...state].reduce((bits, value, p) => (value === "1" ? bits | (1 << p) : bits), 0) * 32 + state.indexOf("*");
@@ -369,13 +372,13 @@ function knightDecode(key: number) {
 function knightNeighbors(key: number) {
   const blank = key & 31,
     bits = key >>> 5;
-  return knightMoves[blank].map((next) => (bits & (1 << next) ? bits ^ (1 << blank) ^ (1 << next) : bits) * 32 + next);
+  return knightMoves[blank]!.map((next) => (bits & (1 << next) ? bits ^ (1 << blank) ^ (1 << next) : bits) * 32 + next);
 }
 function boundedKnightBfs(initial: number, maximum: number) {
   const distance = new Map([[initial, 0]]),
     queue = [initial];
   for (let head = 0; head < queue.length; ++head) {
-    const key = queue[head],
+    const key = queue[head]!,
       depth = distance.get(key)!;
     if (depth === maximum) continue;
     for (const next of knightNeighbors(key)) {
@@ -412,7 +415,7 @@ function unique24Clues() {
   sparseSudoku = [...classicSudoku];
   for (let p = 0; p < 81 && sparseSudoku.filter(Boolean).length > 24; ++p) {
     if (sparseSudoku[p] === 0) continue;
-    const value = sparseSudoku[p];
+    const value = sparseSudoku[p]!;
     sparseSudoku[p] = 0;
     if (sudokuAnswers(sparseSudoku, 2).length !== 1) sparseSudoku[p] = value;
   }
@@ -435,7 +438,7 @@ function exact15Knight() {
     for (let step = 0; step < 15; ++step) {
       const choices = knightNeighbors(key).filter((next) => (next & 31) !== previous);
       previous = key & 31;
-      key = choices[random(choices.length)];
+      key = choices[random(choices.length)]!;
     }
     const state = knightDecode(key);
     if (knightMinimum(state) === 15) return state;
@@ -618,7 +621,7 @@ function extraInputs(id: number): string[] {
         solvedSudoku.map((d, p) => (p === 40 ? 0 : d)),
         ...[0, 4, 8].map((r) => solvedSudoku.map((d, p) => (Math.floor(p / 9) === r ? 0 : d))),
         ...[1, 4, 8].map((shift) => classicSudoku.map((d) => (d ? ((d - 1 + shift) % 9) + 1 : 0))),
-        Array.from({ length: 81 }, (_, p) => classicSudoku[(p % 9) * 9 + Math.floor(p / 9)]),
+        Array.from({ length: 81 }, (_, p) => classicSudoku[(p % 9) * 9 + Math.floor(p / 9)]!),
         unique24Clues(),
       ].map((board) => sudokuText(board));
     case 18: {
@@ -665,7 +668,7 @@ function extraInputs(id: number): string[] {
         ],
       ].map((board) => sudokuText(board, true));
     case 21: {
-      const one = knightDecode(knightNeighbors(knightEncode(knightGoal))[0]),
+      const one = knightDecode(knightNeighbors(knightEncode(knightGoal))[0]!),
         exact15 = exact15Knight();
       const far = [...knightGoal].map((ch) => (ch === "*" ? ch : ch === "0" ? "1" : "0")).join("");
       const atEight = knightDecode([...knightReverse!].find(([, depth]) => depth === 8)![0]);
@@ -689,11 +692,11 @@ function oracle(id: number, input: string) {
   const values = numbers(input);
   switch (id) {
     case 1:
-      return `${permutations(Array.from({ length: values[0] }, (_, i) => i + 1))
+      return `${permutations(Array.from({ length: values[0]! }, (_, i) => i + 1))
         .map((row) => row.map((v) => String(v).padStart(5)).join(""))
         .join("\n")}\n`;
     case 2:
-      return `${combinations(values[0], values[1])
+      return `${combinations(values[0]!, values[1]!)
         .map((row) => row.map((v) => String(v).padStart(3)).join(""))
         .join("\n")}\n`;
     case 3:
@@ -701,15 +704,15 @@ function oracle(id: number, input: string) {
       return rowsOutput(subsets(values.slice(1)), numericOrder);
     case 4:
       return `${
-        combinations(values[0], values[1]).filter((positions) =>
-          isPrime(positions.reduce((sum, p) => sum + values[p + 1], 0)),
+        combinations(values[0]!, values[1]!).filter((positions) =>
+          isPrime(positions.reduce((sum, p) => sum + values[p + 1]!, 0)),
         ).length
       }\n`;
     case 5: {
       const letters = ["", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"];
       let words = [""];
       for (const digit of input.trim())
-        words = words.flatMap((word) => [...letters[Number(digit)]].map((letter) => word + letter));
+        words = words.flatMap((word) => [...letters[Number(digit)]!].map((letter) => word + letter));
       return stringsOutput(words);
     }
     case 6:
@@ -721,23 +724,23 @@ function oracle(id: number, input: string) {
     case 9: {
       const n = values[0],
         answers: string[] = [];
-      for (let bits = 0; bits < 2 ** (2 * n); ++bits) {
+      for (let bits = 0; bits < 2 ** (2 * n!); ++bits) {
         let balance = 0,
           word = "";
-        for (let i = 0; i < 2 * n; ++i) {
+        for (let i = 0; i < 2 * n!; ++i) {
           const open = bits & (1 << i);
           balance += open ? 1 : -1;
           word += open ? "(" : ")";
           if (balance < 0) break;
         }
-        if (balance === 0 && word.length === 2 * n) answers.push(word);
+        if (balance === 0 && word.length === 2 * n!) answers.push(word);
       }
-      assert.equal(answers.length, [1, 1, 2, 5, 14, 42, 132, 429, 1430][n]);
+      assert.equal(answers.length, [1, 1, 2, 5, 14, 42, 132, 429, 1430][n!]);
       return stringsOutput(answers);
     }
     case 10:
     case 13:
-      return rowsOutput(sumCombinations(values.slice(2), values[1], id === 10), numericOrder);
+      return rowsOutput(sumCombinations(values.slice(2), values[1]!, id === 10), numericOrder);
     case 12:
       return rowsOutput(permutations(values.slice(1)), numericOrder);
     case 14:
@@ -745,12 +748,12 @@ function oracle(id: number, input: string) {
     case 15:
       return rowsOutput(partitions(input.trim()), textOrder);
     case 16:
-      return queens(values[0]);
+      return queens(values[0]!);
     case 17: {
       const board = [...input.replace(/\s/g, "")].map((ch) => (ch === "." ? 0 : Number(ch)));
       const answers = sudokuAnswers(board, 2);
       assert.equal(answers.length, 1, "LC37 fixture must have exactly one solution");
-      return sudokuText(answers[0]);
+      return sudokuText(answers[0]!);
     }
     case 18: {
       const result = eightPuzzleDistances().get(input.trim());
@@ -796,8 +799,8 @@ for (const directory of directories) {
   const inputMatch = readme.match(/### 样例输入\s+```text\n([\s\S]*?)\n```/);
   const outputMatch = readme.match(/### 样例输出\s+```text\n([\s\S]*?)\n```/);
   assert.ok(inputMatch && outputMatch, `${directory}: missing README sample`);
-  const input = normalize(inputMatch[1]),
-    expectedSample = normalize(outputMatch[1]);
+  const input = normalize(inputMatch[1]!),
+    expectedSample = normalize(outputMatch[1]!);
   const inputs = [input, ...extraInputs(id).map(normalize)];
   const uniqueInputs = [...new Map(inputs.map((text) => [tokens(text).join(" "), text])).values()];
   const points = Math.floor(100 / uniqueInputs.length),

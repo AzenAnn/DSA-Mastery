@@ -69,7 +69,7 @@ export function renderTuiSummary({
   }
 
   const success = headline.includes("成功");
-  const matchedLabel = headline.match(/^DSA Mastery 环境配置[：:](.*)$/u)?.[1].trimStart();
+  const matchedLabel = headline.match(/^DSA Mastery 环境配置[：:](.*)$/u)?.[1]?.trimStart();
   const headlineLabel = matchedLabel === undefined || matchedLabel === "" ? headline : matchedLabel;
   const metadataFields = metadata.map(parseSummaryField).filter((field): field is SummaryField => Boolean(field));
   const resultFields = resultDetails.map(parseSummaryField).filter((field): field is SummaryField => Boolean(field));
@@ -134,10 +134,10 @@ function parseSummaryStage(
   if (!match) return undefined;
 
   return {
-    icon: match[1],
-    name: match[2],
-    message: match[3].trimStart(),
-    status: SUMMARY_ICON_STATUS[match[1]] ?? "pending",
+    icon: match[1]!,
+    name: match[2]!,
+    message: match[3]!.trimStart(),
+    status: SUMMARY_ICON_STATUS[match[1]!] ?? "pending",
   };
 }
 
@@ -145,7 +145,7 @@ function parseSummaryField(line: string): SummaryField | undefined {
   const match = line.match(/^([^：:]+)[：:](.*)$/u);
   if (!match) return undefined;
 
-  return { label: match[1].trim() === "Profile" ? "方案" : match[1].trim(), value: match[2].trimStart() };
+  return { label: match[1]!.trim() === "Profile" ? "方案" : match[1]!.trim(), value: match[2]!.trimStart() };
 }
 
 function alignedSummarySegments(
@@ -260,7 +260,7 @@ function resolveUiMode({
 }: { mode?: string; stdout?: { isTTY?: boolean }; json?: boolean; nonInteractive?: boolean } = {}): UiMode {
   if (json || nonInteractive || mode === "plain") return "plain";
   const tty = Boolean(stdout?.isTTY);
-  const disabled = Boolean(process.env.NO_COLOR) || process.env.TERM === "dumb";
+  const disabled = Boolean(process.env["NO_COLOR"]) || process.env["TERM"] === "dumb";
 
   return (mode === "tui" || mode === "auto") && tty && !disabled ? "tui" : "plain";
 }
@@ -284,14 +284,14 @@ export function createProgressUI({
   nonInteractive = false,
   spinner = true,
 }: {
-  mode?: string;
-  stdout?: OutputStream;
-  title?: string;
-  profile?: string;
-  stageNames?: readonly string[];
-  json?: boolean;
-  nonInteractive?: boolean;
-  spinner?: boolean;
+  mode?: string | undefined;
+  stdout?: OutputStream | undefined;
+  title?: string | undefined;
+  profile?: string | undefined;
+  stageNames?: readonly string[] | undefined;
+  json?: boolean | undefined;
+  nonInteractive?: boolean | undefined;
+  spinner?: boolean | undefined;
 } = {}): ProgressUI {
   const stages = createStageState(stageNames);
   const resolvedMode = resolveUiMode({ mode, stdout, json, nonInteractive });

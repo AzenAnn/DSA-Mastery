@@ -206,7 +206,7 @@ it("Project build metadata remains optional and rejects invalid targets and buil
   };
   const root = await fixture(manifest, { Makefile: THIN_MAKEFILE, "tasks/module/task.json": JSON.stringify(task) });
   onTestFinished(() => rm(root, { recursive: true, force: true }));
-  expect(((await loadLab(root)) as LoadedProjectLab).tasks[0].config.ctest!.buildTargets).toBe(undefined);
+  expect(((await loadLab(root)) as LoadedProjectLab).tasks[0]!.config.ctest!.buildTargets).toBe(undefined);
   for (const buildTargets of [[], ["--all"], ["one", "one"], ["path/target"]]) {
     await writeFile(
       path.join(root, "tasks/module/task.json"),
@@ -215,10 +215,10 @@ it("Project build metadata remains optional and rejects invalid targets and buil
     await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "SCHEMA_INVALID" }));
   }
   await writeFile(path.join(root, "tasks/module/task.json"), JSON.stringify(task));
-  manifest.tasks[0].buildDependsOn = ["missing"];
+  manifest.tasks[0]!.buildDependsOn = ["missing"];
   await writeFile(path.join(root, "lab.json"), JSON.stringify(manifest));
   await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "TASK_DEPENDENCY" }));
-  manifest.tasks[0].buildDependsOn = ["module"];
+  manifest.tasks[0]!.buildDependsOn = ["module"];
   await writeFile(path.join(root, "lab.json"), JSON.stringify(manifest));
   await expect(loadLab(root)).rejects.toThrow(expect.objectContaining({ code: "TASK_CYCLE" }));
 });
@@ -263,7 +263,7 @@ it("single stdio case feedback cannot replace a full Task grade or complete a ma
   expect(partial.automatedFull).toBe(true);
   expect(partial.partial).toBe(true);
   expect(partial.current.automatedScore).toBe(45);
-  expect(partial.current.tasks[0].status).toBe("WA");
+  expect(partial.current.tasks[0]!.status).toBe("WA");
   expect(partial.current.complete).toBe(false);
   expect(partial.current.manualPending).toBe(10);
 });
@@ -452,13 +452,13 @@ it("judge reports compiler errors as CE", async () => {
 });
 
 it("an unavailable CXX override produces a clear compiler error", async () => {
-  const previous = process.env.CXX;
-  process.env.CXX = path.join(os.tmpdir(), "definitely-missing-cxx.exe");
+  const previous = process.env["CXX"];
+  process.env["CXX"] = path.join(os.tmpdir(), "definitely-missing-cxx.exe");
   try {
     await expect(selectCompiler()).rejects.toThrow(expect.objectContaining({ code: "COMPILER_NOT_FOUND" }));
   } finally {
-    if (previous === undefined) delete process.env.CXX;
-    else process.env.CXX = previous;
+    if (previous === undefined) delete process.env["CXX"];
+    else process.env["CXX"] = previous;
   }
 });
 

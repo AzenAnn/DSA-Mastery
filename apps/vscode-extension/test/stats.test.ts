@@ -65,9 +65,9 @@ it("heatmap fills every day in range including empty ones", () => {
     "2026-08-04",
     "2026-08-05",
   ]);
-  expect(map.cells[2].count).toBe(1);
-  expect(map.cells[0].count).toBe(0);
-  expect(map.cells[0].level).toBe(0);
+  expect(map.cells[2]!.count).toBe(1);
+  expect(map.cells[0]!.count).toBe(0);
+  expect(map.cells[0]!.level).toBe(0);
   expect(map.total).toBe(1);
 });
 
@@ -120,7 +120,7 @@ it("migration backfill pairs submit with pass on full score, sharing one timesta
   expect(events.length).toBe(2);
   expect(events.map((e) => e.kind)).toStrictEqual(["submit", "pass"]);
   // 共用同一个 at,才会落进 heatmap 的同一格。
-  expect(events[0].at).toBe(events[1].at);
+  expect(events[0]!.at).toBe(events[1]!.at);
 });
 
 it("migration backfill records only submit when not full score", () => {
@@ -175,8 +175,8 @@ it("chapter bars dispatch by lab type when checking passed", () => {
   ];
   // 只有代码题通过了 —— 如果实现忽略 type 去单张表查,选择题会被算错。
   const bars = buildChapterBars(chapters, (name, type) => type === "program" && name === "prog-1");
-  expect(bars[0].passed).toBe(1);
-  expect(bars[0].total).toBe(2);
+  expect(bars[0]!.passed).toBe(1);
+  expect(bars[0]!.total).toBe(2);
 });
 
 it("chapter bars keep Project in the same type-aware completion flow", () => {

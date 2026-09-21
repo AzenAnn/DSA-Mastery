@@ -7,8 +7,8 @@ export type Operation = [string, number, number];
 export interface GraphData {
   n: number;
   edges: Edge[];
-  type?: string;
-  format?: string;
+  type?: string | undefined;
+  format?: string | undefined;
   queries?: Edge[];
   operations?: Operation[];
   source?: number;
@@ -26,8 +26,8 @@ export const edgeKey = (u: number, v: number): string => `${u},${v}`;
 export function adjacency(n: number, edges: Edge[], directed = false): number[][] {
   const graph = Array.from({ length: n }, (): number[] => []);
   for (const [u, v] of edges) {
-    graph[u].push(v);
-    if (!directed) graph[v].push(u);
+    graph[u]!.push(v);
+    if (!directed) graph[v]!.push(u);
   }
   return graph;
 }
@@ -37,8 +37,8 @@ export function labelsDsu(n: number, edges: Edge[]): number[] {
   const size = Array.from<number>({ length: n }).fill(1);
   function find(v: number) {
     while (parent[v] !== v) {
-      parent[v] = parent[parent[v]];
-      v = parent[v];
+      parent[v] = parent[parent[v]!]!;
+      v = parent[v]!;
     }
     return v;
   }
@@ -46,9 +46,9 @@ export function labelsDsu(n: number, edges: Edge[]): number[] {
     let a = find(u),
       b = find(v);
     if (a === b) continue;
-    if (size[a] < size[b]) [a, b] = [b, a];
+    if (size[a]! < size[b]!) [a, b] = [b, a];
     parent[b] = a;
-    size[a] += size[b];
+    size[a]! += size[b]!;
   }
   const labels: number[] = [],
     canonical = new Map<number, number>();
@@ -66,7 +66,7 @@ function reachable(n: number, edges: Edge[], start = 0): boolean[] {
     queue = [start];
   seen[start] = true;
   for (let cursor = 0; cursor < queue.length; ++cursor) {
-    for (const v of graph[queue[cursor]]) {
+    for (const v of graph[queue[cursor]!]!) {
       if (!seen[v]) {
         seen[v] = true;
         queue.push(v);
@@ -92,19 +92,20 @@ export function labelsTarjan(n: number, edges: Edge[]): number[] {
     members.push(u);
   };
   for (let start = 0; start < n; ++start) {
-    if (index[start]) continue;
+    if (index[start] !== 0) continue;
     enter(start);
     const frames: [number, number][] = [[start, 0]];
     while (frames.length) {
       const top = frames.at(-1)!,
         u = top[0];
-      if (top[1] < graph[u].length) {
-        const v = graph[u][top[1]++];
-        if (!index[v]) {
+      if (top[1] < graph[u]!.length) {
+        const v = graph[u]![top[1]++]!;
+        const seen = index[v] ?? 0;
+        if (seen === 0) {
           enter(v);
           frames.push([v, 0]);
         } else if (active[v]) {
-          low[u] = Math.min(low[u], index[v]);
+          low[u] = Math.min(low[u]!, seen);
         }
       } else {
         frames.pop();
@@ -119,7 +120,7 @@ export function labelsTarjan(n: number, edges: Edge[]): number[] {
         }
         if (frames.length) {
           const parent = frames.at(-1)![0];
-          low[parent] = Math.min(low[parent], low[u]);
+          low[parent] = Math.min(low[parent]!, low[u]!);
         }
       }
     }
@@ -135,13 +136,13 @@ export function closure(n: number, edges: Edge[], directed = true): boolean[][] 
   assert(n <= 80, "closure is only for small-graph differential checks");
   const a = Array.from({ length: n }, (_, u) => Array.from({ length: n }, (_, v) => u === v));
   for (const [u, v] of edges) {
-    a[u][v] = true;
-    if (!directed) a[v][u] = true;
+    a[u]![v] = true;
+    if (!directed) a[v]![u] = true;
   }
   for (let k = 0; k < n; ++k) {
     for (let u = 0; u < n; ++u) {
-      if (a[u][k]) {
-        for (let v = 0; v < n; ++v) a[u][v] ||= a[k][v];
+      if (a[u]![k]) {
+        for (let v = 0; v < n; ++v) a[u]![v] ||= a[k]![v]!;
       }
     }
   }
@@ -152,10 +153,10 @@ export function labelsClosure(a: boolean[][]): number[] {
   const label = Array.from<number>({ length: a.length }).fill(0);
   let count = 0;
   for (let u = 0; u < a.length; ++u) {
-    if (!label[u]) {
+    if (label[u] === 0) {
       ++count;
       for (let v = 0; v < a.length; ++v) {
-        if (a[u][v] && a[v][u]) label[v] = count;
+        if (a[u]![v] && a[v]![u]) label[v] = count;
       }
     }
   }
@@ -212,7 +213,7 @@ export function parseInput(id: number, text: string): GraphData {
   let at = 0;
   const word = () => {
     assert(at < tokens.length, "truncated input");
-    return tokens[at++];
+    return tokens[at++]!;
   };
   const integer = (min: number, max: number) => {
     const raw = word();
@@ -267,9 +268,9 @@ export function parseInput(id: number, text: string): GraphData {
     const a = Array.from({ length: n }, () => Array.from({ length: n }, () => integer(0, 1)));
     for (let u = 0; u < n; ++u) {
       for (let v = 0; v < n; ++v) {
-        if (u === v) assert.equal(a[u][v], id === 14 ? 1 : 0);
-        if (id === 14 || type === "U") assert.equal(a[u][v], a[v][u], "asymmetric matrix");
-        if (u !== v && a[u][v] && (id !== 14 || u < v)) data.edges.push([u, v]);
+        if (u === v) assert.equal(a[u]![v], id === 14 ? 1 : 0);
+        if (id === 14 || type === "U") assert.equal(a[u]![v], a[v]![u], "asymmetric matrix");
+        if (u !== v && a[u]![v] === 1 && (id !== 14 || u < v)) data.edges.push([u, v]);
       }
     }
   } else {
@@ -305,8 +306,8 @@ export function parseInput(id: number, text: string): GraphData {
   if (id === 4) {
     const degree = Array.from<number>({ length: n }).fill(0);
     for (const [u, v] of data.edges) {
-      ++degree[u];
-      ++degree[v];
+      ++degree[u]!;
+      ++degree[v]!;
     }
     assert.equal(degree.filter((d) => d === n - 1).length, 1, "not a star");
     assert.equal(degree.filter((d) => d === 1).length, n - 1, "not a star");
@@ -321,11 +322,11 @@ export function oracle(id: number, data: GraphData): string {
     const incoming = Array.from<number>({ length: n }).fill(0),
       outgoing = Array.from<number>({ length: n }).fill(0);
     for (const [u, v] of edges) {
-      ++outgoing[u];
-      ++incoming[v];
+      ++outgoing[u]!;
+      ++incoming[v]!;
       if (id === 4) {
-        ++outgoing[v];
-        ++incoming[u];
+        ++outgoing[v]!;
+        ++incoming[u]!;
       }
     }
     const answer = incoming.findIndex((degree, u) => degree === n - 1 && (id === 4 || outgoing[u] === 0));
@@ -345,10 +346,10 @@ export function oracle(id: number, data: GraphData): string {
       return Array.from({ length: n }, (_, v) => Number(set.has(v)));
     });
     const matrixText = matrix.map(line).join("");
-    if (id === 6) return matrixText + data.queries!.map(([u, v]) => `${matrix[u][v]}\n`).join("");
+    if (id === 6) return matrixText + data.queries!.map(([u, v]) => `${matrix[u]![v]}\n`).join("");
     const canonical: Edge[] = [];
     for (let u = 0; u < n; ++u) {
-      for (const v of graph[u]) {
+      for (const v of graph[u]!) {
         if (data.type === "D" || u < v) canonical.push([u, v]);
       }
     }
@@ -401,8 +402,8 @@ export function oracle(id: number, data: GraphData): string {
   const sizes: number[] = [],
     representatives: number[] = [];
   for (let v = 0; v < n; ++v) {
-    const i = labels[v] - 1;
-    if (!sizes[i]) {
+    const i = labels[v]! - 1;
+    if (sizes[i] === undefined) {
       sizes[i] = 0;
       representatives[i] = v;
     }
@@ -421,7 +422,7 @@ export function oracle(id: number, data: GraphData): string {
       complete = sizes.map(() => true);
     for (let u = 0; u < n; ++u) {
       for (let v = u + 1; v < n; ++v) {
-        if (labels[u] === labels[v] && !adjacent.has(edgeKey(u, v))) complete[labels[u] - 1] = false;
+        if (labels[u] === labels[v] && !adjacent.has(edgeKey(u, v))) complete[labels[u]! - 1] = false;
       }
     }
     return `${complete.filter(Boolean).length}\n`;
@@ -429,14 +430,14 @@ export function oracle(id: number, data: GraphData): string {
   if (id === 20) {
     return `${sizes.length - 1}\n${representatives
       .slice(1)
-      .map((v) => line([representatives[0] + 1, v + 1]))
+      .map((v) => line([representatives[0]! + 1, v + 1]))
       .join("")}`;
   }
   if (id === 23) {
     const unique = new Set(
-      edges.filter(([u, v]) => labels[u] !== labels[v]).map(([u, v]) => edgeKey(labels[u], labels[v])),
+      edges.filter(([u, v]) => labels[u] !== labels[v]).map(([u, v]) => edgeKey(labels[u]!, labels[v]!)),
     );
-    const condensed = [...unique].map((key) => key.split(",").map(Number)).sort(([a, b], [c, d]) => a - c || b - d);
+    const condensed = [...unique].map((key) => key.split(",").map(Number)).sort(([a, b], [c, d]) => a! - c! || b! - d!);
     return line([sizes.length, condensed.length]) + line(labels) + condensed.map(line).join("");
   }
   return `${sizes.length}\n${line(labels)}`;

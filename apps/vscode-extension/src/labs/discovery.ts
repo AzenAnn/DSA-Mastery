@@ -28,9 +28,9 @@ interface LabBase {
   chapter: number;
   chapterTitle: string;
   order: number;
-  difficulty?: string;
-  duration?: string;
-  status?: string;
+  difficulty?: string | undefined;
+  duration?: string | undefined;
+  status?: string | undefined;
 }
 
 export interface ProgramLab extends LabBase {
@@ -60,10 +60,10 @@ export interface ProjectTask {
   weight: number;
   kind: ProjectTaskKind;
   dependsOn: string[];
-  buildDependsOn?: string[];
-  buildTargets?: string[];
-  moduleTargets?: string[];
-  readmePath?: string;
+  buildDependsOn?: string[] | undefined;
+  buildTargets?: string[] | undefined;
+  moduleTargets?: string[] | undefined;
+  readmePath?: string | undefined;
   /** stdio task 的 targets.student.sources；其它 task 为空。 */
   studentSources: string[];
   cases?: LoadedTestCase[];
@@ -539,8 +539,8 @@ function buildBase(
   chapterDir: string,
   front: Record<string, unknown>,
 ): LabBase {
-  const order = typeof front.order === "number" ? front.order : Number.MAX_SAFE_INTEGER;
-  const chapter = parseChapterNumber(front.chapter, chapterDir);
+  const order = typeof front["order"] === "number" ? front["order"] : Number.MAX_SAFE_INTEGER;
+  const chapter = parseChapterNumber(front["chapter"], chapterDir);
   const slug = labDir.match(/^[TEP]-\d{2}-\d{2,}-(.+)$/)?.[1];
   const legacyNames =
     slug !== undefined && Number.isSafeInteger(order) && order !== Number.MAX_SAFE_INTEGER
@@ -548,19 +548,19 @@ function buildBase(
       : [];
 
   return {
-    id: readStableLabId(front.labId, labDir),
+    id: readStableLabId(front["labId"], labDir),
     name: labDir,
     legacyNames: [...new Set([...legacyNames, ...ch04LegacyNames(labDir), ...ch07LegacyNames(labDir)])],
     labPath,
     relativePath: path.relative(repoRoot, labPath).split(path.sep).join("/"),
-    title: typeof front.title === "string" ? front.title : labDir,
-    description: typeof front.description === "string" ? front.description : "",
+    title: typeof front["title"] === "string" ? front["title"] : labDir,
+    description: typeof front["description"] === "string" ? front["description"] : "",
     chapter,
-    chapterTitle: typeof front.chapterTitle === "string" ? front.chapterTitle : chapterDir,
+    chapterTitle: typeof front["chapterTitle"] === "string" ? front["chapterTitle"] : chapterDir,
     order,
-    difficulty: typeof front.difficulty === "string" ? front.difficulty : undefined,
-    duration: typeof front.duration === "string" ? front.duration : undefined,
-    status: typeof front.status === "string" ? front.status : undefined,
+    difficulty: typeof front["difficulty"] === "string" ? front["difficulty"] : undefined,
+    duration: typeof front["duration"] === "string" ? front["duration"] : undefined,
+    status: typeof front["status"] === "string" ? front["status"] : undefined,
   };
 }
 
@@ -607,5 +607,5 @@ async function loadTestCasesAt(root: string, casesFile: string): Promise<LoadedT
  * 当前所有 program lab 都是单文件 student/main.cpp。
  */
 export function studentSourcePath(lab: ProgramLab): string {
-  return path.join(lab.labPath, lab.studentSources[0]);
+  return path.join(lab.labPath, lab.studentSources[0]!);
 }

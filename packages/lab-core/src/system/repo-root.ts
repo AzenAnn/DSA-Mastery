@@ -34,7 +34,7 @@ export async function requireRepoRoot(start: string): Promise<string> {
  * 只有当它落在 CLI 自身所属的仓库内时才可信：学生包里的 INIT_CWD 指向的是源仓库，用它会找错 Lab。
  */
 export function invocationDirectory(repoRoot: string | undefined): string {
-  const initCwd = process.env.INIT_CWD;
+  const initCwd = process.env["INIT_CWD"];
   const initial = initCwd === undefined || initCwd === "" ? undefined : path.resolve(initCwd);
   if (initial === undefined || repoRoot === undefined) return process.cwd();
   const relative = path.relative(repoRoot, initial);

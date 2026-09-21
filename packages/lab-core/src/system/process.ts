@@ -6,12 +6,12 @@ import process from "node:process";
 const WINDOWS_SCRIPT_EXT = /\.(?:cmd|bat|com)$/i;
 
 export interface RunOptions {
-  cwd?: string;
-  input?: string;
-  timeMs?: number;
-  outputKb?: number;
-  inherit?: boolean;
-  env?: NodeJS.ProcessEnv;
+  cwd?: string | undefined;
+  input?: string | undefined;
+  timeMs?: number | undefined;
+  outputKb?: number | undefined;
+  inherit?: boolean | undefined;
+  env?: NodeJS.ProcessEnv | undefined;
 }
 
 export interface InheritResult {
@@ -23,7 +23,7 @@ export interface InheritResult {
 export interface CaptureResult extends InheritResult {
   timedOut: boolean;
   outputExceeded: boolean;
-  spawnError?: NodeJS.ErrnoException;
+  spawnError?: NodeJS.ErrnoException | undefined;
   stdout: string;
   stderr: string;
   stdoutBytes: number;

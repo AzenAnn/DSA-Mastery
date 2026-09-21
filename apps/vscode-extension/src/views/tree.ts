@@ -8,14 +8,14 @@ import { shortLabTitle } from "../labs/identity";
 import { quizIconState } from "../labs/quiz";
 import { projectProgressPassed } from "../progress/project";
 
-class ChapterNode {
-  readonly kind = "chapter" as const;
-  constructor(readonly chapter: Chapter) {}
+interface ChapterNode {
+  readonly kind: "chapter";
+  readonly chapter: Chapter;
 }
 
-class LabNode {
-  readonly kind = "lab" as const;
-  constructor(readonly lab: LabEntry) {}
+interface LabNode {
+  readonly kind: "lab";
+  readonly lab: LabEntry;
 }
 
 export type TreeNode = ChapterNode | LabNode;
@@ -24,13 +24,16 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   private readonly emitter = new vscode.EventEmitter<TreeNode | undefined>();
   readonly onDidChangeTreeData = this.emitter.event;
 
+  private readonly repoRoot: string;
+  private readonly progress: ProgressTracker;
+
   private chapters: Chapter[] = [];
   private loaded = false;
 
-  constructor(
-    private readonly repoRoot: string,
-    private readonly progress: ProgressTracker,
-  ) {}
+  constructor(repoRoot: string, progress: ProgressTracker) {
+    this.repoRoot = repoRoot;
+    this.progress = progress;
+  }
 
   /** 重新扫描 labs/ 并刷新整棵树。 */
   async refresh(): Promise<void> {
@@ -62,8 +65,8 @@ export class LabTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   async getChildren(element?: TreeNode): Promise<TreeNode[]> {
     if (!this.loaded) await this.refresh();
-    if (!element) return this.chapters.map((chapter) => new ChapterNode(chapter));
-    if (element.kind === "chapter") return element.chapter.labs.map((lab) => new LabNode(lab));
+    if (!element) return this.chapters.map((chapter) => ({ kind: "chapter", chapter }));
+    if (element.kind === "chapter") return element.chapter.labs.map((lab) => ({ kind: "lab", lab }));
     return [];
   }
 

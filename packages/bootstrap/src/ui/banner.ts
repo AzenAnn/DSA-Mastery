@@ -23,7 +23,7 @@ function pixelRowSegments(row: number): Segment[] {
     if (wordIndex > 0) segments.push({ value: "   " });
     for (const [letterIndex, letter] of [...word.text].entries()) {
       if (letterIndex > 0) segments.push({ value: " " });
-      segments.push({ value: PIXEL_GLYPHS[letter][row], styles: word.styles[letterIndex] });
+      segments.push({ value: PIXEL_GLYPHS[letter]![row]!, styles: word.styles[letterIndex] });
     }
   }
 

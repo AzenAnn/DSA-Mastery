@@ -88,7 +88,7 @@ export function sourceUrlMap(index: CourseIndex): Map<string, string> {
   return new Map([...index.lessons, ...index.labs].map((document) => [document.sourcePath, document.url]));
 }
 
-export function normalizePagesBase(raw = process.env.GITHUB_PAGES_BASE_PATH ?? ""): string {
+export function normalizePagesBase(raw = process.env["GITHUB_PAGES_BASE_PATH"] ?? ""): string {
   const cleaned = raw.trim().replace(/^\/+|\/+$/g, "");
   return cleaned ? `/${cleaned}/` : "/";
 }

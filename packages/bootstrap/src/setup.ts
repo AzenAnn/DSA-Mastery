@@ -85,7 +85,7 @@ function createSilentProgressUI(): ProgressUI {
 }
 
 async function executeStage<T>(context: SetupContext, id: string, action: () => Promise<T>): Promise<T> {
-  context.currentStage = id;
+  context["currentStage"] = id;
   context.ui.update(id, "running", "准备中");
   const result = await action();
   const outcome = result as { status?: StageStatus; message?: string } | undefined;
@@ -264,7 +264,7 @@ export async function runSetup(argv: string[] = [], dependencies: SetupDependenc
             ? "改用对应平台的手工安装指南，再重新运行 --check-only。"
             : "根据失败阶段和日志中的完整命令输出修复后重新运行。",
     };
-    context.ui.update(String(context.currentStage ?? "preflight"), "failed", error.message);
+    context.ui.update(String(context["currentStage"] ?? "preflight"), "failed", error.message);
     report.exitCode = error.exitCode;
   } finally {
     for (const stage of report.stages!) {
@@ -332,4 +332,5 @@ async function main() {
   process.exitCode = result.exitCode;
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) await main();
+if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href)
+  await main();

@@ -501,7 +501,7 @@ it("chapter 0 code contrast, math, copy, tables, and metadata remain functional"
             const normalized = channel / 255;
             return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
           });
-          return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+          return linear[0]! * 0.2126 + linear[1]! * 0.7152 + linear[2]! * 0.0722;
         };
         const contrast = (foreground: ReturnType<typeof parseColor>, background: ReturnType<typeof parseColor>) => {
           const brighter = Math.max(luminance(foreground), luminance(background));
@@ -578,7 +578,7 @@ it("theory syntax and code workbench stay accessible at desktop and mobile width
             const normalized = channel / 255;
             return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
           });
-          return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+          return linear[0]! * 0.2126 + linear[1]! * 0.7152 + linear[2]! * 0.0722;
         };
         const ratio = (first: ReturnType<typeof parseColor>, second: ReturnType<typeof parseColor>) => {
           const brighter = Math.max(luminance(first), luminance(second));
@@ -1109,7 +1109,7 @@ it("chapter 1 Lab sidebar groups remain native, categorized, and visually distin
         const channels = parseColor(color).map((normalized: number) => {
           return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
         });
-        return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+        return 0.2126 * channels[0]! + 0.7152 * channels[1]! + 0.0722 * channels[2]!;
       };
       const background = style?.backgroundColor ?? "rgb(255, 255, 255)";
       const contrasts = colors.map((color) => {
@@ -1927,7 +1927,7 @@ for (const width of [1440, 390]) {
 it("chapter 4 threading and Morris distinguish permanent and temporary links", async () => {
   const page = await newPage();
   const failures = monitorPage(page);
-  const frame = await openTreeDemo(page, treeDemoCases[0]);
+  const frame = await openTreeDemo(page, treeDemoCases[0]!);
   await finishTreeDemo(frame);
   await expect(frame.locator("#right-tree .edge.predecessor")).toHaveCount(2);
   await expect(frame.locator("#right-tree .edge.successor")).toHaveCount(2);
@@ -1959,7 +1959,7 @@ it("chapter 4 threading and Morris distinguish permanent and temporary links", a
 it("chapter 4 forest conversion preserves identity and both traversal correspondences", async () => {
   const page = await newPage();
   const failures = monitorPage(page);
-  const frame = await openTreeDemo(page, treeDemoCases[2]);
+  const frame = await openTreeDemo(page, treeDemoCases[2]!);
   const timeline = frame.getByRole("slider", { name: "时间线进度" });
   await timeline.fill("1");
   await expect(frame.locator("#right-tree .edge.sibling")).toHaveCount(2);
@@ -1986,7 +1986,7 @@ it("chapter 4 forest conversion preserves identity and both traversal correspond
 it("chapter 4 flatten shows individual writes and supports a predecessor with a left child", async () => {
   const page = await newPage();
   const failures = monitorPage(page);
-  const frame = await openTreeDemo(page, treeDemoCases[3]);
+  const frame = await openTreeDemo(page, treeDemoCases[3]!);
   const timeline = frame.getByRole("slider", { name: "时间线进度" });
   await frame.getByRole("combobox", { name: "选择树形" }).selectOption("nested");
   for (let i = 0; i <= Number(await timeline.getAttribute("max")); i++) {
@@ -2026,7 +2026,7 @@ for (const width of [1280, 390]) {
     for (const [name, url, heading] of [
       ["guide", `${baseUrl}/learn/chapter-preface/06-vscode-extension-guide/`, "VSCode 插件安装与使用指南"],
       ["project", projectUrl, "Lab 02-P-04：表达式求值器"],
-    ]) {
+    ] as const) {
       expect((await page.goto(url))!.status()).toBe(200);
       await expect(page.getByRole("heading", { level: 1 })).toContainText(heading);
       expect(
@@ -2178,7 +2178,7 @@ for (const width of [1440, 390]) {
       for (const [category, label] of [
         ["theory", "暂无理论型 Lab"],
         ["project", "暂无工程型 Lab"],
-      ]) {
+      ] as const) {
         const group = labs.locator(`.VPSidebarItem:has(> .item > .text > .course-lab-category--${category})`);
         await expect(group.locator(":scope > .items a")).toHaveCount(0);
         await expect(group.locator(".course-lab-category__empty")).toHaveText(label);
@@ -2250,7 +2250,7 @@ for (const width of [1440, 390]) {
       await links.nth(3).scrollIntoViewIfNeeded();
       await page.screenshot({ path: outputPath("ch06-sidebar.png") });
       await links.nth(3).click();
-      await expect(page).toHaveURL(`${baseUrl}/${chapter06LabPath(chapter06Exercises[0])}/`);
+      await expect(page).toHaveURL(`${baseUrl}/${chapter06LabPath(chapter06Exercises[0]!)}/`);
       for (const item of chapter06Exercises) {
         expect((await page.goto(`${baseUrl}/${chapter06LabPath(item)}/`))!.status()).toBe(200);
         await expect(page.getByRole("heading", { level: 1 })).toHaveText(

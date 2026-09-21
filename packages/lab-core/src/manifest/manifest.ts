@@ -111,8 +111,8 @@ export interface TaskConfig {
   kind: TaskKind;
   targets?: { student: CompileTarget; solution?: CompileTarget };
   judge?: JudgeConfig;
-  ctest?: { tests: CtestEntry[]; buildTargets?: string[]; moduleTargets?: string[] };
-  checklist?: string[];
+  ctest?: { tests: CtestEntry[]; buildTargets?: string[]; moduleTargets?: string[] } | undefined;
+  checklist?: string[] | undefined;
 }
 
 export interface ProjectTask extends ProjectTaskDeclaration {
@@ -125,7 +125,7 @@ export interface ProjectTask extends ProjectTaskDeclaration {
 interface LoadedLabBase {
   labRoot: string;
   manifestPath: string;
-  labId?: string;
+  labId?: string | undefined;
 }
 
 export interface LoadedQuizLab extends LoadedLabBase {
@@ -210,7 +210,7 @@ function validateCompare(value: unknown, label: string): CompareConfig | undefin
   if (value === undefined) return undefined;
   const compare = requireRecord(value, label);
   assertKnownKeys(compare, new Set(["mode", "absTol", "relTol"]), label);
-  if (!COMPARE_MODES.has(compare.mode as string)) {
+  if (!COMPARE_MODES.has(compare["mode"] as string)) {
     throw new LabError("SCHEMA_INVALID", `${label}.mode 必须是 exact、tokens 或 float`);
   }
   for (const key of ["absTol", "relTol"] as const) {
@@ -236,15 +236,15 @@ function validateLimits(value: unknown, label: string): Limits | undefined {
 async function validateSources(labRoot: string, value: unknown, label: string): Promise<CompileTarget> {
   const target = requireRecord(value, label);
   assertKnownKeys(target, new Set(["sources", "includeDirs"]), label);
-  if (!Array.isArray(target.sources) || target.sources.length === 0) {
+  if (!Array.isArray(target["sources"]) || target["sources"].length === 0) {
     throw new LabError("SCHEMA_INVALID", `${label}.sources 必须是非空数组`);
   }
-  for (const [index, source] of target.sources.entries()) {
+  for (const [index, source] of target["sources"].entries()) {
     await resolveLabPath(labRoot, source, `${label}.sources[${index}]`);
   }
-  if (target.includeDirs !== undefined) {
-    if (!Array.isArray(target.includeDirs)) throw new LabError("SCHEMA_INVALID", `${label}.includeDirs 必须是数组`);
-    for (const [index, dir] of target.includeDirs.entries()) {
+  if (target["includeDirs"] !== undefined) {
+    if (!Array.isArray(target["includeDirs"])) throw new LabError("SCHEMA_INVALID", `${label}.includeDirs 必须是数组`);
+    for (const [index, dir] of target["includeDirs"].entries()) {
       await resolveLabPath(labRoot, dir, `${label}.includeDirs[${index}]`);
     }
   }
@@ -265,17 +265,17 @@ async function loadCases(labRoot: string, casesPath: string): Promise<LabCase[]>
       new Set(["id", "input", "expected", "points", "tags", "timeMs", "outputKb", "compare"]),
       `cases[${index}]`,
     );
-    const id = requireString(item.id, `cases[${index}].id`);
+    const id = requireString(item["id"], `cases[${index}].id`);
     if (!/^[a-z0-9][a-z0-9-]*$/.test(id)) throw new LabError("CASES_INVALID", `cases[${index}].id 格式无效：${id}`);
     if (ids.has(id)) throw new LabError("CASES_INVALID", `用例 id 重复：${id}`);
     ids.add(id);
-    await resolveLabPath(labRoot, item.input, `cases[${index}].input`);
-    await resolveLabPath(labRoot, item.expected, `cases[${index}].expected`);
-    totalPoints += requirePositiveInteger(item.points, `cases[${index}].points`);
-    if (item.tags !== undefined) requireStringArray(item.tags, `cases[${index}].tags`, "CASES_INVALID");
-    if (item.timeMs !== undefined) requirePositiveInteger(item.timeMs, `cases[${index}].timeMs`);
-    if (item.outputKb !== undefined) requirePositiveInteger(item.outputKb, `cases[${index}].outputKb`);
-    validateCompare(item.compare, `cases[${index}].compare`);
+    await resolveLabPath(labRoot, item["input"], `cases[${index}].input`);
+    await resolveLabPath(labRoot, item["expected"], `cases[${index}].expected`);
+    totalPoints += requirePositiveInteger(item["points"], `cases[${index}].points`);
+    if (item["tags"] !== undefined) requireStringArray(item["tags"], `cases[${index}].tags`, "CASES_INVALID");
+    if (item["timeMs"] !== undefined) requirePositiveInteger(item["timeMs"], `cases[${index}].timeMs`);
+    if (item["outputKb"] !== undefined) requirePositiveInteger(item["outputKb"], `cases[${index}].outputKb`);
+    validateCompare(item["compare"], `cases[${index}].compare`);
   }
   if (totalPoints !== 100) throw new LabError("CASES_POINTS", `测试用例分值必须合计 100，当前为 ${totalPoints}`);
 
@@ -314,7 +314,7 @@ async function validateThinMakefile(labRoot: string, distribution: Distribution 
 }
 
 function validateCtest(config: Json, taskId: string): void {
-  const ctest = requireRecord(config.ctest, `${taskId}.ctest`);
+  const ctest = requireRecord(config["ctest"], `${taskId}.ctest`);
   assertKnownKeys(ctest, new Set(["tests", "buildTargets", "moduleTargets"]), `${taskId}.ctest`);
   for (const key of ["buildTargets", "moduleTargets"] as const) {
     const targets = ctest[key];
@@ -326,18 +326,18 @@ function validateCtest(config: Json, taskId: string): void {
       new Set(targets).size === targets.length;
     if (!valid) throw new LabError("SCHEMA_INVALID", `${taskId}.ctest.${key} 必须是非空、无重复的 CMake target 数组`);
   }
-  if (!Array.isArray(ctest.tests) || ctest.tests.length === 0) {
+  if (!Array.isArray(ctest["tests"]) || ctest["tests"].length === 0) {
     throw new LabError("SCHEMA_INVALID", `${taskId}.ctest.tests 必须是非空数组`);
   }
   const names = new Set<string>();
   let points = 0;
-  for (const [index, entry] of ctest.tests.entries()) {
+  for (const [index, entry] of ctest["tests"].entries()) {
     const test = requireRecord(entry, `${taskId}.ctest.tests[${index}]`);
     assertKnownKeys(test, new Set(["name", "points"]), `${taskId}.ctest.tests[${index}]`);
-    const name = requireString(test.name, `${taskId}.ctest.tests[${index}].name`);
+    const name = requireString(test["name"], `${taskId}.ctest.tests[${index}].name`);
     if (names.has(name)) throw new LabError("TASK_DUPLICATE", `${taskId} 的 CTest 名称重复：${name}`);
     names.add(name);
-    points += requirePositiveInteger(test.points, `${taskId}.ctest.tests[${index}].points`);
+    points += requirePositiveInteger(test["points"], `${taskId}.ctest.tests[${index}].points`);
   }
   if (points !== 100) throw new LabError("TASK_WEIGHTS", `${taskId} 的 CTest 分值必须合计 100，当前为 ${points}`);
 }
@@ -353,22 +353,22 @@ async function validateProject(labRoot: string, manifest: ProjectManifest): Prom
   for (const [index, raw] of manifest.tasks.entries()) {
     const task = requireRecord(raw, `tasks[${index}]`);
     assertKnownKeys(task, new Set(["id", "path", "weight", "kind", "dependsOn", "buildDependsOn"]), `tasks[${index}]`);
-    const id = requireString(task.id, `tasks[${index}].id`);
+    const id = requireString(task["id"], `tasks[${index}].id`);
     if (!/^[a-z][a-z0-9-]*$/.test(id)) throw new LabError("SCHEMA_INVALID", `tasks[${index}].id 格式无效：${id}`);
     if (ids.has(id)) throw new LabError("TASK_DUPLICATE", `Project task id 重复：${id}`);
     ids.add(id);
-    if (!TASK_KINDS.has(task.kind as string)) throw new LabError("SCHEMA_INVALID", `tasks[${index}].kind 无效`);
-    const taskPath = await resolveLabPath(labRoot, task.path, `tasks[${index}].path`);
-    totalWeight += requirePositiveInteger(task.weight, `tasks[${index}].weight`);
+    if (!TASK_KINDS.has(task["kind"] as string)) throw new LabError("SCHEMA_INVALID", `tasks[${index}].kind 无效`);
+    const taskPath = await resolveLabPath(labRoot, task["path"], `tasks[${index}].path`);
+    totalWeight += requirePositiveInteger(task["weight"], `tasks[${index}].weight`);
     const dependsOn =
-      task.dependsOn === undefined ? [] : requireStringArray(task.dependsOn, `tasks[${index}].dependsOn`);
-    if (task.buildDependsOn !== undefined) {
-      const buildDependsOn = requireStringArray(task.buildDependsOn, `tasks[${index}].buildDependsOn`);
+      task["dependsOn"] === undefined ? [] : requireStringArray(task["dependsOn"], `tasks[${index}].dependsOn`);
+    if (task["buildDependsOn"] !== undefined) {
+      const buildDependsOn = requireStringArray(task["buildDependsOn"], `tasks[${index}].buildDependsOn`);
       if (buildDependsOn.some((item) => !/^[a-z][a-z0-9-]*$/.test(item))) {
         throw new LabError("SCHEMA_INVALID", `tasks[${index}].buildDependsOn 必须是 task ID 数组`);
       }
     }
-    for (const dependencies of [dependsOn, (task.buildDependsOn ?? []) as string[]]) {
+    for (const dependencies of [dependsOn, (task["buildDependsOn"] ?? []) as string[]]) {
       if (new Set(dependencies).size !== dependencies.length) throw new LabError("TASK_DUPLICATE", `${id} 的依赖重复`);
     }
     tasks.push({
@@ -397,30 +397,30 @@ async function validateProject(labRoot: string, manifest: ProjectManifest): Prom
       new Set(["$schema", "schemaVersion", "kind", "targets", "judge", "ctest", "checklist"]),
       `${task.id}/task.json`,
     );
-    if (config.schemaVersion !== LAB_SCHEMA_VERSION) {
+    if (config["schemaVersion"] !== LAB_SCHEMA_VERSION) {
       throw new LabError("SCHEMA_VERSION", `${task.id}/task.json 的 schemaVersion 必须是 ${LAB_SCHEMA_VERSION}`);
     }
-    if (config.kind !== task.kind) throw new LabError("TASK_KIND", `${task.id} 的顶层 kind 与 task.json 不一致`);
+    if (config["kind"] !== task.kind) throw new LabError("TASK_KIND", `${task.id} 的顶层 kind 与 task.json 不一致`);
     if (task.kind === "stdio") {
-      const targets = requireRecord(config.targets, `${task.id}.targets`);
+      const targets = requireRecord(config["targets"], `${task.id}.targets`);
       assertKnownKeys(targets, new Set(["student", "solution"]), `${task.id}.targets`);
-      await validateSources(task.taskPath, targets.student, `${task.id}.targets.student`);
-      if (targets.solution !== undefined)
-        await validateSources(task.taskPath, targets.solution, `${task.id}.targets.solution`);
+      await validateSources(task.taskPath, targets["student"], `${task.id}.targets.student`);
+      if (targets["solution"] !== undefined)
+        await validateSources(task.taskPath, targets["solution"], `${task.id}.targets.solution`);
       else if (manifest.distribution !== "student")
         throw new LabError("SCHEMA_INVALID", `${task.id} 必须声明 targets.solution`);
-      const judge = requireRecord(config.judge, `${task.id}.judge`);
+      const judge = requireRecord(config["judge"], `${task.id}.judge`);
       assertKnownKeys(judge, new Set(["kind", "cases", "compare", "limits"]), `${task.id}.judge`);
-      if (judge.kind !== "stdio") throw new LabError("SCHEMA_INVALID", `${task.id}.judge.kind 必须是 stdio`);
-      validateCompare(judge.compare, `${task.id}.judge.compare`);
-      validateLimits(judge.limits, `${task.id}.judge.limits`);
-      task.cases = await loadCases(task.taskPath, requireString(judge.cases, `${task.id}.judge.cases`));
+      if (judge["kind"] !== "stdio") throw new LabError("SCHEMA_INVALID", `${task.id}.judge.kind 必须是 stdio`);
+      validateCompare(judge["compare"], `${task.id}.judge.compare`);
+      validateLimits(judge["limits"], `${task.id}.judge.limits`);
+      task.cases = await loadCases(task.taskPath, requireString(judge["cases"], `${task.id}.judge.cases`));
     } else if (task.kind === "ctest") {
       validateCtest(config, task.id);
     } else if (
-      !Array.isArray(config.checklist) ||
-      config.checklist.length === 0 ||
-      config.checklist.some((item) => typeof item !== "string" || !item.trim())
+      !Array.isArray(config["checklist"]) ||
+      config["checklist"].length === 0 ||
+      config["checklist"].some((item) => typeof item !== "string" || !item.trim())
     ) {
       throw new LabError("SCHEMA_INVALID", `${task.id}.checklist 必须是非空字符串数组`);
     }
@@ -433,10 +433,10 @@ async function validateProject(labRoot: string, manifest: ProjectManifest): Prom
 function validateToolchain(value: unknown): Toolchain {
   const toolchain = requireRecord(value, "toolchain");
   assertKnownKeys(toolchain, new Set(["standard", "profile"]), "toolchain");
-  if (!["c++17", "c++20"].includes(toolchain.standard as string)) {
+  if (!["c++17", "c++20"].includes(toolchain["standard"] as string)) {
     throw new LabError("SCHEMA_INVALID", "toolchain.standard 必须是 c++17 或 c++20");
   }
-  if (toolchain.profile !== undefined) requireString(toolchain.profile, "toolchain.profile");
+  if (toolchain["profile"] !== undefined) requireString(toolchain["profile"], "toolchain.profile");
 
   return toolchain as unknown as Toolchain;
 }
@@ -454,34 +454,34 @@ export async function loadLab(start: string = process.cwd()): Promise<LoadedLab>
     await readJson(manifestPath, path.relative(process.cwd(), manifestPath) || "lab.json"),
     "lab.json",
   );
-  if (!Number.isInteger(manifest.schemaVersion)) throw new LabError("SCHEMA_VERSION", "schemaVersion 必须是整数");
-  if (manifest.schemaVersion !== LAB_SCHEMA_VERSION) {
+  if (!Number.isInteger(manifest["schemaVersion"])) throw new LabError("SCHEMA_VERSION", "schemaVersion 必须是整数");
+  if (manifest["schemaVersion"] !== LAB_SCHEMA_VERSION) {
     throw new LabError(
       "SCHEMA_VERSION",
-      `不支持 schemaVersion ${String(manifest.schemaVersion)}；当前 CLI 仅支持 ${LAB_SCHEMA_VERSION}`,
+      `不支持 schemaVersion ${String(manifest["schemaVersion"])}；当前 CLI 仅支持 ${LAB_SCHEMA_VERSION}`,
     );
   }
-  if (!isLabType(manifest.type)) throw new LabError("SCHEMA_INVALID", "type 必须是 quiz、program 或 project");
-  if (manifest.distribution !== undefined && !["source", "student"].includes(manifest.distribution as string)) {
+  if (!isLabType(manifest["type"])) throw new LabError("SCHEMA_INVALID", "type 必须是 quiz、program 或 project");
+  if (manifest["distribution"] !== undefined && !["source", "student"].includes(manifest["distribution"] as string)) {
     throw new LabError("SCHEMA_INVALID", "distribution 必须是 source 或 student");
   }
-  const distribution = manifest.distribution as Distribution | undefined;
+  const distribution = manifest["distribution"] as Distribution | undefined;
 
-  if (manifest.type === "quiz") {
+  if (manifest["type"] === "quiz") {
     assertKnownKeys(manifest, new Set([...BASE_KEYS, "quiz"]), "lab.json");
-    const quiz = requireRecord(manifest.quiz, "quiz");
+    const quiz = requireRecord(manifest["quiz"], "quiz");
     assertKnownKeys(quiz, new Set(["questions", "questionType", "reveal", "scoring"]), "quiz");
-    if (quiz.questionType !== undefined && quiz.questionType !== "single-choice") {
+    if (quiz["questionType"] !== undefined && quiz["questionType"] !== "single-choice") {
       throw new LabError("SCHEMA_INVALID", "quiz.questionType 必须是 single-choice");
     }
-    if (quiz.reveal !== undefined && quiz.reveal !== "after-submit") {
+    if (quiz["reveal"] !== undefined && quiz["reveal"] !== "after-submit") {
       throw new LabError("SCHEMA_INVALID", "quiz.reveal 必须是 after-submit");
     }
-    if (quiz.scoring !== undefined && !["equal", "points"].includes(quiz.scoring as string)) {
+    if (quiz["scoring"] !== undefined && !["equal", "points"].includes(quiz["scoring"] as string)) {
       throw new LabError("SCHEMA_INVALID", "quiz.scoring 必须是 equal 或 points");
     }
     validateQuizReadme(readme, path.relative(labRoot, readmePath));
-    const quizPath = await resolveLabPath(labRoot, quiz.questions, "quiz.questions");
+    const quizPath = await resolveLabPath(labRoot, quiz["questions"], "quiz.questions");
     const questions = parseQuizQuestions(
       await readJson(quizPath, path.relative(labRoot, quizPath)),
       path.relative(labRoot, quizPath),
@@ -499,23 +499,23 @@ export async function loadLab(start: string = process.cwd()): Promise<LoadedLab>
     };
   }
 
-  if (manifest.language !== "cpp") throw new LabError("SCHEMA_INVALID", "可执行 Lab 的 language 必须是 cpp");
-  validateToolchain(manifest.toolchain);
+  if (manifest["language"] !== "cpp") throw new LabError("SCHEMA_INVALID", "可执行 Lab 的 language 必须是 cpp");
+  validateToolchain(manifest["toolchain"]);
 
-  if (manifest.type === "program") {
+  if (manifest["type"] === "program") {
     assertKnownKeys(manifest, new Set([...BASE_KEYS, "language", "toolchain", "targets", "judge"]), "lab.json");
-    const targets = requireRecord(manifest.targets, "targets");
+    const targets = requireRecord(manifest["targets"], "targets");
     assertKnownKeys(targets, new Set(["student", "solution"]), "targets");
-    await validateSources(labRoot, targets.student, "targets.student");
-    if (targets.solution !== undefined) await validateSources(labRoot, targets.solution, "targets.solution");
+    await validateSources(labRoot, targets["student"], "targets.student");
+    if (targets["solution"] !== undefined) await validateSources(labRoot, targets["solution"], "targets.solution");
     else if (distribution !== "student")
       throw new LabError("SCHEMA_INVALID", "源码仓库中的 program 必须声明 targets.solution");
-    const judge = requireRecord(manifest.judge, "judge");
+    const judge = requireRecord(manifest["judge"], "judge");
     assertKnownKeys(judge, new Set(["kind", "cases", "compare", "limits"]), "judge");
-    if (judge.kind !== "stdio") throw new LabError("SCHEMA_INVALID", "judge.kind 必须是 stdio");
-    validateCompare(judge.compare, "judge.compare");
-    validateLimits(judge.limits, "judge.limits");
-    const cases = await loadCases(labRoot, requireString(judge.cases, "judge.cases"));
+    if (judge["kind"] !== "stdio") throw new LabError("SCHEMA_INVALID", "judge.kind 必须是 stdio");
+    validateCompare(judge["compare"], "judge.compare");
+    validateLimits(judge["limits"], "judge.limits");
+    const cases = await loadCases(labRoot, requireString(judge["cases"], "judge.cases"));
     await validateThinMakefile(labRoot, distribution);
 
     return { labRoot, manifestPath, manifest: manifest as unknown as ProgramManifest, labId, cases };
@@ -533,7 +533,7 @@ export interface LabReport {
   reportVersion: number;
   command: string;
   ok: boolean;
-  lab: { id?: string; path: string; type: LabType; schemaVersion: number };
+  lab: { id?: string | undefined; path: string; type: LabType; schemaVersion: number };
   [key: string]: unknown;
 }
 

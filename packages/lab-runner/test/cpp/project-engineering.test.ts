@@ -31,26 +31,26 @@ it(
       modules.map((name, i) => readFile(path.join(root, relative(i), "solution", `${name}.cpp`), "utf8")),
     );
     const student = (i: number) => path.join(root, relative(i), "student", `${modules[i]}.cpp`);
-    for (let i = 0; i < modules.length; i += 1) await writeFile(student(i), originals[i]);
+    for (let i = 0; i < modules.length; i += 1) await writeFile(student(i), originals[i]!);
     expect((await scoreProject(lab)).current.complete).toBe(true);
 
     await writeFile(student(3), "#error FINAL_COMPILE_FAULT\n");
     await utimes(student(3), new Date("2000-01-01"), new Date("2000-01-01"));
     const isolated = await scoreProject(lab, { taskId: "stack" });
-    expect(isolated.tasks[0].status).toBe("AC");
+    expect(isolated.tasks[0]!.status).toBe("AC");
     expect(isolated.current.complete).toBe(false);
-    expect(isolated.current.tasks[3].status).toBe("STALE");
+    expect(isolated.current.tasks[3]!.status).toBe("STALE");
     expect(statuses(await scoreProject(lab))).toStrictEqual(["AC", "AC", "AC", "CE"]);
-    await writeFile(student(3), originals[3]);
+    await writeFile(student(3), originals[3]!);
 
     await writeFile(student(0), "#error STACK_COMPILE_FAULT\n");
     const blocked = await scoreProject(lab);
     expect(statuses(blocked)).toStrictEqual(["CE", "AC", "BLOCKED", "BLOCKED"]);
-    expect(blocked.tasks[3].blockedBy).toStrictEqual(["stack"]);
-    expect(blocked.tasks[3].tests?.length).toBe(0);
-    const blockedBuild = blocked.tasks[3].build?.build;
+    expect(blocked.tasks[3]!.blockedBy).toStrictEqual(["stack"]);
+    expect(blocked.tasks[3]!.tests?.length).toBe(0);
+    const blockedBuild = blocked.tasks[3]!.build?.build;
     expect(`${blockedBuild?.stdout}${blockedBuild?.stderr}`).toMatch(/stack\.cpp|STACK_COMPILE_FAULT/);
-    await writeFile(student(0), originals[0]);
+    await writeFile(student(0), originals[0]!);
 
     const unitFile = path.join(root, relative(0), "tests/stack_tests.cpp");
     const unitOriginal = await readFile(unitFile, "utf8");
@@ -63,21 +63,21 @@ it(
 
     await writeFile(
       student(1),
-      originals[1].replace(
+      originals[1]!.replace(
         "tokens.push_back({Kind::Number, value, begin});",
         "tokens.push_back({Kind::Number, value == 42 ? 43 : value, begin});",
       ),
     );
     const integration = await scoreProject(lab);
     expect(statuses(integration)).toStrictEqual(["AC", "AC", "AC", "WA"]);
-    expect(integration.tasks[3].tests?.[0]?.output).toMatch(/expected 52, actual 53/);
-    await writeFile(student(1), originals[1]);
+    expect(integration.tasks[3]!.tests?.[0]?.output).toMatch(/expected 52, actual 53/);
+    await writeFile(student(1), originals[1]!);
     expect((await scoreProject(lab)).current.complete).toBe(true);
     await writeFile(student(0), `${originals[0]}\n// upstream change\n`);
     const stale = await projectStatus(lab);
     expect(statuses(stale)).toStrictEqual(["STALE", "AC", "STALE", "STALE"]);
     expect(stale.automatedScore).toBe(20);
-    expect(stale.tasks[3].historicalScore).toBe(35);
+    expect(stale.tasks[3]!.historicalScore).toBe(35);
     expect(statuses((await scoreProject(lab, { taskId: "stack" })).current)).toStrictEqual([
       "AC",
       "AC",

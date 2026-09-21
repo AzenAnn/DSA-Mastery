@@ -11,7 +11,7 @@ const extensionRoot = path.resolve(fileURLToPath(new URL(".", import.meta.url)),
 
 it("CLI checks trust and explicit Node paths and falls back when PATH has no Node", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "dsa runtime with spaces "));
-  const oldPath = process.env.PATH;
+  const oldPath = process.env["PATH"];
   let nodePath = "";
   const fake = { workspace: { isTrusted: true, getConfiguration: () => ({ get: () => nodePath }) } };
   (globalThis as unknown as { runtimeFixture: unknown }).runtimeFixture = fake;
@@ -52,11 +52,11 @@ it("CLI checks trust and explicit Node paths and falls back when PATH has no Nod
     nodePath = process.execPath;
     expect((await readProjectCurrent(root, ".")).complete).toBe(false);
     nodePath = "";
-    process.env.PATH = "";
+    process.env["PATH"] = "";
     expect((await readProjectCurrent(root, ".")).complete).toBe(false);
   } finally {
-    if (oldPath === undefined) delete process.env.PATH;
-    else process.env.PATH = oldPath;
+    if (oldPath === undefined) delete process.env["PATH"];
+    else process.env["PATH"] = oldPath;
     delete (globalThis as unknown as { runtimeFixture?: unknown }).runtimeFixture;
     await rm(root, { recursive: true, force: true });
   }

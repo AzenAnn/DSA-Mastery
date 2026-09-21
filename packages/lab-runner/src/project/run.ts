@@ -26,14 +26,14 @@ interface BuildState {
   phase: "configure" | "build";
   target: TargetName;
   configure: CaptureResult;
-  environment?: ProjectEnvironment;
-  cleaned?: boolean;
-  build?: CaptureResult;
-  targets?: string[];
-  scope?: "project" | "task";
-  legacyBuild?: boolean;
-  blockedBy?: string[];
-  relatedTasks?: string[];
+  environment?: ProjectEnvironment | undefined;
+  cleaned?: boolean | undefined;
+  build?: CaptureResult | undefined;
+  targets?: string[] | undefined;
+  scope?: "project" | "task" | undefined;
+  legacyBuild?: boolean | undefined;
+  blockedBy?: string[] | undefined;
+  relatedTasks?: string[] | undefined;
 }
 
 export type PublicBuild = Omit<BuildState, "environment" | "cleaned">;
@@ -55,14 +55,14 @@ export interface ProjectTaskResult {
   maxScore?: number;
   weight: number;
   weightedScore: number;
-  judge?: JudgeResult;
-  tests?: CtestResult[];
-  build?: PublicBuild;
-  blockedBy?: string[];
-  checklist?: string[];
-  inputFingerprint?: string;
-  changedDuringRun?: boolean;
-  assessedAt?: string;
+  judge?: JudgeResult | undefined;
+  tests?: CtestResult[] | undefined;
+  build?: PublicBuild | undefined;
+  blockedBy?: string[] | undefined;
+  checklist?: string[] | undefined;
+  inputFingerprint?: string | undefined;
+  changedDuringRun?: boolean | undefined;
+  assessedAt?: string | undefined;
 }
 
 export interface ProjectScore {
@@ -75,16 +75,16 @@ export interface ProjectScore {
   total: 100;
   automatedFull: boolean;
   internalError: boolean;
-  selectedTaskId?: string;
+  selectedTaskId?: string | undefined;
   partial: boolean;
   current: CurrentProject;
 }
 
 export interface ProjectOptions {
-  target?: TargetName;
-  taskId?: string;
-  caseId?: string;
-  environment?: ProjectEnvironment;
+  target?: TargetName | undefined;
+  taskId?: string | undefined;
+  caseId?: string | undefined;
+  environment?: ProjectEnvironment | undefined;
 }
 
 function programView(lab: LoadedProjectLab, task: ProjectTask): JudgeableLab {
@@ -105,6 +105,13 @@ function selectedTasks(lab: LoadedProjectLab, taskId?: string): ProjectTask[] {
   if (!selected.length) throw new LabError("TASK_NOT_FOUND", `不存在 Project task：${taskId}`);
 
   return selected;
+}
+
+function selectedTask(lab: LoadedProjectLab, taskId?: string): ProjectTask {
+  const [task] = selectedTasks(lab, taskId);
+  if (task === undefined) throw new LabError("TASK_NOT_FOUND", "Project 没有可运行的 task");
+
+  return task;
 }
 
 export function cmakeStandardNumber(standard: string): string {
@@ -232,10 +239,9 @@ export async function buildProject(
   options: ProjectOptions = {},
 ): Promise<PublicBuild> {
   return withProjectLock(lab, async () => {
-    const tasks = selectedTasks(lab, options.taskId);
     const configured = await configureProject(lab, target, options);
     if (options.taskId === undefined) return publicBuild(await buildTargets(lab, configured));
-    const [task] = tasks;
+    const task = selectedTask(lab, options.taskId);
     if (task.kind !== "ctest")
       throw new LabError("TYPE_UNSUPPORTED", "Project build --task 需要 CTest task；stdio 请使用 run --task");
 
@@ -313,8 +319,8 @@ async function scoreCtest(
 
 /** 只看各层 verdict，参数不必是完整的任务结果。 */
 export type TaskVerdictView = Pick<ProjectTaskResult, "id" | "status"> & {
-  judge?: { cases?: Pick<CaseResult, "verdict">[] };
-  tests?: Pick<CtestResult, "verdict">[];
+  judge?: { cases?: Pick<CaseResult, "verdict">[] | undefined } | undefined;
+  tests?: Pick<CtestResult, "verdict">[] | undefined;
 };
 
 export function projectHasInternalError(results: TaskVerdictView[]): boolean {
@@ -330,7 +336,7 @@ async function scoreProjectUnlocked(lab: LoadedProjectLab, options: ProjectOptio
   const target = options.target ?? "student";
   assertTarget(target);
   const tasks = selectedTasks(lab, options.taskId);
-  if (options.caseId !== undefined && (tasks.length !== 1 || tasks[0].kind !== "stdio")) {
+  if (options.caseId !== undefined && (tasks.length !== 1 || tasks[0]?.kind !== "stdio")) {
     throw new LabError("ARGUMENT_INVALID", "Project --case 必须同时选择一个 stdio --task");
   }
   const before = await projectInputs(lab, target);
@@ -370,13 +376,14 @@ async function scoreProjectUnlocked(lab: LoadedProjectLab, options: ProjectOptio
   const at = new Date().toISOString();
   const state = await readProjectState(lab, target);
   for (const result of results) {
-    result.inputFingerprint = before[result.id].fingerprint;
-    result.changedDuringRun = before[result.id].fingerprint !== after[result.id].fingerprint;
+    const inputs = before[result.id]!;
+    result.inputFingerprint = inputs.fingerprint;
+    result.changedDuringRun = inputs.fingerprint !== after[result.id]!.fingerprint;
     result.assessedAt = at;
     if (result.kind !== "manual" && options.caseId === undefined) {
       state.tasks[result.id] = {
         at,
-        fingerprint: before[result.id].fingerprint,
+        fingerprint: inputs.fingerprint,
         changedDuringRun: result.changedDuringRun,
         bestScore: Math.max(state.tasks[result.id]?.bestScore ?? 0, result.weightedScore),
         result: result as never,
@@ -413,7 +420,7 @@ export interface ProjectRefreshResult {
 
 export async function refreshProjectExpected(
   lab: LoadedProjectLab,
-  options: { taskId?: string; write?: boolean } = {},
+  options: { taskId?: string | undefined; write?: boolean | undefined } = {},
 ): Promise<ProjectRefreshResult> {
   const stdioTasks = selectedTasks(lab, options.taskId).filter((task) => task.kind === "stdio");
   if (stdioTasks.length === 0) {
@@ -444,7 +451,7 @@ export async function interactiveProjectTask(
   taskId: string | undefined,
   target: TargetName = "student",
 ): Promise<InteractiveResult> {
-  const [task] = selectedTasks(lab, taskId);
+  const task = selectedTask(lab, taskId);
   if (task.kind !== "stdio") throw new LabError("TYPE_UNSUPPORTED", "interactive 只支持 stdio task");
 
   return runInteractive(programView(lab, task), target);

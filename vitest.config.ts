@@ -15,8 +15,8 @@ import { defineConfig } from "vitest/config";
  */
 export default defineConfig({
   test: {
-    reporters: process.env.CI === undefined ? ["default"] : ["default", "github-actions"],
-    maxWorkers: process.env.CI === undefined ? "75%" : "100%",
+    reporters: process.env["CI"] === undefined ? ["default"] : ["default", "github-actions"],
+    maxWorkers: process.env["CI"] === undefined ? "75%" : "100%",
     teardownTimeout: 60_000,
     // Playwright 的 web-first 断言默认重试 5 秒；兼容层基于 expect.poll，对齐同一预算。
     expect: { poll: { timeout: 10_000, interval: 50 } },

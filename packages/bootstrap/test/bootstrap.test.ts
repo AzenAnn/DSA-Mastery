@@ -128,10 +128,10 @@ it("setup arguments reject unknown profile and conflicting UI modes", () => {
 
 it("plain bootstrap output is readable and contains no ANSI control codes", () => {
   const stages = createStageState(["preflight", "toolchain", "repository"]);
-  stages[0].status = "success";
-  stages[1].status = "running";
-  stages[1].message = "安装 CMake";
-  stages[2].status = "pending";
+  stages[0]!.status = "success";
+  stages[1]!.status = "running";
+  stages[1]!.message = "安装 CMake";
+  stages[2]!.status = "pending";
   const output = renderPlain({ title: "DSA Mastery 环境配置", profile: "full", stages, width: 80 });
   expect(output).toMatch(/DSA Mastery 环境配置/);
   expect(output).toMatch(/preflight/);
@@ -142,9 +142,9 @@ it("plain bootstrap output is readable and contains no ANSI control codes", () =
 
 it("TUI frame shows progress and clamps to the terminal width", () => {
   const stages = createStageState(["preflight", "toolchain", "repository", "dependencies"]);
-  stages[0].status = "success";
-  stages[1].status = "success";
-  stages[2].status = "running";
+  stages[0]!.status = "success";
+  stages[1]!.status = "success";
+  stages[2]!.status = "running";
   const frame = renderTuiFrame({ title: "DSA Mastery", profile: "basic", stages, width: 42 });
   expect(frame).toMatch(/2\/4/);
   expect(frame).toMatch(/50%/);
@@ -154,8 +154,8 @@ it("TUI frame shows progress and clamps to the terminal width", () => {
 
 it("colored TUI adds a banner and semantic status colors without changing layout", () => {
   const stages = createStageState(["preflight", "toolchain"]);
-  stages[0].status = "success";
-  stages[1].status = "running";
+  stages[0]!.status = "success";
+  stages[1]!.status = "running";
   const plain = renderTuiFrame({ title: "DSA Mastery", profile: "basic", stages, width: 52, color: false });
   const colored = renderTuiFrame({ title: "DSA Mastery", profile: "basic", stages, width: 52, color: true });
   expect(colored).toMatch(/DSA MASTERY/);
@@ -222,10 +222,10 @@ it("progress UI falls back to stable plain output when stdout is not a TTY", () 
 });
 
 it("TUI completion renders the summary card and pixel banner together", () => {
-  const previousNoColor = process.env.NO_COLOR;
-  const previousTerm = process.env.TERM;
-  delete process.env.NO_COLOR;
-  process.env.TERM = "xterm";
+  const previousNoColor = process.env["NO_COLOR"];
+  const previousTerm = process.env["TERM"];
+  delete process.env["NO_COLOR"];
+  process.env["TERM"] = "xterm";
   const writes: string[] = [];
   try {
     const ui = createProgressUI({
@@ -247,10 +247,10 @@ it("TUI completion renders the summary card and pixel banner together", () => {
     expect(output).toMatch(/配置结果 · 成功/);
     expect(output).toMatch(/███/);
   } finally {
-    if (previousNoColor === undefined) delete process.env.NO_COLOR;
-    else process.env.NO_COLOR = previousNoColor;
-    if (previousTerm === undefined) delete process.env.TERM;
-    else process.env.TERM = previousTerm;
+    if (previousNoColor === undefined) delete process.env["NO_COLOR"];
+    else process.env["NO_COLOR"] = previousNoColor;
+    if (previousTerm === undefined) delete process.env["TERM"];
+    else process.env["TERM"] = previousTerm;
   }
 });
 
@@ -351,10 +351,10 @@ it("MSVC environment parsing preserves values containing equals signs", () => {
     "Path=C:\\VS\\bin;C:\\Windows\\System32\nINCLUDE=C:\\SDK\\include\nLIB=C:\\SDK\\lib\nCUSTOM=a=b=c\n",
     { Path: "old-path", KEEP: "yes" },
   );
-  expect(parsed.Path).toBe("C:\\VS\\bin;C:\\Windows\\System32");
-  expect(parsed.INCLUDE).toBe("C:\\SDK\\include");
-  expect(parsed.CUSTOM).toBe("a=b=c");
-  expect(parsed.KEEP).toBe("yes");
+  expect(parsed["Path"]).toBe("C:\\VS\\bin;C:\\Windows\\System32");
+  expect(parsed["INCLUDE"]).toBe("C:\\SDK\\include");
+  expect(parsed["CUSTOM"]).toBe("a=b=c");
+  expect(parsed["KEEP"]).toBe("yes");
   expect(isMsvcCommand("cl")).toBe(true);
   expect(isMsvcCommand("C:\\VS\\bin\\cl.exe")).toBe(true);
   expect(isMsvcCommand("clang++")).toBe(false);
@@ -368,7 +368,7 @@ it("vswhere output resolves the first non-empty installation path", () => {
 });
 
 it("MSVC environment resolver uses vswhere and imports the developer environment", async () => {
-  const calls: { command: string; args: string[]; cwd?: string }[] = [];
+  const calls: { command: string; args: string[]; cwd?: string | undefined }[] = [];
   const result = await createMsvcEnvironment({
     platform: "win32",
     env: { "ProgramFiles(x86)": "C:\\Program Files (x86)" },
@@ -385,13 +385,13 @@ it("MSVC environment resolver uses vswhere and imports the developer environment
     }),
   });
   expect(result!.family).toBe("msvc");
-  expect(result!.env.INCLUDE).toBe("C:\\SDK\\include");
-  expect(result!.env.LIB).toBe("C:\\SDK\\lib");
+  expect(result!.env["INCLUDE"]).toBe("C:\\SDK\\include");
+  expect(result!.env["LIB"]).toBe("C:\\SDK\\lib");
   expect(result!.installationPath).toBe("C:\\VS\\BuildTools");
   expect(calls.length).toBe(2);
-  expect(calls[0].args.join(" ")).toMatch(/VC\.Tools\.x86\.x64/);
-  expect(calls[1].command).toBe("cmd.exe");
-  expect(calls[1].args.at(-1)).toMatch(/VsDevCmd\.bat/);
+  expect(calls[0]!.args.join(" ")).toMatch(/VC\.Tools\.x86\.x64/);
+  expect(calls[1]!.command).toBe("cmd.exe");
+  expect(calls[1]!.args.at(-1)).toMatch(/VsDevCmd\.bat/);
 });
 
 it("bootstrap command runner preserves arguments containing spaces without a shell", async () => {
@@ -453,7 +453,7 @@ it("host inspection probes Git, Node, exact pnpm, compilers, and CMake", async (
 });
 
 it("Windows host inspection accepts MSVC's nonzero no-input exit after environment setup", async () => {
-  const calls: { command: string; args: string[]; cwd?: string }[] = [];
+  const calls: { command: string; args: string[]; cwd?: string | undefined }[] = [];
   const result = await inspectHost({
     platform: "win32",
     architecture: "x64",
@@ -576,7 +576,7 @@ it("check-only runs read-only probes and never installs or clones", async () => 
   await writeFile(path.join(repo, "package.json"), "{}\n");
   await writeFile(path.join(repo, "pnpm-lock.yaml"), "lockfileVersion: '9.0'\n");
   await writeFile(path.join(repo, "packages", "lab-cli", "dist", "cli.js"), "\n");
-  const calls: { command: string; args: string[]; cwd?: string }[] = [];
+  const calls: { command: string; args: string[]; cwd?: string | undefined }[] = [];
   const outputs = new Map([
     ["brew", { code: 0, stdout: "Homebrew 4.0.0\n", stderr: "" }],
     ["git", { code: 0, stdout: "git version 2.50.1\n", stderr: "" }],
@@ -640,7 +640,7 @@ it("toolchain probes use the caller directory before cloning a new repository", 
   const root = await mkdtemp(path.join(os.tmpdir(), "dsa bootstrap command cwd "));
   onTestFinished(() => rm(root, { recursive: true, force: true }));
   const missingRepo = path.join(root, "future-repository");
-  const calls: { command: string; args: string[]; cwd?: string }[] = [];
+  const calls: { command: string; args: string[]; cwd?: string | undefined }[] = [];
   let pnpmChecks = 0;
   const result = await runSetup(
     ["--profile", "basic", "--repo-dir", missingRepo, "--non-interactive", "--ui", "plain"],
@@ -653,7 +653,7 @@ it("toolchain probes use the caller directory before cloning a new repository", 
         input: fakeInput({ isTTY: false }),
         output: { isTTY: false, write: () => {} },
       },
-      runner: stubRunner(async (command: string, args: string[], options: { cwd?: string } = {}) => {
+      runner: stubRunner(async (command: string, args: string[], options: { cwd?: string | undefined } = {}) => {
         calls.push({ command, args, cwd: options.cwd });
         if (command === "brew") return { code: 0, stdout: "Homebrew 4.0.0\n", stderr: "" };
         if (command === "git") return { code: 0, stdout: "git version 2.50.1\n", stderr: "" };
@@ -692,7 +692,7 @@ it("runtime setup installs only course tooling and skips C++ smoke", async () =>
   await writeFile(path.join(repo, "package.json"), "{}\n");
   await writeFile(path.join(repo, "pnpm-lock.yaml"), "lockfileVersion: '9.0'\n");
   await writeFile(path.join(repo, "packages", "lab-cli", "dist", "cli.js"), "\n");
-  const calls: { command: string; args: string[]; cwd?: string }[] = [];
+  const calls: { command: string; args: string[]; cwd?: string | undefined }[] = [];
   const result = await runSetup(["--profile", "runtime", "--repo-dir", repo, "--non-interactive", "--ui", "plain"], {
     platform: "darwin",
     architecture: "arm64",

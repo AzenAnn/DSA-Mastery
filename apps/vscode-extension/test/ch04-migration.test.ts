@@ -28,7 +28,7 @@ it("simultaneously remaps all overlapping IDs without consuming moved records", 
   });
   for (const [old, next] of CH04_RENUMBERING) expect(migrated.records[`04E${pad(next)}`]).toStrictEqual({ old });
   expect(Object.keys(migrated.records).length).toBe(17);
-  expect(source["04E01"].old).toBe(1);
+  expect(source["04E01"]!.old).toBe(1);
   expect(ch04IdAliases(labs, [CH04_MIGRATION])).toStrictEqual([]);
   expect(ch04IdAliases(labs.slice(1), [])).toStrictEqual([]);
   const oldLayout = CH04_RENUMBERING.map(([old, , slug]) => ({
@@ -120,7 +120,7 @@ it("tracker awaits backup, persists marker, merges aliases, preserves snapshots 
     await tracker.migrateLabKeys(labs);
     expect(writes[0]).toMatch(/backup/);
     expect(writes[1]).toBe(stateKey);
-    expect(memory.get(writes[0])).toStrictEqual(sourceWithMarker(source));
+    expect(memory.get(writes[0]!)).toStrictEqual(sourceWithMarker(source));
     expect(tracker.get("04E03").bestScore).toBe(100);
     expect(tracker.get("04E07").bestScore).toBe(40);
     expect(

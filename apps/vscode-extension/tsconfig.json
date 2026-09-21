@@ -1,20 +1,10 @@
 {
+  // 源码由 tsdown 打包成单个 CJS 文件，运行时不存在 Node 的模块解析，
+  // 因此基座按打包器建模：否则 workspace 里 ESM + `.ts` 后缀的 @dsa/* 源码会被判成不可 require。
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2023"],
-    // 源码由 tsdown 打包成单个 CJS 文件，运行时不存在 Node 的模块解析，
-    // 因此按打包器建模：否则 workspace 里 ESM + `.ts` 后缀的 @dsa/* 源码会被判成不可 require。
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
     "types": ["node", "vscode"]
   },
   "include": ["src/**/*.ts"],

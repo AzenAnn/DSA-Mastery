@@ -32,10 +32,10 @@ it("source fingerprints invalidate only transitive owners and shared config, ign
   const before = await projectInputs(lab);
   await writeFile(path.join(lab.labRoot, "tasks/a/student/module.cpp"), "// changed");
   const after = await projectInputs(lab);
-  expect(before.a.fingerprint).not.toBe(after.a.fingerprint);
-  expect(before.b.fingerprint).toBe(after.b.fingerprint);
-  expect(before.final.fingerprint).not.toBe(after.final.fingerprint);
-  expect(before.report.fingerprint).not.toBe(after.report.fingerprint);
+  expect(before["a"]!.fingerprint).not.toBe(after["a"]!.fingerprint);
+  expect(before["b"]!.fingerprint).toBe(after["b"]!.fingerprint);
+  expect(before["final"]!.fingerprint).not.toBe(after["final"]!.fingerprint);
+  expect(before["report"]!.fingerprint).not.toBe(after["report"]!.fingerprint);
   for (const dir of ["solution", ".lab-cache"]) {
     await mkdir(path.join(lab.labRoot, dir), { recursive: true });
     await writeFile(path.join(lab.labRoot, dir, "generated.cpp"), "irrelevant");
@@ -43,7 +43,7 @@ it("source fingerprints invalidate only transitive owners and shared config, ign
   expect(await projectInputs(lab)).toStrictEqual(after);
   await writeFile(path.join(lab.labRoot, "lab.json"), '{"config":true}');
   const configured = await projectInputs(lab);
-  for (const task of lab.tasks) expect(after[task.id].fingerprint).not.toBe(configured[task.id].fingerprint);
+  for (const task of lab.tasks) expect(after[task.id]!.fingerprint).not.toBe(configured[task.id]!.fingerprint);
 });
 
 it("manual, unassessed and stale results cannot become complete; historical grades survive", async () => {
@@ -57,7 +57,7 @@ it("manual, unassessed and stale results cannot become complete; historical grad
         .map((task) => [
           task.id,
           {
-            fingerprint: inputs[task.id].fingerprint,
+            fingerprint: inputs[task.id]!.fingerprint,
             at: "2026-09-11",
             bestScore: task.weight,
             result: { id: task.id, status: "AC", score: 100, maxScore: 100, weightedScore: task.weight },
@@ -72,13 +72,13 @@ it("manual, unassessed and stale results cannot become complete; historical grad
   await writeFile(path.join(lab.labRoot, "tasks/a/student/module.cpp"), "// stale");
   const stale = currentProject(lab, state, await projectInputs(lab));
   expect(stale.automatedScore).toBe(30);
-  expect(stale.tasks[0].status).toBe("STALE");
-  expect(stale.tasks[0].historicalScore).toBe(30);
-  expect(stale.tasks[0].bestScore).toBe(30);
+  expect(stale.tasks[0]!.status).toBe("STALE");
+  expect(stale.tasks[0]!.historicalScore).toBe(30);
+  expect(stale.tasks[0]!.bestScore).toBe(30);
   expect(stale.complete).toBe(false);
-  expect(currentProject(lab, { version: 1, tasks: {} }, inputs).tasks[0].status).toBe("UNASSESSED");
-  state.tasks.b.changedDuringRun = true;
-  expect(currentProject(lab, state, inputs).tasks[1].status).toBe("STALE");
+  expect(currentProject(lab, { version: 1, tasks: {} }, inputs).tasks[0]!.status).toBe("UNASSESSED");
+  state.tasks["b"]!.changedDuringRun = true;
+  expect(currentProject(lab, state, inputs).tasks[1]!.status).toBe("STALE");
 });
 
 it("project lock rejects concurrent grading and releases on failure", async () => {

@@ -5,8 +5,8 @@ const DEFAULT_REPO_URL = "https://github.com/AzenAnn/DSA-Mastery.git";
 export type UiPreference = "auto" | "tui" | "plain";
 
 export interface SetupOptions {
-  profile?: "runtime" | "basic" | "full";
-  repoDir?: string;
+  profile?: "runtime" | "basic" | "full" | undefined;
+  repoDir?: string | undefined;
   repoUrl: string;
   checkOnly: boolean;
   ui: UiPreference;
@@ -15,15 +15,14 @@ export interface SetupOptions {
   updateRepo: boolean;
   nonInteractive: boolean;
   json: boolean;
-  help?: boolean;
+  help?: boolean | undefined;
   // 交互式选择界面回填的字段
-  installCppExtension?: boolean;
-  installCmakeExtension?: boolean;
-  selection?: string[];
-  cancelled?: boolean;
+  installCppExtension?: boolean | undefined;
+  installCmakeExtension?: boolean | undefined;
+  selection?: string[] | undefined;
+  cancelled?: boolean | undefined;
 }
 
-const VALUE_OPTIONS = new Set(["profile", "repo-dir", "repo-url", "ui"]);
 const VALUE_KEYS: Record<string, keyof SetupOptions> = {
   profile: "profile",
   "repo-dir": "repoDir",
@@ -45,14 +44,14 @@ function invalid(message: string): LabError {
   return new LabError("ARGUMENT_INVALID", message);
 }
 
-function assignValue(result: SetupOptions, key: string, value: string): void {
+function assignValue(result: SetupOptions, key: keyof SetupOptions, value: string): void {
   if (key === "profile" && !["runtime", "basic", "full"].includes(value)) {
     throw invalid(`--profile 必须是 runtime、basic 或 full，收到：${value}`);
   }
   if (key === "ui" && !["auto", "tui", "plain"].includes(value)) {
     throw invalid(`--ui 必须是 auto、tui 或 plain，收到：${value}`);
   }
-  (result as unknown as Record<string, unknown>)[VALUE_KEYS[key]] = value;
+  (result as unknown as Record<string, unknown>)[key] = value;
 }
 
 export function parseSetupArgs(argv: readonly unknown[] = []): SetupOptions {
@@ -74,7 +73,7 @@ export function parseSetupArgs(argv: readonly unknown[] = []): SetupOptions {
     const token = String(argv[index]);
     if (token === "--") continue;
     if (!token.startsWith("--")) throw invalid(`不支持的位置参数：${token}`);
-    const [rawKey, inlineValue] = token.slice(2).split("=", 2);
+    const [rawKey = "", inlineValue] = token.slice(2).split("=", 2);
     const booleanKey = BOOLEAN_OPTIONS.get(rawKey);
     if (booleanKey) {
       if (inlineValue !== undefined && !["true", "false"].includes(inlineValue)) {
@@ -85,10 +84,11 @@ export function parseSetupArgs(argv: readonly unknown[] = []): SetupOptions {
       else (result as unknown as Record<string, unknown>)[booleanKey] = value;
       continue;
     }
-    if (!VALUE_OPTIONS.has(rawKey)) throw invalid(`未知选项：--${rawKey}`);
+    const valueKey = VALUE_KEYS[rawKey];
+    if (valueKey === undefined) throw invalid(`未知选项：--${rawKey}`);
     const value = inlineValue ?? argv[++index];
     if (value === undefined || String(value).startsWith("--")) throw invalid(`--${rawKey} 缺少值`);
-    assignValue(result, rawKey, String(value));
+    assignValue(result, valueKey, String(value));
   }
 
   if (noUi && result.ui !== "auto") throw invalid("--ui 与 --no-ui 不能同时指定");

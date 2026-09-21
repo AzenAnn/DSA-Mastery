@@ -262,12 +262,6 @@ function cleanTerminalText(value) {
 //#endregion
 //#region src/options.ts
 const DEFAULT_REPO_URL = "https://github.com/AzenAnn/DSA-Mastery.git";
-const VALUE_OPTIONS = /* @__PURE__ */ new Set([
-	"profile",
-	"repo-dir",
-	"repo-url",
-	"ui"
-]);
 const VALUE_KEYS = {
 	profile: "profile",
 	"repo-dir": "repoDir",
@@ -298,7 +292,7 @@ function assignValue(result, key, value) {
 		"tui",
 		"plain"
 	].includes(value)) throw invalid(`--ui 必须是 auto、tui 或 plain，收到：${value}`);
-	result[VALUE_KEYS[key]] = value;
+	result[key] = value;
 }
 function parseSetupArgs(argv = []) {
 	const result = {
@@ -318,7 +312,7 @@ function parseSetupArgs(argv = []) {
 		const token = String(argv[index]);
 		if (token === "--") continue;
 		if (!token.startsWith("--")) throw invalid(`不支持的位置参数：${token}`);
-		const [rawKey, inlineValue] = token.slice(2).split("=", 2);
+		const [rawKey = "", inlineValue] = token.slice(2).split("=", 2);
 		const booleanKey = BOOLEAN_OPTIONS.get(rawKey);
 		if (booleanKey) {
 			if (inlineValue !== void 0 && !["true", "false"].includes(inlineValue)) throw invalid(`--${rawKey} 只接受 true 或 false`);
@@ -327,10 +321,11 @@ function parseSetupArgs(argv = []) {
 			else result[booleanKey] = value;
 			continue;
 		}
-		if (!VALUE_OPTIONS.has(rawKey)) throw invalid(`未知选项：--${rawKey}`);
+		const valueKey = VALUE_KEYS[rawKey];
+		if (valueKey === void 0) throw invalid(`未知选项：--${rawKey}`);
 		const value = inlineValue ?? argv[++index];
 		if (value === void 0 || String(value).startsWith("--")) throw invalid(`--${rawKey} 缺少值`);
-		assignValue(result, rawKey, String(value));
+		assignValue(result, valueKey, String(value));
 	}
 	if (noUi && result.ui !== "auto") throw invalid("--ui 与 --no-ui 不能同时指定");
 	if (noUi) result.ui = "plain";
@@ -356,7 +351,7 @@ function parseVsWherePath(source) {
 }
 function vsWhereCandidates(env) {
 	const candidates = [];
-	if (env.VSWHERE_PATH !== void 0 && env.VSWHERE_PATH !== "") candidates.push(env.VSWHERE_PATH);
+	if (env["VSWHERE_PATH"] !== void 0 && env["VSWHERE_PATH"] !== "") candidates.push(env["VSWHERE_PATH"]);
 	if (env["ProgramFiles(x86)"] !== void 0) candidates.push(path.win32.join(env["ProgramFiles(x86)"], "Microsoft Visual Studio", "Installer", "vswhere.exe"));
 	candidates.push("vswhere.exe");
 	return [...new Set(candidates)];
@@ -655,8 +650,8 @@ function summarizeReport(report) {
 }
 async function writeFailureLog(context, report) {
 	if (context.options.checkOnly) return void 0;
-	const home = context.env.HOME ?? context.env.USERPROFILE ?? os.homedir();
-	const directory = context.platform === "darwin" ? path.join(home, "Library", "Logs", "DSA-Mastery", "setup") : context.platform === "win32" ? path.join(context.env.LOCALAPPDATA ?? path.join(home, "AppData", "Local"), "DSA-Mastery", "setup") : path.join(home, ".local", "state", "DSA-Mastery", "setup");
+	const home = context.env["HOME"] ?? context.env["USERPROFILE"] ?? os.homedir();
+	const directory = context.platform === "darwin" ? path.join(home, "Library", "Logs", "DSA-Mastery", "setup") : context.platform === "win32" ? path.join(context.env["LOCALAPPDATA"] ?? path.join(home, "AppData", "Local"), "DSA-Mastery", "setup") : path.join(home, ".local", "state", "DSA-Mastery", "setup");
 	await mkdir(directory, { recursive: true });
 	const file = path.join(directory, `setup-${(/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-")}.log`);
 	const lines = [
@@ -742,7 +737,7 @@ async function refreshPlatformEnvironment(context) {
 			timeMs: 5e3,
 			outputKb: 256
 		}));
-		if (prefix !== void 0 && prefix !== "") context.env.PATH = prependPath(context.env.PATH, [path.join(prefix, "bin"), path.join(prefix, "sbin")], ":");
+		if (prefix !== void 0 && prefix !== "") context.env["PATH"] = prependPath(context.env["PATH"], [path.join(prefix, "bin"), path.join(prefix, "sbin")], ":");
 	}
 	if (context.platform === "win32") {
 		const pathResult = await runWithRunner(context, "powershell.exe", [
@@ -754,7 +749,7 @@ async function refreshPlatformEnvironment(context) {
 			timeMs: 1e4,
 			outputKb: 4096
 		});
-		if (!resultFailed(pathResult) && pathResult.stdout?.trim()) context.env.PATH = pathResult.stdout.trim();
+		if (!resultFailed(pathResult) && pathResult.stdout?.trim()) context.env["PATH"] = pathResult.stdout.trim();
 	}
 	return context.env;
 }
@@ -1060,7 +1055,7 @@ async function ensurePnpm(context) {
 		context.pnpmCommand = "pnpm";
 		return context.pnpmCommand;
 	}
-	const base = context.platform === "win32" ? path.join(context.env.LOCALAPPDATA ?? context.env.USERPROFILE ?? os.homedir(), "DSA-Mastery", "tools") : path.join(context.env.XDG_DATA_HOME ?? path.join(context.env.HOME ?? os.homedir(), ".local", "share"), "DSA-Mastery", "tools");
+	const base = context.platform === "win32" ? path.join(context.env["LOCALAPPDATA"] ?? context.env["USERPROFILE"] ?? os.homedir(), "DSA-Mastery", "tools") : path.join(context.env["XDG_DATA_HOME"] ?? path.join(context.env["HOME"] ?? os.homedir(), ".local", "share"), "DSA-Mastery", "tools");
 	await mkdir(base, { recursive: true });
 	const localInstall = await runWithRunner(context, "npm", [
 		"install",
@@ -1080,7 +1075,7 @@ async function ensurePnpm(context) {
 		`pnpm@${PNPM_VERSION}`
 	], localInstall);
 	const bin = context.platform === "win32" ? base : path.join(base, "bin");
-	context.env.PATH = prependPath(context.env.PATH, [bin], context.platform === "win32" ? ";" : ":");
+	context.env["PATH"] = prependPath(context.env["PATH"], [bin], context.platform === "win32" ? ";" : ":");
 	const candidates = context.platform === "win32" ? [path.join(base, "pnpm.cmd"), path.join(base, "node_modules", ".bin", "pnpm.cmd")] : [path.join(bin, "pnpm")];
 	for (const candidate of candidates) {
 		const afterLocal = await runWithRunner(context, candidate, ["--version"], {
@@ -1156,7 +1151,7 @@ async function detectVSCode(context) {
 	if (context.platform === "darwin") for (const application of ["/Applications/Visual Studio Code.app", path.join(os.homedir(), "Applications/Visual Studio Code.app")]) {
 		const binDir = path.join(application, "Contents/Resources/app/bin");
 		if (!await pathExists(path.join(binDir, "code"))) continue;
-		context.env.PATH = prependPath(context.env.PATH, [binDir], ":");
+		context.env["PATH"] = prependPath(context.env["PATH"], [binDir], ":");
 		if (await commandAvailable(context, "code", ["--version"])) return {
 			found: true,
 			inPath: false,
@@ -1179,7 +1174,7 @@ async function detectVSCode(context) {
 		const codeCmd = candidates.find((p) => /\.cmd$/i.test(p)) ?? candidates.find((p) => /\.exe$/i.test(p)) ?? candidates[0];
 		if (codeCmd !== void 0 && await pathExists(codeCmd)) {
 			const binDir = path.dirname(codeCmd);
-			context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
+			context.env["PATH"] = prependPath(context.env["PATH"], [binDir], ";");
 			if (await commandAvailable(context, "code", ["--version"])) return {
 				found: true,
 				inPath: false,
@@ -1188,11 +1183,11 @@ async function detectVSCode(context) {
 		}
 	} catch {}
 	const standardDirs = [];
-	if (context.env.LOCALAPPDATA !== void 0) standardDirs.push(path.join(context.env.LOCALAPPDATA, "Programs", "Microsoft VS Code", "bin"));
-	if (context.env.ProgramFiles !== void 0) standardDirs.push(path.join(context.env.ProgramFiles, "Microsoft VS Code", "bin"));
+	if (context.env["LOCALAPPDATA"] !== void 0) standardDirs.push(path.join(context.env["LOCALAPPDATA"], "Programs", "Microsoft VS Code", "bin"));
+	if (context.env["ProgramFiles"] !== void 0) standardDirs.push(path.join(context.env["ProgramFiles"], "Microsoft VS Code", "bin"));
 	if (context.env["ProgramFiles(x86)"] !== void 0) standardDirs.push(path.join(context.env["ProgramFiles(x86)"], "Microsoft VS Code", "bin"));
 	for (const binDir of standardDirs) if (await pathExists(path.join(binDir, "code.cmd"))) {
-		context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
+		context.env["PATH"] = prependPath(context.env["PATH"], [binDir], ";");
 		if (await commandAvailable(context, "code", ["--version"])) return {
 			found: true,
 			inPath: false,
@@ -1286,7 +1281,7 @@ function clampWidth(width) {
 	return Math.max(28, Number.isFinite(Number(width)) ? Number(width) : 80);
 }
 function supportsColor(output) {
-	return Boolean(output?.isTTY) && (process.env.NO_COLOR ?? "") === "" && process.env.TERM !== "dumb";
+	return Boolean(output?.isTTY) && (process.env["NO_COLOR"] ?? "") === "" && process.env["TERM"] !== "dumb";
 }
 const COMBINING_CHARACTER = /^\p{Mark}$/u;
 function isZeroWidthCodePoint(codePoint, character) {
@@ -1676,7 +1671,7 @@ function renderChoiceMenu({ title = "配置 DSA Mastery", subtitle = "用 ↑↓
 		lines.push(frameLine(`  ${choice.description}`, innerWidth, "dim", color));
 	});
 	const active = choices[cursor];
-	if (active?.detail) {
+	if (active !== void 0 && active.detail !== "") {
 		lines.push(frameLine("", innerWidth));
 		lines.push(frameLine(`▸ 说明：${active.detail}`, innerWidth, "dim", color));
 	}
@@ -1703,7 +1698,7 @@ function decodeChoiceInputInternal(value, { deferIncomplete = false } = {}) {
 			pending = remaining;
 			break;
 		}
-		const character = value[index];
+		const character = value[index] ?? "";
 		if (character === "" || character === "\x1B") actions.push("escape");
 		else if (character === " ") actions.push("space");
 		else if (character === "\r" || character === "\n") actions.push("enter");
@@ -2061,7 +2056,7 @@ function renderTuiSummary({ summary = "", width = 88, color = false } = {}) {
 		else metadata.push(line);
 	}
 	const success = headline.includes("成功");
-	const matchedLabel = headline.match(/^DSA Mastery 环境配置[：:](.*)$/u)?.[1].trimStart();
+	const matchedLabel = headline.match(/^DSA Mastery 环境配置[：:](.*)$/u)?.[1]?.trimStart();
 	const headlineLabel = matchedLabel === void 0 || matchedLabel === "" ? headline : matchedLabel;
 	const metadataFields = metadata.map(parseSummaryField).filter((field) => Boolean(field));
 	const resultFields = resultDetails.map(parseSummaryField).filter((field) => Boolean(field));
@@ -2214,7 +2209,7 @@ function renderTuiFrame({ title = "DSA Mastery 环境配置", profile = "", stag
 function resolveUiMode({ mode = "auto", stdout = process.stdout, json = false, nonInteractive = false } = {}) {
 	if (json || nonInteractive || mode === "plain") return "plain";
 	const tty = Boolean(stdout?.isTTY);
-	const disabled = Boolean(process.env.NO_COLOR) || process.env.TERM === "dumb";
+	const disabled = Boolean(process.env["NO_COLOR"]) || process.env["TERM"] === "dumb";
 	return (mode === "tui" || mode === "auto") && tty && !disabled ? "tui" : "plain";
 }
 function createProgressUI({ mode = "auto", stdout = process.stdout, title = "DSA Mastery 环境配置", profile = "", stageNames = [], json = false, nonInteractive = false, spinner = true } = {}) {
@@ -2350,7 +2345,7 @@ function createSilentProgressUI() {
 	};
 }
 async function executeStage(context, id, action) {
-	context.currentStage = id;
+	context["currentStage"] = id;
 	context.ui.update(id, "running", "准备中");
 	const result = await action();
 	const outcome = result;
@@ -2511,7 +2506,7 @@ async function runSetup(argv = [], dependencies = {}) {
 			details: error.details,
 			nextAction: error.details?.restartRequired ? "完成系统安装/重启终端后重新运行同一命令。" : error.code === "REPOSITORY_DIRTY" ? "先提交或暂存改动，再显式使用 --update-repo。" : error.code === "SETUP_UNSUPPORTED" ? "改用对应平台的手工安装指南，再重新运行 --check-only。" : "根据失败阶段和日志中的完整命令输出修复后重新运行。"
 		};
-		context.ui.update(String(context.currentStage ?? "preflight"), "failed", error.message);
+		context.ui.update(String(context["currentStage"] ?? "preflight"), "failed", error.message);
 		report.exitCode = error.exitCode;
 	} finally {
 		for (const stage of report.stages) {
@@ -2585,6 +2580,6 @@ async function main() {
 	if (result.report.ok && !process.argv.includes("--json") && result.uiMode !== "tui") process.stdout.write(printSuccessBanner());
 	process.exitCode = result.exitCode;
 }
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) await main();
+if (process.argv[1] !== void 0 && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) await main();
 //#endregion
 export { runSetup };

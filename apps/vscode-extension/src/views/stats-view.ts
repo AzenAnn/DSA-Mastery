@@ -273,7 +273,7 @@ function renderCounters(counters: Counters): string {
 function renderHeatmap(map: Heatmap, other: Heatmap, metric: "submit" | "pass", today: string): string {
   const label = metric === "submit" ? "提交" : "通过";
   if (map.cells.length === 0) return `<p class="stats-empty">这一年还没有${label}记录。</p>`;
-  const first = new Date(`${map.cells[0].date}T12:00:00`);
+  const first = new Date(`${map.cells[0]!.date}T12:00:00`);
   const columnOf = (index: number) => Math.floor((index + first.getDay()) / 7);
   const columns = columnOf(map.cells.length - 1) + 1;
   const width = LEFT + columns * (CELL + GAP) + 2;
@@ -292,8 +292,8 @@ function renderHeatmap(map: Heatmap, other: Heatmap, metric: "submit" | "pass", 
       const date = new Date(`${cell.date}T12:00:00`);
       const x = LEFT + columnOf(index) * (CELL + GAP);
       const y = TOP + date.getDay() * (CELL + GAP);
-      const submits = metric === "submit" ? cell.count : other.cells[index].count;
-      const passes = metric === "pass" ? cell.count : other.cells[index].count;
+      const submits = metric === "submit" ? cell.count : (other.cells[index]?.count ?? 0);
+      const passes = metric === "pass" ? cell.count : (other.cells[index]?.count ?? 0);
       const isToday = cell.date === today;
       const title = `${cell.date}${isToday ? "（今天）" : ""}：提交 ${submits} 次，通过 ${passes} 次`;
       return `<rect class="heatmap-cell${isToday ? " is-today" : ""}" data-date="${cell.date}" data-count="${cell.count}" data-detail="${escapeHtml(title)}" x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="2" fill="${HEAT_COLORS[cell.level]}" tabindex="${index === focusIndex ? "0" : "-1"}" role="img" aria-label="${escapeHtml(title)}"${isToday ? ' aria-current="date"' : ""}><title>${escapeHtml(title)}</title></rect>`;
@@ -327,18 +327,20 @@ function renderHeatmap(map: Heatmap, other: Heatmap, metric: "submit" | "pass", 
 
 /** Calendar-day distance avoids both compressed inactive periods and DST-hour offsets. */
 function calendarDay(date: string): number {
-  const [year, month, day] = date.split("-").map(Number);
+  const [year, month, day] = date.split("-").map(Number) as [number, number, number];
   return Date.UTC(year, month - 1, day) / 86_400_000;
 }
 
 function renderTrend(points: TrendPoint[]): string {
-  if (points.length < 2) {
+  const first = points[0];
+  if (points.length < 2 || first === undefined) {
     const text =
-      points.length === 0
+      first === undefined
         ? "暂无通过记录。"
-        : `${escapeHtml(points[0].date)} · 累计通过 ${points[0].cumulativePasses} 次，尚无跨日趋势。`;
+        : `${escapeHtml(first.date)} · 累计通过 ${first.cumulativePasses} 次，尚无跨日趋势。`;
     return `<p class="stats-empty trend-empty" data-trend-points="${points.length}">${text}</p>`;
   }
+  const last = points[points.length - 1]!;
 
   const width = 720;
   const height = 240;
@@ -346,9 +348,9 @@ function renderTrend(points: TrendPoint[]): string {
   const right = 16;
   const top = 28;
   const bottom = 32;
-  const max = points[points.length - 1].cumulativePasses;
-  const from = calendarDay(points[0].date);
-  const span = calendarDay(points[points.length - 1].date) - from;
+  const max = last.cumulativePasses;
+  const from = calendarDay(first.date);
+  const span = calendarDay(last.date) - from;
   const xFor = (date: string) => left + ((calendarDay(date) - from) / span) * (width - left - right);
   const yFor = (value: number) => top + (1 - value / max) * (height - top - bottom);
   const coords = points
@@ -376,14 +378,14 @@ function renderTrend(points: TrendPoint[]): string {
 
   return `<div class="trend-wrap">
 <svg class="trend" viewBox="0 0 ${width} ${height}" data-points="${escapeHtml(JSON.stringify(chartData))}" role="img" aria-label="累计通过趋势，共 ${max} 次通过">
-  <title>累计通过次数，${escapeHtml(points[0].date)} 至 ${escapeHtml(points[points.length - 1].date)}</title>
+  <title>累计通过次数，${escapeHtml(first.date)} 至 ${escapeHtml(last.date)}</title>
   <text class="axis trend-unit" x="${left}" y="12">通过（次）</text>
   ${tickMarkup}
   <polygon class="trend-area" fill="var(--stats-accent, #4f9cff)" fill-opacity="0.08" points="${left},${height - bottom} ${coords} ${width - right},${height - bottom}" />
   <polyline class="trend-line" fill="none" stroke="var(--stats-accent, #4f9cff)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${coords}" />
   ${dots}
-  <text x="${left}" y="${height - 8}" class="axis trend-start">${escapeHtml(points[0].date)}</text>
-  <text x="${width - right}" y="${height - 8}" text-anchor="end" class="axis trend-end">${escapeHtml(points[points.length - 1].date)}</text>
+  <text x="${left}" y="${height - 8}" class="axis trend-start">${escapeHtml(first.date)}</text>
+  <text x="${width - right}" y="${height - 8}" text-anchor="end" class="axis trend-end">${escapeHtml(last.date)}</text>
 </svg>
 </div>`;
 }

@@ -6,18 +6,22 @@ interface ProjectCaseSummary {
   points: number;
   maxPoints: number;
   durationMs: number;
-  stderr?: string;
-  comparison?: {
-    equal: boolean;
-    difference?: {
-      kind: "token" | "line";
-      index?: number;
-      line?: number;
-      column?: number;
-      expected: string;
-      actual: string;
-    };
-  };
+  stderr?: string | undefined;
+  comparison?:
+    | {
+        equal: boolean;
+        difference?:
+          | {
+              kind: "token" | "line";
+              index?: number | undefined;
+              line?: number | undefined;
+              column?: number | undefined;
+              expected: string;
+              actual: string;
+            }
+          | undefined;
+      }
+    | undefined;
 }
 
 interface ProjectTestSummary {
@@ -26,7 +30,7 @@ interface ProjectTestSummary {
   points: number;
   maxPoints: number;
   durationMs: number;
-  output?: string;
+  output?: string | undefined;
 }
 
 export interface ProjectTaskSubmissionSummary {
@@ -35,18 +39,18 @@ export interface ProjectTaskSubmissionSummary {
   status: ProjectStatus;
   weight: number;
   weightedScore: number;
-  score?: number;
-  maxScore?: number;
-  cases?: ProjectCaseSummary[];
-  tests?: ProjectTestSummary[];
-  checklist?: string[];
-  buildFailed?: boolean;
-  buildPhase?: "configure" | "build";
-  diagnostic?: string;
-  blockedBy?: string[];
-  historicalScore?: number;
-  previousStatus?: ProjectStatus;
-  inputFingerprint?: string;
+  score?: number | undefined;
+  maxScore?: number | undefined;
+  cases?: ProjectCaseSummary[] | undefined;
+  tests?: ProjectTestSummary[] | undefined;
+  checklist?: string[] | undefined;
+  buildFailed?: boolean | undefined;
+  buildPhase?: "configure" | "build" | undefined;
+  diagnostic?: string | undefined;
+  blockedBy?: string[] | undefined;
+  historicalScore?: number | undefined;
+  previousStatus?: ProjectStatus | undefined;
+  inputFingerprint?: string | undefined;
 }
 
 export interface ProjectSubmissionSummary {

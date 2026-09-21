@@ -69,7 +69,7 @@ function parsedExamples(): Example[] {
   expect(jsonBlocks.length, "Lab 作者指南缺少三类 Lab 的完整 JSON 示例").toBeGreaterThanOrEqual(6);
   return jsonBlocks.map((match, index) => {
     try {
-      return JSON.parse(match[1]) as Example;
+      return JSON.parse(match[1]!) as Example;
     } catch (error) {
       throw new Error(`Lab 作者指南第 ${index + 1} 个 JSON 示例无效：${(error as Error).message}`);
     }
@@ -98,7 +98,7 @@ it("every Lab manifest example in the guide loads as a real Lab", async () => {
   const quizManifest = requireExample<GuideQuizManifest>(examples, (value) => hasType(value, "quiz"), "Quiz manifest");
   const quizQuestions = requireExample<unknown[]>(
     examples,
-    (value) => firstEntry(value)?.stem !== undefined && firstEntry(value)?.options !== undefined,
+    (value) => firstEntry(value)?.["stem"] !== undefined && firstEntry(value)?.["options"] !== undefined,
     "Quiz 题目",
   );
   const programManifest = requireExample<GuideProgramManifest>(
@@ -108,7 +108,7 @@ it("every Lab manifest example in the guide loads as a real Lab", async () => {
   );
   const cases = requireExample<GuideCase[]>(
     examples,
-    (value) => firstEntry(value)?.input !== undefined && firstEntry(value)?.expected !== undefined,
+    (value) => firstEntry(value)?.["input"] !== undefined && firstEntry(value)?.["expected"] !== undefined,
     "Program cases",
   );
   const float = requireExample<CompareConfig>(
@@ -197,13 +197,13 @@ it("the guide's thin Makefile template matches the scaffold", () => {
     /<!-- LAB_THIN_MAKEFILE:START -->\s*```makefile[^\S\r\n]*\r?\n([\s\S]*?)\r?\n```\s*<!-- LAB_THIN_MAKEFILE:END -->/,
   );
   expect(thinMatch, "Lab 作者指南缺少可校验的薄 Makefile 模板").not.toBeNull();
-  expect(`${thinMatch![1].replace(/\r\n/g, "\n")}\n`, "Lab 作者指南中的薄 Makefile 已与脚手架模板漂移").toBe(
+  expect(`${thinMatch![1]!.replace(/\r\n/g, "\n")}\n`, "Lab 作者指南中的薄 Makefile 已与脚手架模板漂移").toBe(
     THIN_MAKEFILE,
   );
 });
 
 it("both guides explain every CLI entry point, option and Make variable", async () => {
-  expect(packageJson.scripts.lab, "package.json 缺少统一的 lab 入口").toBeDefined();
+  expect(packageJson.scripts["lab"], "package.json 缺少统一的 lab 入口").toBeDefined();
   for (const command of commands) {
     expect(commandGuide, `Lab 命令指南未解释命令：pnpm lab ${command}`).toContain(`pnpm lab ${command}`);
   }
@@ -258,19 +258,19 @@ it("every PowerShell command in the guides resolves to a real script, Make targe
 
   const commandLines = [guide, commandGuide]
     .flatMap((source) => [...source.matchAll(/```powershell[^\r\n]*\r?\n([\s\S]*?)\r?\n```/g)])
-    .flatMap((match) => match[1].split(/\r?\n/))
+    .flatMap((match) => match[1]!.split(/\r?\n/))
     .map((line) => line.trim())
     .filter((line) => line !== "" && !line.startsWith("#"));
   expect(commandLines.length).toBeGreaterThan(0);
   for (const line of commandLines) {
     const pnpm = line.match(/^pnpm(?:\s+run)?\s+([a-z0-9:-]+)/i);
-    if (pnpm) expect(packageJson.scripts[pnpm[1]], `作者指南命令没有 package script：${line}`).toBeDefined();
+    if (pnpm) expect(packageJson.scripts[pnpm[1]!], `作者指南命令没有 package script：${line}`).toBeDefined();
     const labCommand = line.match(/^pnpm\s+lab\s+([a-z-]+)/i);
     if (labCommand) expect(commands, `作者指南使用了不存在的 lab 子命令：${line}`).toContain(labCommand[1]);
     const make = line.match(/^make\s+([a-z][a-z-]*)/i);
     if (make) expect(makeTargets, `作者指南命令没有 Make target：${line}`).toContain(make[1]);
     const cd = line.match(/^cd\s+(\S+)$/i);
-    if (cd) await readFile(path.join(path.resolve(projectRoot, cd[1]), "lab.json"), "utf8");
+    if (cd) await readFile(path.join(path.resolve(projectRoot, cd[1]!), "lab.json"), "utf8");
   }
 });
 

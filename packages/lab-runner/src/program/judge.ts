@@ -24,7 +24,7 @@ export interface CaseResult {
   maxPoints: number;
   durationMs: number;
   stderr: string;
-  comparison?: CompareResult;
+  comparison?: CompareResult | undefined;
 }
 
 export interface JudgeResult {
@@ -75,7 +75,7 @@ export function classifyExecution(
 
 export async function judgeProgram(
   lab: JudgeableLab,
-  options: { target?: TargetName; caseId?: string } = {},
+  options: { target?: TargetName | undefined; caseId?: string | undefined } = {},
 ): Promise<JudgeResult> {
   const target = options.target ?? "student";
   const compilation = await compileTarget(lab, target);

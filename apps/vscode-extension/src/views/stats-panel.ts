@@ -19,8 +19,10 @@ export class StatsPanel {
   }
 
   private readonly panel: vscode.WebviewPanel;
+  private readonly context: vscode.ExtensionContext;
 
-  private constructor(private readonly context: vscode.ExtensionContext) {
+  private constructor(context: vscode.ExtensionContext) {
+    this.context = context;
     this.panel = vscode.window.createWebviewPanel("dsaMastery.stats", "做题统计", vscode.ViewColumn.One, {
       enableScripts: true,
       retainContextWhenHidden: true,

@@ -28,7 +28,7 @@ export function clampWidth(width: unknown): number {
 }
 
 export function supportsColor(output: { isTTY?: boolean } | undefined): boolean {
-  return Boolean(output?.isTTY) && (process.env.NO_COLOR ?? "") === "" && process.env.TERM !== "dumb";
+  return Boolean(output?.isTTY) && (process.env["NO_COLOR"] ?? "") === "" && process.env["TERM"] !== "dumb";
 }
 
 const COMBINING_CHARACTER = /^\p{Mark}$/u;

@@ -214,7 +214,7 @@ CSES 官方访问超时，1682 另核对了 [USACO Guide 题解](https://usaco.g
 `;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] !== undefined && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const write = process.argv.includes("--write");
   assert.deepEqual(
     catalog.map((item) => item.id),

@@ -176,13 +176,14 @@ interface LabReport<T> {
 
 /** CLI 调用失败：既包括工具内部错误，也包括进程本身起不来。 */
 export class CliError extends Error {
-  constructor(
-    message: string,
-    readonly code?: string,
-    readonly stderr?: string,
-  ) {
+  readonly code: string | undefined;
+  readonly stderr: string | undefined;
+
+  constructor(message: string, code?: string, stderr?: string) {
     super(message);
     this.name = "CliError";
+    this.code = code;
+    this.stderr = stderr;
   }
 }
 
@@ -222,7 +223,7 @@ async function resolveNode(): Promise<{ command: string; env?: NodeJS.ProcessEnv
     if (match) {
       const actual = match.slice(1).map(Number);
       const difference =
-        actual.map((part, index) => part - __LAB_NODE_MINIMUM__[index]).find((part) => part !== 0) ?? 0;
+        actual.map((part, index) => part - __LAB_NODE_MINIMUM__[index]!).find((part) => part !== 0) ?? 0;
       if (difference >= 0) return candidate;
     }
   }

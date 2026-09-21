@@ -58,7 +58,7 @@ it("Project submission captures identity, saves scoped inputs, rejects failed sa
       },
       cli: {
         CliError: class extends Error {
-          code?: string;
+          code: string | undefined;
           constructor(message: string, code?: string) {
             super(message);
             this.code = code;
