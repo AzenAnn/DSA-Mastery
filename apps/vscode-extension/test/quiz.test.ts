@@ -1,6 +1,6 @@
+import type { QuizQuestion } from "@dsa/lab-core";
 import { expect, it } from "vitest";
-import { parseQuizQuestions, quizIconState, scoreQuiz } from '../src/quiz.ts';
-import type { QuizQuestion } from '../src/quiz.ts';
+import { quizIconState, scoreQuiz } from "../src/labs/quiz.ts";
 
 const questions: QuizQuestion[] = [
   {
@@ -21,17 +21,6 @@ const questions: QuizQuestion[] = [
   },
 ];
 
-it("parses the existing four-option quiz format", () => {
-  expect(parseQuizQuestions(questions).map(({ id, stem, options, answer, explanation, points }) => ({
-      id,
-      stem,
-      options,
-      answer,
-      explanation,
-      points,
-    }))).toStrictEqual(questions);
-});
-
 it("scores selected answers and reports completion only when every question is correct", () => {
   expect(scoreQuiz(questions, { q1: 1, q2: 0 })).toStrictEqual({
     score: 2,
@@ -47,13 +36,6 @@ it("scores selected answers and reports completion only when every question is c
     answeredCount: 2,
     completed: true,
   });
-});
-
-it("rejects malformed quiz questions before they reach the webview", () => {
-  expect(() =>
-      parseQuizQuestions([
-        { ...questions[0], options: ["A", "B", "C"] },
-      ])).toThrow(/options 必须恰好包含 4 项/);
 });
 
 it("keeps a quiz distinguishable from a program lab until it is passed", () => {

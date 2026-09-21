@@ -1,13 +1,27 @@
+import type { ActivityEvent } from "../src/progress/stats.ts";
 import { expect, it } from "vitest";
-import { backfillEvents, buildChapterBars, buildHeatmap, buildTrend, countActivity, intensity, localDateKey, mockEvents } from '../src/stats.ts';
-import type { ActivityEvent } from '../src/stats.ts';
+import {
+  backfillEvents,
+  buildChapterBars,
+  buildHeatmap,
+  buildTrend,
+  countActivity,
+  intensity,
+  localDateKey,
+  mockEvents,
+} from "../src/progress/stats.ts";
 
 /** 用本地时区构造时间戳,避免测试在不同 TZ 下飘。 */
 function at(year: number, month: number, day: number, hour = 12): string {
   return new Date(year, month - 1, day, hour).toISOString();
 }
 
-function event(kind: "submit" | "pass", labName: string, iso: string, labType: "program" | "quiz" | "project" = "program"): ActivityEvent {
+function event(
+  kind: "submit" | "pass",
+  labName: string,
+  iso: string,
+  labType: "program" | "quiz" | "project" = "program",
+): ActivityEvent {
   return { at: iso, kind, labName, labType };
 }
 
@@ -45,7 +59,11 @@ it("heatmap fills every day in range including empty ones", () => {
   // 8/1 到 8/5 共 5 天,没活动的日子必须是 level 0 的格子,不能跳过。
   expect(map.cells.length).toBe(5);
   expect(map.cells.map((c) => c.date)).toStrictEqual([
-    "2026-08-01", "2026-08-02", "2026-08-03", "2026-08-04", "2026-08-05",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
   ]);
   expect(map.cells[2].count).toBe(1);
   expect(map.cells[0].count).toBe(0);
@@ -54,10 +72,7 @@ it("heatmap fills every day in range including empty ones", () => {
 });
 
 it("heatmap counts only the requested kind", () => {
-  const events = [
-    event("submit", "lab-a", at(2026, 8, 1)),
-    event("pass", "lab-a", at(2026, 8, 1)),
-  ];
+  const events = [event("submit", "lab-a", at(2026, 8, 1)), event("pass", "lab-a", at(2026, 8, 1))];
   const submits = buildHeatmap(events, "submit", new Date(2026, 7, 1), new Date(2026, 7, 1));
   const passes = buildHeatmap(events, "pass", new Date(2026, 7, 1), new Date(2026, 7, 1));
 
@@ -165,11 +180,13 @@ it("chapter bars dispatch by lab type when checking passed", () => {
 });
 
 it("chapter bars keep Project in the same type-aware completion flow", () => {
-  const chapters = [{
-    chapter: 3,
-    chapterTitle: "字符串",
-    labs: [{ name: "project-1", type: "project" as const }],
-  }];
+  const chapters = [
+    {
+      chapter: 3,
+      chapterTitle: "字符串",
+      labs: [{ name: "project-1", type: "project" as const }],
+    },
+  ];
   const bars = buildChapterBars(chapters, (name, type) => type === "project" && name === "project-1");
   expect(bars[0]).toStrictEqual({ chapter: 3, chapterTitle: "字符串", passed: 1, total: 1 });
 });

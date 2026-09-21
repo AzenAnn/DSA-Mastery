@@ -96,19 +96,6 @@ export function evaluateProfile(profile: string, tools: ToolStatus[] = []): Prof
   return { profile, ok: issues.length === 0, issues, compilerReady, cmakeReady };
 }
 
-export function toolResult(name: string, command: string, output: string, minimum: Version): ToolStatus {
-  const version = parseVersion(output);
-
-  return {
-    name,
-    command,
-    available: version !== undefined,
-    version: formatVersion(version),
-    minimum: formatVersion(minimum),
-    meetsMinimum: compareVersion(version, minimum),
-  };
-}
-
 interface ProbeOptions {
   env?: NodeJS.ProcessEnv;
   cwd?: string;

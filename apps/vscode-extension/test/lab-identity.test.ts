@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { readStableLabId, shortLabTitle } from "../src/labIdentity.ts";
+import { readStableLabId, shortLabTitle } from "../src/labs/identity.ts";
 
 it("accepts a PR#122 stable ID and falls back for missing or malformed metadata", () => {
   expect(readStableLabId("01E01", "E-01-01-demo")).toBe("01E01");

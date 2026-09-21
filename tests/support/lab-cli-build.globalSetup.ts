@@ -1,10 +1,11 @@
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdir, open, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, open, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { setTimeout as sleep } from "node:timers/promises";
 import { promisify } from "node:util";
+import { hashSourceTree } from "@dsa/lab-runner";
 import { REPO_ROOT } from "./repo.ts";
 
 const run = promisify(execFile);
@@ -16,11 +17,7 @@ const LOCK = path.join(CACHE, "build.lock");
 async function sourceFingerprint(): Promise<string> {
   const hash = createHash("sha256");
   for (const pkg of ["lab-core", "lab-runner", "lab-cli"]) {
-    const directory = path.join(REPO_ROOT, "packages", pkg, "src");
-    for (const name of (await readdir(directory)).sort()) {
-      hash.update(name);
-      hash.update(await readFile(path.join(directory, name)));
-    }
+    hash.update(await hashSourceTree(path.join(REPO_ROOT, "packages", pkg, "src")));
   }
 
   return hash.digest("hex");

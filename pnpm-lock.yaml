@@ -173,9 +173,6 @@ importers:
       '@dsa/course-index':
         specifier: workspace:*
         version: link:packages/course-index
-      '@dsa/lab-cli':
-        specifier: workspace:*
-        version: link:packages/lab-cli
       '@dsa/lab-core':
         specifier: workspace:*
         version: link:packages/lab-core

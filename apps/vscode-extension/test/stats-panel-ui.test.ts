@@ -1,36 +1,45 @@
-import { afterAll, beforeAll, expect, it } from "vitest";
+import type { ActivityEvent, ChapterBar } from "../src/progress/stats.ts";
 import { mkdtemp, rm } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
-import type { ActivityEvent, ChapterBar } from "../src/stats.ts";
+import { afterAll, beforeAll, expect, it } from "vitest";
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const resources = { cspSource: "https://webview.example", styleUri: "https://webview.example/panel.css", nonce: "stats-test-nonce" };
+const resources = {
+  cspSource: "https://webview.example",
+  styleUri: "https://webview.example/panel.css",
+  nonce: "stats-test-nonce",
+};
 const now = new Date(2026, 8, 12, 12);
 let temporaryRoot: string | undefined;
-let renderStatsDocument: typeof import("../src/statsView.ts").renderStatsDocument;
+let renderStatsDocument: typeof import("../src/views/stats-view.ts").renderStatsDocument;
 
 beforeAll(async () => {
   temporaryRoot = await mkdtemp(path.join(tmpdir(), "dsa-stats-render-"));
   const output = path.join(temporaryRoot, "stats-view.cjs");
   await build({
-    entryPoints: [path.join(packageRoot, "src/statsView.ts")],
+    entryPoints: [path.join(packageRoot, "src/views/stats-view.ts")],
     outfile: output,
     bundle: true,
     platform: "node",
     format: "cjs",
   });
-  ({ renderStatsDocument } = createRequire(import.meta.url)(output) as typeof import("../src/statsView.ts"));
+  ({ renderStatsDocument } = createRequire(import.meta.url)(output) as typeof import("../src/views/stats-view.ts"));
 });
 
 afterAll(async () => {
   if (temporaryRoot !== undefined) await rm(temporaryRoot, { recursive: true, force: true });
 });
 
-function activity(kind: "submit" | "pass", labName: string, date = now, labType: ActivityEvent["labType"] = "program"): ActivityEvent {
+function activity(
+  kind: "submit" | "pass",
+  labName: string,
+  date = now,
+  labType: ActivityEvent["labType"] = "program",
+): ActivityEvent {
   return { at: date.toISOString(), kind, labName, labType };
 }
 
@@ -48,11 +57,18 @@ it("generated statistics document preserves the page shell and reading order", (
   expect(html).toMatch(/<meta name="viewport" content="width=device-width, initial-scale=1\.0"\s*\/>/);
   expect(html).toMatch(/<main class="lab-page stats-page" aria-labelledby="stats-title">/);
   expect(html).toMatch(/<h1 id="stats-title">做题统计<\/h1>/);
-  const markers = ['class="rank-overview"', 'class="stat-cards"', 'id="stats-activity-title"', 'id="stats-trend-title"', 'id="stats-chapters-title"'];
+  const markers = [
+    'class="rank-overview"',
+    'class="stat-cards"',
+    'id="stats-activity-title"',
+    'id="stats-trend-title"',
+    'id="stats-chapters-title"',
+  ];
   const positions = markers.map((marker) => html.indexOf(marker));
   expect(positions.every((position) => position >= 0)).toBeTruthy();
   expect([...positions].sort((left, right) => left - right)).toStrictEqual(positions);
-  for (const label of ["PROGRESS OVERVIEW", "ACTIVITY", "MOMENTUM", "CURRICULUM"]) expect(html.includes(label)).toBeTruthy();
+  for (const label of ["PROGRESS OVERVIEW", "ACTIVITY", "MOMENTUM", "CURRICULUM"])
+    expect(html.includes(label)).toBeTruthy();
 });
 
 it("generated document preserves the external stylesheet and strict nonce CSP", () => {
@@ -106,7 +122,12 @@ it("14 solved remains Pupil with 20 percent progress despite repeated activity",
   expect(html).toMatch(/14 solved[^<]*58 submissions/);
   expect(html.includes("16 problems to Specialist")).toBeTruthy();
   expect(html).toMatch(/aria-valuenow="20"/);
-  for (const [label, value] of [["提交次数", 58], ["通过次数", 18], ["尝试题目", 19], ["已解决题目", 14]]) {
+  for (const [label, value] of [
+    ["提交次数", 58],
+    ["通过次数", 18],
+    ["尝试题目", 19],
+    ["已解决题目", 14],
+  ]) {
     expect(html).toMatch(new RegExp(`<dt[^>]*>${label}</dt>\\s*<dd[^>]*>${value}</dd>`));
   }
 });
@@ -122,8 +143,13 @@ it("chapter titles and external resource attributes cannot inject HTML or script
   expect(html).not.toMatch(/\sstyle\s*=/i);
 
   const injectedUri = 'https://webview.example/panel.css" onload="alert(3)';
-  const escapedResourceHtml = renderStatsDocument({ events: [], bars: [], now }, { ...resources, styleUri: injectedUri });
-  expect(escapedResourceHtml.includes('href="https://webview.example/panel.css&quot; onload=&quot;alert(3)"')).toBeTruthy();
+  const escapedResourceHtml = renderStatsDocument(
+    { events: [], bars: [], now },
+    { ...resources, styleUri: injectedUri },
+  );
+  expect(
+    escapedResourceHtml.includes('href="https://webview.example/panel.css&quot; onload=&quot;alert(3)"'),
+  ).toBeTruthy();
   expect(escapedResourceHtml).not.toMatch(/\sonload="/i);
 });
 
@@ -133,7 +159,11 @@ it("zero or one pass-bearing date produces a compact trend empty state", () => {
   expect(noPasses.includes("暂无通过记录。")).toBeTruthy();
   expect(noPasses).not.toMatch(/<svg class="trend"/);
 
-  const oneDay = render([...solvedEvents(14), activity("pass", "solved-0"), activity("submit", "next", new Date(2026, 8, 13, 12))]);
+  const oneDay = render([
+    ...solvedEvents(14),
+    activity("pass", "solved-0"),
+    activity("submit", "next", new Date(2026, 8, 13, 12)),
+  ]);
   expect(oneDay).toMatch(/class="stats-empty trend-empty" data-trend-points="1"/);
   expect(oneDay.includes("2026-09-12 · 累计通过 15 次")).toBeTruthy();
   expect(oneDay).not.toMatch(/<svg class="trend"/);
@@ -184,7 +214,9 @@ it("heatmap covers leap years and labels local calendar dates with both event to
     expect(html.includes("<title>2024-02-29（今天）：提交 2 次，通过 1 次</title>")).toBeTruthy();
     expect(html).toMatch(/data-date="2024-02-28" data-count="0"/);
     expect([...html.matchAll(/aria-current="date"/g)].length).toBe(2);
-    expect([...html.matchAll(/<rect\b[^>]+tabindex="0"/g)].length, "one keyboard entry point per year and metric").toBe(4);
+    expect([...html.matchAll(/<rect\b[^>]+tabindex="0"/g)].length, "one keyboard entry point per year and metric").toBe(
+      4,
+    );
     expect(html).toMatch(/id="heatmap-detail" role="status" aria-live="polite"/);
   } finally {
     if (previousTimezone === undefined) delete process.env.TZ;
@@ -218,14 +250,20 @@ it("trend preserves cumulative pass-event units and real calendar gaps while ran
 });
 
 it("chapter rows expose numbers, completion counts and accessible bounded progress", () => {
-  const html = render([], [
-    { chapter: 1, chapterTitle: "空章节", passed: 0, total: 0 },
-    { chapter: 2, chapterTitle: "线性表", passed: 1, total: 4 },
-    { chapter: 3, chapterTitle: "字符串", passed: 4, total: 4 },
-  ]);
-  for (const number of ["01", "02", "03"]) expect(html.includes(`<span class="chapter-number">${number}</span>`)).toBeTruthy();
-  for (const count of ["0 / 0", "1 / 4", "4 / 4"]) expect(html.includes(`<span class="chapter-count">${count}</span>`)).toBeTruthy();
-  for (const percent of [0, 25, 100]) expect(html).toMatch(new RegExp(`class="chapter-bar"[^>]*aria-valuenow="${percent}"`));
+  const html = render(
+    [],
+    [
+      { chapter: 1, chapterTitle: "空章节", passed: 0, total: 0 },
+      { chapter: 2, chapterTitle: "线性表", passed: 1, total: 4 },
+      { chapter: 3, chapterTitle: "字符串", passed: 4, total: 4 },
+    ],
+  );
+  for (const number of ["01", "02", "03"])
+    expect(html.includes(`<span class="chapter-number">${number}</span>`)).toBeTruthy();
+  for (const count of ["0 / 0", "1 / 4", "4 / 4"])
+    expect(html.includes(`<span class="chapter-count">${count}</span>`)).toBeTruthy();
+  for (const percent of [0, 25, 100])
+    expect(html).toMatch(new RegExp(`class="chapter-bar"[^>]*aria-valuenow="${percent}"`));
   expect([...html.matchAll(/class="chapter-row is-complete"/g)].length).toBe(1);
   expect([...html.matchAll(/class="chapter-complete"/g)].length).toBe(1);
   expect(html.includes('viewBox="0 0 240 6"')).toBeTruthy();
@@ -240,8 +278,12 @@ it("StatsPanel keeps stable lab IDs and type-aware Project completion when adapt
   let reveals = 0;
   const panel = {
     webview: { html: "", cspSource: resources.cspSource, asWebviewUri: (uri: unknown) => uri },
-    onDidDispose(callback: () => void) { onDispose = callback; },
-    reveal() { reveals += 1; },
+    onDidDispose(callback: () => void) {
+      onDispose = callback;
+    },
+    reveal() {
+      reveals += 1;
+    },
   };
   const fixture = {
     ViewColumn: { One: 1 },
@@ -252,12 +294,22 @@ it("StatsPanel keeps stable lab IDs and type-aware Project completion when adapt
   fixtureGlobal.statsPanelFixture = fixture;
   try {
     await build({
-      entryPoints: [path.join(packageRoot, "src/statsPanel.ts")],
-      outfile: output, bundle: true, platform: "node", format: "cjs",
-      plugins: [{ name: "stats-panel-fixture", setup(builder) {
-        builder.onResolve({ filter: /^vscode$/ }, () => ({ path: "vscode", namespace: "fixture" }));
-        builder.onLoad({ filter: /.*/, namespace: "fixture" }, () => ({ contents: "module.exports = globalThis.statsPanelFixture;" }));
-      } }],
+      entryPoints: [path.join(packageRoot, "src/views/stats-panel.ts")],
+      outfile: output,
+      bundle: true,
+      platform: "node",
+      format: "cjs",
+      plugins: [
+        {
+          name: "stats-panel-fixture",
+          setup(builder) {
+            builder.onResolve({ filter: /^vscode$/ }, () => ({ path: "vscode", namespace: "fixture" }));
+            builder.onLoad({ filter: /.*/, namespace: "fixture" }, () => ({
+              contents: "module.exports = globalThis.statsPanelFixture;",
+            }));
+          },
+        },
+      ],
     });
     const projects: Record<string, unknown> = {
       "01P01": { automatedFull: true, manualPending: 0, internalError: false },
@@ -268,14 +320,27 @@ it("StatsPanel keeps stable lab IDs and type-aware Project completion when adapt
     };
     const progress = {
       events: () => solvedEvents(14),
-      get(id: string) { calls.push(["program", id]); return { passed: true }; },
-      getQuiz(id: string) { calls.push(["quiz", id]); return { passed: true }; },
-      getProject(id: string) { calls.push(["project", id]); return projects[id]; },
+      get(id: string) {
+        calls.push(["program", id]);
+        return { passed: true };
+      },
+      getQuiz(id: string) {
+        calls.push(["quiz", id]);
+        return { passed: true };
+      },
+      getProject(id: string) {
+        calls.push(["project", id]);
+        return projects[id];
+      },
     };
     const labs = [
       { id: "01E01", name: "old-program-name", type: "program" },
       { id: "01T01", name: "old-quiz-name", type: "quiz" },
-      ...Array.from({ length: 6 }, (_, index) => ({ id: `01P0${index + 1}`, name: `old-project-${index}`, type: "project" })),
+      ...Array.from({ length: 6 }, (_, index) => ({
+        id: `01P0${index + 1}`,
+        name: `old-project-${index}`,
+        type: "project",
+      })),
     ];
     // 打包产物只被这个用例按 show 一个入口驱动，替身也只实现到这个程度。
     const { StatsPanel } = createRequire(import.meta.url)(output) as {

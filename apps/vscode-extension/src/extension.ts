@@ -1,15 +1,15 @@
+import type { LabEntry, ProjectLab } from "./labs/discovery";
+import type { HistoryEntry } from "./progress/tracker";
+import type { TreeNode } from "./views/tree";
 import { access, rm } from "node:fs/promises";
 import path from "node:path";
 import * as vscode from "vscode";
-import { CliError, readProjectCurrent } from "./cli";
-import { EnvironmentGuard } from "./doctor";
-import type { LabEntry, ProjectLab } from "./labIndex";
-import { LabPanel, projectDirtyFiles } from "./panel";
-import { ProgressTracker } from './progress';
-import type { HistoryEntry } from './progress';
-import { StatsPanel } from "./statsPanel";
-import { LabTreeProvider } from './tree';
-import type { TreeNode } from './tree';
+import { CliError, readProjectCurrent } from "./cli/client";
+import { EnvironmentGuard } from "./cli/doctor";
+import { ProgressTracker } from "./progress/tracker";
+import { LabPanel, projectDirtyFiles } from "./views/panel";
+import { StatsPanel } from "./views/stats-panel";
+import { LabTreeProvider } from "./views/tree";
 
 /** 找到包含 labs/ 的工作区目录。多根工作区时取第一个匹配的。 */
 async function findRepoRoot(): Promise<string | undefined> {
@@ -151,7 +151,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       progress.setProjectCurrent(lab.id, current);
       tree.refreshDecorations();
       LabPanel.refreshCurrent(lab.id);
-    } catch { /* Keep historical results, but never count an unchecked current pass. */ }
+    } catch {
+      /* Keep historical results, but never count an unchecked current pass. */
+    }
   };
   const refreshProject = (lab: LabEntry) => {
     if (lab.type !== "project") return;
@@ -161,22 +163,40 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     tree.refreshDecorations();
     LabPanel.refreshCurrent(lab.id);
     clearTimeout(timers.get(lab.id));
-    timers.set(lab.id, setTimeout(() => void rescoreProject(lab, revision), 250));
+    timers.set(
+      lab.id,
+      setTimeout(() => void rescoreProject(lab, revision), 250),
+    );
   };
   const changed = (uri: vscode.Uri) => {
     const relative = path.relative(repoRoot, uri.fsPath).split(path.sep).join("/");
     if (relative.split("/").some((part) => ["solution", "node_modules", ".git"].includes(part))) return;
     if (relative.includes("/.lab-cache/") && !relative.endsWith("/project-results-student.json")) return;
     for (const lab of tree.allLabs()) {
-      if (isWithinDirectory(lab.labPath, uri.fsPath) || relative.startsWith("packages/lab-") || relative.startsWith("schemas/")) refreshProject(lab);
+      if (
+        isWithinDirectory(lab.labPath, uri.fsPath) ||
+        relative.startsWith("packages/lab-") ||
+        relative.startsWith("schemas/")
+      ) {
+        refreshProject(lab);
+      }
     }
   };
   const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(repoRoot, "**/*"));
-  context.subscriptions.push(watcher, watcher.onDidChange(changed), watcher.onDidCreate(changed), watcher.onDidDelete(changed),
+  context.subscriptions.push(
+    watcher,
+    watcher.onDidChange(changed),
+    watcher.onDidCreate(changed),
+    watcher.onDidDelete(changed),
     vscode.workspace.onDidChangeTextDocument((event) => changed(event.document.uri)),
     vscode.workspace.onDidSaveTextDocument((document) => changed(document.uri)),
     vscode.workspace.onDidGrantWorkspaceTrust(() => tree.allLabs().forEach(refreshProject)),
-    { dispose: () => { for (const timer of timers.values()) clearTimeout(timer); } });
+    {
+      dispose: () => {
+        for (const timer of timers.values()) clearTimeout(timer);
+      },
+    },
+  );
   tree.allLabs().forEach(refreshProject);
 }
 

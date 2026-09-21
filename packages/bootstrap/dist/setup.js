@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import { access, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
-import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
+import { access, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { Buffer } from "node:buffer";
 import { execFileSync, spawn } from "node:child_process";
 import { stripVTControlCharacters } from "node:util";
+import os from "node:os";
 //#region ../lab-core/src/errors.ts
 var LabError = class extends Error {
 	code;
@@ -19,7 +19,7 @@ var LabError = class extends Error {
 	}
 };
 //#endregion
-//#region ../lab-core/src/schema.ts
+//#region ../lab-core/src/manifest/schema.ts
 async function pathExists$1(target) {
 	try {
 		await access(target);
@@ -29,7 +29,7 @@ async function pathExists$1(target) {
 	}
 }
 //#endregion
-//#region ../lab-core/src/process.ts
+//#region ../lab-core/src/system/process.ts
 const WINDOWS_SCRIPT_EXT = /\.(?:cmd|bat|com)$/i;
 function resolveWindowsCommand(command, env) {
 	if (path.isAbsolute(command)) return command;
@@ -166,7 +166,7 @@ function runProcess(command, args, options = {}) {
 	});
 }
 //#endregion
-//#region ../lab-core/src/repo-root.ts
+//#region ../lab-core/src/system/repo-root.ts
 /**
 * 仓库根靠标记文件向上查找，而不是按目录层数倒推 —— 判题内核被打包进学生包后层数不再成立。
 * 学生包里没有仓库根，返回 undefined 由调用方决定是否报错。
@@ -255,12 +255,90 @@ function profileRequirements(profile) {
 	return result;
 }
 //#endregion
-//#region ../lab-core/src/terminal.ts
+//#region ../lab-core/src/system/terminal.ts
 function cleanTerminalText(value) {
 	return stripVTControlCharacters(String(value ?? ""));
 }
 //#endregion
-//#region ../lab-runner/src/toolchain.ts
+//#region src/options.ts
+const DEFAULT_REPO_URL = "https://github.com/AzenAnn/DSA-Mastery.git";
+const VALUE_OPTIONS = /* @__PURE__ */ new Set([
+	"profile",
+	"repo-dir",
+	"repo-url",
+	"ui"
+]);
+const VALUE_KEYS = {
+	profile: "profile",
+	"repo-dir": "repoDir",
+	"repo-url": "repoUrl",
+	ui: "ui"
+};
+const BOOLEAN_OPTIONS = /* @__PURE__ */ new Map([
+	["check-only", "checkOnly"],
+	["skip-vscode", "skipVscode"],
+	["install-vscode", "installVscode"],
+	["update-repo", "updateRepo"],
+	["non-interactive", "nonInteractive"],
+	["json", "json"],
+	["no-ui", "noUi"],
+	["help", "help"]
+]);
+function invalid(message) {
+	return new LabError("ARGUMENT_INVALID", message);
+}
+function assignValue(result, key, value) {
+	if (key === "profile" && ![
+		"runtime",
+		"basic",
+		"full"
+	].includes(value)) throw invalid(`--profile 必须是 runtime、basic 或 full，收到：${value}`);
+	if (key === "ui" && ![
+		"auto",
+		"tui",
+		"plain"
+	].includes(value)) throw invalid(`--ui 必须是 auto、tui 或 plain，收到：${value}`);
+	result[VALUE_KEYS[key]] = value;
+}
+function parseSetupArgs(argv = []) {
+	const result = {
+		profile: void 0,
+		repoDir: void 0,
+		repoUrl: DEFAULT_REPO_URL,
+		checkOnly: false,
+		ui: "auto",
+		skipVscode: false,
+		installVscode: false,
+		updateRepo: false,
+		nonInteractive: false,
+		json: false
+	};
+	let noUi = false;
+	for (let index = 0; index < argv.length; index += 1) {
+		const token = String(argv[index]);
+		if (token === "--") continue;
+		if (!token.startsWith("--")) throw invalid(`不支持的位置参数：${token}`);
+		const [rawKey, inlineValue] = token.slice(2).split("=", 2);
+		const booleanKey = BOOLEAN_OPTIONS.get(rawKey);
+		if (booleanKey) {
+			if (inlineValue !== void 0 && !["true", "false"].includes(inlineValue)) throw invalid(`--${rawKey} 只接受 true 或 false`);
+			const value = inlineValue === void 0 ? true : inlineValue === "true";
+			if (booleanKey === "noUi") noUi = value;
+			else result[booleanKey] = value;
+			continue;
+		}
+		if (!VALUE_OPTIONS.has(rawKey)) throw invalid(`未知选项：--${rawKey}`);
+		const value = inlineValue ?? argv[++index];
+		if (value === void 0 || String(value).startsWith("--")) throw invalid(`--${rawKey} 缺少值`);
+		assignValue(result, rawKey, String(value));
+	}
+	if (noUi && result.ui !== "auto") throw invalid("--ui 与 --no-ui 不能同时指定");
+	if (noUi) result.ui = "plain";
+	if (result.json || result.nonInteractive) result.ui = "plain";
+	return result;
+}
+//#endregion
+//#region ../lab-runner/src/toolchain/windows.ts
 function parseEnvironmentBlock(source, baseEnvironment = {}) {
 	const environment = { ...baseEnvironment };
 	for (const rawLine of String(source ?? "").split(/\r?\n/)) {
@@ -497,101 +575,700 @@ function commandText(command, args = []) {
 	}).join(" ");
 }
 //#endregion
-//#region src/options.ts
-const DEFAULT_REPO_URL = "https://github.com/AzenAnn/DSA-Mastery.git";
-const VALUE_OPTIONS = /* @__PURE__ */ new Set([
-	"profile",
-	"repo-dir",
-	"repo-url",
-	"ui"
-]);
-const VALUE_KEYS = {
-	profile: "profile",
-	"repo-dir": "repoDir",
-	"repo-url": "repoUrl",
-	ui: "ui"
+//#region src/setup/report.ts
+const SETUP_EXIT = {
+	OK: 0,
+	UNSUPPORTED: 10,
+	INSTALLER: 11,
+	USER_ACTION: 12,
+	REPOSITORY: 13,
+	ENVIRONMENT: 14,
+	SMOKE: 15,
+	ARGUMENT: 2
 };
-const BOOLEAN_OPTIONS = /* @__PURE__ */ new Map([
-	["check-only", "checkOnly"],
-	["skip-vscode", "skipVscode"],
-	["install-vscode", "installVscode"],
-	["update-repo", "updateRepo"],
-	["non-interactive", "nonInteractive"],
-	["json", "json"],
-	["no-ui", "noUi"],
-	["help", "help"]
-]);
-function invalid(message) {
-	return new LabError("ARGUMENT_INVALID", message);
-}
-function assignValue(result, key, value) {
-	if (key === "profile" && ![
-		"runtime",
-		"basic",
-		"full"
-	].includes(value)) throw invalid(`--profile 必须是 runtime、basic 或 full，收到：${value}`);
-	if (key === "ui" && ![
-		"auto",
-		"tui",
-		"plain"
-	].includes(value)) throw invalid(`--ui 必须是 auto、tui 或 plain，收到：${value}`);
-	result[VALUE_KEYS[key]] = value;
-}
-function parseSetupArgs(argv = []) {
-	const result = {
-		profile: void 0,
-		repoDir: void 0,
-		repoUrl: DEFAULT_REPO_URL,
-		checkOnly: false,
-		ui: "auto",
-		skipVscode: false,
-		installVscode: false,
-		updateRepo: false,
-		nonInteractive: false,
-		json: false
-	};
-	let noUi = false;
-	for (let index = 0; index < argv.length; index += 1) {
-		const token = String(argv[index]);
-		if (token === "--") continue;
-		if (!token.startsWith("--")) throw invalid(`不支持的位置参数：${token}`);
-		const [rawKey, inlineValue] = token.slice(2).split("=", 2);
-		const booleanKey = BOOLEAN_OPTIONS.get(rawKey);
-		if (booleanKey) {
-			if (inlineValue !== void 0 && !["true", "false"].includes(inlineValue)) throw invalid(`--${rawKey} 只接受 true 或 false`);
-			const value = inlineValue === void 0 ? true : inlineValue === "true";
-			if (booleanKey === "noUi") noUi = value;
-			else result[booleanKey] = value;
-			continue;
-		}
-		if (!VALUE_OPTIONS.has(rawKey)) throw invalid(`未知选项：--${rawKey}`);
-		const value = inlineValue ?? argv[++index];
-		if (value === void 0 || String(value).startsWith("--")) throw invalid(`--${rawKey} 缺少值`);
-		assignValue(result, rawKey, String(value));
+const SETUP_STAGES = [
+	"preflight",
+	"toolchain",
+	"repository",
+	"dependencies",
+	"ide",
+	"smoke"
+];
+var SetupError = class extends Error {
+	code;
+	details;
+	exitCode;
+	constructor(code, message, details, exitCode) {
+		super(message);
+		this.name = "SetupError";
+		this.code = code;
+		this.details = details;
+		this.exitCode = exitCode ?? exitCodeFor(code);
 	}
-	if (noUi && result.ui !== "auto") throw invalid("--ui 与 --no-ui 不能同时指定");
-	if (noUi) result.ui = "plain";
-	if (result.json || result.nonInteractive) result.ui = "plain";
-	return result;
+};
+function exitCodeFor(code) {
+	return {
+		SETUP_UNSUPPORTED: SETUP_EXIT.UNSUPPORTED,
+		INSTALLER_FAILED: SETUP_EXIT.INSTALLER,
+		NEEDS_USER_ACTION: SETUP_EXIT.USER_ACTION,
+		REPOSITORY_DIRTY: SETUP_EXIT.REPOSITORY,
+		REPOSITORY_INVALID: SETUP_EXIT.REPOSITORY,
+		REPOSITORY_MISSING: SETUP_EXIT.REPOSITORY,
+		REPOSITORY_UPDATE_FAILED: SETUP_EXIT.REPOSITORY,
+		ENVIRONMENT_NOT_READY: SETUP_EXIT.ENVIRONMENT,
+		SMOKE_FAILED: SETUP_EXIT.SMOKE,
+		ARGUMENT_INVALID: SETUP_EXIT.ARGUMENT
+	}[code] ?? SETUP_EXIT.INSTALLER;
+}
+function setupError(code, message, details) {
+	return new SetupError(code, message, details);
+}
+function serializeHost(host) {
+	if (!host) return void 0;
+	return {
+		platform: host.platform,
+		architecture: host.architecture,
+		compilerReady: host.compilerReady,
+		cmakeReady: host.cmakeReady,
+		runtimeReady: host.runtimeReady,
+		tools: host.tools,
+		msvc: {
+			initialized: host.msvc?.initialized,
+			installationPath: host.msvc?.installationPath,
+			developerCommand: host.msvc?.developerCommand,
+			error: host.msvc?.error
+		}
+	};
+}
+function summarizeReport(report) {
+	const lines = [
+		"",
+		`DSA Mastery 环境配置：${report.ok ? "成功" : "未完成"}`,
+		`Profile：${report.profile} · 平台：${report.platform}/${report.architecture}`
+	];
+	if (report.selectionLabels !== void 0 && report.selectionLabels.length > 0) lines.push(`已选择：${report.selectionLabels.join("、")}`);
+	for (const stage of report.stages ?? []) lines.push(`${stage.status === "success" ? "✓" : stage.status === "warning" ? "⚠" : stage.status === "skipped" ? "–" : stage.status === "failed" ? "✗" : "·"} ${stage.id}：${stage.message ?? ""}`);
+	if (report.repository !== void 0) lines.push(`仓库：${report.repository.path}`);
+	if (report.logPath !== void 0) lines.push(`日志：${report.logPath}`);
+	if (report.error?.nextAction !== void 0) lines.push(`下一步：${report.error.nextAction}`);
+	return lines.join("\n");
+}
+async function writeFailureLog(context, report) {
+	if (context.options.checkOnly) return void 0;
+	const home = context.env.HOME ?? context.env.USERPROFILE ?? os.homedir();
+	const directory = context.platform === "darwin" ? path.join(home, "Library", "Logs", "DSA-Mastery", "setup") : context.platform === "win32" ? path.join(context.env.LOCALAPPDATA ?? path.join(home, "AppData", "Local"), "DSA-Mastery", "setup") : path.join(home, ".local", "state", "DSA-Mastery", "setup");
+	await mkdir(directory, { recursive: true });
+	const file = path.join(directory, `setup-${(/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-")}.log`);
+	const lines = [
+		`DSA Mastery setup ${(/* @__PURE__ */ new Date()).toISOString()}`,
+		`profile=${context.profile}`,
+		`platform=${context.platform}/${context.architecture}`,
+		`repo=${context.repoDir}`,
+		`error=${report.error?.code ?? "unknown"}: ${report.error?.message ?? "unknown"}`,
+		""
+	];
+	for (const command of context.commands) {
+		lines.push(`$ ${commandText(command.command, command.args)}`);
+		if (command.stdout) lines.push(command.stdout.trimEnd());
+		if (command.stderr) lines.push(command.stderr.trimEnd());
+		lines.push("");
+	}
+	await writeFile(file, `${lines.join("\n")}\n`, "utf8");
+	return file;
+}
+function normalizeError(rawError) {
+	if (rawError instanceof SetupError) return rawError;
+	const error = rawError;
+	return setupError(error?.code === "ARGUMENT_INVALID" ? "ARGUMENT_INVALID" : "INSTALLER_FAILED", error?.message ?? String(rawError), { cause: error?.stack });
 }
 //#endregion
-//#region src/ui.ts
-const STATUS_ICON = {
-	pending: "·",
-	running: "▶",
-	success: "✓",
-	warning: "⚠",
-	failed: "✗",
-	skipped: "–"
-};
-const STATUS_LABEL = {
-	pending: "待处理",
-	running: "进行中",
-	success: "完成",
-	warning: "警告",
-	failed: "失败",
-	skipped: "跳过"
-};
+//#region src/setup/context.ts
+const HOMEBREW_INSTALLER = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh";
+async function pathExists(target) {
+	try {
+		await access(target);
+		return true;
+	} catch {
+		return false;
+	}
+}
+function resultOutput(result) {
+	return `${result?.stdout ?? ""}\n${result?.stderr ?? ""}`.trim();
+}
+function resultFailed(result) {
+	return Boolean(result?.spawnError) || result?.code !== 0 || Boolean(result?.timedOut) || Boolean(result?.outputExceeded);
+}
+function firstOutputLine(result) {
+	return resultOutput(result).split(/\r?\n/).find(Boolean)?.trim();
+}
+function prependPath(currentPath, additions, delimiter) {
+	const values = [...additions, ...String(currentPath ?? "").split(delimiter)].filter(Boolean);
+	return [...new Set(values)].join(delimiter);
+}
+function hostTool(host, name) {
+	return host?.tools?.find((tool) => tool.name === name);
+}
+function hasTool(host, name) {
+	return Boolean(hostTool(host, name)?.meetsMinimum);
+}
+async function runWithRunner(context, command, args = [], options = {}) {
+	try {
+		return await context.runner(command, args, {
+			cwd: options.cwd ?? context.commandCwd ?? context.repoDir,
+			env: options.env ?? context.env,
+			timeMs: options.timeoutMs ?? options.timeMs ?? 3e4,
+			outputKb: options.outputLimitKb ?? options.outputKb ?? 4096,
+			inherit: options.inherit ?? false
+		});
+	} catch (error) {
+		return {
+			code: null,
+			spawnError: error,
+			stdout: "",
+			stderr: ""
+		};
+	}
+}
+async function commandAvailable(context, command, args = ["--version"]) {
+	const result = await runWithRunner(context, command, args, {
+		timeMs: 5e3,
+		outputKb: 256
+	});
+	return !resultFailed(result) ? result : void 0;
+}
+async function refreshPlatformEnvironment(context) {
+	if (context.platform === "darwin" && context.packageManager?.kind === "brew") {
+		const prefix = firstOutputLine(await runWithRunner(context, context.packageManager.command, ["--prefix"], {
+			timeMs: 5e3,
+			outputKb: 256
+		}));
+		if (prefix !== void 0 && prefix !== "") context.env.PATH = prependPath(context.env.PATH, [path.join(prefix, "bin"), path.join(prefix, "sbin")], ":");
+	}
+	if (context.platform === "win32") {
+		const pathResult = await runWithRunner(context, "powershell.exe", [
+			"-NoProfile",
+			"-NonInteractive",
+			"-Command",
+			"[Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')"
+		], {
+			timeMs: 1e4,
+			outputKb: 4096
+		});
+		if (!resultFailed(pathResult) && pathResult.stdout?.trim()) context.env.PATH = pathResult.stdout.trim();
+	}
+	return context.env;
+}
+async function resolveExecutable(context, command) {
+	if (path.isAbsolute(command)) return command;
+	return firstOutputLine(await runWithRunner(context, context.platform === "win32" ? "where.exe" : "which", [command], {
+		timeMs: 5e3,
+		outputKb: 256
+	})) ?? command;
+}
+function recordCommand(context, command, args, result) {
+	context.commands.push({
+		command,
+		args,
+		code: result?.code ?? null,
+		stdout: result?.stdout ?? "",
+		stderr: result?.stderr ?? "",
+		timedOut: Boolean(result?.timedOut),
+		outputExceeded: Boolean(result?.outputExceeded)
+	});
+}
+async function runExternal(context, command, args, options = {}) {
+	const result = await runWithRunner(context, command, args, options);
+	recordCommand(context, command, args, result);
+	if (resultFailed(result)) throw setupError(options.errorCode ?? "INSTALLER_FAILED", options.errorMessage ?? `命令执行失败：${commandText(command, args)}`, {
+		command,
+		args,
+		result
+	});
+	return result;
+}
+async function inspectContextHost(context) {
+	context.host = await inspectHost({
+		platform: context.platform,
+		architecture: context.architecture,
+		env: context.env,
+		nodeCommand: context.nodeCommand,
+		runner: context.runner
+	});
+	return context.host;
+}
+//#endregion
+//#region src/setup/toolchain.ts
+function wingetInstall(id, extra = []) {
+	return {
+		command: "winget",
+		args: [
+			"install",
+			"--id",
+			id,
+			"--exact",
+			"--source",
+			"winget",
+			"--accept-source-agreements",
+			"--accept-package-agreements",
+			...extra
+		]
+	};
+}
+const VS_BUILDTOOLS_INSTALLER_URL = "https://aka.ms/vs/17/release/vs_buildtools.exe";
+const VC_TOOLS_COMPONENT = "Microsoft.VisualStudio.Component.VC.Tools.x86.x64";
+async function findVisualStudioViaVsWhere(context) {
+	const candidates = [];
+	if (context.env["ProgramFiles(x86)"] !== void 0) candidates.push(path.join(context.env["ProgramFiles(x86)"], "Microsoft Visual Studio", "Installer", "vswhere.exe"));
+	candidates.push("vswhere.exe");
+	for (const command of [...new Set(candidates)]) {
+		const result = await runWithRunner(context, command, [
+			"-latest",
+			"-products",
+			"*",
+			"-requires",
+			VC_TOOLS_COMPONENT,
+			"-property",
+			"installationPath"
+		], {
+			timeMs: 1e4,
+			outputKb: 256
+		});
+		if (!resultFailed(result)) {
+			const installationPath = resultOutput(result).split(/\r?\n/).find(Boolean)?.trim();
+			if (installationPath !== void 0 && installationPath !== "") return {
+				installationPath,
+				vswhere: command
+			};
+		}
+	}
+}
+async function downloadFileWithPowershell(context, url, destination) {
+	const result = await runWithRunner(context, "powershell.exe", [
+		"-NoProfile",
+		"-NonInteractive",
+		"-Command",
+		`[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '${url}' -OutFile '${destination}' -UseBasicParsing`
+	], {
+		timeMs: 6e5,
+		outputKb: 4096
+	});
+	if (resultFailed(result)) throw setupError("INSTALLER_FAILED", `下载失败：${url}`, {
+		command: "powershell.exe",
+		result
+	});
+	return destination;
+}
+async function installVisualStudioBuildTools(context) {
+	const existing = await findVisualStudioViaVsWhere(context);
+	if (existing) {
+		context.ui.update("toolchain", "running", `检测到已安装 Visual Studio C++ 工具：${existing.installationPath}`);
+		return {
+			skipped: true,
+			reason: "already-installed",
+			installationPath: existing.installationPath
+		};
+	}
+	if (context.packageManager?.kind === "winget") {
+		const install = wingetInstall("Microsoft.VisualStudio.2022.BuildTools", [
+			"--wait",
+			"--override",
+			"--passive --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+		]);
+		try {
+			context.ui.update("toolchain", "running", "通过 winget 安装 Visual Studio C++ Build Tools");
+			await runExternal(context, install.command, install.args, {
+				inherit: true,
+				timeMs: 27e5,
+				errorMessage: "winget 安装 Visual Studio C++ Build Tools 失败"
+			});
+			return { method: "winget" };
+		} catch {
+			context.ui.update("toolchain", "running", "winget 安装未成功，回退到官方安装程序");
+		}
+	}
+	const tempDir = await mkdtemp(path.join(os.tmpdir(), "dsa-mastery-vs-"));
+	const installer = path.join(tempDir, "vs_buildtools.exe");
+	try {
+		context.ui.update("toolchain", "running", "下载 Visual Studio Build Tools 官方安装程序");
+		await downloadFileWithPowershell(context, VS_BUILDTOOLS_INSTALLER_URL, installer);
+		context.ui.update("toolchain", "running", "运行官方安装程序（可能需要 10-30 分钟）");
+		await runExternal(context, installer, [
+			"--wait",
+			"--passive",
+			"--norestart",
+			"--add",
+			"Microsoft.VisualStudio.Workload.VCTools",
+			"--includeRecommended"
+		], {
+			inherit: true,
+			timeMs: 54e5,
+			errorMessage: "官方安装程序安装 Visual Studio C++ Build Tools 失败"
+		});
+		return { method: "official-installer" };
+	} finally {
+		await rm(tempDir, {
+			recursive: true,
+			force: true
+		}).catch(() => {});
+	}
+}
+function planToolchainInstall(profile, host = {}) {
+	const requirement = profileRequirements(profile);
+	const plan = [];
+	const platform = host.platform ?? process.platform;
+	const packageManager = host.packageManager?.command ?? (platform === "win32" ? "winget" : "brew");
+	const missing = (name) => !hasTool(host, name);
+	const add = (id, description, install, extra = {}) => {
+		plan.push({
+			id,
+			description,
+			...install,
+			...extra
+		});
+	};
+	if (platform === "darwin") {
+		if (missing("Git")) add("git", "安装 Git", {
+			command: packageManager,
+			args: ["install", "git"]
+		});
+		if (missing("Node.js")) add("node", "安装 Node.js", {
+			command: packageManager,
+			args: ["install", "node"]
+		});
+		if (requirement.requiresCompiler && !hasTool(host, "Clang") && !hasTool(host, "GCC")) add("compiler", "安装 Xcode Command Line Tools", {
+			command: "xcode-select",
+			args: ["--install"]
+		}, { requiresUserAction: true });
+		if (requirement.requiresCmake && missing("CMake")) add("cmake", "安装 CMake", {
+			command: packageManager,
+			args: ["install", "cmake"]
+		});
+		return plan;
+	}
+	if (platform === "win32") {
+		if (missing("Git")) add("git", "安装 Git", wingetInstall("Git.Git"));
+		if (missing("Node.js")) add("node", "安装 Node.js LTS", wingetInstall("OpenJS.NodeJS.LTS"));
+		const hasAnyCompiler = hasTool(host, "MSVC") || hasTool(host, "GCC") || hasTool(host, "Clang");
+		if (requirement.requiresCompiler && !hasAnyCompiler) add("msvc", "安装 Visual Studio C++ Build Tools", wingetInstall("Microsoft.VisualStudio.2022.BuildTools", [
+			"--wait",
+			"--override",
+			"--passive --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+		]));
+		if (requirement.requiresCmake && missing("CMake")) add("cmake", "安装 CMake", wingetInstall("Kitware.CMake"));
+		return plan;
+	}
+	throw setupError("SETUP_UNSUPPORTED", `暂不支持自动配置平台：${platform}`);
+}
+async function detectPackageManager(context) {
+	if (context.platform === "darwin") {
+		for (const command of [
+			"brew",
+			"/opt/homebrew/bin/brew",
+			"/usr/local/bin/brew"
+		]) if (await commandAvailable(context, command)) return {
+			kind: "brew",
+			command
+		};
+		return;
+	}
+	if (context.platform === "win32") return await commandAvailable(context, "winget") ? {
+		kind: "winget",
+		command: "winget"
+	} : void 0;
+}
+async function ensureHomebrew(context) {
+	context.packageManager = await detectPackageManager(context);
+	if (context.packageManager) return context.packageManager;
+	if (!await commandAvailable(context, "curl", ["--version"])) throw setupError("SETUP_UNSUPPORTED", "未找到 Homebrew 或 curl，无法自动安装 macOS 工具；请按 macOS 手工指南安装 Homebrew。", { fallback: "docs/MACOS_STUDENT_SETUP_GUIDE.md" });
+	const temporaryDirectory = await mkdtemp(path.join(os.tmpdir(), "dsa-mastery-brew-"));
+	const installer = path.join(temporaryDirectory, "install-homebrew.sh");
+	try {
+		context.ui.update("toolchain", "running", "下载 Homebrew 官方安装脚本");
+		await runExternal(context, "curl", [
+			"-fsSL",
+			HOMEBREW_INSTALLER,
+			"-o",
+			installer
+		], { inherit: true });
+		await runExternal(context, "/bin/bash", [installer], { inherit: true });
+	} finally {
+		await rm(temporaryDirectory, {
+			recursive: true,
+			force: true
+		});
+	}
+	await refreshPlatformEnvironment(context);
+	context.packageManager = await detectPackageManager(context);
+	if (!context.packageManager) throw setupError("INSTALLER_FAILED", "Homebrew 安装命令已结束，但当前进程仍找不到 brew；请打开新终端后重试。", { restartRequired: true });
+	return context.packageManager;
+}
+async function ensurePnpm(context) {
+	const current = await runWithRunner(context, "pnpm", ["--version"], {
+		timeMs: 5e3,
+		outputKb: 256
+	});
+	if (!resultFailed(current) && firstOutputLine(current) === PNPM_VERSION) {
+		context.pnpmCommand = "pnpm";
+		return context.pnpmCommand;
+	}
+	if (await commandAvailable(context, "corepack", ["--version"])) {
+		recordCommand(context, "corepack", ["enable", "pnpm"], await runWithRunner(context, "corepack", ["enable", "pnpm"], {
+			timeMs: 3e4,
+			outputKb: 512
+		}));
+		const installed = await runWithRunner(context, "corepack", [
+			"install",
+			"--global",
+			`pnpm@${PNPM_VERSION}`
+		], {
+			timeMs: 6e4,
+			outputKb: 1024
+		});
+		recordCommand(context, "corepack", [
+			"install",
+			"--global",
+			`pnpm@${PNPM_VERSION}`
+		], installed);
+		const afterCorepack = await runWithRunner(context, "pnpm", ["--version"], {
+			timeMs: 5e3,
+			outputKb: 256
+		});
+		if (!resultFailed(afterCorepack) && firstOutputLine(afterCorepack) === PNPM_VERSION) {
+			context.pnpmCommand = "pnpm";
+			return context.pnpmCommand;
+		}
+	}
+	if (!await commandAvailable(context, "npm", ["--version"])) throw setupError("INSTALLER_FAILED", "未找到 npm，无法准备固定版本 pnpm。请安装满足要求的 Node.js 后重试。", { required: `pnpm ${PNPM_VERSION}` });
+	const globalInstall = await runWithRunner(context, "npm", [
+		"install",
+		"--global",
+		`pnpm@${PNPM_VERSION}`
+	], {
+		timeMs: 12e4,
+		outputKb: 2048
+	});
+	recordCommand(context, "npm", [
+		"install",
+		"--global",
+		`pnpm@${PNPM_VERSION}`
+	], globalInstall);
+	const afterGlobal = await runWithRunner(context, "pnpm", ["--version"], {
+		timeMs: 5e3,
+		outputKb: 256
+	});
+	if (!resultFailed(afterGlobal) && firstOutputLine(afterGlobal) === PNPM_VERSION) {
+		context.pnpmCommand = "pnpm";
+		return context.pnpmCommand;
+	}
+	const base = context.platform === "win32" ? path.join(context.env.LOCALAPPDATA ?? context.env.USERPROFILE ?? os.homedir(), "DSA-Mastery", "tools") : path.join(context.env.XDG_DATA_HOME ?? path.join(context.env.HOME ?? os.homedir(), ".local", "share"), "DSA-Mastery", "tools");
+	await mkdir(base, { recursive: true });
+	const localInstall = await runWithRunner(context, "npm", [
+		"install",
+		"--global",
+		"--prefix",
+		base,
+		`pnpm@${PNPM_VERSION}`
+	], {
+		timeMs: 12e4,
+		outputKb: 2048
+	});
+	recordCommand(context, "npm", [
+		"install",
+		"--global",
+		"--prefix",
+		base,
+		`pnpm@${PNPM_VERSION}`
+	], localInstall);
+	const bin = context.platform === "win32" ? base : path.join(base, "bin");
+	context.env.PATH = prependPath(context.env.PATH, [bin], context.platform === "win32" ? ";" : ":");
+	const candidates = context.platform === "win32" ? [path.join(base, "pnpm.cmd"), path.join(base, "node_modules", ".bin", "pnpm.cmd")] : [path.join(bin, "pnpm")];
+	for (const candidate of candidates) {
+		const afterLocal = await runWithRunner(context, candidate, ["--version"], {
+			timeMs: 5e3,
+			outputKb: 256
+		});
+		if (!resultFailed(afterLocal) && firstOutputLine(afterLocal) === PNPM_VERSION) {
+			context.pnpmCommand = candidate;
+			return context.pnpmCommand;
+		}
+	}
+	throw setupError("INSTALLER_FAILED", `无法准备 pnpm ${PNPM_VERSION}；请按安装指南手工安装并重新运行。`, { required: `pnpm ${PNPM_VERSION}` });
+}
+async function installSystemTools(context) {
+	const plan = planToolchainInstall(context.profile, {
+		...context.host,
+		packageManager: context.packageManager
+	});
+	if (!plan.length) return plan;
+	if (context.platform === "darwin") await ensureHomebrew(context);
+	if (context.platform === "win32" && !context.packageManager) {
+		context.packageManager = await detectPackageManager(context);
+		if (!context.packageManager) throw setupError("SETUP_UNSUPPORTED", "未找到 winget，无法自动安装 Windows 工具；请按 Windows 手工指南安装 Git、Node、Build Tools 和 CMake。", { fallback: "docs/WINDOWS_STUDENT_SETUP_GUIDE.md" });
+	}
+	for (const action of plan) {
+		if (action.requiresUserAction) {
+			await runExternal(context, action.command, action.args, {
+				inherit: true,
+				errorCode: "NEEDS_USER_ACTION"
+			});
+			throw setupError("NEEDS_USER_ACTION", "Xcode Command Line Tools 安装窗口已打开；请完成安装后重新运行此脚本。", { restartRequired: true });
+		}
+		if (action.id === "msvc" && context.platform === "win32") {
+			await installVisualStudioBuildTools(context);
+			context.ui.update("toolchain", "running", "Visual Studio 安装完成，准备捕获开发环境");
+			continue;
+		}
+		const command = action.command === "brew" ? context.packageManager.command : action.command;
+		await runExternal(context, command, action.args, {
+			inherit: true,
+			timeMs: 12e5,
+			errorMessage: `${action.description}失败：${commandText(command, action.args)}`
+		});
+	}
+	await refreshPlatformEnvironment(context);
+	context.nodeCommand = await resolveExecutable(context, "node");
+	return plan;
+}
+async function ensureToolchain(context) {
+	await installSystemTools(context);
+	await ensurePnpm(context);
+	await refreshPlatformEnvironment(context);
+	await inspectContextHost(context);
+	const evaluation = evaluateProfile(context.profile, context.host.tools);
+	context.evaluation = evaluation;
+	if (!evaluation.ok) throw setupError("ENVIRONMENT_NOT_READY", `环境检查未通过：${evaluation.issues.join("；")}。请根据提示补齐工具后重试。`, {
+		evaluation,
+		host: serializeHost(context.host)
+	});
+	return evaluation;
+}
+//#endregion
+//#region src/setup/ide.ts
+function planIdeExtensions(options = {}, profile = "basic") {
+	if (options.selection !== void 0) return [...options.installCppExtension === true ? ["ms-vscode.cpptools"] : [], ...options.installCmakeExtension === true ? ["ms-vscode.cmake-tools"] : []];
+	return [...profile === "runtime" ? [] : ["ms-vscode.cpptools"], ...profile === "full" ? ["ms-vscode.cmake-tools"] : []];
+}
+async function detectVSCode(context) {
+	if (await commandAvailable(context, "code", ["--version"])) return {
+		found: true,
+		inPath: true
+	};
+	if (context.platform === "darwin") for (const application of ["/Applications/Visual Studio Code.app", path.join(os.homedir(), "Applications/Visual Studio Code.app")]) {
+		const binDir = path.join(application, "Contents/Resources/app/bin");
+		if (!await pathExists(path.join(binDir, "code"))) continue;
+		context.env.PATH = prependPath(context.env.PATH, [binDir], ":");
+		if (await commandAvailable(context, "code", ["--version"])) return {
+			found: true,
+			inPath: false,
+			path: binDir
+		};
+	}
+	if (context.platform !== "win32") return { found: false };
+	try {
+		const { execFileSync } = await import("node:child_process");
+		const candidates = execFileSync("where.exe", ["code"], {
+			encoding: "utf8",
+			timeout: 5e3,
+			stdio: [
+				"ignore",
+				"pipe",
+				"ignore"
+			],
+			env: process.env
+		}).split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+		const codeCmd = candidates.find((p) => /\.cmd$/i.test(p)) ?? candidates.find((p) => /\.exe$/i.test(p)) ?? candidates[0];
+		if (codeCmd !== void 0 && await pathExists(codeCmd)) {
+			const binDir = path.dirname(codeCmd);
+			context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
+			if (await commandAvailable(context, "code", ["--version"])) return {
+				found: true,
+				inPath: false,
+				path: binDir
+			};
+		}
+	} catch {}
+	const standardDirs = [];
+	if (context.env.LOCALAPPDATA !== void 0) standardDirs.push(path.join(context.env.LOCALAPPDATA, "Programs", "Microsoft VS Code", "bin"));
+	if (context.env.ProgramFiles !== void 0) standardDirs.push(path.join(context.env.ProgramFiles, "Microsoft VS Code", "bin"));
+	if (context.env["ProgramFiles(x86)"] !== void 0) standardDirs.push(path.join(context.env["ProgramFiles(x86)"], "Microsoft VS Code", "bin"));
+	for (const binDir of standardDirs) if (await pathExists(path.join(binDir, "code.cmd"))) {
+		context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
+		if (await commandAvailable(context, "code", ["--version"])) return {
+			found: true,
+			inPath: false,
+			path: binDir
+		};
+	}
+	return { found: false };
+}
+async function installIde(context) {
+	if (context.options.skipVscode || !context.options.installVscode) return {
+		status: "skipped",
+		message: "未选择 VS Code"
+	};
+	const detected = await detectVSCode(context);
+	if (detected.found && !detected.inPath) context.ui.update("ide", "running", `检测到已安装 VS Code：${detected.path}`);
+	let code = await commandAvailable(context, "code", ["--version"]);
+	if (!code) {
+		if (context.platform === "darwin") {
+			await ensureHomebrew(context);
+			await runExternal(context, context.packageManager.command, [
+				"install",
+				"--cask",
+				"visual-studio-code"
+			], {
+				stage: "ide",
+				inherit: true,
+				timeMs: 12e5
+			});
+		} else if (context.platform === "win32") {
+			if (!context.packageManager) context.packageManager = await detectPackageManager(context);
+			if (!context.packageManager) return {
+				status: "warning",
+				message: "未找到 winget，跳过 VS Code"
+			};
+			const install = wingetInstall("Microsoft.VisualStudioCode");
+			await runExternal(context, install.command, install.args, {
+				stage: "ide",
+				inherit: true,
+				timeMs: 12e5
+			});
+		}
+		await refreshPlatformEnvironment(context);
+		code = await commandAvailable(context, "code", ["--version"]);
+	}
+	if (!code) return {
+		status: "warning",
+		message: "VS Code 安装后当前终端仍找不到 code，请打开新终端"
+	};
+	const extensions = planIdeExtensions(context.options, context.profile);
+	const failures = [];
+	for (const extension of extensions) {
+		const result = await runWithRunner(context, "code", [
+			"--install-extension",
+			extension,
+			"--force"
+		], {
+			timeMs: 12e4,
+			outputKb: 2048
+		});
+		recordCommand(context, "code", [
+			"--install-extension",
+			extension,
+			"--force"
+		], result);
+		if (resultFailed(result)) failures.push(extension);
+	}
+	return failures.length ? {
+		status: "warning",
+		message: `扩展安装失败：${failures.join(", ")}`
+	} : {
+		status: "success",
+		message: extensions.length ? "VS Code 与所选扩展已准备" : "VS Code 已准备"
+	};
+}
+//#endregion
+//#region src/ui/terminal.ts
 const ANSI_STYLE = {
 	reset: "\x1B[0m",
 	bold: "\x1B[1m",
@@ -605,14 +1282,60 @@ const ANSI_STYLE = {
 	brightYellow: "\x1B[93m",
 	brightBlue: "\x1B[94m"
 };
-const STATUS_STYLES = {
-	pending: "dim",
-	running: ["bold", "cyan"],
-	success: ["bold", "green"],
-	warning: ["bold", "yellow"],
-	failed: ["bold", "red"],
-	skipped: "dim"
-};
+function clampWidth(width) {
+	return Math.max(28, Number.isFinite(Number(width)) ? Number(width) : 80);
+}
+function supportsColor(output) {
+	return Boolean(output?.isTTY) && (process.env.NO_COLOR ?? "") === "" && process.env.TERM !== "dumb";
+}
+const COMBINING_CHARACTER = /^\p{Mark}$/u;
+function isZeroWidthCodePoint(codePoint, character) {
+	return codePoint === 8205 || codePoint >= 65024 && codePoint <= 65039 || codePoint >= 917760 && codePoint <= 917999 || COMBINING_CHARACTER.test(character);
+}
+function isWideCodePoint(codePoint) {
+	return codePoint >= 4352 && codePoint <= 4447 || codePoint === 9001 || codePoint === 9002 || codePoint >= 11904 && codePoint <= 12350 || codePoint >= 12352 && codePoint <= 42191 || codePoint >= 44032 && codePoint <= 55203 || codePoint >= 63744 && codePoint <= 64255 || codePoint >= 65040 && codePoint <= 65049 || codePoint >= 65072 && codePoint <= 65135 || codePoint >= 65280 && codePoint <= 65376 || codePoint >= 65504 && codePoint <= 65510 || codePoint >= 127462 && codePoint <= 127487 || codePoint >= 127744 && codePoint <= 129791 || codePoint >= 131072 && codePoint <= 262141;
+}
+function displayWidth(value) {
+	let width = 0;
+	for (const character of cleanTerminalText(value)) {
+		const codePoint = character.codePointAt(0);
+		if (codePoint === void 0 || codePoint < 32 || codePoint >= 127 && codePoint < 160) continue;
+		if (isZeroWidthCodePoint(codePoint, character)) continue;
+		width += isWideCodePoint(codePoint) ? 2 : 1;
+	}
+	return width;
+}
+function paint(value, styles, color) {
+	if (!color) return value;
+	const prefix = (Array.isArray(styles) ? styles : styles === void 0 ? [] : [styles]).map((name) => ANSI_STYLE[name]).join("");
+	return prefix ? `${prefix}${value}${ANSI_STYLE.reset}` : value;
+}
+function frameLine(value, width, styles, color = false) {
+	const content = truncate(value, width);
+	return `│ ${paint(`${content}${" ".repeat(Math.max(0, width - displayWidth(content)))}`, styles, color)} │`;
+}
+function frameSegments(segments, width, color) {
+	const visible = segments.map((segment) => segment.value).join("");
+	if (displayWidth(visible) > width) return frameLine(visible, width);
+	return `│ ${segments.map((segment) => paint(segment.value, segment.styles, color)).join("").concat(" ".repeat(Math.max(0, width - displayWidth(visible))))} │`;
+}
+function truncate(value, width) {
+	const text = String(value ?? "");
+	if (displayWidth(text) <= width) return text;
+	if (width <= 1) return "…";
+	const targetWidth = width - 1;
+	let result = "";
+	let usedWidth = 0;
+	for (const character of text) {
+		const characterWidth = displayWidth(character);
+		if (usedWidth + characterWidth > targetWidth) break;
+		result += character;
+		usedWidth += characterWidth;
+	}
+	return `${result}…`;
+}
+//#endregion
+//#region src/ui/banner.ts
 const PIXEL_GLYPHS = {
 	D: [
 		"███  ",
@@ -690,6 +1413,68 @@ const PIXEL_WORDS = [{
 		"dim"
 	]
 }];
+function pixelRowSegments(row) {
+	const segments = [];
+	for (const [wordIndex, word] of PIXEL_WORDS.entries()) {
+		if (wordIndex > 0) segments.push({ value: "   " });
+		for (const [letterIndex, letter] of [...word.text].entries()) {
+			if (letterIndex > 0) segments.push({ value: " " });
+			segments.push({
+				value: PIXEL_GLYPHS[letter][row],
+				styles: word.styles[letterIndex]
+			});
+		}
+	}
+	return segments;
+}
+function renderBanner({ width = 88, subtitle = "本地实验环境安装向导", color = false } = {}) {
+	const safeWidth = clampWidth(width);
+	return [
+		`╭${"─".repeat(safeWidth - 2)}╮`,
+		frameLine(`◆ DSA MASTERY  ·  ${subtitle}`, safeWidth - 4, ["bold", "cyan"], color),
+		`╰${"─".repeat(safeWidth - 2)}╯`
+	].join("\n");
+}
+function renderPixelBanner({ width = 88, color = false } = {}) {
+	const safeWidth = clampWidth(width);
+	const innerWidth = safeWidth - 4;
+	const artWidth = displayWidth(pixelRowSegments(0).map((segment) => segment.value).join(""));
+	if (innerWidth < artWidth) return [
+		`╭${"─".repeat(safeWidth - 2)}╮`,
+		frameSegments([
+			{ value: "◆ " },
+			{
+				value: "D",
+				styles: "brightRed"
+			},
+			{
+				value: "S",
+				styles: "brightYellow"
+			},
+			{
+				value: "A",
+				styles: "brightBlue"
+			},
+			{
+				value: " MASTERY",
+				styles: "dim"
+			}
+		], innerWidth, color),
+		`╰${"─".repeat(safeWidth - 2)}╯`
+	].join("\n");
+	const leftPadding = Math.floor((innerWidth - artWidth) / 2);
+	const rightPadding = innerWidth - artWidth - leftPadding;
+	const lines = [`╭${"─".repeat(safeWidth - 2)}╮`];
+	for (let row = 0; row < 5; row += 1) lines.push(frameSegments([
+		{ value: " ".repeat(leftPadding) },
+		...pixelRowSegments(row),
+		{ value: " ".repeat(rightPadding) }
+	], innerWidth, color));
+	lines.push(`╰${"─".repeat(safeWidth - 2)}╯`);
+	return lines.join("\n");
+}
+//#endregion
+//#region src/ui/choices.ts
 const INSTALL_CHOICES = [
 	{
 		id: "runtime",
@@ -860,154 +1645,6 @@ function handleChoiceKey(key, cursor, selection) {
 		action: "noop"
 	};
 }
-function renderBanner({ width = 88, subtitle = "本地实验环境安装向导", color = false } = {}) {
-	const safeWidth = clampWidth(width);
-	return [
-		`╭${"─".repeat(safeWidth - 2)}╮`,
-		frameLine(`◆ DSA MASTERY  ·  ${subtitle}`, safeWidth - 4, ["bold", "cyan"], color),
-		`╰${"─".repeat(safeWidth - 2)}╯`
-	].join("\n");
-}
-function renderPixelBanner({ width = 88, color = false } = {}) {
-	const safeWidth = clampWidth(width);
-	const innerWidth = safeWidth - 4;
-	const artWidth = displayWidth(pixelRowSegments(0).map((segment) => segment.value).join(""));
-	if (innerWidth < artWidth) return [
-		`╭${"─".repeat(safeWidth - 2)}╮`,
-		frameSegments([
-			{ value: "◆ " },
-			{
-				value: "D",
-				styles: "brightRed"
-			},
-			{
-				value: "S",
-				styles: "brightYellow"
-			},
-			{
-				value: "A",
-				styles: "brightBlue"
-			},
-			{
-				value: " MASTERY",
-				styles: "dim"
-			}
-		], innerWidth, color),
-		`╰${"─".repeat(safeWidth - 2)}╯`
-	].join("\n");
-	const leftPadding = Math.floor((innerWidth - artWidth) / 2);
-	const rightPadding = innerWidth - artWidth - leftPadding;
-	const lines = [`╭${"─".repeat(safeWidth - 2)}╮`];
-	for (let row = 0; row < 5; row += 1) lines.push(frameSegments([
-		{ value: " ".repeat(leftPadding) },
-		...pixelRowSegments(row),
-		{ value: " ".repeat(rightPadding) }
-	], innerWidth, color));
-	lines.push(`╰${"─".repeat(safeWidth - 2)}╯`);
-	return lines.join("\n");
-}
-function renderTuiSummary({ summary = "", width = 88, color = false } = {}) {
-	const safeWidth = clampWidth(width);
-	const innerWidth = safeWidth - 4;
-	const sourceLines = String(summary ?? "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-	if (!sourceLines.length) return "";
-	const headline = sourceLines.shift();
-	const metadata = [];
-	const stages = [];
-	const resultDetails = [];
-	for (const line of sourceLines) {
-		const stage = parseSummaryStage(line);
-		if (stage) stages.push(stage);
-		else if (/^(?:仓库|日志|下一步)[：:]/u.test(line)) resultDetails.push(line);
-		else metadata.push(line);
-	}
-	const success = headline.includes("成功");
-	const matchedLabel = headline.match(/^DSA Mastery 环境配置[：:](.*)$/u)?.[1].trimStart();
-	const headlineLabel = matchedLabel === void 0 || matchedLabel === "" ? headline : matchedLabel;
-	const metadataFields = metadata.map(parseSummaryField).filter((field) => Boolean(field));
-	const resultFields = resultDetails.map(parseSummaryField).filter((field) => Boolean(field));
-	const metadataLabelWidth = Math.max(4, ...metadataFields.map((field) => displayWidth(field.label)));
-	const resultLabelWidth = Math.max(4, ...resultFields.map((field) => displayWidth(field.label)));
-	const lines = [`╭${"─".repeat(safeWidth - 2)}╮`, frameLine(`配置结果 · ${headlineLabel}`, innerWidth, ["bold", success ? "green" : "red"], color)];
-	for (const field of metadataFields) lines.push(frameSegments(alignedSummarySegments(field, metadataLabelWidth, innerWidth), innerWidth, color));
-	if (stages.length) {
-		lines.push(`├${"─".repeat(safeWidth - 2)}┤`);
-		lines.push(frameLine("执行阶段", innerWidth, ["bold", "magenta"], color));
-		const labelWidth = Math.max(14, ...stages.map((stage) => displayWidth(`${stage.icon} ${stage.name}`)));
-		for (const stage of stages) {
-			const label = `${stage.icon} ${stage.name}`;
-			const padding = " ".repeat(Math.max(0, labelWidth - displayWidth(label)));
-			lines.push(frameSegments([{
-				value: `${label}${padding}`,
-				styles: STATUS_STYLES[stage.status]
-			}, {
-				value: stage.message ? `  ${stage.message}` : "",
-				styles: "dim"
-			}], innerWidth, color));
-		}
-	}
-	if (resultDetails.length) {
-		lines.push(`├${"─".repeat(safeWidth - 2)}┤`);
-		lines.push(frameLine("输出信息", innerWidth, ["bold", "magenta"], color));
-		for (const field of resultFields) {
-			const valueStyles = field.label === "下一步" ? ["bold", "yellow"] : "dim";
-			lines.push(frameSegments(alignedSummarySegments(field, resultLabelWidth, innerWidth, valueStyles), innerWidth, color));
-		}
-	}
-	lines.push(`╰${"─".repeat(safeWidth - 2)}╯`);
-	return lines.join("\n");
-}
-const SUMMARY_ICON_STATUS = {
-	"✓": "success",
-	"⚠": "warning",
-	"–": "skipped",
-	"✗": "failed",
-	"▶": "running",
-	"·": "pending"
-};
-function parseSummaryStage(line) {
-	const match = line.match(/^([✓⚠–✗·▶])\s+(\S[^：:]*)[：:](.*)$/u);
-	if (!match) return void 0;
-	return {
-		icon: match[1],
-		name: match[2],
-		message: match[3].trimStart(),
-		status: SUMMARY_ICON_STATUS[match[1]] ?? "pending"
-	};
-}
-function parseSummaryField(line) {
-	const match = line.match(/^([^：:]+)[：:](.*)$/u);
-	if (!match) return void 0;
-	return {
-		label: match[1].trim() === "Profile" ? "方案" : match[1].trim(),
-		value: match[2].trimStart()
-	};
-}
-function alignedSummarySegments(field, labelWidth, innerWidth, valueStyles = "dim") {
-	const padding = " ".repeat(Math.max(0, labelWidth - displayWidth(field.label)));
-	const prefix = `${field.label}${padding}  `;
-	return [{
-		value: prefix,
-		styles: ["bold", "cyan"]
-	}, {
-		value: truncate(field.value, Math.max(0, innerWidth - displayWidth(prefix))),
-		styles: valueStyles
-	}];
-}
-function pixelRowSegments(row) {
-	const segments = [];
-	for (const [wordIndex, word] of PIXEL_WORDS.entries()) {
-		if (wordIndex > 0) segments.push({ value: "   " });
-		for (const [letterIndex, letter] of [...word.text].entries()) {
-			if (letterIndex > 0) segments.push({ value: " " });
-			segments.push({
-				value: PIXEL_GLYPHS[letter][row],
-				styles: word.styles[letterIndex]
-			});
-		}
-	}
-	return segments;
-}
 function renderChoiceMenu({ title = "配置 DSA Mastery", subtitle = "用 ↑↓ 移动，空格勾选，Enter 开始", choices = INSTALL_CHOICES, selection = createInstallSelection(), cursor = 0, width = 88, color = false } = {}) {
 	const safeWidth = clampWidth(width);
 	const innerWidth = safeWidth - 4;
@@ -1159,57 +1796,342 @@ async function promptInstallSelection({ input = process.stdin, output = process.
 		input.pause?.();
 	}
 }
-function clampWidth(width) {
-	return Math.max(28, Number.isFinite(Number(width)) ? Number(width) : 80);
+//#endregion
+//#region src/setup/repository.ts
+function resolveRepositoryDir({ cwd = process.cwd(), repoDir } = {}) {
+	return path.resolve(cwd, repoDir ?? ".");
 }
-function supportsColor(output) {
-	return Boolean(output?.isTTY) && (process.env.NO_COLOR ?? "") === "" && process.env.TERM !== "dumb";
-}
-const COMBINING_CHARACTER = /^\p{Mark}$/u;
-function isZeroWidthCodePoint(codePoint, character) {
-	return codePoint === 8205 || codePoint >= 65024 && codePoint <= 65039 || codePoint >= 917760 && codePoint <= 917999 || COMBINING_CHARACTER.test(character);
-}
-function isWideCodePoint(codePoint) {
-	return codePoint >= 4352 && codePoint <= 4447 || codePoint === 9001 || codePoint === 9002 || codePoint >= 11904 && codePoint <= 12350 || codePoint >= 12352 && codePoint <= 42191 || codePoint >= 44032 && codePoint <= 55203 || codePoint >= 63744 && codePoint <= 64255 || codePoint >= 65040 && codePoint <= 65049 || codePoint >= 65072 && codePoint <= 65135 || codePoint >= 65280 && codePoint <= 65376 || codePoint >= 65504 && codePoint <= 65510 || codePoint >= 127462 && codePoint <= 127487 || codePoint >= 127744 && codePoint <= 129791 || codePoint >= 131072 && codePoint <= 262141;
-}
-function displayWidth(value) {
-	let width = 0;
-	for (const character of cleanTerminalText(value)) {
-		const codePoint = character.codePointAt(0);
-		if (codePoint === void 0 || codePoint < 32 || codePoint >= 127 && codePoint < 160) continue;
-		if (isZeroWidthCodePoint(codePoint, character)) continue;
-		width += isWideCodePoint(codePoint) ? 2 : 1;
+async function inspectRepository(repositoryDir, { runner = runProcess, env = process.env } = {}) {
+	const state = {
+		path: repositoryDir,
+		exists: false,
+		directory: false,
+		empty: false,
+		valid: false,
+		git: false,
+		dirty: false,
+		remote: void 0
+	};
+	try {
+		const repositoryStat = await stat(repositoryDir);
+		state.exists = true;
+		state.directory = repositoryStat.isDirectory();
+	} catch (error) {
+		if (error.code === "ENOENT") return state;
+		throw error;
 	}
-	return width;
-}
-function paint(value, styles, color) {
-	if (!color) return value;
-	const prefix = (Array.isArray(styles) ? styles : styles === void 0 ? [] : [styles]).map((name) => ANSI_STYLE[name]).join("");
-	return prefix ? `${prefix}${value}${ANSI_STYLE.reset}` : value;
-}
-function frameLine(value, width, styles, color = false) {
-	const content = truncate(value, width);
-	return `│ ${paint(`${content}${" ".repeat(Math.max(0, width - displayWidth(content)))}`, styles, color)} │`;
-}
-function frameSegments(segments, width, color) {
-	const visible = segments.map((segment) => segment.value).join("");
-	if (displayWidth(visible) > width) return frameLine(visible, width);
-	return `│ ${segments.map((segment) => paint(segment.value, segment.styles, color)).join("").concat(" ".repeat(Math.max(0, width - displayWidth(visible))))} │`;
-}
-function truncate(value, width) {
-	const text = String(value ?? "");
-	if (displayWidth(text) <= width) return text;
-	if (width <= 1) return "…";
-	const targetWidth = width - 1;
-	let result = "";
-	let usedWidth = 0;
-	for (const character of text) {
-		const characterWidth = displayWidth(character);
-		if (usedWidth + characterWidth > targetWidth) break;
-		result += character;
-		usedWidth += characterWidth;
+	if (!state.directory) return state;
+	state.empty = (await readdir(repositoryDir)).length === 0;
+	state.valid = await Promise.all([
+		pathExists(path.join(repositoryDir, "package.json")),
+		pathExists(path.join(repositoryDir, "pnpm-lock.yaml")),
+		pathExists(path.join(repositoryDir, "labs")),
+		pathExists(path.join(repositoryDir, "packages", "lab-cli", "dist", "cli.js"))
+	]).then((items) => items.every(Boolean));
+	state.git = await pathExists(path.join(repositoryDir, ".git"));
+	if (state.git) {
+		const status = await runner("git", ["status", "--short"], {
+			cwd: repositoryDir,
+			env,
+			timeMs: 1e4,
+			outputKb: 256
+		});
+		state.dirty = !resultFailed(status) && Boolean(status.stdout?.trim());
+		const remote = await runner("git", [
+			"remote",
+			"get-url",
+			"origin"
+		], {
+			cwd: repositoryDir,
+			env,
+			timeMs: 1e4,
+			outputKb: 256
+		});
+		if (!resultFailed(remote)) state.remote = firstOutputLine(remote);
 	}
-	return `${result}…`;
+	return state;
+}
+function assertRepositorySafe(state) {
+	if (state.exists && !state.directory) throw setupError("REPOSITORY_INVALID", `仓库目标不是目录：${state.path}`);
+	if (state.exists && !state.valid && !state.empty) throw setupError("REPOSITORY_INVALID", `目标目录不是 DSA Mastery 仓库且不为空，不会覆盖：${state.path}`);
+	if (state.dirty && state.updateRepo) throw setupError("REPOSITORY_DIRTY", `仓库存在未提交改动，已阻止更新：${state.path}；请提交/暂存改动后再使用 --update-repo。`);
+	return state;
+}
+async function ensureRepository(context) {
+	let state = await inspectRepository(context.repoDir, {
+		runner: context.runner,
+		env: context.env
+	});
+	state.updateRepo = context.options.updateRepo;
+	assertRepositorySafe(state);
+	if (state.valid) {
+		if (context.options.updateRepo) {
+			if (!state.git) throw setupError("REPOSITORY_INVALID", "--update-repo 要求目标是 Git 仓库；当前目录缺少 .git。", { path: context.repoDir });
+			await runExternal(context, "git", ["pull", "--ff-only"], {
+				stage: "repository",
+				timeMs: 12e4,
+				errorCode: "REPOSITORY_UPDATE_FAILED",
+				errorMessage: "仓库更新失败；未执行强制覆盖，请检查网络和远端分支。"
+			});
+			state = await inspectRepository(context.repoDir, {
+				runner: context.runner,
+				env: context.env
+			});
+		}
+		context.repository = state;
+		return state;
+	}
+	if (context.options.checkOnly) throw setupError("REPOSITORY_MISSING", `未找到有效的 DSA Mastery 仓库：${context.repoDir}`, { path: context.repoDir });
+	await mkdir(path.dirname(context.repoDir), { recursive: true });
+	await runExternal(context, "git", [
+		"clone",
+		context.options.repoUrl,
+		context.repoDir
+	], {
+		stage: "repository",
+		timeMs: 12e5,
+		errorCode: "REPOSITORY_UPDATE_FAILED",
+		errorMessage: `仓库 clone 失败：${context.options.repoUrl}`
+	});
+	state = await inspectRepository(context.repoDir, {
+		runner: context.runner,
+		env: context.env
+	});
+	if (!state.valid) throw setupError("REPOSITORY_INVALID", `clone 完成但目标不是有效的 DSA Mastery 仓库：${context.repoDir}`);
+	context.repository = state;
+	return state;
+}
+async function askRepositoryUpdate(options, { io, cwd, runner, env }) {
+	if (!(!options.nonInteractive && !options.json && !options.checkOnly && options.ui !== "plain" && Boolean(io.input?.isTTY && io.output?.isTTY)) || options.updateRepo) return options;
+	const repositoryDir = resolveRepositoryDir({
+		cwd,
+		repoDir: options.repoDir
+	});
+	const state = await inspectRepository(repositoryDir, {
+		runner,
+		env
+	});
+	if (!state.valid || !state.git || state.dirty) return options;
+	const answer = (await promptLine(`发现已有干净仓库 ${repositoryDir}，是否执行 git pull --ff-only？[y/N]：`, io.input, io.output)).toLowerCase();
+	if ([
+		"y",
+		"yes",
+		"是"
+	].includes(answer)) return {
+		...options,
+		updateRepo: true
+	};
+	return options;
+}
+//#endregion
+//#region src/setup/smoke.ts
+async function runLabJson(context, args, label) {
+	const result = await runWithRunner(context, context.nodeCommand ?? process.execPath, [
+		"packages/lab-cli/dist/cli.js",
+		...args,
+		"--json",
+		"--no-color"
+	], {
+		cwd: context.repoDir,
+		timeMs: 6e5,
+		outputKb: 8192
+	});
+	recordCommand(context, context.nodeCommand ?? process.execPath, [
+		"packages/lab-cli/dist/cli.js",
+		...args,
+		"--json",
+		"--no-color"
+	], result);
+	let report;
+	try {
+		report = JSON.parse(result.stdout);
+	} catch {
+		throw setupError("SMOKE_FAILED", `${label} 未返回可解析的 JSON 报告。`, { result });
+	}
+	if (resultFailed(result) || report.ok !== true) throw setupError("SMOKE_FAILED", `${label} 未通过；请查看报告或日志中的诊断。`, {
+		report,
+		result
+	});
+	return report;
+}
+async function runSmoke(context) {
+	if (context.profile === "runtime") {
+		context.smoke = [];
+		return context.smoke;
+	}
+	const program = path.join(context.repoDir, "labs", "chapter-01", "exercise", "E-01-01-sequential-list-deduplication");
+	const results = [{
+		label: "Program doctor",
+		report: await runLabJson(context, ["doctor", program], "Program doctor")
+	}, {
+		label: "Program reference sample",
+		report: await runLabJson(context, [
+			"run",
+			program,
+			"--target",
+			"solution",
+			"--case",
+			"001-sample"
+		], "Program reference sample")
+	}];
+	if (context.profile === "full") {
+		const project = path.join(context.repoDir, "labs", "chapter-08", "project", "P-08-01-avl-tree-rotations");
+		results.push({
+			label: "Project doctor",
+			report: await runLabJson(context, ["doctor", project], "Project doctor")
+		});
+		results.push({
+			label: "Project reference CTest",
+			report: await runLabJson(context, [
+				"run",
+				project,
+				"--target",
+				"solution",
+				"--task",
+				"avl"
+			], "Project reference CTest")
+		});
+	}
+	context.smoke = results;
+	return results;
+}
+async function runCheckOnly(context) {
+	const evaluation = evaluateProfile(context.profile, context.host.tools);
+	context.evaluation = evaluation;
+	const repository = await inspectRepository(context.repoDir, {
+		runner: context.runner,
+		env: context.env
+	});
+	context.repository = repository;
+	const issues = [...evaluation.issues];
+	if (!repository.valid) issues.push(`有效仓库：${context.repoDir}`);
+	if (issues.length) {
+		evaluation.ok = false;
+		evaluation.issues = issues;
+		throw setupError("ENVIRONMENT_NOT_READY", `只读检查未通过：${issues.join("；")}`, {
+			evaluation,
+			host: serializeHost(context.host),
+			repository
+		});
+	}
+	return {
+		evaluation,
+		repository
+	};
+}
+//#endregion
+//#region src/ui/progress.ts
+const STATUS_ICON = {
+	pending: "·",
+	running: "▶",
+	success: "✓",
+	warning: "⚠",
+	failed: "✗",
+	skipped: "–"
+};
+const STATUS_LABEL = {
+	pending: "待处理",
+	running: "进行中",
+	success: "完成",
+	warning: "警告",
+	failed: "失败",
+	skipped: "跳过"
+};
+const STATUS_STYLES = {
+	pending: "dim",
+	running: ["bold", "cyan"],
+	success: ["bold", "green"],
+	warning: ["bold", "yellow"],
+	failed: ["bold", "red"],
+	skipped: "dim"
+};
+function renderTuiSummary({ summary = "", width = 88, color = false } = {}) {
+	const safeWidth = clampWidth(width);
+	const innerWidth = safeWidth - 4;
+	const sourceLines = String(summary ?? "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+	if (!sourceLines.length) return "";
+	const headline = sourceLines.shift();
+	const metadata = [];
+	const stages = [];
+	const resultDetails = [];
+	for (const line of sourceLines) {
+		const stage = parseSummaryStage(line);
+		if (stage) stages.push(stage);
+		else if (/^(?:仓库|日志|下一步)[：:]/u.test(line)) resultDetails.push(line);
+		else metadata.push(line);
+	}
+	const success = headline.includes("成功");
+	const matchedLabel = headline.match(/^DSA Mastery 环境配置[：:](.*)$/u)?.[1].trimStart();
+	const headlineLabel = matchedLabel === void 0 || matchedLabel === "" ? headline : matchedLabel;
+	const metadataFields = metadata.map(parseSummaryField).filter((field) => Boolean(field));
+	const resultFields = resultDetails.map(parseSummaryField).filter((field) => Boolean(field));
+	const metadataLabelWidth = Math.max(4, ...metadataFields.map((field) => displayWidth(field.label)));
+	const resultLabelWidth = Math.max(4, ...resultFields.map((field) => displayWidth(field.label)));
+	const lines = [`╭${"─".repeat(safeWidth - 2)}╮`, frameLine(`配置结果 · ${headlineLabel}`, innerWidth, ["bold", success ? "green" : "red"], color)];
+	for (const field of metadataFields) lines.push(frameSegments(alignedSummarySegments(field, metadataLabelWidth, innerWidth), innerWidth, color));
+	if (stages.length) {
+		lines.push(`├${"─".repeat(safeWidth - 2)}┤`);
+		lines.push(frameLine("执行阶段", innerWidth, ["bold", "magenta"], color));
+		const labelWidth = Math.max(14, ...stages.map((stage) => displayWidth(`${stage.icon} ${stage.name}`)));
+		for (const stage of stages) {
+			const label = `${stage.icon} ${stage.name}`;
+			const padding = " ".repeat(Math.max(0, labelWidth - displayWidth(label)));
+			lines.push(frameSegments([{
+				value: `${label}${padding}`,
+				styles: STATUS_STYLES[stage.status]
+			}, {
+				value: stage.message ? `  ${stage.message}` : "",
+				styles: "dim"
+			}], innerWidth, color));
+		}
+	}
+	if (resultDetails.length) {
+		lines.push(`├${"─".repeat(safeWidth - 2)}┤`);
+		lines.push(frameLine("输出信息", innerWidth, ["bold", "magenta"], color));
+		for (const field of resultFields) {
+			const valueStyles = field.label === "下一步" ? ["bold", "yellow"] : "dim";
+			lines.push(frameSegments(alignedSummarySegments(field, resultLabelWidth, innerWidth, valueStyles), innerWidth, color));
+		}
+	}
+	lines.push(`╰${"─".repeat(safeWidth - 2)}╯`);
+	return lines.join("\n");
+}
+const SUMMARY_ICON_STATUS = {
+	"✓": "success",
+	"⚠": "warning",
+	"–": "skipped",
+	"✗": "failed",
+	"▶": "running",
+	"·": "pending"
+};
+function parseSummaryStage(line) {
+	const match = line.match(/^([✓⚠–✗·▶])\s+(\S[^：:]*)[：:](.*)$/u);
+	if (!match) return void 0;
+	return {
+		icon: match[1],
+		name: match[2],
+		message: match[3].trimStart(),
+		status: SUMMARY_ICON_STATUS[match[1]] ?? "pending"
+	};
+}
+function parseSummaryField(line) {
+	const match = line.match(/^([^：:]+)[：:](.*)$/u);
+	if (!match) return void 0;
+	return {
+		label: match[1].trim() === "Profile" ? "方案" : match[1].trim(),
+		value: match[2].trimStart()
+	};
+}
+function alignedSummarySegments(field, labelWidth, innerWidth, valueStyles = "dim") {
+	const padding = " ".repeat(Math.max(0, labelWidth - displayWidth(field.label)));
+	const prefix = `${field.label}${padding}  `;
+	return [{
+		value: prefix,
+		styles: ["bold", "cyan"]
+	}, {
+		value: truncate(field.value, Math.max(0, innerWidth - displayWidth(prefix))),
+		styles: valueStyles
+	}];
 }
 function createStageState(names) {
 	return names.map((name) => ({
@@ -1367,617 +2289,6 @@ function createProgressUI({ mode = "auto", stdout = process.stdout, title = "DSA
 }
 //#endregion
 //#region src/setup.ts
-const SETUP_EXIT = {
-	OK: 0,
-	UNSUPPORTED: 10,
-	INSTALLER: 11,
-	USER_ACTION: 12,
-	REPOSITORY: 13,
-	ENVIRONMENT: 14,
-	SMOKE: 15,
-	ARGUMENT: 2
-};
-const SETUP_STAGES = [
-	"preflight",
-	"toolchain",
-	"repository",
-	"dependencies",
-	"ide",
-	"smoke"
-];
-const HOMEBREW_INSTALLER = "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh";
-var SetupError = class extends Error {
-	code;
-	details;
-	exitCode;
-	constructor(code, message, details, exitCode) {
-		super(message);
-		this.name = "SetupError";
-		this.code = code;
-		this.details = details;
-		this.exitCode = exitCode ?? exitCodeFor(code);
-	}
-};
-function exitCodeFor(code) {
-	return {
-		SETUP_UNSUPPORTED: SETUP_EXIT.UNSUPPORTED,
-		INSTALLER_FAILED: SETUP_EXIT.INSTALLER,
-		NEEDS_USER_ACTION: SETUP_EXIT.USER_ACTION,
-		REPOSITORY_DIRTY: SETUP_EXIT.REPOSITORY,
-		REPOSITORY_INVALID: SETUP_EXIT.REPOSITORY,
-		REPOSITORY_MISSING: SETUP_EXIT.REPOSITORY,
-		REPOSITORY_UPDATE_FAILED: SETUP_EXIT.REPOSITORY,
-		ENVIRONMENT_NOT_READY: SETUP_EXIT.ENVIRONMENT,
-		SMOKE_FAILED: SETUP_EXIT.SMOKE,
-		ARGUMENT_INVALID: SETUP_EXIT.ARGUMENT
-	}[code] ?? SETUP_EXIT.INSTALLER;
-}
-function setupError(code, message, details) {
-	return new SetupError(code, message, details);
-}
-async function pathExists(target) {
-	try {
-		await access(target);
-		return true;
-	} catch {
-		return false;
-	}
-}
-function resultOutput(result) {
-	return `${result?.stdout ?? ""}\n${result?.stderr ?? ""}`.trim();
-}
-function resultFailed(result) {
-	return Boolean(result?.spawnError) || result?.code !== 0 || Boolean(result?.timedOut) || Boolean(result?.outputExceeded);
-}
-function firstOutputLine(result) {
-	return resultOutput(result).split(/\r?\n/).find(Boolean)?.trim();
-}
-function prependPath(currentPath, additions, delimiter) {
-	const values = [...additions, ...String(currentPath ?? "").split(delimiter)].filter(Boolean);
-	return [...new Set(values)].join(delimiter);
-}
-function hostTool(host, name) {
-	return host?.tools?.find((tool) => tool.name === name);
-}
-function hasTool(host, name) {
-	return Boolean(hostTool(host, name)?.meetsMinimum);
-}
-function resolveRepositoryDir({ cwd = process.cwd(), repoDir } = {}) {
-	return path.resolve(cwd, repoDir ?? ".");
-}
-async function inspectRepository(repositoryDir, { runner = runProcess, env = process.env } = {}) {
-	const state = {
-		path: repositoryDir,
-		exists: false,
-		directory: false,
-		empty: false,
-		valid: false,
-		git: false,
-		dirty: false,
-		remote: void 0
-	};
-	try {
-		const repositoryStat = await stat(repositoryDir);
-		state.exists = true;
-		state.directory = repositoryStat.isDirectory();
-	} catch (error) {
-		if (error.code === "ENOENT") return state;
-		throw error;
-	}
-	if (!state.directory) return state;
-	state.empty = (await readdir(repositoryDir)).length === 0;
-	state.valid = await Promise.all([
-		pathExists(path.join(repositoryDir, "package.json")),
-		pathExists(path.join(repositoryDir, "pnpm-lock.yaml")),
-		pathExists(path.join(repositoryDir, "labs")),
-		pathExists(path.join(repositoryDir, "packages", "lab-cli", "dist", "cli.js"))
-	]).then((items) => items.every(Boolean));
-	state.git = await pathExists(path.join(repositoryDir, ".git"));
-	if (state.git) {
-		const status = await runner("git", ["status", "--short"], {
-			cwd: repositoryDir,
-			env,
-			timeMs: 1e4,
-			outputKb: 256
-		});
-		state.dirty = !resultFailed(status) && Boolean(status.stdout?.trim());
-		const remote = await runner("git", [
-			"remote",
-			"get-url",
-			"origin"
-		], {
-			cwd: repositoryDir,
-			env,
-			timeMs: 1e4,
-			outputKb: 256
-		});
-		if (!resultFailed(remote)) state.remote = firstOutputLine(remote);
-	}
-	return state;
-}
-function assertRepositorySafe(state) {
-	if (state.exists && !state.directory) throw setupError("REPOSITORY_INVALID", `仓库目标不是目录：${state.path}`);
-	if (state.exists && !state.valid && !state.empty) throw setupError("REPOSITORY_INVALID", `目标目录不是 DSA Mastery 仓库且不为空，不会覆盖：${state.path}`);
-	if (state.dirty && state.updateRepo) throw setupError("REPOSITORY_DIRTY", `仓库存在未提交改动，已阻止更新：${state.path}；请提交/暂存改动后再使用 --update-repo。`);
-	return state;
-}
-function wingetInstall(id, extra = []) {
-	return {
-		command: "winget",
-		args: [
-			"install",
-			"--id",
-			id,
-			"--exact",
-			"--source",
-			"winget",
-			"--accept-source-agreements",
-			"--accept-package-agreements",
-			...extra
-		]
-	};
-}
-const VS_BUILDTOOLS_INSTALLER_URL = "https://aka.ms/vs/17/release/vs_buildtools.exe";
-const VC_TOOLS_COMPONENT = "Microsoft.VisualStudio.Component.VC.Tools.x86.x64";
-async function findVisualStudioViaVsWhere(context) {
-	const candidates = [];
-	if (context.env["ProgramFiles(x86)"] !== void 0) candidates.push(path.join(context.env["ProgramFiles(x86)"], "Microsoft Visual Studio", "Installer", "vswhere.exe"));
-	candidates.push("vswhere.exe");
-	for (const command of [...new Set(candidates)]) {
-		const result = await runWithRunner(context, command, [
-			"-latest",
-			"-products",
-			"*",
-			"-requires",
-			VC_TOOLS_COMPONENT,
-			"-property",
-			"installationPath"
-		], {
-			timeMs: 1e4,
-			outputKb: 256
-		});
-		if (!resultFailed(result)) {
-			const installationPath = resultOutput(result).split(/\r?\n/).find(Boolean)?.trim();
-			if (installationPath !== void 0 && installationPath !== "") return {
-				installationPath,
-				vswhere: command
-			};
-		}
-	}
-}
-async function downloadFileWithPowershell(context, url, destination) {
-	const result = await runWithRunner(context, "powershell.exe", [
-		"-NoProfile",
-		"-NonInteractive",
-		"-Command",
-		`[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '${url}' -OutFile '${destination}' -UseBasicParsing`
-	], {
-		timeMs: 6e5,
-		outputKb: 4096
-	});
-	if (resultFailed(result)) throw setupError("INSTALLER_FAILED", `下载失败：${url}`, {
-		command: "powershell.exe",
-		result
-	});
-	return destination;
-}
-async function installVisualStudioBuildTools(context) {
-	const existing = await findVisualStudioViaVsWhere(context);
-	if (existing) {
-		context.ui.update("toolchain", "running", `检测到已安装 Visual Studio C++ 工具：${existing.installationPath}`);
-		return {
-			skipped: true,
-			reason: "already-installed",
-			installationPath: existing.installationPath
-		};
-	}
-	if (context.packageManager?.kind === "winget") {
-		const install = wingetInstall("Microsoft.VisualStudio.2022.BuildTools", [
-			"--wait",
-			"--override",
-			"--passive --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
-		]);
-		try {
-			context.ui.update("toolchain", "running", "通过 winget 安装 Visual Studio C++ Build Tools");
-			await runExternal(context, install.command, install.args, {
-				inherit: true,
-				timeMs: 27e5,
-				errorMessage: "winget 安装 Visual Studio C++ Build Tools 失败"
-			});
-			return { method: "winget" };
-		} catch {
-			context.ui.update("toolchain", "running", "winget 安装未成功，回退到官方安装程序");
-		}
-	}
-	const tempDir = await mkdtemp(path.join(os.tmpdir(), "dsa-mastery-vs-"));
-	const installer = path.join(tempDir, "vs_buildtools.exe");
-	try {
-		context.ui.update("toolchain", "running", "下载 Visual Studio Build Tools 官方安装程序");
-		await downloadFileWithPowershell(context, VS_BUILDTOOLS_INSTALLER_URL, installer);
-		context.ui.update("toolchain", "running", "运行官方安装程序（可能需要 10-30 分钟）");
-		await runExternal(context, installer, [
-			"--wait",
-			"--passive",
-			"--norestart",
-			"--add",
-			"Microsoft.VisualStudio.Workload.VCTools",
-			"--includeRecommended"
-		], {
-			inherit: true,
-			timeMs: 54e5,
-			errorMessage: "官方安装程序安装 Visual Studio C++ Build Tools 失败"
-		});
-		return { method: "official-installer" };
-	} finally {
-		await rm(tempDir, {
-			recursive: true,
-			force: true
-		}).catch(() => {});
-	}
-}
-function planToolchainInstall(profile, host = {}) {
-	const requirement = profileRequirements(profile);
-	const plan = [];
-	const platform = host.platform ?? process.platform;
-	const packageManager = host.packageManager?.command ?? (platform === "win32" ? "winget" : "brew");
-	const missing = (name) => !hasTool(host, name);
-	const add = (id, description, install, extra = {}) => {
-		plan.push({
-			id,
-			description,
-			...install,
-			...extra
-		});
-	};
-	if (platform === "darwin") {
-		if (missing("Git")) add("git", "安装 Git", {
-			command: packageManager,
-			args: ["install", "git"]
-		});
-		if (missing("Node.js")) add("node", "安装 Node.js", {
-			command: packageManager,
-			args: ["install", "node"]
-		});
-		if (requirement.requiresCompiler && !hasTool(host, "Clang") && !hasTool(host, "GCC")) add("compiler", "安装 Xcode Command Line Tools", {
-			command: "xcode-select",
-			args: ["--install"]
-		}, { requiresUserAction: true });
-		if (requirement.requiresCmake && missing("CMake")) add("cmake", "安装 CMake", {
-			command: packageManager,
-			args: ["install", "cmake"]
-		});
-		return plan;
-	}
-	if (platform === "win32") {
-		if (missing("Git")) add("git", "安装 Git", wingetInstall("Git.Git"));
-		if (missing("Node.js")) add("node", "安装 Node.js LTS", wingetInstall("OpenJS.NodeJS.LTS"));
-		const hasAnyCompiler = hasTool(host, "MSVC") || hasTool(host, "GCC") || hasTool(host, "Clang");
-		if (requirement.requiresCompiler && !hasAnyCompiler) add("msvc", "安装 Visual Studio C++ Build Tools", wingetInstall("Microsoft.VisualStudio.2022.BuildTools", [
-			"--wait",
-			"--override",
-			"--passive --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
-		]));
-		if (requirement.requiresCmake && missing("CMake")) add("cmake", "安装 CMake", wingetInstall("Kitware.CMake"));
-		return plan;
-	}
-	throw setupError("SETUP_UNSUPPORTED", `暂不支持自动配置平台：${platform}`);
-}
-function planIdeExtensions(options = {}, profile = "basic") {
-	if (options.selection !== void 0) return [...options.installCppExtension === true ? ["ms-vscode.cpptools"] : [], ...options.installCmakeExtension === true ? ["ms-vscode.cmake-tools"] : []];
-	return [...profile === "runtime" ? [] : ["ms-vscode.cpptools"], ...profile === "full" ? ["ms-vscode.cmake-tools"] : []];
-}
-async function runWithRunner(context, command, args = [], options = {}) {
-	try {
-		return await context.runner(command, args, {
-			cwd: options.cwd ?? context.commandCwd ?? context.repoDir,
-			env: options.env ?? context.env,
-			timeMs: options.timeoutMs ?? options.timeMs ?? 3e4,
-			outputKb: options.outputLimitKb ?? options.outputKb ?? 4096,
-			inherit: options.inherit ?? false
-		});
-	} catch (error) {
-		return {
-			code: null,
-			spawnError: error,
-			stdout: "",
-			stderr: ""
-		};
-	}
-}
-async function commandAvailable(context, command, args = ["--version"]) {
-	const result = await runWithRunner(context, command, args, {
-		timeMs: 5e3,
-		outputKb: 256
-	});
-	return !resultFailed(result) ? result : void 0;
-}
-async function detectPackageManager(context) {
-	if (context.platform === "darwin") {
-		for (const command of [
-			"brew",
-			"/opt/homebrew/bin/brew",
-			"/usr/local/bin/brew"
-		]) if (await commandAvailable(context, command)) return {
-			kind: "brew",
-			command
-		};
-		return;
-	}
-	if (context.platform === "win32") return await commandAvailable(context, "winget") ? {
-		kind: "winget",
-		command: "winget"
-	} : void 0;
-}
-async function refreshPlatformEnvironment(context) {
-	if (context.platform === "darwin" && context.packageManager?.kind === "brew") {
-		const prefix = firstOutputLine(await runWithRunner(context, context.packageManager.command, ["--prefix"], {
-			timeMs: 5e3,
-			outputKb: 256
-		}));
-		if (prefix !== void 0 && prefix !== "") context.env.PATH = prependPath(context.env.PATH, [path.join(prefix, "bin"), path.join(prefix, "sbin")], ":");
-	}
-	if (context.platform === "win32") {
-		const pathResult = await runWithRunner(context, "powershell.exe", [
-			"-NoProfile",
-			"-NonInteractive",
-			"-Command",
-			"[Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')"
-		], {
-			timeMs: 1e4,
-			outputKb: 4096
-		});
-		if (!resultFailed(pathResult) && pathResult.stdout?.trim()) context.env.PATH = pathResult.stdout.trim();
-	}
-	return context.env;
-}
-async function resolveExecutable(context, command) {
-	if (path.isAbsolute(command)) return command;
-	return firstOutputLine(await runWithRunner(context, context.platform === "win32" ? "where.exe" : "which", [command], {
-		timeMs: 5e3,
-		outputKb: 256
-	})) ?? command;
-}
-function recordCommand(context, command, args, result) {
-	context.commands.push({
-		command,
-		args,
-		code: result?.code ?? null,
-		stdout: result?.stdout ?? "",
-		stderr: result?.stderr ?? "",
-		timedOut: Boolean(result?.timedOut),
-		outputExceeded: Boolean(result?.outputExceeded)
-	});
-}
-async function runExternal(context, command, args, options = {}) {
-	const result = await runWithRunner(context, command, args, options);
-	recordCommand(context, command, args, result);
-	if (resultFailed(result)) throw setupError(options.errorCode ?? "INSTALLER_FAILED", options.errorMessage ?? `命令执行失败：${commandText(command, args)}`, {
-		command,
-		args,
-		result
-	});
-	return result;
-}
-async function ensureHomebrew(context) {
-	context.packageManager = await detectPackageManager(context);
-	if (context.packageManager) return context.packageManager;
-	if (!await commandAvailable(context, "curl", ["--version"])) throw setupError("SETUP_UNSUPPORTED", "未找到 Homebrew 或 curl，无法自动安装 macOS 工具；请按 macOS 手工指南安装 Homebrew。", { fallback: "docs/MACOS_STUDENT_SETUP_GUIDE.md" });
-	const temporaryDirectory = await mkdtemp(path.join(os.tmpdir(), "dsa-mastery-brew-"));
-	const installer = path.join(temporaryDirectory, "install-homebrew.sh");
-	try {
-		context.ui.update("toolchain", "running", "下载 Homebrew 官方安装脚本");
-		await runExternal(context, "curl", [
-			"-fsSL",
-			HOMEBREW_INSTALLER,
-			"-o",
-			installer
-		], { inherit: true });
-		await runExternal(context, "/bin/bash", [installer], { inherit: true });
-	} finally {
-		await rm(temporaryDirectory, {
-			recursive: true,
-			force: true
-		});
-	}
-	await refreshPlatformEnvironment(context);
-	context.packageManager = await detectPackageManager(context);
-	if (!context.packageManager) throw setupError("INSTALLER_FAILED", "Homebrew 安装命令已结束，但当前进程仍找不到 brew；请打开新终端后重试。", { restartRequired: true });
-	return context.packageManager;
-}
-async function ensurePnpm(context) {
-	const current = await runWithRunner(context, "pnpm", ["--version"], {
-		timeMs: 5e3,
-		outputKb: 256
-	});
-	if (!resultFailed(current) && firstOutputLine(current) === PNPM_VERSION) {
-		context.pnpmCommand = "pnpm";
-		return context.pnpmCommand;
-	}
-	if (await commandAvailable(context, "corepack", ["--version"])) {
-		recordCommand(context, "corepack", ["enable", "pnpm"], await runWithRunner(context, "corepack", ["enable", "pnpm"], {
-			timeMs: 3e4,
-			outputKb: 512
-		}));
-		const installed = await runWithRunner(context, "corepack", [
-			"install",
-			"--global",
-			`pnpm@${PNPM_VERSION}`
-		], {
-			timeMs: 6e4,
-			outputKb: 1024
-		});
-		recordCommand(context, "corepack", [
-			"install",
-			"--global",
-			`pnpm@${PNPM_VERSION}`
-		], installed);
-		const afterCorepack = await runWithRunner(context, "pnpm", ["--version"], {
-			timeMs: 5e3,
-			outputKb: 256
-		});
-		if (!resultFailed(afterCorepack) && firstOutputLine(afterCorepack) === PNPM_VERSION) {
-			context.pnpmCommand = "pnpm";
-			return context.pnpmCommand;
-		}
-	}
-	if (!await commandAvailable(context, "npm", ["--version"])) throw setupError("INSTALLER_FAILED", "未找到 npm，无法准备固定版本 pnpm。请安装满足要求的 Node.js 后重试。", { required: `pnpm ${PNPM_VERSION}` });
-	const globalInstall = await runWithRunner(context, "npm", [
-		"install",
-		"--global",
-		`pnpm@${PNPM_VERSION}`
-	], {
-		timeMs: 12e4,
-		outputKb: 2048
-	});
-	recordCommand(context, "npm", [
-		"install",
-		"--global",
-		`pnpm@${PNPM_VERSION}`
-	], globalInstall);
-	const afterGlobal = await runWithRunner(context, "pnpm", ["--version"], {
-		timeMs: 5e3,
-		outputKb: 256
-	});
-	if (!resultFailed(afterGlobal) && firstOutputLine(afterGlobal) === PNPM_VERSION) {
-		context.pnpmCommand = "pnpm";
-		return context.pnpmCommand;
-	}
-	const base = context.platform === "win32" ? path.join(context.env.LOCALAPPDATA ?? context.env.USERPROFILE ?? os.homedir(), "DSA-Mastery", "tools") : path.join(context.env.XDG_DATA_HOME ?? path.join(context.env.HOME ?? os.homedir(), ".local", "share"), "DSA-Mastery", "tools");
-	await mkdir(base, { recursive: true });
-	const localInstall = await runWithRunner(context, "npm", [
-		"install",
-		"--global",
-		"--prefix",
-		base,
-		`pnpm@${PNPM_VERSION}`
-	], {
-		timeMs: 12e4,
-		outputKb: 2048
-	});
-	recordCommand(context, "npm", [
-		"install",
-		"--global",
-		"--prefix",
-		base,
-		`pnpm@${PNPM_VERSION}`
-	], localInstall);
-	const bin = context.platform === "win32" ? base : path.join(base, "bin");
-	context.env.PATH = prependPath(context.env.PATH, [bin], context.platform === "win32" ? ";" : ":");
-	const candidates = context.platform === "win32" ? [path.join(base, "pnpm.cmd"), path.join(base, "node_modules", ".bin", "pnpm.cmd")] : [path.join(bin, "pnpm")];
-	for (const candidate of candidates) {
-		const afterLocal = await runWithRunner(context, candidate, ["--version"], {
-			timeMs: 5e3,
-			outputKb: 256
-		});
-		if (!resultFailed(afterLocal) && firstOutputLine(afterLocal) === PNPM_VERSION) {
-			context.pnpmCommand = candidate;
-			return context.pnpmCommand;
-		}
-	}
-	throw setupError("INSTALLER_FAILED", `无法准备 pnpm ${PNPM_VERSION}；请按安装指南手工安装并重新运行。`, { required: `pnpm ${PNPM_VERSION}` });
-}
-async function installSystemTools(context) {
-	const plan = planToolchainInstall(context.profile, {
-		...context.host,
-		packageManager: context.packageManager
-	});
-	if (!plan.length) return plan;
-	if (context.platform === "darwin") await ensureHomebrew(context);
-	if (context.platform === "win32" && !context.packageManager) {
-		context.packageManager = await detectPackageManager(context);
-		if (!context.packageManager) throw setupError("SETUP_UNSUPPORTED", "未找到 winget，无法自动安装 Windows 工具；请按 Windows 手工指南安装 Git、Node、Build Tools 和 CMake。", { fallback: "docs/WINDOWS_STUDENT_SETUP_GUIDE.md" });
-	}
-	for (const action of plan) {
-		if (action.requiresUserAction) {
-			await runExternal(context, action.command, action.args, {
-				inherit: true,
-				errorCode: "NEEDS_USER_ACTION"
-			});
-			throw setupError("NEEDS_USER_ACTION", "Xcode Command Line Tools 安装窗口已打开；请完成安装后重新运行此脚本。", { restartRequired: true });
-		}
-		if (action.id === "msvc" && context.platform === "win32") {
-			await installVisualStudioBuildTools(context);
-			context.ui.update("toolchain", "running", "Visual Studio 安装完成，准备捕获开发环境");
-			continue;
-		}
-		const command = action.command === "brew" ? context.packageManager.command : action.command;
-		await runExternal(context, command, action.args, {
-			inherit: true,
-			timeMs: 12e5,
-			errorMessage: `${action.description}失败：${commandText(command, action.args)}`
-		});
-	}
-	await refreshPlatformEnvironment(context);
-	context.nodeCommand = await resolveExecutable(context, "node");
-	return plan;
-}
-async function inspectContextHost(context) {
-	context.host = await inspectHost({
-		platform: context.platform,
-		architecture: context.architecture,
-		env: context.env,
-		nodeCommand: context.nodeCommand,
-		runner: context.runner
-	});
-	return context.host;
-}
-async function ensureToolchain(context) {
-	await installSystemTools(context);
-	await ensurePnpm(context);
-	await refreshPlatformEnvironment(context);
-	await inspectContextHost(context);
-	const evaluation = evaluateProfile(context.profile, context.host.tools);
-	context.evaluation = evaluation;
-	if (!evaluation.ok) throw setupError("ENVIRONMENT_NOT_READY", `环境检查未通过：${evaluation.issues.join("；")}。请根据提示补齐工具后重试。`, {
-		evaluation,
-		host: serializeHost(context.host)
-	});
-	return evaluation;
-}
-async function ensureRepository(context) {
-	let state = await inspectRepository(context.repoDir, {
-		runner: context.runner,
-		env: context.env
-	});
-	state.updateRepo = context.options.updateRepo;
-	assertRepositorySafe(state);
-	if (state.valid) {
-		if (context.options.updateRepo) {
-			if (!state.git) throw setupError("REPOSITORY_INVALID", "--update-repo 要求目标是 Git 仓库；当前目录缺少 .git。", { path: context.repoDir });
-			await runExternal(context, "git", ["pull", "--ff-only"], {
-				stage: "repository",
-				timeMs: 12e4,
-				errorCode: "REPOSITORY_UPDATE_FAILED",
-				errorMessage: "仓库更新失败；未执行强制覆盖，请检查网络和远端分支。"
-			});
-			state = await inspectRepository(context.repoDir, {
-				runner: context.runner,
-				env: context.env
-			});
-		}
-		context.repository = state;
-		return state;
-	}
-	if (context.options.checkOnly) throw setupError("REPOSITORY_MISSING", `未找到有效的 DSA Mastery 仓库：${context.repoDir}`, { path: context.repoDir });
-	await mkdir(path.dirname(context.repoDir), { recursive: true });
-	await runExternal(context, "git", [
-		"clone",
-		context.options.repoUrl,
-		context.repoDir
-	], {
-		stage: "repository",
-		timeMs: 12e5,
-		errorCode: "REPOSITORY_UPDATE_FAILED",
-		errorMessage: `仓库 clone 失败：${context.options.repoUrl}`
-	});
-	state = await inspectRepository(context.repoDir, {
-		runner: context.runner,
-		env: context.env
-	});
-	if (!state.valid) throw setupError("REPOSITORY_INVALID", `clone 完成但目标不是有效的 DSA Mastery 仓库：${context.repoDir}`);
-	context.repository = state;
-	return state;
-}
 async function installDependencies(context) {
 	await runExternal(context, context.pnpmCommand ?? "pnpm", ["install", "--frozen-lockfile"], {
 		stage: "dependencies",
@@ -2016,247 +2327,6 @@ async function askInstallChoices(options, io) {
 		...selected
 	};
 }
-async function askRepositoryUpdate(options, { io, cwd, runner, env }) {
-	if (!(!options.nonInteractive && !options.json && !options.checkOnly && options.ui !== "plain" && Boolean(io.input?.isTTY && io.output?.isTTY)) || options.updateRepo) return options;
-	const repositoryDir = resolveRepositoryDir({
-		cwd,
-		repoDir: options.repoDir
-	});
-	const state = await inspectRepository(repositoryDir, {
-		runner,
-		env
-	});
-	if (!state.valid || !state.git || state.dirty) return options;
-	const answer = (await promptLine(`发现已有干净仓库 ${repositoryDir}，是否执行 git pull --ff-only？[y/N]：`, io.input, io.output)).toLowerCase();
-	if ([
-		"y",
-		"yes",
-		"是"
-	].includes(answer)) return {
-		...options,
-		updateRepo: true
-	};
-	return options;
-}
-async function runLabJson(context, args, label) {
-	const result = await runWithRunner(context, context.nodeCommand ?? process.execPath, [
-		"packages/lab-cli/dist/cli.js",
-		...args,
-		"--json",
-		"--no-color"
-	], {
-		cwd: context.repoDir,
-		timeMs: 6e5,
-		outputKb: 8192
-	});
-	recordCommand(context, context.nodeCommand ?? process.execPath, [
-		"packages/lab-cli/dist/cli.js",
-		...args,
-		"--json",
-		"--no-color"
-	], result);
-	let report;
-	try {
-		report = JSON.parse(result.stdout);
-	} catch {
-		throw setupError("SMOKE_FAILED", `${label} 未返回可解析的 JSON 报告。`, { result });
-	}
-	if (resultFailed(result) || report.ok !== true) throw setupError("SMOKE_FAILED", `${label} 未通过；请查看报告或日志中的诊断。`, {
-		report,
-		result
-	});
-	return report;
-}
-async function runSmoke(context) {
-	if (context.profile === "runtime") {
-		context.smoke = [];
-		return context.smoke;
-	}
-	const program = path.join(context.repoDir, "labs", "chapter-01", "exercise", "E-01-01-sequential-list-deduplication");
-	const results = [{
-		label: "Program doctor",
-		report: await runLabJson(context, ["doctor", program], "Program doctor")
-	}, {
-		label: "Program reference sample",
-		report: await runLabJson(context, [
-			"run",
-			program,
-			"--target",
-			"solution",
-			"--case",
-			"001-sample"
-		], "Program reference sample")
-	}];
-	if (context.profile === "full") {
-		const project = path.join(context.repoDir, "labs", "chapter-08", "project", "P-08-01-avl-tree-rotations");
-		results.push({
-			label: "Project doctor",
-			report: await runLabJson(context, ["doctor", project], "Project doctor")
-		});
-		results.push({
-			label: "Project reference CTest",
-			report: await runLabJson(context, [
-				"run",
-				project,
-				"--target",
-				"solution",
-				"--task",
-				"avl"
-			], "Project reference CTest")
-		});
-	}
-	context.smoke = results;
-	return results;
-}
-async function detectVSCode(context) {
-	if (await commandAvailable(context, "code", ["--version"])) return {
-		found: true,
-		inPath: true
-	};
-	if (context.platform === "darwin") for (const application of ["/Applications/Visual Studio Code.app", path.join(os.homedir(), "Applications/Visual Studio Code.app")]) {
-		const binDir = path.join(application, "Contents/Resources/app/bin");
-		if (!await pathExists(path.join(binDir, "code"))) continue;
-		context.env.PATH = prependPath(context.env.PATH, [binDir], ":");
-		if (await commandAvailable(context, "code", ["--version"])) return {
-			found: true,
-			inPath: false,
-			path: binDir
-		};
-	}
-	if (context.platform !== "win32") return { found: false };
-	try {
-		const { execFileSync } = await import("node:child_process");
-		const candidates = execFileSync("where.exe", ["code"], {
-			encoding: "utf8",
-			timeout: 5e3,
-			stdio: [
-				"ignore",
-				"pipe",
-				"ignore"
-			],
-			env: process.env
-		}).split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
-		const codeCmd = candidates.find((p) => /\.cmd$/i.test(p)) ?? candidates.find((p) => /\.exe$/i.test(p)) ?? candidates[0];
-		if (codeCmd !== void 0 && await pathExists(codeCmd)) {
-			const binDir = path.dirname(codeCmd);
-			context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
-			if (await commandAvailable(context, "code", ["--version"])) return {
-				found: true,
-				inPath: false,
-				path: binDir
-			};
-		}
-	} catch {}
-	const standardDirs = [];
-	if (context.env.LOCALAPPDATA !== void 0) standardDirs.push(path.join(context.env.LOCALAPPDATA, "Programs", "Microsoft VS Code", "bin"));
-	if (context.env.ProgramFiles !== void 0) standardDirs.push(path.join(context.env.ProgramFiles, "Microsoft VS Code", "bin"));
-	if (context.env["ProgramFiles(x86)"] !== void 0) standardDirs.push(path.join(context.env["ProgramFiles(x86)"], "Microsoft VS Code", "bin"));
-	for (const binDir of standardDirs) if (await pathExists(path.join(binDir, "code.cmd"))) {
-		context.env.PATH = prependPath(context.env.PATH, [binDir], ";");
-		if (await commandAvailable(context, "code", ["--version"])) return {
-			found: true,
-			inPath: false,
-			path: binDir
-		};
-	}
-	return { found: false };
-}
-async function installIde(context) {
-	if (context.options.skipVscode || !context.options.installVscode) return {
-		status: "skipped",
-		message: "未选择 VS Code"
-	};
-	const detected = await detectVSCode(context);
-	if (detected.found && !detected.inPath) context.ui.update("ide", "running", `检测到已安装 VS Code：${detected.path}`);
-	let code = await commandAvailable(context, "code", ["--version"]);
-	if (!code) {
-		if (context.platform === "darwin") {
-			await ensureHomebrew(context);
-			await runExternal(context, context.packageManager.command, [
-				"install",
-				"--cask",
-				"visual-studio-code"
-			], {
-				stage: "ide",
-				inherit: true,
-				timeMs: 12e5
-			});
-		} else if (context.platform === "win32") {
-			if (!context.packageManager) context.packageManager = await detectPackageManager(context);
-			if (!context.packageManager) return {
-				status: "warning",
-				message: "未找到 winget，跳过 VS Code"
-			};
-			const install = wingetInstall("Microsoft.VisualStudioCode");
-			await runExternal(context, install.command, install.args, {
-				stage: "ide",
-				inherit: true,
-				timeMs: 12e5
-			});
-		}
-		await refreshPlatformEnvironment(context);
-		code = await commandAvailable(context, "code", ["--version"]);
-	}
-	if (!code) return {
-		status: "warning",
-		message: "VS Code 安装后当前终端仍找不到 code，请打开新终端"
-	};
-	const extensions = planIdeExtensions(context.options, context.profile);
-	const failures = [];
-	for (const extension of extensions) {
-		const result = await runWithRunner(context, "code", [
-			"--install-extension",
-			extension,
-			"--force"
-		], {
-			timeMs: 12e4,
-			outputKb: 2048
-		});
-		recordCommand(context, "code", [
-			"--install-extension",
-			extension,
-			"--force"
-		], result);
-		if (resultFailed(result)) failures.push(extension);
-	}
-	return failures.length ? {
-		status: "warning",
-		message: `扩展安装失败：${failures.join(", ")}`
-	} : {
-		status: "success",
-		message: extensions.length ? "VS Code 与所选扩展已准备" : "VS Code 已准备"
-	};
-}
-function serializeHost(host) {
-	if (!host) return void 0;
-	return {
-		platform: host.platform,
-		architecture: host.architecture,
-		compilerReady: host.compilerReady,
-		cmakeReady: host.cmakeReady,
-		runtimeReady: host.runtimeReady,
-		tools: host.tools,
-		msvc: {
-			initialized: host.msvc?.initialized,
-			installationPath: host.msvc?.installationPath,
-			developerCommand: host.msvc?.developerCommand,
-			error: host.msvc?.error
-		}
-	};
-}
-function summarizeReport(report) {
-	const lines = [
-		"",
-		`DSA Mastery 环境配置：${report.ok ? "成功" : "未完成"}`,
-		`Profile：${report.profile} · 平台：${report.platform}/${report.architecture}`
-	];
-	if (report.selectionLabels !== void 0 && report.selectionLabels.length > 0) lines.push(`已选择：${report.selectionLabels.join("、")}`);
-	for (const stage of report.stages ?? []) lines.push(`${stage.status === "success" ? "✓" : stage.status === "warning" ? "⚠" : stage.status === "skipped" ? "–" : stage.status === "failed" ? "✗" : "·"} ${stage.id}：${stage.message ?? ""}`);
-	if (report.repository !== void 0) lines.push(`仓库：${report.repository.path}`);
-	if (report.logPath !== void 0) lines.push(`日志：${report.logPath}`);
-	if (report.error?.nextAction !== void 0) lines.push(`下一步：${report.error.nextAction}`);
-	return lines.join("\n");
-}
 function createSilentProgressUI() {
 	const stages = SETUP_STAGES.map((id) => ({
 		id,
@@ -2279,53 +2349,6 @@ function createSilentProgressUI() {
 		finish() {}
 	};
 }
-async function writeFailureLog(context, report) {
-	if (context.options.checkOnly) return void 0;
-	const home = context.env.HOME ?? context.env.USERPROFILE ?? os.homedir();
-	const directory = context.platform === "darwin" ? path.join(home, "Library", "Logs", "DSA-Mastery", "setup") : context.platform === "win32" ? path.join(context.env.LOCALAPPDATA ?? path.join(home, "AppData", "Local"), "DSA-Mastery", "setup") : path.join(home, ".local", "state", "DSA-Mastery", "setup");
-	await mkdir(directory, { recursive: true });
-	const file = path.join(directory, `setup-${(/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-")}.log`);
-	const lines = [
-		`DSA Mastery setup ${(/* @__PURE__ */ new Date()).toISOString()}`,
-		`profile=${context.profile}`,
-		`platform=${context.platform}/${context.architecture}`,
-		`repo=${context.repoDir}`,
-		`error=${report.error?.code ?? "unknown"}: ${report.error?.message ?? "unknown"}`,
-		""
-	];
-	for (const command of context.commands) {
-		lines.push(`$ ${commandText(command.command, command.args)}`);
-		if (command.stdout) lines.push(command.stdout.trimEnd());
-		if (command.stderr) lines.push(command.stderr.trimEnd());
-		lines.push("");
-	}
-	await writeFile(file, `${lines.join("\n")}\n`, "utf8");
-	return file;
-}
-async function runCheckOnly(context) {
-	const evaluation = evaluateProfile(context.profile, context.host.tools);
-	context.evaluation = evaluation;
-	const repository = await inspectRepository(context.repoDir, {
-		runner: context.runner,
-		env: context.env
-	});
-	context.repository = repository;
-	const issues = [...evaluation.issues];
-	if (!repository.valid) issues.push(`有效仓库：${context.repoDir}`);
-	if (issues.length) {
-		evaluation.ok = false;
-		evaluation.issues = issues;
-		throw setupError("ENVIRONMENT_NOT_READY", `只读检查未通过：${issues.join("；")}`, {
-			evaluation,
-			host: serializeHost(context.host),
-			repository
-		});
-	}
-	return {
-		evaluation,
-		repository
-	};
-}
 async function executeStage(context, id, action) {
 	context.currentStage = id;
 	context.ui.update(id, "running", "准备中");
@@ -2333,11 +2356,6 @@ async function executeStage(context, id, action) {
 	const outcome = result;
 	context.ui.update(id, outcome?.status ?? "success", outcome?.message ?? "完成");
 	return result;
-}
-function normalizeError(rawError) {
-	if (rawError instanceof SetupError) return rawError;
-	const error = rawError;
-	return setupError(error?.code === "ARGUMENT_INVALID" ? "ARGUMENT_INVALID" : "INSTALLER_FAILED", error?.message ?? String(rawError), { cause: error?.stack });
 }
 async function runSetup(argv = [], dependencies = {}) {
 	if (process.platform === "win32") {
@@ -2569,4 +2587,4 @@ async function main() {
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) await main();
 //#endregion
-export { SETUP_EXIT, SETUP_STAGES, SetupError, assertRepositorySafe, inspectRepository, planIdeExtensions, planToolchainInstall, resolveRepositoryDir, runSetup };
+export { runSetup };

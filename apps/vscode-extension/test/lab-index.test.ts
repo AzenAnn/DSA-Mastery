@@ -1,18 +1,24 @@
 import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { expect, it } from "vitest";
-import { build } from "esbuild";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { build } from "esbuild";
+import { expect, it } from "vitest";
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-async function loadLabIndex(): Promise<typeof import("../src/labIndex.ts")> {
+async function loadLabIndex(): Promise<typeof import("../src/labs/discovery.ts")> {
   const buildRoot = await mkdtemp(path.join(tmpdir(), "dsa-lab-index-build-"));
   const bundlePath = path.join(buildRoot, "labIndex.cjs");
   try {
-    await build({ entryPoints: [path.join(packageRoot, "src/labIndex.ts")], bundle: true, platform: "node", format: "cjs", outfile: bundlePath });
-    return await import(pathToFileURL(bundlePath).href) as typeof import("../src/labIndex.ts");
+    await build({
+      entryPoints: [path.join(packageRoot, "src/labs/discovery.ts")],
+      bundle: true,
+      platform: "node",
+      format: "cjs",
+      outfile: bundlePath,
+    });
+    return (await import(pathToFileURL(bundlePath).href)) as typeof import("../src/labs/discovery.ts");
   } finally {
     // The imported CommonJS bundle is self-contained; its temporary directory can be removed
     // after loading so the test never leaves generated files in the repository.
@@ -61,28 +67,56 @@ it("discovers PR#122 category labs and keeps a legacy flat lab readable", async 
     await writeLab(
       repoRoot,
       "labs/chapter-01/theory/T-01-01-sequential-list-quiz",
-      { title: "Lab 01-T-01：顺序表选择题", description: "理论", order: 1, chapter: 1, chapterTitle: "线性表", labId: "01T01" },
+      {
+        title: "Lab 01-T-01：顺序表选择题",
+        description: "理论",
+        order: 1,
+        chapter: 1,
+        chapterTitle: "线性表",
+        labId: "01T01",
+      },
       quizManifest,
       { "quiz.json": quizData },
     );
     await writeLab(
       repoRoot,
       "labs/chapter-01/exercise/E-01-01-sequential-list",
-      { title: "Lab 01-E-01：顺序表练习", description: "练习", order: 2, chapter: 1, chapterTitle: "线性表", labId: "01E01" },
+      {
+        title: "Lab 01-E-01：顺序表练习",
+        description: "练习",
+        order: 2,
+        chapter: 1,
+        chapterTitle: "线性表",
+        labId: "01E01",
+      },
       programManifest,
       { "student/main.cpp": "int main() {}", "tests/cases.json": "[]" },
     );
     await writeLab(
       repoRoot,
       "labs/chapter-01/project/P-01-01-list-project",
-      { title: "Lab 01-P-01：顺序表项目", description: "项目", order: 3, chapter: 1, chapterTitle: "线性表", labId: "01P01" },
+      {
+        title: "Lab 01-P-01：顺序表项目",
+        description: "项目",
+        order: 3,
+        chapter: 1,
+        chapterTitle: "线性表",
+        labId: "01P01",
+      },
       programManifest,
       { "student/main.cpp": "int main() {}", "tests/cases.json": "[]" },
     );
     await writeLab(
       repoRoot,
       "labs/chapter-01/project/P-01-02-manual-review",
-      { title: "Lab 01-P-02：人工评审项目", description: "人工评审", order: 4, chapter: 1, chapterTitle: "线性表", labId: "01P02" },
+      {
+        title: "Lab 01-P-02：人工评审项目",
+        description: "人工评审",
+        order: 4,
+        chapter: 1,
+        chapterTitle: "线性表",
+        labId: "01P02",
+      },
       { type: "project", tasks: [{ id: "review", kind: "manual" }] },
     );
     await writeLab(
@@ -123,7 +157,14 @@ it("discovers project task metadata, cases, ctest names, and student files", asy
     await writeLab(
       repoRoot,
       "labs/chapter-01/project/P-01-02-workload-analyzer",
-      { title: "Lab 01-P-02：工作负载分析器", description: "项目", order: 2, chapter: 1, chapterTitle: "线性表", labId: "01P02" },
+      {
+        title: "Lab 01-P-02：工作负载分析器",
+        description: "项目",
+        order: 2,
+        chapter: 1,
+        chapterTitle: "线性表",
+        labId: "01P02",
+      },
       {
         schemaVersion: 1,
         type: "project",
@@ -157,7 +198,12 @@ it("discovers project task metadata, cases, ctest names, and student files", asy
           schemaVersion: 1,
           id: "linked",
           kind: "ctest",
-          ctest: { tests: [{ name: "linked_basic", points: 50 }, { name: "linked_edge", points: 50 }] },
+          ctest: {
+            tests: [
+              { name: "linked_basic", points: 50 },
+              { name: "linked_edge", points: 50 },
+            ],
+          },
         }),
         "tasks/linked/student/linked.cpp": "// student implementation\n",
         "tasks/report/task.json": JSON.stringify({
@@ -184,7 +230,10 @@ it("discovers project task metadata, cases, ctest names, and student files", asy
       ["report", "manual", 20],
     ]);
     expect(project.tasks[0]?.cases?.map((testCase) => testCase.id)).toStrictEqual(["small", "large"]);
-    expect(project.tasks[1]?.ctestTests?.map((testCase) => testCase.name)).toStrictEqual(["linked_basic", "linked_edge"]);
+    expect(project.tasks[1]?.ctestTests?.map((testCase) => testCase.name)).toStrictEqual([
+      "linked_basic",
+      "linked_edge",
+    ]);
     expect(project.tasks[2]?.checklist).toStrictEqual(["复杂度分析", "实验报告"]);
     expect(project.studentFiles.map((file) => file.relativePath).sort()).toStrictEqual([
       "tasks/linked/student/linked.cpp",
@@ -218,7 +267,11 @@ it("does not follow a project student directory symlink", async () => {
       { "tasks/review/task.json": JSON.stringify({ schemaVersion: 1, kind: "manual", checklist: ["检查"] }) },
     );
     await writeFile(path.join(outsideRoot, "secret.cpp"), "should not be discovered\n", "utf8");
-    await symlink(outsideRoot, path.join(repoRoot, "labs/chapter-01/project/P-01-03-symlink/tasks/review/student"), "dir");
+    await symlink(
+      outsideRoot,
+      path.join(repoRoot, "labs/chapter-01/project/P-01-03-symlink/tasks/review/student"),
+      "dir",
+    );
 
     const labs = (await discoverProgramLabs(repoRoot)).flatMap((chapter) => chapter.labs);
     const project = labs.find((lab) => lab.id === "01P03");
@@ -254,10 +307,13 @@ it("discovers all real Project labs in the repository", async () => {
 
 it("discovers 31 renumbered Ch4 exercises with legacy aliases in final order", async () => {
   const { discoverProgramLabs } = await loadLabIndex();
-  const { CH04_RENUMBERING, ch04IdAliases } = await import("../src/ch04Migration.ts");
+  const { CH04_RENUMBERING, ch04IdAliases } = await import("../src/progress/migrations/ch04.ts");
   const exercises = (await discoverProgramLabs(path.resolve(packageRoot, "../..")))
-    .flatMap((chapter) => chapter.labs).filter((lab) => lab.chapter === 4 && lab.type === "program");
-  expect(exercises.map((lab) => lab.id)).toStrictEqual(Array.from({ length: 31 }, (_, i) => `04E${String(i + 1).padStart(2, "0")}`));
+    .flatMap((chapter) => chapter.labs)
+    .filter((lab) => lab.chapter === 4 && lab.type === "program");
+  expect(exercises.map((lab) => lab.id)).toStrictEqual(
+    Array.from({ length: 31 }, (_, i) => `04E${String(i + 1).padStart(2, "0")}`),
+  );
   expect(ch04IdAliases(exercises, []).length).toBe(17);
   for (const [old, next, slug] of CH04_RENUMBERING) {
     const lab = exercises[next - 1];
@@ -274,7 +330,14 @@ it("prefers the categorized lab when a transition checkout contains its old flat
     await writeLab(
       repoRoot,
       "labs/chapter-01/exercise/E-01-01-sequential-list",
-      { title: "Lab 01-E-01：顺序表练习", description: "新目录", order: 6, chapter: 1, chapterTitle: "线性表", labId: "01E01" },
+      {
+        title: "Lab 01-E-01：顺序表练习",
+        description: "新目录",
+        order: 6,
+        chapter: 1,
+        chapterTitle: "线性表",
+        labId: "01E01",
+      },
       programManifest,
       { "student/main.cpp": "int main() {}", "tests/cases.json": "[]" },
     );

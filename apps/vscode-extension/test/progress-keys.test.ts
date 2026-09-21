@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { remapEventKeys, remapRecordKeys } from "../src/progressKeys.ts";
+import { remapEventKeys, remapRecordKeys } from "../src/progress/keys.ts";
 
 it("merges legacy and current directory records under one stable ID", () => {
   const source = {

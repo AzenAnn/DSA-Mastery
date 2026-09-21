@@ -1,4 +1,4 @@
-import type { ActivityEvent, ChapterBar } from "../../apps/vscode-extension/src/stats.ts";
+import type { ActivityEvent, ChapterBar } from "../../apps/vscode-extension/src/progress/stats.ts";
 import type { IncomingMessage, Server, ServerResponse } from "node:http";
 import type { Browser, Locator, Page } from "playwright";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { chromium } from "playwright";
 import { afterAll, beforeAll, it } from "vitest";
-import { renderStatsDocument } from "../../apps/vscode-extension/src/statsView.ts";
+import { renderStatsDocument } from "../../apps/vscode-extension/src/views/stats-view.ts";
 import { expect } from "../support/pw-expect.ts";
 import { REPO_ROOT } from "../support/repo.ts";
 

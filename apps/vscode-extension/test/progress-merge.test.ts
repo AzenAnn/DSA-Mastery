@@ -1,6 +1,6 @@
-import type { LabProgress } from "../src/progress.ts";
+import type { LabProgress } from "../src/progress/tracker.ts";
 import { expect, it } from "vitest";
-import { mergeLabProgress, mergeQuizProgress } from "../src/progressMerge.ts";
+import { mergeLabProgress, mergeQuizProgress } from "../src/progress/merge.ts";
 
 it("merges code progress without losing the latest submission or history", () => {
   const stable: LabProgress = {
@@ -15,14 +15,16 @@ it("merges code progress without losing the latest submission or history", () =>
       maxScore: 100,
       cases: [],
     },
-    history: [{
-      id: "stable-submit",
-      at: "2026-08-01T10:00:00.000Z",
-      verdict: "WA",
-      score: 60,
-      maxScore: 100,
-      snapshot: "submissions/01E01/stable-submit/main.cpp",
-    }],
+    history: [
+      {
+        id: "stable-submit",
+        at: "2026-08-01T10:00:00.000Z",
+        verdict: "WA",
+        score: 60,
+        maxScore: 100,
+        snapshot: "submissions/01E01/stable-submit/main.cpp",
+      },
+    ],
   };
   const legacy: LabProgress = {
     passed: true,
@@ -37,14 +39,16 @@ it("merges code progress without losing the latest submission or history", () =>
       maxScore: 100,
       cases: [],
     },
-    history: [{
-      id: "legacy-submit",
-      at: "2026-08-02T10:00:00.000Z",
-      verdict: "AC",
-      score: 100,
-      maxScore: 100,
-      snapshot: "submissions/lab-01-06-sequential-list/legacy-submit/main.cpp",
-    }],
+    history: [
+      {
+        id: "legacy-submit",
+        at: "2026-08-02T10:00:00.000Z",
+        verdict: "AC",
+        score: 100,
+        maxScore: 100,
+        snapshot: "submissions/lab-01-06-sequential-list/legacy-submit/main.cpp",
+      },
+    ],
   };
 
   const merged = mergeLabProgress(stable, legacy);

@@ -6,7 +6,152 @@ import { Buffer } from "node:buffer";
 import { execFileSync, spawn } from "node:child_process";
 import { stripVTControlCharacters } from "node:util";
 import { createHash } from "node:crypto";
-//#region ../lab-core/src/compare.ts
+//#region ../lab-core/src/errors.ts
+const EXIT = {
+	OK: 0,
+	SCORE_NOT_FULL: 1,
+	TOOL_ERROR: 2
+};
+var LabError = class extends Error {
+	code;
+	details;
+	constructor(code, message, details) {
+		super(message);
+		this.name = "LabError";
+		this.code = code;
+		this.details = details;
+	}
+};
+function asLabError(error) {
+	if (error instanceof LabError) return error;
+	return new LabError("LAB_INTERNAL", error instanceof Error ? error.message : String(error));
+}
+//#endregion
+//#region ../lab-core/src/identity/lab-id.ts
+function padMinimum(value, width = 2) {
+	return String(value).padStart(width, "0");
+}
+function integer(value, label, minimum = 0) {
+	const parsed = Number(value);
+	if (!Number.isInteger(parsed) || parsed < minimum) throw new LabError("ARGUMENT_INVALID", `${label} 必须是大于等于 ${minimum} 的整数`);
+	return parsed;
+}
+function formatLabId(chapter, tag, sequence) {
+	const normalizedChapter = integer(chapter, "章节", 0);
+	const normalizedSequence = integer(sequence, "Lab 类型内序号", 1);
+	const normalizedTag = String(tag ?? "").toUpperCase();
+	if (!(/* @__PURE__ */ new Set([
+		"T",
+		"E",
+		"P"
+	])).has(normalizedTag)) throw new LabError("LAB_ID_INVALID", "Lab 类型标签必须是 T、E 或 P");
+	if (normalizedChapter > 99) throw new LabError("LAB_ID_INVALID", "Lab 章节必须在 0～99 之间");
+	return `${padMinimum(normalizedChapter)}${normalizedTag}${padMinimum(normalizedSequence)}`;
+}
+function parseLabId(value) {
+	const source = String(value ?? "").trim();
+	const match = source.match(/^(?:lab-?)?(\d{1,2})-?([tep])-?(\d+)$/i);
+	if (!match) throw new LabError("LAB_ID_INVALID", `Lab ID 格式无效：${source || "(empty)"}；示例：02T03、02T3、02-T-03`);
+	const chapter = Number(match[1]);
+	const tag = match[2].toUpperCase();
+	const sequence = Number(match[3]);
+	if (!Number.isInteger(sequence) || sequence < 1) throw new LabError("LAB_ID_INVALID", "Lab 类型内序号必须从 1 开始");
+	return {
+		id: formatLabId(chapter, tag, sequence),
+		chapter,
+		tag,
+		sequence
+	};
+}
+function normalizeLabId(value) {
+	return parseLabId(value).id;
+}
+function formatLabDocumentTitlePrefix(value) {
+	const { chapter, tag, sequence } = parseLabId(value);
+	return `Lab ${padMinimum(chapter)}-${tag}-${padMinimum(sequence)}：`;
+}
+//#endregion
+//#region ../lab-core/src/identity/frontmatter.ts
+const BLOCK = /^---[^\S\r\n]*\r?\n([\s\S]*?)\r?\n---\s*/;
+/**
+* 课程 frontmatter 只用扁平的 `key: value`，所以这里不引入 YAML 解析器 —— 判题内核要保持零第三方依赖。
+* 需要数组或嵌套值的站点索引另行使用 gray-matter。
+*/
+function parseFrontmatter(source, label = "README.md") {
+	const match = source.match(BLOCK);
+	if (!match) throw new LabError("FRONTMATTER_INVALID", `${label}: 缺少 YAML frontmatter`);
+	const data = {};
+	for (const line of match[1].split(/\r?\n/)) {
+		const separator = line.indexOf(":");
+		if (separator === -1) continue;
+		data[line.slice(0, separator).trim()] = line.slice(separator + 1).trim().replace(/^(["'])(.*)\1$/, "$2");
+	}
+	return {
+		data,
+		body: source.slice(match[0].length)
+	};
+}
+//#endregion
+//#region ../lab-core/src/identity/layout.ts
+const LAB_TYPES = /* @__PURE__ */ new Set([
+	"quiz",
+	"program",
+	"project"
+]);
+const LAB_CATEGORIES = [
+	"theory",
+	"exercise",
+	"project"
+];
+const LAB_TYPE_TO_TAG = {
+	quiz: "T",
+	program: "E",
+	project: "P"
+};
+const LAB_TYPE_TO_CATEGORY = {
+	quiz: "theory",
+	program: "exercise",
+	project: "project"
+};
+const LAB_CATEGORY_TO_TAG = {
+	theory: "T",
+	exercise: "E",
+	project: "P"
+};
+const LAB_DIRECTORY_PATTERN = /^([TEP])-(\d{2})-(\d{2,})-([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+const LAB_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const CHAPTER_DIRECTORY_PATTERN = /^chapter-(\d{2})$/;
+function isLabType(value) {
+	return typeof value === "string" && LAB_TYPES.has(value);
+}
+function tagForType(type) {
+	if (!isLabType(type)) throw new LabError("ARGUMENT_INVALID", "--type 必须是 quiz、program 或 project");
+	return LAB_TYPE_TO_TAG[type];
+}
+function categoryForType(type) {
+	return LAB_TYPE_TO_CATEGORY[type];
+}
+function tagForCategory(category) {
+	return LAB_CATEGORY_TO_TAG[category];
+}
+function formatLabDirectoryName(value, slug) {
+	const identity = parseLabId(value);
+	const normalizedSlug = String(slug ?? "").trim();
+	if (!LAB_SLUG_PATTERN.test(normalizedSlug)) throw new LabError("ARGUMENT_INVALID", "Lab slug 必须是小写 kebab-case");
+	return `${identity.tag}-${String(identity.chapter).padStart(2, "0")}-${String(identity.sequence).padStart(2, "0")}-${normalizedSlug}`;
+}
+function parseLabDirectoryName(value) {
+	const source = String(value ?? "").trim();
+	const match = source.match(LAB_DIRECTORY_PATTERN);
+	if (!match) throw new LabError("LAB_PATH_INVALID", `Lab 目录格式无效：${source || "(empty)"}；应为 X-CC-SS-kebab-slug`);
+	return {
+		...parseLabId(formatLabId(Number(match[2]), match[1], Number(match[3]))),
+		slug: match[4],
+		directoryName: source
+	};
+}
+//#endregion
+//#region ../lab-core/src/manifest/compare.ts
 function normalizeNewlines(value) {
 	return value.replace(/\r\n?/g, "\n");
 }
@@ -80,152 +225,7 @@ function compareOutput(expected, actual, config = { mode: "tokens" }) {
 	return tokenCompare(expected, actual, config);
 }
 //#endregion
-//#region ../lab-core/src/errors.ts
-const EXIT = {
-	OK: 0,
-	SCORE_NOT_FULL: 1,
-	TOOL_ERROR: 2
-};
-var LabError = class extends Error {
-	code;
-	details;
-	constructor(code, message, details) {
-		super(message);
-		this.name = "LabError";
-		this.code = code;
-		this.details = details;
-	}
-};
-function asLabError(error) {
-	if (error instanceof LabError) return error;
-	return new LabError("LAB_INTERNAL", error instanceof Error ? error.message : String(error));
-}
-//#endregion
-//#region ../lab-core/src/lab-id.ts
-function padMinimum(value, width = 2) {
-	return String(value).padStart(width, "0");
-}
-function integer(value, label, minimum = 0) {
-	const parsed = Number(value);
-	if (!Number.isInteger(parsed) || parsed < minimum) throw new LabError("ARGUMENT_INVALID", `${label} 必须是大于等于 ${minimum} 的整数`);
-	return parsed;
-}
-function formatLabId(chapter, tag, sequence) {
-	const normalizedChapter = integer(chapter, "章节", 0);
-	const normalizedSequence = integer(sequence, "Lab 类型内序号", 1);
-	const normalizedTag = String(tag ?? "").toUpperCase();
-	if (!(/* @__PURE__ */ new Set([
-		"T",
-		"E",
-		"P"
-	])).has(normalizedTag)) throw new LabError("LAB_ID_INVALID", "Lab 类型标签必须是 T、E 或 P");
-	if (normalizedChapter > 99) throw new LabError("LAB_ID_INVALID", "Lab 章节必须在 0～99 之间");
-	return `${padMinimum(normalizedChapter)}${normalizedTag}${padMinimum(normalizedSequence)}`;
-}
-function parseLabId(value) {
-	const source = String(value ?? "").trim();
-	const match = source.match(/^(?:lab-?)?(\d{1,2})-?([tep])-?(\d+)$/i);
-	if (!match) throw new LabError("LAB_ID_INVALID", `Lab ID 格式无效：${source || "(empty)"}；示例：02T03、02T3、02-T-03`);
-	const chapter = Number(match[1]);
-	const tag = match[2].toUpperCase();
-	const sequence = Number(match[3]);
-	if (!Number.isInteger(sequence) || sequence < 1) throw new LabError("LAB_ID_INVALID", "Lab 类型内序号必须从 1 开始");
-	return {
-		id: formatLabId(chapter, tag, sequence),
-		chapter,
-		tag,
-		sequence
-	};
-}
-function normalizeLabId(value) {
-	return parseLabId(value).id;
-}
-function formatLabDocumentTitlePrefix(value) {
-	const { chapter, tag, sequence } = parseLabId(value);
-	return `Lab ${padMinimum(chapter)}-${tag}-${padMinimum(sequence)}：`;
-}
-//#endregion
-//#region ../lab-core/src/frontmatter.ts
-const BLOCK = /^---[^\S\r\n]*\r?\n([\s\S]*?)\r?\n---\s*/;
-/**
-* 课程 frontmatter 只用扁平的 `key: value`，所以这里不引入 YAML 解析器 —— 判题内核要保持零第三方依赖。
-* 需要数组或嵌套值的站点索引另行使用 gray-matter。
-*/
-function parseFrontmatter(source, label = "README.md") {
-	const match = source.match(BLOCK);
-	if (!match) throw new LabError("FRONTMATTER_INVALID", `${label}: 缺少 YAML frontmatter`);
-	const data = {};
-	for (const line of match[1].split(/\r?\n/)) {
-		const separator = line.indexOf(":");
-		if (separator === -1) continue;
-		data[line.slice(0, separator).trim()] = line.slice(separator + 1).trim().replace(/^(["'])(.*)\1$/, "$2");
-	}
-	return {
-		data,
-		body: source.slice(match[0].length)
-	};
-}
-//#endregion
-//#region ../lab-core/src/layout.ts
-const LAB_TYPES = /* @__PURE__ */ new Set([
-	"quiz",
-	"program",
-	"project"
-]);
-const LAB_CATEGORIES = [
-	"theory",
-	"exercise",
-	"project"
-];
-const LAB_TYPE_TO_TAG = {
-	quiz: "T",
-	program: "E",
-	project: "P"
-};
-const LAB_TYPE_TO_CATEGORY = {
-	quiz: "theory",
-	program: "exercise",
-	project: "project"
-};
-const LAB_CATEGORY_TO_TAG = {
-	theory: "T",
-	exercise: "E",
-	project: "P"
-};
-const LAB_DIRECTORY_PATTERN = /^([TEP])-(\d{2})-(\d{2,})-([a-z0-9]+(?:-[a-z0-9]+)*)$/;
-const LAB_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const CHAPTER_DIRECTORY_PATTERN = /^chapter-(\d{2})$/;
-function isLabType(value) {
-	return typeof value === "string" && LAB_TYPES.has(value);
-}
-function tagForType(type) {
-	if (!isLabType(type)) throw new LabError("ARGUMENT_INVALID", "--type 必须是 quiz、program 或 project");
-	return LAB_TYPE_TO_TAG[type];
-}
-function categoryForType(type) {
-	return LAB_TYPE_TO_CATEGORY[type];
-}
-function tagForCategory(category) {
-	return LAB_CATEGORY_TO_TAG[category];
-}
-function formatLabDirectoryName(value, slug) {
-	const identity = parseLabId(value);
-	const normalizedSlug = String(slug ?? "").trim();
-	if (!LAB_SLUG_PATTERN.test(normalizedSlug)) throw new LabError("ARGUMENT_INVALID", "Lab slug 必须是小写 kebab-case");
-	return `${identity.tag}-${String(identity.chapter).padStart(2, "0")}-${String(identity.sequence).padStart(2, "0")}-${normalizedSlug}`;
-}
-function parseLabDirectoryName(value) {
-	const source = String(value ?? "").trim();
-	const match = source.match(LAB_DIRECTORY_PATTERN);
-	if (!match) throw new LabError("LAB_PATH_INVALID", `Lab 目录格式无效：${source || "(empty)"}；应为 X-CC-SS-kebab-slug`);
-	return {
-		...parseLabId(formatLabId(Number(match[2]), match[1], Number(match[3]))),
-		slug: match[4],
-		directoryName: source
-	};
-}
-//#endregion
-//#region ../lab-core/src/makefile.ts
+//#region ../lab-core/src/manifest/makefile.ts
 /** 仓库内 Lab 的薄 Makefile：`../../../../` 对应 labs/chapter-NN/<category>/<lab>/ 的深度。 */
 const THIN_MAKEFILE = "LAB_DIR := $(CURDIR)\nREPO_ROOT := $(LAB_DIR)/../../../..\ninclude ../../../../packages/lab-cli/lab.mk\n";
 /** 学生包是自包含的：判题内核和 lab.mk 都躺在 Lab 目录里，不依赖仓库布局。 */
@@ -233,7 +233,7 @@ const STANDALONE_MAKEFILE = "LAB_DIR := $(CURDIR)\nREPO_ROOT := $(LAB_DIR)\nLAB_
 /** 学生包里判题内核的文件名，`STANDALONE_MAKEFILE` 与打包逻辑共用。 */
 const STANDALONE_CLI_FILENAME = "lab-cli.js";
 //#endregion
-//#region ../lab-core/src/schema.ts
+//#region ../lab-core/src/manifest/schema.ts
 function isRecord(value) {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -280,7 +280,7 @@ function requireStringArray(value, label, code = "SCHEMA_INVALID") {
 	return value;
 }
 //#endregion
-//#region ../lab-core/src/quiz.ts
+//#region ../lab-core/src/manifest/quiz.ts
 const QUESTION_KEYS = /* @__PURE__ */ new Set([
 	"id",
 	"title",
@@ -368,6 +368,10 @@ function validateQuizReadme(source, label = "README.md") {
 	if (STATIC_ANSWER_PATTERNS.some((pattern) => pattern.test(source))) throw new LabError("QUIZ_INVALID", `${label} 不得重复维护静态题目或折叠答案`);
 	return { mountCount };
 }
+//#endregion
+//#region ../lab-core/src/manifest/manifest.ts
+const LAB_SCHEMA_VERSION = 1;
+const JSON_REPORT_VERSION = 1;
 const COMPARE_MODES = /* @__PURE__ */ new Set([
 	"exact",
 	"tokens",
@@ -580,7 +584,7 @@ async function validateProject(labRoot, manifest) {
 			"ctest",
 			"checklist"
 		]), `${task.id}/task.json`);
-		if (config.schemaVersion !== 1) throw new LabError("SCHEMA_VERSION", `${task.id}/task.json 的 schemaVersion 必须是 1`);
+		if (config.schemaVersion !== LAB_SCHEMA_VERSION) throw new LabError("SCHEMA_VERSION", `${task.id}/task.json 的 schemaVersion 必须是 ${LAB_SCHEMA_VERSION}`);
 		if (config.kind !== task.kind) throw new LabError("TASK_KIND", `${task.id} 的顶层 kind 与 task.json 不一致`);
 		if (task.kind === "stdio") {
 			const targets = requireRecord(config.targets, `${task.id}.targets`);
@@ -627,7 +631,7 @@ async function loadLab(start = process.cwd()) {
 	const labId = labIdMatch ? parseLabId(labIdMatch[1]).id : void 0;
 	const manifest = requireRecord(await readJson(manifestPath, path.relative(process.cwd(), manifestPath) || "lab.json"), "lab.json");
 	if (!Number.isInteger(manifest.schemaVersion)) throw new LabError("SCHEMA_VERSION", "schemaVersion 必须是整数");
-	if (manifest.schemaVersion !== 1) throw new LabError("SCHEMA_VERSION", `不支持 schemaVersion ${String(manifest.schemaVersion)}；当前 CLI 仅支持 1`);
+	if (manifest.schemaVersion !== LAB_SCHEMA_VERSION) throw new LabError("SCHEMA_VERSION", `不支持 schemaVersion ${String(manifest.schemaVersion)}；当前 CLI 仅支持 ${LAB_SCHEMA_VERSION}`);
 	if (!isLabType(manifest.type)) throw new LabError("SCHEMA_INVALID", "type 必须是 quiz、program 或 project");
 	if (manifest.distribution !== void 0 && !["source", "student"].includes(manifest.distribution)) throw new LabError("SCHEMA_INVALID", "distribution 必须是 source 或 student");
 	const distribution = manifest.distribution;
@@ -715,7 +719,7 @@ async function loadLab(start = process.cwd()) {
 }
 function createReport(command, lab, data = {}) {
 	return {
-		reportVersion: 1,
+		reportVersion: JSON_REPORT_VERSION,
 		command,
 		ok: true,
 		lab: {
@@ -728,7 +732,7 @@ function createReport(command, lab, data = {}) {
 	};
 }
 //#endregion
-//#region ../lab-core/src/process.ts
+//#region ../lab-core/src/system/process.ts
 const WINDOWS_SCRIPT_EXT = /\.(?:cmd|bat|com)$/i;
 function resolveWindowsCommand(command, env) {
 	if (path.isAbsolute(command)) return command;
@@ -865,7 +869,7 @@ function runProcess(command, args, options = {}) {
 	});
 }
 //#endregion
-//#region ../lab-core/src/repo-root.ts
+//#region ../lab-core/src/system/repo-root.ts
 /**
 * 仓库根靠标记文件向上查找，而不是按目录层数倒推 —— 判题内核被打包进学生包后层数不再成立。
 * 学生包里没有仓库根，返回 undefined 由调用方决定是否报错。
@@ -948,7 +952,7 @@ function formatVersion(version) {
 	return version?.join(".") ?? "unknown";
 }
 //#endregion
-//#region ../lab-core/src/terminal.ts
+//#region ../lab-core/src/system/terminal.ts
 const ANSI = {
 	bold: 1,
 	dim: 2,
@@ -1033,319 +1037,126 @@ function createTheme(options = {}) {
 	};
 }
 //#endregion
-//#region ../lab-runner/src/toolchain.ts
-function parseEnvironmentBlock(source, baseEnvironment = {}) {
-	const environment = { ...baseEnvironment };
-	for (const rawLine of String(source ?? "").split(/\r?\n/)) {
-		const line = rawLine.trimEnd();
-		const separator = line.indexOf("=");
-		if (separator <= 0) continue;
-		const key = line.slice(0, separator).trim();
-		if (!key) continue;
-		environment[key] = line.slice(separator + 1);
+//#region ../lab-runner/src/distribution.ts
+const PACK_BINARY = /\.(?:exe|o|obj|a|lib|so|dylib|dll|pdb)$/i;
+function packageFilter(source) {
+	const parts = path.resolve(source).split(path.sep).map((part) => part.toLocaleLowerCase());
+	return !parts.includes("solution") && !parts.includes(".lab-cache") && !parts.includes("node_modules") && !PACK_BINARY.test(path.basename(source));
+}
+async function copyPackageEntry(lab, packageRoot, relative, required = false) {
+	const source = path.resolve(lab.labRoot, relative);
+	if (!await pathExists(source)) {
+		if (required) throw new LabError("FILE_NOT_FOUND", `学生包缺少必需源文件：${relative}`);
+		return false;
 	}
-	return environment;
+	const target = path.resolve(packageRoot, relative);
+	await mkdir(path.dirname(target), { recursive: true });
+	await cp(source, target, {
+		recursive: true,
+		force: true,
+		filter: packageFilter
+	});
+	return true;
 }
-function parseVsWherePath(source) {
-	return String(source ?? "").split(/\r?\n/).map((line) => line.trim()).find(Boolean);
+async function rewriteTaskManifests(packageRoot) {
+	const taskFiles = [];
+	async function collect(root) {
+		for (const entry of await readdir(root, { withFileTypes: true })) {
+			const target = path.join(root, entry.name);
+			if (entry.isDirectory()) await collect(target);
+			else if (entry.name === "task.json") taskFiles.push(target);
+		}
+	}
+	await collect(packageRoot);
+	for (const taskFile of taskFiles) {
+		const taskManifest = JSON.parse(await readFile(taskFile, "utf8"));
+		if (taskManifest.targets !== void 0) delete taskManifest.targets.solution;
+		taskManifest.$schema = path.relative(path.dirname(taskFile), path.join(packageRoot, "schemas", "task.schema.json")).replaceAll("\\", "/");
+		await writeFile(taskFile, `${JSON.stringify(taskManifest, null, 2)}\n`, "utf8");
+	}
 }
-function vsWhereCandidates(env) {
-	const candidates = [];
-	if (env.VSWHERE_PATH !== void 0 && env.VSWHERE_PATH !== "") candidates.push(env.VSWHERE_PATH);
-	if (env["ProgramFiles(x86)"] !== void 0) candidates.push(path.win32.join(env["ProgramFiles(x86)"], "Microsoft Visual Studio", "Installer", "vswhere.exe"));
-	candidates.push("vswhere.exe");
-	return [...new Set(candidates)];
-}
-const VSWHERE_ARGS = [
-	"-latest",
-	"-products",
-	"*",
-	"-requires",
-	"Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
-	"-property",
-	"installationPath"
+const STUDENT_COMMANDS = [
+	"doctor",
+	"validate",
+	"build",
+	"run",
+	"interactive",
+	"score",
+	"clean"
 ];
-async function findVisualStudioInstallation({ platform = process.platform, env = process.env, runner = runProcess } = {}) {
-	if (platform !== "win32") return void 0;
-	for (const command of vsWhereCandidates(env)) {
-		const result = await runner(command, VSWHERE_ARGS, {
-			env,
-			timeMs: 1e4,
-			outputKb: 256
-		});
-		const installationPath = result?.code === 0 && !result.spawnError ? parseVsWherePath(result.stdout) : void 0;
-		if (installationPath !== void 0 && installationPath !== "") return {
-			installationPath,
-			vswhere: command
-		};
-	}
-}
-async function createMsvcEnvironment({ platform = process.platform, env = process.env, runner = runProcess } = {}) {
-	if (platform !== "win32") return void 0;
-	const installation = await findVisualStudioInstallation({
-		platform,
-		env,
-		runner
+async function packStudent(lab) {
+	const repoRoot = await requireRepoRoot(import.meta.dirname);
+	const packageRoot = path.join(lab.labRoot, ".lab-cache", "packages", `${path.basename(lab.labRoot)}-student`);
+	await rm(packageRoot, {
+		recursive: true,
+		force: true
 	});
-	if (!installation) throw new LabError("MSVC_ENV_NOT_FOUND", "未找到满足 Microsoft.VisualStudio.Component.VC.Tools.x86.x64 的 Visual Studio 实例；请安装 Visual Studio 2022 Build Tools，或打开 Developer PowerShell。", { candidates: vsWhereCandidates(env) });
-	const developerCommand = path.win32.join(installation.installationPath, "Common7", "Tools", "VsDevCmd.bat");
-	const result = await runner("cmd.exe", [
-		"/d",
-		"/s",
-		"/c",
-		`call "${developerCommand}" -arch=x64 >nul 2>&1 && set`
-	], {
-		env,
-		timeMs: 6e4,
-		outputKb: 4096
-	});
-	if (result?.spawnError || result?.code !== 0) throw new LabError("MSVC_ENV_NOT_FOUND", `Visual Studio 开发环境初始化失败：${developerCommand}`, {
-		installationPath: installation.installationPath,
-		developerCommand,
-		result
-	});
-	return {
-		family: "msvc",
-		command: "cl",
-		env: parseEnvironmentBlock(result.stdout, env),
-		installationPath: installation.installationPath,
-		developerCommand
-	};
-}
-/**
-* 没装 Visual Studio 但有 MinGW 的 Windows 机器的退路。
-*
-* CMake 默认挑 MSVC 生成器，探不到就直接失败；显式换成 MinGW Makefiles 才能把 Project Lab 跑起来。
-*/
-async function createMinGwEnvironment({ platform = process.platform, env = process.env, runner = runProcess } = {}) {
-	if (platform !== "win32" || (env.CMAKE_GENERATOR ?? "") !== "") return void 0;
-	if (env.CXX !== void 0 && !/g\+\+|mingw|gcc/iu.test(env.CXX)) return void 0;
-	const probe = await runner("g++", ["--version"], {
-		env,
-		timeMs: 1e4,
-		outputKb: 256
-	});
-	if (probe.spawnError || probe.code !== 0) return void 0;
-	return {
-		family: "mingw",
-		command: "g++",
-		env: {
-			...env,
-			CMAKE_GENERATOR: "MinGW Makefiles",
-			CXX: env.CXX ?? "g++"
+	await mkdir(packageRoot, { recursive: true });
+	const requiredEntries = /* @__PURE__ */ new Set(["README.md"]);
+	const optionalEntries = /* @__PURE__ */ new Set();
+	if (isProgramLab(lab)) {
+		optionalEntries.add("student");
+		optionalEntries.add("tests");
+		requiredEntries.add(lab.manifest.judge.cases);
+		for (const source of lab.manifest.targets.student.sources) requiredEntries.add(source);
+		for (const includeDir of lab.manifest.targets.student.includeDirs ?? []) requiredEntries.add(includeDir);
+		for (const testCase of lab.cases) {
+			requiredEntries.add(testCase.input);
+			requiredEntries.add(testCase.expected);
 		}
-	};
-}
-function isMsvcCommand(command) {
-	return /(?:^|[\\/])cl(?:\.exe)?$/iu.test(String(command ?? ""));
-}
-//#endregion
-//#region ../lab-runner/src/compiler.ts
-async function available(command, args = ["--version"], acceptNonzero = false, env, runner = runProcess) {
-	const result = await runner(command, args, {
-		env,
-		timeMs: 5e3,
-		outputKb: 256
-	});
-	return !result.spawnError && (acceptNonzero || result.code === 0);
-}
-async function selectCompiler({ platform = process.platform, env = process.env, runner = runProcess } = {}) {
-	if (env.CXX !== void 0 && env.CXX !== "") {
-		const command = env.CXX;
-		const family = isMsvcCommand(command) ? "msvc" : "gnu";
-		let compilerEnvironment;
-		if (family === "msvc" && platform === "win32") try {
-			compilerEnvironment = await createMsvcEnvironment({
-				platform,
-				env,
-				runner
-			});
-		} catch (error) {
-			throw new LabError("COMPILER_NOT_FOUND", error.message, error.details);
-		}
-		if (await available(command, family === "msvc" ? [] : ["--version"], family === "msvc", compilerEnvironment?.env, runner)) return {
-			command,
-			family,
-			env: compilerEnvironment?.env,
-			toolchain: compilerEnvironment
-		};
-		throw new LabError("COMPILER_NOT_FOUND", `CXX 指定的编译器不可用：${command}`);
+	} else {
+		requiredEntries.add("CMakeLists.txt");
+		requiredEntries.add("CMakePresets.json");
+		for (const task of lab.manifest.tasks) requiredEntries.add(task.path);
+		for (const shared of [
+			"include",
+			"src",
+			"contracts"
+		]) optionalEntries.add(shared);
 	}
-	const candidates = [
-		{
-			command: "g++",
-			family: "gnu"
-		},
-		{
-			command: "clang++",
-			family: "gnu"
-		},
-		...platform === "win32" ? [{
-			command: "cl",
-			family: "msvc",
-			args: []
-		}] : []
-	];
-	for (const candidate of candidates) {
-		let compilerEnvironment;
-		if (candidate.family === "msvc") try {
-			compilerEnvironment = await createMsvcEnvironment({
-				platform,
-				env,
-				runner
-			});
-		} catch {
-			continue;
-		}
-		if (await available(candidate.command, candidate.args, candidate.family === "msvc", compilerEnvironment?.env, runner)) return {
-			...candidate,
-			env: compilerEnvironment?.env,
-			toolchain: compilerEnvironment
-		};
-	}
-	throw new LabError("COMPILER_NOT_FOUND", "未找到可用 C++ 编译器；请安装 GCC >= 11、Clang >= 14 或 Visual Studio 2022，然后重新运行 lab doctor");
+	for (const entry of requiredEntries) await copyPackageEntry(lab, packageRoot, entry, true);
+	for (const entry of optionalEntries) if (!requiredEntries.has(entry)) await copyPackageEntry(lab, packageRoot, entry);
+	const manifest = structuredClone(lab.manifest);
+	manifest.distribution = "student";
+	manifest.$schema = "schemas/lab.schema.json";
+	if (manifest.targets !== void 0) delete manifest.targets.solution;
+	await writeFile(path.join(packageRoot, "lab.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+	await writeFile(path.join(packageRoot, "Makefile"), STANDALONE_MAKEFILE, "utf8");
+	await cp(path.join(repoRoot, "schemas"), path.join(packageRoot, "schemas"), { recursive: true });
+	if (isProjectLab(lab)) await rewriteTaskManifests(packageRoot);
+	const cliBundle = path.join(repoRoot, "packages", "lab-cli", "dist", "cli.js");
+	if (!await pathExists(cliBundle)) throw new LabError("CLI_BUNDLE_MISSING", `缺少判题内核构建产物：${cliBundle}；请先运行 pnpm -r build`);
+	await cp(cliBundle, path.join(packageRoot, STANDALONE_CLI_FILENAME));
+	await cp(path.join(repoRoot, "packages", "lab-cli", "lab.mk"), path.join(packageRoot, "lab.mk"));
+	await writeFile(path.join(packageRoot, "package.json"), `${JSON.stringify({
+		name: `${path.basename(lab.labRoot)}-student`,
+		private: true,
+		type: "module",
+		scripts: Object.fromEntries(STUDENT_COMMANDS.map((command) => [`lab:${command}`, `node ${STANDALONE_CLI_FILENAME} ${command}`]))
+	}, null, 2)}\n`, "utf8");
+	return { packageRoot };
 }
-async function compileTarget(lab, targetName = "student") {
-	const target = lab.manifest.targets?.[targetName];
-	if (!target) throw new LabError("TARGET_INVALID", `manifest 中不存在编译目标：${targetName}`);
-	const compiler = await selectCompiler();
-	const outputDir = path.join(lab.labRoot, ".lab-cache", "bin");
-	await mkdir(outputDir, { recursive: true });
-	const executable = path.join(outputDir, `${targetName}${process.platform === "win32" ? ".exe" : ""}`);
-	const standard = lab.manifest.toolchain.standard;
-	const sources = target.sources.map((source) => path.resolve(lab.labRoot, source));
-	const includeDirs = (target.includeDirs ?? []).map((dir) => path.resolve(lab.labRoot, dir));
-	const args = compiler.family === "msvc" ? [
-		"/nologo",
-		`/std:${standard}`,
-		"/EHsc",
-		"/utf-8",
-		"/W4",
-		...includeDirs.map((dir) => `/I${dir}`),
-		...sources,
-		`/Fe:${executable}`
-	] : [
-		`-std=${standard}`,
-		"-O2",
-		"-Wall",
-		"-Wextra",
-		"-Wpedantic",
-		...includeDirs.flatMap((dir) => ["-I", dir]),
-		...sources,
-		"-o",
-		executable
-	];
-	const result = await runProcess(compiler.command, args, {
-		cwd: lab.labRoot,
-		env: compiler.env,
-		timeMs: 6e4,
-		outputKb: 4096
-	});
-	if (result.spawnError) throw new LabError("COMPILER_NOT_FOUND", `无法启动编译器 ${compiler.command}：${result.spawnError.message}`);
+async function cleanLab(lab) {
+	const root = path.resolve(lab.labRoot);
+	const caches = /* @__PURE__ */ new Set([path.join(root, ".lab-cache")]);
+	for (const task of lab.tasks ?? []) caches.add(path.join(path.resolve(task.taskPath), ".lab-cache"));
+	for (const cache of caches) {
+		const relative = path.relative(root, cache);
+		if (relative.startsWith(`..${path.sep}`) || relative === ".." || path.isAbsolute(relative) || path.basename(cache) !== ".lab-cache") throw new LabError("CLEAN_REFUSED", `拒绝清理 Lab 根目录之外的路径：${cache}`);
+	}
+	await Promise.all([...caches].map((cache) => rm(cache, {
+		recursive: true,
+		force: true
+	})));
 	return {
-		ok: result.code === 0 && !result.timedOut && !result.outputExceeded,
-		compiler,
-		command: compiler.command,
-		args,
-		executable,
-		stdout: result.stdout,
-		stderr: result.stderr,
-		durationMs: result.durationMs
+		cache: path.join(root, ".lab-cache"),
+		caches: [...caches]
 	};
 }
 //#endregion
-//#region ../lab-runner/src/doctor.ts
-async function probe(name, command, args, minimum, pattern, options) {
-	const result = await options.runner(command, args, {
-		env: options.env,
-		timeMs: 5e3,
-		outputKb: 256
-	});
-	if (result.spawnError) return {
-		name,
-		command,
-		available: false,
-		meetsMinimum: false,
-		error: result.spawnError.code ?? result.spawnError.message
-	};
-	const output = `${result.stdout ?? ""}\n${result.stderr ?? ""}`.trim();
-	const version = parseVersion(output, pattern);
-	return {
-		name,
-		command,
-		available: true,
-		version: formatVersion(version),
-		minimum: formatVersion(minimum),
-		meetsMinimum: compareVersion(version, minimum),
-		summary: output.split(/\r?\n/).find(Boolean)?.trim()
-	};
-}
-async function inspectEnvironment(lab, options = {}) {
-	const platform = options.platform ?? process.platform;
-	const env = options.env ?? process.env;
-	const runner = options.runner ?? runProcess;
-	let msvcEnvironment;
-	let msvcError;
-	if (platform === "win32") try {
-		msvcEnvironment = await createMsvcEnvironment({
-			platform,
-			env,
-			runner
-		});
-	} catch (error) {
-		msvcError = error;
-	}
-	const probes = await Promise.all([
-		probe("GCC", "g++", ["--version"], MINIMUMS.gcc, void 0, {
-			env,
-			runner
-		}),
-		probe("Clang", "clang++", ["--version"], MINIMUMS.clang, void 0, {
-			env,
-			runner
-		}),
-		probe("MSVC", "cl", [], MINIMUMS.msvc, /Version\s+(\d+)\.(\d+)(?:\.(\d+))?/i, {
-			env: msvcEnvironment?.env,
-			runner
-		}),
-		probe("CMake", "cmake", ["--version"], MINIMUMS.cmake, void 0, {
-			env,
-			runner
-		}),
-		probe("GNU Make", "make", ["--version"], MINIMUMS.make, void 0, {
-			env,
-			runner
-		})
-	]);
-	if (probes[0].available && /clang/i.test(probes[0].summary ?? "")) {
-		probes[0].name = "Clang (g++ driver)";
-		probes[0].minimum = formatVersion(MINIMUMS.clang);
-		probes[0].meetsMinimum = compareVersion(parseVersion(probes[0].version), MINIMUMS.clang);
-	}
-	const compilers = probes.slice(0, 3);
-	const cmake = probes.find((item) => item.name === "CMake");
-	const make = probes.find((item) => item.name === "GNU Make");
-	const issues = [];
-	if (lab.manifest.type !== "quiz" && !compilers.some((item) => item.available && item.meetsMinimum)) issues.push("需要 GCC >= 11、Clang >= 14 或 Visual Studio 2022 / MSVC >= 19.30 之一");
-	if (lab.manifest.type === "project" && !(cmake.available && cmake.meetsMinimum)) issues.push("Project Lab 需要 CMake >= 3.25");
-	return {
-		platform: process.platform,
-		architecture: process.arch,
-		node: process.version,
-		standard: lab.manifest.type === "quiz" ? void 0 : lab.manifest.toolchain.standard,
-		tools: probes,
-		makeOptional: true,
-		makeAvailable: make.available,
-		msvc: {
-			initialized: Boolean(msvcEnvironment),
-			installationPath: msvcEnvironment?.installationPath,
-			developerCommand: msvcEnvironment?.developerCommand,
-			error: msvcError?.message
-		},
-		fallback: "pnpm lab run <lab-path>",
-		ok: issues.length === 0,
-		issues
-	};
+//#region ../lab-runner/src/fingerprint.ts
+async function engineFingerprint() {
+	return "37905cae75ff6dc9f27b1f5d109044e9bbeabf4d525d87d9595cdfaf4b5c444c";
 }
 //#endregion
 //#region ../lab-runner/src/identity.ts
@@ -1475,7 +1286,228 @@ async function locateLabById(root, value) {
 	};
 }
 //#endregion
-//#region ../lab-runner/src/judge.ts
+//#region ../lab-runner/src/toolchain/windows.ts
+function parseEnvironmentBlock(source, baseEnvironment = {}) {
+	const environment = { ...baseEnvironment };
+	for (const rawLine of String(source ?? "").split(/\r?\n/)) {
+		const line = rawLine.trimEnd();
+		const separator = line.indexOf("=");
+		if (separator <= 0) continue;
+		const key = line.slice(0, separator).trim();
+		if (!key) continue;
+		environment[key] = line.slice(separator + 1);
+	}
+	return environment;
+}
+function parseVsWherePath(source) {
+	return String(source ?? "").split(/\r?\n/).map((line) => line.trim()).find(Boolean);
+}
+function vsWhereCandidates(env) {
+	const candidates = [];
+	if (env.VSWHERE_PATH !== void 0 && env.VSWHERE_PATH !== "") candidates.push(env.VSWHERE_PATH);
+	if (env["ProgramFiles(x86)"] !== void 0) candidates.push(path.win32.join(env["ProgramFiles(x86)"], "Microsoft Visual Studio", "Installer", "vswhere.exe"));
+	candidates.push("vswhere.exe");
+	return [...new Set(candidates)];
+}
+const VSWHERE_ARGS = [
+	"-latest",
+	"-products",
+	"*",
+	"-requires",
+	"Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+	"-property",
+	"installationPath"
+];
+async function findVisualStudioInstallation({ platform = process.platform, env = process.env, runner = runProcess } = {}) {
+	if (platform !== "win32") return void 0;
+	for (const command of vsWhereCandidates(env)) {
+		const result = await runner(command, VSWHERE_ARGS, {
+			env,
+			timeMs: 1e4,
+			outputKb: 256
+		});
+		const installationPath = result?.code === 0 && !result.spawnError ? parseVsWherePath(result.stdout) : void 0;
+		if (installationPath !== void 0 && installationPath !== "") return {
+			installationPath,
+			vswhere: command
+		};
+	}
+}
+async function createMsvcEnvironment({ platform = process.platform, env = process.env, runner = runProcess } = {}) {
+	if (platform !== "win32") return void 0;
+	const installation = await findVisualStudioInstallation({
+		platform,
+		env,
+		runner
+	});
+	if (!installation) throw new LabError("MSVC_ENV_NOT_FOUND", "未找到满足 Microsoft.VisualStudio.Component.VC.Tools.x86.x64 的 Visual Studio 实例；请安装 Visual Studio 2022 Build Tools，或打开 Developer PowerShell。", { candidates: vsWhereCandidates(env) });
+	const developerCommand = path.win32.join(installation.installationPath, "Common7", "Tools", "VsDevCmd.bat");
+	const result = await runner("cmd.exe", [
+		"/d",
+		"/s",
+		"/c",
+		`call "${developerCommand}" -arch=x64 >nul 2>&1 && set`
+	], {
+		env,
+		timeMs: 6e4,
+		outputKb: 4096
+	});
+	if (result?.spawnError || result?.code !== 0) throw new LabError("MSVC_ENV_NOT_FOUND", `Visual Studio 开发环境初始化失败：${developerCommand}`, {
+		installationPath: installation.installationPath,
+		developerCommand,
+		result
+	});
+	return {
+		family: "msvc",
+		command: "cl",
+		env: parseEnvironmentBlock(result.stdout, env),
+		installationPath: installation.installationPath,
+		developerCommand
+	};
+}
+/**
+* 没装 Visual Studio 但有 MinGW 的 Windows 机器的退路。
+*
+* CMake 默认挑 MSVC 生成器，探不到就直接失败；显式换成 MinGW Makefiles 才能把 Project Lab 跑起来。
+*/
+async function createMinGwEnvironment({ platform = process.platform, env = process.env, runner = runProcess } = {}) {
+	if (platform !== "win32" || (env.CMAKE_GENERATOR ?? "") !== "") return void 0;
+	if (env.CXX !== void 0 && !/g\+\+|mingw|gcc/iu.test(env.CXX)) return void 0;
+	const probe = await runner("g++", ["--version"], {
+		env,
+		timeMs: 1e4,
+		outputKb: 256
+	});
+	if (probe.spawnError || probe.code !== 0) return void 0;
+	return {
+		family: "mingw",
+		command: "g++",
+		env: {
+			...env,
+			CMAKE_GENERATOR: "MinGW Makefiles",
+			CXX: env.CXX ?? "g++"
+		}
+	};
+}
+function isMsvcCommand(command) {
+	return /(?:^|[\\/])cl(?:\.exe)?$/iu.test(String(command ?? ""));
+}
+//#endregion
+//#region ../lab-runner/src/toolchain/compiler.ts
+async function available(command, args = ["--version"], acceptNonzero = false, env, runner = runProcess) {
+	const result = await runner(command, args, {
+		env,
+		timeMs: 5e3,
+		outputKb: 256
+	});
+	return !result.spawnError && (acceptNonzero || result.code === 0);
+}
+async function selectCompiler({ platform = process.platform, env = process.env, runner = runProcess } = {}) {
+	if (env.CXX !== void 0 && env.CXX !== "") {
+		const command = env.CXX;
+		const family = isMsvcCommand(command) ? "msvc" : "gnu";
+		let compilerEnvironment;
+		if (family === "msvc" && platform === "win32") try {
+			compilerEnvironment = await createMsvcEnvironment({
+				platform,
+				env,
+				runner
+			});
+		} catch (error) {
+			throw new LabError("COMPILER_NOT_FOUND", error.message, error.details);
+		}
+		if (await available(command, family === "msvc" ? [] : ["--version"], family === "msvc", compilerEnvironment?.env, runner)) return {
+			command,
+			family,
+			env: compilerEnvironment?.env,
+			toolchain: compilerEnvironment
+		};
+		throw new LabError("COMPILER_NOT_FOUND", `CXX 指定的编译器不可用：${command}`);
+	}
+	const candidates = [
+		{
+			command: "g++",
+			family: "gnu"
+		},
+		{
+			command: "clang++",
+			family: "gnu"
+		},
+		...platform === "win32" ? [{
+			command: "cl",
+			family: "msvc",
+			args: []
+		}] : []
+	];
+	for (const candidate of candidates) {
+		let compilerEnvironment;
+		if (candidate.family === "msvc") try {
+			compilerEnvironment = await createMsvcEnvironment({
+				platform,
+				env,
+				runner
+			});
+		} catch {
+			continue;
+		}
+		if (await available(candidate.command, candidate.args, candidate.family === "msvc", compilerEnvironment?.env, runner)) return {
+			...candidate,
+			env: compilerEnvironment?.env,
+			toolchain: compilerEnvironment
+		};
+	}
+	throw new LabError("COMPILER_NOT_FOUND", "未找到可用 C++ 编译器；请安装 GCC >= 11、Clang >= 14 或 Visual Studio 2022，然后重新运行 lab doctor");
+}
+async function compileTarget(lab, targetName = "student") {
+	const target = lab.manifest.targets?.[targetName];
+	if (!target) throw new LabError("TARGET_INVALID", `manifest 中不存在编译目标：${targetName}`);
+	const compiler = await selectCompiler();
+	const outputDir = path.join(lab.labRoot, ".lab-cache", "bin");
+	await mkdir(outputDir, { recursive: true });
+	const executable = path.join(outputDir, `${targetName}${process.platform === "win32" ? ".exe" : ""}`);
+	const standard = lab.manifest.toolchain.standard;
+	const sources = target.sources.map((source) => path.resolve(lab.labRoot, source));
+	const includeDirs = (target.includeDirs ?? []).map((dir) => path.resolve(lab.labRoot, dir));
+	const args = compiler.family === "msvc" ? [
+		"/nologo",
+		`/std:${standard}`,
+		"/EHsc",
+		"/utf-8",
+		"/W4",
+		...includeDirs.map((dir) => `/I${dir}`),
+		...sources,
+		`/Fe:${executable}`
+	] : [
+		`-std=${standard}`,
+		"-O2",
+		"-Wall",
+		"-Wextra",
+		"-Wpedantic",
+		...includeDirs.flatMap((dir) => ["-I", dir]),
+		...sources,
+		"-o",
+		executable
+	];
+	const result = await runProcess(compiler.command, args, {
+		cwd: lab.labRoot,
+		env: compiler.env,
+		timeMs: 6e4,
+		outputKb: 4096
+	});
+	if (result.spawnError) throw new LabError("COMPILER_NOT_FOUND", `无法启动编译器 ${compiler.command}：${result.spawnError.message}`);
+	return {
+		ok: result.code === 0 && !result.timedOut && !result.outputExceeded,
+		compiler,
+		command: compiler.command,
+		args,
+		executable,
+		stdout: result.stdout,
+		stderr: result.stderr,
+		durationMs: result.durationMs
+	};
+}
+//#endregion
+//#region ../lab-runner/src/program/judge.ts
 function limitsFor(manifest, testCase) {
 	return {
 		timeMs: testCase.timeMs ?? manifest.judge.limits?.timeMs ?? 2e3,
@@ -1599,7 +1631,7 @@ function formatJudge(result, options = {}) {
 	return rows.join("\n");
 }
 //#endregion
-//#region ../lab-runner/src/operations.ts
+//#region ../lab-runner/src/program/expected.ts
 function previewDiff(previous, next) {
 	const before = previous.replace(/\r\n?/g, "\n").split("\n");
 	const after = next.replace(/\r\n?/g, "\n").split("\n");
@@ -1667,123 +1699,8 @@ async function verifyProgram(lab) {
 		student
 	};
 }
-const PACK_BINARY = /\.(?:exe|o|obj|a|lib|so|dylib|dll|pdb)$/i;
-function packageFilter(source) {
-	const parts = path.resolve(source).split(path.sep).map((part) => part.toLocaleLowerCase());
-	return !parts.includes("solution") && !parts.includes(".lab-cache") && !parts.includes("node_modules") && !PACK_BINARY.test(path.basename(source));
-}
-async function copyPackageEntry(lab, packageRoot, relative, required = false) {
-	const source = path.resolve(lab.labRoot, relative);
-	if (!await pathExists(source)) {
-		if (required) throw new LabError("FILE_NOT_FOUND", `学生包缺少必需源文件：${relative}`);
-		return false;
-	}
-	const target = path.resolve(packageRoot, relative);
-	await mkdir(path.dirname(target), { recursive: true });
-	await cp(source, target, {
-		recursive: true,
-		force: true,
-		filter: packageFilter
-	});
-	return true;
-}
-async function rewriteTaskManifests(packageRoot) {
-	const taskFiles = [];
-	async function collect(root) {
-		for (const entry of await readdir(root, { withFileTypes: true })) {
-			const target = path.join(root, entry.name);
-			if (entry.isDirectory()) await collect(target);
-			else if (entry.name === "task.json") taskFiles.push(target);
-		}
-	}
-	await collect(packageRoot);
-	for (const taskFile of taskFiles) {
-		const taskManifest = JSON.parse(await readFile(taskFile, "utf8"));
-		if (taskManifest.targets !== void 0) delete taskManifest.targets.solution;
-		taskManifest.$schema = path.relative(path.dirname(taskFile), path.join(packageRoot, "schemas", "task.schema.json")).replaceAll("\\", "/");
-		await writeFile(taskFile, `${JSON.stringify(taskManifest, null, 2)}\n`, "utf8");
-	}
-}
-const STUDENT_COMMANDS = [
-	"doctor",
-	"validate",
-	"build",
-	"run",
-	"interactive",
-	"score",
-	"clean"
-];
-async function packStudent(lab) {
-	const repoRoot = await requireRepoRoot(import.meta.dirname);
-	const packageRoot = path.join(lab.labRoot, ".lab-cache", "packages", `${path.basename(lab.labRoot)}-student`);
-	await rm(packageRoot, {
-		recursive: true,
-		force: true
-	});
-	await mkdir(packageRoot, { recursive: true });
-	const requiredEntries = /* @__PURE__ */ new Set(["README.md"]);
-	const optionalEntries = /* @__PURE__ */ new Set();
-	if (isProgramLab(lab)) {
-		optionalEntries.add("student");
-		optionalEntries.add("tests");
-		requiredEntries.add(lab.manifest.judge.cases);
-		for (const source of lab.manifest.targets.student.sources) requiredEntries.add(source);
-		for (const includeDir of lab.manifest.targets.student.includeDirs ?? []) requiredEntries.add(includeDir);
-		for (const testCase of lab.cases) {
-			requiredEntries.add(testCase.input);
-			requiredEntries.add(testCase.expected);
-		}
-	} else {
-		requiredEntries.add("CMakeLists.txt");
-		requiredEntries.add("CMakePresets.json");
-		for (const task of lab.manifest.tasks) requiredEntries.add(task.path);
-		for (const shared of [
-			"include",
-			"src",
-			"contracts"
-		]) optionalEntries.add(shared);
-	}
-	for (const entry of requiredEntries) await copyPackageEntry(lab, packageRoot, entry, true);
-	for (const entry of optionalEntries) if (!requiredEntries.has(entry)) await copyPackageEntry(lab, packageRoot, entry);
-	const manifest = structuredClone(lab.manifest);
-	manifest.distribution = "student";
-	manifest.$schema = "schemas/lab.schema.json";
-	if (manifest.targets !== void 0) delete manifest.targets.solution;
-	await writeFile(path.join(packageRoot, "lab.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
-	await writeFile(path.join(packageRoot, "Makefile"), STANDALONE_MAKEFILE, "utf8");
-	await cp(path.join(repoRoot, "schemas"), path.join(packageRoot, "schemas"), { recursive: true });
-	if (isProjectLab(lab)) await rewriteTaskManifests(packageRoot);
-	const cliBundle = path.join(repoRoot, "packages", "lab-cli", "dist", "cli.js");
-	if (!await pathExists(cliBundle)) throw new LabError("CLI_BUNDLE_MISSING", `缺少判题内核构建产物：${cliBundle}；请先运行 pnpm -r build`);
-	await cp(cliBundle, path.join(packageRoot, STANDALONE_CLI_FILENAME));
-	await cp(path.join(repoRoot, "packages", "lab-cli", "lab.mk"), path.join(packageRoot, "lab.mk"));
-	await writeFile(path.join(packageRoot, "package.json"), `${JSON.stringify({
-		name: `${path.basename(lab.labRoot)}-student`,
-		private: true,
-		type: "module",
-		scripts: Object.fromEntries(STUDENT_COMMANDS.map((command) => [`lab:${command}`, `node ${STANDALONE_CLI_FILENAME} ${command}`]))
-	}, null, 2)}\n`, "utf8");
-	return { packageRoot };
-}
-async function cleanLab(lab) {
-	const root = path.resolve(lab.labRoot);
-	const caches = /* @__PURE__ */ new Set([path.join(root, ".lab-cache")]);
-	for (const task of lab.tasks ?? []) caches.add(path.join(path.resolve(task.taskPath), ".lab-cache"));
-	for (const cache of caches) {
-		const relative = path.relative(root, cache);
-		if (relative.startsWith(`..${path.sep}`) || relative === ".." || path.isAbsolute(relative) || path.basename(cache) !== ".lab-cache") throw new LabError("CLEAN_REFUSED", `拒绝清理 Lab 根目录之外的路径：${cache}`);
-	}
-	await Promise.all([...caches].map((cache) => rm(cache, {
-		recursive: true,
-		force: true
-	})));
-	return {
-		cache: path.join(root, ".lab-cache"),
-		caches: [...caches]
-	};
-}
 //#endregion
-//#region ../lab-runner/src/project-state.ts
+//#region ../lab-runner/src/project/state.ts
 const ignoredDirectories = /* @__PURE__ */ new Set([
 	".lab-cache",
 	"solution",
@@ -1806,9 +1723,6 @@ function dependencyClosure(lab, task, dependencies = sourceDependencies) {
 	}
 	visit(task);
 	return lab.tasks.filter((item) => result.has(item.id));
-}
-async function engineFingerprint() {
-	return "8a88502115289d3288201a4c4de1954f600a3bfcf15181d0956feb76ba5ae3c0";
 }
 async function projectInputs(lab, target = "student") {
 	const files = /* @__PURE__ */ new Map();
@@ -1963,7 +1877,7 @@ async function withProjectLock(lab, operation) {
 	}
 }
 //#endregion
-//#region ../lab-runner/src/project.ts
+//#region ../lab-runner/src/project/run.ts
 function programView(lab, task) {
 	return {
 		labRoot: task.taskPath,
@@ -2341,6 +2255,100 @@ function formatProject(result, options = {}) {
 	const retry = projectRetry(options.command ?? "pnpm lab run", options.labPath, failedTask?.id, failedTask?.judge?.cases?.find((item) => item.verdict !== "AC")?.id);
 	if (retry !== void 0) lines.push(`${theme.heading("Retry：")} ${theme.command(retry)}`);
 	return lines.join("\n");
+}
+//#endregion
+//#region ../lab-runner/src/toolchain/doctor.ts
+async function probe(name, command, args, minimum, pattern, options) {
+	const result = await options.runner(command, args, {
+		env: options.env,
+		timeMs: 5e3,
+		outputKb: 256
+	});
+	if (result.spawnError) return {
+		name,
+		command,
+		available: false,
+		meetsMinimum: false,
+		error: result.spawnError.code ?? result.spawnError.message
+	};
+	const output = `${result.stdout ?? ""}\n${result.stderr ?? ""}`.trim();
+	const version = parseVersion(output, pattern);
+	return {
+		name,
+		command,
+		available: true,
+		version: formatVersion(version),
+		minimum: formatVersion(minimum),
+		meetsMinimum: compareVersion(version, minimum),
+		summary: output.split(/\r?\n/).find(Boolean)?.trim()
+	};
+}
+async function inspectEnvironment(lab, options = {}) {
+	const platform = options.platform ?? process.platform;
+	const env = options.env ?? process.env;
+	const runner = options.runner ?? runProcess;
+	let msvcEnvironment;
+	let msvcError;
+	if (platform === "win32") try {
+		msvcEnvironment = await createMsvcEnvironment({
+			platform,
+			env,
+			runner
+		});
+	} catch (error) {
+		msvcError = error;
+	}
+	const probes = await Promise.all([
+		probe("GCC", "g++", ["--version"], MINIMUMS.gcc, void 0, {
+			env,
+			runner
+		}),
+		probe("Clang", "clang++", ["--version"], MINIMUMS.clang, void 0, {
+			env,
+			runner
+		}),
+		probe("MSVC", "cl", [], MINIMUMS.msvc, /Version\s+(\d+)\.(\d+)(?:\.(\d+))?/i, {
+			env: msvcEnvironment?.env,
+			runner
+		}),
+		probe("CMake", "cmake", ["--version"], MINIMUMS.cmake, void 0, {
+			env,
+			runner
+		}),
+		probe("GNU Make", "make", ["--version"], MINIMUMS.make, void 0, {
+			env,
+			runner
+		})
+	]);
+	if (probes[0].available && /clang/i.test(probes[0].summary ?? "")) {
+		probes[0].name = "Clang (g++ driver)";
+		probes[0].minimum = formatVersion(MINIMUMS.clang);
+		probes[0].meetsMinimum = compareVersion(parseVersion(probes[0].version), MINIMUMS.clang);
+	}
+	const compilers = probes.slice(0, 3);
+	const cmake = probes.find((item) => item.name === "CMake");
+	const make = probes.find((item) => item.name === "GNU Make");
+	const issues = [];
+	if (lab.manifest.type !== "quiz" && !compilers.some((item) => item.available && item.meetsMinimum)) issues.push("需要 GCC >= 11、Clang >= 14 或 Visual Studio 2022 / MSVC >= 19.30 之一");
+	if (lab.manifest.type === "project" && !(cmake.available && cmake.meetsMinimum)) issues.push("Project Lab 需要 CMake >= 3.25");
+	return {
+		platform: process.platform,
+		architecture: process.arch,
+		node: process.version,
+		standard: lab.manifest.type === "quiz" ? void 0 : lab.manifest.toolchain.standard,
+		tools: probes,
+		makeOptional: true,
+		makeAvailable: make.available,
+		msvc: {
+			initialized: Boolean(msvcEnvironment),
+			installationPath: msvcEnvironment?.installationPath,
+			developerCommand: msvcEnvironment?.developerCommand,
+			error: msvcError?.message
+		},
+		fallback: "pnpm lab run <lab-path>",
+		ok: issues.length === 0,
+		issues
+	};
 }
 //#endregion
 //#region src/reporter.ts

@@ -1,6 +1,6 @@
 import { LabError } from "@dsa/lab-core";
 
-export const DEFAULT_REPO_URL = "https://github.com/AzenAnn/DSA-Mastery.git";
+const DEFAULT_REPO_URL = "https://github.com/AzenAnn/DSA-Mastery.git";
 
 export type UiPreference = "auto" | "tui" | "plain";
 

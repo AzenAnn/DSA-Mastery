@@ -1,31 +1,39 @@
 {
   "name": "dsa-mastery-labs",
   "displayName": "DSA Mastery Labs",
-  "description": "在 VSCode 中浏览、作答与提交 DSA Mastery 的代码题、项目题与选择题",
   "version": "0.1.15",
   "private": true,
-  "publisher": "dsa-mastery",
-  "license": "UNLICENSED",
-  "engines": {
-    "vscode": "^1.90.0",
-    "node": ">=22.13.0"
-  },
+  "description": "在 VSCode 中浏览、作答与提交 DSA Mastery 的代码题、项目题与选择题",
   "categories": [
     "Education",
     "Testing"
   ],
+  "homepage": "https://azenann.github.io/DSA-Mastery/learn/chapter-preface/06-vscode-extension-guide/",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AzenAnn/DSA-Mastery.git",
+    "directory": "apps/vscode-extension"
+  },
+  "publisher": "dsa-mastery",
   "main": "./dist/extension.js",
-  "activationEvents": [
-    "workspaceContains:labs/index.md"
-  ],
-  "capabilities": {
-    "untrustedWorkspaces": {
-      "supported": "limited",
-      "description": "可浏览题面和选择题；执行仓库内测评脚本和学生代码前必须信任工作区。",
-      "restrictedConfigurations": [
-        "dsaMastery.nodePath"
-      ]
-    }
+  "scripts": {
+    "build": "tsdown",
+    "watch": "tsdown --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "package": "tsdown && vsce package --no-dependencies --allow-missing-repository --skip-license"
+  },
+  "dependencies": {
+    "@dsa/lab-core": "workspace:*",
+    "gray-matter": "4.0.3",
+    "katex": "0.18.7",
+    "markdown-it": "14.3.2"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.138.0",
+    "@vscode/vsce": "4.0.0",
+    "esbuild": "0.28.2",
+    "tsdown": "0.23.0"
   },
   "contributes": {
     "viewsContainers": {
@@ -143,28 +151,20 @@
       }
     }
   },
-  "scripts": {
-    "build": "tsdown",
-    "watch": "tsdown --watch",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "package": "tsdown && vsce package --no-dependencies --allow-missing-repository --skip-license"
+  "activationEvents": [
+    "workspaceContains:labs/index.md"
+  ],
+  "engines": {
+    "node": ">=22.13.0",
+    "vscode": "^1.90.0"
   },
-  "dependencies": {
-    "@dsa/lab-core": "workspace:*",
-    "gray-matter": "4.0.3",
-    "katex": "0.18.7",
-    "markdown-it": "14.3.2"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.138.0",
-    "@vscode/vsce": "4.0.0",
-    "esbuild": "0.28.2",
-    "tsdown": "0.23.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AzenAnn/DSA-Mastery.git",
-    "directory": "apps/vscode-extension"
-  },
-  "homepage": "https://azenann.github.io/DSA-Mastery/learn/chapter-preface/06-vscode-extension-guide/"
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "可浏览题面和选择题；执行仓库内测评脚本和学生代码前必须信任工作区。",
+      "restrictedConfigurations": [
+        "dsaMastery.nodePath"
+      ]
+    }
+  }
 }

@@ -1,6 +1,6 @@
+import type { ProjectScoreResult } from "../src/cli/client";
 import { expect, it } from "vitest";
-import { projectProgressPassed, summarizeProjectSubmission } from "../src/projectProgress.ts";
-import type { ProjectScoreResult } from "../src/cli";
+import { projectProgressPassed, summarizeProjectSubmission } from "../src/progress/project.ts";
 
 it("project submission summaries preserve nested task results without long output", () => {
   const result: ProjectScoreResult = {
@@ -58,8 +58,21 @@ it("automatic full score with manual weight remains pending instead of passed", 
 it("historical full score cannot override unknown, unassessed or stale current code", () => {
   const history = { automatedFull: true, manualPending: 0, internalError: false };
   expect(projectProgressPassed({ ...history, currentUnknown: true })).toBe(false);
-  expect(projectProgressPassed({ ...history, current: {
-    target: "student", tasks: [], automatedScore: 0, automatedMax: 100, manualPending: 0,
-    provisionalTotal: 0, total: 100, automatedFull: false, internalError: false, complete: false,
-  } })).toBe(false);
+  expect(
+    projectProgressPassed({
+      ...history,
+      current: {
+        target: "student",
+        tasks: [],
+        automatedScore: 0,
+        automatedMax: 100,
+        manualPending: 0,
+        provisionalTotal: 0,
+        total: 100,
+        automatedFull: false,
+        internalError: false,
+        complete: false,
+      },
+    }),
+  ).toBe(false);
 });

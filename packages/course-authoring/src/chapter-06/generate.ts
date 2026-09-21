@@ -146,7 +146,7 @@ interface JudgeCase {
   tags: string[];
 }
 
-export function artifactsFor(item: CatalogItem): Map<string, string> {
+function artifactsFor(item: CatalogItem): Map<string, string> {
   assert(item.id >= 4 && item.id <= 23, "generation is limited to new ch6 Labs");
   const files = new Map<string, string>(),
     cases: JudgeCase[] = [];

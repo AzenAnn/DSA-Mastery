@@ -56,7 +56,7 @@ const LESSON_PATH = /^content\/chapter-\d{2}-[a-z0-9-]+\/\d{2}-[a-z0-9-]+\.md$/;
 /** 这些章节已经完成三级目录迁移，README-only Lab 必须显式声明分类。 */
 const CATEGORIZED_CHAPTERS = new Set([1, 2, 3, 4, 5, 8, 9]);
 
-export const RULES = [
+const RULES = [
   "lab-layout",
   "required-fields",
   "status-enum",

@@ -1,18 +1,9 @@
-import { createHash } from "node:crypto";
-import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { hashSourceTree } from "@dsa/lab-runner";
 import { defineConfig } from "tsdown";
 
 /** 判题引擎指纹：Project 缓存成绩靠它判断引擎是否变过，必须在构建期定死。 */
-async function engineFingerprint(): Promise<string> {
-  const directory = path.resolve(import.meta.dirname, "../lab-runner/src");
-  const hash = createHash("sha256");
-  for (const name of (await readdir(directory)).filter((entry) => entry.endsWith(".ts")).sort()) {
-    hash.update(await readFile(path.join(directory, name)));
-  }
-
-  return hash.digest("hex");
-}
+const engineFingerprint = await hashSourceTree(path.resolve(import.meta.dirname, "../lab-runner/src"));
 
 export default defineConfig({
   entry: "src/cli.ts",
@@ -26,5 +17,5 @@ export default defineConfig({
   dts: false,
   clean: ["dist/cli.js"],
   shims: true,
-  define: { __LAB_ENGINE_FINGERPRINT__: JSON.stringify(await engineFingerprint()) },
+  define: { __LAB_ENGINE_FINGERPRINT__: JSON.stringify(engineFingerprint) },
 });
