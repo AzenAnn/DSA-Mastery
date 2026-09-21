@@ -1,3 +1,5 @@
+import { randomBytes } from "node:crypto";
+
 export function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -7,7 +9,7 @@ export function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
-/** WebView 的 CSP 只放行带本次 nonce 的内联脚本，每次渲染都要换一个。 */
+/** WebView 的 CSP 只放行带本次 nonce 的内联脚本，猜得出来就等于没设防，必须用随机数发生器。 */
 export function nonce(): string {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+  return randomBytes(16).toString("base64url");
 }

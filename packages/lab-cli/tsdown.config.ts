@@ -1,9 +1,9 @@
 import path from "node:path";
-import { hashSourceTree } from "@dsa/lab-runner";
+import { hashEngineSources } from "@dsa/lab-runner";
 import { defineConfig } from "tsdown";
 
 /** 判题引擎指纹：Project 缓存成绩靠它判断引擎是否变过，必须在构建期定死。 */
-const engineFingerprint = await hashSourceTree(path.resolve(import.meta.dirname, "../lab-runner/src"));
+const engineFingerprint = await hashEngineSources(path.resolve(import.meta.dirname, ".."));
 
 export default defineConfig({
   entry: "src/cli.ts",

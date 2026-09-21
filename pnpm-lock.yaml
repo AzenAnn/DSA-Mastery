@@ -305,6 +305,9 @@ importers:
       '@dsa/lab-core':
         specifier: workspace:*
         version: link:../lab-core
+      '@dsa/lab-runner':
+        specifier: workspace:*
+        version: link:../lab-runner
     devDependencies:
       '@dsa/lab-testkit':
         specifier: workspace:*

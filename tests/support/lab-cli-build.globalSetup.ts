@@ -1,11 +1,10 @@
 import { execFile } from "node:child_process";
-import { createHash } from "node:crypto";
 import { mkdir, open, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { setTimeout as sleep } from "node:timers/promises";
 import { promisify } from "node:util";
-import { hashSourceTree } from "@dsa/lab-runner";
+import { hashEngineSources } from "@dsa/lab-runner";
 import { REPO_ROOT } from "./repo.ts";
 
 const run = promisify(execFile);
@@ -14,15 +13,6 @@ const CACHE = path.join(REPO_ROOT, "node_modules", ".cache", "dsa-lab-cli-build"
 const STAMP = path.join(CACHE, "sources.sha256");
 const LOCK = path.join(CACHE, "build.lock");
 
-async function sourceFingerprint(): Promise<string> {
-  const hash = createHash("sha256");
-  for (const pkg of ["lab-core", "lab-runner", "lab-cli"]) {
-    hash.update(await hashSourceTree(path.join(REPO_ROOT, "packages", pkg, "src")));
-  }
-
-  return hash.digest("hex");
-}
-
 /**
  * 判题测试跑的是学生实际执行的那个打包产物，所以先确保它与源码同步。
  *
@@ -30,7 +20,7 @@ async function sourceFingerprint(): Promise<string> {
  * tsdown 带 clean，并发构建会互相删掉对方的产物，因此用指纹跳过 + 文件锁串行化。
  */
 export async function setup(): Promise<void> {
-  const fingerprint = await sourceFingerprint();
+  const fingerprint = await hashEngineSources(path.join(REPO_ROOT, "packages"));
   await mkdir(CACHE, { recursive: true });
   for (let attempt = 0; attempt < 900; attempt += 1) {
     if (

@@ -50,6 +50,10 @@ jobs:
       - name: Typecheck
         run: pnpm run typecheck
 
+      # vscode project 里的统计面板版式断言要开真浏览器。
+      - name: Install Chromium for the stats panel layout test
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Run extension tests
         run: pnpm exec vitest run --project vscode
 

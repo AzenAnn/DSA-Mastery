@@ -1159,7 +1159,7 @@ async function cleanLab(lab) {
 //#endregion
 //#region ../lab-runner/src/fingerprint.ts
 async function engineFingerprint() {
-	return "b172968b3ea6f7606f4c94392863733d7d2047e14b07b04cbae13a399304e4b7";
+	return "2ce8dbbe3ee9da5bc5a65006f9ed5b3bfd3e1f0ff2843ffc7b94061448eda485";
 }
 //#endregion
 //#region ../lab-runner/src/identity.ts
