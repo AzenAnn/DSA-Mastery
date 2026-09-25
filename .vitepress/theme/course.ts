@@ -1,5 +1,5 @@
+import type { ChapterId, CourseChapter, CourseDocument, CourseIndex } from "@dsa/course-index";
 import { data as rawCourseIndex } from "../content.data";
-import type { ChapterId, CourseChapter, CourseDocument, CourseIndex } from "../content-index";
 
 const loadedIndex = rawCourseIndex as Partial<CourseIndex>;
 
@@ -10,8 +10,8 @@ export const courseIndex: CourseIndex = {
   curriculum: loadedIndex.curriculum ?? { url: "/learn/", foundations: [], parts: [] },
 };
 
-export function normalizeCourseUrl(value: string): string {
-  const path = decodeURI(value.split(/[?#]/, 1)[0] || "/")
+function normalizeCourseUrl(value: string): string {
+  const path = decodeURI(value.split(/[?#]/, 1)[0]! || "/")
     .replace(/\/index\.html$/i, "/")
     .replace(/\.html$/i, "")
     .replace(/\/{2,}/g, "/");
@@ -20,12 +20,10 @@ export function normalizeCourseUrl(value: string): string {
 
 export function findCourseDocument(path: string): CourseDocument | undefined {
   const normalizedPath = normalizeCourseUrl(path);
-  return [...courseIndex.lessons, ...courseIndex.labs].find(
-    (document) => {
-      const documentPath = normalizeCourseUrl(document.url);
-      return documentPath === normalizedPath || normalizedPath.endsWith(documentPath);
-    },
-  );
+  return [...courseIndex.lessons, ...courseIndex.labs].find((document) => {
+    const documentPath = normalizeCourseUrl(document.url);
+    return documentPath === normalizedPath || normalizedPath.endsWith(documentPath);
+  });
 }
 
 export function getCourseChapters(): CourseChapter[] {
@@ -43,7 +41,7 @@ export function getCourseChapters(): CourseChapter[] {
     chapters.set(document.chapter, chapter);
   }
 
-  const rank = (chapter: ChapterId) => chapter === "preface" ? -1 : chapter;
+  const rank = (chapter: ChapterId) => (chapter === "preface" ? -1 : chapter);
   return [...chapters.values()].sort((left, right) => rank(left.chapter) - rank(right.chapter));
 }
 
@@ -53,6 +51,5 @@ export function getChapterLanding(document: CourseDocument): string {
     const preface = courseIndex.curriculum.foundations.find((chapter) => chapter.number === "preface");
     if (preface) return preface.url;
   }
-  return courseIndex.lessons.find((entry) => entry.chapter === document.chapter)?.url
-    ?? document.url;
+  return courseIndex.lessons.find((entry) => entry.chapter === document.chapter)?.url ?? document.url;
 }

@@ -106,9 +106,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-07/exercise/E-07-25-eight-puzzle
-pnpm lab:run -- labs/chapter-07/exercise/E-07-25-eight-puzzle --case 001-sample
-pnpm lab:score -- labs/chapter-07/exercise/E-07-25-eight-puzzle
+pnpm lab doctor labs/chapter-07/exercise/E-07-25-eight-puzzle
+pnpm lab run labs/chapter-07/exercise/E-07-25-eight-puzzle --case 001-sample
+pnpm lab score labs/chapter-07/exercise/E-07-25-eight-puzzle
 ```
 
 ## 解题思路

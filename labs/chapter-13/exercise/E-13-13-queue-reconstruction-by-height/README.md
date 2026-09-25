@@ -93,8 +93,8 @@ make score
 也可以在仓库根目录执行：
 
 ```bash
-pnpm lab:run -- labs/chapter-13/exercise/E-13-13-queue-reconstruction-by-height --target student
-pnpm lab:verify -- labs/chapter-13/exercise/E-13-13-queue-reconstruction-by-height --no-color
+pnpm lab run labs/chapter-13/exercise/E-13-13-queue-reconstruction-by-height --target student
+pnpm lab verify labs/chapter-13/exercise/E-13-13-queue-reconstruction-by-height --no-color
 ```
 
 ## 完成清单

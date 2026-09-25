@@ -83,10 +83,10 @@ cd labs/chapter-12/exercise/E-12-07-kth-smallest-quickselect
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-12/exercise/E-12-07-kth-smallest-quickselect
+pnpm lab run labs/chapter-12/exercise/E-12-07-kth-smallest-quickselect
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-12/exercise/E-12-07-kth-smallest-quickselect
+pnpm lab verify labs/chapter-12/exercise/E-12-07-kth-smallest-quickselect
 ```
 
 ## 完成清单

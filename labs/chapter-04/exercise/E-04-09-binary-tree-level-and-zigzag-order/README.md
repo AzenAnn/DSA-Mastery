@@ -104,10 +104,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-04/exercise/E-04-09-binary-tree-level-and-zigzag-order
-pnpm lab:run -- labs/chapter-04/exercise/E-04-09-binary-tree-level-and-zigzag-order
-pnpm lab:run -- labs/chapter-04/exercise/E-04-09-binary-tree-level-and-zigzag-order --case 001-sample
-pnpm lab:score -- labs/chapter-04/exercise/E-04-09-binary-tree-level-and-zigzag-order
+pnpm lab doctor labs/chapter-04/exercise/E-04-09-binary-tree-level-and-zigzag-order
+pnpm lab run labs/chapter-04/exercise/E-04-09-binary-tree-level-and-zigzag-order
+pnpm lab run labs/chapter-04/exercise/E-04-09-binary-tree-level-and-zigzag-order --case 001-sample
+pnpm lab score labs/chapter-04/exercise/E-04-09-binary-tree-level-and-zigzag-order
 ```
 
 `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。

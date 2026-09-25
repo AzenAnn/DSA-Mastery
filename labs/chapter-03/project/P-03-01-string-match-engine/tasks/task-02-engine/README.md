@@ -33,8 +33,8 @@
 make run TASK=engine
 make score
 # 免 Make 兜底（仓库根）：
-pnpm lab:run -- labs/chapter-03/project/P-03-01-string-match-engine --task engine
-pnpm lab:score -- labs/chapter-03/project/P-03-01-string-match-engine --task engine
+pnpm lab run labs/chapter-03/project/P-03-01-string-match-engine --task engine
+pnpm lab score labs/chapter-03/project/P-03-01-string-match-engine --task engine
 ```
 
 ## 可选：命令行探索

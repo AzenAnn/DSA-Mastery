@@ -82,10 +82,10 @@ cd labs/chapter-14/exercise/E-14-24-coin-change-combinations
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-14/exercise/E-14-24-coin-change-combinations
+pnpm lab run labs/chapter-14/exercise/E-14-24-coin-change-combinations
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-14/exercise/E-14-24-coin-change-combinations
+pnpm lab verify labs/chapter-14/exercise/E-14-24-coin-change-combinations
 ```
 
 ## 完成清单

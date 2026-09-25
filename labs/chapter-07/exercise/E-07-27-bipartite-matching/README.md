@@ -108,9 +108,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-07/exercise/E-07-27-bipartite-matching
-pnpm lab:run -- labs/chapter-07/exercise/E-07-27-bipartite-matching --case 001-sample
-pnpm lab:score -- labs/chapter-07/exercise/E-07-27-bipartite-matching
+pnpm lab doctor labs/chapter-07/exercise/E-07-27-bipartite-matching
+pnpm lab run labs/chapter-07/exercise/E-07-27-bipartite-matching --case 001-sample
+pnpm lab score labs/chapter-07/exercise/E-07-27-bipartite-matching
 ```
 
 ## 解题思路

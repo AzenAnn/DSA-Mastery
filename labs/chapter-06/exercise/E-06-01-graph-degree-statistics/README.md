@@ -137,9 +137,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-06/exercise/E-06-01-graph-degree-statistics
-pnpm lab:run -- labs/chapter-06/exercise/E-06-01-graph-degree-statistics
-pnpm lab:score -- labs/chapter-06/exercise/E-06-01-graph-degree-statistics
+pnpm lab doctor labs/chapter-06/exercise/E-06-01-graph-degree-statistics
+pnpm lab run labs/chapter-06/exercise/E-06-01-graph-degree-statistics
+pnpm lab score labs/chapter-06/exercise/E-06-01-graph-degree-statistics
 ```
 
 ## 完成清单

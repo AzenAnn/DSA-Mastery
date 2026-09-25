@@ -1,0 +1,362 @@
+import { spawn } from "node:child_process";
+import { access } from "node:fs/promises";
+import path from "node:path";
+import process from "node:process";
+import { EXIT } from "@dsa/lab-core";
+import * as vscode from "vscode";
+
+/** packages/lab-cli/dist/cli.js 当前输出的报告版本。不匹配时提示升级扩展，而不是静默出错。 */
+const SUPPORTED_REPORT_VERSION = 1;
+declare const __LAB_NODE_MINIMUM__: readonly number[];
+
+export type Verdict = "AC" | "WA" | "TLE" | "RE" | "CE" | "OLE" | "IE";
+export type ProjectStatus = Verdict | "PENDING" | "BLOCKED" | "UNASSESSED" | "STALE";
+
+export interface CaseResult {
+  id: string;
+  tags: string[];
+  verdict: Verdict;
+  points: number;
+  maxPoints: number;
+  durationMs: number;
+  stderr: string;
+  comparison?: {
+    equal: boolean;
+    difference?: {
+      kind: "token" | "line";
+      index?: number;
+      line?: number;
+      column?: number;
+      expected: string;
+      actual: string;
+    };
+  };
+}
+
+export interface ScoreResult {
+  target: string;
+  verdict: Verdict;
+  score: number;
+  maxScore: number;
+  cases: CaseResult[];
+  compilation: {
+    ok: boolean;
+    compiler?: { command: string; family: string };
+    durationMs?: number;
+    stdout: string;
+    stderr: string;
+  };
+}
+
+interface ProjectCtestResult {
+  name: string;
+  verdict: Verdict;
+  points: number;
+  maxPoints: number;
+  durationMs: number;
+  output: string;
+}
+
+interface ProjectBuildResult {
+  ok: boolean;
+  phase: "configure" | "build";
+  target: "student" | "solution";
+  configure?: { stdout?: string; stderr?: string };
+  build?: { stdout?: string; stderr?: string };
+  targets?: string[];
+  scope?: "task" | "project";
+  blockedBy?: string[];
+  relatedTasks?: string[];
+  legacyBuild?: boolean;
+}
+
+interface ProjectTaskResultBase {
+  id: string;
+  kind: "stdio" | "ctest" | "manual";
+  status: ProjectStatus;
+  weight: number;
+  weightedScore: number;
+  inputFingerprint?: string;
+  changedDuringRun?: boolean;
+  assessedAt?: string;
+  blockedBy?: string[];
+}
+
+interface ProjectStdioTaskResult extends ProjectTaskResultBase {
+  kind: "stdio";
+  status: Verdict;
+  score: number;
+  maxScore: number;
+  judge: ScoreResult;
+}
+
+interface ProjectCtestTaskResult extends ProjectTaskResultBase {
+  kind: "ctest";
+  status: Verdict | "BLOCKED";
+  score: number;
+  maxScore: number;
+  tests: ProjectCtestResult[];
+  build?: ProjectBuildResult;
+}
+
+interface ProjectManualTaskResult extends ProjectTaskResultBase {
+  kind: "manual";
+  status: "PENDING";
+  weightedScore: 0;
+  checklist: string[];
+}
+
+export type ProjectTaskResult = ProjectStdioTaskResult | ProjectCtestTaskResult | ProjectManualTaskResult;
+
+export interface ProjectScoreResult {
+  target: "student" | "solution";
+  tasks: ProjectTaskResult[];
+  automatedScore: number;
+  automatedMax: number;
+  manualPending: number;
+  provisionalTotal: number;
+  total: number;
+  automatedFull: boolean;
+  internalError: boolean;
+  selectedTaskId?: string;
+  partial?: boolean;
+  current?: ProjectCurrentState;
+}
+
+export interface ProjectCurrentTask extends ProjectTaskResultBase {
+  score?: number;
+  maxScore?: number;
+  tests?: ProjectCtestResult[];
+  judge?: ScoreResult;
+  build?: ProjectBuildResult;
+  checklist?: string[];
+  historicalScore?: number;
+  bestScore?: number;
+  previousStatus?: ProjectStatus;
+  inputFiles: string[];
+  valid: boolean;
+  unsaved?: boolean;
+}
+
+export interface ProjectCurrentState extends Omit<ProjectScoreResult, "tasks" | "current"> {
+  tasks: ProjectCurrentTask[];
+  complete: boolean;
+}
+
+interface DoctorTool {
+  name: string;
+  command: string;
+  available: boolean;
+  version?: string;
+  minimum?: string;
+  meetsMinimum: boolean;
+  summary?: string;
+}
+
+export interface DoctorResult {
+  platform: string;
+  architecture: string;
+  node: string;
+  standard?: string;
+  tools: DoctorTool[];
+  makeAvailable: boolean;
+  ok: boolean;
+  issues: string[];
+}
+
+interface LabReport<T> {
+  reportVersion: number;
+  command: string;
+  ok: boolean;
+  lab?: { path: string; type: string; schemaVersion: number };
+  error?: { code: string; message: string; details?: unknown };
+  result?: T;
+  environment?: DoctorResult;
+}
+
+/** CLI 调用失败：既包括工具内部错误，也包括进程本身起不来。 */
+export class CliError extends Error {
+  readonly code: string | undefined;
+  readonly stderr: string | undefined;
+
+  constructor(message: string, code?: string, stderr?: string) {
+    super(message);
+    this.name = "CliError";
+    this.code = code;
+    this.stderr = stderr;
+  }
+}
+
+async function exists(target: string): Promise<boolean> {
+  try {
+    await access(target);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * 解析用于运行判题内核的 Node 可执行文件。
+ *
+ * 判题内核是零第三方依赖的单文件产物，只需一个 Node 运行时即可判题。优先用用户配置或 PATH 中的
+ * node；都不可用时回退到 VSCode 自带的 Electron，通过 ELECTRON_RUN_AS_NODE=1 让它
+ * 以纯 Node 模式运行，这样 PATH 里没有 node 的学生同样能提交。
+ */
+async function resolveNode(): Promise<{ command: string; env?: NodeJS.ProcessEnv }> {
+  const configured = vscode.workspace.getConfiguration("dsaMastery").get<string>("nodePath")?.trim();
+  const candidates =
+    (configured ?? "") !== ""
+      ? [{ command: configured! }]
+      : [{ command: "node" }, { command: process.execPath, env: { ...process.env, ELECTRON_RUN_AS_NODE: "1" } }];
+  for (const candidate of candidates) {
+    const version = await new Promise<string>((resolve) => {
+      const child = spawn(candidate.command, ["--version"], { shell: false, env: candidate.env, timeout: 5000 });
+      let output = "";
+      child.stdout.on("data", (chunk) => {
+        output += chunk;
+      });
+      child.once("error", () => resolve(""));
+      child.once("close", (code) => resolve(code === 0 ? output.trim() : ""));
+    });
+    const match = version.match(/^v?(\d+)\.(\d+)\.(\d+)$/);
+    if (match) {
+      const actual = match.slice(1).map(Number);
+      const difference =
+        actual.map((part, index) => part - __LAB_NODE_MINIMUM__[index]!).find((part) => part !== 0) ?? 0;
+      if (difference >= 0) return candidate;
+    }
+  }
+  throw new CliError(
+    (configured ?? "") !== ""
+      ? `dsaMastery.nodePath 无法提供 Node >=22.13.0：${configured}。请配置有效可执行文件或清空此设置。`
+      : "PATH 和 VS Code 内置运行时均无法提供 Node >=22.13.0。请安装受支持的 Node 或更新 VS Code。",
+    "NODE_VERSION",
+  );
+}
+
+interface RunOutcome<T> {
+  report: LabReport<T>;
+  exitCode: number;
+}
+
+async function runCli<T>(repoRoot: string, args: string[]): Promise<RunOutcome<T>> {
+  if (!vscode.workspace.isTrusted) {
+    throw new CliError(
+      "当前工作区尚未受信任。确认源码可信后，在 VS Code 的工作区信任中启用测评。",
+      "WORKSPACE_UNTRUSTED",
+    );
+  }
+  const cliPath = path.join(repoRoot, "packages", "lab-cli", "dist", "cli.js");
+  if (!(await exists(cliPath))) {
+    throw new CliError(`未找到判题内核：${cliPath}。请确认当前工作区是 DSA Mastery 仓库根目录。`);
+  }
+
+  const node = await resolveNode();
+  const { stdout, stderr, exitCode } = await new Promise<{
+    stdout: string;
+    stderr: string;
+    exitCode: number;
+  }>((resolve, reject) => {
+    const child = spawn(node.command, [cliPath, ...args, "--json"], {
+      cwd: repoRoot,
+      shell: false,
+      env: node.env ?? process.env,
+    });
+    let out = "";
+    let err = "";
+    child.stdout.on("data", (chunk) => {
+      out += chunk;
+    });
+    child.stderr.on("data", (chunk) => {
+      err += chunk;
+    });
+    child.once("error", (error) => reject(new CliError(`无法启动判题进程：${error.message}`, "SPAWN_FAILED")));
+    child.once("close", (code) => resolve({ stdout: out, stderr: err, exitCode: code ?? EXIT.TOOL_ERROR }));
+  });
+
+  let report: LabReport<T>;
+  try {
+    report = JSON.parse(stdout) as LabReport<T>;
+  } catch {
+    // CLI 在 --json 下总应输出 JSON；走到这里说明进程异常退出或输出被污染。
+    const detail = (stderr || stdout).trim().slice(0, 800);
+    throw new CliError(
+      `判题内核没有返回可解析的 JSON（退出码 ${exitCode}）。${detail ? `\n${detail}` : ""}`,
+      "REPORT_UNPARSABLE",
+      stderr,
+    );
+  }
+
+  if (report.reportVersion !== SUPPORTED_REPORT_VERSION) {
+    throw new CliError(
+      `判题内核的报告版本是 ${report.reportVersion}，本扩展支持 ${SUPPORTED_REPORT_VERSION}。请更新扩展后重试。`,
+      "REPORT_VERSION_MISMATCH",
+    );
+  }
+
+  if (report.error) {
+    throw new CliError(report.error.message, report.error.code, stderr);
+  }
+
+  return { report, exitCode };
+}
+
+/**
+ * 对一道 program lab 评分。
+ *
+ * 用 score 而不是 run：两者共用同一套编译、运行与比较内核，但 score 在未满分时
+ * 返回退出码 1，让"是否满分"有一个明确信号。WA / CE 等都是正常的判题结果，
+ * 不是命令失败，因此这里只把 TOOL_ERROR 当作异常。
+ */
+export async function scoreLab(repoRoot: string, labRelativePath: string): Promise<ScoreResult> {
+  const { report, exitCode } = await runCli<ScoreResult>(repoRoot, ["score", labRelativePath]);
+  if (!report.result) {
+    throw new CliError(`判题报告缺少 result 字段（退出码 ${exitCode}）。`, "REPORT_INCOMPLETE");
+  }
+  return report.result;
+}
+
+/**
+ * 对 Project Lab 评分。
+ *
+ * Project 的权重、CMake/CTest 结果和 stdio 嵌套用例都由 lab CLI 计算；扩展只接收并展示
+ * 原始聚合结果，不在这里重新实现一套评分规则。
+ */
+export async function scoreProject(
+  repoRoot: string,
+  labRelativePath: string,
+  taskId?: string,
+): Promise<ProjectScoreResult> {
+  const args = ["score", labRelativePath];
+  if (taskId !== undefined) args.push("--task", taskId);
+  const { report, exitCode } = await runCli<ProjectScoreResult>(repoRoot, args);
+  if (!report.result) {
+    throw new CliError(`Project 判题报告缺少 result 字段（退出码 ${exitCode}）。`, "REPORT_INCOMPLETE");
+  }
+  return report.result;
+}
+
+export async function readProjectCurrent(
+  repoRoot: string,
+  labRelativePath: string,
+  dirtyFiles: string[] = [],
+): Promise<ProjectCurrentState> {
+  const { report } = await runCli<ProjectCurrentState>(repoRoot, [
+    "project-status",
+    labRelativePath,
+    "--dirty-files",
+    JSON.stringify(dirtyFiles),
+  ]);
+  if (!report.result) throw new CliError("Project 状态报告缺少 result 字段。", "REPORT_INCOMPLETE");
+  return report.result;
+}
+
+/** 探测本机实验环境。返回 ok: false 时 issues 里是具体缺什么。 */
+export async function runDoctor(repoRoot: string, labRelativePath: string): Promise<DoctorResult> {
+  const { report } = await runCli<never>(repoRoot, ["doctor", labRelativePath]);
+  if (!report.environment) {
+    throw new CliError("doctor 报告缺少 environment 字段。", "REPORT_INCOMPLETE");
+  }
+  return report.environment;
+}

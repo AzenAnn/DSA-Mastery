@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+# workspace 成员各自的 node_modules（packages/*/dist 是入库产物，不能一起忽略）
+packages/*/node_modules
+apps/*/node_modules
 /.pnpm-store/
 /.pnp
 .pnp.*
@@ -49,3 +52,16 @@ yarn-error.log*
 /.trellis/tasks/08-31-vscode-stats-dashboard-ui/
 /.trellis/tasks/archive/2026-08/08-31-vscode-exercise-webview-ui/
 /.trellis/tasks/archive/2026-08/08-31-vscode-stats-dashboard-ui/
+
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+packages/*/dist/.sources.sha256
+packages/*/dist/.build.lock

@@ -256,7 +256,7 @@ int invalid = 5;    // [!code error]
 - iframe URL 通过 `withBase` 生成，提供中文 `title` 和 `loading="lazy"`；使用 8.1/8.2 同款局部 `search-demo-frame` 样式，不能仅写类名而漏掉样式。
 - 演示可逐步播放、回退和重置，保留阶段说明、节点身份、指针含义与访问序列。线型及文字应足以区分含义，不能只靠颜色。
 - 双图对照按“访问并输出一个节点”同步，并允许点击核对同一节点。对暂时有环或多条入边的算法状态，图示应忠实呈现指针，不得强行画成普通树。
-- 修改后运行 `pnpm run test:tree-demos`，并在最终构建的教材 iframe 中检查控件、浅暗主题和手机布局。实现及测试约定见 [独立交互式演示规范](../.trellis/spec/frontend/interactive-demos.md)。
+- 修改后运行 `pnpm test --project unit`，并在最终构建的教材 iframe 中检查控件、浅暗主题和手机布局。实现及测试约定见 [独立交互式演示规范](../.trellis/spec/frontend/interactive-demos.md)。
 
 ## 浅色、深色与移动端注意事项
 

@@ -110,10 +110,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/exercise/E-02-01-validate-stack-sequences
-pnpm lab:run -- labs/chapter-02/exercise/E-02-01-validate-stack-sequences
-pnpm lab:run -- labs/chapter-02/exercise/E-02-01-validate-stack-sequences --case 001-valid-sample
-pnpm lab:score -- labs/chapter-02/exercise/E-02-01-validate-stack-sequences
+pnpm lab doctor labs/chapter-02/exercise/E-02-01-validate-stack-sequences
+pnpm lab run labs/chapter-02/exercise/E-02-01-validate-stack-sequences
+pnpm lab run labs/chapter-02/exercise/E-02-01-validate-stack-sequences --case 001-valid-sample
+pnpm lab score labs/chapter-02/exercise/E-02-01-validate-stack-sequences
 ```
 
 `make run` 在答案尚未全对时仍正常返回，便于查看各用例结果；`make score` 是严格入口，只有得到 100 分才返回成功。样例采用精确输出比较；`007-scale` 使用两千个元素回归较长的合法序列，复杂度要求仍应结合算法分析判断，而不依赖易受机器性能影响的极限超时。

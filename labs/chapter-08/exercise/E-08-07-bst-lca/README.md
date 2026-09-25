@@ -129,10 +129,10 @@ LCA 定义：同时以 `u`、`v` 为后代（或相等）的深度最大的结�
 ```powershell
 make run
 # 免 Make 兜底：在仓库根执行
-pnpm lab:run -- labs/chapter-08/exercise/E-08-07-bst-lca
+pnpm lab run labs/chapter-08/exercise/E-08-07-bst-lca
 ```
 
-需要单用例或严格评分时使用 `make run CASE=006-stress-random` 与 `make score`；也可用 `pnpm lab:score -- labs/chapter-08/exercise/E-08-07-bst-lca` 兜底。
+需要单用例或严格评分时使用 `make run CASE=006-stress-random` 与 `make score`；也可用 `pnpm lab score labs/chapter-08/exercise/E-08-07-bst-lca` 兜底。
 
 ## 完成清单
 

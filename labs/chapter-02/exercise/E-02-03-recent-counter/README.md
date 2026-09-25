@@ -101,10 +101,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/exercise/E-02-03-recent-counter
-pnpm lab:run -- labs/chapter-02/exercise/E-02-03-recent-counter
-pnpm lab:run -- labs/chapter-02/exercise/E-02-03-recent-counter --case 001-sample
-pnpm lab:score -- labs/chapter-02/exercise/E-02-03-recent-counter
+pnpm lab doctor labs/chapter-02/exercise/E-02-03-recent-counter
+pnpm lab run labs/chapter-02/exercise/E-02-03-recent-counter
+pnpm lab run labs/chapter-02/exercise/E-02-03-recent-counter --case 001-sample
+pnpm lab score labs/chapter-02/exercise/E-02-03-recent-counter
 ```
 
 `make run` 用于查看各用例；`make score` 只有得到 100 分才返回成功。样例采用精确输出比较；`006-scale` 使用两千个密集时间戳，回归窗口持续滑动时的计数更新。线性总复杂度要求仍需结合实现分析判断，不依赖易受机器性能影响的极限超时。

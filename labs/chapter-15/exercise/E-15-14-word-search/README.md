@@ -72,14 +72,14 @@ true
 在仓库根目录执行：
 
 ```powershell
-pnpm lab:run -- labs/chapter-15/exercise/E-15-14-word-search
-pnpm lab:score -- labs/chapter-15/exercise/E-15-14-word-search
+pnpm lab run labs/chapter-15/exercise/E-15-14-word-search
+pnpm lab score labs/chapter-15/exercise/E-15-14-word-search
 ```
 
 进入本 Lab 目录后也可以运行 `make run`。作者与 CI 严格核验：
 
 ```powershell
-pnpm lab:verify -- labs/chapter-15/exercise/E-15-14-word-search
+pnpm lab verify labs/chapter-15/exercise/E-15-14-word-search
 ```
 
 ## 完成清单

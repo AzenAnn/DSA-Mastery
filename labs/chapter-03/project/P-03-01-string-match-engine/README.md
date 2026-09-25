@@ -39,7 +39,7 @@ Node.js、pnpm、C++17 编译器与 CMake 3.25 或更高版本。进入目录先
 ```powershell
 make doctor
 # 未安装 GNU Make 时，在仓库根执行：
-pnpm lab:doctor -- labs/chapter-03/project/P-03-01-string-match-engine
+pnpm lab doctor labs/chapter-03/project/P-03-01-string-match-engine
 ```
 
 ## 公共契约与约定
@@ -135,10 +135,10 @@ make run TASK=engine
 make score
 make verify
 # 免 Make 兜底：在仓库根执行
-pnpm lab:run -- labs/chapter-03/project/P-03-01-string-match-engine
-pnpm lab:run -- labs/chapter-03/project/P-03-01-string-match-engine --task matcher
-pnpm lab:score -- labs/chapter-03/project/P-03-01-string-match-engine
-pnpm lab:verify -- labs/chapter-03/project/P-03-01-string-match-engine
+pnpm lab run labs/chapter-03/project/P-03-01-string-match-engine
+pnpm lab run labs/chapter-03/project/P-03-01-string-match-engine --task matcher
+pnpm lab score labs/chapter-03/project/P-03-01-string-match-engine
+pnpm lab verify labs/chapter-03/project/P-03-01-string-match-engine
 ```
 
 ## 正常、边界与错误情况

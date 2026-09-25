@@ -83,10 +83,10 @@ cd labs/chapter-14/exercise/E-14-20-unbounded-herb-gathering
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-14/exercise/E-14-20-unbounded-herb-gathering
+pnpm lab run labs/chapter-14/exercise/E-14-20-unbounded-herb-gathering
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-14/exercise/E-14-20-unbounded-herb-gathering
+pnpm lab verify labs/chapter-14/exercise/E-14-20-unbounded-herb-gathering
 ```
 
 ## 完成清单

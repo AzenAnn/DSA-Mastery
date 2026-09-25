@@ -133,10 +133,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/exercise/E-01-11-circular-linked-list-split
-pnpm lab:run -- labs/chapter-01/exercise/E-01-11-circular-linked-list-split
-pnpm lab:run -- labs/chapter-01/exercise/E-01-11-circular-linked-list-split --case 001-sample-even
-pnpm lab:score -- labs/chapter-01/exercise/E-01-11-circular-linked-list-split
+pnpm lab doctor labs/chapter-01/exercise/E-01-11-circular-linked-list-split
+pnpm lab run labs/chapter-01/exercise/E-01-11-circular-linked-list-split
+pnpm lab run labs/chapter-01/exercise/E-01-11-circular-linked-list-split --case 001-sample-even
+pnpm lab score labs/chapter-01/exercise/E-01-11-circular-linked-list-split
 ```
 
 `make run` 在答案尚未全对时仍正常返回，避免 Make 把学习结果显示成工具故障；`make score` 是严格入口，只有 100 分才返回成功。标准输出参与判题，调试信息请写入标准错误。

@@ -98,10 +98,10 @@ duration: "30～45 分钟"
 ```powershell
 make run
 # 免 Make 兜底：在仓库根执行
-pnpm lab:run -- labs/chapter-08/exercise/E-08-05-sorted-array-to-bst
+pnpm lab run labs/chapter-08/exercise/E-08-05-sorted-array-to-bst
 ```
 
-需要单用例或严格评分时使用 `make run CASE=005-stress-1e4` 与 `make score`；也可用 `pnpm lab:score -- labs/chapter-08/exercise/E-08-05-sorted-array-to-bst` 兜底。
+需要单用例或严格评分时使用 `make run CASE=005-stress-1e4` 与 `make score`；也可用 `pnpm lab score labs/chapter-08/exercise/E-08-05-sorted-array-to-bst` 兜底。
 
 ## 完成清单
 

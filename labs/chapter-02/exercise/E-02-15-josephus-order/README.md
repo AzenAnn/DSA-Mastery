@@ -62,9 +62,9 @@ make score
 未安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:validate -- labs/chapter-02/exercise/E-02-15-josephus-order
-pnpm lab:run -- labs/chapter-02/exercise/E-02-15-josephus-order
-pnpm lab:score -- labs/chapter-02/exercise/E-02-15-josephus-order
+pnpm lab validate labs/chapter-02/exercise/E-02-15-josephus-order
+pnpm lab run labs/chapter-02/exercise/E-02-15-josephus-order
+pnpm lab score labs/chapter-02/exercise/E-02-15-josephus-order
 ```
 
 - [ ] 全部 20 个公开测试通过。

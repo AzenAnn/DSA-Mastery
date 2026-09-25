@@ -168,9 +168,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-14-sparse-fast-transpose
-pnpm lab:run -- labs/chapter-03/exercise/E-03-14-sparse-fast-transpose
-pnpm lab:score -- labs/chapter-03/exercise/E-03-14-sparse-fast-transpose
+pnpm lab doctor labs/chapter-03/exercise/E-03-14-sparse-fast-transpose
+pnpm lab run labs/chapter-03/exercise/E-03-14-sparse-fast-transpose
+pnpm lab score labs/chapter-03/exercise/E-03-14-sparse-fast-transpose
 ```
 
 - [ ] 样例通过，且第一行 `cpot` 与手算的前缀和一致；

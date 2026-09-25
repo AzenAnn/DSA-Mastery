@@ -6,4 +6,4 @@
 
 字面量在 `[0,1000000000]`，可有前导零；最多 4096 字节、256 Token。先检查输入长度；扫描时先检查 Token 容量，再识别下一 Token。错误定位和优先级见[项目题面](../../README.md)。每次调用覆盖输出，任一错误须清空整个输出，不能留下有效前缀。成功返回默认 `Error{}`。目标时间 O(n)、空间 O(Token 数)。
 
-`expr_tokenizer_tests` 只链接 `expr_tokenizer`，不依赖栈且不使用替身。正常扫描 40 分、边界 30 分、错误 30 分，项目权重 20%。单项命令在仓库根为 `pnpm lab:run -- labs/chapter-02/project/P-02-04-expression-evaluator --task tokenizer`。测试位于 `tests/tokenizer_tests.cpp`，本 Task 不编写 main。
+`expr_tokenizer_tests` 只链接 `expr_tokenizer`，不依赖栈且不使用替身。正常扫描 40 分、边界 30 分、错误 30 分，项目权重 20%。单项命令在仓库根为 `pnpm lab run labs/chapter-02/project/P-02-04-expression-evaluator --task tokenizer`。测试位于 `tests/tokenizer_tests.cpp`，本 Task 不编写 main。

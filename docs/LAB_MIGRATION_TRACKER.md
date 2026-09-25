@@ -38,7 +38,7 @@
 ## 每次迁移的关闭条件
 
 - [ ] 原 README 知识内容、frontmatter 和公开 URL 保持兼容；若任务明确批准重编号，记录映射与 404 风险。
-- [ ] `pnpm lab:validate -- <path>` 与 `pnpm lab:verify -- <path>` 通过。
+- [ ] `pnpm lab validate <path>` 与 `pnpm lab verify <path>` 通过。
 - [ ] reference 自动满分，starter 可编译且非满分。
 - [ ] README 的 `make run` 与 pnpm 兜底在干净环境复现。
 - [ ] `pnpm test` 与相关 Pages 流程通过。

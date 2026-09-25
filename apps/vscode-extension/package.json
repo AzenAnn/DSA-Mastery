@@ -1,0 +1,170 @@
+{
+  "name": "dsa-mastery-labs",
+  "displayName": "DSA Mastery Labs",
+  "version": "0.1.15",
+  "private": true,
+  "description": "在 VSCode 中浏览、作答与提交 DSA Mastery 的代码题、项目题与选择题",
+  "categories": [
+    "Education",
+    "Testing"
+  ],
+  "homepage": "https://azenann.github.io/DSA-Mastery/learn/chapter-preface/06-vscode-extension-guide/",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AzenAnn/DSA-Mastery.git",
+    "directory": "apps/vscode-extension"
+  },
+  "publisher": "dsa-mastery",
+  "main": "./dist/extension.js",
+  "scripts": {
+    "build": "tsdown",
+    "watch": "tsdown --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "package": "tsdown && vsce package --no-dependencies --allow-missing-repository --skip-license"
+  },
+  "dependencies": {
+    "@dsa/lab-core": "workspace:*",
+    "gray-matter": "4.0.3",
+    "katex": "0.18.7",
+    "markdown-it": "14.3.2"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.138.0",
+    "@vscode/vsce": "4.0.0",
+    "esbuild": "0.28.2",
+    "tsdown": "0.23.0"
+  },
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "dsaMastery",
+          "title": "DSA Mastery",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "dsaMastery": [
+        {
+          "id": "dsaMastery.labs",
+          "name": "题目",
+          "contextualTitle": "DSA Mastery 题目"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "dsaMastery.labs",
+        "contents": "当前工作区中没有找到 DSA Mastery 的 labs/ 目录。\n请打开 DSA Mastery 仓库根目录后重试。"
+      }
+    ],
+    "commands": [
+      {
+        "command": "dsaMastery.openLab",
+        "title": "打开题目",
+        "category": "DSA Mastery"
+      },
+      {
+        "command": "dsaMastery.submit",
+        "title": "提交当前题目",
+        "category": "DSA Mastery",
+        "icon": "$(play)"
+      },
+      {
+        "command": "dsaMastery.refreshTree",
+        "title": "刷新题目列表",
+        "category": "DSA Mastery",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "dsaMastery.showHistory",
+        "title": "查看提交历史",
+        "category": "DSA Mastery",
+        "icon": "$(history)"
+      },
+      {
+        "command": "dsaMastery.showStats",
+        "title": "查看做题统计",
+        "category": "DSA Mastery",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "dsaMastery.runDoctor",
+        "title": "检查实验环境",
+        "category": "DSA Mastery"
+      },
+      {
+        "command": "dsaMastery.resetProgress",
+        "title": "重置全部做题进度",
+        "category": "DSA Mastery"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "dsaMastery.showStats",
+          "when": "view == dsaMastery.labs",
+          "group": "navigation@1"
+        },
+        {
+          "command": "dsaMastery.refreshTree",
+          "when": "view == dsaMastery.labs",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "dsaMastery.submit",
+          "when": "view == dsaMastery.labs && (viewItem == dsaMasteryLab || viewItem == dsaMasteryProject)",
+          "group": "inline"
+        },
+        {
+          "command": "dsaMastery.showHistory",
+          "when": "view == dsaMastery.labs && viewItem == dsaMasteryLab",
+          "group": "1_actions"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "dsaMastery.openLab",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "DSA Mastery",
+      "properties": {
+        "dsaMastery.historyLimit": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "每道题保留的提交历史条数，超出后自动删除最旧的源码快照。"
+        },
+        "dsaMastery.nodePath": {
+          "type": "string",
+          "default": "",
+          "description": "判题使用的 Node 可执行文件路径。留空则先尝试 PATH 中的 node，找不到时回退到 VSCode 内置 Node。"
+        }
+      }
+    }
+  },
+  "activationEvents": [
+    "workspaceContains:labs/index.md"
+  ],
+  "engines": {
+    "node": ">=22.13.0",
+    "vscode": "^1.90.0"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "可浏览题面和选择题；执行仓库内测评脚本和学生代码前必须信任工作区。",
+      "restrictedConfigurations": [
+        "dsaMastery.nodePath"
+      ]
+    }
+  }
+}

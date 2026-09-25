@@ -126,10 +126,10 @@ No Answer!
 ```powershell
 make run
 # 免 Make 兜底：在仓库根执行
-pnpm lab:run -- labs/chapter-09/exercise/E-09-04-student-record-lookup
+pnpm lab run labs/chapter-09/exercise/E-09-04-student-record-lookup
 ```
 
-需要单用例或严格评分时使用 `make run CASE=005-stress-1e4-1e5` 与 `make score`；也可用 `pnpm lab:score -- labs/chapter-09/exercise/E-09-04-student-record-lookup` 兜底。
+需要单用例或严格评分时使用 `make run CASE=005-stress-1e4-1e5` 与 `make score`；也可用 `pnpm lab score labs/chapter-09/exercise/E-09-04-student-record-lookup` 兜底。
 
 ## 完成清单
 

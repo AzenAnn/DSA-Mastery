@@ -96,9 +96,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-08-tridiagonal-compress
-pnpm lab:run -- labs/chapter-03/exercise/E-03-08-tridiagonal-compress
-pnpm lab:score -- labs/chapter-03/exercise/E-03-08-tridiagonal-compress
+pnpm lab doctor labs/chapter-03/exercise/E-03-08-tridiagonal-compress
+pnpm lab run labs/chapter-03/exercise/E-03-08-tridiagonal-compress
+pnpm lab score labs/chapter-03/exercise/E-03-08-tridiagonal-compress
 ```
 
 - [ ] 样例通过；

@@ -86,19 +86,19 @@ factor     := integer | '(' expression ')'
 先检查环境。在导出的学生包根目录执行：
 
 ```powershell
-node tools/lab/cli.mjs doctor .
+node packages/lab-cli/dist/cli.js doctor .
 ```
 
 源码仓库的 CLI 位于仓库根，推荐在那里执行：
 
 ```powershell
-pnpm lab:run -- labs/chapter-02/project/P-02-04-expression-evaluator --task stack
-pnpm lab:build -- labs/chapter-02/project/P-02-04-expression-evaluator --task final
-pnpm lab:score -- labs/chapter-02/project/P-02-04-expression-evaluator
-node tools/lab/cli.mjs project-status labs/chapter-02/project/P-02-04-expression-evaluator
+pnpm lab run labs/chapter-02/project/P-02-04-expression-evaluator --task stack
+pnpm lab build labs/chapter-02/project/P-02-04-expression-evaluator --task final
+pnpm lab score labs/chapter-02/project/P-02-04-expression-evaluator
+node packages/lab-cli/dist/cli.js project-status labs/chapter-02/project/P-02-04-expression-evaluator
 ```
 
-或者进入本目录使用 `make run TASK=stack`、`make score`。全新导出的学生包在包根运行 `node tools/lab/cli.mjs score . --task stack`，不需要 pnpm 安装依赖。源码仓库进入本目录时，Node CLI 的相对路径是 `../../../../tools/lab/cli.mjs`。
+或者进入本目录使用 `make run TASK=stack`、`make score`。全新导出的学生包在包根运行 `node packages/lab-cli/dist/cli.js score . --task stack`，不需要 pnpm 安装依赖。源码仓库进入本目录时，Node CLI 的相对路径是 `../../../../packages/lab-cli/dist/cli.js`。
 
 每个 Task 内的命名测试总分 100，当前有效项目分为各项 `Task 得分 / 100 × 权重` 之和。单项测评只更新该项，其他有效成绩保留；未测评和需要重测的任务当前贡献为 0，历史分仍显示。四项当前结果全部 AC 才完成项目。其他 Project 若有 manual，自动满分仍须等待人工，插件不代替人工评分。
 
@@ -115,6 +115,6 @@ node tools/lab/cli.mjs project-status labs/chapter-02/project/P-02-04-expression
 
 ## 作者验证与学生包
 
-仓库根运行 `pnpm lab:verify -- labs/chapter-02/project/P-02-04-expression-evaluator`，同时检查参考满分、起始代码可编译且非满分。参考构建在 `.lab-cache/cmake/solution`，学生构建在 `.lab-cache/cmake/student`，互不链接。
+仓库根运行 `pnpm lab verify labs/chapter-02/project/P-02-04-expression-evaluator`，同时检查参考满分、起始代码可编译且非满分。参考构建在 `.lab-cache/cmake/solution`，学生构建在 `.lab-cache/cmake/student`，互不链接。
 
-`pnpm lab:pack -- labs/chapter-02/project/P-02-04-expression-evaluator --profile student` 导出 `.lab-cache/packages/P-02-04-expression-evaluator-student/`，包含题面、接口、测试、学生文件、CMake、Schema 和零第三方依赖 CLI，排除参考源码和构建缓存。工具链要求 Node 22.13+、CMake 3.25+，以及 GCC 11+、Clang 14+ 或 MSVC 19.30+；Make 可选。
+`pnpm lab pack labs/chapter-02/project/P-02-04-expression-evaluator --profile student` 导出 `.lab-cache/packages/P-02-04-expression-evaluator-student/`，包含题面、接口、测试、学生文件、CMake、Schema 和零第三方依赖 CLI，排除参考源码和构建缓存。工具链要求 Node 22.13+、CMake 3.25+，以及 GCC 11+、Clang 14+ 或 MSVC 19.30+；Make 可选。

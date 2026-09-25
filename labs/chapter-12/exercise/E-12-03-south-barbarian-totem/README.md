@@ -85,10 +85,10 @@ cd labs/chapter-12/exercise/E-12-03-south-barbarian-totem
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-12/exercise/E-12-03-south-barbarian-totem
+pnpm lab run labs/chapter-12/exercise/E-12-03-south-barbarian-totem
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-12/exercise/E-12-03-south-barbarian-totem
+pnpm lab verify labs/chapter-12/exercise/E-12-03-south-barbarian-totem
 ```
 
 ## 完成清单

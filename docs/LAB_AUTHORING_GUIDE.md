@@ -9,7 +9,7 @@
 | 需要检查的学习成果 | 类型 | 机器事实来源 | 本地执行 |
 | --- | --- | --- | --- |
 | 概念辨析、复杂度、结构性质，答案是四选一 | `quiz` | `quiz.json` | 浏览器 `<QuizSet />` |
-| 一个标准输入/标准输出 C++ 问题 | `program` | `lab.json` + `tests/cases.json` | `make run` / `pnpm lab:run` |
+| 一个标准输入/标准输出 C++ 问题 | `program` | `lab.json` + `tests/cases.json` | `make run` / `pnpm lab run` |
 | 多个有依赖关系的 task、公共接口、自动与人工混合评分 | `project` | 顶层 `lab.json` + 各 task 的 `task.json` | Make + CMake/CTest |
 
 决策顺序：
@@ -31,7 +31,7 @@
 
 | 平台 | 支持级别 | 推荐入口 | 说明 |
 | --- | --- | --- | --- |
-| Windows 10/11 原生 PowerShell | 一等支持 | `make run`；无 Make 用 `pnpm lab:run` | CI 使用 MSVC 复现 |
+| Windows 10/11 原生 PowerShell | 一等支持 | `make run`；无 Make 用 `pnpm lab run` | CI 使用 MSVC 复现 |
 | Ubuntu/Linux | 一等支持 | `make run` | CI 同时验证 GCC 与 Clang |
 | macOS | 支持 | `make run` | 使用 Apple Clang；提交前仍由跨平台 CI 复核 |
 | WSL | 支持 | `make run` | 按 Linux 环境处理，不与 Windows 二进制混用 |
@@ -59,7 +59,7 @@ GNU Make 是首选学习入口，但不是必装依赖。Makefile 只转发到 N
 安装后先检查，不要让 `doctor` 替你修改 PATH：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab doctor labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 ## 3. 统一命令与退出码
@@ -75,8 +75,8 @@ make run
 没有 GNU Make 时，在仓库根使用官方兜底：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab doctor labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 CLI 不带路径时会从当前目录向上寻找最近的 `lab.json`。维护者也可从仓库根使用 Make：
@@ -123,8 +123,8 @@ Lab CLI 在交互终端自动增强关键信息，但状态文字和 `x/y` 分�
 需要纯文本时在任一非 interactive 命令添加 `--no-color`。设置 `NO_COLOR`、使用 `TERM=dumb` 或把输出重定向到文件时也会自动关闭颜色。`--json` 永远不含 ANSI 控制码，脚本与 CI 必须消费 JSON 字段而非带样式的人类输出。
 
 ```powershell
-pnpm lab:run -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --no-color
-pnpm lab:score -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --json
+pnpm lab run labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --no-color
+pnpm lab score labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --json
 ```
 
 ## 4. 公共目录、命名与路径安全
@@ -197,9 +197,9 @@ Schema v1 只接受 `quiz`、`program`、`project`。未知主版本会立即失
 通过脚手架创建：
 
 ```powershell
-pnpm lab:new -- --type quiz --chapter 2 --slug stack-quiz
-pnpm lab:new -- --type program --chapter 2 --slug stack-merge
-pnpm lab:new -- --type project --chapter 4 --slug tree-index
+pnpm lab new --type quiz --chapter 2 --slug stack-quiz
+pnpm lab new --type program --chapter 2 --slug stack-merge
+pnpm lab new --type project --chapter 4 --slug tree-index
 ```
 
 脚手架分别扫描同章 `T/E/P` 的最大序号并加一；缺号不会复用。`--order` 仍可选填，但它只设置展示顺序。脚手架拒绝覆盖已存在目录。生成后仍必须替换占位题面、参考实现、测试和章节标题；“能生成”不是“可发布”。
@@ -207,7 +207,7 @@ pnpm lab:new -- --type project --chapter 4 --slug tree-index
 创建后用稳定编号定位，不需要记目录名：
 
 ```powershell
-pnpm lab:locate -- 02T2
+pnpm lab locate 02T2
 ```
 
 ### 4.2 网站侧栏的分类接口
@@ -228,7 +228,7 @@ pnpm lab:locate -- 02T2
 labCategory: exercise # theory | exercise | project
 ```
 
-不要按标题、slug 或关键词猜测类型。新增或调整分类后，至少运行 `pnpm run validate`、`pnpm run test:discovery`、`pnpm run build` 和 `pnpm run check:site`；涉及侧栏范围、样式或 Pages base 时，再运行 `pnpm run test:pages`。侧栏、Labs 首页、搜索与路由必须继续消费同一 `CourseIndex`。
+不要按标题、slug 或关键词猜测类型。新增或调整分类后，至少运行 `pnpm test`、`pnpm test --project discovery`、`pnpm run build` 和 `pnpm test --project site-audit`；涉及侧栏范围、样式或 Pages base 时，再运行 `pnpm test --project site-e2e`。侧栏、Labs 首页、搜索与路由必须继续消费同一 `CourseIndex`。
 
 ## 5. Quiz：理论选择题
 
@@ -290,7 +290,7 @@ README 只能挂载一次：
 
 ### 5.3 Quiz 作者检查
 
-1. `pnpm lab:validate -- <lab-path>`。
+1. `pnpm lab validate <lab-path>`。
 2. 在网站真实完成“选择 → 提交 → 反馈 → 题解 → 重试”。
 3. 检查 390px 移动端无根页面横向溢出。
 4. 人工逐题核对答案索引、干扰项、解析和来源；若来源按维护者决定不公开，则核对 task/PR 中的省略记录。
@@ -428,13 +428,13 @@ labs/chapter-NN/exercise/E-NN-SS-slug/
 
 ### 6.5 Makefile 为什么仍在 Lab 内
 
-每个可执行 Lab 的 Makefile 只有三行，用于支持 `cd` 后立即 `make run`。真实规则只在仓库级 `tools/lab/lab.mk`。
+每个可执行 Lab 的 Makefile 只有三行，用于支持 `cd` 后立即 `make run`。真实规则只在仓库级 `packages/lab-cli/lab.mk`。
 
 <!-- LAB_THIN_MAKEFILE:START -->
 ```makefile
 LAB_DIR := $(CURDIR)
 REPO_ROOT := $(LAB_DIR)/../../../..
-include ../../../../tools/lab/lab.mk
+include ../../../../packages/lab-cli/lab.mk
 ```
 <!-- LAB_THIN_MAKEFILE:END -->
 
@@ -444,13 +444,13 @@ include ../../../../tools/lab/lab.mk
 
 ```powershell
 # 只预览差异，不写文件
-pnpm lab:refresh-expected -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab refresh-expected labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 
 # 人工确认 diff 后显式更新
-pnpm lab:refresh-expected -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --write
+pnpm lab refresh-expected labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --write
 
 # 检查 solution=100、starter<100、.out 无漂移
-pnpm lab:verify -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab verify labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
 ```
 
 不要手工运行 solution 后用重定向悄悄覆盖 `.out`。标准输出是可 Review 的稳定 oracle；任何改变都应先看到 diff。
@@ -561,7 +561,7 @@ make run TASK=frequency
 make run TASK=codec
 make refresh-expected TASK=frequency
 make score
-pnpm lab:verify -- labs/chapter-08/project/P-08-01-avl-tree-rotations
+pnpm lab verify labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 结果明确区分：
@@ -579,7 +579,7 @@ Provisional total: 80/100
 完整公开仓库保留 solution，适合自学与维护。需要只发作业时：
 
 ```powershell
-pnpm lab:pack -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --profile student
+pnpm lab pack labs/chapter-01/exercise/E-01-01-sequential-list-deduplication --profile student
 ```
 
 包生成到该 Lab 的 `.lab-cache/packages/`，不会回写源码。学生包：
@@ -587,7 +587,7 @@ pnpm lab:pack -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication 
 - 排除所有 `solution/`、缓存、构建产物和二进制；
 - 保留 student、公开测试、README、manifest 与本地 runner；
 - 使用独立薄 Makefile，不依赖原仓库 `../../..`；
-- 同时支持 `make run` 和 `pnpm lab:run`。
+- 同时支持 `make run` 和 `pnpm lab run`。
 
 打包后必须在包目录重新执行 `validate` 和 `run`，并搜索确认没有 solution。公开测试和参考答案防不了主动查看仓库历史；它们服务自学与可复现，不是保密考试系统。
 
@@ -623,8 +623,8 @@ pnpm lab:pack -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication 
 
 ```powershell
 pnpm test
-pnpm lab:verify -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
-pnpm lab:verify -- labs/chapter-08/project/P-08-01-avl-tree-rotations
+pnpm lab verify labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+pnpm lab verify labs/chapter-08/project/P-08-01-avl-tree-rotations
 ```
 
 PR 记录：操作系统、Node/pnpm、编译器/CMake 版本、实际命令、关键分数、未执行项及原因。CI 在 Ubuntu 验证 GCC/Clang，在 Windows 验证 MSVC；网站 job 验证静态契约、构建、Pages 产物和浏览器交互。外部 PR 只获得只读 token，不向执行学生代码的 job 注入部署秘密。
@@ -646,10 +646,10 @@ Review Owner 不能只引用作者截图：从干净 clone 独立复现至少一
 ## 12. 常见错误与正确做法
 
 错误：每个 Lab 复制一份复杂 Makefile。  
-正确：保留固定三行薄 Makefile，行为集中在 `tools/lab/lab.mk` 与 CLI。
+正确：保留固定三行薄 Makefile，行为集中在 `packages/lab-cli/lab.mk` 与 CLI。
 
 错误：Windows 学习者必须先装 Make 才能做题。  
-正确：Make 推荐；`pnpm lab:run -- <path>` 是同等权威兜底。
+正确：Make 推荐；`pnpm lab run <path>` 是同等权威兜底。
 
 错误：选项写成 `A. O(n)`，同时 README 维护答案表。  
 正确：JSON 只写 `O(n)`，答案索引与总览均由 QuizSet 读取。

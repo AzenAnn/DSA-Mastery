@@ -126,9 +126,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-15-generalized-list-length
-pnpm lab:run -- labs/chapter-03/exercise/E-03-15-generalized-list-length
-pnpm lab:score -- labs/chapter-03/exercise/E-03-15-generalized-list-length
+pnpm lab doctor labs/chapter-03/exercise/E-03-15-generalized-list-length
+pnpm lab run labs/chapter-03/exercise/E-03-15-generalized-list-length
+pnpm lab score labs/chapter-03/exercise/E-03-15-generalized-list-length
 ```
 
 - [ ] 冻结样例表里的 7 行全部通过；

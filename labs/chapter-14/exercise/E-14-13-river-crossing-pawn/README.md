@@ -81,10 +81,10 @@ cd labs/chapter-14/exercise/E-14-13-river-crossing-pawn
 make run
 
 # 没有 Make 时，在仓库根执行
-pnpm lab:run -- labs/chapter-14/exercise/E-14-13-river-crossing-pawn
+pnpm lab run labs/chapter-14/exercise/E-14-13-river-crossing-pawn
 
 # 作者与 CI 的严格检查
-pnpm lab:verify -- labs/chapter-14/exercise/E-14-13-river-crossing-pawn
+pnpm lab verify labs/chapter-14/exercise/E-14-13-river-crossing-pawn
 ```
 
 ## 完成清单

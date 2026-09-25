@@ -110,14 +110,14 @@ macOS：
 
 ```bash
 cd ~/code/DSA-Mastery
-bash scripts/bootstrap/bootstrap-macos.sh
+bash packages/bootstrap/scripts/bootstrap-macos.sh
 ```
 
 Windows（PowerShell）：
 
 ```powershell
 cd "$HOME\code\DSA-Mastery"
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1
 ```
 
 启动器会打开交互式选择界面：用方向键移动、空格选择或取消、回车开始安装。基础运行环境始终保留；Program Lab C++ 环境、Project Lab / CMake、VS Code 和扩展可以按需选择。脚本会显示各阶段进度，重跑时会复用已经安装的工具、仓库和依赖。
@@ -128,7 +128,7 @@ macOS：
 
 ```bash
 mkdir -p ~/code
-curl -fL https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-macos.sh -o /tmp/bootstrap-macos.sh
+curl -fL https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/packages/bootstrap/scripts/bootstrap-macos.sh -o /tmp/bootstrap-macos.sh
 bash /tmp/bootstrap-macos.sh --repo-dir "$HOME/code/DSA-Mastery"
 ```
 
@@ -136,7 +136,7 @@ Windows（PowerShell）：
 
 ```powershell
 $bootstrap = Join-Path $env:TEMP "dsa-mastery-bootstrap.ps1"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/scripts/bootstrap/bootstrap-windows.ps1" -OutFile $bootstrap
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AzenAnn/DSA-Mastery/main/packages/bootstrap/scripts/bootstrap-windows.ps1" -OutFile $bootstrap
 powershell.exe -ExecutionPolicy Bypass -File $bootstrap -RepoDir "$HOME\code\DSA-Mastery"
 ```
 
@@ -144,14 +144,14 @@ powershell.exe -ExecutionPolicy Bypass -File $bootstrap -RepoDir "$HOME\code\DSA
 
 ```bash
 # macOS
-bash scripts/bootstrap/bootstrap-macos.sh --profile basic
-bash scripts/bootstrap/bootstrap-macos.sh --profile full
+bash packages/bootstrap/scripts/bootstrap-macos.sh --profile basic
+bash packages/bootstrap/scripts/bootstrap-macos.sh --profile full
 ```
 
 ```powershell
 # Windows
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile basic
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\bootstrap\bootstrap-windows.ps1 -Profile full
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1 -Profile basic
+powershell.exe -ExecutionPolicy Bypass -File .\packages\bootstrap\scripts\bootstrap-windows.ps1 -Profile full
 ```
 
 - macOS：[macOS 学生实验环境安装指南](https://azenann.github.io/DSA-Mastery/learn/chapter-preface/05-macos-student-setup/)

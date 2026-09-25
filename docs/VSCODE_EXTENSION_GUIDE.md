@@ -103,7 +103,7 @@ macOS（仓库根，bash/zsh）：
 ```bash
 (
   set -e
-  cd tools/vscode-extension
+  cd apps/vscode-extension
   pnpm install --frozen-lockfile
   pnpm run typecheck
   pnpm run package
@@ -167,7 +167,7 @@ fi
 - **看不到命令** → 插件没加载。运行 `Developer: Show Running Extensions`，找 `dsa-mastery.dsa-mastery-labs` 看有无报错。
 
 ::: pitfall 必须打开仓库根目录
-插件靠 `labs/` 和 `tools/lab/cli.mjs` 定位判题内核。只打开某个 Lab 子目录，插件不会激活。
+插件靠 `labs/` 和 `packages/lab-cli/dist/cli.js` 定位判题内核。只打开某个 Lab 子目录，插件不会激活。
 :::
 
 ## 做一道题
@@ -276,7 +276,7 @@ Project 可从任务表单项测评，也可测评整个 Project。插件保存�
 | Project 当前输入指纹、逐 Task 结果与完整诊断 | Project 内 `.lab-cache/project-results-student.json` |
 | 每次提交的源码快照 | 插件的 `globalStorage` 目录 |
 
-VS Code 历史状态不进仓库，也不被 `pnpm lab:clean` 删除。CLI 的当前测评缓存位于被 Git 忽略的 `.lab-cache/`，清理后当前代码需要重新测评，VS Code 历史摘要仍保留。
+VS Code 历史状态不进仓库，也不被 `pnpm lab clean` 删除。CLI 的当前测评缓存位于被 Git 忽略的 `.lab-cache/`，清理后当前代码需要重新测评，VS Code 历史摘要仍保留。
 
 插件使用 `01E04` 这样的稳定 Lab ID 保存进度，而不是依赖目录名。升级到采用稳定 ID 的版本时，插件会先备份旧状态，再自动迁移代码题、选择题和做题统计；既有源码快照仍能从提交历史打开，不需要手工重做题目。
 
@@ -317,7 +317,7 @@ VS Code 历史状态不进仓库，也不被 `pnpm lab:clean` 删除。CLI 的�
 
 ### 插件不做的事
 
-- **交互式运行**（手工输入输出）需要真实终端，请继续用 `pnpm lab:interactive`。
+- **交互式运行**（手工输入输出）需要真实终端，请继续用 `pnpm lab interactive`。
 - **Project 的 manual task** 只展示 checklist 和 `PENDING`，人工评审仍由课程流程完成。
 - **Project 多文件历史** 暂未实现；插件只保存最近一次自动结果摘要，不复制多文件源码快照。
 - **选择题不接入终端 CLI**。答案在插件内本地判定，网页端与 VSCode 的答题进度目前不互相同步。
@@ -353,9 +353,9 @@ VS Code 历史状态不进仓库，也不被 `pnpm lab:clean` 删除。CLI 的�
 插件**不重新实现判题**。它调用的是仓库里同一个内核：
 
 ```
-node tools/lab/cli.mjs score <lab-path> --json
+node packages/lab-cli/dist/cli.js score <lab-path> --json
 ```
 
-所以插件里的判定结果和 `pnpm lab:score` 完全一致 —— 同一份 manifest、同一套编译器选择、同一批测试用例、同一个计分规则。插件只是换了一层界面。
+所以插件里的判定结果和 `pnpm lab score` 完全一致 —— 同一份 manifest、同一套编译器选择、同一批测试用例、同一个计分规则。插件只是换了一层界面。
 
-Project 的 CLI 维护当前结果缓存，插件读取同一份结构化状态；终端测评后可刷新插件。CLI 的 Project 锁防止同时写构建目录。Program/Quiz 历史仍由插件独立记录。`scripts/bootstrap/` 的环境安装器准备工具链与可选 IDE，不等于已经安装本项目 VSIX；VSIX 安装按本页单独完成。
+Project 的 CLI 维护当前结果缓存，插件读取同一份结构化状态；终端测评后可刷新插件。CLI 的 Project 锁防止同时写构建目录。Program/Quiz 历史仍由插件独立记录。`packages/bootstrap/` 的环境安装器准备工具链与可选 IDE，不等于已经安装本项目 VSIX；VSIX 安装按本页单独完成。

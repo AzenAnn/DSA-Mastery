@@ -1,24 +1,22 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2023",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "types": ["node", "vite/client"],
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "types": ["node", "vite/client"]
   },
+  // 覆盖站点、全部 workspace 包、VSCode 扩展的源码与配置，以及全部测试。
   "include": [
     ".vitepress/**/*.ts",
-    ".vitepress/**/*.vue"
+    ".vitepress/**/*.vue",
+    "packages/*/src/**/*.ts",
+    "packages/*/test/**/*.ts",
+    "packages/*/*.config.ts",
+    "apps/*/src/**/*.ts",
+    "apps/*/test/**/*.ts",
+    "apps/*/*.config.ts",
+    "tests/**/*.ts",
+    "*.config.ts"
   ],
-  "exclude": ["node_modules", "dist", "playwright-report", "test-results"]
+  "exclude": ["node_modules", "dist", "packages/*/dist", "apps/*/dist", "playwright-report", "test-results"]
 }

@@ -106,11 +106,11 @@ null
 在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative
-pnpm lab:run -- labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative --case 001-sample
-pnpm lab:score -- labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative
-pnpm lab:run -- labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative --target solution --case 001-sample
-pnpm lab:verify -- labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative
+pnpm lab doctor labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative
+pnpm lab run labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative --case 001-sample
+pnpm lab score labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative
+pnpm lab run labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative --target solution --case 001-sample
+pnpm lab verify labs/chapter-04/exercise/E-04-08-binary-tree-inorder-iterative
 ```
 
 也可以进入本 Lab 目录运行 `make doctor`、`make run`、`make score`、`make verify`。每题 20 点，每点 5 分，总分 100。学生骨架可编译，但初始并未完成算法。

@@ -61,9 +61,9 @@ make score
 未安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:validate -- labs/chapter-02/exercise/E-02-12-next-greater-element
-pnpm lab:run -- labs/chapter-02/exercise/E-02-12-next-greater-element
-pnpm lab:score -- labs/chapter-02/exercise/E-02-12-next-greater-element
+pnpm lab validate labs/chapter-02/exercise/E-02-12-next-greater-element
+pnpm lab run labs/chapter-02/exercise/E-02-12-next-greater-element
+pnpm lab score labs/chapter-02/exercise/E-02-12-next-greater-element
 ```
 
 - [ ] 全部 20 个公开测试通过。

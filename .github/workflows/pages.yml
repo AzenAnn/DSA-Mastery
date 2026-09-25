@@ -29,8 +29,6 @@ jobs:
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11.1.1
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -51,32 +49,28 @@ jobs:
           echo "GITHUB_PAGES_BASE_PATH=${{ steps.pages.outputs.base_path }}" >> "$GITHUB_ENV"
           echo "SITE_URL=${{ steps.pages.outputs.base_url }}" >> "$GITHUB_ENV"
 
-      - name: Validate content, types, and source
-        run: pnpm run validate
+      - name: Lint and typecheck
+        run: |
+          pnpm run lint
+          pnpm run typecheck
 
-      - name: Test Lab schemas, scaffolding, comparators, and process limits
-        run: pnpm run test:lab-tools
+      # 入库的判题内核产物必须与源码同步，否则学生 clone 到的是过期内核。
+      - name: Confirm committed build artifacts are current
+        run: |
+          pnpm -r build
+          git diff --exit-code -- packages
 
-      - name: Verify tree visualization algorithms and replay snapshots
-        run: pnpm run test:tree-demos
-
-      - name: Validate Lab author-guide examples and entry points
-        run: pnpm run test:lab-docs
-
-      - name: Verify automatic Markdown discovery
-        run: pnpm run test:discovery
-
-      - name: Build final VitePress Pages artifact
-        run: pnpm run build
-
-      - name: Audit final Pages artifact
-        run: pnpm run check:site
-
-      - name: Install Chromium for navigation smoke test
+      - name: Install Chromium for the navigation smoke test
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Click through the final Pages artifact
-        run: pnpm run test:pages
+      # 一条命令覆盖内容校验、Lab 工具链、扩展、站点产物审计与浏览器冒烟。
+      # VitePress 构建发生在 site-audit / site-e2e 的 globalSetup 里。
+      - name: Run the site and tooling suite
+        run: >
+          pnpm exec vitest run
+          --project unit --project lab-tools --project vscode
+          --project content --project docs
+          --project site-audit --project site-e2e --project discovery
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
@@ -86,7 +80,7 @@ jobs:
   lab-cpp:
     name: Lab C++ (${{ matrix.label }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     permissions:
       contents: read
     strategy:
@@ -108,8 +102,6 @@ jobs:
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11.1.1
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -129,10 +121,10 @@ jobs:
         env:
           CXX: ${{ matrix.cxx }}
         run: |
-          pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
-          pnpm run test:lab-golden
-          pnpm run test:lab-make
+          pnpm lab doctor labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+          pnpm exec vitest run --project lab-cpp
 
+      # VsDevCmd.bat 改的是 shell 环境，必须由 cmd 继承给 vitest worker 再传到 cl 孙进程。
       - name: Verify Program and Project Golden Labs (MSVC)
         if: runner.os == 'Windows'
         shell: cmd
@@ -145,14 +137,8 @@ jobs:
           call "%VS_INSTALL%\Common7\Tools\VsDevCmd.bat" -arch=x64
           if errorlevel 1 exit /b %errorlevel%
           set CXX=cl
-          pnpm lab:doctor -- labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
-          pnpm run test:lab-golden
-          pnpm run test:lab-make
-
-      - name: Verify Project dependency isolation and fresh student package
-        env:
-          CXX: ${{ matrix.cxx }}
-        run: node --test tests/project-engineering.test.mjs
+          pnpm lab doctor labs/chapter-01/exercise/E-01-01-sequential-list-deduplication
+          pnpm exec vitest run --project lab-cpp
 
       - name: Confirm Lab builds do not modify tracked sources
         shell: bash

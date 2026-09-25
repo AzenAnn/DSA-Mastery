@@ -113,13 +113,13 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-06/exercise/E-06-09-graph-representation-conversion
-pnpm lab:run -- labs/chapter-06/exercise/E-06-09-graph-representation-conversion
-pnpm lab:run -- labs/chapter-06/exercise/E-06-09-graph-representation-conversion --case 001-sample
-pnpm lab:score -- labs/chapter-06/exercise/E-06-09-graph-representation-conversion
+pnpm lab doctor labs/chapter-06/exercise/E-06-09-graph-representation-conversion
+pnpm lab run labs/chapter-06/exercise/E-06-09-graph-representation-conversion
+pnpm lab run labs/chapter-06/exercise/E-06-09-graph-representation-conversion --case 001-sample
+pnpm lab score labs/chapter-06/exercise/E-06-09-graph-representation-conversion
 ```
 
-本题有 20 组测试，每组 5 分，总分 100。起始代码可以编译，但尚未实现完整算法；满分需补齐 TODO。作者检查参考解、骨架与预期输出可使用 `pnpm lab:verify -- labs/chapter-06/exercise/E-06-09-graph-representation-conversion`。
+本题有 20 组测试，每组 5 分，总分 100。起始代码可以编译，但尚未实现完整算法；满分需补齐 TODO。作者检查参考解、骨架与预期输出可使用 `pnpm lab verify labs/chapter-06/exercise/E-06-09-graph-representation-conversion`。
 
 ## 正确性说明
 

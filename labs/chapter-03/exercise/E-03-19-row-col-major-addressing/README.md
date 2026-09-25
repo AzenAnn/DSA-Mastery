@@ -207,9 +207,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-19-row-col-major-addressing
-pnpm lab:run -- labs/chapter-03/exercise/E-03-19-row-col-major-addressing
-pnpm lab:score -- labs/chapter-03/exercise/E-03-19-row-col-major-addressing
+pnpm lab doctor labs/chapter-03/exercise/E-03-19-row-col-major-addressing
+pnpm lab run labs/chapter-03/exercise/E-03-19-row-col-major-addressing
+pnpm lab score labs/chapter-03/exercise/E-03-19-row-col-major-addressing
 ```
 
 - [ ] 样例通过（两个样例的四个输出值都能手算复现）；

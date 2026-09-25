@@ -2,7 +2,7 @@
 
 > 状态：迁移实现与本地验收已完成
 >
-> 固定版本：VitePress `1.6.4`、Trellis `0.6.14`
+> 固定版本：VitePress `2.0.0-alpha.20`、Trellis `0.6.14`
 >
 > 发布目标：GitHub Pages，静态产物 `dist/pages`
 
@@ -31,7 +31,7 @@ vitepress build .     ─► dist/pages
 - `.vitepress/config.ts` 是唯一 Vite/VitePress 配置入口，`outDir` 固定为 `dist/pages`。
 - `.vitepress/content-index.ts` 在构建期扫描并派生课程数据；Node 文件系统 API 不进入浏览器 bundle。
 - `.vitepress/content.data.ts` 监听 `content/chapter-*/*.md` 与 `labs/chapter-*/*/*/README.md`，供 Vue 组件消费同一索引。
-- `scripts/validate-content.mjs` 是独立校验防线；`scripts/test-content-discovery.mjs` 用临时教材与 Lab 证明自动发现，并在 `finally` 中安全清理。
+- `packages/course-index/src/validate.ts` 是独立校验防线；`tests/content-discovery.test.mjs` 用临时教材与 Lab 证明自动发现，并在 `afterAll` 中安全清理。
 
 公开 URL 保持不变：
 
@@ -53,7 +53,7 @@ GitHub Pages 的 base 只从 `actions/configure-pages` 输出写入 `GITHUB_PAGE
 [对应 Lab](../../labs/chapter-01/theory/T-01-02-singly-linked-list-quiz/README.md)
 ```
 
-`pnpm run validate:content` 先检查目标源文件存在；VitePress 构建时再把可识别的相对 `.md` 链接改写为无扩展名课程路由，并由统一 base 处理部署前缀。不要把 `/DSA-Mastery/` 写进正文。
+`pnpm test --project content` 先检查目标源文件存在；VitePress 构建时再把可识别的相对 `.md` 链接改写为无扩展名课程路由，并由统一 base 处理部署前缀。不要把 `/DSA-Mastery/` 写进正文。
 
 ### 原生能力与自定义范围
 
@@ -82,12 +82,12 @@ VitePress `1.6.4` 在部分 Lab 跨页面客户端导航中会保留上一页 ou
 | --- | --- |
 | `pnpm run dev` | 在 `127.0.0.1` 启动 VitePress 开发服务 |
 | `pnpm run preview` | 在 `127.0.0.1` 预览生产产物 |
-| `pnpm run validate` | 内容校验 + `vue-tsc` + ESLint |
-| `pnpm run test:discovery` | 临时内容自动发现、渲染与清理 |
+| `pnpm test` | 内容校验 + `vue-tsc` + Oxlint |
+| `pnpm test --project discovery` | 临时内容自动发现、渲染与清理 |
 | `pnpm run build` | 构建 `dist/pages` |
-| `pnpm run check:site` | 检查页面清单、内部链接、base、H1 与搜索内容 |
+| `pnpm test --project site-audit` | 检查页面清单、内部链接、base、H1 与搜索内容 |
 | `pnpm test` | 依次执行 validate、树演示/启动器/Lab 工具与文档检查、discovery、最终 build 与 artifact check |
-| `pnpm run test:pages` | 对最终 Pages 子路径产物运行 Playwright |
+| `pnpm test --project site-e2e` | 对最终 Pages 子路径产物运行 Playwright |
 
 迁移收口时的实际结果：
 
@@ -103,8 +103,8 @@ VitePress `1.6.4` 在部分 Lab 跨页面客户端导航中会保留上一页 ou
 $env:GITHUB_PAGES_BASE_PATH = "/DSA-Mastery"
 $env:SITE_URL = "https://azenann.github.io/DSA-Mastery/"
 pnpm run build
-pnpm run check:site
-pnpm run test:pages
+pnpm test --project site-audit
+pnpm test --project site-e2e
 Remove-Item Env:GITHUB_PAGES_BASE_PATH
 Remove-Item Env:SITE_URL
 ```
@@ -127,19 +127,15 @@ Remove-Item Env:SITE_URL
 
 清理报告审计的 30 个旧 vinext、React、RSC、Cloudflare Workers 与 OpenAI Sites 跟踪文件已全部删除；旧直接依赖和补丁脚本也已从 package/lockfile 与 workflow 移除。Markdown、Labs、`public`、文档、Trellis、内容校验、Playwright、VitePress 和 Pages workflow 均保留。
 
-`pnpm audit` 仍报告 3 个传递依赖问题（2 moderate、1 high）：
+`pnpm audit` 已清零。原先 14 条公告来自两条构建期链路，处理方式：
 
-```text
-vitepress 1.6.4
-└─ vite 5.4.21
-   └─ esbuild 0.21.5
-```
+- `speech-rule-engine` 把 `@xmldom/xmldom` 精确锁在 0.9.10，13 条公告的修复版是 0.9.12，用 `pnpm-workspace.yaml` 的定向 override 顶到 0.9.12；
+- `gray-matter` 的 `js-yaml` 范围是 `^3.13.1`，直接更到修复版 3.15.2，不需要 override。
 
-在固定 VitePress `1.6.4` 的兼容范围内没有可用修复。`pnpm audit --fix` 或强制升级会越过当前版本合同，可能破坏 VitePress 构建，禁止作为自动处置。当前缓解措施：
+`markdown-it-mathjax3` 保持 4.x：v5 换掉了 mathjax-full，输出会在每条公式外包一层带内联 `<style>` 的 `<span>`，经 Vue SFC 编译后公式元素会丢失，且它没有任何选项可以关掉。`pnpm audit --fix` 式的盲目升级仍然禁止，任何 override 都要跟着跑一遍 `pnpm test`、Pages 子路径 Playwright 与视觉检查。其余缓解措施不变：
 
 - `dev` 与 `preview` 强制绑定 `127.0.0.1`，不向局域网暴露开发服务器；
-- 正式环境只发布预构建的静态 `dist/pages`，不运行 Vite/esbuild 开发服务；
-- 升级需单独 Issue/PR，重新跑 `pnpm test`、Pages 子路径 Playwright 与视觉检查。
+- 正式环境只发布预构建的静态 `dist/pages`，不运行 Vite/esbuild 开发服务。
 
 ## 6. 回滚
 
@@ -165,9 +161,9 @@ vitepress 1.6.4
 
 | 现象 | 先检查 |
 | --- | --- |
-| 相对 `.md` 链接 404 | 源文件是否存在、是否位于两类内容扫描路径、`pnpm run validate:content` 输出 |
+| 相对 `.md` 链接 404 | 源文件是否存在、是否位于两类内容扫描路径、`pnpm test --project content` 输出 |
 | URL 出现双 `/DSA-Mastery/` | 源码是否硬编码 base；`GITHUB_PAGES_BASE_PATH` 是否只注入一次 |
-| 新页面没有进入导航/搜索 | frontmatter、目录命名、`pnpm run test:discovery` |
+| 新页面没有进入导航/搜索 | frontmatter、目录命名、`pnpm test --project discovery` |
 | Lab 跳转后 outline 错乱 | `target="_self"` 是否仍在顶栏 Labs/目录卡片上 |
 | 公式未渲染 | `markdown.math` 是否仍为 `true`，正文分隔符是否完整 |
 | 本地正常、Pages 失败 | 使用本节 PowerShell 命令在最终 `dist/pages` 上复现 |

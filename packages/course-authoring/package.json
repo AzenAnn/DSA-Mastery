@@ -1,0 +1,16 @@
+{
+  "name": "@dsa/course-authoring",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@dsa/lab-core": "workspace:*",
+    "@dsa/lab-runner": "workspace:*"
+  },
+  "devDependencies": {
+    "@dsa/lab-testkit": "workspace:*"
+  }
+}

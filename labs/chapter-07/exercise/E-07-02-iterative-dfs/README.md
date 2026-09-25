@@ -107,9 +107,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-07/exercise/E-07-02-iterative-dfs
-pnpm lab:run -- labs/chapter-07/exercise/E-07-02-iterative-dfs
-pnpm lab:score -- labs/chapter-07/exercise/E-07-02-iterative-dfs
+pnpm lab doctor labs/chapter-07/exercise/E-07-02-iterative-dfs
+pnpm lab run labs/chapter-07/exercise/E-07-02-iterative-dfs
+pnpm lab score labs/chapter-07/exercise/E-07-02-iterative-dfs
 ```
 
 ## 完成清单

@@ -1,0 +1,4 @@
+{
+  "nixEnvSelector.suggestion": false,
+  "js/ts.experimental.useTsgo": false
+}

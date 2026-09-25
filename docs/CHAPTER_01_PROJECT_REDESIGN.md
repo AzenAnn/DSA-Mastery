@@ -62,7 +62,7 @@ List ADT 与边界契约
 - 顺序表的寻址、插删平移、倍增扩容与摊还分析；
 - 单/双向链表、哨兵节点、尺寸缓存与链接不变量；
 - 时间/空间复杂度和基本 C++ 类设计；
-- 会使用 `make run`，或在仓库根使用 `pnpm lab:run`。
+- 会使用 `make run`，或在仓库根使用 `pnpm lab run`。
 
 ### 4.2 非目标
 
@@ -409,7 +409,7 @@ Elapsed time is observational only; it is not used for automatic scoring.
 2. 使用脚手架生成安全起点：
 
    ```powershell
-   pnpm lab:new -- --type project --chapter 1 --slug list-workload-analyzer --order 21
+   pnpm lab new --type project --chapter 1 --slug list-workload-analyzer --order 21
    ```
 
 3. 先完成 `contracts/`、reference 实现和能抓住已知错误的 CTest，再写可编译但自动部分不满分的 starter；
@@ -418,17 +418,17 @@ Elapsed time is observational only; it is not used for automatic scoring.
 6. 运行并记录：
 
    ```powershell
-   pnpm lab:validate -- labs/chapter-01/project/P-01-01-list-workload-analyzer
-   pnpm lab:run -- labs/chapter-01/project/P-01-01-list-workload-analyzer
-   pnpm lab:score -- labs/chapter-01/project/P-01-01-list-workload-analyzer
-   pnpm lab:verify -- labs/chapter-01/project/P-01-01-list-workload-analyzer
-   pnpm lab:pack -- labs/chapter-01/project/P-01-01-list-workload-analyzer --profile student
+   pnpm lab validate labs/chapter-01/project/P-01-01-list-workload-analyzer
+   pnpm lab run labs/chapter-01/project/P-01-01-list-workload-analyzer
+   pnpm lab score labs/chapter-01/project/P-01-01-list-workload-analyzer
+   pnpm lab verify labs/chapter-01/project/P-01-01-list-workload-analyzer
+   pnpm lab pack labs/chapter-01/project/P-01-01-list-workload-analyzer --profile student
    pnpm test
-   pnpm run validate
-   pnpm run test:discovery
+   pnpm test
+   pnpm test --project discovery
    pnpm run build
-   pnpm run check:site
-   pnpm run test:pages
+   pnpm test --project site-audit
+   pnpm test --project site-e2e
    ```
 
 7. 在学生包内重新执行 validate/run，并确认没有 `solution/`、缓存和二进制；
@@ -457,7 +457,7 @@ Elapsed time is observational only; it is not used for automatic scoring.
 
 ### 15.3 工程交付
 
-- [ ] `make run TASK=...` 与 `pnpm lab:run -- ... --task ...` 行为一致；
+- [ ] `make run TASK=...` 与 `pnpm lab run ... --task ...` 行为一致；
 - [ ] Windows/MSVC 与 Linux/GCC、Clang 的验证路径有真实记录；
 - [ ] student pack 不含 solution、cache 或 binary，且能脱离源仓库运行；
 - [ ] Project 自动进入 Chapter 1 的“工程 Project”分类，没有第二份导航清单；

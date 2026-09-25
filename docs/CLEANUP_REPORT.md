@@ -62,7 +62,7 @@ git ls-files app components lib/content.ts next-env.d.ts next.config.ts `
 rg -n -S '^import ' app components lib/content.ts
 rg -n -S '(@/components/|@/lib/content|sites-vite-plugin|worker/index|patch-vinext-pages|prepare-pages-artifact)' .
 rg -n -S '(vinext|from ["'']react|next/|@cloudflare|wrangler|hosting\.json|sites-vite-plugin|plugin-rsc|lucide-react)' `
-  .vitepress index.md labs/index.md scripts/check-built-site.mjs `
+  .vitepress index.md labs/index.md packages/course-index/src/audit-site.ts `
   scripts/test-content-discovery.mjs tests/pages-navigation.spec.mjs
 ```
 
@@ -87,7 +87,7 @@ rg -n -S '(vinext|from ["'']react|next/|@cloudflare|wrangler|hosting\.json|sites
 | `.vitepress/theme/components/LabsIndex.vue`、`labs/index.md` | Lab 目录页 |
 | `.vitepress/theme/components/DocumentHeader.vue`、`DocumentFooterNote.vue` | 教材/Lab 元信息与文档补充区 |
 | `.vitepress/theme/course.ts` | 浏览器侧课程索引读取、route 归一化与当前文档定位 |
-| `scripts/check-built-site.mjs` | 最终 `dist/pages` 的路由、链接、base、H1 与搜索产物审计 |
+| `packages/course-index/src/audit-site.ts` | 最终 `dist/pages` 的路由、链接、base、H1 与搜索产物审计 |
 | `scripts/test-content-discovery.mjs` | 临时教材/Lab 的自动发现、构建、搜索与安全清理验证 |
 | `tests/pages-navigation.spec.mjs` | 在 `/DSA-Mastery/` 下服务最终静态产物并真实点击、搜索、切主题、测移动导航与 404 |
 
@@ -148,9 +148,9 @@ rg -n -S '(vinext|from ["'']react|next/|@cloudflare|wrangler|hosting\.json|sites
 | 精确路径 | 旧职责与引用证据 | VitePress 替代 | 决定 | 主要风险与删除后验证 |
 | --- | --- | --- | --- | --- |
 | `scripts/patch-vinext-pages.mjs` | 跟踪；由 `.github/workflows/pages.yml` 调用，直接修改 `node_modules/vinext/dist/build/prerender.js` 的 HTML/RSC/404 请求 | `.vitepress/config.ts` 原生 Pages base + rewrites；产物/Playwright base 检查 | 删除（门禁后） | 先从 workflow 删除调用；Pages base 构建与真实点击必须覆盖旧故障路径。 |
-| `scripts/prepare-pages-artifact.mjs` | 跟踪；由 workflow 调用，将 `dist/client` 重排到 `dist/pages`、写 `.nojekyll`、检查旧 `_next` | VitePress 直接输出 `dist/pages` + `scripts/check-built-site.mjs` + Pages artifact action | 删除（门禁后） | 清理前把 `.nojekyll` 列为待验证差异；最终确认官方 Actions artifact 模式直接部署预构建的 `dist/pages`，不走 Jekyll，故无需迁移该文件。Pages-base 检查与 Playwright 5/5 已通过。 |
-| `tests/pages-navigation.test.mjs` | 跟踪；静态断言旧 `SiteLink`、`NEXT_PUBLIC_*` 与 workflow workaround | `scripts/check-built-site.mjs` + `tests/pages-navigation.spec.mjs` 的最终产物真实点击 | 删除（门禁后） | 确认新测试覆盖 home → lesson、top Labs → index、index → Lab、相对链接与单一 base。 |
-| `tests/rendered-html.test.mjs` | 跟踪；动态导入旧 `dist/server/index.js` Worker 并测试 vinext SSR/RSC HTML | `scripts/check-built-site.mjs` + 在 `dist/pages` 上运行的 Playwright | 删除（门禁后） | 确认首页、7 篇教材、4 个 Lab、404 的静态产物与状态均被覆盖，不再引用 `dist/server`。 |
+| `scripts/prepare-pages-artifact.mjs` | 跟踪；由 workflow 调用，将 `dist/client` 重排到 `dist/pages`、写 `.nojekyll`、检查旧 `_next` | VitePress 直接输出 `dist/pages` + `packages/course-index/src/audit-site.ts` + Pages artifact action | 删除（门禁后） | 清理前把 `.nojekyll` 列为待验证差异；最终确认官方 Actions artifact 模式直接部署预构建的 `dist/pages`，不走 Jekyll，故无需迁移该文件。Pages-base 检查与 Playwright 5/5 已通过。 |
+| `tests/pages-navigation.test.mjs` | 跟踪；静态断言旧 `SiteLink`、`NEXT_PUBLIC_*` 与 workflow workaround | `packages/course-index/src/audit-site.ts` + `tests/pages-navigation.spec.mjs` 的最终产物真实点击 | 删除（门禁后） | 确认新测试覆盖 home → lesson、top Labs → index、index → Lab、相对链接与单一 base。 |
+| `tests/rendered-html.test.mjs` | 跟踪；动态导入旧 `dist/server/index.js` Worker 并测试 vinext SSR/RSC HTML | `packages/course-index/src/audit-site.ts` + 在 `dist/pages` 上运行的 Playwright | 删除（门禁后） | 确认首页、7 篇教材、4 个 Lab、404 的静态产物与状态均被覆盖，不再引用 `dist/server`。 |
 
 ## 5. 清理前识别的保留并原位改写入口（最终已执行）
 
@@ -308,7 +308,7 @@ docs/**（本报告和迁移文档更新除外，不删除项目资料或截图�
 .agents/**
 .codex/**
 AGENTS.md
-scripts/validate-content.mjs
+packages/course-index/src/validate.ts
 tests/pages-navigation.spec.mjs
 .vitepress/**
 index.md

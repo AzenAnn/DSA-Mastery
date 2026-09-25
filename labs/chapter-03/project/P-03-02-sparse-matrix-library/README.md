@@ -38,7 +38,7 @@ Node.js、pnpm、C++17 编译器与 CMake 3.25 或更高版本。进入目录先
 ```powershell
 make doctor
 # 未安装 GNU Make 时，在仓库根执行：
-pnpm lab:doctor -- labs/chapter-03/project/P-03-02-sparse-matrix-library
+pnpm lab doctor labs/chapter-03/project/P-03-02-sparse-matrix-library
 ```
 
 ## 公共契约与约定
@@ -92,10 +92,10 @@ make run TASK=ops
 make score
 make verify
 # 免 Make 兜底：在仓库根执行
-pnpm lab:run -- labs/chapter-03/project/P-03-02-sparse-matrix-library
-pnpm lab:run -- labs/chapter-03/project/P-03-02-sparse-matrix-library --task transpose
-pnpm lab:score -- labs/chapter-03/project/P-03-02-sparse-matrix-library
-pnpm lab:verify -- labs/chapter-03/project/P-03-02-sparse-matrix-library
+pnpm lab run labs/chapter-03/project/P-03-02-sparse-matrix-library
+pnpm lab run labs/chapter-03/project/P-03-02-sparse-matrix-library --task transpose
+pnpm lab score labs/chapter-03/project/P-03-02-sparse-matrix-library
+pnpm lab verify labs/chapter-03/project/P-03-02-sparse-matrix-library
 ```
 
 ## 正常、边界与错误情况

@@ -1,3 +1,3 @@
 LAB_DIR := $(CURDIR)
 REPO_ROOT := $(LAB_DIR)/../../../..
-include ../../../../tools/lab/lab.mk
+include ../../../../packages/lab-cli/lab.mk

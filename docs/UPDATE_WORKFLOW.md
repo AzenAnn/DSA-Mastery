@@ -108,8 +108,8 @@ pnpm test
 $env:GITHUB_PAGES_BASE_PATH = "/DSA-Mastery"
 $env:SITE_URL = "https://azenann.github.io/DSA-Mastery/"
 pnpm run build
-pnpm run check:site
-pnpm run test:pages
+pnpm test --project site-audit
+pnpm test --project site-e2e
 Remove-Item Env:GITHUB_PAGES_BASE_PATH
 Remove-Item Env:SITE_URL
 ```
@@ -253,10 +253,10 @@ status: "draft"
 以第 2 章的栈实验为例：
 
 1. 创建 Lab Issue，说明学习目标、输入输出、验收方式与依赖。
-2. 判断类型后运行 `pnpm lab:new -- --type <quiz|program|project> --chapter 2 --slug stack`，由工具自动分配 `T/E/P` 稳定编号；只有需要调整展示位置时才传 `--order`。也可以说明为何继续使用 README-only。
+2. 判断类型后运行 `pnpm lab new --type <quiz|program|project> --chapter 2 --slug stack`，由工具自动分配 `T/E/P` 稳定编号；只有需要调整展示位置时才传 `--order`。也可以说明为何继续使用 README-only。
 3. 先写目标、准备、步骤、验收清单、思考题和复盘，再决定是否需要代码目录。
 4. 如有实现，遵循统一 student/solution/tests/task 结构；README 必须给出 `make run` 与 pnpm 免 Make 兜底。
-5. 运行 `pnpm lab:validate -- <lab-path>`；Program/Project 再运行 `pnpm lab:verify -- <lab-path>`。
+5. 运行 `pnpm lab validate <lab-path>`；Program/Project 再运行 `pnpm lab verify <lab-path>`。
 6. 用一份全新检出或至少从清晰环境按说明复现，避免依赖作者机器中的隐藏状态。
 7. 启动网站检查 Lab 页面是否自动出现，再提交 PR。
 
@@ -281,7 +281,7 @@ PR 中保留以下检查表；不适用项必须解释，不能静默删除。
 - [ ] 正文、Lab、代码与测试使用一致的术语和行为约定。
 - [ ] 引用可追溯；第三方文字、图片和代码的许可允许当前用法。
 - [ ] 页面顺序、标题、链接和网站显示经过手工检查。
-- [ ] `pnpm test` 通过；涉及导航、主题、Markdown 渲染、base 或发布时，Pages 子路径 `pnpm run check:site` 与 `pnpm run test:pages` 也通过。
+- [ ] `pnpm test` 通过；涉及导航、主题、Markdown 渲染、base 或发布时，Pages 子路径 `pnpm test --project site-audit` 与 `pnpm test --project site-e2e` 也通过。
 - [ ] 新式 Lab 通过 `lab:validate`；Program/Project 的 reference 自动满分、starter 非满分、构建不污染工作树，且 Review Owner 从干净环境复现。
 - [ ] AI 参与范围已说明，事实、代码、引用和测试结果均由人工复核。
 - [ ] Review 的 blocking 评论已解决，Review Owner 已批准。

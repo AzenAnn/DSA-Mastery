@@ -6,6 +6,6 @@
 
 例如依次压入值 4、值 -2，peek 得到 -2 且大小仍为 2，依次 pop 得到 -2、4，第三次 pop 失败。Token 的 `kind`、`value`、`offset` 均须保留。
 
-测试目标 `expr_stack_tests` 只链接本 Task 的 `expr_stack`，无替身或其他学生模块。`stack-lifo` 40 分、`stack-capacity` 40 分、`stack-empty` 20 分，总分乘项目权重 20%。在仓库根运行 `pnpm lab:run -- labs/chapter-02/project/P-02-04-expression-evaluator --task stack`。
+测试目标 `expr_stack_tests` 只链接本 Task 的 `expr_stack`，无替身或其他学生模块。`stack-lifo` 40 分、`stack-capacity` 40 分、`stack-empty` 20 分，总分乘项目权重 20%。在仓库根运行 `pnpm lab run labs/chapter-02/project/P-02-04-expression-evaluator --task stack`。
 
 接口和全工程规则见[项目题面](../../README.md)。本 Task 无需 main；测试驱动位于 `tests/stack_tests.cpp`。

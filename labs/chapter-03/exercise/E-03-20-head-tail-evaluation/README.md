@@ -154,9 +154,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-20-head-tail-evaluation
-pnpm lab:run -- labs/chapter-03/exercise/E-03-20-head-tail-evaluation
-pnpm lab:score -- labs/chapter-03/exercise/E-03-20-head-tail-evaluation
+pnpm lab doctor labs/chapter-03/exercise/E-03-20-head-tail-evaluation
+pnpm lab run labs/chapter-03/exercise/E-03-20-head-tail-evaluation
+pnpm lab score labs/chapter-03/exercise/E-03-20-head-tail-evaluation
 ```
 
 - [ ] 三个样例都能手工逐步推导（尤其是 `TT` 得 `(c)` 而不是 `((c))`）；

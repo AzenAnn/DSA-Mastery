@@ -95,9 +95,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-07/exercise/E-07-12-minimum-spanning-tree
-pnpm lab:run -- labs/chapter-07/exercise/E-07-12-minimum-spanning-tree
-pnpm lab:score -- labs/chapter-07/exercise/E-07-12-minimum-spanning-tree
+pnpm lab doctor labs/chapter-07/exercise/E-07-12-minimum-spanning-tree
+pnpm lab run labs/chapter-07/exercise/E-07-12-minimum-spanning-tree
+pnpm lab score labs/chapter-07/exercise/E-07-12-minimum-spanning-tree
 ```
 
 ## 完成清单

@@ -126,9 +126,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-06/exercise/E-06-02-minimum-trio-degree
-pnpm lab:run -- labs/chapter-06/exercise/E-06-02-minimum-trio-degree
-pnpm lab:score -- labs/chapter-06/exercise/E-06-02-minimum-trio-degree
+pnpm lab doctor labs/chapter-06/exercise/E-06-02-minimum-trio-degree
+pnpm lab run labs/chapter-06/exercise/E-06-02-minimum-trio-degree
+pnpm lab score labs/chapter-06/exercise/E-06-02-minimum-trio-degree
 ```
 
 ## 完成清单

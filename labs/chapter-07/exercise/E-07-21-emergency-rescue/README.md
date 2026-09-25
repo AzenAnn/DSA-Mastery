@@ -133,9 +133,9 @@ make score
 未安装 Make 时，在仓库根目录执行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-07/exercise/E-07-21-emergency-rescue
-pnpm lab:run -- labs/chapter-07/exercise/E-07-21-emergency-rescue
-pnpm lab:score -- labs/chapter-07/exercise/E-07-21-emergency-rescue
+pnpm lab doctor labs/chapter-07/exercise/E-07-21-emergency-rescue
+pnpm lab run labs/chapter-07/exercise/E-07-21-emergency-rescue
+pnpm lab score labs/chapter-07/exercise/E-07-21-emergency-rescue
 ```
 
 ## 完成清单

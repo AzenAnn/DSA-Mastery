@@ -129,9 +129,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-11-kmp-all-occurrences
-pnpm lab:run -- labs/chapter-03/exercise/E-03-11-kmp-all-occurrences
-pnpm lab:score -- labs/chapter-03/exercise/E-03-11-kmp-all-occurrences
+pnpm lab doctor labs/chapter-03/exercise/E-03-11-kmp-all-occurrences
+pnpm lab run labs/chapter-03/exercise/E-03-11-kmp-all-occurrences
+pnpm lab score labs/chapter-03/exercise/E-03-11-kmp-all-occurrences
 ```
 
 - [ ] 样例通过，且 `ABABABA` 中重叠的 `0 2 4` 都被统计到；

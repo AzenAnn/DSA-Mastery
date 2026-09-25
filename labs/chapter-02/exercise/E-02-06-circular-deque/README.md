@@ -158,10 +158,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/exercise/E-02-06-circular-deque
-pnpm lab:run -- labs/chapter-02/exercise/E-02-06-circular-deque
-pnpm lab:run -- labs/chapter-02/exercise/E-02-06-circular-deque --case 001-sample
-pnpm lab:score -- labs/chapter-02/exercise/E-02-06-circular-deque
+pnpm lab doctor labs/chapter-02/exercise/E-02-06-circular-deque
+pnpm lab run labs/chapter-02/exercise/E-02-06-circular-deque
+pnpm lab run labs/chapter-02/exercise/E-02-06-circular-deque --case 001-sample
+pnpm lab score labs/chapter-02/exercise/E-02-06-circular-deque
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`006-scale-wraparound` 使用容量 400 的满双端队列持续删除队头并插入队尾，使两个下标完成一整轮环绕。常数时间要求还需结合实现分析判断。

@@ -174,9 +174,9 @@ make score
 Windows 没有安装 Make 时，在仓库根目录使用完全相同的评分内核：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-03/exercise/E-03-17-nextval-comparison-count
-pnpm lab:run -- labs/chapter-03/exercise/E-03-17-nextval-comparison-count
-pnpm lab:score -- labs/chapter-03/exercise/E-03-17-nextval-comparison-count
+pnpm lab doctor labs/chapter-03/exercise/E-03-17-nextval-comparison-count
+pnpm lab run labs/chapter-03/exercise/E-03-17-nextval-comparison-count
+pnpm lab score labs/chapter-03/exercise/E-03-17-nextval-comparison-count
 ```
 
 - [ ] 样例 1、样例 2 都能手工复算出 `30 15 15` 与 `12 10 6`；

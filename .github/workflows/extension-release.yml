@@ -32,46 +32,39 @@ jobs:
     permissions:
       # 创建 Release 需要写权限，仅这个 job 提升。
       contents: write
-    defaults:
-      run:
-        working-directory: tools/vscode-extension
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11.1.1
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
 
-      # The extension owns its lockfile and reviewed allowBuilds configuration.
-      - name: Install extension dependencies
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Verify toolchain is usable
-        run: |
-          ./node_modules/.bin/esbuild --version
-          ./node_modules/.bin/tsc --version
 
       - name: Typecheck
         run: pnpm run typecheck
 
-      - name: Run tests
-        run: node --experimental-strip-types --test test/*.test.ts
+      # vscode project 里的统计面板版式断言要开真浏览器。
+      - name: Install Chromium for the stats panel layout test
+        run: pnpm exec playwright install --with-deps chromium
 
-      - name: Bundle with esbuild
-        run: node build.mjs
+      - name: Run extension tests
+        run: pnpm exec vitest run --project vscode
+
+      - name: Bundle with tsdown
+        run: pnpm --filter dsa-mastery-labs build
 
       # tag 名里的版本必须和 package.json 一致，否则下载的文件名会对不上。
       - name: Verify tag matches manifest version
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          manifest_version="$(node -p "require('./package.json').version")"
+          manifest_version="$(node -p "require('./apps/vscode-extension/package.json').version")"
           tag_version="${GITHUB_REF_NAME#ext-v}"
           if [ "$manifest_version" != "$tag_version" ]; then
             echo "::error::tag ($tag_version) 与 package.json ($manifest_version) 版本不一致"
@@ -80,9 +73,10 @@ jobs:
           echo "版本一致：$manifest_version"
 
       - name: Package .vsix
-        run: pnpm run package
+        run: pnpm --filter dsa-mastery-labs package
 
       - name: Show package contents
+        working-directory: apps/vscode-extension
         run: pnpm exec vsce ls --no-dependencies
 
       # draft: true 是审核门 —— 推 tag 只把 .vsix 构建好并挂成草稿,
@@ -92,7 +86,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: tools/vscode-extension/*.vsix
+          files: apps/vscode-extension/*.vsix
           draft: true
           prerelease: true
           name: "VSCode 插件 ${{ github.ref_name }}（测试版）"
@@ -138,5 +132,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dsa-mastery-labs-vsix
-          path: tools/vscode-extension/*.vsix
+          path: apps/vscode-extension/*.vsix
           retention-days: 14

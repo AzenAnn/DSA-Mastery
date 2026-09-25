@@ -1,0 +1,467 @@
+import { access, readdir, readFile } from "node:fs/promises";
+import path from "node:path";
+
+export interface SiteArtifact {
+  /** 构建产物根目录，通常是 dist/pages。 */
+  root: string;
+  /** Pages 子路径，形如 "/" 或 "/DSA-Mastery/"。 */
+  base: string;
+  lessonPages: string[];
+  labPages: string[];
+  curriculumPages: string[];
+  allFiles: string[];
+  htmlFiles: string[];
+}
+
+async function filesRecursively(directory: string): Promise<string[]> {
+  const files: string[] = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...(await filesRecursively(target)));
+    else files.push(target);
+  }
+
+  return files;
+}
+
+async function exists(file: string): Promise<boolean> {
+  try {
+    await access(file);
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function normalizeBase(raw: string | undefined): string {
+  const cleaned = (raw ?? "").trim().replace(/^\/+|\/+$/g, "");
+
+  return cleaned ? `/${cleaned}/` : "/";
+}
+
+async function expectedCoursePages(projectRoot: string) {
+  const lessonPages: string[] = [];
+  const contentRoot = path.join(projectRoot, "content");
+  for (const chapter of await readdir(contentRoot, { withFileTypes: true })) {
+    if (!chapter.isDirectory() || !/^(?:chapter-\d{2}-[a-z0-9-]+|chapter-preface)$/.test(chapter.name)) continue;
+    const chapterRoot = path.join(contentRoot, chapter.name);
+    for (const file of await readdir(chapterRoot, { withFileTypes: true })) {
+      if (!file.isFile() || !file.name.endsWith(".md") || file.name.toLowerCase() === "readme.md") continue;
+      lessonPages.push(path.join("learn", chapter.name, file.name.replace(/\.md$/, ""), "index.html"));
+    }
+  }
+
+  const labPages: string[] = [];
+  const labsRoot = path.join(projectRoot, "labs");
+  for (const chapter of await readdir(labsRoot, { withFileTypes: true })) {
+    if (!chapter.isDirectory() || !/^chapter-\d{2}$/.test(chapter.name)) continue;
+    for (const category of ["theory", "exercise", "project"]) {
+      const categoryRoot = path.join(labsRoot, chapter.name, category);
+      for (const lab of await readdir(categoryRoot, { withFileTypes: true })) {
+        if (!lab.isDirectory() || !/^[TEP]-\d{2}-\d{2,}-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(lab.name)) continue;
+        labPages.push(path.join("labs", chapter.name, category, lab.name, "index.html"));
+      }
+    }
+  }
+
+  const curriculumPages = [path.join("learn", "index.html")];
+  const curriculumRoot = path.join(projectRoot, "curriculum");
+  for (const section of ["parts", "outline"]) {
+    for (const file of await readdir(path.join(curriculumRoot, section), { withFileTypes: true })) {
+      if (!file.isFile() || !file.name.endsWith(".md")) continue;
+      curriculumPages.push(path.join("learn", section, file.name.replace(/\.md$/, ""), "index.html"));
+    }
+  }
+
+  return { lessonPages, labPages, curriculumPages };
+}
+
+/** 读取一次产物清单，四组审计共用，避免重复遍历几千个文件。 */
+export async function readSiteArtifact(projectRoot: string, artifactRoot: string, base: string): Promise<SiteArtifact> {
+  const pages = await expectedCoursePages(projectRoot);
+  const allFiles = await filesRecursively(artifactRoot);
+
+  return { root: artifactRoot, base, ...pages, allFiles, htmlFiles: allFiles.filter((file) => file.endsWith(".html")) };
+}
+
+function artifactTarget(artifact: SiteArtifact, urlPath: string): string {
+  let pathname = decodeURIComponent(urlPath);
+  if (artifact.base !== "/") {
+    if (!pathname.startsWith(artifact.base)) {
+      throw new Error(`Root-relative URL escaped the Pages artifact.base ${artifact.base}: ${urlPath}`);
+    }
+    pathname = pathname.slice(artifact.base.length);
+  } else {
+    pathname = pathname.replace(/^\//, "");
+  }
+
+  if (!pathname || pathname.endsWith("/")) return path.join(artifact.root, pathname, "index.html");
+
+  return path.join(artifact.root, pathname);
+}
+
+export async function auditPages(artifact: SiteArtifact): Promise<void> {
+  const chapterOneLabPages = artifact.labPages.filter((relativePath) =>
+    relativePath.replaceAll("\\", "/").startsWith("labs/chapter-01/"),
+  );
+  const chapterOneCategoryCounts = Object.fromEntries(
+    ["theory", "exercise", "project"].map((category) => [
+      category,
+      chapterOneLabPages.filter((relativePath) =>
+        relativePath.replaceAll("\\", "/").includes(`/chapter-01/${category}/`),
+      ).length,
+    ]),
+  );
+  if (
+    (chapterOneCategoryCounts["theory"] ?? 0) < 5 ||
+    (chapterOneCategoryCounts["exercise"] ?? 0) < 15 ||
+    (chapterOneCategoryCounts["project"] ?? 0) < 1
+  ) {
+    throw new Error(`Chapter 1 Lab category counts drifted: ${JSON.stringify(chapterOneCategoryCounts)}`);
+  }
+  const expectedPages = [
+    "index.html",
+    "labs/index.html",
+    "404.html",
+    ...artifact.curriculumPages,
+    ...artifact.lessonPages,
+    ...artifact.labPages,
+  ];
+  const missingPages: string[] = [];
+  for (const relativePath of expectedPages) {
+    if (!(await exists(path.join(artifact.root, relativePath)))) missingPages.push(relativePath.replaceAll("\\", "/"));
+  }
+  if (missingPages.length) throw new Error(`Missing generated pages:\n${missingPages.join("\n")}`);
+  if (await exists(path.join(artifact.root, "AGENTS.html"))) {
+    throw new Error("Repository-only AGENTS.md leaked into the public course artifact");
+  }
+  const builtLabsRoot = path.join(artifact.root, "labs");
+  for (const chapter of await readdir(builtLabsRoot, { withFileTypes: true })) {
+    if (!chapter.isDirectory() || !/^chapter-\d{2}$/.test(chapter.name)) continue;
+    for (const entry of await readdir(path.join(builtLabsRoot, chapter.name), { withFileTypes: true })) {
+      if (entry.isDirectory() && /^lab-\d{2}-/.test(entry.name)) {
+        throw new Error(`Legacy Lab route must not be generated: labs/${chapter.name}/${entry.name}/`);
+      }
+    }
+  }
+
+  const brokenLinks: string[] = [];
+  for (const htmlFile of artifact.htmlFiles) {
+    const html = await readFile(htmlFile, "utf8");
+    const routeRelative = path.relative(artifact.root, htmlFile).replaceAll("\\", "/");
+    const pageUrl = new URL(
+      routeRelative.endsWith("index.html")
+        ? `${artifact.base}${routeRelative.slice(0, -"index.html".length)}`
+        : `${artifact.base}${routeRelative}`,
+      "https://course.invalid",
+    );
+
+    for (const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
+      const value = match[1]!;
+      if (!value || value.startsWith("#") || /^(?:mailto:|tel:|data:|javascript:)/i.test(value)) continue;
+      const targetUrl = new URL(value, pageUrl);
+      if (targetUrl.origin !== pageUrl.origin) continue;
+      let target: string;
+      try {
+        target = artifactTarget(artifact, targetUrl.pathname);
+      } catch (error) {
+        brokenLinks.push(`${routeRelative} -> ${value} (${(error as Error).message})`);
+        continue;
+      }
+      if (!(await exists(target))) brokenLinks.push(`${routeRelative} -> ${value}`);
+    }
+  }
+  if (brokenLinks.length) throw new Error(`Broken internal artifact links:\n${brokenLinks.join("\n")}`);
+
+  for (const relativePath of [...artifact.lessonPages, ...artifact.labPages]) {
+    const html = await readFile(path.join(artifact.root, relativePath), "utf8");
+    const h1Count = (html.match(/<h1\b/g) ?? []).length;
+    if (h1Count !== 1) throw new Error(`${relativePath.replaceAll("\\", "/")}: expected one H1, found ${h1Count}`);
+  }
+}
+
+export async function auditGuidePages(artifact: SiteArtifact): Promise<void> {
+  const dataStructureBasicsHtml = await readFile(
+    path.join(artifact.root, "learn", "chapter-00-introduction", "01-data-structure-basics", "index.html"),
+    "utf8",
+  );
+  for (const required of [
+    "dsa-theory-block--definition",
+    "dsa-theory-block--intuition",
+    "<mark>一个逻辑结构可以有多种存储实现</mark>",
+    "<dfn>抽象数据类型</dfn>",
+    "dsa-code-block--titled",
+    "student-list-interface.cpp",
+    "vp-code-group",
+  ]) {
+    if (!dataStructureBasicsHtml.includes(required)) {
+      throw new Error(`Data-structure basics page is missing theory style artifact: ${required}`);
+    }
+  }
+
+  if (dataStructureBasicsHtml.includes("::: definition")) {
+    throw new Error("Unparsed theory container markers leaked into Chapter 0 artifacts");
+  }
+
+  const prefacePages = artifact.lessonPages.filter((relativePath) =>
+    relativePath.replaceAll("\\", "/").startsWith("learn/chapter-preface/"),
+  );
+  if (prefacePages.length !== 8) {
+    throw new Error(
+      `Preface must contain the theory, Lab author, Windows student, Lab command, Graphviz authoring, macOS student, VSCode extension, and Git guides, found ${prefacePages.length} pages`,
+    );
+  }
+  const prefaceHtml = await readFile(
+    path.join(artifact.root, "learn", "chapter-preface", "00-theory-environments", "index.html"),
+    "utf8",
+  );
+  for (const kind of [
+    "definition",
+    "theorem",
+    "lemma",
+    "corollary",
+    "property",
+    "proof",
+    "intuition",
+    "example",
+    "counterexample",
+    "complexity",
+    "pitfall",
+  ]) {
+    if (!prefaceHtml.includes(`dsa-theory-block--${kind}`)) {
+      throw new Error(`Preface showcase is missing theory container: ${kind}`);
+    }
+  }
+  for (const required of [
+    "前言 · 理论环境展示",
+    "docs/THEORY_DOC_STYLE_GUIDE.md",
+    "https://github.com/AzenAnn/DSA-Mastery/blob/main/docs/THEORY_DOC_STYLE_GUIDE.md",
+    "dsa-code-block--titled",
+    "theory-environment-demo.cpp",
+    "has-focused-lines",
+    "diff add",
+    "diff remove",
+    "highlighted warning",
+    "highlighted error",
+    "vp-code-group",
+    "<mark>",
+    "<dfn>",
+    "<kbd>",
+  ]) {
+    if (!prefaceHtml.includes(required)) {
+      throw new Error(`Preface showcase is missing rendered feature: ${required}`);
+    }
+  }
+  if (prefaceHtml.includes("第 preface 章") || prefaceHtml.includes("::: definition")) {
+    throw new Error("Preface leaked an internal chapter id or unparsed theory marker");
+  }
+
+  const labAuthorGuideHtml = await readFile(
+    path.join(artifact.root, "learn", "chapter-preface", "01-lab-authoring-guide", "index.html"),
+    "utf8",
+  );
+  for (const required of [
+    "Lab 更新与测试指南",
+    "先选对 Lab 类型",
+    "make run",
+    "Golden Project",
+    "网站侧栏的分类接口",
+    "labCategory",
+    "labId",
+    "最终 Definition of Done",
+  ]) {
+    if (!labAuthorGuideHtml.includes(required)) {
+      throw new Error(`Rendered Lab author guide is missing: ${required}`);
+    }
+  }
+  if (labAuthorGuideHtml.includes("@include") || labAuthorGuideHtml.includes("第 preface 章")) {
+    throw new Error("Lab author guide was not expanded or leaked the internal preface id");
+  }
+
+  const windowsStudentGuideHtml = await readFile(
+    path.join(artifact.root, "learn", "chapter-preface", "02-windows-student-setup", "index.html"),
+    "utf8",
+  );
+  for (const required of [
+    "Windows 学生实验环境安装指南",
+    "Git for Windows",
+    "Visual Studio C++ Build Tools",
+    "第一个 Program Lab",
+  ]) {
+    if (!windowsStudentGuideHtml.includes(required)) {
+      throw new Error(`Rendered Windows student guide is missing: ${required}`);
+    }
+  }
+  if (windowsStudentGuideHtml.includes("@include") || windowsStudentGuideHtml.includes("第 preface 章")) {
+    throw new Error("Windows student guide was not expanded or leaked the internal preface id");
+  }
+
+  const labCommandGuideHtml = await readFile(
+    path.join(artifact.root, "learn", "chapter-preface", "03-lab-cli-command-guide", "index.html"),
+    "utf8",
+  );
+  for (const required of [
+    "Lab 命令与接口使用指南",
+    "30 秒选择入口",
+    "三类 Lab 的能力边界",
+    "pnpm 操作总表",
+    "参数字典",
+    "Program：从运行到定位单个错误",
+    "Project：task、CTest 与人工评分",
+    "Make：同一套能力的短命令",
+    "lab:refresh-expected",
+    "NO_COLOR",
+  ]) {
+    if (!labCommandGuideHtml.includes(required)) {
+      throw new Error(`Rendered Lab command guide is missing: ${required}`);
+    }
+  }
+  if (labCommandGuideHtml.includes("@include") || labCommandGuideHtml.includes("第 preface 章")) {
+    throw new Error("Lab command guide was not expanded or leaked the internal preface id");
+  }
+
+  const graphvizGuideHtml = await readFile(
+    path.join(artifact.root, "learn", "chapter-preface", "04-graphviz-authoring-guide", "index.html"),
+    "utf8",
+  );
+  for (const required of [
+    "Graphviz 图示作者指南",
+    "Graphviz Online",
+    "Kroki Inspector",
+    "KROKI_SERVER_URL",
+    "public/diagrams/",
+  ]) {
+    if (!graphvizGuideHtml.includes(required)) {
+      throw new Error(`Rendered Graphviz authoring guide is missing: ${required}`);
+    }
+  }
+  if (graphvizGuideHtml.includes("@include") || graphvizGuideHtml.includes("第 preface 章")) {
+    throw new Error("Graphviz authoring guide was not expanded or leaked the internal preface id");
+  }
+
+  const macosStudentGuideHtml = await readFile(
+    path.join(artifact.root, "learn", "chapter-preface", "05-macos-student-setup", "index.html"),
+    "utf8",
+  );
+  for (const required of [
+    "macOS 学生实验环境安装指南",
+    "Xcode Command Line Tools",
+    "Homebrew",
+    "pnpm@11.1.1",
+    "Visual Studio Code",
+  ]) {
+    if (!macosStudentGuideHtml.includes(required)) {
+      throw new Error(`Rendered macOS student guide is missing: ${required}`);
+    }
+  }
+  if (macosStudentGuideHtml.includes("@include") || macosStudentGuideHtml.includes("第 preface 章")) {
+    throw new Error("macOS student guide was not expanded or leaked the internal preface id");
+  }
+}
+
+export async function auditCurriculum(artifact: SiteArtifact): Promise<void> {
+  const curriculumHtml = await readFile(path.join(artifact.root, "learn", "index.html"), "utf8");
+  for (const requiredLabel of [
+    "Part IV · 查找与索引",
+    "Ch.8",
+    "基础查找与树形查找",
+    "Ch.9",
+    "散列与索引结构",
+    "Part V · 排序",
+    "Ch.10",
+    "基础排序算法",
+    "Ch.11",
+    "高效排序与外部排序",
+    "Part VI · 算法思想",
+    "Ch.12",
+    "分治与递归",
+    "Ch.13",
+    "贪心算法",
+    "Ch.14",
+    "动态规划",
+    "Ch.15",
+    "回溯与搜索",
+  ]) {
+    if (!curriculumHtml.includes(requiredLabel)) throw new Error(`Curriculum index is missing: ${requiredLabel}`);
+  }
+  const prefacePosition = curriculumHtml.indexOf(">前言<");
+  const chapterZeroPosition = curriculumHtml.indexOf(">Ch.0<");
+  if (prefacePosition < 0 || chapterZeroPosition < 0 || prefacePosition >= chapterZeroPosition) {
+    throw new Error("Preface chapter is missing or does not appear before Ch.0 in the curriculum");
+  }
+
+  const chapterFiveOutlineHtml = await readFile(
+    path.join(artifact.root, "learn", "outline", "chapter-05-tree-applications", "index.html"),
+    "utf8",
+  );
+  const chapterFiveSidebarStart = chapterFiveOutlineHtml.indexOf('<aside class="VPSidebar"');
+  const chapterFiveSidebarEnd = chapterFiveOutlineHtml.indexOf("</aside>", chapterFiveSidebarStart);
+  const chapterFiveSidebar = chapterFiveOutlineHtml.slice(chapterFiveSidebarStart, chapterFiveSidebarEnd);
+  const chapterFiveItemStart = chapterFiveSidebar.indexOf("/learn/outline/chapter-05-tree-applications/");
+  const chapterFiveItemEnd = chapterFiveSidebar.indexOf("Part III · 图结构", chapterFiveItemStart);
+  const chapterFiveItem = chapterFiveSidebar.slice(chapterFiveItemStart, chapterFiveItemEnd);
+  for (const required of [
+    "本章 Labs",
+    "理论 Theory",
+    "实验 Exercise",
+    "工程 Project",
+    "05T01 · 森林与二叉树转换题精练",
+    "05T02 · 树与森林遍历题精练",
+    "05T03 · 哈夫曼树与编码题精练",
+    "05T04 · 并查集题精练",
+    "05T05 · 堆题精练",
+    "05E01 · 二叉搜索树的插入与查找",
+    "05E27 · B+ 树的范围查询",
+    "暂无工程型 Lab",
+  ]) {
+    if (!chapterFiveItem.includes(required)) {
+      throw new Error(`Chapter 5 categorized Lab interface is missing: ${required}`);
+    }
+  }
+  const chapterFiveLabLinks = chapterFiveItem.match(/\/labs\/chapter-05\//g) ?? [];
+  if (
+    chapterFiveSidebarStart < 0 ||
+    chapterFiveSidebarEnd < 0 ||
+    chapterFiveItemStart < 0 ||
+    chapterFiveItemEnd < 0 ||
+    chapterFiveLabLinks.length !== 32 ||
+    chapterFiveItem.includes("暂无理论型 Lab") ||
+    chapterFiveItem.includes("暂无实验型 Lab")
+  ) {
+    throw new Error("Chapter 5 Theory/Exercise Labs or empty Project slot are inconsistent");
+  }
+
+  if (artifact.base !== "/") {
+    const duplicate = `${artifact.base}${artifact.base.replace(/^\//, "")}`;
+    for (const file of artifact.allFiles.filter((entry) => /\.(?:html|js|css|xml)$/.test(entry))) {
+      if ((await readFile(file, "utf8")).includes(duplicate)) {
+        throw new Error(`${path.relative(artifact.root, file)} contains a doubled Pages base: ${duplicate}`);
+      }
+    }
+  }
+
+  const stableIdLabHtml = await readFile(
+    path.join(artifact.root, "labs", "chapter-01", "exercise", "E-01-04-singly-linked-list-reverse", "index.html"),
+    "utf8",
+  );
+  if (!stableIdLabHtml.includes("01E04")) {
+    throw new Error("Lab detail page does not expose its stable ID");
+  }
+
+  const searchableJavaScript = (
+    await Promise.all(artifact.allFiles.filter((file) => file.endsWith(".js")).map((file) => readFile(file, "utf8")))
+  ).join("\n");
+  for (const searchTitle of [
+    "前言 · 理论环境展示",
+    "Lab 更新与测试指南",
+    "Windows 学生实验环境安装指南",
+    "Lab 命令与接口使用指南",
+    "第 0 章 基础",
+    "Lab 01-T-02：单链表选择题精练",
+    "Lab 01-P-01：线性表双实现与工作负载评测器",
+    "01E04",
+  ]) {
+    if (!searchableJavaScript.includes(searchTitle)) throw new Error(`Local search bundle is missing: ${searchTitle}`);
+  }
+}

@@ -115,10 +115,10 @@ make score
 Windows 没有安装 Make 时，在仓库根目录运行：
 
 ```powershell
-pnpm lab:doctor -- labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram
-pnpm lab:run -- labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram
-pnpm lab:run -- labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram --case 001-sample
-pnpm lab:score -- labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram
+pnpm lab doctor labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram
+pnpm lab run labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram
+pnpm lab run labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram --case 001-sample
+pnpm lab score labs/chapter-02/exercise/E-02-08-largest-rectangle-histogram
 ```
 
 `make run` 用于查看各用例；`make score` 只有 100 分才返回成功。样例采用精确输出比较；`009-scale` 使用两千根等高柱子，回归相等高度的左边界保留和统一结算。线性复杂度要求仍需结合实现分析判断，不依赖易受机器性能影响的极限超时。
